@@ -3,11 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0AC77EE0CD3D6D2290D9F497 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 396B04B09C0200C7DE68055C /* SnapKit */; };
 		16B525A7E0B2133452A0C74C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9479AB5B3983A834C09A596 /* AppDelegate.swift */; };
+		5CD87B54501895D02589DC52 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 937DD14699DE9C04C48A9435 /* Then */; };
 		5FAA9D3AA8B0221A90CBD2B4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 470D872F229B48EE2BE79AC2 /* LaunchScreen.storyboard */; };
 		D744514822C69AA957250031 /* TuistBundle+MMM.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED2FCB8283628C6642C9068 /* TuistBundle+MMM.swift */; };
 /* End PBXBuildFile section */
@@ -38,6 +40,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5CD87B54501895D02589DC52 /* Then in Frameworks */,
+				0AC77EE0CD3D6D2290D9F497 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -153,6 +157,8 @@
 			);
 			name = MMM;
 			packageProductDependencies = (
+				937DD14699DE9C04C48A9435 /* Then */,
+				396B04B09C0200C7DE68055C /* SnapKit */,
 			);
 			productName = MMM;
 			productReference = 36FFA788F4C91EFF6BFBE522 /* MMM.app */;
@@ -165,6 +171,8 @@
 			isa = PBXProject;
 			attributes = {
 				ORGANIZATIONNAME = Lab.M;
+				TargetAttributes = {
+				};
 			};
 			buildConfigurationList = D6CF1F8BA92CF2B0E9A29FFD /* Build configuration list for PBXProject "MMM" */;
 			compatibilityVersion = "Xcode 13.0";
@@ -412,6 +420,17 @@
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		396B04B09C0200C7DE68055C /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SnapKit;
+		};
+		937DD14699DE9C04C48A9435 /* Then */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Then;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B2CBEEC000564567FDAD7321 /* Project object */;
 }

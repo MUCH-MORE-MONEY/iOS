@@ -26,6 +26,8 @@
 		C462897529D18F1F00FA2059 /* Color.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C462897429D18F1F00FA2059 /* Color.xcassets */; };
 		C462897929D18FB400FA2059 /* Icon.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C462897829D18FB400FA2059 /* Icon.xcassets */; };
 		C462897B29D1901100FA2059 /* Ex+Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = C462897A29D1901100FA2059 /* Ex+Icon.swift */; };
+		C462897D29D1935500FA2059 /* Ex+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = C462897C29D1935500FA2059 /* Ex+View.swift */; };
+		C462897F29D1939600FA2059 /* Ex+UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = C462897E29D1939600FA2059 /* Ex+UIDevice.swift */; };
 		D744514822C69AA957250031 /* TuistBundle+MMM.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED2FCB8283628C6642C9068 /* TuistBundle+MMM.swift */; };
 /* End PBXBuildFile section */
 
@@ -61,6 +63,8 @@
 		C462897429D18F1F00FA2059 /* Color.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Color.xcassets; sourceTree = "<group>"; };
 		C462897829D18FB400FA2059 /* Icon.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Icon.xcassets; sourceTree = "<group>"; };
 		C462897A29D1901100FA2059 /* Ex+Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Icon.swift"; sourceTree = "<group>"; };
+		C462897C29D1935500FA2059 /* Ex+View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+View.swift"; sourceTree = "<group>"; };
+		C462897E29D1939600FA2059 /* Ex+UIDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIDevice.swift"; sourceTree = "<group>"; };
 		D9479AB5B3983A834C09A596 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FED2FCB8283628C6642C9068 /* TuistBundle+MMM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TuistBundle+MMM.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -182,6 +186,8 @@
 				C462896D29D18B6C00FA2059 /* Ex+Font.swift */,
 				C462897129D18EAF00FA2059 /* Ex+Color.swift */,
 				C462897A29D1901100FA2059 /* Ex+Icon.swift */,
+				C462897E29D1939600FA2059 /* Ex+UIDevice.swift */,
+				C462897C29D1935500FA2059 /* Ex+View.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -298,7 +304,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C462897D29D1935500FA2059 /* Ex+View.swift in Sources */,
 				C462896E29D18B6C00FA2059 /* Ex+Font.swift in Sources */,
+				C462897F29D1939600FA2059 /* Ex+UIDevice.swift in Sources */,
 				D744514822C69AA957250031 /* TuistBundle+MMM.swift in Sources */,
 				C462897229D18EAF00FA2059 /* Ex+Color.swift in Sources */,
 				C462897B29D1901100FA2059 /* Ex+Icon.swift in Sources */,

@@ -24,6 +24,8 @@
 		C462897029D18B9100FA2059 /* MMMResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C462896F29D18B9100FA2059 /* MMMResource.swift */; };
 		C462897229D18EAF00FA2059 /* Ex+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = C462897129D18EAF00FA2059 /* Ex+Color.swift */; };
 		C462897529D18F1F00FA2059 /* Color.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C462897429D18F1F00FA2059 /* Color.xcassets */; };
+		C462897929D18FB400FA2059 /* Icon.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C462897829D18FB400FA2059 /* Icon.xcassets */; };
+		C462897B29D1901100FA2059 /* Ex+Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = C462897A29D1901100FA2059 /* Ex+Icon.swift */; };
 		D744514822C69AA957250031 /* TuistBundle+MMM.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED2FCB8283628C6642C9068 /* TuistBundle+MMM.swift */; };
 /* End PBXBuildFile section */
 
@@ -57,6 +59,8 @@
 		C462896F29D18B9100FA2059 /* MMMResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMMResource.swift; sourceTree = "<group>"; };
 		C462897129D18EAF00FA2059 /* Ex+Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Color.swift"; sourceTree = "<group>"; };
 		C462897429D18F1F00FA2059 /* Color.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Color.xcassets; sourceTree = "<group>"; };
+		C462897829D18FB400FA2059 /* Icon.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Icon.xcassets; sourceTree = "<group>"; };
+		C462897A29D1901100FA2059 /* Ex+Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Icon.swift"; sourceTree = "<group>"; };
 		D9479AB5B3983A834C09A596 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FED2FCB8283628C6642C9068 /* TuistBundle+MMM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TuistBundle+MMM.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -177,6 +181,7 @@
 			children = (
 				C462896D29D18B6C00FA2059 /* Ex+Font.swift */,
 				C462897129D18EAF00FA2059 /* Ex+Color.swift */,
+				C462897A29D1901100FA2059 /* Ex+Icon.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -185,6 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				C462897429D18F1F00FA2059 /* Color.xcassets */,
+				C462897829D18FB400FA2059 /* Icon.xcassets */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -276,6 +282,7 @@
 				C462896829D18A6000FA2059 /* Pretendard-Bold.otf in Resources */,
 				C462896929D18A6000FA2059 /* Pretendard-Thin.otf in Resources */,
 				C462897529D18F1F00FA2059 /* Color.xcassets in Resources */,
+				C462897929D18FB400FA2059 /* Icon.xcassets in Resources */,
 				C462896729D18A6000FA2059 /* Pretendard-ExtraBold.otf in Resources */,
 				C462896329D18A6000FA2059 /* Pretendard-Regular.otf in Resources */,
 				C462896B29D18A6000FA2059 /* Pretendard-SemiBold.otf in Resources */,
@@ -294,6 +301,7 @@
 				C462896E29D18B6C00FA2059 /* Ex+Font.swift in Sources */,
 				D744514822C69AA957250031 /* TuistBundle+MMM.swift in Sources */,
 				C462897229D18EAF00FA2059 /* Ex+Color.swift in Sources */,
+				C462897B29D1901100FA2059 /* Ex+Icon.swift in Sources */,
 				16B525A7E0B2133452A0C74C /* AppDelegate.swift in Sources */,
 				C462897029D18B9100FA2059 /* MMMResource.swift in Sources */,
 			);

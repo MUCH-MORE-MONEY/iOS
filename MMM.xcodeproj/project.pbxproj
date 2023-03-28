@@ -26,6 +26,12 @@
 		C41193D929D2874A003DBC15 /* Pretendard-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = C41193D029D2874A003DBC15 /* Pretendard-Thin.otf */; };
 		C41193DA29D2874A003DBC15 /* Pretendard-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = C41193D129D2874A003DBC15 /* Pretendard-ExtraLight.otf */; };
 		C41193DB29D2874A003DBC15 /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = C41193D229D2874A003DBC15 /* Pretendard-SemiBold.otf */; };
+		C41193E329D287E6003DBC15 /* Ex+KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193DD29D287E6003DBC15 /* Ex+KeychainWrapper.swift */; };
+		C41193E429D287E6003DBC15 /* Ex+Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193DE29D287E6003DBC15 /* Ex+Font.swift */; };
+		C41193E529D287E6003DBC15 /* Ex+UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193DF29D287E6003DBC15 /* Ex+UIDevice.swift */; };
+		C41193E629D287E6003DBC15 /* Ex+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193E029D287E6003DBC15 /* Ex+Color.swift */; };
+		C41193E729D287E6003DBC15 /* Ex+Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193E129D287E6003DBC15 /* Ex+Icon.swift */; };
+		C41193E829D287E6003DBC15 /* Ex+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193E229D287E6003DBC15 /* Ex+View.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +75,12 @@
 		C41193D029D2874A003DBC15 /* Pretendard-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Thin.otf"; sourceTree = "<group>"; };
 		C41193D129D2874A003DBC15 /* Pretendard-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraLight.otf"; sourceTree = "<group>"; };
 		C41193D229D2874A003DBC15 /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.otf"; sourceTree = "<group>"; };
+		C41193DD29D287E6003DBC15 /* Ex+KeychainWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+KeychainWrapper.swift"; sourceTree = "<group>"; };
+		C41193DE29D287E6003DBC15 /* Ex+Font.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+Font.swift"; sourceTree = "<group>"; };
+		C41193DF29D287E6003DBC15 /* Ex+UIDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UIDevice.swift"; sourceTree = "<group>"; };
+		C41193E029D287E6003DBC15 /* Ex+Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+Color.swift"; sourceTree = "<group>"; };
+		C41193E129D287E6003DBC15 /* Ex+Icon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+Icon.swift"; sourceTree = "<group>"; };
+		C41193E229D287E6003DBC15 /* Ex+View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+View.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +161,7 @@
 				C41193C229D28318003DBC15 /* Info */,
 				C41193C329D28334003DBC15 /* Assets */,
 				C41193C829D2874A003DBC15 /* Font */,
+				C41193DC29D287E6003DBC15 /* Extensions */,
 				C411939829D2817E003DBC15 /* LaunchScreen.storyboard */,
 			);
 			path = Resources;
@@ -219,6 +232,19 @@
 				C41193D229D2874A003DBC15 /* Pretendard-SemiBold.otf */,
 			);
 			path = Pretendard;
+			sourceTree = "<group>";
+		};
+		C41193DC29D287E6003DBC15 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				C41193DD29D287E6003DBC15 /* Ex+KeychainWrapper.swift */,
+				C41193DE29D287E6003DBC15 /* Ex+Font.swift */,
+				C41193DF29D287E6003DBC15 /* Ex+UIDevice.swift */,
+				C41193E029D287E6003DBC15 /* Ex+Color.swift */,
+				C41193E129D287E6003DBC15 /* Ex+Icon.swift */,
+				C41193E229D287E6003DBC15 /* Ex+View.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -362,8 +388,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C41193E329D287E6003DBC15 /* Ex+KeychainWrapper.swift in Sources */,
+				C41193E829D287E6003DBC15 /* Ex+View.swift in Sources */,
+				C41193E729D287E6003DBC15 /* Ex+Icon.swift in Sources */,
 				C411939229D2817C003DBC15 /* ViewController.swift in Sources */,
 				C411938E29D2817C003DBC15 /* AppDelegate.swift in Sources */,
+				C41193E629D287E6003DBC15 /* Ex+Color.swift in Sources */,
+				C41193E429D287E6003DBC15 /* Ex+Font.swift in Sources */,
+				C41193E529D287E6003DBC15 /* Ex+UIDevice.swift in Sources */,
 				C411939029D2817C003DBC15 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

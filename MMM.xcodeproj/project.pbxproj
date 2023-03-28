@@ -32,6 +32,7 @@
 		C41193E629D287E6003DBC15 /* Ex+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193E029D287E6003DBC15 /* Ex+Color.swift */; };
 		C41193E729D287E6003DBC15 /* Ex+Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193E129D287E6003DBC15 /* Ex+Icon.swift */; };
 		C41193E829D287E6003DBC15 /* Ex+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193E229D287E6003DBC15 /* Ex+View.swift */; };
+		C41193EA29D2D7FE003DBC15 /* MMMResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193E929D2D7FE003DBC15 /* MMMResource.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +82,7 @@
 		C41193E029D287E6003DBC15 /* Ex+Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+Color.swift"; sourceTree = "<group>"; };
 		C41193E129D287E6003DBC15 /* Ex+Icon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+Icon.swift"; sourceTree = "<group>"; };
 		C41193E229D287E6003DBC15 /* Ex+View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+View.swift"; sourceTree = "<group>"; };
+		C41193E929D2D7FE003DBC15 /* MMMResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMMResource.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,6 +164,7 @@
 				C41193C329D28334003DBC15 /* Assets */,
 				C41193C829D2874A003DBC15 /* Font */,
 				C41193DC29D287E6003DBC15 /* Extensions */,
+				C41193E929D2D7FE003DBC15 /* MMMResource.swift */,
 				C411939829D2817E003DBC15 /* LaunchScreen.storyboard */,
 			);
 			path = Resources;
@@ -391,6 +394,7 @@
 				C41193E329D287E6003DBC15 /* Ex+KeychainWrapper.swift in Sources */,
 				C41193E829D287E6003DBC15 /* Ex+View.swift in Sources */,
 				C41193E729D287E6003DBC15 /* Ex+Icon.swift in Sources */,
+				C41193EA29D2D7FE003DBC15 /* MMMResource.swift in Sources */,
 				C411939229D2817C003DBC15 /* ViewController.swift in Sources */,
 				C411938E29D2817C003DBC15 /* AppDelegate.swift in Sources */,
 				C41193E629D287E6003DBC15 /* Ex+Color.swift in Sources */,

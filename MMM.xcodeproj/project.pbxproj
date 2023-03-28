@@ -135,7 +135,6 @@
 				1E035A75D3A833AD01047796 /* Pods-MMMTests.debug.xcconfig */,
 				E1F4C2751A32E5FDB91A657F /* Pods-MMMTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};

@@ -3,12 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		0AC77EE0CD3D6D2290D9F497 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 396B04B09C0200C7DE68055C /* SnapKit */; };
-		16B525A7E0B2133452A0C74C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9479AB5B3983A834C09A596 /* AppDelegate.swift */; };
 		1E8281A1130AB916DB29A683 /* Ex+Font.swift in Resources */ = {isa = PBXBuildFile; fileRef = 9ED8D7BBCA9C78247A0ADF5E /* Ex+Font.swift */; };
 		29B3A0AE0DA2128AC026C5E4 /* Icon.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C73D75F4E3F4DDE2F96444A /* Icon.xcassets */; };
 		355A58CAD5AD84D074CEB81F /* Pretendard-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = 6F3F75D97F64E7B1493047E5 /* Pretendard-Black.otf */; };
@@ -16,6 +15,7 @@
 		5FAA9D3AA8B0221A90CBD2B4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 470D872F229B48EE2BE79AC2 /* LaunchScreen.storyboard */; };
 		66EB7B05AB7655EE7E505A88 /* Color.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 09C1EDF57D1B9CB6805C0696 /* Color.xcassets */; };
 		6C325EF522DB41770C34AE5E /* Pretendard-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 85186EA584110A1F228DD179 /* Pretendard-Light.otf */; };
+		7B988A9E83DC33542ADE340C /* Ex+KeychainWrapper.swift in Resources */ = {isa = PBXBuildFile; fileRef = 96D47F683FA10E859A691F15 /* Ex+KeychainWrapper.swift */; };
 		91CE10B68D80387C1EAFFF2E /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = C8CAC80D6E13F1261471AA7F /* Pretendard-Bold.otf */; };
 		9C0600C726EDB936F1FD7056 /* Ex+UIDevice.swift in Resources */ = {isa = PBXBuildFile; fileRef = 3A9FA0FCF73D047A7248D7ED /* Ex+UIDevice.swift */; };
 		A012EF6F7D23C95608B870C5 /* MMMResource.swift in Resources */ = {isa = PBXBuildFile; fileRef = 50A63FB9D237DA6E21149537 /* MMMResource.swift */; };
@@ -26,13 +26,14 @@
 		B7F80FD95BE1049BAA4483C4 /* TuistFonts+MMM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DD9B5A86D31F2CF66832EF /* TuistFonts+MMM.swift */; };
 		C1F2617D6E66E800AB08010C /* Pretendard-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = B82743B0745F776508C14984 /* Pretendard-Medium.otf */; };
 		C42CA491EA7ACA78C5AACB3F /* Pretendard-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = BA61E91266AA3D77FE2C11FD /* Pretendard-ExtraLight.otf */; };
-		C462898829D1972200FA2059 /* Ex+KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C462898729D1972200FA2059 /* Ex+KeychainWrapper.swift */; };
 		C9CD57E0305922B6D5C68688 /* Ex+Icon.swift in Resources */ = {isa = PBXBuildFile; fileRef = A9C29230F057F716EBA877D6 /* Ex+Icon.swift */; };
 		D0719A5AB117830680791853 /* Pretendard-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = ADA124E829F7252C8A3C542E /* Pretendard-ExtraBold.otf */; };
 		D744514822C69AA957250031 /* TuistBundle+MMM.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED2FCB8283628C6642C9068 /* TuistBundle+MMM.swift */; };
 		DF82B9435741A2C49C57DD7E /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = F1CCAFA7130E1A32E73B7718 /* Pretendard-Regular.otf */; };
 		E4EE45A9A169141368ABCDF9 /* Pretendard-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 83A6E8A82E07D714748732FC /* Pretendard-Thin.otf */; };
+		E657677B9EE7799755B0DD1B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7257929596A416086AAA76 /* AppDelegate.swift */; };
 		F7D841616B39E220EFBD711F /* Ex+Color.swift in Resources */ = {isa = PBXBuildFile; fileRef = F89EABC20D67ACB52CAEE1CC /* Ex+Color.swift */; };
+		FE75805489ADF67A81071200 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C383CC7BC4C089449A0EDD06 /* LoginViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -50,28 +51,29 @@
 
 /* Begin PBXFileReference section */
 		09C1EDF57D1B9CB6805C0696 /* Color.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Color.xcassets; sourceTree = "<group>"; };
+		0C7257929596A416086AAA76 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		36FFA788F4C91EFF6BFBE522 /* MMM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MMM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A9FA0FCF73D047A7248D7ED /* Ex+UIDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIDevice.swift"; sourceTree = "<group>"; };
 		470D872F229B48EE2BE79AC2 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		50A63FB9D237DA6E21149537 /* MMMResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMMResource.swift; sourceTree = "<group>"; };
-		5DFD906DE47AB00FCC028FEA /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.otf"; sourceTree = "<group>"; };
+		5DFD906DE47AB00FCC028FEA /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; path = "Pretendard-SemiBold.otf"; sourceTree = "<group>"; };
 		6C73D75F4E3F4DDE2F96444A /* Icon.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Icon.xcassets; sourceTree = "<group>"; };
-		6F3F75D97F64E7B1493047E5 /* Pretendard-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Black.otf"; sourceTree = "<group>"; };
+		6F3F75D97F64E7B1493047E5 /* Pretendard-Black.otf */ = {isa = PBXFileReference; path = "Pretendard-Black.otf"; sourceTree = "<group>"; };
 		74DD9B5A86D31F2CF66832EF /* TuistFonts+MMM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TuistFonts+MMM.swift"; sourceTree = "<group>"; };
 		7A7A39CC92DFB96EC4E35B0D /* TuistAssets+MMM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TuistAssets+MMM.swift"; sourceTree = "<group>"; };
-		83A6E8A82E07D714748732FC /* Pretendard-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Thin.otf"; sourceTree = "<group>"; };
-		85186EA584110A1F228DD179 /* Pretendard-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Light.otf"; sourceTree = "<group>"; };
+		83A6E8A82E07D714748732FC /* Pretendard-Thin.otf */ = {isa = PBXFileReference; path = "Pretendard-Thin.otf"; sourceTree = "<group>"; };
+		85186EA584110A1F228DD179 /* Pretendard-Light.otf */ = {isa = PBXFileReference; path = "Pretendard-Light.otf"; sourceTree = "<group>"; };
 		8594BED8EC55AED819B97E1C /* MMM-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "MMM-Info.plist"; sourceTree = "<group>"; };
+		96D47F683FA10E859A691F15 /* Ex+KeychainWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+KeychainWrapper.swift"; sourceTree = "<group>"; };
 		9ED8D7BBCA9C78247A0ADF5E /* Ex+Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Font.swift"; sourceTree = "<group>"; };
 		A057A340BB3E3C3C5C0B20F5 /* Ex+View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+View.swift"; sourceTree = "<group>"; };
 		A9C29230F057F716EBA877D6 /* Ex+Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Icon.swift"; sourceTree = "<group>"; };
-		ADA124E829F7252C8A3C542E /* Pretendard-ExtraBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraBold.otf"; sourceTree = "<group>"; };
-		B82743B0745F776508C14984 /* Pretendard-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Medium.otf"; sourceTree = "<group>"; };
-		BA61E91266AA3D77FE2C11FD /* Pretendard-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraLight.otf"; sourceTree = "<group>"; };
-		C462898729D1972200FA2059 /* Ex+KeychainWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+KeychainWrapper.swift"; sourceTree = "<group>"; };
-		C8CAC80D6E13F1261471AA7F /* Pretendard-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.otf"; sourceTree = "<group>"; };
-		D9479AB5B3983A834C09A596 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		F1CCAFA7130E1A32E73B7718 /* Pretendard-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.otf"; sourceTree = "<group>"; };
+		ADA124E829F7252C8A3C542E /* Pretendard-ExtraBold.otf */ = {isa = PBXFileReference; path = "Pretendard-ExtraBold.otf"; sourceTree = "<group>"; };
+		B82743B0745F776508C14984 /* Pretendard-Medium.otf */ = {isa = PBXFileReference; path = "Pretendard-Medium.otf"; sourceTree = "<group>"; };
+		BA61E91266AA3D77FE2C11FD /* Pretendard-ExtraLight.otf */ = {isa = PBXFileReference; path = "Pretendard-ExtraLight.otf"; sourceTree = "<group>"; };
+		C383CC7BC4C089449A0EDD06 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		C8CAC80D6E13F1261471AA7F /* Pretendard-Bold.otf */ = {isa = PBXFileReference; path = "Pretendard-Bold.otf"; sourceTree = "<group>"; };
+		F1CCAFA7130E1A32E73B7718 /* Pretendard-Regular.otf */ = {isa = PBXFileReference; path = "Pretendard-Regular.otf"; sourceTree = "<group>"; };
 		F89EABC20D67ACB52CAEE1CC /* Ex+Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Color.swift"; sourceTree = "<group>"; };
 		FED2FCB8283628C6642C9068 /* TuistBundle+MMM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TuistBundle+MMM.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -93,7 +95,8 @@
 		04E1B54DE1E7AE5AA3EEC347 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				D9479AB5B3983A834C09A596 /* AppDelegate.swift */,
+				56621AB4C1334C926DDEE024 /* App */,
+				E98DB156E49D7CE19438F222 /* ViewController */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -131,11 +134,19 @@
 				F89EABC20D67ACB52CAEE1CC /* Ex+Color.swift */,
 				9ED8D7BBCA9C78247A0ADF5E /* Ex+Font.swift */,
 				A9C29230F057F716EBA877D6 /* Ex+Icon.swift */,
-				C462898729D1972200FA2059 /* Ex+KeychainWrapper.swift */,
+				96D47F683FA10E859A691F15 /* Ex+KeychainWrapper.swift */,
 				3A9FA0FCF73D047A7248D7ED /* Ex+UIDevice.swift */,
 				A057A340BB3E3C3C5C0B20F5 /* Ex+View.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		56621AB4C1334C926DDEE024 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				0C7257929596A416086AAA76 /* AppDelegate.swift */,
+			);
+			path = App;
 			sourceTree = "<group>";
 		};
 		57AD022575FF5E6ADBC81325 /* Project */ = {
@@ -224,6 +235,14 @@
 			path = Font;
 			sourceTree = "<group>";
 		};
+		E98DB156E49D7CE19438F222 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				C383CC7BC4C089449A0EDD06 /* LoginViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
 		EBE6D77A22F0937A2576FCF7 /* Derived */ = {
 			isa = PBXGroup;
 			children = (
@@ -266,6 +285,8 @@
 			isa = PBXProject;
 			attributes = {
 				ORGANIZATIONNAME = Lab.M;
+				TargetAttributes = {
+				};
 			};
 			buildConfigurationList = D6CF1F8BA92CF2B0E9A29FFD /* Build configuration list for PBXProject "MMM" */;
 			compatibilityVersion = "Xcode 13.0";
@@ -279,7 +300,7 @@
 			packageReferences = (
 				2242FA36E666C26E222D5458 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				8C27618DCAA3ACEA9B8A0C7D /* XCRemoteSwiftPackageReference "Then" */,
-				12ED573AB650BE5DFF530C6C /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */,
+				ABEAB34E41F238D6DB2AFC22 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */,
 			);
 			productRefGroup = 2F447123A1170B9DEB8F5B98 /* Products */;
 			projectDirPath = "";
@@ -300,6 +321,7 @@
 				F7D841616B39E220EFBD711F /* Ex+Color.swift in Resources */,
 				1E8281A1130AB916DB29A683 /* Ex+Font.swift in Resources */,
 				C9CD57E0305922B6D5C68688 /* Ex+Icon.swift in Resources */,
+				7B988A9E83DC33542ADE340C /* Ex+KeychainWrapper.swift in Resources */,
 				9C0600C726EDB936F1FD7056 /* Ex+UIDevice.swift in Resources */,
 				AB4C854EAA31B4E6BBF5861F /* Ex+View.swift in Resources */,
 				355A58CAD5AD84D074CEB81F /* Pretendard-Black.otf in Resources */,
@@ -326,8 +348,8 @@
 				A9AD3CD80C790CEB2C27FBFB /* TuistAssets+MMM.swift in Sources */,
 				D744514822C69AA957250031 /* TuistBundle+MMM.swift in Sources */,
 				B7F80FD95BE1049BAA4483C4 /* TuistFonts+MMM.swift in Sources */,
-				16B525A7E0B2133452A0C74C /* AppDelegate.swift in Sources */,
-				C462898829D1972200FA2059 /* Ex+KeychainWrapper.swift in Sources */,
+				E657677B9EE7799755B0DD1B /* AppDelegate.swift in Sources */,
+				FE75805489ADF67A81071200 /* LoginViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -517,14 +539,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		12ED573AB650BE5DFF530C6C /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/jrendel/SwiftKeychainWrapper";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 4.0.0;
-			};
-		};
 		2242FA36E666C26E222D5458 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -539,6 +553,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 3.0.0;
+			};
+		};
+		ABEAB34E41F238D6DB2AFC22 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jrendel/SwiftKeychainWrapper.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

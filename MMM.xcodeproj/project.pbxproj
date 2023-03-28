@@ -17,6 +17,15 @@
 		C41193B129D2817F003DBC15 /* MMMUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193B029D2817F003DBC15 /* MMMUITestsLaunchTests.swift */; };
 		C41193C629D2838E003DBC15 /* Icon.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C41193C429D2838D003DBC15 /* Icon.xcassets */; };
 		C41193C729D2838E003DBC15 /* Color.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C41193C529D2838E003DBC15 /* Color.xcassets */; };
+		C41193D329D2874A003DBC15 /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = C41193CA29D2874A003DBC15 /* Pretendard-Regular.otf */; };
+		C41193D429D2874A003DBC15 /* Pretendard-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = C41193CB29D2874A003DBC15 /* Pretendard-Black.otf */; };
+		C41193D529D2874A003DBC15 /* Pretendard-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = C41193CC29D2874A003DBC15 /* Pretendard-Medium.otf */; };
+		C41193D629D2874A003DBC15 /* Pretendard-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = C41193CD29D2874A003DBC15 /* Pretendard-Light.otf */; };
+		C41193D729D2874A003DBC15 /* Pretendard-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = C41193CE29D2874A003DBC15 /* Pretendard-ExtraBold.otf */; };
+		C41193D829D2874A003DBC15 /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = C41193CF29D2874A003DBC15 /* Pretendard-Bold.otf */; };
+		C41193D929D2874A003DBC15 /* Pretendard-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = C41193D029D2874A003DBC15 /* Pretendard-Thin.otf */; };
+		C41193DA29D2874A003DBC15 /* Pretendard-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = C41193D129D2874A003DBC15 /* Pretendard-ExtraLight.otf */; };
+		C41193DB29D2874A003DBC15 /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = C41193D229D2874A003DBC15 /* Pretendard-SemiBold.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +60,15 @@
 		C41193B029D2817F003DBC15 /* MMMUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMMUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		C41193C429D2838D003DBC15 /* Icon.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Icon.xcassets; sourceTree = "<group>"; };
 		C41193C529D2838E003DBC15 /* Color.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Color.xcassets; sourceTree = "<group>"; };
+		C41193CA29D2874A003DBC15 /* Pretendard-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.otf"; sourceTree = "<group>"; };
+		C41193CB29D2874A003DBC15 /* Pretendard-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Black.otf"; sourceTree = "<group>"; };
+		C41193CC29D2874A003DBC15 /* Pretendard-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Medium.otf"; sourceTree = "<group>"; };
+		C41193CD29D2874A003DBC15 /* Pretendard-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Light.otf"; sourceTree = "<group>"; };
+		C41193CE29D2874A003DBC15 /* Pretendard-ExtraBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraBold.otf"; sourceTree = "<group>"; };
+		C41193CF29D2874A003DBC15 /* Pretendard-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.otf"; sourceTree = "<group>"; };
+		C41193D029D2874A003DBC15 /* Pretendard-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Thin.otf"; sourceTree = "<group>"; };
+		C41193D129D2874A003DBC15 /* Pretendard-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraLight.otf"; sourceTree = "<group>"; };
+		C41193D229D2874A003DBC15 /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.otf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +148,7 @@
 			children = (
 				C41193C229D28318003DBC15 /* Info */,
 				C41193C329D28334003DBC15 /* Assets */,
+				C41193C829D2874A003DBC15 /* Font */,
 				C411939829D2817E003DBC15 /* LaunchScreen.storyboard */,
 			);
 			path = Resources;
@@ -176,6 +195,30 @@
 				C411939629D2817E003DBC15 /* Assets.xcassets */,
 			);
 			path = Assets;
+			sourceTree = "<group>";
+		};
+		C41193C829D2874A003DBC15 /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				C41193C929D2874A003DBC15 /* Pretendard */,
+			);
+			path = Font;
+			sourceTree = "<group>";
+		};
+		C41193C929D2874A003DBC15 /* Pretendard */ = {
+			isa = PBXGroup;
+			children = (
+				C41193CA29D2874A003DBC15 /* Pretendard-Regular.otf */,
+				C41193CB29D2874A003DBC15 /* Pretendard-Black.otf */,
+				C41193CC29D2874A003DBC15 /* Pretendard-Medium.otf */,
+				C41193CD29D2874A003DBC15 /* Pretendard-Light.otf */,
+				C41193CE29D2874A003DBC15 /* Pretendard-ExtraBold.otf */,
+				C41193CF29D2874A003DBC15 /* Pretendard-Bold.otf */,
+				C41193D029D2874A003DBC15 /* Pretendard-Thin.otf */,
+				C41193D129D2874A003DBC15 /* Pretendard-ExtraLight.otf */,
+				C41193D229D2874A003DBC15 /* Pretendard-SemiBold.otf */,
+			);
+			path = Pretendard;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -282,9 +325,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C41193D529D2874A003DBC15 /* Pretendard-Medium.otf in Resources */,
+				C41193D829D2874A003DBC15 /* Pretendard-Bold.otf in Resources */,
+				C41193D629D2874A003DBC15 /* Pretendard-Light.otf in Resources */,
+				C41193DB29D2874A003DBC15 /* Pretendard-SemiBold.otf in Resources */,
+				C41193D729D2874A003DBC15 /* Pretendard-ExtraBold.otf in Resources */,
 				C41193C629D2838E003DBC15 /* Icon.xcassets in Resources */,
 				C41193C729D2838E003DBC15 /* Color.xcassets in Resources */,
+				C41193DA29D2874A003DBC15 /* Pretendard-ExtraLight.otf in Resources */,
+				C41193D329D2874A003DBC15 /* Pretendard-Regular.otf in Resources */,
 				C411939A29D2817E003DBC15 /* LaunchScreen.storyboard in Resources */,
+				C41193D429D2874A003DBC15 /* Pretendard-Black.otf in Resources */,
+				C41193D929D2874A003DBC15 /* Pretendard-Thin.otf in Resources */,
 				C411939729D2817E003DBC15 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -485,6 +537,7 @@
 				INFOPLIST_FILE = MMM/Resources/Info/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -515,6 +568,7 @@
 				INFOPLIST_FILE = MMM/Resources/Info/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;

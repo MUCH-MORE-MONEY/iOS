@@ -134,7 +134,6 @@
 				C41193BF29D281E6003DBC15 /* App */,
 				C41193BD29D281AB003DBC15 /* Resources */,
 				C41193BE29D281BF003DBC15 /* Sources */,
-				C41193C029D281F2003DBC15 /* ViewController */,
 			);
 			path = MMM;
 			sourceTree = "<group>";
@@ -171,6 +170,7 @@
 		C41193BE29D281BF003DBC15 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				C41193C029D281F2003DBC15 /* ViewController */,
 			);
 			path = Sources;
 			sourceTree = "<group>";

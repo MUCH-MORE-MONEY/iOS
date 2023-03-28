@@ -48,7 +48,7 @@ public extension MMMResource {
 public extension MMMResource {
 	static func registerFonts() {
 		Font.Family.allCases.forEach {
-			registerFont(bundle: Bundle.module, fontName: "Pretendard-\($0.rawValue)", fontExtension: "otf")
+			registerFont(bundle: Bundle.main, fontName: "Pretendard-\($0.rawValue)", fontExtension: "otf")
 		}
 	}
 	

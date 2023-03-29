@@ -29,7 +29,7 @@ final class ProfileTableViewCell: UITableViewCell {
 		addSubviews(contentLabel)
 		
 		contentLabel.snp.makeConstraints {
-			$0.left.right.equalTo(24)
+			$0.left.right.equalTo(28)
 			$0.centerY.equalToSuperview()
 		}
 	}

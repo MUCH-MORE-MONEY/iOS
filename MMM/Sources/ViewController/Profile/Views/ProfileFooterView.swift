@@ -37,12 +37,12 @@ final class ProfileFooterView: UIView {
 		addSubviews(contentLabel, versionLabel)
 				
 		contentLabel.snp.makeConstraints {
-			$0.left.equalToSuperview().inset(24)
+			$0.left.equalToSuperview().inset(28)
 			$0.top.equalTo(12)
 		}
 		
 		versionLabel.snp.makeConstraints {
-			$0.right.equalToSuperview().inset(24)
+			$0.right.equalToSuperview().inset(28)
 			$0.top.equalTo(12)
 		}
 	}

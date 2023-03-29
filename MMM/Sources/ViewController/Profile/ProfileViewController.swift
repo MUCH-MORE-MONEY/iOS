@@ -79,7 +79,7 @@ private extension ProfileViewController {
 				topSafeAreaInsets = hasWindowScene.windows.first?.safeAreaInsets.top ?? 0
 			}
 			$0.top.left.right.equalToSuperview()
-			$0.top.height.equalTo(topSafeAreaInsets)
+			$0.height.equalTo(topSafeAreaInsets)
 		}
 		
 		tableView.snp.makeConstraints {

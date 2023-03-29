@@ -16,7 +16,7 @@ final class ProfileViewController: UIViewController {
 	
 	private lazy var profileView = ProfileView()
 	
-	private lazy var profileFooterView = ProfileFooter()
+	private lazy var profileFooterView = ProfileFooterView()
 	
 	private lazy var tableView = UITableView()
 	

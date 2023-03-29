@@ -1,5 +1,5 @@
 //
-//  ProfileFooter.swift
+//  ProfileFooterView.swift
 //  MMM
 //
 //  Created by geonhyeong on 2023/03/29.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ProfileFooter: UIView {
+final class ProfileFooterView: UIView {
 	private lazy var contentLabel = UILabel().then {
 		$0.font = R.Font.body2
 		$0.textColor = R.Color.gray900

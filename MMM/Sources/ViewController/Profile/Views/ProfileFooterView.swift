@@ -16,6 +16,13 @@ final class ProfileFooterView: UIView {
 		$0.text = "앱 버전"
 	}
 	
+	private lazy var versionLabel = UILabel().then {
+		$0.font = R.Font.body3
+		$0.textColor = R.Color.gray500
+		$0.textAlignment = .right
+		$0.text = "현재 1.0.0"
+	}
+	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		backgroundColor = R.Color.gray900
@@ -27,10 +34,15 @@ final class ProfileFooterView: UIView {
 	}
 	
 	private func setLayout() {
-		addSubviews(contentLabel)
-		
+		addSubviews(contentLabel, versionLabel)
+				
 		contentLabel.snp.makeConstraints {
-			$0.left.right.equalTo(24)
+			$0.left.equalToSuperview().inset(24)
+			$0.top.equalTo(12)
+		}
+		
+		versionLabel.snp.makeConstraints {
+			$0.right.equalToSuperview().inset(24)
 			$0.top.equalTo(12)
 		}
 	}

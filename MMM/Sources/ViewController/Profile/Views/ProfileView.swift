@@ -10,7 +10,7 @@ import Then
 import SnapKit
 
 final class ProfileView: UIView {
-
+	
 	private lazy var imageView = UIImageView().then {
 		$0.contentMode = .scaleAspectFill
 		$0.layer.masksToBounds = true
@@ -51,7 +51,7 @@ final class ProfileView: UIView {
 	private func setLayout() {
 		addSubviews(imageView)
 		imageView.addSubviews(navigationLabel, phrasesLabel, emailLabel)
-
+		
 		imageView.snp.makeConstraints {
 			$0.top.equalToSuperview()
 			$0.left.right.equalToSuperview()

@@ -41,14 +41,14 @@ final class ProfileView: UIView {
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		backgroundColor = R.Color.gray900
-		setUpLayout()
+		setLayout()
 	}
 	
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	private func setUpLayout() {
+	private func setLayout() {
 		addSubviews(imageView)
 		imageView.addSubviews(navigationLabel, phrasesLabel, emailLabel)
 

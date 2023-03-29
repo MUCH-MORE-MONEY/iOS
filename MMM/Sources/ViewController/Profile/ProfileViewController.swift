@@ -51,7 +51,7 @@ private extension ProfileViewController {
 		
 		profileView = profileView.then {
 			$0.setUp(email: "mmm1234@icloud.com")
-			$0.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: 206)
+			$0.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: 222)
 		}
 		
 		tableView = tableView.then {

@@ -20,6 +20,10 @@ final class ProfileViewController: UIViewController {
 		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
 	}
+	
+	override var preferredStatusBarStyle: UIStatusBarStyle {
+		return .lightContent // status text color 변경
+	}
 }
 
 //MARK: - Style & Layouts

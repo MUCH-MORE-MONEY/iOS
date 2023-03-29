@@ -62,7 +62,6 @@ private extension ProfileViewController {
 			$0.tableHeaderView = profileView
 			$0.tableFooterView = profileFooterView
 			$0.separatorInset = UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0)
-			
 			$0.register(ProfileTableViewCell.self)
 		}
 				
@@ -92,12 +91,15 @@ private extension ProfileViewController {
 // MARK: - UITableView DataSource
 extension ProfileViewController: UITableViewDataSource {
 	
+	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+		return 44
+	}
+	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return 3
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//		print(#line, #function, ProfileTableViewCell.className)
 		let cell = tableView.dequeueReusableCell(withIdentifier: ProfileTableViewCell.className, for: indexPath) as! ProfileTableViewCell
 
 		cell.setUp(text: lableCellList[indexPath.row])

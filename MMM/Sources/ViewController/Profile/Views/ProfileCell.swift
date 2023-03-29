@@ -24,12 +24,13 @@ final class ProfileTableViewCell: UITableViewCell {
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
-		
+			
 	private func setLayout() {
 		addSubviews(contentLabel)
 		
 		contentLabel.snp.makeConstraints {
-			$0.left.equalToSuperview()
+			$0.left.right.equalTo(24)
+			$0.centerY.equalToSuperview()
 		}
 	}
 }

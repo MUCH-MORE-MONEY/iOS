@@ -8,6 +8,7 @@
 import UIKit
 
 final class ProfileFooterView: UIView {
+	
 	private lazy var contentLabel = UILabel().then {
 		$0.font = R.Font.body2
 		$0.textColor = R.Color.gray900
@@ -29,7 +30,8 @@ final class ProfileFooterView: UIView {
 		addSubviews(contentLabel)
 		
 		contentLabel.snp.makeConstraints {
-			$0.left.equalToSuperview()
+			$0.left.right.equalTo(24)
+			$0.top.equalTo(12)
 		}
 	}
 }

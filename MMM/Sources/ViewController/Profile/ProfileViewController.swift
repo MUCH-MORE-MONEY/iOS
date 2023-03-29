@@ -61,7 +61,8 @@ private extension ProfileViewController {
 			$0.backgroundColor = R.Color.gray100
 			$0.tableHeaderView = profileView
 			$0.tableFooterView = profileFooterView
-			$0.separatorInset = UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0)
+			$0.separatorInset.left = 24
+			$0.separatorInset.right = 24
 			$0.register(ProfileTableViewCell.self)
 		}
 				

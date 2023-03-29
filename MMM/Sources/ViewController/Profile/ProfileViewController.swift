@@ -14,8 +14,14 @@ final class ProfileViewController: UIViewController {
 		
 	private lazy var topArea = UIView()
 	
-	private let profileView = ProfileView()
+	private lazy var profileView = ProfileView()
 	
+	private lazy var profileFooterView = ProfileFooter()
+	
+	private lazy var tableView = UITableView()
+	
+	private lazy var lableCellList = ["계정 관리", "데이터 내보내기", "문의 및 서비스 약관", "앱 버전"]
+
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
@@ -43,9 +49,24 @@ private extension ProfileViewController {
 			$0.backgroundColor = R.Color.gray900
 		}
 		
-		profileView.setUp(email: "mmm1234@icloud.com")
+		profileView = profileView.then {
+			$0.setUp(email: "mmm1234@icloud.com")
+			$0.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: 206)
+		}
 		
-		view.addSubviews(topArea, profileView)
+		tableView = tableView.then {
+			$0.delegate = self
+			$0.dataSource = self
+			$0.showsVerticalScrollIndicator = false
+			$0.backgroundColor = R.Color.gray100
+			$0.tableHeaderView = profileView
+			$0.tableFooterView = profileFooterView
+			$0.separatorInset = UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0)
+			
+			$0.register(ProfileTableViewCell.self)
+		}
+				
+		view.addSubviews(topArea, tableView)
 	}
 	
 	private func setLayout() {
@@ -61,12 +82,35 @@ private extension ProfileViewController {
 			$0.top.height.equalTo(topSafeAreaInsets)
 		}
 		
-		profileView.snp.makeConstraints {
-			$0.top.left.right.equalTo(view.safeAreaLayoutGuide)
-			$0.height.equalTo(206)
+		tableView.snp.makeConstraints {
+			$0.top.bottom.equalTo(view.safeAreaLayoutGuide)
+			$0.left.right.equalTo(view.safeAreaLayoutGuide)
 		}
 	}
 }
 
-private extension ProfileViewController {
+// MARK: - UITableView DataSource
+extension ProfileViewController: UITableViewDataSource {
+	
+	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		return 3
+	}
+	
+	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//		print(#line, #function, ProfileTableViewCell.className)
+		let cell = tableView.dequeueReusableCell(withIdentifier: ProfileTableViewCell.className, for: indexPath) as! ProfileTableViewCell
+
+		cell.setUp(text: lableCellList[indexPath.row])
+		cell.backgroundColor = R.Color.gray100
+		
+		return cell
+	}
+}
+
+// MARK: - UITableView Delegate
+extension ProfileViewController: UITableViewDelegate {
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		// 셀 터치시 회색 표시 없애기
+		tableView.deselectRow(at: indexPath, animated: true)
+	}
 }

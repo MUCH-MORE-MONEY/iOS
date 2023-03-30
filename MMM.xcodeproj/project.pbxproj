@@ -329,8 +329,7 @@
 		C41193F029D3A867003DBC15 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				C41193F129D3AEBB003DBC15 /* Views */,
-				C41193FE29D53A69003DBC15 /* ViewController */,
+				C41193FF29D53AA8003DBC15 /* Profile */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -351,6 +350,15 @@
 				C411939129D2817C003DBC15 /* ProfileViewController.swift */,
 			);
 			path = ViewController;
+			sourceTree = "<group>";
+		};
+		C41193FF29D53AA8003DBC15 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				C41193F129D3AEBB003DBC15 /* Views */,
+				C41193FE29D53A69003DBC15 /* ViewController */,
+			);
+			path = Profile;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

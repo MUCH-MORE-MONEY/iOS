@@ -14,22 +14,21 @@ final class ProfileTableViewCell: UITableViewCell {
 		$0.textColor = R.Color.gray900
 		$0.textAlignment = .left
 	}
-	
+
 	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
 		setLayout()
-		
 	}
-	
+
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
-			
+
 	private func setLayout() {
 		addSubviews(contentLabel)
 		
 		contentLabel.snp.makeConstraints {
-			$0.left.right.equalTo(28)
+			$0.leading.trailing.equalToSuperview().inset(28)
 			$0.centerY.equalToSuperview()
 		}
 	}

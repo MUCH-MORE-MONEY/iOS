@@ -38,6 +38,11 @@ final class ProfileView: UIView {
 		$0.lineBreakMode = .byCharWrapping
 	}
 	
+	private lazy var bottomArea = UIView().then {
+		$0.backgroundColor = .red
+	}
+
+	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		backgroundColor = R.Color.gray900
@@ -49,7 +54,7 @@ final class ProfileView: UIView {
 	}
 	
 	private func setLayout() {
-		addSubviews(imageView)
+		addSubviews(imageView, bottomArea)
 		
 		imageView.addSubviews(navigationLabel, phrasesLabel, emailLabel)
 		

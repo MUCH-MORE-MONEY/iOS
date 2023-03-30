@@ -13,14 +13,14 @@ import SnapKit
 final class ProfileViewController: UIViewController {
 		
 	private lazy var topArea = UIView()
-	
+		
 	private lazy var profileView = ProfileView()
 	
 	private lazy var profileFooterView = ProfileFooterView()
 	
 	private lazy var tableView = UITableView()
 	
-	private lazy var lableCellList = ["계정 관리", "데이터 내보내기", "문의 및 서비스 약관", "앱 버전"]
+	private lazy var lableCellList = ["", "계정 관리", "데이터 내보내기", "문의 및 서비스 약관", "앱 버전"]
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -61,8 +61,9 @@ private extension ProfileViewController {
 			$0.backgroundColor = R.Color.gray100
 			$0.tableHeaderView = profileView
 			$0.tableFooterView = profileFooterView
-			$0.separatorInset.left = 24
-			$0.separatorInset.right = 24
+			$0.separatorStyle = .none
+//			$0.separatorInset.left = 24
+//			$0.separatorInset.right = 24
 			$0.register(ProfileTableViewCell.self)
 		}
 				
@@ -83,8 +84,7 @@ private extension ProfileViewController {
 		}
 		
 		tableView.snp.makeConstraints {
-			$0.top.bottom.equalTo(view.safeAreaLayoutGuide)
-			$0.left.right.equalTo(view.safeAreaLayoutGuide)
+			$0.top.bottom.left.right.equalTo(view.safeAreaLayoutGuide)
 		}
 	}
 }
@@ -93,17 +93,25 @@ private extension ProfileViewController {
 extension ProfileViewController: UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+		if indexPath.row == 0 {
+			return 16
+		}
 		return 44
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return 3
+		return 4
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: ProfileTableViewCell.className, for: indexPath) as! ProfileTableViewCell
 
-		cell.setUp(text: lableCellList[indexPath.row])
+		if indexPath.row == 0 {
+			cell.isUserInteractionEnabled = false // click disable
+		} else {
+			cell.setUp(text: lableCellList[indexPath.row])
+		}
+		
 		cell.backgroundColor = R.Color.gray100
 		
 		return cell

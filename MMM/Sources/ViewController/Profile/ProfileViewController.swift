@@ -21,6 +21,16 @@ final class ProfileViewController: UIViewController {
 	private lazy var tableView = UITableView()
 	
 	private lazy var lableCellList = ["", "계정 관리", "데이터 내보내기", "문의 및 서비스 약관", "앱 버전"]
+	
+	private let topSafeAreaInsets: CGFloat = {
+		let scenes = UIApplication.shared.connectedScenes
+		let windowScene = scenes.first as? UIWindowScene
+		if let hasWindowScene = windowScene {
+			return hasWindowScene.windows.first?.safeAreaInsets.top ?? 0
+		} else {
+			return 0.0
+		}
+	}()
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -72,18 +82,13 @@ private extension ProfileViewController {
 	private func setLayout() {
 		// [view]
 		topArea.snp.makeConstraints {
-			var topSafeAreaInsets: CGFloat = 0.0
-			let scenes = UIApplication.shared.connectedScenes
-			let windowScene = scenes.first as? UIWindowScene
-			if let hasWindowScene = windowScene {
-				topSafeAreaInsets = hasWindowScene.windows.first?.safeAreaInsets.top ?? 0
-			}
 			$0.top.left.right.equalToSuperview()
 			$0.height.equalTo(topSafeAreaInsets)
 		}
 		
 		tableView.snp.makeConstraints {
-			$0.top.bottom.left.right.equalTo(view.safeAreaLayoutGuide)
+			$0.top.equalTo(topArea.snp.bottom)
+			$0.bottom.left.right.equalTo(view.safeAreaLayoutGuide)
 		}
 	}
 }

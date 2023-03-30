@@ -61,9 +61,8 @@ private extension ProfileViewController {
 			$0.backgroundColor = R.Color.gray100
 			$0.tableHeaderView = profileView
 			$0.tableFooterView = profileFooterView
-			$0.separatorStyle = .none
-//			$0.separatorInset.left = 24
-//			$0.separatorInset.right = 24
+			$0.separatorInset.left = 24
+			$0.separatorInset.right = 24
 			$0.register(ProfileTableViewCell.self)
 		}
 				
@@ -108,6 +107,9 @@ extension ProfileViewController: UITableViewDataSource {
 
 		if indexPath.row == 0 {
 			cell.isUserInteractionEnabled = false // click disable
+			DispatchQueue.main.async {
+				cell.addAboveTheBottomBorderWithColor(color: R.Color.gray100)
+			}
 		} else {
 			cell.setUp(text: lableCellList[indexPath.row])
 		}

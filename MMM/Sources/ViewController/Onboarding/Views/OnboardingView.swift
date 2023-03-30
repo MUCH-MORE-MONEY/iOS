@@ -77,3 +77,12 @@ final class OnboardingView: UIView {
         }
     }
 }
+
+extension OnboardingView {
+    func setUp(image: UIImage, label1: String, label2: String, label3: String) {
+        imageView.image = R.Icon.onboarding2
+        mainLabel1.text = label1
+        mainLabel2.text = label2
+        subLabel.text = label3
+    }
+}

@@ -22,6 +22,7 @@ final class OnboardingView: UIView {
         $0.font = R.Font.h2
         $0.textColor = R.Color.gray800
         $0.textAlignment = .center
+        $0.alpha = 0.0
     }
     
     private lazy var mainLabel2 = UILabel().then {
@@ -29,6 +30,7 @@ final class OnboardingView: UIView {
         $0.font = R.Font.h2
         $0.textColor = R.Color.orange500
         $0.textAlignment = .center
+        $0.alpha = 0.0
     }
     
     private lazy var subLabel = UILabel().then {
@@ -37,6 +39,7 @@ final class OnboardingView: UIView {
         $0.textColor = R.Color.gray500
         $0.textAlignment = .center
         $0.numberOfLines = 2
+        $0.alpha = 0.0
     }
     
     override init(frame: CGRect) {

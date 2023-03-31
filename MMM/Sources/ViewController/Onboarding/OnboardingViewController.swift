@@ -111,6 +111,8 @@ private extension OnboardingViewController {
             $0.layer.masksToBounds = true
             $0.backgroundColor = R.Color.gray900
         }
+        
+        labelAnimation(mainLabel1, mainLabel2, subLabel)
     }
     
     private func setLayout() {
@@ -191,6 +193,18 @@ extension OnboardingViewController {
     @objc func pageControlTapped() {
         
     }
+    
+    func labelAnimation(_ labels: UILabel...) {
+        labels.forEach {
+            $0.alpha = 0.0
+        }
+        
+        UIView.animate(withDuration: 0.3) {
+            labels.forEach {
+                $0.alpha = 1.0
+            }
+        }
+    }
 }
 
 // MARK: - Scrollview delegate
@@ -202,5 +216,8 @@ extension OnboardingViewController: UIScrollViewDelegate {
         mainLabel1.text = onboardingItems[Int(round(value))].mainLabel1
         mainLabel2.text = onboardingItems[Int(round(value))].mainLabel2
         subLabel.text = onboardingItems[Int(round(value))].subLabel
+        
+        labelAnimation(mainLabel1, mainLabel2, subLabel)
+
     }
 }

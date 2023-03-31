@@ -127,6 +127,7 @@ extension ProfileViewController: UITableViewDataSource {
 			DispatchQueue.main.async {
 				cell.addAboveTheBottomBorderWithColor(color: R.Color.gray100)
 			}
+			cell.isHidden()
 		} else {
 			cell.setUp(text: lableCellList[indexPath.row])
 		}

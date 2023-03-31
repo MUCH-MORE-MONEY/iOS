@@ -54,7 +54,6 @@ private extension ManagementViewController {
 			$0.style = .plain
 			$0.target = self
 			$0.action = #selector(didTapBackButton)
-//			$0.isUserInteractionEnabled = false		// tip: view를 위한 event는 event queue에서 무시되고 삭제
 		}
 		
 		view.addSubviews(profileView)

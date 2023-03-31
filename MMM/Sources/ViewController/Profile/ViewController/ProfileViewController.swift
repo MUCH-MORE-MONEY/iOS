@@ -146,7 +146,9 @@ extension ProfileViewController: UITableViewDelegate {
 		
 		switch indexPath.row {
 		case 1:
-			navigationController?.pushViewController(ManagementViewController(), animated: true)		// 계정관리
+			let vs = ManagementViewController()
+			vs.setData(email: "mmm1234@naver.com")
+			navigationController?.pushViewController(vs, animated: true)		// 계정관리
 		default:
 			break
 		}

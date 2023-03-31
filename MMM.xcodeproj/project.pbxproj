@@ -40,6 +40,8 @@
 		C41193F729D3D954003DBC15 /* Ex+UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193F629D3D954003DBC15 /* Ex+UITableView.swift */; };
 		C41193F929D3DD9A003DBC15 /* ProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193F829D3DD9A003DBC15 /* ProfileCell.swift */; };
 		C41193FD29D42BD9003DBC15 /* ProfileFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193FC29D42BD9003DBC15 /* ProfileFooterView.swift */; };
+		C411940429D53DDF003DBC15 /* ManagementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411940329D53DDF003DBC15 /* ManagementViewController.swift */; };
+		C411940729D53EA0003DBC15 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411940629D53EA0003DBC15 /* NavigationController.swift */; };
 		FF7FB61A0AC167F25EB6438F /* Pods_MMM_MMMUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 738AB5686981CA1A28640207 /* Pods_MMM_MMMUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -102,6 +104,8 @@
 		C41193F629D3D954003DBC15 /* Ex+UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UITableView.swift"; sourceTree = "<group>"; };
 		C41193F829D3DD9A003DBC15 /* ProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCell.swift; sourceTree = "<group>"; };
 		C41193FC29D42BD9003DBC15 /* ProfileFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileFooterView.swift; sourceTree = "<group>"; };
+		C411940329D53DDF003DBC15 /* ManagementViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagementViewController.swift; sourceTree = "<group>"; };
+		C411940629D53EA0003DBC15 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		E1F4C2751A32E5FDB91A657F /* Pods-MMMTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMMTests.release.xcconfig"; path = "Target Support Files/Pods-MMMTests/Pods-MMMTests.release.xcconfig"; sourceTree = "<group>"; };
 		F4482F9A861317CCBA1EDC6B /* Pods-MMM-MMMUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMM-MMMUITests.release.xcconfig"; path = "Target Support Files/Pods-MMM-MMMUITests/Pods-MMM-MMMUITests.release.xcconfig"; sourceTree = "<group>"; };
 		FC275A78FD9B770379D3387D /* Pods-MMM.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMM.debug.xcconfig"; path = "Target Support Files/Pods-MMM/Pods-MMM.debug.xcconfig"; sourceTree = "<group>"; };
@@ -212,6 +216,7 @@
 			children = (
 				C41193C229D28318003DBC15 /* Info */,
 				C41193C329D28334003DBC15 /* Assets */,
+				C411940529D53E77003DBC15 /* Base */,
 				C41193C829D2874A003DBC15 /* Font */,
 				C41193DC29D287E6003DBC15 /* Extensions */,
 				C41193E929D2D7FE003DBC15 /* MMMResource.swift */,
@@ -329,7 +334,8 @@
 		C41193F029D3A867003DBC15 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				C41193FF29D53AA8003DBC15 /* Profile */,
+				C41193F129D3AEBB003DBC15 /* Views */,
+				C41193FE29D53A69003DBC15 /* ViewController */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -348,17 +354,17 @@
 			isa = PBXGroup;
 			children = (
 				C411939129D2817C003DBC15 /* ProfileViewController.swift */,
+				C411940329D53DDF003DBC15 /* ManagementViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
 		};
-		C41193FF29D53AA8003DBC15 /* Profile */ = {
+		C411940529D53E77003DBC15 /* Base */ = {
 			isa = PBXGroup;
 			children = (
-				C41193F129D3AEBB003DBC15 /* Views */,
-				C41193FE29D53A69003DBC15 /* ViewController */,
+				C411940629D53EA0003DBC15 /* NavigationController.swift */,
 			);
-			path = Profile;
+			path = Base;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -610,6 +616,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C411940429D53DDF003DBC15 /* ManagementViewController.swift in Sources */,
 				C41193F529D3D7FB003DBC15 /* Ex+NSObject.swift in Sources */,
 				C41193FD29D42BD9003DBC15 /* ProfileFooterView.swift in Sources */,
 				C41193F929D3DD9A003DBC15 /* ProfileCell.swift in Sources */,
@@ -622,6 +629,7 @@
 				C41193E629D287E6003DBC15 /* Ex+Color.swift in Sources */,
 				C41193E429D287E6003DBC15 /* Ex+Font.swift in Sources */,
 				C41193E529D287E6003DBC15 /* Ex+UIDevice.swift in Sources */,
+				C411940729D53EA0003DBC15 /* NavigationController.swift in Sources */,
 				C41193F329D3AED5003DBC15 /* ProfileView.swift in Sources */,
 				C41193F729D3D954003DBC15 /* Ex+UITableView.swift in Sources */,
 				C411939029D2817C003DBC15 /* SceneDelegate.swift in Sources */,

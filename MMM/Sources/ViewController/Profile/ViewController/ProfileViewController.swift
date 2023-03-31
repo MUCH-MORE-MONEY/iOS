@@ -37,6 +37,10 @@ final class ProfileViewController: UIViewController {
 		setup()		// 초기 셋업할 코드들
 	}
 	
+	override func viewWillAppear(_ animated: Bool) {
+		navigationController?.setNavigationBarHidden(true, animated: animated)	// navigation bar 숨김
+	}
+	
 	override var preferredStatusBarStyle: UIStatusBarStyle {
 		return .lightContent // status text color 변경
 	}
@@ -71,6 +75,7 @@ private extension ProfileViewController {
 			$0.backgroundColor = R.Color.gray100
 			$0.tableHeaderView = profileView
 			$0.tableFooterView = profileFooterView
+			$0.bounces = false			// TableView Scroll 방지
 			$0.separatorInset.left = 24
 			$0.separatorInset.right = 24
 			$0.register(ProfileTableViewCell.self)
@@ -130,5 +135,12 @@ extension ProfileViewController: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		// 셀 터치시 회색 표시 없애기
 		tableView.deselectRow(at: indexPath, animated: true)
+		
+		switch indexPath.row {
+		case 1:
+			navigationController?.pushViewController(ManagementViewController(), animated: true)		// 계정관리
+		default:
+			break
+		}
 	}
 }

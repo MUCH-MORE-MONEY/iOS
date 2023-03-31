@@ -8,13 +8,44 @@
 import UIKit
 import Then
 import SnapKit
+import AuthenticationServices
+import WebKit
 
 final class OnboardingViewController: UIViewController {
     
     private let onboardingView = OnboardingView()
     private let onboardingView1 = OnboardingView()
-    private lazy var scrollView = UIScrollView()
-    private let pageControl = UIPageControl()
+    private var webView: WKWebView!
+    
+    
+    private lazy var scrollView = UIScrollView().then {
+        $0.delegate = self
+        $0.showsVerticalScrollIndicator = false
+        $0.showsHorizontalScrollIndicator = false
+        $0.isScrollEnabled = true
+        $0.isPagingEnabled = true
+        $0.bounces = false // 경계 지점 scroll 유무
+        $0.contentSize.width = view.frame.width * CGFloat(2)
+    }
+    private let pageControl = UIPageControl().then {
+        $0.currentPage = 0
+        $0.numberOfPages = 2
+        $0.pageIndicatorTintColor = R.Color.gray200
+        $0.currentPageIndicatorTintColor = R.Color.orange500
+    }
+    
+    private let appleButton = ASAuthorizationAppleIDButton().then {_ in
+        
+    }
+    
+    private let guideButton = UIButton().then {
+        $0.setTitle("로그인 중 문제가 발생하셨나요?", for: .normal)
+        $0.titleLabel?.font = R.Font.body3
+        $0.setTitleColor(R.Color.gray500, for: .normal)
+        $0.addTarget(self, action: #selector(showWebView), for: .touchUpInside)
+    }
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,8 +64,7 @@ private extension OnboardingViewController {
     
     private func setAttribute() {
         // [view]
-        setupScrollView()
-        setupPageControl()
+        
         onboardingView1.setUp(image: R.Icon.onboarding2 ?? UIImage(),
                               label1: "더 나은 내 소비를 위해",
                               label2: "리뷰를 작성해보세요",
@@ -43,12 +73,12 @@ private extension OnboardingViewController {
     
     private func setLayout() {
         // [view]
-        view.addSubviews(scrollView, pageControl)
+        view.addSubviews(scrollView, pageControl, appleButton, guideButton)
         scrollView.addSubviews(onboardingView, onboardingView1)
-
+        
         scrollView.snp.makeConstraints {
             $0.top.left.right.equalToSuperview()
-            $0.height.equalToSuperview().inset(118)
+            $0.bottom.equalToSuperview().inset(188 + 48) // bottom + label2 height
         }
         
         pageControl.snp.makeConstraints {
@@ -67,28 +97,34 @@ private extension OnboardingViewController {
             $0.left.equalTo(onboardingView.snp.right)
             $0.height.equalTo(464)
         }
-    }
-    
-    private func setupScrollView() {
-        scrollView.delegate = self // scroll범위에 따라 pageControl의 값을 바꾸어주기 위한 delegate
-        scrollView.showsHorizontalScrollIndicator = false
-        scrollView.showsVerticalScrollIndicator = false
-        scrollView.isScrollEnabled = true
-        scrollView.isPagingEnabled = true
-        scrollView.bounces = false // 경계 지점 scroll 유무
-
-        scrollView.contentSize.width = view.frame.width * CGFloat(2)
-    }
-    
-    private func setupPageControl() {
-        pageControl.currentPage = 0
-        pageControl.numberOfPages = 2
-        pageControl.pageIndicatorTintColor = R.Color.gray200
-        pageControl.currentPageIndicatorTintColor = R.Color.orange500
+        
+        appleButton.snp.makeConstraints {
+            $0.left.right.equalToSuperview().inset(24)
+            $0.top.equalTo(pageControl.snp.bottom).offset(24)
+            $0.height.equalTo(40)
+        }
+        
+        guideButton.snp.makeConstraints {
+            $0.left.right.equalToSuperview().inset(100)
+            $0.top.equalTo(appleButton.snp.bottom).offset(16)
+        }
+        
+        
     }
     
     private func setPageControlSelectedPage(currentPage: Int) {
         pageControl.currentPage = currentPage
+    }
+    
+}
+
+// MARK: - Actions
+
+extension OnboardingViewController {
+    @objc func showWebView() {
+        if let url = URL(string: "https://talk.naver.com/ct/w40igt") {
+            UIApplication.shared.open(url)
+        }
     }
 }
 

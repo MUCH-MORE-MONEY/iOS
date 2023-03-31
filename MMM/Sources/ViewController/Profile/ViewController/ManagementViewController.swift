@@ -6,29 +6,63 @@
 //
 
 import UIKit
+import Then
+import SnapKit
 
 class ManagementViewController: UIViewController {
 
-    override func viewDidLoad() {
+	private lazy var profileView = ProfileView()
+	
+	private lazy var backButton = UIBarButtonItem()
+	
+	override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+		setup()		// 초기 셋업할 코드들
     }
     
 	override func viewWillAppear(_ animated: Bool) {
-		self.navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = .darkGray
-		self.navigationController?.navigationBar.scrollEdgeAppearance?.titleTextAttributes = [.foregroundColor: UIColor.black]
-		navigationController?.setNavigationBarHidden(false, animated: animated)	// navigation bar 숨김
+		navigationController?.setNavigationBarHidden(false, animated: animated)	// navigation bar 노출
 	}
+}
 
-    /*
-    // MARK: - Navigation
+//MARK: - Action
+private extension ManagementViewController {
+	
+	@objc func didTapBackButton(_ sender: UITapGestureRecognizer) {
+		print()
+		navigationController?.popViewController(animated: true)
+	}
+}
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+//MARK: - Style & Layouts
+private extension ManagementViewController {
+	
+	private func setup() {
+		// 초기 셋업할 코드들
+		setAttribute()
+		setLayout()
+	}
+	
+	private func setAttribute() {
+		// [view]
+		view.backgroundColor = R.Color.gray100
+		navigationItem.leftBarButtonItem = backButton
+		navigationItem.title = "계정관리"
+		
+		backButton = backButton.then {
+			$0.image = R.Icon.arrowBack24
+			$0.style = .plain
+			$0.target = self
+			$0.action = #selector(didTapBackButton)
+//			$0.isUserInteractionEnabled = false		// tip: view를 위한 event는 event queue에서 무시되고 삭제
+		}
+		
+		view.addSubviews(profileView)
+	}
+	
+	private func setLayout() {
+		profileView.snp.makeConstraints {
+			$0.edges.equalToSuperview()
+		}
+	}
 }

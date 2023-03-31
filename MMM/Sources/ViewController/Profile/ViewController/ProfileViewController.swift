@@ -38,7 +38,14 @@ final class ProfileViewController: UIViewController {
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
 		navigationController?.setNavigationBarHidden(true, animated: animated)	// navigation bar 숨김
+	}
+	
+	override func viewWillDisappear(_ animated: Bool) {
+		super.viewWillDisappear(animated)
+
+		self.navigationController?.setNavigationBarHidden(false, animated: animated) // navigation bar 노출
 	}
 	
 	override var preferredStatusBarStyle: UIStatusBarStyle {

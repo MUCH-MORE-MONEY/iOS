@@ -10,7 +10,7 @@ import Then
 import SnapKit
 
 final class ProfileView: UIView {
-
+	
 	private lazy var imageView = UIImageView().then {
 		$0.contentMode = .scaleAspectFill
 		$0.layer.masksToBounds = true
@@ -38,6 +38,11 @@ final class ProfileView: UIView {
 		$0.lineBreakMode = .byCharWrapping
 	}
 	
+	private lazy var bottomArea = UIView().then {
+		$0.backgroundColor = .red
+	}
+
+	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		backgroundColor = R.Color.gray900
@@ -49,9 +54,10 @@ final class ProfileView: UIView {
 	}
 	
 	private func setLayout() {
-		addSubviews(imageView)
+		addSubviews(imageView, bottomArea)
+		
 		imageView.addSubviews(navigationLabel, phrasesLabel, emailLabel)
-
+		
 		imageView.snp.makeConstraints {
 			$0.top.equalToSuperview()
 			$0.left.right.equalToSuperview()
@@ -59,18 +65,18 @@ final class ProfileView: UIView {
 		}
 		
 		navigationLabel.snp.makeConstraints {
-			$0.top.equalToSuperview().inset(3)
+			$0.top.equalToSuperview().inset(19)
 			$0.left.equalToSuperview().inset(24)
 		}
 		
 		phrasesLabel.snp.makeConstraints {
-			$0.top.equalToSuperview().inset(144)
 			$0.left.equalToSuperview().inset(24)
 		}
 		
 		emailLabel.snp.makeConstraints {
 			$0.top.equalTo(phrasesLabel.snp.bottom).offset(4)
 			$0.left.equalToSuperview().inset(24)
+			$0.bottom.equalToSuperview().inset(24)
 		}
 	}
 }

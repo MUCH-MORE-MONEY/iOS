@@ -23,10 +23,8 @@ final class ManagementViewController: UIViewController {
 	
 	private lazy var userLoginLabel = UILabel()
 	
-	private lazy var logoutButton = UIButton()
+	private lazy var tableView = UITableView()
 	
-	private lazy var withdrawalButton = UIButton()
-
 	override func viewDidLoad() {
         super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
@@ -95,32 +93,24 @@ private extension ManagementViewController {
 			$0.textColor = R.Color.gray800
 		}
 		
-		logoutButton = logoutButton.then {
-			$0.setTitle("로그아웃", for: .normal)
-			$0.titleLabel?.font = R.Font.body2
-			$0.setTitleColor(R.Color.gray900, for: .normal)
-			$0.setImage(R.Icon.arrowNext16, for: .normal)
-			$0.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
+		tableView = tableView.then {
+			$0.delegate = self
+			$0.dataSource = self
+			$0.showsVerticalScrollIndicator = false
+			$0.backgroundColor = R.Color.gray100
+			$0.bounces = false			// TableView Scroll 방지
+			$0.separatorStyle = .none
+			$0.register(ProfileTableViewCell.self)
 		}
 		
-		withdrawalButton = withdrawalButton.then {
-			$0.setTitle("탈퇴하기", for: .normal)
-			$0.titleLabel?.font = R.Font.body2
-			$0.setTitleColor(R.Color.gray900, for: .normal)
-			$0.setImage(R.Icon.arrowNext16, for: .normal)
-			$0.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
-		}
-		
-		view.addSubviews(baseView)
-		baseView.addSubviews(userInfoLabel, emailLabel, userEmailLabel, userLoginLabel, logoutButton, withdrawalButton)
+		view.addSubviews(baseView, tableView)
+		baseView.addSubviews(userInfoLabel, emailLabel, userEmailLabel, userLoginLabel)
 	}
 	
 	private func setLayout() {
 		baseView.snp.makeConstraints {
 			$0.top.left.equalToSuperview().inset(24)
-			$0.right.equalToSuperview().inset(29)
-			$0.centerX.equalToSuperview()
-			$0.height.equalTo(200)
+			$0.right.equalToSuperview().inset(24)
 		}
 		
 		userInfoLabel.snp.makeConstraints {
@@ -141,17 +131,55 @@ private extension ManagementViewController {
 			$0.left.equalToSuperview()
 			$0.top.equalTo(emailLabel.snp.bottom).offset(48)
 		}
-
-		logoutButton.snp.makeConstraints {
-			$0.left.right.equalToSuperview()
+		
+		tableView.snp.makeConstraints {
 			$0.top.equalTo(userLoginLabel.snp.bottom).offset(16)
-			$0.height.equalTo(44)
+			$0.left.right.equalToSuperview()
+			$0.height.equalTo(88)
+		}
+	}
+}
+
+// MARK: - UITableView DataSource
+extension ManagementViewController: UITableViewDataSource {
+	
+	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+		return 44
+	}
+	
+	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		return 2
+	}
+	
+	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		let cell = tableView.dequeueReusableCell(withIdentifier: ProfileTableViewCell.className, for: indexPath) as! ProfileTableViewCell
+		
+		switch indexPath.row {
+		case 0:
+			cell.setUp(text: "로그아웃")
+		default:
+			cell.setUp(text: "탈퇴하기")
 		}
 		
-		withdrawalButton.snp.makeConstraints {
-			$0.left.right.equalToSuperview()
-			$0.top.equalTo(logoutButton.snp.bottom)
-			$0.height.equalTo(44)
-		}
+		cell.backgroundColor = R.Color.gray100
+		
+		return cell
+	}
+}
+
+// MARK: - UITableView Delegate
+extension ManagementViewController: UITableViewDelegate {
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		// 셀 터치시 회색 표시 없애기
+		tableView.deselectRow(at: indexPath, animated: true)
+		
+//		switch indexPath.row {
+//		case 1:
+//			let vs = ManagementViewController()
+//			vs.setData(email: "mmm1234@naver.com")
+//			navigationController?.pushViewController(vs, animated: true)		// 계정관리
+//		default:
+//			break
+//		}
 	}
 }

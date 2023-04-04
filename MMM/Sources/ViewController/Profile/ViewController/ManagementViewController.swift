@@ -33,10 +33,6 @@ final class ManagementViewController: UIViewController {
 	override func viewWillAppear(_ animated: Bool) {
 		navigationController?.setNavigationBarHidden(false, animated: animated)	// navigation bar 노출
 	}
-	
-	public func setData(email: String) {
-		userEmailLabel.text = email
-	}
 }
 
 //MARK: - Action
@@ -54,7 +50,11 @@ extension ManagementViewController: CustomAlertDelegate {
 }
 
 //MARK: - Style & Layouts
-private extension ManagementViewController {
+extension ManagementViewController {
+	
+	public func setData(email: String) {
+		userEmailLabel.text = email
+	}
 	
 	private func setup() {
 		// 초기 셋업할 코드들
@@ -181,6 +181,9 @@ extension ManagementViewController: UITableViewDelegate {
 		switch indexPath.row {
 		case 0:
 			showAlert(alertType: .canCancel, titleText: "로그아웃 하시겠어요?", contentText: "로그아웃해도 해당 계정의 데이터는 \n 계속 저장되어 있습니다.", cancelButtonText: "취소하기", confirmButtonText: "로그아웃")
+		case 1:
+			let vs = WithdrawViewController()
+			navigationController?.pushViewController(vs, animated: true)		// 계정관리
 		default:
 			break
 		}

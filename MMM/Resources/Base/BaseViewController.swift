@@ -39,7 +39,7 @@ extension BaseViewController {
     
     private func setAttribute() {
         navigationItem.leftBarButtonItem = backButton
-        
+        view.backgroundColor = R.Color.gray100
         backButton = backButton.then {
             $0.image = R.Icon.arrowBack24
             $0.style = .plain

@@ -7,23 +7,212 @@
 
 import UIKit
 
-class CustomAlertViewController: UIViewController {
+// Custom Alert의 버튼의 액션을 처리하는 Delegate
+protocol CustomAlertDelegate: AnyObject {
+	func didAlertCofirmButton()   // confirm button event
+	func didAlertCacelButton()     // cancel button event
+}
 
+extension CustomAlertDelegate where Self: UIViewController {
+	func showAlert(
+		alertType: AlertType,
+		titleText: String,
+		contentText: String,
+		cancelButtonText: String? = "취소하기",
+		confirmButtonText: String
+	) {
+		let vc = CustomAlertViewController()
+		
+		vc.delegate = self
+		
+		vc.modalPresentationStyle = .overFullScreen
+		vc.modalTransitionStyle = .crossDissolve		// 뷰가 전환될 때의 효과
+		vc.setData(alertType: alertType, titleText: titleText, contentText: contentText, cancelButtonText: cancelButtonText, confirmButtonText: confirmButtonText)
+		
+		self.present(vc, animated: true, completion: nil)
+	}
+}
+
+enum AlertType {
+	case onlyConfirm    // 확인 버튼
+	case canCancel      // 확인 + 취소 버튼
+}
+
+class CustomAlertViewController: UIViewController {
+	
+	weak var delegate: CustomAlertDelegate?
+	
+	private lazy var alertType: AlertType = .canCancel
+
+	private lazy var alertView = UIView().then {
+		$0.backgroundColor = R.Color.white
+		$0.layer.cornerRadius = 16
+	}
+	
+	private lazy var containerStackView = UIStackView().then {
+		$0.axis = .vertical
+		$0.spacing = 8
+		$0.alignment = .center
+	}
+	
+	private lazy var buttonStackView = UIStackView().then {
+		$0.spacing = 11
+		$0.distribution = .fillEqually
+	}
+
+	private lazy var titleLabel = UILabel().then {
+		$0.font = R.Font.title1
+		$0.textColor = R.Color.black
+		$0.textAlignment = .center
+		$0.numberOfLines = 0
+	}
+	
+	private lazy var contentLabel = UILabel().then {
+		$0.font = R.Font.body1
+		$0.textColor = R.Color.gray700
+		$0.textAlignment = .center
+		$0.numberOfLines = 2
+	}
+	
+	private lazy var cancelButton = UIButton().then {
+		$0.setTitle("취소하기", for: .normal)
+		$0.setTitleColor(R.Color.black, for: .normal)	// enable
+		$0.titleLabel?.font = R.Font.body1
+		$0.backgroundColor = R.Color.white
+		$0.setBackgroundColor(R.Color.gray200, for: .highlighted)
+		$0.layer.borderWidth = 1
+		$0.layer.borderColor = R.Color.gray200.cgColor
+		$0.layer.cornerRadius = 4
+		$0.addTarget(self, action: #selector(didTapCancleButton), for: .touchUpInside)
+	}
+	
+	private lazy var confirmButton = UIButton().then {
+		$0.setTitle("확인하기", for: .normal)
+		$0.setTitleColor(R.Color.white, for: .normal)
+		$0.titleLabel?.font = R.Font.title3
+		$0.backgroundColor = R.Color.gray900
+		$0.setBackgroundColor(R.Color.gray600, for: .highlighted)
+		$0.layer.cornerRadius = 4
+		$0.addTarget(self, action: #selector(didTapConfirmButton), for: .touchUpInside)
+	}
+	
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+		setUp()		// 초기 셋업할 코드들
     }
-    
+}
 
-    /*
-    // MARK: - Navigation
+//MARK: - Action
+extension CustomAlertViewController {
+	
+	public func setData(alertType: AlertType, titleText: String, contentText: String, cancelButtonText: String? = "취소하기", confirmButtonText: String) {
+		self.alertType = alertType
+		self.titleLabel.text = titleText
+		
+		let attributedString = NSMutableAttributedString(string: contentText)
+		let paragraphStyle = NSMutableParagraphStyle()
+		paragraphStyle.lineBreakMode = .byCharWrapping
+		paragraphStyle.lineSpacing = 8
+		paragraphStyle.alignment = .center
+		attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, attributedString.length))
+		self.contentLabel.attributedText = attributedString
+		
+		self.cancelButton.setTitle(cancelButtonText, for: .normal)
+		self.confirmButton.setTitle(confirmButtonText, for: .normal)
+	}
+	
+	// 확인
+	@objc private func didTapConfirmButton() {
+		self.dismiss(animated: true) { self.delegate?.didAlertCofirmButton() }
+	}
+	
+	// 취소
+	@objc private func didTapCancleButton() {
+		self.dismiss(animated: true) { self.delegate?.didAlertCacelButton() }
+	}
+	
+	// 배경 클릭
+	@objc func handleTap(sender: UITapGestureRecognizer) {
+		self.dismiss(animated: true)
+	}
+}
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
+import Combine
 
+//MARK: - Style & Layouts
+extension CustomAlertViewController {
+	private func setUp() {
+		// 초기 셋업할 코드들
+		setAttribute()
+		setLayout()
+	}
+	
+	private func setAttribute() {
+		view.backgroundColor = R.Color.black.withAlphaComponent(0.7)
+//		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+//		view.addGestureRecognizer(tapGesture)
+		
+		switch alertType {
+		case .onlyConfirm:
+			cancelButton.isHidden = true
+			
+			confirmButton.isHidden = false
+			buttonStackView.addArrangedSubview(confirmButton)
+		case .canCancel:
+			cancelButton.isHidden = false
+			
+			confirmButton.isHidden = false
+			[cancelButton, confirmButton].forEach {
+				buttonStackView.addArrangedSubview($0)
+			}
+		}
+		
+		view.addSubviews(alertView)
+		alertView.addSubview(containerStackView)
+		[titleLabel, contentLabel, buttonStackView].forEach {
+			containerStackView.addArrangedSubview($0)
+		}
+	}
+	
+	private func setLayout() {
+		
+		alertView.snp.makeConstraints {
+			$0.top.greaterThanOrEqualToSuperview()
+			$0.bottom.lessThanOrEqualToSuperview()
+			$0.left.right.equalToSuperview().inset(24)
+			$0.centerY.equalToSuperview()
+		}
+		
+		containerStackView.snp.makeConstraints {
+			$0.top.equalTo(alertView.snp.top).inset(24)
+			$0.bottom.equalTo(alertView.snp.bottom).inset(24)
+			$0.left.equalTo(alertView.snp.left).inset(20)
+			$0.right.equalTo(alertView.snp.right).inset(20)
+		}
+
+//		buttonStackView.snp.makeConstraints {
+//			$0.top.equalTo(containerStackView.snp.bottom).inset(8)
+//		}
+//
+//		contentLabel.snp.makeConstraints {
+//			$0.top.equalTo(titleLabel.snp.bottom).offset(16)
+//			$0.left.right.equalToSuperview().inset(20)
+//		}
+		
+		switch alertType {
+		case .onlyConfirm:
+			confirmButton.snp.makeConstraints {
+				$0.top.equalTo(contentLabel.snp.bottom).offset(16)
+				$0.width.equalTo(containerStackView.snp.width)
+				$0.height.equalTo(40)
+			}
+
+		case .canCancel:
+			cancelButton.snp.makeConstraints {
+				$0.top.equalTo(contentLabel.snp.bottom).offset(16)
+				$0.width.greaterThanOrEqualTo(containerStackView.snp.width).multipliedBy(0.48)
+				$0.height.equalTo(40)
+			}
+		}
+	}
 }

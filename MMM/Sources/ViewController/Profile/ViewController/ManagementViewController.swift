@@ -40,12 +40,17 @@ final class ManagementViewController: UIViewController {
 }
 
 //MARK: - Action
-private extension ManagementViewController {
-	
+extension ManagementViewController: CustomAlertDelegate {
 	@objc func didTapBackButton(_ sender: UITapGestureRecognizer) {
 		print()
 		navigationController?.popViewController(animated: true)
 	}
+	
+	// 확인 버튼 이벤트 처리
+	func didAlertCofirmButton() { }
+	
+	// 취소 버튼 이벤트 처리
+	func didAlertCacelButton() { }
 }
 
 //MARK: - Style & Layouts
@@ -173,13 +178,11 @@ extension ManagementViewController: UITableViewDelegate {
 		// 셀 터치시 회색 표시 없애기
 		tableView.deselectRow(at: indexPath, animated: true)
 		
-//		switch indexPath.row {
-//		case 1:
-//			let vs = ManagementViewController()
-//			vs.setData(email: "mmm1234@naver.com")
-//			navigationController?.pushViewController(vs, animated: true)		// 계정관리
-//		default:
-//			break
-//		}
+		switch indexPath.row {
+		case 0:
+			showAlert(alertType: .canCancel, titleText: "로그아웃 하시겠어요?", contentText: "로그아웃해도 해당 계정의 데이터는 \n 계속 저장되어 있습니다.", cancelButtonText: "취소하기", confirmButtonText: "로그아웃")
+		default:
+			break
+		}
 	}
 }

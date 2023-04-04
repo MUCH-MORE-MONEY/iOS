@@ -9,7 +9,7 @@ import UIKit
 import Then
 import SnapKit
 
-class DataExportViewController: UIViewController {
+final class DataExportViewController: BaseViewController {
 
     // MARK: - UI components
     private lazy var mainLabel = UILabel().then {

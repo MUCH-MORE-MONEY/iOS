@@ -43,6 +43,7 @@
 		C411940429D53DDF003DBC15 /* ManagementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411940329D53DDF003DBC15 /* ManagementViewController.swift */; };
 		C411940729D53EA0003DBC15 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411940629D53EA0003DBC15 /* NavigationController.swift */; };
 		C411940B29DAEDF9003DBC15 /* CustomAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411940A29DAEDF9003DBC15 /* CustomAlertViewController.swift */; };
+		C4DBAA2C29DBCB8B00D1BB97 /* Ex+Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBAA2B29DBCB8B00D1BB97 /* Ex+Button.swift */; };
 		FF7FB61A0AC167F25EB6438F /* Pods_MMM_MMMUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 738AB5686981CA1A28640207 /* Pods_MMM_MMMUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -108,6 +109,7 @@
 		C411940329D53DDF003DBC15 /* ManagementViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagementViewController.swift; sourceTree = "<group>"; };
 		C411940629D53EA0003DBC15 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		C411940A29DAEDF9003DBC15 /* CustomAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertViewController.swift; sourceTree = "<group>"; };
+		C4DBAA2B29DBCB8B00D1BB97 /* Ex+Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Button.swift"; sourceTree = "<group>"; };
 		E1F4C2751A32E5FDB91A657F /* Pods-MMMTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMMTests.release.xcconfig"; path = "Target Support Files/Pods-MMMTests/Pods-MMMTests.release.xcconfig"; sourceTree = "<group>"; };
 		F4482F9A861317CCBA1EDC6B /* Pods-MMM-MMMUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMM-MMMUITests.release.xcconfig"; path = "Target Support Files/Pods-MMM-MMMUITests/Pods-MMM-MMMUITests.release.xcconfig"; sourceTree = "<group>"; };
 		FC275A78FD9B770379D3387D /* Pods-MMM.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMM.debug.xcconfig"; path = "Target Support Files/Pods-MMM/Pods-MMM.debug.xcconfig"; sourceTree = "<group>"; };
@@ -301,6 +303,7 @@
 			isa = PBXGroup;
 			children = (
 				C41193E029D287E6003DBC15 /* Ex+Color.swift */,
+				C4DBAA2B29DBCB8B00D1BB97 /* Ex+Button.swift */,
 				C41193DE29D287E6003DBC15 /* Ex+Font.swift */,
 				C41193E129D287E6003DBC15 /* Ex+Icon.swift */,
 				C41193DD29D287E6003DBC15 /* Ex+KeychainWrapper.swift */,
@@ -631,6 +634,7 @@
 				C411939229D2817C003DBC15 /* ProfileViewController.swift in Sources */,
 				C411938E29D2817C003DBC15 /* AppDelegate.swift in Sources */,
 				C41193E629D287E6003DBC15 /* Ex+Color.swift in Sources */,
+				C4DBAA2C29DBCB8B00D1BB97 /* Ex+Button.swift in Sources */,
 				C41193E429D287E6003DBC15 /* Ex+Font.swift in Sources */,
 				C41193E529D287E6003DBC15 /* Ex+UIDevice.swift in Sources */,
 				C411940729D53EA0003DBC15 /* NavigationController.swift in Sources */,

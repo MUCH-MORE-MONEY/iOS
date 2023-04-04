@@ -12,24 +12,8 @@ import AuthenticationServices
 import WebKit
 
 final class OnboardingViewController: UIViewController {
-    
-    private let onboardingView = OnboardingView()
-    private let onboardingView1 = OnboardingView()
-    private var webView: WKWebView!
-    
-    private let onboardingItems = [
-        OnboardingItem(image: R.Icon.onboarding1!,
-                       mainLabel1: "내 하루를 돌아보며",
-                       mainLabel2: "가계부를 작성해요",
-                       subLabel: "MMM과 함께 수입과 지출을 작성하며\n 그날의 하루를 돌아봐요"),
-        OnboardingItem(image: R.Icon.onboarding2!,
-                       mainLabel1: "더 나은 내 소비를 위해",
-                       mainLabel2: "리뷰를 작성해보세요",
-                       subLabel: "다음에 돈을 어떻게 쓰고 벌지 \n다시 한 번 생각하고 다짐해요")
-    ]
-    
+    // MARK: - UI Components
     private var onboardingViews: [UIImageView] = []
-    
     
     private lazy var scrollView = UIScrollView().then {
         $0.delegate = self
@@ -41,10 +25,10 @@ final class OnboardingViewController: UIViewController {
         $0.contentSize.width = view.frame.width * CGFloat(2)
     }
     private let pageControl = UIPageControl().then {
-        $0.currentPage = 0
         $0.numberOfPages = 2
         $0.pageIndicatorTintColor = R.Color.gray200
         $0.currentPageIndicatorTintColor = R.Color.orange500
+        
         $0.addTarget(self, action: #selector(pageControlTapped), for: .valueChanged)
     }
     
@@ -71,20 +55,30 @@ final class OnboardingViewController: UIViewController {
     }
     
     private let appleButton = ASAuthorizationAppleIDButton().then { _ in
-//        $0.cornerRadius = 22
-//        $0.setTitle("Apple로 계속하기", for: .normal)
-
+        //        $0.cornerRadius = 22
+        //        $0.setTitle("Apple로 계속하기", for: .normal)
+        
     }
     
     private let guideButton = UIButton().then {
         $0.setTitle("로그인 중 문제가 발생하셨나요?", for: .normal)
         $0.titleLabel?.font = R.Font.body3
         $0.setTitleColor(R.Color.gray500, for: .normal)
-        $0.addTarget(self, action: #selector(showWebView), for: .touchUpInside)
+//        $0.addTarget(self, action: #selector(showWebView), for: .touchUpInside)
     }
     
-    
-    
+    // MARK: - properites
+    private let onboardingItems = [
+        OnboardingItem(image: R.Icon.onboarding1!,
+                       mainLabel1: "내 하루를 돌아보며",
+                       mainLabel2: "가계부를 작성해요",
+                       subLabel: "MMM과 함께 수입과 지출을 작성하며\n 그날의 하루를 돌아봐요"),
+        OnboardingItem(image: R.Icon.onboarding2!,
+                       mainLabel1: "더 나은 내 소비를 위해",
+                       mainLabel2: "리뷰를 작성해보세요",
+                       subLabel: "다음에 돈을 어떻게 쓰고 벌지 \n다시 한 번 생각하고 다짐해요")
+    ]
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -125,7 +119,7 @@ private extension OnboardingViewController {
         
         scrollView.snp.makeConstraints {
             $0.top.left.right.equalToSuperview()
-            $0.bottom.equalToSuperview().inset(188 + 48) // bottom + label2 height
+            $0.bottom.equalTo(scrollView.snp.top).offset(464)
         }
         
         onboardingViews[0].snp.makeConstraints {
@@ -175,10 +169,6 @@ private extension OnboardingViewController {
         
     }
     
-    private func setPageControlSelectedPage(currentPage: Int) {
-        pageControl.currentPage = currentPage
-    }
-    
 }
 
 // MARK: - Actions
@@ -191,7 +181,15 @@ extension OnboardingViewController {
     }
     
     @objc func pageControlTapped() {
-        
+        let current = pageControl.currentPage
+        scrollView.setContentOffset(
+            CGPoint(x: CGFloat(current)*view.frame.size.width,
+                    y: 0),
+            animated: true)
+    }
+    
+    private func setPageControlSelectedPage(currentPage: Int) {
+        pageControl.currentPage = currentPage
     }
     
     func labelAnimation(_ labels: UILabel...) {
@@ -210,14 +208,17 @@ extension OnboardingViewController {
 // MARK: - Scrollview delegate
 extension OnboardingViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let value = scrollView.contentOffset.x/scrollView.frame.size.width
         setPageControlSelectedPage(currentPage: Int(round(value)))
-        
+
         mainLabel1.text = onboardingItems[Int(round(value))].mainLabel1
         mainLabel2.text = onboardingItems[Int(round(value))].mainLabel2
         subLabel.text = onboardingItems[Int(round(value))].subLabel
-        
-        labelAnimation(mainLabel1, mainLabel2, subLabel)
 
+        labelAnimation(mainLabel1, mainLabel2, subLabel)
     }
 }

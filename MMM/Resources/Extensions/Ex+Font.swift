@@ -27,20 +27,50 @@ public extension MMMResource {
 		}
 		
 		// TODO: - lineHeight
-		public static let h0 = prtendard(family: .semibold, size: 36)
+        // MARK: - h0
+        /// Weight : semibold, Size : 36
+ 		public static let h0 = prtendard(family: .semibold, size: 36)
+        // MARK: - h1
+        /// Weight : bold, Size : 28
 		public static let h1 = prtendard(family: .bold, size: 28)
+        // MARK: - h2
+        /// Weight : bold, Size : 24
 		public static let h2 = prtendard(family: .bold, size: 24)
+        // MARK: - h3
+        /// Weight : medium, Size : 28
 		public static let h3 = prtendard(family: .medium, size: 28)
+        // MARK: - h4
+        /// Weight : semibold, Size : 20
 		public static let h4 = prtendard(family: .semibold, size: 20)
+        // MARK: - title1
+        /// Weight : bold, Size : 18
 		public static let title1 = prtendard(family: .bold, size: 18)
+        // MARK: - title2
+        /// Weight : semibold, Size : 18
 		public static let title2 = prtendard(family: .semibold, size: 18)
+        // MARK: - title3
+        /// Weight : bold, Size : 16
 		public static let title3 = prtendard(family: .bold, size: 16)
+        // MARK: - body1
+        /// Weight : medium, Size : 16
 		public static let body1 = prtendard(family: .medium, size: 16)
+        // MARK: - body2
+        /// Weight : bold, Size : 14
 		public static let body2 = prtendard(family: .bold, size: 14)
+        // MARK: - body3
+        /// Weight : medium, Size : 14
 		public static let body3 = prtendard(family: .medium, size: 14)
+        // MARK: - body4
+        /// Weight : bold, Size : 12
 		public static let body4 = prtendard(family: .bold, size: 12)
+        // MARK: - body5
+        /// Weight : medium, Size : 12
 		public static let body5 = prtendard(family: .medium, size: 12)
+        // MARK: - caption1
+        /// Weight : bold, Size : 11
 		public static let caption1 = prtendard(family: .bold, size: 11)
+        // MARK: - caption2
+        /// Weight : medium, Size : 11
 		public static let caption2 = prtendard(family: .medium, size: 11)
 	}
 }

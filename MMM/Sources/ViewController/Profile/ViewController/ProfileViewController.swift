@@ -149,6 +149,9 @@ extension ProfileViewController: UITableViewDelegate {
 			let vs = ManagementViewController()
 			vs.setData(email: "mmm1234@naver.com")
 			navigationController?.pushViewController(vs, animated: true)		// 계정관리
+        case 2:
+            let vc = DataExportViewController()
+            navigationController?.pushViewController(vc, animated: true)
 		default:
 			break
 		}

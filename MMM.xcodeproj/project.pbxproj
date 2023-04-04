@@ -12,6 +12,8 @@
 		6A0D108229D3CF1B009D6DCA /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0D108129D3CF1B009D6DCA /* OnboardingViewController.swift */; };
 		6A0D108529D3D209009D6DCA /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0D108429D3D209009D6DCA /* OnboardingView.swift */; };
 		6A1D698F29D6B15D003A438C /* OnboardingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1D698E29D6B15D003A438C /* OnboardingItem.swift */; };
+		6A0F234029DBA8AA0063673B /* DataExportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0F233F29DBA8AA0063673B /* DataExportViewController.swift */; };
+		6A0F234229DBA92D0063673B /* ServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0F234129DBA92D0063673B /* ServiceViewController.swift */; };
 		C411938E29D2817C003DBC15 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411938D29D2817C003DBC15 /* AppDelegate.swift */; };
 		C411939029D2817C003DBC15 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411938F29D2817C003DBC15 /* SceneDelegate.swift */; };
 		C411939229D2817C003DBC15 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411939129D2817C003DBC15 /* ProfileViewController.swift */; };
@@ -73,6 +75,8 @@
 		6A0D108129D3CF1B009D6DCA /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		6A0D108429D3D209009D6DCA /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		6A1D698E29D6B15D003A438C /* OnboardingItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OnboardingItem.swift; path = MMM/Sources/ViewController/Onboarding/Views/OnboardingItem.swift; sourceTree = SOURCE_ROOT; };
+		6A0F233F29DBA8AA0063673B /* DataExportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExportViewController.swift; sourceTree = "<group>"; };
+		6A0F234129DBA92D0063673B /* ServiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceViewController.swift; sourceTree = "<group>"; };
 		738AB5686981CA1A28640207 /* Pods_MMM_MMMUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MMM_MMMUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A564931308C77DE145181BBF /* Pods_MMM.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MMM.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C411938A29D2817C003DBC15 /* MMM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MMM.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -378,8 +382,10 @@
 		C41193FE29D53A69003DBC15 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				C411939129D2817C003DBC15 /* ProfileViewController.swift */,
+				6A0F233F29DBA8AA0063673B /* DataExportViewController.swift */,
 				C411940329D53DDF003DBC15 /* ManagementViewController.swift */,
+				C411939129D2817C003DBC15 /* ProfileViewController.swift */,
+				6A0F234129DBA92D0063673B /* ServiceViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -647,8 +653,10 @@
 				C41193F929D3DD9A003DBC15 /* ProfileCell.swift in Sources */,
 				C41193E329D287E6003DBC15 /* Ex+KeychainWrapper.swift in Sources */,
 				C41193E829D287E6003DBC15 /* Ex+View.swift in Sources */,
+				6A0F234229DBA92D0063673B /* ServiceViewController.swift in Sources */,
 				C41193E729D287E6003DBC15 /* Ex+Icon.swift in Sources */,
 				C41193EA29D2D7FE003DBC15 /* MMMResource.swift in Sources */,
+				6A0F234029DBA8AA0063673B /* DataExportViewController.swift in Sources */,
 				C411939229D2817C003DBC15 /* ProfileViewController.swift in Sources */,
 				C411938E29D2817C003DBC15 /* AppDelegate.swift in Sources */,
 				C41193E629D287E6003DBC15 /* Ex+Color.swift in Sources */,

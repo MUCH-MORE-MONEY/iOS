@@ -34,5 +34,14 @@ public extension MMMResource {
 		public static let onboarding1 = UIImage(named: "iconOnboarding1", in: .main, compatibleWith: nil)
 		public static let onboarding2 = UIImage(named: "iconOnboarding2", in: .main, compatibleWith: nil)
 		public static let mypageBg = UIImage(named: "iconMypageBg", in: .main, compatibleWith: nil)
+        // MARK: - TabBar Items
+        public static let iconGroupActive = UIImage(named: "iconGroupActive", in: .main, compatibleWith: nil)
+        public static let iconGroupInActive = UIImage(named: "iconGroupInActive", in: .main, compatibleWith: nil)
+        public static let iconMoneyActive = UIImage(named: "iconMoneyActive", in: .main, compatibleWith: nil)
+        public static let iconMoneyInActive = UIImage(named: "iconMoneyInActive", in: .main, compatibleWith: nil)
+        public static let iconMypageActive = UIImage(named: "iconMypageActive", in: .main, compatibleWith: nil)
+        public static let iconMypageInActive = UIImage(named: "iconMypageInActive", in: .main, compatibleWith: nil)
+        public static let iconSeedActive = UIImage(named: "iconSeedActive", in: .main, compatibleWith: nil)
+        public static let iconSeedInActive = UIImage(named: "iconSeedInActive", in: .main, compatibleWith: nil)
 	}
 }

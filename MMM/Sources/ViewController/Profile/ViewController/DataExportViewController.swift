@@ -36,11 +36,25 @@ final class DataExportViewController: BaseViewController {
         $0.layer.shadowOpacity = 0.25
         $0.layer.shadowOffset = CGSize(width: 0, height: 2)
         $0.layer.shadowRadius = 8
+        $0.addTarget(self, action: #selector(presentShareSheet), for: .touchUpInside)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
         // Do any additional setup after loading the view.
+    }
+}
+
+// MARK: - Action
+private extension DataExportViewController {
+    @objc func presentShareSheet() {
+        
+        // 데이터를 넘겨야함 -> sample data
+        guard let url = URL(string: "https://www.google.com") else { return }
+        
+        let vc = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        
+        present(vc, animated: true)
     }
 }
 

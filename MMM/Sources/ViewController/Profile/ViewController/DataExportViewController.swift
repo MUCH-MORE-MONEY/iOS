@@ -73,7 +73,7 @@ private extension DataExportViewController {
     
     private func setLayout() {
         mainLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(32)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(32)
             $0.left.right.equalToSuperview().inset(24)
         }
             

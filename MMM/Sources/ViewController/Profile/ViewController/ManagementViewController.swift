@@ -117,7 +117,8 @@ private extension ManagementViewController {
 	
 	private func setLayout() {
 		baseView.snp.makeConstraints {
-			$0.top.left.equalToSuperview().inset(24)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(24)
+			$0.left.equalToSuperview().inset(24)
 			$0.right.equalToSuperview().inset(29)
 			$0.centerX.equalToSuperview()
 			$0.height.equalTo(200)

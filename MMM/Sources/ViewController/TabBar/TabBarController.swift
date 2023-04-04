@@ -37,10 +37,15 @@ extension TabBarController {
         moneyTab.selectedImage = R.Icon.iconMoneyActive
         moneyVC.tabBarItem = moneyTab
         
-        let profileVC = UINavigationController(rootViewController: ProfileViewController())
+        let profileVC = NavigationController(rootViewController: ProfileViewController())
         let profileTab = UITabBarItem(title: "마이페이지", image: R.Icon.iconMypageInActive, tag: 1)
+        
         profileTab.selectedImage = R.Icon.iconMypageActive
         profileVC.tabBarItem = profileTab
+        profileVC.tabBarItem.image = R.Icon.iconMypageActive
+        
+        tabBar.barTintColor = R.Color.orange500
+        tabBar.unselectedItemTintColor = R.Color.gray900
         
         viewControllers = [moneyVC, profileVC]
     }

@@ -31,24 +31,20 @@ final class TabBarController: UITabBarController {
 // MARK: - Style & Layout
 extension TabBarController {
     
-    private func setupTabBar() {
-        let moneyVC = UINavigationController(rootViewController: MoneyViewController())
-        let moneyTab = UITabBarItem(title: "소비", image: R.Icon.iconMoneyInActive, tag: 0)
-        moneyTab.selectedImage = R.Icon.iconMoneyActive
-        moneyVC.tabBarItem = moneyTab
-        
-        let profileVC = NavigationController(rootViewController: ProfileViewController())
-        let profileTab = UITabBarItem(title: "마이페이지", image: R.Icon.iconMypageInActive, tag: 1)
-        
-        profileTab.selectedImage = R.Icon.iconMypageActive
-        profileVC.tabBarItem = profileTab
-        profileVC.tabBarItem.image = R.Icon.iconMypageActive
-        
-        tabBar.barTintColor = R.Color.orange500
-        tabBar.unselectedItemTintColor = R.Color.gray900
-        
-        viewControllers = [moneyVC, profileVC]
-    }
+	private func setupTabBar() {
+		tabBar.tintColor = R.Color.gray900
+		tabBar.isTranslucent = false						// 불투명도
+		
+		let moneyVC = UINavigationController(rootViewController: MoneyViewController())
+		let moneyTabItem = UITabBarItem(title: "소비", image: R.Icon.iconMoneyInActive, selectedImage: R.Icon.iconMoneyActive)
+		moneyVC.tabBarItem = moneyTabItem
+		
+		let profileVC = NavigationController(rootViewController: ProfileViewController())
+		let profileTabItem = UITabBarItem(title: "마이페이지", image: R.Icon.iconMypageInActive, selectedImage: R.Icon.iconMypageActive)
+		profileVC.tabBarItem = profileTabItem
+		
+		viewControllers = [moneyVC, profileVC]
+	}
     
     private func setup() {
         setAttribute()

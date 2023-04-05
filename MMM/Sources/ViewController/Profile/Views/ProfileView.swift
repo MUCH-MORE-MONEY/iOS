@@ -41,7 +41,6 @@ final class ProfileView: UIView {
 	private lazy var bottomArea = UIView().then {
 		$0.backgroundColor = .red
 	}
-
 	
 	override init(frame: CGRect) {
 		super.init(frame: frame)

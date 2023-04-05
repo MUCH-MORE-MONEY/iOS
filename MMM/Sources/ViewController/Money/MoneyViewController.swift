@@ -17,11 +17,25 @@ final class MoneyViewController: BaseViewController {
         $0.layer.masksToBounds = true
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
     }
+	
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		navigationController?.setNavigationBarHidden(true, animated: animated)	// navigation bar 숨김
+	}
+	
+	override func viewWillDisappear(_ animated: Bool) {
+		super.viewWillDisappear(animated)
+
+		self.navigationController?.setNavigationBarHidden(false, animated: animated) // navigation bar 노출
+	}
+	
+	override var preferredStatusBarStyle: UIStatusBarStyle {
+		return .lightContent // status text color 변경
+	}
 }
 
 // MARK: - Style & Layout
@@ -37,7 +51,7 @@ private extension MoneyViewController {
     
     private func setLayout() {
         imageView.snp.makeConstraints {
-            $0.top.left.right.bottom.equalToSuperview()
+			$0.centerY.centerX.equalToSuperview()
         }
     }
 }

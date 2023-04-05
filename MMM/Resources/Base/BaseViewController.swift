@@ -12,7 +12,6 @@ class BaseViewController: UIViewController {
     // MARK: - UI Components
     private lazy var backButton = UIBarButtonItem()
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()

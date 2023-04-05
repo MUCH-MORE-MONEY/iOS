@@ -111,7 +111,7 @@ extension CustomAlertViewController {
 		
 		let attributedString = NSMutableAttributedString(string: contentText)
 		let paragraphStyle = NSMutableParagraphStyle()
-		paragraphStyle.lineBreakMode = .byCharWrapping
+		paragraphStyle.lineBreakMode = .byWordWrapping
 		paragraphStyle.lineSpacing = 8
 		paragraphStyle.alignment = .center
 		attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, attributedString.length))

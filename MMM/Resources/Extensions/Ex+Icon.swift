@@ -19,6 +19,8 @@ public extension MMMResource {
 		public static let arrowNext24 = UIImage(named: "iconArrowNext24", in: .main, compatibleWith: nil)
 		public static let arrowUp32 = UIImage(named: "iconArrowUp32", in: .main, compatibleWith: nil)
 		public static let camera48 = UIImage(named: "iconCamera48", in: .main, compatibleWith: nil)
+		public static let checkActive = UIImage(named: "iconCheckActive", in: .main, compatibleWith: nil)
+		public static let checkInActive = UIImage(named: "iconCheckInActive", in: .main, compatibleWith: nil)
 		public static let coinEarn40 = UIImage(named: "iconCoinEarn40", in: .main, compatibleWith: nil)
 		public static let coinPay40 = UIImage(named: "iconCoinPay40", in: .main, compatibleWith: nil)
 		public static let delete24 = UIImage(named: "iconDelete24", in: .main, compatibleWith: nil)

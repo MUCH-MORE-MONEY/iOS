@@ -114,8 +114,8 @@ extension ManagementViewController {
 	
 	private func setLayout() {
 		baseView.snp.makeConstraints {
-			$0.top.left.equalToSuperview().inset(24)
-			$0.right.equalToSuperview().inset(24)
+			$0.top.equalTo(view.safeAreaLayoutGuide).inset(24)
+			$0.right.left.equalToSuperview().inset(24)
 		}
 		
 		userInfoLabel.snp.makeConstraints {

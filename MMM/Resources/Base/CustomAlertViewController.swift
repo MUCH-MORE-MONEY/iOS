@@ -177,8 +177,8 @@ extension CustomAlertViewController {
 	private func setLayout() {
 		
 		alertView.snp.makeConstraints {
-			$0.top.greaterThanOrEqualToSuperview()
-			$0.bottom.lessThanOrEqualToSuperview()
+			$0.top.greaterThanOrEqualTo(view.safeAreaLayoutGuide)
+			$0.bottom.lessThanOrEqualTo(view.safeAreaLayoutGuide)
 			$0.left.right.equalToSuperview().inset(24)
 			$0.centerY.equalToSuperview()
 		}
@@ -189,15 +189,6 @@ extension CustomAlertViewController {
 			$0.left.equalTo(alertView.snp.left).inset(20)
 			$0.right.equalTo(alertView.snp.right).inset(20)
 		}
-
-//		buttonStackView.snp.makeConstraints {
-//			$0.top.equalTo(containerStackView.snp.bottom).inset(8)
-//		}
-//
-//		contentLabel.snp.makeConstraints {
-//			$0.top.equalTo(titleLabel.snp.bottom).offset(16)
-//			$0.left.right.equalToSuperview().inset(20)
-//		}
 		
 		switch alertType {
 		case .onlyConfirm:

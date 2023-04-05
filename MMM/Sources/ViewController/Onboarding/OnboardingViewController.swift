@@ -188,9 +188,11 @@ extension OnboardingViewController {
             animated: true)
     }
     
-    @objc func appleButtonTapped() {
-        
-        print("apple tapped")
+	@objc func appleButtonTapped() {
+		if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+			let tabBarController = TabBarController()
+			sceneDelegate.window?.rootViewController = tabBarController
+		}
     }
     
     private func setPageControlSelectedPage(currentPage: Int) {

@@ -32,7 +32,7 @@ final class TabBarController: UITabBarController {
 extension TabBarController {
     
     private func setupTabBar() {
-        let moneyVC = UINavigationController(rootViewController: MoneyViewController())
+        let moneyVC = NavigationController(rootViewController: MoneyViewController())
         let moneyTab = UITabBarItem(title: "소비", image: R.Icon.iconMoneyInActive, tag: 0)
         moneyTab.selectedImage = R.Icon.iconMoneyActive
         moneyVC.tabBarItem = moneyTab
@@ -44,9 +44,11 @@ extension TabBarController {
         profileVC.tabBarItem = profileTab
         profileVC.tabBarItem.image = R.Icon.iconMypageActive
         
+		tabBar.isTranslucent = false						// 불투명도
         tabBar.barTintColor = R.Color.orange500
         tabBar.unselectedItemTintColor = R.Color.gray900
-        
+//		modalPresentationStyle = .fullScreen
+//		modalTransitionStyle = .crossDissolve				// 전환 효과
         viewControllers = [moneyVC, profileVC]
     }
     

@@ -63,6 +63,7 @@ final class OnboardingViewController: UIViewController {
         $0.setTitle("로그인 중 문제가 발생하셨나요?", for: .normal)
         $0.titleLabel?.font = R.Font.body3
         $0.setTitleColor(R.Color.gray500, for: .normal)
+		$0.setTitleColor(R.Color.gray500.withAlphaComponent(0.7), for: .highlighted) // click시 색상
         $0.addTarget(self, action: #selector(showWebView), for: .touchUpInside)
     }
     

@@ -50,10 +50,8 @@ private extension DataExportViewController {
     @objc func presentShareSheet() {
         
         // 데이터를 넘겨야함 -> sample data
-        guard let url = URL(string: "https://www.google.com") else { return }
-        
-        let vc = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-        
+        // 실제 데이터를 넘길경우 비동기 처리를 해줘야함
+        let vc = UIActivityViewController(activityItems: ["데이터 넘겨주자!"], applicationActivities: nil)
         present(vc, animated: true)
     }
 }

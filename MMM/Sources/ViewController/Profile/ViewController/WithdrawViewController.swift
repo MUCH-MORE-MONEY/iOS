@@ -51,8 +51,33 @@ extension WithdrawViewController: CustomAlertDelegate {
 		navigationController?.popViewController(animated: true)
 	}
 	
+	@objc func didTapConfirmButton() {
+		if confirmButton.isSelected {
+			confirmButton.setImage(R.Icon.checkInActive, for: .normal)
+			confirmButton.backgroundColor = R.Color.white
+			withdrawButton.isEnabled = false
+			withdrawButton.titleLabel?.font = R.Font.prtendard(family: .medium, size: 18)
+			withdrawButton.backgroundColor = R.Color.gray400
+		} else {
+			confirmButton.setImage(R.Icon.checkActive, for: .normal)
+			confirmButton.backgroundColor = R.Color.gray900
+			withdrawButton.isEnabled = true
+			withdrawButton.titleLabel?.font = R.Font.title1
+			withdrawButton.backgroundColor = R.Color.gray900
+		}
+		confirmButton.isSelected = !confirmButton.isSelected
+	}
+	
+	@objc func didTapWithdrawButton() {
+		showAlert(alertType: .onlyConfirm, titleText: "탈퇴를 완료하였습니다", contentText: "언제든 다시 MMM을 찾아와주세요!", confirmButtonText: "삭제하기")
+	}
+	
 	// 확인 버튼 이벤트 처리
-	func didAlertCofirmButton() { }
+	func didAlertCofirmButton() {
+		if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+			sceneDelegate.window?.rootViewController = sceneDelegate.onboarding
+		}
+	}
 	
 	// 취소 버튼 이벤트 처리
 	func didAlertCacelButton() { }
@@ -107,7 +132,6 @@ extension WithdrawViewController {
 			$0.axis = .vertical
 			$0.spacing = 16
 			$0.alignment = .leading
-//			$0.distribution = .fillProportionally
 		}
 		
 		checkLabel = checkLabel.then {
@@ -132,11 +156,9 @@ extension WithdrawViewController {
 		
 		confirmButton = confirmButton.then {
 			$0.setImage(R.Icon.checkInActive, for: .normal)
-			$0.setImage(R.Icon.checkActive, for: .selected)
-			$0.setBackgroundColor(R.Color.white, for: .normal)
-			$0.setBackgroundColor(R.Color.gray900, for: .selected)
+			$0.backgroundColor = R.Color.white
 			$0.layer.cornerRadius = 4
-//			$0.addTarget(self, action: #selector(didTapCancleButton), for: .touchUpInside)
+			$0.addTarget(self, action: #selector(didTapConfirmButton), for: .touchUpInside)
 		}
 		
 		confirmLabel = confirmLabel.then {
@@ -147,14 +169,14 @@ extension WithdrawViewController {
 		
 		withdrawButton = withdrawButton.then {
 			$0.setTitle("MMM 탈퇴하기", for: .normal)
-			$0.titleLabel?.font = R.Font.title1
-			$0.backgroundColor = R.Color.gray900
+			$0.titleLabel?.font = R.Font.prtendard(family: .medium, size: 18)
+			$0.backgroundColor = R.Color.gray400
 			$0.layer.cornerRadius = 4
 			$0.layer.shadowColor = UIColor.black.cgColor
 			$0.layer.shadowOpacity = 0.25
 			$0.layer.shadowOffset = CGSize(width: 0, height: 2)
 			$0.layer.shadowRadius = 8
-//			$0.addTarget(self, action: #selector(presentShareSheet), for: .touchUpInside)
+			$0.addTarget(self, action: #selector(didTapWithdrawButton), for: .touchUpInside)
 		}
 		
 		view.addSubviews(reconfirmLabel, economicLabel, moneyLabel, containView, confirmStackView, withdrawButton)

@@ -43,7 +43,11 @@ extension ManagementViewController: CustomAlertDelegate {
 	}
 	
 	// 확인 버튼 이벤트 처리
-	func didAlertCofirmButton() { }
+	func didAlertCofirmButton() {
+		if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+			sceneDelegate.window?.rootViewController = sceneDelegate.onboarding
+		}
+	}
 	
 	// 취소 버튼 이벤트 처리
 	func didAlertCacelButton() { }

@@ -152,6 +152,9 @@ extension ProfileViewController: UITableViewDelegate {
         case 2:
             let vc = DataExportViewController()
             navigationController?.pushViewController(vc, animated: true)
+        case 3:
+            let vc = ServiceViewController()
+            navigationController?.pushViewController(vc, animated: true)
 		default:
 			break
 		}

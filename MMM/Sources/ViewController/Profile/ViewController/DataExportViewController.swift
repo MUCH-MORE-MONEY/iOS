@@ -9,7 +9,7 @@ import UIKit
 import Then
 import SnapKit
 
-class DataExportViewController: UIViewController {
+final class DataExportViewController: BaseViewController {
 
     // MARK: - UI components
     private lazy var mainLabel = UILabel().then {
@@ -36,11 +36,25 @@ class DataExportViewController: UIViewController {
         $0.layer.shadowOpacity = 0.25
         $0.layer.shadowOffset = CGSize(width: 0, height: 2)
         $0.layer.shadowRadius = 8
+        $0.addTarget(self, action: #selector(presentShareSheet), for: .touchUpInside)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
         // Do any additional setup after loading the view.
+    }
+}
+
+// MARK: - Action
+private extension DataExportViewController {
+    @objc func presentShareSheet() {
+        
+        // 데이터를 넘겨야함 -> sample data
+        guard let url = URL(string: "https://www.google.com") else { return }
+        
+        let vc = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        
+        present(vc, animated: true)
     }
 }
 
@@ -59,7 +73,7 @@ private extension DataExportViewController {
     
     private func setLayout() {
         mainLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(32)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(32)
             $0.left.right.equalToSuperview().inset(24)
         }
             

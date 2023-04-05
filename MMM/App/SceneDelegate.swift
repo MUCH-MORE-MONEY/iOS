@@ -21,7 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		window = UIWindow(windowScene: windowScene)
 		
 		// ViewController 초기화
-		let mainViewController = NavigationController(rootViewController: ProfileViewController())
+		let mainViewController = OnboardingViewController()
 		
 		// MARK: Window 구성
 		window?.rootViewController = mainViewController

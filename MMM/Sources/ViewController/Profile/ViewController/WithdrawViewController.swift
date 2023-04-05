@@ -11,11 +11,16 @@ final class WithdrawViewController: UIViewController {
 
 	private lazy var backButton = UIBarButtonItem()
 
+	
 	private lazy var reconfirmLabel = UILabel()
 
 	private lazy var economicLabel = UILabel()
 	
+	private lazy var economicCount = 1234
+	
 	private lazy var moneyLabel = UILabel()
+	
+	private lazy var moneyCount = 10_000_000
 
 	private lazy var containView = UIView()
 	
@@ -92,6 +97,36 @@ extension WithdrawViewController {
 		setLayout()
 	}
 	
+	private func setMutiTest(isMoney: Bool, first: String, count: Int, second: String) -> NSMutableAttributedString {
+		let attributedText1 = NSMutableAttributedString(string: first)
+		
+		var attributedText2: NSMutableAttributedString
+		if isMoney {
+			attributedText2 = NSMutableAttributedString(string: "\(count.withCommas())원")
+		} else {
+			attributedText2 = NSMutableAttributedString(string: "\(count)개")
+		}
+		
+		let attributedText3 = NSMutableAttributedString(string: second)
+
+		let textAttributes: [NSAttributedString.Key : Any] = [
+			NSAttributedString.Key.font: R.Font.prtendard(family: .medium, size: 16),
+			NSAttributedString.Key.foregroundColor: R.Color.gray800
+		]
+		
+		attributedText1.addAttributes(textAttributes, range: NSMakeRange(0, attributedText1.length))
+		
+		let textAttributes2: [NSAttributedString.Key : Any] = [
+			NSAttributedString.Key.font: R.Font.prtendard(family: .medium, size: 16),
+			NSAttributedString.Key.foregroundColor: R.Color.orange500
+		]
+		attributedText2.addAttributes(textAttributes2, range: NSMakeRange(0, attributedText2.length))
+		attributedText3.addAttributes(textAttributes, range: NSMakeRange(0, attributedText3.length))
+		attributedText1.append(attributedText2)
+		attributedText1.append(attributedText3)
+		return attributedText1
+	}
+	
 	private func setAttribute() {
 		// [view]
 		view.backgroundColor = R.Color.gray100
@@ -112,15 +147,11 @@ extension WithdrawViewController {
 		}
 		
 		economicLabel = economicLabel.then {
-			$0.text = "이대로 가면 작성했던 {nnn}개의 경재활동,"
-			$0.font = R.Font.prtendard(family: .medium, size: 16)
-			$0.textColor = R.Color.gray800
+			$0.attributedText = setMutiTest(isMoney: false, first: "이대로 가면 작성했던 ", count: economicCount, second: "의 경재활동,")
 		}
 		
 		moneyLabel = moneyLabel.then {
-			$0.text = "그리고 모았던 {nn,nnn,nnn}원이 사라져요."
-			$0.font = R.Font.prtendard(family: .medium, size: 16)
-			$0.textColor = R.Color.gray800
+			$0.attributedText = setMutiTest(isMoney: true, first: "그리고 모았던 ", count: moneyCount, second: "이 사라져요.")
 		}
 		
 		containView = containView.then {
@@ -145,7 +176,7 @@ extension WithdrawViewController {
 		}
 		
 		secondComfirm = secondComfirm.then {
-			$0.setUp(number: "2", title: "30일 이후에는 모든 기록이 사라져요.", content: "30일 뒤에 모든 데이터는 회원님의 소중한 정보를 지키기 위해 개인정보 처리 방침에 따라 복구가 불가능해요.")
+			$0.setUp(number: "2", title: "30일 이후에는 모든 기록이 사라져요.", content: "30일 뒤에 모든 데이터는 회원님의 소중한\n정보를 지키기 위해 개인정보 처리 방침에 따라\n복구가 불가능해요.")
 		}
 		
 		confirmStackView = confirmStackView.then {
@@ -170,6 +201,7 @@ extension WithdrawViewController {
 		withdrawButton = withdrawButton.then {
 			$0.setTitle("MMM 탈퇴하기", for: .normal)
 			$0.titleLabel?.font = R.Font.prtendard(family: .medium, size: 18)
+			$0.isEnabled = false
 			$0.backgroundColor = R.Color.gray400
 			$0.layer.cornerRadius = 4
 			$0.layer.shadowColor = UIColor.black.cgColor
@@ -222,7 +254,7 @@ extension WithdrawViewController {
 		}
 		
 		secondComfirm.snp.makeConstraints {
-			$0.height.equalTo(86)
+			$0.height.equalTo(90)
 		}
 		
 		confirmStackView.snp.makeConstraints {

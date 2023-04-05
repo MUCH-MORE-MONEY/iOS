@@ -74,7 +74,14 @@ extension WithdrawConfirmView {
 		paragraphStyle.lineBreakMode = .byWordWrapping
 		paragraphStyle.lineSpacing = 8
 		paragraphStyle.alignment = .left
-		attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, attributedString.length))
+		
+		let textAttributes: [NSAttributedString.Key : Any] = [
+			NSAttributedString.Key.font: R.Font.body3,
+			NSAttributedString.Key.foregroundColor: R.Color.gray800,
+			NSAttributedString.Key.paragraphStyle: paragraphStyle
+		]
+		
+		attributedString.addAttributes(textAttributes, range: NSMakeRange(0, attributedString.length))
 		contentLabel.attributedText = attributedString
 		
 		if number == "1" {

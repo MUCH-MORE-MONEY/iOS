@@ -23,10 +23,8 @@ final class ManagementViewController: UIViewController {
 	
 	private lazy var userLoginLabel = UILabel()
 	
-	private lazy var logoutButton = UIButton()
+	private lazy var tableView = UITableView()
 	
-	private lazy var withdrawalButton = UIButton()
-
 	override func viewDidLoad() {
         super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
@@ -35,23 +33,28 @@ final class ManagementViewController: UIViewController {
 	override func viewWillAppear(_ animated: Bool) {
 		navigationController?.setNavigationBarHidden(false, animated: animated)	// navigation bar 노출
 	}
-	
-	public func setData(email: String) {
-		userEmailLabel.text = email
-	}
 }
 
 //MARK: - Action
-private extension ManagementViewController {
-	
+extension ManagementViewController: CustomAlertDelegate {
 	@objc func didTapBackButton(_ sender: UITapGestureRecognizer) {
 		print()
 		navigationController?.popViewController(animated: true)
 	}
+	
+	// 확인 버튼 이벤트 처리
+	func didAlertCofirmButton() { }
+	
+	// 취소 버튼 이벤트 처리
+	func didAlertCacelButton() { }
 }
 
 //MARK: - Style & Layouts
-private extension ManagementViewController {
+extension ManagementViewController {
+	
+	public func setData(email: String) {
+		userEmailLabel.text = email
+	}
 	
 	private func setup() {
 		// 초기 셋업할 코드들
@@ -95,33 +98,24 @@ private extension ManagementViewController {
 			$0.textColor = R.Color.gray800
 		}
 		
-		logoutButton = logoutButton.then {
-			$0.setTitle("로그아웃", for: .normal)
-			$0.titleLabel?.font = R.Font.body2
-			$0.setTitleColor(R.Color.gray900, for: .normal)
-			$0.setImage(R.Icon.arrowNext16, for: .normal)
-			$0.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
+		tableView = tableView.then {
+			$0.delegate = self
+			$0.dataSource = self
+			$0.showsVerticalScrollIndicator = false
+			$0.backgroundColor = R.Color.gray100
+			$0.bounces = false			// TableView Scroll 방지
+			$0.separatorStyle = .none
+			$0.register(ProfileTableViewCell.self)
 		}
 		
-		withdrawalButton = withdrawalButton.then {
-			$0.setTitle("탈퇴하기", for: .normal)
-			$0.titleLabel?.font = R.Font.body2
-			$0.setTitleColor(R.Color.gray900, for: .normal)
-			$0.setImage(R.Icon.arrowNext16, for: .normal)
-			$0.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
-		}
-		
-		view.addSubviews(baseView)
-		baseView.addSubviews(userInfoLabel, emailLabel, userEmailLabel, userLoginLabel, logoutButton, withdrawalButton)
+		view.addSubviews(baseView, tableView)
+		baseView.addSubviews(userInfoLabel, emailLabel, userEmailLabel, userLoginLabel)
 	}
 	
 	private func setLayout() {
 		baseView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(24)
-			$0.left.equalToSuperview().inset(24)
-			$0.right.equalToSuperview().inset(29)
-			$0.centerX.equalToSuperview()
-			$0.height.equalTo(200)
+			$0.top.equalTo(view.safeAreaLayoutGuide).inset(24)
+			$0.right.left.equalToSuperview().inset(24)
 		}
 		
 		userInfoLabel.snp.makeConstraints {
@@ -142,17 +136,56 @@ private extension ManagementViewController {
 			$0.left.equalToSuperview()
 			$0.top.equalTo(emailLabel.snp.bottom).offset(48)
 		}
-
-		logoutButton.snp.makeConstraints {
-			$0.left.right.equalToSuperview()
+		
+		tableView.snp.makeConstraints {
 			$0.top.equalTo(userLoginLabel.snp.bottom).offset(16)
-			$0.height.equalTo(44)
+			$0.left.right.equalToSuperview()
+			$0.height.equalTo(88)
+		}
+	}
+}
+
+// MARK: - UITableView DataSource
+extension ManagementViewController: UITableViewDataSource {
+	
+	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+		return 44
+	}
+	
+	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		return 2
+	}
+	
+	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		let cell = tableView.dequeueReusableCell(withIdentifier: ProfileTableViewCell.className, for: indexPath) as! ProfileTableViewCell
+		
+		switch indexPath.row {
+		case 0:
+			cell.setUp(text: "로그아웃")
+		default:
+			cell.setUp(text: "탈퇴하기")
 		}
 		
-		withdrawalButton.snp.makeConstraints {
-			$0.left.right.equalToSuperview()
-			$0.top.equalTo(logoutButton.snp.bottom)
-			$0.height.equalTo(44)
+		cell.backgroundColor = R.Color.gray100
+		
+		return cell
+	}
+}
+
+// MARK: - UITableView Delegate
+extension ManagementViewController: UITableViewDelegate {
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		// 셀 터치시 회색 표시 없애기
+		tableView.deselectRow(at: indexPath, animated: true)
+		
+		switch indexPath.row {
+		case 0:
+			showAlert(alertType: .canCancel, titleText: "로그아웃 하시겠어요?", contentText: "로그아웃해도 해당 계정의 데이터는 \n 계속 저장되어 있습니다.", cancelButtonText: "취소하기", confirmButtonText: "로그아웃")
+		case 1:
+			let vs = WithdrawViewController()
+			navigationController?.pushViewController(vs, animated: true)		// 계정관리
+		default:
+			break
 		}
 	}
 }

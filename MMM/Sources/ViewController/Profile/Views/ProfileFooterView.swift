@@ -29,6 +29,8 @@ final class ProfileFooterView: UIView {
 		setLayout()
 	}
 	
+	// Compile time에 error를 발생시키는 코드
+	@available(*, unavailable)
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}

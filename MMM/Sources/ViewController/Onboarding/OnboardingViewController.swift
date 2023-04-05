@@ -24,7 +24,7 @@ final class OnboardingViewController: UIViewController {
         $0.bounces = false // 경계 지점 scroll 유무
         $0.contentSize.width = view.frame.width * CGFloat(2)
     }
-    private let pageControl = UIPageControl().then {
+    private lazy var pageControl = UIPageControl().then {
         $0.numberOfPages = 2
         $0.pageIndicatorTintColor = R.Color.gray200
         $0.currentPageIndicatorTintColor = R.Color.orange500
@@ -54,17 +54,16 @@ final class OnboardingViewController: UIViewController {
         $0.numberOfLines = 2
     }
     
-    private let appleButton = ASAuthorizationAppleIDButton().then { _ in
-        //        $0.cornerRadius = 22
-        //        $0.setTitle("Apple로 계속하기", for: .normal)
+    private lazy var appleButton = ASAuthorizationAppleIDButton().then {
+        $0.addTarget(self, action: #selector(appleButtonTapped), for: .touchUpInside)
         
     }
     
-    private let guideButton = UIButton().then {
+    private lazy var guideButton = UIButton().then {
         $0.setTitle("로그인 중 문제가 발생하셨나요?", for: .normal)
         $0.titleLabel?.font = R.Font.body3
         $0.setTitleColor(R.Color.gray500, for: .normal)
-//        $0.addTarget(self, action: #selector(showWebView), for: .touchUpInside)
+        $0.addTarget(self, action: #selector(showWebView), for: .touchUpInside)
     }
     
     // MARK: - properites
@@ -186,6 +185,11 @@ extension OnboardingViewController {
             CGPoint(x: CGFloat(current)*view.frame.size.width,
                     y: 0),
             animated: true)
+    }
+    
+    @objc func appleButtonTapped() {
+        
+        print("apple tapped")
     }
     
     private func setPageControlSelectedPage(currentPage: Int) {

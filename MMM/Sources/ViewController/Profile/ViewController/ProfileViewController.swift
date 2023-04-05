@@ -146,14 +146,17 @@ extension ProfileViewController: UITableViewDelegate {
 		
 		switch indexPath.row {
 		case 1:
-			let vs = ManagementViewController()
-			vs.setData(email: "mmm1234@naver.com")
-			navigationController?.pushViewController(vs, animated: true)		// 계정관리
+			let vc = ManagementViewController()
+			vc.setData(email: "mmm1234@naver.com")
+			vc.hidesBottomBarWhenPushed = true	// TabBar Above
+			navigationController?.pushViewController(vc, animated: true)	// 계정관리
         case 2:
             let vc = DataExportViewController()
+			vc.hidesBottomBarWhenPushed = true	// TabBar Above
             navigationController?.pushViewController(vc, animated: true)
         case 3:
             let vc = ServiceViewController()
+			vc.hidesBottomBarWhenPushed = true	// TabBar Above
             navigationController?.pushViewController(vc, animated: true)
 		default:
 			break

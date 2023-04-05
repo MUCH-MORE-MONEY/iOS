@@ -38,14 +38,18 @@ extension TabBarController {
         moneyVC.tabBarItem = moneyTab
         
         let profileVC = NavigationController(rootViewController: ProfileViewController())
-        let profileTab = UITabBarItem(title: "마이페이지", image: R.Icon.iconMypageInActive, tag: 1)
+//        let profileTab = UITabBarItem(title: "마이페이지", image: R.Icon.iconMypageInActive, tag: 1)
         
-        profileTab.selectedImage = R.Icon.iconMypageActive
-        profileVC.tabBarItem = profileTab
-        profileVC.tabBarItem.image = R.Icon.iconMypageActive
-        
+//        profileTab.selectedImage = R.Icon.iconMypageActive
+		
+//        profileVC.tabBarItem = profileTab
+		profileVC.tabBarItem.selectedImage = R.Icon.iconMypageActive
+		profileVC.tabBarItem.title = "마이페이지"
+        profileVC.tabBarItem.image = R.Icon.iconMoneyInActive
+		
 		tabBar.isTranslucent = false						// 불투명도
         tabBar.barTintColor = R.Color.orange500
+		tabBar.tintColor = R.Color.gray900
         tabBar.unselectedItemTintColor = R.Color.gray900
 //		modalPresentationStyle = .fullScreen
 //		modalTransitionStyle = .crossDissolve				// 전환 효과

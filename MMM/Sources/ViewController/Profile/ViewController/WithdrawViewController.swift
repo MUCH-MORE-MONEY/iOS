@@ -51,7 +51,7 @@ final class WithdrawViewController: UIViewController {
 }
 
 //MARK: - Action
-extension WithdrawViewController: CustomAlertDelegate {
+extension WithdrawViewController {
 	@objc func didTapBackButton(_ sender: UITapGestureRecognizer) {
 		navigationController?.popViewController(animated: true)
 	}
@@ -74,18 +74,13 @@ extension WithdrawViewController: CustomAlertDelegate {
 	}
 	
 	@objc func didTapWithdrawButton() {
-		showAlert(alertType: .onlyConfirm, titleText: "탈퇴를 완료하였습니다", contentText: "언제든 다시 MMM을 찾아와주세요!", confirmButtonText: "삭제하기")
-	}
-	
-	// 확인 버튼 이벤트 처리
-	func didAlertCofirmButton() {
 		if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
 			sceneDelegate.window?.rootViewController = sceneDelegate.onboarding
+			DispatchQueue.main.asyncAfter(deadline: .now()) {
+				sceneDelegate.onboarding.showAlert(alertType: .onlyConfirm, titleText: "탈퇴를 완료하였습니다", contentText: "언제든 다시 MMM을 찾아와주세요!", confirmButtonText: "삭제하기")
+			}
 		}
 	}
-	
-	// 취소 버튼 이벤트 처리
-	func didAlertCacelButton() { }
 }
 
 //MARK: - Style & Layouts

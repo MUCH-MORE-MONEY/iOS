@@ -28,7 +28,7 @@ final class OnboardingViewController: UIViewController {
         $0.numberOfPages = 2
         $0.pageIndicatorTintColor = R.Color.gray200
         $0.currentPageIndicatorTintColor = R.Color.orange500
-        
+        $0.isUserInteractionEnabled = false
         $0.addTarget(self, action: #selector(pageControlTapped), for: .valueChanged)
     }
     

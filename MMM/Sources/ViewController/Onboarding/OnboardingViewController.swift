@@ -174,7 +174,7 @@ private extension OnboardingViewController {
 
 // MARK: - Actions
 
-extension OnboardingViewController {
+extension OnboardingViewController: CustomAlertDelegate {
     @objc func showWebView() {
         if let url = URL(string: "https://talk.naver.com/ct/w40igt") {
             UIApplication.shared.open(url)
@@ -195,6 +195,12 @@ extension OnboardingViewController {
 			sceneDelegate.window?.rootViewController = tabBarController
 		}
     }
+	
+	// 확인 버튼 이벤트 처리
+	func didAlertCofirmButton() {}
+	
+	// 취소 버튼 이벤트 처리
+	func didAlertCacelButton() {}
     
     func labelAnimation(_ labels: UILabel...) {
         if currentPage != pageControl.currentPage {

@@ -56,7 +56,6 @@ final class OnboardingViewController: UIViewController {
     
     private lazy var appleButton = ASAuthorizationAppleIDButton().then {
         $0.addTarget(self, action: #selector(appleButtonTapped), for: .touchUpInside)
-        
     }
     
     private lazy var guideButton = UIButton().then {

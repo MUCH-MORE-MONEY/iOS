@@ -28,7 +28,7 @@ final class OnboardingViewController: UIViewController {
         $0.numberOfPages = 2
         $0.pageIndicatorTintColor = R.Color.gray200
         $0.currentPageIndicatorTintColor = R.Color.orange500
-        
+        $0.isUserInteractionEnabled = false
         $0.addTarget(self, action: #selector(pageControlTapped), for: .valueChanged)
     }
     
@@ -56,7 +56,6 @@ final class OnboardingViewController: UIViewController {
     
     private lazy var appleButton = ASAuthorizationAppleIDButton().then {
         $0.addTarget(self, action: #selector(appleButtonTapped), for: .touchUpInside)
-        
     }
     
     private lazy var guideButton = UIButton().then {
@@ -79,6 +78,8 @@ final class OnboardingViewController: UIViewController {
                        subLabel: "다음에 돈을 어떻게 쓰고 벌지 \n다시 한 번 생각하고 다짐해요")
     ]
         
+    private var currentPage = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -195,18 +196,16 @@ extension OnboardingViewController {
 		}
     }
     
-    private func setPageControlSelectedPage(currentPage: Int) {
-        pageControl.currentPage = currentPage
-    }
-    
     func labelAnimation(_ labels: UILabel...) {
-        labels.forEach {
-            $0.alpha = 0.0
-        }
-        
-        UIView.animate(withDuration: 0.3) {
+        if currentPage != pageControl.currentPage {
             labels.forEach {
-                $0.alpha = 1.0
+                $0.alpha = 0.0
+            }
+            
+            UIView.animate(withDuration: 0.3) {
+                labels.forEach {
+                    $0.alpha = 1.0
+                }
             }
         }
     }
@@ -214,18 +213,20 @@ extension OnboardingViewController {
 
 // MARK: - Scrollview delegate
 extension OnboardingViewController: UIScrollViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-
-    }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        let value = scrollView.contentOffset.x/scrollView.frame.size.width
-        setPageControlSelectedPage(currentPage: Int(round(value)))
+        let value = Int(round(scrollView.contentOffset.x/scrollView.frame.size.width))
+        pageControl.currentPage = value
 
-        mainLabel1.text = onboardingItems[Int(round(value))].mainLabel1
-        mainLabel2.text = onboardingItems[Int(round(value))].mainLabel2
-        subLabel.text = onboardingItems[Int(round(value))].subLabel
+        mainLabel1.text = onboardingItems[value].mainLabel1
+        mainLabel2.text = onboardingItems[value].mainLabel2
+        subLabel.text = onboardingItems[value].subLabel
 
         labelAnimation(mainLabel1, mainLabel2, subLabel)
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        let value = Int(round(scrollView.contentOffset.x/scrollView.frame.size.width))
+        currentPage = value
     }
 }

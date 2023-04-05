@@ -7,7 +7,7 @@
 
 import UIKit
 
-class WithdrawViewController: UIViewController {
+final class WithdrawViewController: UIViewController {
 
 	private lazy var backButton = UIBarButtonItem()
 
@@ -22,6 +22,10 @@ class WithdrawViewController: UIViewController {
 	private lazy var containerStackView = UIStackView()
 	
 	private lazy var checkLabel = UILabel()
+	
+	private lazy var firstComfirm = WithdrawConfirmView()
+
+	private lazy var secondComfirm = WithdrawConfirmView()
 	
 	private lazy var confirmStackView = UIStackView()
 	
@@ -103,12 +107,21 @@ extension WithdrawViewController {
 			$0.axis = .vertical
 			$0.spacing = 16
 			$0.alignment = .leading
+//			$0.distribution = .fillProportionally
 		}
 		
 		checkLabel = checkLabel.then {
 			$0.text = "탈퇴하기 전 확인해주세요"
 			$0.font = R.Font.title1
 			$0.textColor = R.Color.gray900
+		}
+		
+		firstComfirm = firstComfirm.then {
+			$0.setUp(number: "1", title: "30일동안은 기록이 유지돼요.", content: "회원님의 탈퇴는 30일 이후에 처리가 되며 30일 이전 재가입할 시 복구가 가능해요.")
+		}
+		
+		secondComfirm = secondComfirm.then {
+			$0.setUp(number: "2", title: "30일 이후에는 모든 기록이 사라져요.", content: "30일 뒤에 모든 데이터는 회원님의 소중한 정보를 지키기 위해 개인정보 처리 방침에 따라 복구가 불가능해요.")
 		}
 		
 		confirmStackView = confirmStackView.then {
@@ -146,9 +159,10 @@ extension WithdrawViewController {
 		
 		view.addSubviews(reconfirmLabel, economicLabel, moneyLabel, containView, confirmStackView, withdrawButton)
 		containView.addSubviews(containerStackView)
-		[checkLabel].forEach {
+		[checkLabel, firstComfirm, secondComfirm].forEach {
 			containerStackView.addArrangedSubview($0)
 		}
+		
 		[confirmButton, confirmLabel].forEach {
 			confirmStackView.addArrangedSubview($0)
 		}
@@ -173,11 +187,20 @@ extension WithdrawViewController {
 		containView.snp.makeConstraints {
 			$0.top.equalTo(moneyLabel.snp.bottom).offset(48)
 			$0.left.right.equalTo(view.safeAreaLayoutGuide).inset(24)
-			$0.height.equalTo(200)
+			$0.height.equalTo(242)
 		}
 		
 		containerStackView.snp.makeConstraints {
-			$0.edges.equalToSuperview().offset(16)
+			$0.top.left.bottom.equalToSuperview().inset(16)
+			$0.right.equalToSuperview().inset(35)
+		}
+		
+		firstComfirm.snp.makeConstraints {
+			$0.height.equalTo(66)
+		}
+		
+		secondComfirm.snp.makeConstraints {
+			$0.height.equalTo(86)
 		}
 		
 		confirmStackView.snp.makeConstraints {

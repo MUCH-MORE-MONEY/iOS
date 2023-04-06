@@ -84,6 +84,10 @@ final class OnboardingViewController: UIViewController {
         super.viewDidLoad()
         setup()
     }
+	
+	override var preferredStatusBarStyle: UIStatusBarStyle {
+		return .lightContent // status text color 변경
+	}
 }
 
 //MARK: - Style & Layouts
@@ -166,8 +170,6 @@ private extension OnboardingViewController {
             $0.left.right.equalToSuperview().inset(100)
             $0.top.equalTo(appleButton.snp.bottom).offset(16)
         }
-        
-        
     }
     
 }

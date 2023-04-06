@@ -17,7 +17,6 @@
 		6A0F234729DC0DB20063673B /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0F234629DC0DB20063673B /* TabBarController.swift */; };
 		6A0F234A29DC19200063673B /* MoneyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0F234929DC19200063673B /* MoneyViewController.swift */; };
 		6A1D698F29D6B15D003A438C /* OnboardingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1D698E29D6B15D003A438C /* OnboardingItem.swift */; };
-		6AA7EFB029DD462000E45C2F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6AA7EFB229DD462000E45C2F /* Localizable.strings */; };
 		C411938E29D2817C003DBC15 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411938D29D2817C003DBC15 /* AppDelegate.swift */; };
 		C411939029D2817C003DBC15 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411938F29D2817C003DBC15 /* SceneDelegate.swift */; };
 		C411939229D2817C003DBC15 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411939129D2817C003DBC15 /* ProfileViewController.swift */; };
@@ -56,6 +55,8 @@
 		C4DBAA2E29DC16A400D1BB97 /* WithdrawViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBAA2D29DC16A400D1BB97 /* WithdrawViewController.swift */; };
 		C4DBAA3029DD459100D1BB97 /* WithdrawConfirmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBAA2F29DD459100D1BB97 /* WithdrawConfirmView.swift */; };
 		C4DBAA3229DD763D00D1BB97 /* Ex+Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBAA3129DD763D00D1BB97 /* Ex+Int.swift */; };
+		C4DBAA3729DD7B2600D1BB97 /* CountPushLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBAA3629DD7B2600D1BB97 /* CountPushLabel.swift */; };
+		C4DBAA3929DEAE0200D1BB97 /* CountAnimationStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBAA3829DEAE0200D1BB97 /* CountAnimationStackView.swift */; };
 		FF7FB61A0AC167F25EB6438F /* Pods_MMM_MMMUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 738AB5686981CA1A28640207 /* Pods_MMM_MMMUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -89,9 +90,6 @@
 		6A0F234629DC0DB20063673B /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		6A0F234929DC19200063673B /* MoneyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoneyViewController.swift; sourceTree = "<group>"; };
 		6A1D698E29D6B15D003A438C /* OnboardingItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OnboardingItem.swift; path = MMM/Sources/ViewController/Onboarding/Views/OnboardingItem.swift; sourceTree = SOURCE_ROOT; };
-		6AA7EFB329DD465E00E45C2F /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
-		6AA7EFB429DD465E00E45C2F /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
-		6AA7EFB529DD46EC00E45C2F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		738AB5686981CA1A28640207 /* Pods_MMM_MMMUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MMM_MMMUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A564931308C77DE145181BBF /* Pods_MMM.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MMM.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C411938A29D2817C003DBC15 /* MMM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MMM.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -136,6 +134,9 @@
 		C4DBAA2D29DC16A400D1BB97 /* WithdrawViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawViewController.swift; sourceTree = "<group>"; };
 		C4DBAA2F29DD459100D1BB97 /* WithdrawConfirmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawConfirmView.swift; sourceTree = "<group>"; };
 		C4DBAA3129DD763D00D1BB97 /* Ex+Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Int.swift"; sourceTree = "<group>"; };
+		C4DBAA3529DD7A9F00D1BB97 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		C4DBAA3629DD7B2600D1BB97 /* CountPushLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountPushLabel.swift; sourceTree = "<group>"; };
+		C4DBAA3829DEAE0200D1BB97 /* CountAnimationStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountAnimationStackView.swift; sourceTree = "<group>"; };
 		E1F4C2751A32E5FDB91A657F /* Pods-MMMTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMMTests.release.xcconfig"; path = "Target Support Files/Pods-MMMTests/Pods-MMMTests.release.xcconfig"; sourceTree = "<group>"; };
 		F4482F9A861317CCBA1EDC6B /* Pods-MMM-MMMUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMM-MMMUITests.release.xcconfig"; path = "Target Support Files/Pods-MMM-MMMUITests/Pods-MMM-MMMUITests.release.xcconfig"; sourceTree = "<group>"; };
 		FC275A78FD9B770379D3387D /* Pods-MMM.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMM.debug.xcconfig"; path = "Target Support Files/Pods-MMM/Pods-MMM.debug.xcconfig"; sourceTree = "<group>"; };
@@ -200,14 +201,6 @@
 				6A0F234929DC19200063673B /* MoneyViewController.swift */,
 			);
 			path = Money;
-			sourceTree = "<group>";
-		};
-		6AA7EFAD29DD45D000E45C2F /* Localize */ = {
-			isa = PBXGroup;
-			children = (
-				6AA7EFB229DD462000E45C2F /* Localizable.strings */,
-			);
-			path = Localize;
 			sourceTree = "<group>";
 		};
 		88255752AA5B9A60F9E5F964 /* Pods */ = {
@@ -290,7 +283,6 @@
 				C41193DC29D287E6003DBC15 /* Extensions */,
 				C41193C829D2874A003DBC15 /* Font */,
 				C41193C229D28318003DBC15 /* Info */,
-				6AA7EFAD29DD45D000E45C2F /* Localize */,
 				C41193E929D2D7FE003DBC15 /* MMMResource.swift */,
 				C411939829D2817E003DBC15 /* LaunchScreen.storyboard */,
 			);
@@ -425,6 +417,7 @@
 				C41193FC29D42BD9003DBC15 /* ProfileFooterView.swift */,
 				C41193F829D3DD9A003DBC15 /* ProfileCell.swift */,
 				C4DBAA2F29DD459100D1BB97 /* WithdrawConfirmView.swift */,
+				C4DBAA3829DEAE0200D1BB97 /* CountAnimationStackView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -446,6 +439,7 @@
 			children = (
 				6A0F234329DBC0C30063673B /* BaseViewController.swift */,
 				C411940A29DAEDF9003DBC15 /* CustomAlertViewController.swift */,
+				C4DBAA3629DD7B2600D1BB97 /* CountPushLabel.swift */,
 				C411940629D53EA0003DBC15 /* NavigationController.swift */,
 			);
 			path = Base;
@@ -564,7 +558,6 @@
 				C41193D529D2874A003DBC15 /* Pretendard-Medium.otf in Resources */,
 				C41193D829D2874A003DBC15 /* Pretendard-Bold.otf in Resources */,
 				C41193D629D2874A003DBC15 /* Pretendard-Light.otf in Resources */,
-				6AA7EFB029DD462000E45C2F /* Localizable.strings in Resources */,
 				C41193DB29D2874A003DBC15 /* Pretendard-SemiBold.otf in Resources */,
 				C41193D729D2874A003DBC15 /* Pretendard-ExtraBold.otf in Resources */,
 				C41193C629D2838E003DBC15 /* Icon.xcassets in Resources */,
@@ -713,12 +706,14 @@
 				C41193E329D287E6003DBC15 /* Ex+KeychainWrapper.swift in Sources */,
 				C41193E829D287E6003DBC15 /* Ex+View.swift in Sources */,
 				6A0F234229DBA92D0063673B /* ServiceViewController.swift in Sources */,
+				C4DBAA3729DD7B2600D1BB97 /* CountPushLabel.swift in Sources */,
 				C41193E729D287E6003DBC15 /* Ex+Icon.swift in Sources */,
 				6A0F234729DC0DB20063673B /* TabBarController.swift in Sources */,
 				C4DBAA3229DD763D00D1BB97 /* Ex+Int.swift in Sources */,
 				C41193EA29D2D7FE003DBC15 /* MMMResource.swift in Sources */,
 				6A0F234029DBA8AA0063673B /* DataExportViewController.swift in Sources */,
 				C411939229D2817C003DBC15 /* ProfileViewController.swift in Sources */,
+				C4DBAA3929DEAE0200D1BB97 /* CountAnimationStackView.swift in Sources */,
 				C411938E29D2817C003DBC15 /* AppDelegate.swift in Sources */,
 				C41193E629D287E6003DBC15 /* Ex+Color.swift in Sources */,
 				C4DBAA2C29DBCB8B00D1BB97 /* Ex+Button.swift in Sources */,
@@ -768,21 +763,11 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		6AA7EFB229DD462000E45C2F /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				6AA7EFB429DD465E00E45C2F /* ko */,
-				6AA7EFB529DD46EC00E45C2F /* en */,
-			);
-			name = Localizable.strings;
-			path = ../../../..;
-			sourceTree = "<group>";
-		};
 		C411939829D2817E003DBC15 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				C411939929D2817E003DBC15 /* Base */,
-				6AA7EFB329DD465E00E45C2F /* ko */,
+				C4DBAA3529DD7A9F00D1BB97 /* ko */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";

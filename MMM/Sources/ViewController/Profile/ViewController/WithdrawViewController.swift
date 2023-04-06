@@ -11,16 +11,15 @@ final class WithdrawViewController: UIViewController {
 
 	private lazy var backButton = UIBarButtonItem()
 
-	
 	private lazy var reconfirmLabel = UILabel()
 
 	private lazy var economicLabel = UILabel()
 	
 	private lazy var economicCount = 1234
 	
-	private lazy var moneyLabel = UILabel()
+	private lazy var moneyLabel = CountAnimationStackView()
 	
-	private lazy var moneyCount = 10_000_000
+	private lazy var moneyCount = 12_345_569
 
 	private lazy var containView = UIView()
 	
@@ -146,7 +145,7 @@ extension WithdrawViewController {
 		}
 		
 		moneyLabel = moneyLabel.then {
-			$0.attributedText = setMutiTest(isMoney: true, first: "그리고 모았던 ", count: moneyCount, second: "이 사라져요.")
+			$0.setUp(first: "그리고 모았던 ", second: "이 사라져요.", money: moneyCount, unitText: "원", duration: 0.1)
 		}
 		
 		containView = containView.then {
@@ -218,6 +217,7 @@ extension WithdrawViewController {
 	}
 	
 	private func setLayout() {
+
 		reconfirmLabel.snp.makeConstraints {
 			$0.top.equalTo(view.safeAreaLayoutGuide).inset(32)
 			$0.left.equalTo(view.safeAreaLayoutGuide).inset(24)

@@ -15,7 +15,6 @@
 		6A0F234229DBA92D0063673B /* ServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0F234129DBA92D0063673B /* ServiceViewController.swift */; };
 		6A0F234429DBC0C30063673B /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0F234329DBC0C30063673B /* BaseViewController.swift */; };
 		6A0F234729DC0DB20063673B /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0F234629DC0DB20063673B /* TabBarController.swift */; };
-		6A0F234A29DC19200063673B /* MoneyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0F234929DC19200063673B /* MoneyViewController.swift */; };
 		6A1D698F29D6B15D003A438C /* OnboardingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1D698E29D6B15D003A438C /* OnboardingItem.swift */; };
 		C411938E29D2817C003DBC15 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411938D29D2817C003DBC15 /* AppDelegate.swift */; };
 		C411939029D2817C003DBC15 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411938F29D2817C003DBC15 /* SceneDelegate.swift */; };
@@ -51,6 +50,9 @@
 		C411940429D53DDF003DBC15 /* ManagementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411940329D53DDF003DBC15 /* ManagementViewController.swift */; };
 		C411940729D53EA0003DBC15 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411940629D53EA0003DBC15 /* NavigationController.swift */; };
 		C411940B29DAEDF9003DBC15 /* CustomAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411940A29DAEDF9003DBC15 /* CustomAlertViewController.swift */; };
+		C44807DE29E4FE8000D4B090 /* Ex+Publisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44807DD29E4FE8000D4B090 /* Ex+Publisher.swift */; };
+		C44807E129E648D300D4B090 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44807E029E648D300D4B090 /* HomeViewController.swift */; };
+		C44807E329E649A300D4B090 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44807E229E649A300D4B090 /* HomeViewModel.swift */; };
 		C4DBAA2C29DBCB8B00D1BB97 /* Ex+Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBAA2B29DBCB8B00D1BB97 /* Ex+Button.swift */; };
 		C4DBAA2E29DC16A400D1BB97 /* WithdrawViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBAA2D29DC16A400D1BB97 /* WithdrawViewController.swift */; };
 		C4DBAA3029DD459100D1BB97 /* WithdrawConfirmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBAA2F29DD459100D1BB97 /* WithdrawConfirmView.swift */; };
@@ -88,7 +90,6 @@
 		6A0F234129DBA92D0063673B /* ServiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceViewController.swift; sourceTree = "<group>"; };
 		6A0F234329DBC0C30063673B /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		6A0F234629DC0DB20063673B /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
-		6A0F234929DC19200063673B /* MoneyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoneyViewController.swift; sourceTree = "<group>"; };
 		6A1D698E29D6B15D003A438C /* OnboardingItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OnboardingItem.swift; path = MMM/Sources/ViewController/Onboarding/Views/OnboardingItem.swift; sourceTree = SOURCE_ROOT; };
 		738AB5686981CA1A28640207 /* Pods_MMM_MMMUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MMM_MMMUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A564931308C77DE145181BBF /* Pods_MMM.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MMM.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -130,6 +131,9 @@
 		C411940329D53DDF003DBC15 /* ManagementViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagementViewController.swift; sourceTree = "<group>"; };
 		C411940629D53EA0003DBC15 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		C411940A29DAEDF9003DBC15 /* CustomAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertViewController.swift; sourceTree = "<group>"; };
+		C44807DD29E4FE8000D4B090 /* Ex+Publisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Publisher.swift"; sourceTree = "<group>"; };
+		C44807E029E648D300D4B090 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		C44807E229E649A300D4B090 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		C4DBAA2B29DBCB8B00D1BB97 /* Ex+Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Button.swift"; sourceTree = "<group>"; };
 		C4DBAA2D29DC16A400D1BB97 /* WithdrawViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawViewController.swift; sourceTree = "<group>"; };
 		C4DBAA2F29DD459100D1BB97 /* WithdrawConfirmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawConfirmView.swift; sourceTree = "<group>"; };
@@ -193,14 +197,6 @@
 				6A0F234629DC0DB20063673B /* TabBarController.swift */,
 			);
 			path = TabBar;
-			sourceTree = "<group>";
-		};
-		6A0F234829DC190A0063673B /* Money */ = {
-			isa = PBXGroup;
-			children = (
-				6A0F234929DC19200063673B /* MoneyViewController.swift */,
-			);
-			path = Money;
 			sourceTree = "<group>";
 		};
 		88255752AA5B9A60F9E5F964 /* Pods */ = {
@@ -312,7 +308,7 @@
 		C41193C029D281F2003DBC15 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				6A0F234829DC190A0063673B /* Money */,
+				C44807DF29E6489300D4B090 /* Home */,
 				6A0D108029D3CEF6009D6DCA /* Onboarding */,
 				C41193F029D3A867003DBC15 /* Profile */,
 				6A0F234529DC0D750063673B /* TabBar */,
@@ -372,6 +368,7 @@
 				C4DBAA3129DD763D00D1BB97 /* Ex+Int.swift */,
 				C41193DD29D287E6003DBC15 /* Ex+KeychainWrapper.swift */,
 				C41193F429D3D7FB003DBC15 /* Ex+NSObject.swift */,
+				C44807DD29E4FE8000D4B090 /* Ex+Publisher.swift */,
 				C41193DF29D287E6003DBC15 /* Ex+UIDevice.swift */,
 				C41193F629D3D954003DBC15 /* Ex+UITableView.swift */,
 				C41193E229D287E6003DBC15 /* Ex+View.swift */,
@@ -397,6 +394,7 @@
 		C41193EF29D3A7BA003DBC15 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				C44807E229E649A300D4B090 /* HomeViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -443,6 +441,14 @@
 				C411940629D53EA0003DBC15 /* NavigationController.swift */,
 			);
 			path = Base;
+			sourceTree = "<group>";
+		};
+		C44807DF29E6489300D4B090 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				C44807E029E648D300D4B090 /* HomeViewController.swift */,
+			);
+			path = Home;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -700,6 +706,8 @@
 				C411940B29DAEDF9003DBC15 /* CustomAlertViewController.swift in Sources */,
 				C4DBAA3029DD459100D1BB97 /* WithdrawConfirmView.swift in Sources */,
 				C41193FD29D42BD9003DBC15 /* ProfileFooterView.swift in Sources */,
+				C44807E129E648D300D4B090 /* HomeViewController.swift in Sources */,
+				C44807DE29E4FE8000D4B090 /* Ex+Publisher.swift in Sources */,
 				C4DBAA2E29DC16A400D1BB97 /* WithdrawViewController.swift in Sources */,
 				6A0F234429DBC0C30063673B /* BaseViewController.swift in Sources */,
 				C41193F929D3DD9A003DBC15 /* ProfileCell.swift in Sources */,
@@ -712,6 +720,7 @@
 				C4DBAA3229DD763D00D1BB97 /* Ex+Int.swift in Sources */,
 				C41193EA29D2D7FE003DBC15 /* MMMResource.swift in Sources */,
 				6A0F234029DBA8AA0063673B /* DataExportViewController.swift in Sources */,
+				C44807E329E649A300D4B090 /* HomeViewModel.swift in Sources */,
 				C411939229D2817C003DBC15 /* ProfileViewController.swift in Sources */,
 				C4DBAA3929DEAE0200D1BB97 /* CountAnimationStackView.swift in Sources */,
 				C411938E29D2817C003DBC15 /* AppDelegate.swift in Sources */,
@@ -720,7 +729,6 @@
 				6A0D108229D3CF1B009D6DCA /* OnboardingViewController.swift in Sources */,
 				C41193E429D287E6003DBC15 /* Ex+Font.swift in Sources */,
 				C41193E529D287E6003DBC15 /* Ex+UIDevice.swift in Sources */,
-				6A0F234A29DC19200063673B /* MoneyViewController.swift in Sources */,
 				C411940729D53EA0003DBC15 /* NavigationController.swift in Sources */,
 				C41193F329D3AED5003DBC15 /* ProfileView.swift in Sources */,
 				6A1D698F29D6B15D003A438C /* OnboardingItem.swift in Sources */,

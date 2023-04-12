@@ -19,7 +19,7 @@ final class WithdrawViewController: UIViewController {
 	
 	private lazy var moneyLabel = CountAnimationStackView()
 	
-	private lazy var moneyCount = 12_345_569
+	private lazy var moneyCount = 28_345_569
 
 	private lazy var containView = UIView()
 	

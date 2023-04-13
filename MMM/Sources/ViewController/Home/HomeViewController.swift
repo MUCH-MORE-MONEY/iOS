@@ -145,14 +145,7 @@ extension HomeViewController {
 			$0.image = R.Icon.setting
 			$0.style = .plain
 		}
-		
-		checkButton = checkButton.then {
-			$0.setImage(R.Icon.checkInActive, for: .normal)
-			$0.backgroundColor = R.Color.white
-			$0.layer.cornerRadius = 4
-//			$0.addTarget(self, action: #selector(didTapCheckButton), for: .touchUpInside)
-		}
-		
+
 		view.addSubview(checkButton)
 	}
 	

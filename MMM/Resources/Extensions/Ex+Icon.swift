@@ -27,6 +27,7 @@ public extension MMMResource {
 		public static let highlightoff24 = UIImage(named: "iconHighlightoff24", in: .main, compatibleWith: nil)
 		public static let photoBlank64 = UIImage(named: "iconPhotoBlank64", in: .main, compatibleWith: nil)
 		public static let report16 = UIImage(named: "iconReport16", in: .main, compatibleWith: nil)
+		public static let setting = UIImage(named: "iconSetting", in: .main, compatibleWith: nil)
 		public static let star16 = UIImage(named: "iconStar16", in: .main, compatibleWith: nil)
 		public static let star24 = UIImage(named: "iconStar24", in: .main, compatibleWith: nil)
 		public static let star36 = UIImage(named: "iconStar36", in: .main, compatibleWith: nil)

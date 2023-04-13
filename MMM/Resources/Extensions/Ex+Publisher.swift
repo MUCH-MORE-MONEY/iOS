@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import UIKit
 
 public extension Publisher {
 	
@@ -20,5 +21,22 @@ public extension Publisher {
 		
 		return receive(on: DispatchQueue.main)
 			.sink(receiveValue: receiveValue)
+	}
+}
+
+extension UIButton {
+	var tapPublisher: AnyPublisher<Void, Never> {
+		controlPublisher(for: .touchUpInside)
+			.map { _ in }
+			.eraseToAnyPublisher()
+	}
+}
+
+extension UITextField {
+	var textPublisher: AnyPublisher<String, Never> {
+		controlPublisher(for: .editingChanged)
+			.compactMap { $0 as? UITextField }
+			.map { $0.text! }
+			.eraseToAnyPublisher()
 	}
 }

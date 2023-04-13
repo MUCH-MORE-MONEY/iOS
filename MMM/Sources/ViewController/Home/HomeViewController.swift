@@ -12,13 +12,13 @@ import SnapKit
 
 class HomeViewController: UIViewController {
 	private lazy var cancellables: Set<AnyCancellable> = .init()
-	private var viewModel: HomeViewModel
-	
+	private let viewModel = HomeViewModel()
+
 	// MARK: - UI Components
 	private lazy var imageView = UIImageView()
-	
+	private lazy var checkButton = UIButton()
+
 	public init() {
-		self.viewModel = HomeViewModel()
 		super.init(nibName: nil, bundle: nil)
 	}
 	
@@ -49,13 +49,25 @@ class HomeViewController: UIViewController {
 }
 
 //MARK: - Action
-extension HomeViewController {
+extension HomeViewController {	
+	func toggleCheckButton(_ isEnabled: Bool) {
+		checkButton.setImage(checkButton.isSelected ? R.Icon.checkInActive : R.Icon.checkActive, for: .normal)
+		checkButton.backgroundColor = checkButton.isSelected ? R.Color.white : R.Color.gray900
+		checkButton.isSelected = !checkButton.isSelected
+	}
 	
+	// 버튼에 대한 Action
+	func go() {
+		print()
+	}
+	
+	func go2(_ bool: Bool) {
+		print()
+	}
 }
 
 //MARK: - Style & Layouts
 extension HomeViewController {
-	
 	private func setup() {
 		// 초기 셋업할 코드들
 		bind()
@@ -64,12 +76,33 @@ extension HomeViewController {
 	}
 	
 	private func bind() {
-		viewModel.state.compactMap { $0 }
-			.sinkOnMainThread(receiveValue: { [weak self] state in
-				switch state {
-				case .errorMessage(let message): break
-				}
-			}).store(in: &cancellables)
+		//MARK: input
+		checkButton.tapPublisher
+			.receive(on: DispatchQueue.main)
+			.sinkOnMainThread(receiveValue: go)
+			.store(in: &cancellables)
+		
+		// 예시
+		UITextField().textPublisher
+			.receive(on: DispatchQueue.main)
+			.assign(to: \.passwordInput, on: viewModel)
+			.store(in: &cancellables)
+		
+		//MARK: output
+//		viewModel
+//			.transform(input: viewModel.input.eraseToAnyPublisher())
+//			.sinkOnMainThread(receiveValue: { [weak self] state in
+//				switch state {
+//				case .errorMessage(_):
+//					break
+//				case .toggleButton(isEnabled: let isEnabled):
+//					self?.toggleCheckButton(isEnabled)
+//				}
+//			}).store(in: &cancellables)
+		viewModel.isMatchPasswordInput
+			.receive(on: DispatchQueue.main)
+			.sink(receiveValue: go2)
+			.store(in: &cancellables)
 	}
 	
 	private func setAttribute() {
@@ -82,11 +115,18 @@ extension HomeViewController {
 			$0.layer.masksToBounds = true
 		}
 		
-		view.addSubview(imageView)
+		checkButton = checkButton.then {
+			$0.setImage(R.Icon.checkInActive, for: .normal)
+			$0.backgroundColor = R.Color.white
+			$0.layer.cornerRadius = 4
+//			$0.addTarget(self, action: #selector(didTapCheckButton), for: .touchUpInside)
+		}
+		
+		view.addSubview(checkButton)
 	}
 	
 	private func setLayout() {
-		imageView.snp.makeConstraints {
+		checkButton.snp.makeConstraints {
 			$0.centerY.centerX.equalToSuperview()
 		}
 	}

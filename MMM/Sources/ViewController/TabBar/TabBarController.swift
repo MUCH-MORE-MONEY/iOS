@@ -35,15 +35,15 @@ extension TabBarController {
 		tabBar.tintColor = R.Color.gray900
 		tabBar.isTranslucent = false						// 불투명도
 		
-		let moneyVC = UINavigationController(rootViewController: MoneyViewController())
-		let moneyTabItem = UITabBarItem(title: "소비", image: R.Icon.iconMoneyInActive, selectedImage: R.Icon.iconMoneyActive)
-		moneyVC.tabBarItem = moneyTabItem
+		let homeVC = NavigationController(rootViewController: HomeViewController())
+		let homeTabItem = UITabBarItem(title: "소비", image: R.Icon.iconMoneyInActive, selectedImage: R.Icon.iconMoneyActive)
+		homeVC.tabBarItem = homeTabItem
 		
 		let profileVC = NavigationController(rootViewController: ProfileViewController())
 		let profileTabItem = UITabBarItem(title: "마이페이지", image: R.Icon.iconMypageInActive, selectedImage: R.Icon.iconMypageActive)
 		profileVC.tabBarItem = profileTabItem
 		
-		viewControllers = [moneyVC, profileVC]
+		viewControllers = [homeVC, profileVC]
 	}
     
     private func setup() {

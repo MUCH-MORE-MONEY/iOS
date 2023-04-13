@@ -15,8 +15,10 @@ class HomeViewController: UIViewController {
 	private let viewModel = HomeViewModel()
 
 	// MARK: - UI Components
-	private lazy var imageView = UIImageView()
 	private lazy var checkButton = UIButton()
+	private lazy var monthButton = UIBarButtonItem()
+	private lazy var todayButton = UIBarButtonItem()
+	private lazy var settingButton = UIBarButtonItem()
 
 	public init() {
 		super.init(nibName: nil, bundle: nil)
@@ -108,11 +110,40 @@ extension HomeViewController {
 	private func setAttribute() {
 		// [view]
 		view.backgroundColor = R.Color.gray100
+		navigationItem.leftBarButtonItem = monthButton
+		navigationItem.rightBarButtonItems = [settingButton, todayButton]
 		
-		imageView = imageView.then {
-			$0.image = R.Icon.iconMoneyActive
-			$0.contentMode = .scaleAspectFit
-			$0.layer.masksToBounds = true
+		monthButton = monthButton.then {
+			let button = UIButton()
+			button.frame = .init(origin: .zero, size: .init(width: 49, height: 24))
+			button.setTitle("3월", for: .normal)
+			button.setImage(R.Icon.arrowExpandMore16, for: .normal)
+			button.setTitleColor(R.Color.white, for: .normal)
+			button.setTitleColor(R.Color.white.withAlphaComponent(0.7), for: .highlighted)
+			button.imageView?.contentMode = .scaleAspectFit
+			button.titleLabel?.font = R.Font.h5
+			button.contentHorizontalAlignment = .center
+			button.semanticContentAttribute = .forceRightToLeft //<- 중요
+			button.imageEdgeInsets = .init(top: 0, left: 11, bottom: 0, right: 0) // 이미지 여백
+			$0.customView = button
+		}
+		
+		todayButton = todayButton.then {
+			let button = UIButton()
+			button.frame = .init(origin: .zero, size: .init(width: 49, height: 24))
+			button.setTitle("오늘", for: .normal)
+			button.setTitleColor(R.Color.gray300, for: .normal)
+			button.setBackgroundColor(R.Color.gray800, for: .highlighted)
+			button.titleLabel?.font = R.Font.body3
+			button.layer.cornerRadius = 12
+			button.layer.borderWidth = 2
+			button.layer.borderColor = R.Color.gray800.cgColor
+			$0.customView = button
+		}
+		
+		settingButton = settingButton.then {
+			$0.image = R.Icon.setting
+			$0.style = .plain
 		}
 		
 		checkButton = checkButton.then {

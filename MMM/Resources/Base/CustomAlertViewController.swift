@@ -201,14 +201,14 @@ extension CustomAlertViewController {
 		switch alertType {
 		case .onlyConfirm:
 			confirmButton.snp.makeConstraints {
-				$0.top.equalTo(contentLabel.snp.bottom).offset(16)
+				$0.top.equalToSuperview().offset(8)
 				$0.width.equalTo(containerStackView.snp.width)
 				$0.height.equalTo(40)
 			}
 
 		case .canCancel:
 			cancelButton.snp.makeConstraints {
-				$0.top.equalTo(contentLabel.snp.bottom).offset(16)
+				$0.top.equalToSuperview().offset(8)
 				$0.width.greaterThanOrEqualTo(containerStackView.snp.width).multipliedBy(0.48)
 				$0.height.equalTo(40)
 			}

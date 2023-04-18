@@ -17,7 +17,8 @@ class HomeViewController: UIViewController {
 
 	// MARK: - UI Components
 	private lazy var monthButton = UIBarButtonItem()
-	private lazy var todayButton = UIBarButtonItem()
+	private lazy var todayButtonItem = UIBarButtonItem()
+	private lazy var todayButton = UIButton()
 	private lazy var settingButton = UIBarButtonItem()
 	private lazy var tableView = UITableView()
 	
@@ -56,13 +57,10 @@ class HomeViewController: UIViewController {
 
 //MARK: - Action
 extension HomeViewController {
-	// 버튼에 대한 Action
-	func go() {
-		print()
-	}
-	
-	func go2(_ bool: Bool) {
-		print()
+
+	// 오늘 날짜로 돌아오기
+	func didTapTodayButton() {
+		self.calendar.select(Date())
 	}
 }
 
@@ -77,6 +75,9 @@ extension HomeViewController {
 	
 	private func bind() {
 		//MARK: input
+		todayButton.tapPublisher
+			.sinkOnMainThread(receiveValue: didTapTodayButton)
+			.store(in: &cancellables)
 //		checkButton.tapPublisher
 //			.receive(on: DispatchQueue.main)
 //			.sinkOnMainThread(receiveValue: go)
@@ -110,7 +111,7 @@ extension HomeViewController {
 		view.backgroundColor = R.Color.gray100
 		view.addGestureRecognizer(self.scopeGesture)
 		navigationItem.leftBarButtonItem = monthButton
-		navigationItem.rightBarButtonItems = [settingButton, todayButton]
+		navigationItem.rightBarButtonItems = [settingButton, todayButtonItem]
 
 		monthButton = monthButton.then {
 			let button = UIButton()
@@ -128,16 +129,18 @@ extension HomeViewController {
 		}
 		
 		todayButton = todayButton.then {
-			let button = UIButton()
-			button.frame = .init(origin: .zero, size: .init(width: 49, height: 24))
-			button.setTitle("오늘", for: .normal)
-			button.setTitleColor(R.Color.gray300, for: .normal)
-			button.setBackgroundColor(R.Color.gray800, for: .highlighted)
-			button.titleLabel?.font = R.Font.body3
-			button.layer.cornerRadius = 12
-			button.layer.borderWidth = 2
-			button.layer.borderColor = R.Color.gray800.cgColor
-			$0.customView = button
+			$0.frame = .init(origin: .zero, size: .init(width: 49, height: 24))
+			$0.setTitle("오늘", for: .normal)
+			$0.setTitleColor(R.Color.gray300, for: .normal)
+			$0.setBackgroundColor(R.Color.gray800, for: .highlighted)
+			$0.titleLabel?.font = R.Font.body3
+			$0.layer.cornerRadius = 12
+			$0.layer.borderWidth = 2
+			$0.layer.borderColor = R.Color.gray800.cgColor
+		}
+		
+		todayButtonItem = todayButtonItem.then {
+			$0.customView = todayButton
 		}
 		
 		settingButton = settingButton.then {

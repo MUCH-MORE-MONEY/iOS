@@ -165,8 +165,10 @@ extension HomeViewController {
 			$0.dataSource = self
 			$0.backgroundColor = R.Color.gray100
 			$0.showsVerticalScrollIndicator = false
-			$0.register(ProfileTableViewCell.self)
+			$0.register(HomeTableViewCell.self)
 			$0.panGestureRecognizer.require(toFail: self.scopeGesture)
+			$0.separatorInset.left = 20
+			$0.separatorInset.right = 20
 		}
 		
 		view.addSubviews(calendar, tableView)
@@ -227,18 +229,28 @@ extension HomeViewController: UIGestureRecognizerDelegate {
 
 //MARK: - UITableView DataSource
 extension HomeViewController: UITableViewDataSource {
-	// Section 개수
-	func numberOfSections(in tableView: UITableView) -> Int {
-		return 1
+
+	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		return Calendar.getDummyList().count // 임시
 	}
 	
-	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return 4 // 임시
+	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+		return Calendar.getDummyList()[indexPath.row].memo.isEmpty ? 42 : 64
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = tableView.dequeueReusableCell(withIdentifier: ProfileTableViewCell.className, for: indexPath) as! ProfileTableViewCell
+		let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.className, for: indexPath) as! HomeTableViewCell
+		
+		cell.setUp(data: Calendar.getDummyList()[indexPath.row])
+		cell.backgroundColor = R.Color.gray100
 
+		if indexPath.row == Calendar.getDummyList().count - 1 {
+			// 마지막 cell은 bottom border 제거
+			DispatchQueue.main.async {
+				cell.addAboveTheBottomBorderWithColor(color: R.Color.gray100)
+			}
+		}
+		
 		return cell
 	}
 }
@@ -248,9 +260,5 @@ extension HomeViewController: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		// 셀 터치시 회색 표시 없애기
 		tableView.deselectRow(at: indexPath, animated: true)
-	}
-	
-	func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-		return 10
 	}
 }

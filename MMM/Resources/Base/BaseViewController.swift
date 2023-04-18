@@ -18,7 +18,6 @@ class BaseViewController: UIViewController {
     }
 }
 
-
 //MARK: - Action
 private extension BaseViewController {
     

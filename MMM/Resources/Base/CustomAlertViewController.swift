@@ -44,6 +44,10 @@ class CustomAlertViewController: UIViewController {
 	
 	private lazy var alertType: AlertType = .canCancel
 
+	private lazy var bgView = UIView().then {
+		$0.backgroundColor = R.Color.black.withAlphaComponent(0.7)
+	}
+	
 	private lazy var alertView = UIView().then {
 		$0.backgroundColor = R.Color.white
 		$0.layer.cornerRadius = 16
@@ -149,8 +153,8 @@ extension CustomAlertViewController {
 	
 	private func setAttribute() {
 		view.backgroundColor = R.Color.black.withAlphaComponent(0.7)
-//		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-//		view.addGestureRecognizer(tapGesture)
+		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+		bgView.addGestureRecognizer(tapGesture)
 		
 		switch alertType {
 		case .onlyConfirm:
@@ -167,7 +171,7 @@ extension CustomAlertViewController {
 			}
 		}
 		
-		view.addSubviews(alertView)
+		view.addSubviews(bgView, alertView)
 		alertView.addSubview(containerStackView)
 		[titleLabel, contentLabel, buttonStackView].forEach {
 			containerStackView.addArrangedSubview($0)
@@ -175,6 +179,10 @@ extension CustomAlertViewController {
 	}
 	
 	private func setLayout() {
+		
+		bgView.snp.makeConstraints {
+			$0.edges.equalToSuperview()
+		}
 		
 		alertView.snp.makeConstraints {
 			$0.top.greaterThanOrEqualTo(view.safeAreaLayoutGuide)

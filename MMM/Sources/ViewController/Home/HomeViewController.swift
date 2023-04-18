@@ -16,8 +16,9 @@ class HomeViewController: UIViewController {
 	private let viewModel = HomeViewModel()
 
 	// MARK: - UI Components
-	private lazy var monthButton = UIBarButtonItem()
+	private lazy var monthButtonItem = UIBarButtonItem()
 	private lazy var todayButtonItem = UIBarButtonItem()
+	private lazy var monthButton = UIButton()
 	private lazy var todayButton = UIButton()
 	private lazy var settingButton = UIBarButtonItem()
 	private lazy var tableView = UITableView()
@@ -110,22 +111,24 @@ extension HomeViewController {
 		// [view]
 		view.backgroundColor = R.Color.gray100
 		view.addGestureRecognizer(self.scopeGesture)
-		navigationItem.leftBarButtonItem = monthButton
+		navigationItem.leftBarButtonItem = monthButtonItem
 		navigationItem.rightBarButtonItems = [settingButton, todayButtonItem]
 
 		monthButton = monthButton.then {
-			let button = UIButton()
-			button.frame = .init(origin: .zero, size: .init(width: 49, height: 24))
-			button.setTitle("3월", for: .normal)
-			button.setImage(R.Icon.arrowExpandMore16, for: .normal)
-			button.setTitleColor(R.Color.white, for: .normal)
-			button.setTitleColor(R.Color.white.withAlphaComponent(0.7), for: .highlighted)
-			button.imageView?.contentMode = .scaleAspectFit
-			button.titleLabel?.font = R.Font.h5
-			button.contentHorizontalAlignment = .center
-			button.semanticContentAttribute = .forceRightToLeft //<- 중요
-			button.imageEdgeInsets = .init(top: 0, left: 11, bottom: 0, right: 0) // 이미지 여백
-			$0.customView = button
+			$0.frame = .init(origin: .zero, size: .init(width: 100, height: 24))
+			$0.setTitle(Date().getFormattedDate(format: "M월"), for: .normal)
+			$0.setImage(R.Icon.arrowExpandMore16, for: .normal)
+			$0.setTitleColor(R.Color.white, for: .normal)
+			$0.setTitleColor(R.Color.white.withAlphaComponent(0.7), for: .highlighted)
+			$0.imageView?.contentMode = .scaleAspectFit
+			$0.titleLabel?.font = R.Font.h5
+			$0.contentHorizontalAlignment = .left
+			$0.semanticContentAttribute = .forceRightToLeft //<- 중요
+			$0.imageEdgeInsets = .init(top: 0, left: 11, bottom: 0, right: 0) // 이미지 여백
+		}
+		
+		monthButtonItem = monthButtonItem.then {
+			$0.customView = monthButton
 		}
 		
 		todayButton = todayButton.then {
@@ -208,6 +211,13 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 		}
 		self.view.layoutIfNeeded()
 	}
+	
+
+	// page가 변경될때 month 변경
+	func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
+		monthButton.setTitle(calendar.currentPage.getFormattedDate(format: "M월"), for: .normal)
+	}
+}
 }
 
 //MARK: - UIGesture Recognizer Delegate

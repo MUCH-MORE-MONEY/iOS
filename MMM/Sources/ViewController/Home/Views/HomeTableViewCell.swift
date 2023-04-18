@@ -79,13 +79,6 @@ final class HomeTableViewCell: UITableViewCell {
 		super.init(coder: coder)
 		fatalError("init(coder:) has not been implemented")
 	}
-	
-	override func layoutSubviews() {
-		super.layoutSubviews()
-		
-		// Cell 간격 조정
-		contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0))
-	}
 
 	private func setLayout() {
 		contentView.addSubviews(image, containsStackView, contains3StackView)

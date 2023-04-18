@@ -24,6 +24,8 @@ class HomeViewController: UIViewController {
 	private lazy var tableView = UITableView()
 	
 	private lazy var calendar = FSCalendar()
+	private lazy var headerView = UIView()
+	private lazy var dayLabel = UILabel()
 	private lazy var scopeGesture = UIPanGestureRecognizer()
 	
 	public init() {
@@ -101,10 +103,10 @@ extension HomeViewController {
 //					self?.toggleCheckButton(isEnabled)
 //				}
 //			}).store(in: &cancellables)
-		viewModel.isMatchPasswordInput
-			.receive(on: DispatchQueue.main)
-			.sink(receiveValue: go2)
-			.store(in: &cancellables)
+//		viewModel.isMatchPasswordInput
+//			.receive(on: DispatchQueue.main)
+//			.sink(receiveValue: go2)
+//			.store(in: &cancellables)
 	}
 	
 	private func setAttribute() {
@@ -180,12 +182,26 @@ extension HomeViewController {
 			$0.dataSource = self
 			$0.backgroundColor = R.Color.gray100
 			$0.showsVerticalScrollIndicator = false
+			$0.tableHeaderView = headerView
 			$0.register(HomeTableViewCell.self)
 			$0.panGestureRecognizer.require(toFail: self.scopeGesture)
 			$0.separatorInset.left = 20
 			$0.separatorInset.right = 20
 		}
 		
+		headerView = headerView.then {
+			$0.backgroundColor = R.Color.gray100
+			$0.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: 44)
+		}
+
+		dayLabel = dayLabel.then {
+			$0.text = "16일 (화)"
+			$0.font = R.Font.title3
+			$0.textColor = R.Color.gray900
+			$0.textAlignment = .left
+		}
+		
+		headerView.addSubview(dayLabel)
 		view.addSubviews(calendar, tableView)
 	}
 	
@@ -193,6 +209,14 @@ extension HomeViewController {
 		calendar.snp.makeConstraints {
 			$0.top.left.right.equalTo(view.safeAreaLayoutGuide)
 			$0.height.equalTo(314)
+		}
+		
+		headerView.snp.makeConstraints {
+			$0.left.right.equalToSuperview().inset(20)
+		}
+
+		dayLabel.snp.makeConstraints {
+			$0.top.equalToSuperview().inset(16)
 		}
 		
 		tableView.snp.makeConstraints {

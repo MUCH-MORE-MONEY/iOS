@@ -152,7 +152,7 @@ extension CustomAlertViewController {
 	}
 	
 	private func setAttribute() {
-		view.backgroundColor = R.Color.black.withAlphaComponent(0.7)
+		view.backgroundColor = R.Color.black.withAlphaComponent(0.2)
 		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
 		bgView.addGestureRecognizer(tapGesture)
 		

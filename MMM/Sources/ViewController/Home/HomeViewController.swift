@@ -183,7 +183,7 @@ extension HomeViewController {
 	private func setLayout() {
 		calendar.snp.makeConstraints {
 			$0.top.left.right.equalTo(view.safeAreaLayoutGuide)
-			$0.height.equalTo(300)
+			$0.height.equalTo(314)
 		}
 		
 		tableView.snp.makeConstraints {
@@ -198,7 +198,7 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 	// 캘린더 선택
 	func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
 //		let selectedDates = calendar.selectedDates.map({dateFormatter.string(from: $0)}) // 선택된 날짜
-
+		
 		if monthPosition == .next || monthPosition == .previous {
 			calendar.setCurrentPage(date, animated: true)
 		}
@@ -211,19 +211,31 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 		}
 		self.view.layoutIfNeeded()
 	}
-	
 
 	// page가 변경될때 month 변경
 	func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
 		monthButton.setTitle(calendar.currentPage.getFormattedDate(format: "M월"), for: .normal)
 	}
 }
+
+//MARK: - FSCalendar Delegate Appearance
+extension HomeViewController: FSCalendarDelegateAppearance {
+	
+	// 오늘날짜에 대한 border
+	func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, borderDefaultColorFor date: Date) -> UIColor? {
+		return date.getFormattedDefault() == Date().getFormattedDefault() ? R.Color.white : appearance.borderDefaultColor
+	}
+	
+	func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, fillDefaultColorFor date: Date) -> UIColor? {
+		return nil
+	}
 }
 
 //MARK: - UIGesture Recognizer Delegate
 extension HomeViewController: UIGestureRecognizerDelegate {
 	// 스크롤 제스쳐
 	func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+		
 		let shouldBegin = self.tableView.contentOffset.y <= -self.tableView.contentInset.top
 		if shouldBegin {
 			let velocity = self.scopeGesture.velocity(in: self.view)

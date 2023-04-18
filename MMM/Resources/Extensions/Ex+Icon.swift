@@ -45,5 +45,6 @@ public extension MMMResource {
         public static let iconMypageInActive = UIImage(named: "iconMypageInActive", in: .main, compatibleWith: nil)
         public static let iconSeedActive = UIImage(named: "iconSeedActive", in: .main, compatibleWith: nil)
         public static let iconSeedInActive = UIImage(named: "iconSeedInActive", in: .main, compatibleWith: nil)
+        public static let iconPlus = UIImage(named: "iconPlus", in: .main, compatibleWith: nil)
 	}
 }

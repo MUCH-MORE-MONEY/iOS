@@ -153,10 +153,19 @@ extension HomeViewController {
 		
 		calendar = calendar.then {
 			$0.backgroundColor = R.Color.gray900
-			$0.select(Date())
 			$0.scope = .month		// 한달 단위(기본값)로 보여주기
 			$0.delegate = self
 			$0.dataSource = self
+			$0.today = nil			// default 오늘 표시 제거
+			$0.appearance.titleTodayColor = R.Color.white
+			$0.appearance.titleDefaultColor = R.Color.gray300 	// 달력의 평일 날짜 색깔
+			$0.appearance.titleFont = R.Font.body5				// 달력의 평일 글자 폰트
+			$0.appearance.weekdayTextColor = R.Color.gray100	// 달력의 요일 글자 색깔
+			$0.appearance.weekdayFont = R.Font.body5			// 달력의 요일 글자 폰트
+			$0.appearance.headerMinimumDissolvedAlpha = 0		// 년월에 흐릿하게 보이는 애들 없애기
+			$0.appearance.titlePlaceholderColor = R.Color.gray300.withAlphaComponent(0.5) // 달에 유효하지 않은 날짜의 색 지정
+			$0.appearance.subtitleOffset = CGPoint(x: 0, y: 6)	// 캘린더 숫자와 subtitle간의 간격 조정
+			$0.placeholderType = .none							// 달에 유효하지않은 날짜 지우기
 		}
 		
 		scopeGesture = scopeGesture.then {

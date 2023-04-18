@@ -235,7 +235,8 @@ extension HomeViewController: UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		return Calendar.getDummyList()[indexPath.row].memo.isEmpty ? 42 : 64
+		let padding: CGFloat = 24
+		return Calendar.getDummyList()[indexPath.row].memo.isEmpty ? 42 + padding : 64 + padding
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

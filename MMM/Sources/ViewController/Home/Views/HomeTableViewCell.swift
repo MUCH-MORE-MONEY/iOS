@@ -83,38 +83,40 @@ final class HomeTableViewCell: UITableViewCell {
 	override func layoutSubviews() {
 		super.layoutSubviews()
 		
-		contentView.frame = contentView.frame.inset(by: .init(top: 12, left: 20, bottom: 12, right: 20))
+		// Cell 간격 조정
+		contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0))
 	}
 
 	private func setLayout() {
-		addSubviews(image, containsStackView, contains3StackView)
+		contentView.addSubviews(image, containsStackView, contains3StackView)
 		[contains2StackView, memoLabel].forEach {
 			containsStackView.addArrangedSubview($0)
 		}
+
 		[starStackView, titleLabel].forEach {
 			contains2StackView.addArrangedSubview($0)
 		}
-		
+
 		[plusMinusImage, priceLabel].forEach {
 			contains3StackView.addArrangedSubview($0)
 		}
-		
+
 		image.snp.makeConstraints {
 			$0.leading.equalToSuperview().inset(20)
 			$0.centerY.equalToSuperview()
 			$0.width.height.equalTo(40)
 		}
-		
+
 		containsStackView.snp.makeConstraints {
 			$0.leading.equalTo(image.snp.trailing).offset(16)
 			$0.trailing.equalToSuperview().inset(20)
 			$0.centerY.equalToSuperview()
 		}
-		
+
 		contains2StackView.snp.makeConstraints {
 			$0.trailing.lessThanOrEqualTo(contains3StackView.snp.leading)
 		}
-		
+
 		contains3StackView.snp.makeConstraints {
 			$0.trailing.equalToSuperview().inset(20)
 			$0.centerY.equalTo(titleLabel.snp.centerY)

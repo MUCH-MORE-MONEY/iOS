@@ -39,6 +39,10 @@ public extension MMMResource {
 		public static let onboarding1 = UIImage(named: "iconOnboarding1", in: .main, compatibleWith: nil)
 		public static let onboarding2 = UIImage(named: "iconOnboarding2", in: .main, compatibleWith: nil)
 		public static let mypageBg = UIImage(named: "iconMypageBg", in: .main, compatibleWith: nil)
+		public static let iconStarActive = UIImage(named: "iconStarActive24", in: .main, compatibleWith: nil)
+		public static let iconStarInActive = UIImage(named: "iconStarInActive24", in: .main, compatibleWith: nil)
+
+		
         // MARK: - TabBar Items
         public static let iconGroupActive = UIImage(named: "iconGroupActive", in: .main, compatibleWith: nil)
         public static let iconGroupInActive = UIImage(named: "iconGroupInActive", in: .main, compatibleWith: nil)

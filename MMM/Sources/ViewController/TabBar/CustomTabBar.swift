@@ -92,8 +92,8 @@ class CustomTabBar: UIView {
                     print(self.currentIndex)
                     
                     let isButtonSelected = self.currentIndex == i
-                    let image = isButtonSelected ? tabItems[i].selectedImage : tabItems[i].image
-                    let selectedButton = tabButtons[i]
+					let image = isButtonSelected ? self.tabItems[i].selectedImage : self.tabItems[i].image
+					let selectedButton = self.tabButtons[i]
                     
                     selectedButton.setImage(image, for: .normal)
                 }

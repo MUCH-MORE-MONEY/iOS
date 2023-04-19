@@ -28,6 +28,8 @@ class HomeViewController: UIViewController {
 	private lazy var dayLabel = UILabel()
 	private lazy var scopeGesture = UIPanGestureRecognizer()
 	
+	private lazy var selectData: [Calendar] = Calendar.getDummyList()
+	
 	public init() {
 		super.init(nibName: nil, bundle: nil)
 	}
@@ -45,6 +47,7 @@ class HomeViewController: UIViewController {
 
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
+//		tableView.reloadData()
 //		self.navigationController?.setNavigationBarHidden(true, animated: animated)	// navigation bar 숨김
 	}
 	
@@ -64,6 +67,7 @@ extension HomeViewController {
 	// 오늘 날짜로 돌아오기
 	func didTapTodayButton() {
 		self.calendar.select(Date())
+		self.dayLabel.text = Date().getFormattedDate(format: "dd일 (EEEEE)") // 선택된 날짜
 	}
 }
 
@@ -158,7 +162,9 @@ extension HomeViewController {
 			$0.scope = .month		// 한달 단위(기본값)로 보여주기
 			$0.delegate = self
 			$0.dataSource = self
+			$0.select(Date())
 			$0.today = nil			// default 오늘 표시 제거
+			$0.calendarHeaderView = FSCalendarHeaderView()
 			$0.appearance.titleTodayColor = R.Color.white
 			$0.appearance.titleDefaultColor = R.Color.gray300 	// 달력의 평일 날짜 색깔
 			$0.appearance.titleFont = R.Font.body5				// 달력의 평일 글자 폰트
@@ -195,7 +201,7 @@ extension HomeViewController {
 		}
 
 		dayLabel = dayLabel.then {
-			$0.text = "16일 (화)"
+			$0.text = Date().getFormattedDate(format: "dd일 (EEEEE)") // 요일을 한글자로 표현
 			$0.font = R.Font.title3
 			$0.textColor = R.Color.gray900
 			$0.textAlignment = .left
@@ -230,7 +236,13 @@ extension HomeViewController {
 extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 	// 캘린더 선택
 	func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-//		let selectedDates = calendar.selectedDates.map({dateFormatter.string(from: $0)}) // 선택된 날짜
+		dayLabel.text = date.getFormattedDate(format: "dd일 (EEEEE)") // 선택된 날짜
+		
+//		if date.getFormattedDefault() == Date().getFormattedDefault() {
+//			selectData = []
+//		} else {
+//			selectData = Calendar.getDummyList()
+//		}
 		
 		if monthPosition == .next || monthPosition == .previous {
 			calendar.setCurrentPage(date, animated: true)
@@ -289,12 +301,12 @@ extension HomeViewController: UIGestureRecognizerDelegate {
 extension HomeViewController: UITableViewDataSource {
 
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return Calendar.getDummyList().count // 임시
+		return selectData.count // 임시
 	}
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 		let padding: CGFloat = 24
-		return Calendar.getDummyList()[indexPath.row].memo.isEmpty ? 42 + padding : 64 + padding
+		return selectData[indexPath.row].memo.isEmpty ? 42 + padding : 64 + padding
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -303,7 +315,7 @@ extension HomeViewController: UITableViewDataSource {
 		cell.setUp(data: Calendar.getDummyList()[indexPath.row])
 		cell.backgroundColor = R.Color.gray100
 
-		if indexPath.row == Calendar.getDummyList().count - 1 {
+		if indexPath.row == selectData.count - 1 {
 			// 마지막 cell은 bottom border 제거
 			DispatchQueue.main.async {
 				cell.addAboveTheBottomBorderWithColor(color: R.Color.gray100)

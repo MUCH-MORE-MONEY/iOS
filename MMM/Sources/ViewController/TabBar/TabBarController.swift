@@ -6,25 +6,37 @@
 //
 
 import UIKit
+import Combine
+import Then
+import SnapKit
 
 final class TabBarController: UITabBarController {
-    // MARK: - UI Components
-//    private lazy var moneyVC = UIViewController().then {
-//        $0.tabBarItem = UITabBarItem(title: "소비", image: R.Icon.iconMoneyActive, tag: 0)
-//    }
-//
-//    private lazy var profileVC = UIViewController().then {
-//        $0.tabBarItem = UITabBarItem(title: "마이페이지", image: R.Icon.iconMypageActive, tag: 1)
-//    }
+
+    private let customTabBar = CustomTabBar(tabItems: [.home, .add, .profile])
+    private lazy var cancellables = Set<AnyCancellable>()
+    private lazy var childVCs = [HomeViewController(), AddViewController(), ProfileViewController()]
+    
+    init() {
+        super.init(nibName: nil, bundle: nil)
+//        setup()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setup()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+//        setup()
+        
         setupTabBar()
+//        if let items = tabBarController?.tabBar.items {
+//            // Get the first tab bar item
+//            let item = items[1]
+//
+//            // Set the image insets for the first tab bar item
+//            item.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0)
+//        }
     }
 }
 
@@ -32,6 +44,7 @@ final class TabBarController: UITabBarController {
 extension TabBarController {
     
 	private func setupTabBar() {
+        tabBar.backgroundColor = R.Color.gray100
 		tabBar.tintColor = R.Color.gray900
 		tabBar.isTranslucent = false						// 불투명도
 		
@@ -39,29 +52,72 @@ extension TabBarController {
 		let homeTabItem = UITabBarItem(title: "소비", image: R.Icon.iconMoneyInActive, selectedImage: R.Icon.iconMoneyActive)
 		homeVC.tabBarItem = homeTabItem
 		
+        let addVC = NavigationController(rootViewController: AddViewController())
+        addVC.tabBarItem.image = R.Icon.iconPlus
+        
+        
+        
 		let profileVC = NavigationController(rootViewController: ProfileViewController())
 		let profileTabItem = UITabBarItem(title: "마이페이지", image: R.Icon.iconMypageInActive, selectedImage: R.Icon.iconMypageActive)
 		profileVC.tabBarItem = profileTabItem
-		
-		viewControllers = [homeVC, profileVC]
+        
+        
+        
+        UITabBar.clearShadow()
+        tabBar.layer.applyShadow(color: .gray, alpha: 0.3, x: 0, y: 0, blur: 12)
+
+		viewControllers = [homeVC, addVC, profileVC]
 	}
     
     private func setup() {
         setAttribute()
         setLayout()
+        bind()
     }
     
     private func setAttribute() {
-        // tabbar delegate
-        self.delegate = self
+        view.addSubview(customTabBar)
+        
+        customTabBar.tabItems
+            .enumerated()
+             .forEach { i, item in
+                 let vc = NavigationController(rootViewController: childVCs[i])
+                 addChild(vc)
+                 view.addSubview(vc.view)
+                 vc.didMove(toParent: self)
+                 
+                 vc.view.snp.makeConstraints {
+                     $0.top.leading.trailing.equalToSuperview()
+                     $0.bottom.equalTo(tabBar.snp.top)
+                 }
+                 
+                 childVCs.append(vc)
+             }
+         
+         guard let shouldFrontView = childVCs[0].view else { return }
+         view.bringSubviewToFront(shouldFrontView)
     }
     
     private func setLayout() {
+        customTabBar.snp.makeConstraints {
+            $0.leading.bottom.trailing.equalToSuperview()
+            $0.top.equalTo(view.snp.bottom).offset(-82)
+        }
+    }
+    
+    private func bind() {
+        customTabBar.tabButtons.forEach {
+            $0.tapPublisher
+                .sinkOnMainThread(receiveValue: bindCurrentIndex)
+                .store(in: &cancellables)
+        }
         
     }
-}
 
-// MARK: - TabBarControllerDelegate
-extension TabBarController: UITabBarControllerDelegate{
     
+    private func bindCurrentIndex() {
+        selectedIndex = customTabBar.currentIndex
+        guard let shouldFrontView = childVCs[selectedIndex].view else { return }
+        view.bringSubviewToFront(shouldFrontView)
+    }
 }

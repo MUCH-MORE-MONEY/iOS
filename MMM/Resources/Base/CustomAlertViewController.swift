@@ -123,8 +123,8 @@ extension CustomAlertViewController {
 		
 		let attributedString = NSMutableAttributedString(string: contentText)
 		let paragraphStyle = NSMutableParagraphStyle()
-		paragraphStyle.lineBreakMode = .byWordWrapping
-		paragraphStyle.lineSpacing = 4
+		paragraphStyle.lineBreakStrategy = .hangulWordPriority
+		paragraphStyle.lineSpacing = 2
 		paragraphStyle.alignment = .center
 		attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, attributedString.length))
 		self.contentLabel.attributedText = attributedString

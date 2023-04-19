@@ -61,6 +61,7 @@ final class WithdrawConfirmView: UIView {
 		containerStackView.snp.makeConstraints {
 			$0.left.equalTo(numberLabel.snp.right).offset(8)
 			$0.top.equalToSuperview()
+			$0.right.equalToSuperview().inset(19)
 		}
 	}
 }
@@ -71,8 +72,8 @@ extension WithdrawConfirmView {
 		titleLabel.text = title
 		let attributedString = NSMutableAttributedString(string: content)
 		let paragraphStyle = NSMutableParagraphStyle()
-		paragraphStyle.lineBreakMode = .byWordWrapping
-		paragraphStyle.lineSpacing = 8
+		paragraphStyle.lineBreakStrategy = .hangulWordPriority
+		paragraphStyle.lineSpacing = 2
 		paragraphStyle.alignment = .left
 		
 		let textAttributes: [NSAttributedString.Key : Any] = [
@@ -83,15 +84,5 @@ extension WithdrawConfirmView {
 		
 		attributedString.addAttributes(textAttributes, range: NSMakeRange(0, attributedString.length))
 		contentLabel.attributedText = attributedString
-		
-		if number == "1" {
-			containerStackView.snp.makeConstraints {
-				$0.right.equalToSuperview().inset(40)
-			}
-		} else {
-			containerStackView.snp.makeConstraints {
-				$0.right.equalToSuperview().inset(35)
-			}
-		}
 	}
 }

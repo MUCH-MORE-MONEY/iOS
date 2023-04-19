@@ -142,17 +142,17 @@ private extension OnboardingViewController {
         
         mainLabel1.snp.makeConstraints {
             $0.top.equalTo(onboardingViews[0].snp.bottom).offset(32)
-            $0.left.right.equalToSuperview().inset(100)
+            $0.left.right.equalToSuperview()
         }
         
         mainLabel2.snp.makeConstraints {
             $0.top.equalTo(mainLabel1.snp.bottom)
-            $0.left.right.equalToSuperview().inset(100)
+            $0.left.right.equalToSuperview()
         }
         
         subLabel.snp.makeConstraints {
             $0.top.equalTo(mainLabel2.snp.bottom).offset(16)
-            $0.left.right.equalToSuperview().inset(70)
+            $0.left.right.equalToSuperview()
         }
         
         pageControl.snp.makeConstraints {

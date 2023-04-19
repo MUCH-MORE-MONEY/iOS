@@ -216,13 +216,10 @@ extension HomeViewController {
 			$0.top.left.right.equalTo(view.safeAreaLayoutGuide)
 			$0.height.equalTo(314)
 		}
-		
-		headerView.snp.makeConstraints {
-			$0.left.right.equalToSuperview().inset(20)
-		}
 
 		dayLabel.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(16)
+			$0.left.right.equalToSuperview().inset(20)
 		}
 		
 		tableView.snp.makeConstraints {

@@ -35,7 +35,7 @@ final class HomeTableViewCell: UITableViewCell {
 	private lazy var contains3StackView = UIStackView().then {
 		$0.axis = .horizontal
 		$0.spacing = 4
-		$0.alignment = .leading
+		$0.alignment = .center
 		$0.distribution = .fill
 	}
 	

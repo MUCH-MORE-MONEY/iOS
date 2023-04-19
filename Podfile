@@ -9,7 +9,7 @@ target 'MMM' do
   pod 'SnapKit', '~> 5.6.0'
   pod 'Then'
   pod 'SwiftKeychainWrapper'
-
+  pod 'FSCalendar'
 
   target 'MMMTests' do
     inherit! :search_paths

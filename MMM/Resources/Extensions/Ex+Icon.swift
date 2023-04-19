@@ -25,8 +25,11 @@ public extension MMMResource {
 		public static let coinPay40 = UIImage(named: "iconCoinPay40", in: .main, compatibleWith: nil)
 		public static let delete24 = UIImage(named: "iconDelete24", in: .main, compatibleWith: nil)
 		public static let highlightoff24 = UIImage(named: "iconHighlightoff24", in: .main, compatibleWith: nil)
+		public static let minus16 = UIImage(named: "iconMinus16", in: .main, compatibleWith: nil)
 		public static let photoBlank64 = UIImage(named: "iconPhotoBlank64", in: .main, compatibleWith: nil)
+		public static let plus16 = UIImage(named: "iconPlus16", in: .main, compatibleWith: nil)
 		public static let report16 = UIImage(named: "iconReport16", in: .main, compatibleWith: nil)
+		public static let setting = UIImage(named: "iconSetting", in: .main, compatibleWith: nil)
 		public static let star16 = UIImage(named: "iconStar16", in: .main, compatibleWith: nil)
 		public static let star24 = UIImage(named: "iconStar24", in: .main, compatibleWith: nil)
 		public static let star36 = UIImage(named: "iconStar36", in: .main, compatibleWith: nil)
@@ -36,6 +39,10 @@ public extension MMMResource {
 		public static let onboarding1 = UIImage(named: "iconOnboarding1", in: .main, compatibleWith: nil)
 		public static let onboarding2 = UIImage(named: "iconOnboarding2", in: .main, compatibleWith: nil)
 		public static let mypageBg = UIImage(named: "iconMypageBg", in: .main, compatibleWith: nil)
+		public static let iconStarActive = UIImage(named: "iconStarActive24", in: .main, compatibleWith: nil)
+		public static let iconStarInActive = UIImage(named: "iconStarInActive24", in: .main, compatibleWith: nil)
+
+		
         // MARK: - TabBar Items
         public static let iconGroupActive = UIImage(named: "iconGroupActive", in: .main, compatibleWith: nil)
         public static let iconGroupInActive = UIImage(named: "iconGroupInActive", in: .main, compatibleWith: nil)

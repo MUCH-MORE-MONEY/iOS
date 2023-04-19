@@ -50,7 +50,7 @@ final class WithdrawViewController: UIViewController {
 }
 
 //MARK: - Action
-extension WithdrawViewController {
+extension WithdrawViewController: CustomAlertDelegate {
 	@objc func didTapBackButton(_ sender: UITapGestureRecognizer) {
 		navigationController?.popViewController(animated: true)
 	}
@@ -73,13 +73,21 @@ extension WithdrawViewController {
 	}
 	
 	@objc func didTapWithdrawButton() {
+		self.showAlert(alertType: .canCancel, titleText: "정말 탈퇴하시겠어요?", contentText: "탈퇴하면 소장 중인 데이터가 삭제되며\n30일 이후에는 복구가 불가능합니다.", confirmButtonText: "탈퇴하기")
+	}
+	
+	// 확인 버튼 이벤트 처리
+	func didAlertCofirmButton() {
 		if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
 			sceneDelegate.window?.rootViewController = sceneDelegate.onboarding
 			DispatchQueue.main.asyncAfter(deadline: .now()) {
-				sceneDelegate.onboarding.showAlert(alertType: .onlyConfirm, titleText: "탈퇴를 완료하였습니다", contentText: "언제든 다시 MMM을 찾아와주세요!", confirmButtonText: "삭제하기")
+				sceneDelegate.onboarding.showAlert(alertType: .onlyConfirm, titleText: "탈퇴를 완료하였습니다", contentText: "언제든 다시 MMM을 찾아와주세요!", confirmButtonText: "확인하기")
 			}
 		}
 	}
+	
+	// 취소 버튼 이벤트 처리
+	func didAlertCacelButton() { }
 }
 
 //MARK: - Style & Layouts

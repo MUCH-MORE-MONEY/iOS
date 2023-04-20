@@ -106,11 +106,8 @@ final class HomeTableViewCell: UITableViewCell {
 			$0.centerY.equalToSuperview()
 		}
 
-		contains2StackView.snp.makeConstraints {
-			$0.trailing.lessThanOrEqualTo(contains3StackView.snp.leading)
-		}
-
 		contains3StackView.snp.makeConstraints {
+			$0.leading.greaterThanOrEqualTo(titleLabel.snp.trailing).offset(11)
 			$0.trailing.equalToSuperview().inset(20)
 			$0.centerY.equalTo(titleLabel.snp.centerY)
 		}

@@ -80,6 +80,7 @@ final class OnboardingViewController: UIViewController {
     ]
     
     private var currentPage = 0
+    private var onboardingVM = OnboardingViewModel(authorizationCode: "", email: "", identityToken: "", userIdentifier: "")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -270,11 +271,12 @@ extension OnboardingViewController: ASAuthorizationControllerDelegate {
                     print("두번째 email : \(email)")
                 }
             }
+            onboardingVM.authorizationCode = codeStr
+            onboardingVM.email = email
+            onboardingVM.identityToken = tokeStr
+            onboardingVM.userIdentifier = user
             
-            if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
-                let tabBarController = TabBarController()
-                sceneDelegate.window?.rootViewController = tabBarController
-            }
+            onboardingVM.loginServices()
         }
     }
     

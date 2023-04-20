@@ -192,10 +192,14 @@ extension OnboardingViewController: CustomAlertDelegate {
     }
     
 	@objc func appleButtonTapped() {
-		if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
-			let tabBarController = TabBarController()
-			sceneDelegate.window?.rootViewController = tabBarController
-		}
+        
+        let request = ASAuthorizationAppleIDProvider().createRequest()
+        request.requestedScopes = [.fullName, .email]
+        
+        let controller = ASAuthorizationController(authorizationRequests: [request])
+        controller.delegate = self as? ASAuthorizationControllerDelegate
+        controller.presentationContextProvider = self as? ASAuthorizationControllerPresentationContextProviding
+        controller.performRequests()
     }
 	
 	// 확인 버튼 이벤트 처리
@@ -236,5 +240,34 @@ extension OnboardingViewController: UIScrollViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         let value = Int(round(scrollView.contentOffset.x/scrollView.frame.size.width))
         currentPage = value
+    }
+}
+
+extension OnboardingViewController: ASAuthorizationControllerDelegate {
+    // 성공 후 동작
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        if let credential = authorization.credential as? ASAuthorizationAppleIDCredential {
+
+            let idToken = credential.identityToken!
+            let tokeStr = String(data: idToken, encoding: .utf8)
+            print("token : \(tokeStr)")
+
+            guard let code = credential.authorizationCode else { return }
+            let codeStr = String(data: code, encoding: .utf8)
+            print("code : \(codeStr)")
+
+            let user = credential.user
+            print("user : \(user)")
+
+            if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+                let tabBarController = TabBarController()
+                sceneDelegate.window?.rootViewController = tabBarController
+            }
+        }
+    }
+
+    // 실패 후 동작
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        print("로그인 실패")
     }
 }

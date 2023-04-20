@@ -10,6 +10,7 @@ import Then
 import SnapKit
 import AuthenticationServices
 import WebKit
+import SwiftKeychainWrapper
 
 final class OnboardingViewController: UIViewController {
     // MARK: - UI Components
@@ -62,7 +63,7 @@ final class OnboardingViewController: UIViewController {
         $0.setTitle("로그인 중 문제가 발생하셨나요?", for: .normal)
         $0.titleLabel?.font = R.Font.body3
         $0.setTitleColor(R.Color.gray500, for: .normal)
-		$0.setTitleColor(R.Color.gray500.withAlphaComponent(0.7), for: .highlighted) // click시 색상
+        $0.setTitleColor(R.Color.gray500.withAlphaComponent(0.7), for: .highlighted) // click시 색상
         $0.addTarget(self, action: #selector(showWebView), for: .touchUpInside)
     }
     
@@ -77,17 +78,17 @@ final class OnboardingViewController: UIViewController {
                        mainLabel2: "리뷰를 작성해보세요",
                        subLabel: "다음에 돈을 어떻게 쓰고 벌지 \n다시 한 번 생각하고 다짐해요")
     ]
-        
+    
     private var currentPage = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
     }
-	
-	override var preferredStatusBarStyle: UIStatusBarStyle {
-		return .lightContent // status text color 변경
-	}
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent // status text color 변경
+    }
 }
 
 //MARK: - Style & Layouts
@@ -191,7 +192,7 @@ extension OnboardingViewController: CustomAlertDelegate {
             animated: true)
     }
     
-	@objc func appleButtonTapped() {
+    @objc func appleButtonTapped() {
         
         let request = ASAuthorizationAppleIDProvider().createRequest()
         request.requestedScopes = [.fullName, .email]
@@ -201,12 +202,12 @@ extension OnboardingViewController: CustomAlertDelegate {
         controller.presentationContextProvider = self as? ASAuthorizationControllerPresentationContextProviding
         controller.performRequests()
     }
-	
-	// 확인 버튼 이벤트 처리
-	func didAlertCofirmButton() {}
-	
-	// 취소 버튼 이벤트 처리
-	func didAlertCacelButton() {}
+    
+    // 확인 버튼 이벤트 처리
+    func didAlertCofirmButton() {}
+    
+    // 취소 버튼 이벤트 처리
+    func didAlertCacelButton() {}
     
     func labelAnimation(_ labels: UILabel...) {
         if currentPage != pageControl.currentPage {
@@ -229,11 +230,11 @@ extension OnboardingViewController: UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let value = Int(round(scrollView.contentOffset.x/scrollView.frame.size.width))
         pageControl.currentPage = value
-
+        
         mainLabel1.text = onboardingItems[value].mainLabel1
         mainLabel2.text = onboardingItems[value].mainLabel2
         subLabel.text = onboardingItems[value].subLabel
-
+        
         labelAnimation(mainLabel1, mainLabel2, subLabel)
     }
     
@@ -247,25 +248,67 @@ extension OnboardingViewController: ASAuthorizationControllerDelegate {
     // 성공 후 동작
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         if let credential = authorization.credential as? ASAuthorizationAppleIDCredential {
-
+            
             let idToken = credential.identityToken!
             let tokeStr = String(data: idToken, encoding: .utf8)
             print("token : \(tokeStr)")
-
+            
             guard let code = credential.authorizationCode else { return }
             let codeStr = String(data: code, encoding: .utf8)
             print("code : \(codeStr)")
-
+            
             let user = credential.user
             print("user : \(user)")
-
+            
+            var email = credential.email ?? ""
+            print("첫번째 email : \(email)")
+            
+            if email.isEmpty {/// 2번째 애플 로그인부터는 email이 identityToken에 들어있음.
+                
+                if let tokenString = String(data: credential.identityToken ?? Data(), encoding: .utf8) {
+                    email = decode(jwtToken: tokenString)["email"] as? String ?? ""
+                    print("두번째 email : \(email)")
+                }
+            }
+            
             if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
                 let tabBarController = TabBarController()
                 sceneDelegate.window?.rootViewController = tabBarController
             }
         }
     }
-
+    
+    /// JWTToken -> dictionary
+    private func decode(jwtToken jwt: String) -> [String: Any] {
+        
+        func base64UrlDecode(_ value: String) -> Data? {
+            var base64 = value
+                .replacingOccurrences(of: "-", with: "+")
+                .replacingOccurrences(of: "_", with: "/")
+            
+            let length = Double(base64.lengthOfBytes(using: String.Encoding.utf8))
+            let requiredLength = 4 * ceil(length / 4.0)
+            let paddingLength = requiredLength - length
+            if paddingLength > 0 {
+                let padding = "".padding(toLength: Int(paddingLength), withPad: "=", startingAt: 0)
+                base64 = base64 + padding
+            }
+            return Data(base64Encoded: base64, options: .ignoreUnknownCharacters)
+        }
+        
+        func decodeJWTPart(_ value: String) -> [String: Any]? {
+            guard let bodyData = base64UrlDecode(value),
+                  let json = try? JSONSerialization.jsonObject(with: bodyData, options: []), let payload = json as? [String: Any] else {
+                return nil
+            }
+            
+            return payload
+        }
+        
+        let segments = jwt.components(separatedBy: ".")
+        return decodeJWTPart(segments[1]) ?? [:]
+    }
+    
     // 실패 후 동작
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
         print("로그인 실패")

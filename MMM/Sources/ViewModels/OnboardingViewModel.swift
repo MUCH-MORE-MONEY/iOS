@@ -10,5 +10,5 @@ import Combine
 import UIKit
 
 final class OnboardingViewModel {
-    
+//    var accessToken: String
 }

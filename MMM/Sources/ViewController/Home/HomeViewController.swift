@@ -159,12 +159,13 @@ extension HomeViewController {
 		
 		calendar = calendar.then {
 			$0.backgroundColor = R.Color.gray900
-			$0.scope = .month		// 한달 단위(기본값)로 보여주기
+			$0.scope = .month									// 한달 단위(기본값)로 보여주기
 			$0.delegate = self
 			$0.dataSource = self
 			$0.select(Date())
-			$0.today = nil			// default 오늘 표시 제거
-			$0.calendarHeaderView = FSCalendarHeaderView()
+			$0.today = nil										// default 오늘 표시 제거
+			$0.headerHeight = 0									// deafult header 제거
+			$0.calendarHeaderView.isHidden = true				// deafult header 제거
 			$0.appearance.titleTodayColor = R.Color.white
 			$0.appearance.titleDefaultColor = R.Color.gray300 	// 달력의 평일 날짜 색깔
 			$0.appearance.titleFont = R.Font.body5				// 달력의 평일 글자 폰트

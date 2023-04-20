@@ -219,7 +219,7 @@ extension HomeViewController {
 
 		dayLabel.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(16)
-			$0.left.right.equalToSuperview().inset(20)
+			$0.left.right.equalTo(view.safeAreaLayoutGuide).inset(20)
 		}
 		
 		tableView.snp.makeConstraints {

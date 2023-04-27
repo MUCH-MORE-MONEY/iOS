@@ -157,6 +157,10 @@ extension HomeViewController {
 			$0.style = .plain
 		}
 		
+		calendarHeaderView = calendarHeaderView.then {
+			$0.setUp(pay: 200000, earn: 21230)
+		}
+		
 		calendar = calendar.then {
 			$0.backgroundColor = R.Color.gray900
 			$0.scope = .month									// 한달 단위(기본값)로 보여주기
@@ -260,7 +264,7 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 		}
 		
 		calendarHeaderView.snp.updateConstraints {
-			$0.height.equalTo(bounds.height <= 268 / 2 ? 0 : 46) // 높이 변경
+			$0.height.equalTo(bounds.height <= 268 / 2 ? 0 : 46) // calendar 전체 높이에 따른 높이 변경
 		}
 		
 		self.view.layoutIfNeeded()

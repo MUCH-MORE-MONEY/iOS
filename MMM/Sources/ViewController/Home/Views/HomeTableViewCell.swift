@@ -12,6 +12,7 @@ final class HomeTableViewCell: UITableViewCell {
 	private lazy var image = UIImageView().then {
 		$0.layer.cornerRadius = 20
 		$0.layer.backgroundColor = R.Color.gray100.cgColor
+		$0.layer.masksToBounds = true	// 모양대로 자르기
 		$0.contentMode = .scaleAspectFit
 	}
 	

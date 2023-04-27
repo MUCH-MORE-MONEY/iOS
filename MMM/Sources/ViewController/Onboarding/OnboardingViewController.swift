@@ -265,6 +265,9 @@ extension OnboardingViewController: ASAuthorizationControllerDelegate {
                     email = onboardingVM.decode(jwtToken: tokenString)["email"] as? String ?? ""
                 }
             }
+            // 사용자의 이메일 저장
+            Common.setKeychain(email, forKey: Common.KeychainKey.email)
+            
             onboardingVM.authorizationCode = authorizationCodeStr
             onboardingVM.email = email
             onboardingVM.identityToken = identityTokenStr

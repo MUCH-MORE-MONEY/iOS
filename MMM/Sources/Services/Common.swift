@@ -15,7 +15,9 @@ final class Common {
      - Authors: suni
      */
     enum KeychainKey: String {
+        case accessToken
         case authorization
+        case email
     }
     
     /**

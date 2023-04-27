@@ -128,7 +128,7 @@ extension CustomAlertViewController {
 	// 확인
 	@objc private func didTapConfirmButton() {
 		self.dismiss(animated: true) {
-            Common.removeKeychain(forKey: Common.KeychainKey.authorization)
+            Common.removeKeychain(forKey: Common.KeychainKey.accessToken)
             self.delegate?.didAlertCofirmButton()
         }
 	}

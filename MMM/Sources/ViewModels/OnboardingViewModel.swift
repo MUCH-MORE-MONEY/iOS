@@ -9,6 +9,7 @@ import Foundation
 import Combine
 import UIKit
 import Alamofire
+import SwiftKeychainWrapper
 
 final class OnboardingViewModel {
     var authorizationCode: String?
@@ -24,7 +25,7 @@ final class OnboardingViewModel {
     }
     
     func loginServices() {
-        let url = "http://ec2-13-209-4-42.ap-northeast-2.compute.amazonaws.com:8080/login/apple"
+        let url = APIConstant.baseURL
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
         
@@ -47,6 +48,16 @@ final class OnboardingViewModel {
             switch response.result {
             case .success:
                 print("POST 성공")
+                guard let data = response.data else { return }
+                do {
+                    let decoder = JSONDecoder()
+                    let json = try decoder.decode(Login.self, from: data)
+                    Common.setKeychain(json.token, forKey: Common.KeychainKey.authorization)
+                } catch {
+                    print("데이터 파싱 실패")
+                }
+                
+                // 로그인 성공 시 tabbar로 메인 뷰 전환
                 if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
                     let tabBarController = TabBarController()
                     sceneDelegate.window?.rootViewController = tabBarController

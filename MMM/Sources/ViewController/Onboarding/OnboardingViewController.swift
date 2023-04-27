@@ -252,14 +252,14 @@ extension OnboardingViewController: ASAuthorizationControllerDelegate {
             
             let idToken = credential.identityToken!
             let tokeStr = String(data: idToken, encoding: .utf8)
-            print("token : \(tokeStr)")
+            print("identityToken : \(tokeStr)")
             
             guard let code = credential.authorizationCode else { return }
             let codeStr = String(data: code, encoding: .utf8)
-            print("code : \(codeStr)")
+            print("authorizationCode : \(codeStr)")
             
             let user = credential.user
-            print("user : \(user)")
+            print("userIdentifier : \(user)")
             
             var email = credential.email ?? ""
             print("첫번째 email : \(email)")

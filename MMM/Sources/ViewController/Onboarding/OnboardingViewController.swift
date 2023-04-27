@@ -249,66 +249,29 @@ extension OnboardingViewController: ASAuthorizationControllerDelegate {
     // 성공 후 동작
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         if let credential = authorization.credential as? ASAuthorizationAppleIDCredential {
+        
+            guard let identityToken = credential.identityToken else { return }
+            let identityTokenStr = String(data: identityToken, encoding: .utf8)
             
-            let idToken = credential.identityToken!
-            let tokeStr = String(data: idToken, encoding: .utf8)
-            print("identityToken : \(tokeStr)")
-            
-            guard let code = credential.authorizationCode else { return }
-            let codeStr = String(data: code, encoding: .utf8)
-            print("authorizationCode : \(codeStr)")
-            
-            let user = credential.user
-            print("userIdentifier : \(user)")
-            
+            guard let authorizationCode = credential.authorizationCode else { return }
+            let authorizationCodeStr = String(data: authorizationCode, encoding: .utf8)
+            let userIdentifier = credential.user
+        
+            /// 최초 로그인 시 credential에서 email 들어옴
             var email = credential.email ?? ""
-            print("첫번째 email : \(email)")
-            
-            if email.isEmpty {/// 2번째 애플 로그인부터는 email이 identityToken에 들어있음.
-                
+            /// 2번째 애플 로그인부터는 email이 identityToken에 들어있음.
+            if email.isEmpty {
                 if let tokenString = String(data: credential.identityToken ?? Data(), encoding: .utf8) {
-                    email = decode(jwtToken: tokenString)["email"] as? String ?? ""
-                    print("두번째 email : \(email)")
+                    email = onboardingVM.decode(jwtToken: tokenString)["email"] as? String ?? ""
                 }
             }
-            onboardingVM.authorizationCode = codeStr
+            onboardingVM.authorizationCode = authorizationCodeStr
             onboardingVM.email = email
-            onboardingVM.identityToken = tokeStr
-            onboardingVM.userIdentifier = user
+            onboardingVM.identityToken = identityTokenStr
+            onboardingVM.userIdentifier = userIdentifier
             
             onboardingVM.loginServices()
         }
-    }
-    
-    /// JWTToken -> dictionary
-    private func decode(jwtToken jwt: String) -> [String: Any] {
-        
-        func base64UrlDecode(_ value: String) -> Data? {
-            var base64 = value
-                .replacingOccurrences(of: "-", with: "+")
-                .replacingOccurrences(of: "_", with: "/")
-            
-            let length = Double(base64.lengthOfBytes(using: String.Encoding.utf8))
-            let requiredLength = 4 * ceil(length / 4.0)
-            let paddingLength = requiredLength - length
-            if paddingLength > 0 {
-                let padding = "".padding(toLength: Int(paddingLength), withPad: "=", startingAt: 0)
-                base64 = base64 + padding
-            }
-            return Data(base64Encoded: base64, options: .ignoreUnknownCharacters)
-        }
-        
-        func decodeJWTPart(_ value: String) -> [String: Any]? {
-            guard let bodyData = base64UrlDecode(value),
-                  let json = try? JSONSerialization.jsonObject(with: bodyData, options: []), let payload = json as? [String: Any] else {
-                return nil
-            }
-            
-            return payload
-        }
-        
-        let segments = jwt.components(separatedBy: ".")
-        return decodeJWTPart(segments[1]) ?? [:]
     }
     
     // 실패 후 동작

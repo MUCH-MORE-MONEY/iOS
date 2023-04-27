@@ -21,9 +21,9 @@ class HomeViewController: UIViewController {
 	private lazy var monthButton = UIButton()
 	private lazy var todayButton = UIButton()
 	private lazy var settingButton = UIBarButtonItem()
-	private lazy var tableView = UITableView()
-	
 	private lazy var calendar = FSCalendar()
+	private lazy var calendarHeaderView = HomeHeaderView()
+	private lazy var tableView = UITableView()
 	private lazy var headerView = UIView()
 	private lazy var dayLabel = UILabel()
 	private lazy var scopeGesture = UIPanGestureRecognizer()
@@ -209,13 +209,19 @@ extension HomeViewController {
 		}
 		
 		headerView.addSubview(dayLabel)
-		view.addSubviews(calendar, tableView)
+		view.addSubviews(calendarHeaderView, calendar, tableView)
 	}
 	
 	private func setLayout() {
-		calendar.snp.makeConstraints {
+		calendarHeaderView.snp.makeConstraints {
 			$0.top.left.right.equalTo(view.safeAreaLayoutGuide)
-			$0.height.equalTo(314)
+			$0.height.equalTo(46)
+		}
+		
+		calendar.snp.makeConstraints {
+			$0.top.equalTo(calendarHeaderView.snp.bottom)
+			$0.left.right.equalTo(view.safeAreaLayoutGuide)
+			$0.height.equalTo(268)
 		}
 
 		dayLabel.snp.makeConstraints {
@@ -252,6 +258,11 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 		calendar.snp.updateConstraints {
 			$0.height.equalTo(bounds.height) // 높이 변경
 		}
+		
+		calendarHeaderView.snp.updateConstraints {
+			$0.height.equalTo(bounds.height <= 268 / 2 ? 0 : 46) // 높이 변경
+		}
+		
 		self.view.layoutIfNeeded()
 	}
 

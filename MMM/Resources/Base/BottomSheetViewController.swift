@@ -9,7 +9,11 @@ import UIKit
 import Then
 import SnapKit
 
-class BottomSheetViewController: UIViewController {
+protocol BottomSheetChild: AnyObject {
+	func willDismiss()
+}
+
+class BottomSheetViewController: UIViewController, BottomSheetChild {
 	// bottomSheet 올라와있는 정도에 따른 상태
 	enum BottomSheetViewState {
 		case expanded
@@ -39,7 +43,7 @@ class BottomSheetViewController: UIViewController {
 	// contentVC: 보여질 UIViewController
 	// bgView: bottomSheet 뒤에 깔릴 어두운 UIView
 	// bottomSheetView: contentViewController가 올라갈 UIView 그자체
-	private let contentVC: UIViewController
+	private let contentVC: UIViewController!
 	private lazy var bgView = UIView() // 뒷 배경
 	private lazy var dragAreaView = UIView() // indicator
 	private lazy var dragIndicatorView = UIView() // indicator
@@ -93,6 +97,28 @@ extension BottomSheetViewController {
 		self.isExpended = isExpended
 		self.isShadow = isShadow
 	}
+	
+	func willDismiss() {
+		self.view.layoutIfNeeded()
+		
+		topConstraint.update(offset: safeAreaHeight + bottomPadding)
+		
+		let showSheet = UIViewPropertyAnimator(duration: 0.25, curve: .easeIn) {
+			self.view.layoutIfNeeded()
+		}
+		
+		showSheet.addAnimations {
+			self.bgView.alpha = 0.0
+		}
+		
+		showSheet.addCompletion { (position) in
+			if position == .end {
+				self.dismiss(animated: true, completion: nil)
+			}
+		}
+		
+		showSheet.startAnimation()
+	}
 }
 
 //MARK: - Action
@@ -125,25 +151,7 @@ private extension BottomSheetViewController {
 	
 	// Sheet를 숨기거나 닫히는 메소드
 	@objc func hideAndCloseSheet() {
-		self.view.layoutIfNeeded()
-		
-		topConstraint.update(offset: safeAreaHeight + bottomPadding)
-		
-		let showSheet = UIViewPropertyAnimator(duration: 0.25, curve: .easeIn) {
-			self.view.layoutIfNeeded()
-		}
-		
-		showSheet.addAnimations {
-			self.bgView.alpha = 0.0
-		}
-		
-		showSheet.addCompletion { (position) in
-			if position == .end {
-				self.dismiss(animated: true, completion: nil)
-			}
-		}
-		
-		showSheet.startAnimation()
+		willDismiss()
 	}
 	
 	@objc func didTapPanned(_ gesture: UIPanGestureRecognizer) {

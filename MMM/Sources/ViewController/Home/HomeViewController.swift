@@ -72,7 +72,9 @@ extension HomeViewController {
 	
 	// 달력 Picker BottomSheet
 	func didTapMonthButton() {
-		let bottomSheetVC = BottomSheetViewController(contentViewController: DatePickerViewController())
+		let picker = DatePickerViewController()
+		let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
+		picker.delegate = bottomSheetVC
 		bottomSheetVC.modalPresentationStyle = .overFullScreen
 		bottomSheetVC.setSetting(height: 375, isExpended: false, isShadow: true)
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)

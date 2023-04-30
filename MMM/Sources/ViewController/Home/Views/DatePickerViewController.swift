@@ -6,8 +6,14 @@
 //
 
 import UIKit
+import Combine
+import Then
+import SnapKit
 
 class DatePickerViewController: UIViewController {
+	// MARK: - Properties
+	private lazy var cancellables: Set<AnyCancellable> = .init()
+	weak var delegate: BottomSheetChild?
 
 	// MARK: - UI
 	private lazy var stackView = UIStackView() // 날짜 이동, 확인 Button
@@ -21,13 +27,28 @@ class DatePickerViewController: UIViewController {
 	}
 }
 
+extension DatePickerViewController {
+	
+	func willDismiss() {
+		delegate?.willDismiss()
+	}
+}
+
 //MARK: - Style & Layouts
 extension DatePickerViewController {
 	
 	func setup() {
 		// 초기 셋업할 코드들
+		bind()
 		setAttribute()
 		setLayout()
+	}
+	
+	func bind() {
+		checkButton.tapPublisher
+			.sinkOnMainThread(receiveValue: willDismiss)
+			.store(in: &cancellables)
+
 	}
 	
 	func setAttribute() {

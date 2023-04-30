@@ -233,15 +233,14 @@ private extension BottomSheetViewController {
 			$0.backgroundColor = R.Color.gray400
 			$0.layer.cornerRadius = 2
 		}
-		
+	}
+	
+	func setLayout() {
 		addChild(contentVC)
 		dragAreaView.addSubview(dragIndicatorView)
 		bottomSheetOuterView.addSubviews(bottomSheetInnerView)
 		bottomSheetInnerView.addSubviews(dragAreaView, contentVC.view)
 		contentVC.didMove(toParent: self) // contentVC 입장에서는 언제 부모VC에 추가되는지 모르기 때문에 contentVC에게 추가 및 제거되는 시점을 알려줌
-	}
-	
-	func setLayout() {
 		view.addSubviews(bgView, bottomSheetOuterView)
 
 		bgView.snp.makeConstraints {
@@ -259,7 +258,8 @@ private extension BottomSheetViewController {
 		}
 		
 		dragAreaView.snp.makeConstraints {
-			$0.top.leading.trailing.equalToSuperview()
+			$0.top.equalToSuperview()
+			$0.leading.trailing.equalTo(view.safeAreaInsets)
 			$0.height.equalTo(34)
 		}
 		

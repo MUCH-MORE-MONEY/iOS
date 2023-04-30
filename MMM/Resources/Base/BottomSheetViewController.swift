@@ -33,6 +33,7 @@ class BottomSheetViewController: UIViewController {
 	}
 	private var isDrag: Bool = true
 	private var isExpended: Bool = false
+	private var isShadow: Bool = false
 
 	// MARK: - UI
 	// contentVC: 보여질 UIViewController
@@ -42,7 +43,8 @@ class BottomSheetViewController: UIViewController {
 	private lazy var bgView = UIView() // 뒷 배경
 	private lazy var dragAreaView = UIView() // indicator
 	private lazy var dragIndicatorView = UIView() // indicator
-	private lazy var bottomSheetView = UIView()
+	private lazy var bottomSheetOuterView = UIView()
+	private lazy var bottomSheetInnerView = UIView()
 	
 	// 이니셜라이저 구현
 	init(contentViewController: UIViewController) {
@@ -74,20 +76,22 @@ extension BottomSheetViewController {
 	
 	/// height : 높이,
 	/// isDrag : 드래그가 가능한지 (false = 불가능)
-	func setSetting(height: CGFloat, isDrag: Bool = true, isExpended: Bool = false) {
+	func setSetting(height: CGFloat, isDrag: Bool = true, isExpended: Bool = false, isShadow: Bool = false) {
 		self.defaultHeight = height
 		self.isDrag = isDrag
 		self.isExpended = isExpended
+		self.isShadow = isShadow
 	}
 	
 	/// percentHeight : 퍼센트로 높이 설정(0~1, 범위내 값이 아니면 설정 안됨, 1은 하지 말기),
 	/// isDrag : 드래그가 가능한지 (false: 불가능)
-	func setSetting(percentHeight: CGFloat, isDrag: Bool = true, isExpended: Bool = false) {
+	func setSetting(percentHeight: CGFloat, isDrag: Bool = true, isExpended: Bool = false, isShadow: Bool = false) {
 		guard 0 < percentHeight && percentHeight <= 1 else { return }
 		
 		self.defaultHeight = view.frame.height * percentHeight
 		self.isDrag = isDrag
 		self.isExpended = isExpended
+		self.isShadow = isShadow
 	}
 }
 
@@ -109,7 +113,11 @@ private extension BottomSheetViewController {
 		}
 		
 		showSheet.addAnimations {
-			self.bgView.alpha = 0.5
+			if !self.isShadow {
+				self.bgView.alpha = 0.5
+			} else {
+				self.bgView.alpha = 0.05 // 색상을 줘야 gesture 작동
+			}
 		}
 		
 		showSheet.startAnimation()
@@ -204,7 +212,13 @@ private extension BottomSheetViewController {
 			$0.isUserInteractionEnabled = true
 		}
 		
-		bottomSheetView = bottomSheetView.then {
+		bottomSheetOuterView = bottomSheetOuterView.then {
+			if isShadow {
+				$0.layer.applyShadow(color: .gray, alpha: 0.3, x: 0, y: 0, blur: 12)
+			}
+		}
+		
+		bottomSheetInnerView = bottomSheetInnerView.then {
 			$0.backgroundColor = .white
 			$0.layer.cornerRadius = 16
 			$0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner] // 상단 왼쪽, 오른쪽 모서리에만 cornerRadius 적용
@@ -222,21 +236,26 @@ private extension BottomSheetViewController {
 		
 		addChild(contentVC)
 		dragAreaView.addSubview(dragIndicatorView)
-		bottomSheetView.addSubviews(dragAreaView, contentVC.view)
+		bottomSheetOuterView.addSubviews(bottomSheetInnerView)
+		bottomSheetInnerView.addSubviews(dragAreaView, contentVC.view)
 		contentVC.didMove(toParent: self) // contentVC 입장에서는 언제 부모VC에 추가되는지 모르기 때문에 contentVC에게 추가 및 제거되는 시점을 알려줌
 	}
 	
 	func setLayout() {
-		view.addSubviews(bgView, bottomSheetView)
+		view.addSubviews(bgView, bottomSheetOuterView)
 
 		bgView.snp.makeConstraints {
 			$0.edges.equalToSuperview()
 		}
 				
-		bottomSheetView.snp.makeConstraints {
+		bottomSheetOuterView.snp.makeConstraints {
 			topConstraint = $0.top.equalTo(self.view.safeAreaLayoutGuide).offset(safeAreaHeight + bottomPadding).constraint
 			$0.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
 			$0.bottom.equalToSuperview()
+		}
+		
+		bottomSheetInnerView.snp.makeConstraints {
+			$0.edges.equalToSuperview()
 		}
 		
 		dragAreaView.snp.makeConstraints {

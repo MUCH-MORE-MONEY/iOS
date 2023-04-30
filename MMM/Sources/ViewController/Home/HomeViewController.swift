@@ -21,6 +21,7 @@ class HomeViewController: UIViewController {
 	private lazy var monthButton = UIButton()
 	private lazy var todayButton = UIButton()
 	private lazy var settingButton = UIBarButtonItem()
+	private lazy var separator = UIView() // Nav separator
 	private lazy var calendar = FSCalendar()
 	private lazy var calendarHeaderView = HomeHeaderView()
 	private lazy var tableView = UITableView()
@@ -171,6 +172,10 @@ extension HomeViewController {
 			$0.style = .plain
 		}
 		
+		separator = separator.then {
+			$0.backgroundColor = R.Color.gray800
+		}
+		
 		calendarHeaderView = calendarHeaderView.then {
 			$0.setUp(pay: 200000, earn: 21230)
 		}
@@ -182,7 +187,7 @@ extension HomeViewController {
 			$0.dataSource = self
 			$0.select(Date())
 			$0.today = nil										// default 오늘 표시 제거
-			$0.headerHeight = 0									// deafult header 제거
+			$0.headerHeight = 8									// deafult header 제거
 			$0.calendarHeaderView.isHidden = true				// deafult header 제거
 			$0.appearance.titleTodayColor = R.Color.white
 			$0.appearance.titleDefaultColor = R.Color.gray300 	// 달력의 평일 날짜 색깔
@@ -227,19 +232,25 @@ extension HomeViewController {
 		}
 		
 		headerView.addSubview(dayLabel)
-		view.addSubviews(calendarHeaderView, calendar, tableView)
+		view.addSubviews(calendarHeaderView, calendar, separator, tableView)
 	}
 	
 	private func setLayout() {
+		separator.snp.makeConstraints {
+			$0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(15)
+			$0.top.equalTo(view.safeAreaLayoutGuide)
+			$0.height.equalTo(1)
+		}
+		
 		calendarHeaderView.snp.makeConstraints {
 			$0.top.left.right.equalTo(view.safeAreaLayoutGuide)
 			$0.height.equalTo(46)
 		}
-		
+				
 		calendar.snp.makeConstraints {
 			$0.top.equalTo(calendarHeaderView.snp.bottom)
 			$0.left.right.equalTo(view.safeAreaLayoutGuide)
-			$0.height.equalTo(268)
+			$0.height.equalTo(260)
 		}
 
 		dayLabel.snp.makeConstraints {

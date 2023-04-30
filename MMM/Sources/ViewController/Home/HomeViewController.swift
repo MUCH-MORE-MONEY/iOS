@@ -250,7 +250,7 @@ extension HomeViewController {
 		calendar.snp.makeConstraints {
 			$0.top.equalTo(calendarHeaderView.snp.bottom)
 			$0.left.right.equalTo(view.safeAreaLayoutGuide)
-			$0.height.equalTo(260)
+			$0.height.equalTo(268)
 		}
 
 		dayLabel.snp.makeConstraints {

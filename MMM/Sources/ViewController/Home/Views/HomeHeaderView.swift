@@ -28,12 +28,12 @@ final class HomeHeaderView: UIView {
 		addSubviews(payView, earnView)
 				
 		payView.snp.makeConstraints {
-			$0.centerY.equalToSuperview()
+			$0.bottom.equalToSuperview().inset(8)
 			$0.leading.equalToSuperview().inset(16)
 		}
 		
 		earnView.snp.makeConstraints {
-			$0.centerY.equalToSuperview()
+			$0.bottom.equalToSuperview().inset(8)
 			$0.leading.equalTo(payView.snp.trailing).offset(16)
 		}
 	}

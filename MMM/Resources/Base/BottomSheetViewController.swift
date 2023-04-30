@@ -70,9 +70,7 @@ class BottomSheetViewController: UIViewController, BottomSheetChild {
 	
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-			self.showSheet()
-		}
+		self.showSheet()
 	}
 }
 

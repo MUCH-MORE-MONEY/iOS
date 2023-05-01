@@ -25,7 +25,7 @@ final class OnboardingViewModel {
     }
     
     func loginServices() {
-        let url = APIConstant.baseURL
+        let url = APIConstants.baseURL
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
         
@@ -51,8 +51,8 @@ final class OnboardingViewModel {
                 guard let data = response.data else { return }
                 do {
                     let decoder = JSONDecoder()
-                    let json = try decoder.decode(Login.self, from: data)
-                    Common.setKeychain(json.token, forKey: Common.KeychainKey.accessToken)
+                    let json = try decoder.decode(LoginResponse.self, from: data)
+                    Constants.setKeychain(json.token, forKey: Constants.KeychainKey.accessToken)
                 } catch {
                     print("데이터 파싱 실패")
                 }

@@ -7,6 +7,7 @@
 
 import Foundation
 
-enum APIConstant {
+enum APIConstants {
     static let baseURL = "http://ec2-13-209-4-42.ap-northeast-2.compute.amazonaws.com:8080/login/apple"
 }
+

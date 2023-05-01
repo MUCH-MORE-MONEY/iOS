@@ -15,15 +15,15 @@
 		6A0F234229DBA92D0063673B /* ServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0F234129DBA92D0063673B /* ServiceViewController.swift */; };
 		6A0F234429DBC0C30063673B /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0F234329DBC0C30063673B /* BaseViewController.swift */; };
 		6A0F234729DC0DB20063673B /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0F234629DC0DB20063673B /* TabBarController.swift */; };
-		6A12144729FA0C300076848A /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A12144629FA0C300076848A /* Login.swift */; };
-		6A12144929FA0FB50076848A /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A12144829FA0FB50076848A /* Common.swift */; };
+		6A12144729FA0C300076848A /* LoginResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A12144629FA0C300076848A /* LoginResponse.swift */; };
+		6A12144929FA0FB50076848A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A12144829FA0FB50076848A /* Constants.swift */; };
 		6A12144B29FA180A0076848A /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A12144A29FA180A0076848A /* NetworkManager.swift */; };
 		6A1880C929EF85BC00D62F1A /* TabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1880C829EF85BB00D62F1A /* TabItem.swift */; };
 		6A1880CB29EF85EA00D62F1A /* OnboardingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1880CA29EF85EA00D62F1A /* OnboardingItem.swift */; };
 		6A1BAD4529E6550100818086 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1BAD4429E6550100818086 /* OnboardingViewModel.swift */; };
 		6A381E0A29E8F40700E0974F /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A381E0929E8F40700E0974F /* AddViewController.swift */; };
-		6A7DE6B729F77010009354EF /* APIConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7DE6B629F77010009354EF /* APIConstant.swift */; };
-		6A7DE6BA29F77214009354EF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7DE6B929F77214009354EF /* Constants.swift */; };
+		6A7DE6B729F77010009354EF /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7DE6B629F77010009354EF /* APIConstants.swift */; };
+		6AA49BC129FE4E0100BD306F /* LoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA49BC029FE4E0100BD306F /* LoginManager.swift */; };
 		6AB1150F29EE372F00D3B813 /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB1150E29EE372F00D3B813 /* CustomTabBar.swift */; };
 		6AB1151329EE6D9E00D3B813 /* Ex_UITabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB1151229EE6D9E00D3B813 /* Ex_UITabBar.swift */; };
 		C411938E29D2817C003DBC15 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411938D29D2817C003DBC15 /* AppDelegate.swift */; };
@@ -104,15 +104,15 @@
 		6A0F234129DBA92D0063673B /* ServiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceViewController.swift; sourceTree = "<group>"; };
 		6A0F234329DBC0C30063673B /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		6A0F234629DC0DB20063673B /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
-		6A12144629FA0C300076848A /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
-		6A12144829FA0FB50076848A /* Common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
+		6A12144629FA0C300076848A /* LoginResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResponse.swift; sourceTree = "<group>"; };
+		6A12144829FA0FB50076848A /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = ../../Sources/Services/Constants.swift; sourceTree = "<group>"; };
 		6A12144A29FA180A0076848A /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		6A1880C829EF85BB00D62F1A /* TabItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabItem.swift; sourceTree = "<group>"; };
 		6A1880CA29EF85EA00D62F1A /* OnboardingItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingItem.swift; sourceTree = "<group>"; };
 		6A1BAD4429E6550100818086 /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
 		6A381E0929E8F40700E0974F /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
-		6A7DE6B629F77010009354EF /* APIConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConstant.swift; sourceTree = "<group>"; };
-		6A7DE6B929F77214009354EF /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		6A7DE6B629F77010009354EF /* APIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConstants.swift; sourceTree = "<group>"; };
+		6AA49BC029FE4E0100BD306F /* LoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginManager.swift; sourceTree = "<group>"; };
 		6AB1150E29EE372F00D3B813 /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
 		6AB1151229EE6D9E00D3B813 /* Ex_UITabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ex_UITabBar.swift; sourceTree = "<group>"; };
 		6AF9E85829F0D0BD00DCB330 /* MMM.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MMM.entitlements; sourceTree = "<group>"; };
@@ -240,7 +240,7 @@
 		6A7DE6B829F771F8009354EF /* Configuration */ = {
 			isa = PBXGroup;
 			children = (
-				6A7DE6B929F77214009354EF /* Constants.swift */,
+				6A12144829FA0FB50076848A /* Constants.swift */,
 			);
 			path = Configuration;
 			sourceTree = "<group>";
@@ -432,7 +432,7 @@
 			isa = PBXGroup;
 			children = (
 				C433A07029EE5516008B26DF /* Calendar.swift */,
-				6A12144629FA0C300076848A /* Login.swift */,
+				6A12144629FA0C300076848A /* LoginResponse.swift */,
 				6A1880CA29EF85EA00D62F1A /* OnboardingItem.swift */,
 				6A1880C829EF85BB00D62F1A /* TabItem.swift */,
 			);
@@ -442,9 +442,9 @@
 		C41193EE29D3A7B6003DBC15 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				6A7DE6B629F77010009354EF /* APIConstant.swift */,
-				6A12144829FA0FB50076848A /* Common.swift */,
+				6A7DE6B629F77010009354EF /* APIConstants.swift */,
 				6A12144A29FA180A0076848A /* NetworkManager.swift */,
+				6AA49BC029FE4E0100BD306F /* LoginManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -775,19 +775,19 @@
 				C411940B29DAEDF9003DBC15 /* CustomAlertViewController.swift in Sources */,
 				C4DBAA3029DD459100D1BB97 /* WithdrawConfirmView.swift in Sources */,
 				C41193FD29D42BD9003DBC15 /* ProfileFooterView.swift in Sources */,
-				6A12144929FA0FB50076848A /* Common.swift in Sources */,
+				6A12144929FA0FB50076848A /* Constants.swift in Sources */,
 				C44807E129E648D300D4B090 /* HomeViewController.swift in Sources */,
 				C44807DE29E4FE8000D4B090 /* Ex+Publisher.swift in Sources */,
 				C4DBAA2E29DC16A400D1BB97 /* WithdrawViewController.swift in Sources */,
 				6A1880C929EF85BC00D62F1A /* TabItem.swift in Sources */,
 				6A0F234429DBC0C30063673B /* BaseViewController.swift in Sources */,
 				C41193F929D3DD9A003DBC15 /* ProfileTableViewCell.swift in Sources */,
-				6A7DE6B729F77010009354EF /* APIConstant.swift in Sources */,
+				6A7DE6B729F77010009354EF /* APIConstants.swift in Sources */,
 				C41193E329D287E6003DBC15 /* Ex+KeychainWrapper.swift in Sources */,
 				6A1880CB29EF85EA00D62F1A /* OnboardingItem.swift in Sources */,
 				C44807E529E7E76800D4B090 /* Ex+UIControl.swift in Sources */,
 				C41193E829D287E6003DBC15 /* Ex+View.swift in Sources */,
-				6A12144729FA0C300076848A /* Login.swift in Sources */,
+				6A12144729FA0C300076848A /* LoginResponse.swift in Sources */,
 				6A0F234229DBA92D0063673B /* ServiceViewController.swift in Sources */,
 				C4DBAA3729DD7B2600D1BB97 /* CountPushLabel.swift in Sources */,
 				C41193E729D287E6003DBC15 /* Ex+Icon.swift in Sources */,
@@ -807,12 +807,12 @@
 				C4DBAA2C29DBCB8B00D1BB97 /* Ex+Button.swift in Sources */,
 				6A12144B29FA180A0076848A /* NetworkManager.swift in Sources */,
 				6A0D108229D3CF1B009D6DCA /* OnboardingViewController.swift in Sources */,
-				6A7DE6BA29F77214009354EF /* Constants.swift in Sources */,
 				C433A07129EE5516008B26DF /* Calendar.swift in Sources */,
 				C41193E429D287E6003DBC15 /* Ex+Font.swift in Sources */,
 				C41193E529D287E6003DBC15 /* Ex+UIDevice.swift in Sources */,
 				C411940729D53EA0003DBC15 /* NavigationController.swift in Sources */,
 				C41193F329D3AED5003DBC15 /* ProfileView.swift in Sources */,
+				6AA49BC129FE4E0100BD306F /* LoginManager.swift in Sources */,
 				6A0D108529D3D209009D6DCA /* OnboardingView.swift in Sources */,
 				C41193F729D3D954003DBC15 /* Ex+UITableView.swift in Sources */,
 				C433A06D29EE53BB008B26DF /* HomeTableViewCell.swift in Sources */,

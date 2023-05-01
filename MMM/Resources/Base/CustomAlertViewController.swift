@@ -127,7 +127,10 @@ extension CustomAlertViewController {
 	
 	// 확인
 	@objc private func didTapConfirmButton() {
-		self.dismiss(animated: true) { self.delegate?.didAlertCofirmButton() }
+		self.dismiss(animated: true) {
+            Constants.removeKeychain(forKey: Constants.KeychainKey.accessToken)
+            self.delegate?.didAlertCofirmButton()
+        }
 	}
 	
 	// 취소

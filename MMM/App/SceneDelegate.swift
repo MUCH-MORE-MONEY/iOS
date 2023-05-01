@@ -21,12 +21,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		window = UIWindow(windowScene: windowScene)
 		
 		onboarding = OnboardingViewController()
-		
+		// 로그인이 되어 있을 경우
+        if Constants.getKeychainValue(forKey: Constants.KeychainKey.authorization) != nil {
+            let mainViewController = TabBarController()
+            window?.rootViewController = mainViewController
+        } else {
+            let mainViewController = onboarding
+            window?.rootViewController = mainViewController
+        }
+        
 		// ViewController 초기화
-		let mainViewController = onboarding
 		
 		// MARK: Window 구성
-		window?.rootViewController = mainViewController
+
 		// 화면에 띄울 Root 뷰 컨트롤러 지정
 		
 		window?.backgroundColor = .systemBackground

@@ -30,13 +30,6 @@ final class TabBarController: UITabBarController {
 //        setup()
         
         setupTabBar()
-//        if let items = tabBarController?.tabBar.items {
-//            // Get the first tab bar item
-//            let item = items[1]
-//
-//            // Set the image insets for the first tab bar item
-//            item.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0)
-//        }
     }
 }
 

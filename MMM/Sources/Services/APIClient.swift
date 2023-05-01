@@ -32,18 +32,6 @@ enum NetworkRequestError: LocalizedError, Equatable {
     case unknownError
 }
 
-// Extending Encodable to Serialize a Type into a Dictionary
-extension Encodable {
-    var asDictionary: [String: Any] {
-        guard let data = try? JSONEncoder().encode(self) else { return [:] }
-
-        guard let dictionary = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any] else {
-            return [:]
-        }
-        return dictionary
-    }
-}
-
 // Our Request Protocol
 protocol Request {
     var path: String { get }

@@ -266,7 +266,7 @@ extension OnboardingViewController: ASAuthorizationControllerDelegate {
                 }
             }
             // 사용자의 이메일 저장
-            Constants.setKeychain(email, forKey: Constants.KeychainKey.email)
+            Constants.setKeychain(email, forKey: Constants.KeychainKey.accessToken)
             
             onboardingVM.authorizationCode = authorizationCodeStr
             onboardingVM.email = email

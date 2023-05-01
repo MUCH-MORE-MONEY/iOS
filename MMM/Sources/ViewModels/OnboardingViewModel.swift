@@ -58,8 +58,8 @@ final class OnboardingViewModel {
             }
         }, receiveValue: { [weak self] value in
             guard let self = self else { return }
-            loginResponse.message = value.message
-            loginResponse.token = value.token
+            self.loginResponse.message = value.message
+            self.loginResponse.token = value.token
             print(value.message)
             // 로그인 성공 시 tabbar로 메인 뷰 전환
             if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {

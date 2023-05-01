@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		003B832595A61A7EA6CCC014 /* Pods_MMM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A564931308C77DE145181BBF /* Pods_MMM.framework */; };
 		62AC9C989058B479AA52D81F /* Pods_MMMTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BC1A763E0587F6517C3A5E7 /* Pods_MMMTests.framework */; };
+		6A08B47629FF5B150080719E /* APIRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A08B47529FF5B150080719E /* APIRouter.swift */; };
+		6A08B47829FF5C7E0080719E /* APIParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A08B47729FF5C7E0080719E /* APIParameters.swift */; };
+		6A08B47A29FF5CA90080719E /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A08B47929FF5CA90080719E /* APIClient.swift */; };
+		6A08B47D29FF5D530080719E /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A08B47C29FF5D530080719E /* Log.swift */; };
 		6A0D108229D3CF1B009D6DCA /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0D108129D3CF1B009D6DCA /* OnboardingViewController.swift */; };
 		6A0D108529D3D209009D6DCA /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0D108429D3D209009D6DCA /* OnboardingView.swift */; };
 		6A0F234029DBA8AA0063673B /* DataExportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0F233F29DBA8AA0063673B /* DataExportViewController.swift */; };
@@ -17,13 +21,11 @@
 		6A0F234729DC0DB20063673B /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0F234629DC0DB20063673B /* TabBarController.swift */; };
 		6A12144729FA0C300076848A /* LoginResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A12144629FA0C300076848A /* LoginResponse.swift */; };
 		6A12144929FA0FB50076848A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A12144829FA0FB50076848A /* Constants.swift */; };
-		6A12144B29FA180A0076848A /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A12144A29FA180A0076848A /* NetworkManager.swift */; };
 		6A1880C929EF85BC00D62F1A /* TabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1880C829EF85BB00D62F1A /* TabItem.swift */; };
 		6A1880CB29EF85EA00D62F1A /* OnboardingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1880CA29EF85EA00D62F1A /* OnboardingItem.swift */; };
 		6A1BAD4529E6550100818086 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1BAD4429E6550100818086 /* OnboardingViewModel.swift */; };
 		6A381E0A29E8F40700E0974F /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A381E0929E8F40700E0974F /* AddViewController.swift */; };
 		6A7DE6B729F77010009354EF /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7DE6B629F77010009354EF /* APIConstants.swift */; };
-		6AA49BC129FE4E0100BD306F /* LoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA49BC029FE4E0100BD306F /* LoginManager.swift */; };
 		6AB1150F29EE372F00D3B813 /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB1150E29EE372F00D3B813 /* CustomTabBar.swift */; };
 		6AB1151329EE6D9E00D3B813 /* Ex_UITabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB1151229EE6D9E00D3B813 /* Ex_UITabBar.swift */; };
 		C411938E29D2817C003DBC15 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411938D29D2817C003DBC15 /* AppDelegate.swift */; };
@@ -98,6 +100,10 @@
 		1E035A75D3A833AD01047796 /* Pods-MMMTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMMTests.debug.xcconfig"; path = "Target Support Files/Pods-MMMTests/Pods-MMMTests.debug.xcconfig"; sourceTree = "<group>"; };
 		2BC1A763E0587F6517C3A5E7 /* Pods_MMMTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MMMTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		58A4D4522CDE75108D91C22E /* Pods-MMM-MMMUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMM-MMMUITests.debug.xcconfig"; path = "Target Support Files/Pods-MMM-MMMUITests/Pods-MMM-MMMUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		6A08B47529FF5B150080719E /* APIRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRouter.swift; sourceTree = "<group>"; };
+		6A08B47729FF5C7E0080719E /* APIParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIParameters.swift; sourceTree = "<group>"; };
+		6A08B47929FF5CA90080719E /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		6A08B47C29FF5D530080719E /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		6A0D108129D3CF1B009D6DCA /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		6A0D108429D3D209009D6DCA /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		6A0F233F29DBA8AA0063673B /* DataExportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExportViewController.swift; sourceTree = "<group>"; };
@@ -106,13 +112,11 @@
 		6A0F234629DC0DB20063673B /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		6A12144629FA0C300076848A /* LoginResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResponse.swift; sourceTree = "<group>"; };
 		6A12144829FA0FB50076848A /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = ../../Sources/Services/Constants.swift; sourceTree = "<group>"; };
-		6A12144A29FA180A0076848A /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		6A1880C829EF85BB00D62F1A /* TabItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabItem.swift; sourceTree = "<group>"; };
 		6A1880CA29EF85EA00D62F1A /* OnboardingItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingItem.swift; sourceTree = "<group>"; };
 		6A1BAD4429E6550100818086 /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
 		6A381E0929E8F40700E0974F /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 		6A7DE6B629F77010009354EF /* APIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConstants.swift; sourceTree = "<group>"; };
-		6AA49BC029FE4E0100BD306F /* LoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginManager.swift; sourceTree = "<group>"; };
 		6AB1150E29EE372F00D3B813 /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
 		6AB1151229EE6D9E00D3B813 /* Ex_UITabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ex_UITabBar.swift; sourceTree = "<group>"; };
 		6AF9E85829F0D0BD00DCB330 /* MMM.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MMM.entitlements; sourceTree = "<group>"; };
@@ -203,6 +207,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6A08B47B29FF5D3D0080719E /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				6A08B47C29FF5D530080719E /* Log.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		6A08B47E29FF60EB0080719E /* Responses */ = {
+			isa = PBXGroup;
+			children = (
+				6A12144629FA0C300076848A /* LoginResponse.swift */,
+			);
+			path = Responses;
+			sourceTree = "<group>";
+		};
 		6A0D108029D3CEF6009D6DCA /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
@@ -336,10 +356,11 @@
 		C41193BE29D281BF003DBC15 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				C41193EE29D3A7B6003DBC15 /* Services */,
-				C41193EF29D3A7BA003DBC15 /* ViewModels */,
 				C41193ED29D3A79D003DBC15 /* Models */,
+				C41193EE29D3A7B6003DBC15 /* Services */,
+				6A08B47B29FF5D3D0080719E /* Utilities */,
 				C41193C029D281F2003DBC15 /* ViewController */,
+				C41193EF29D3A7BA003DBC15 /* ViewModels */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -431,8 +452,8 @@
 		C41193ED29D3A79D003DBC15 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				6A08B47E29FF60EB0080719E /* Responses */,
 				C433A07029EE5516008B26DF /* Calendar.swift */,
-				6A12144629FA0C300076848A /* LoginResponse.swift */,
 				6A1880CA29EF85EA00D62F1A /* OnboardingItem.swift */,
 				6A1880C829EF85BB00D62F1A /* TabItem.swift */,
 			);
@@ -442,9 +463,10 @@
 		C41193EE29D3A7B6003DBC15 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				6A08B47929FF5CA90080719E /* APIClient.swift */,
 				6A7DE6B629F77010009354EF /* APIConstants.swift */,
-				6A12144A29FA180A0076848A /* NetworkManager.swift */,
-				6AA49BC029FE4E0100BD306F /* LoginManager.swift */,
+				6A08B47729FF5C7E0080719E /* APIParameters.swift */,
+				6A08B47529FF5B150080719E /* APIRouter.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -771,6 +793,7 @@
 			files = (
 				C411940429D53DDF003DBC15 /* ManagementViewController.swift in Sources */,
 				C41193F529D3D7FB003DBC15 /* Ex+NSObject.swift in Sources */,
+				6A08B47D29FF5D530080719E /* Log.swift in Sources */,
 				6AB1150F29EE372F00D3B813 /* CustomTabBar.swift in Sources */,
 				C411940B29DAEDF9003DBC15 /* CustomAlertViewController.swift in Sources */,
 				C4DBAA3029DD459100D1BB97 /* WithdrawConfirmView.swift in Sources */,
@@ -783,9 +806,11 @@
 				6A0F234429DBC0C30063673B /* BaseViewController.swift in Sources */,
 				C41193F929D3DD9A003DBC15 /* ProfileTableViewCell.swift in Sources */,
 				6A7DE6B729F77010009354EF /* APIConstants.swift in Sources */,
+				6A08B47629FF5B150080719E /* APIRouter.swift in Sources */,
 				C41193E329D287E6003DBC15 /* Ex+KeychainWrapper.swift in Sources */,
 				6A1880CB29EF85EA00D62F1A /* OnboardingItem.swift in Sources */,
 				C44807E529E7E76800D4B090 /* Ex+UIControl.swift in Sources */,
+				6A08B47829FF5C7E0080719E /* APIParameters.swift in Sources */,
 				C41193E829D287E6003DBC15 /* Ex+View.swift in Sources */,
 				6A12144729FA0C300076848A /* LoginResponse.swift in Sources */,
 				6A0F234229DBA92D0063673B /* ServiceViewController.swift in Sources */,
@@ -802,17 +827,16 @@
 				C433A07329EEE751008B26DF /* Ex+Date.swift in Sources */,
 				C4DBAA3929DEAE0200D1BB97 /* CountAnimationStackView.swift in Sources */,
 				6A1BAD4529E6550100818086 /* OnboardingViewModel.swift in Sources */,
+				6A08B47A29FF5CA90080719E /* APIClient.swift in Sources */,
 				C411938E29D2817C003DBC15 /* AppDelegate.swift in Sources */,
 				C41193E629D287E6003DBC15 /* Ex+Color.swift in Sources */,
 				C4DBAA2C29DBCB8B00D1BB97 /* Ex+Button.swift in Sources */,
-				6A12144B29FA180A0076848A /* NetworkManager.swift in Sources */,
 				6A0D108229D3CF1B009D6DCA /* OnboardingViewController.swift in Sources */,
 				C433A07129EE5516008B26DF /* Calendar.swift in Sources */,
 				C41193E429D287E6003DBC15 /* Ex+Font.swift in Sources */,
 				C41193E529D287E6003DBC15 /* Ex+UIDevice.swift in Sources */,
 				C411940729D53EA0003DBC15 /* NavigationController.swift in Sources */,
 				C41193F329D3AED5003DBC15 /* ProfileView.swift in Sources */,
-				6AA49BC129FE4E0100BD306F /* LoginManager.swift in Sources */,
 				6A0D108529D3D209009D6DCA /* OnboardingView.swift in Sources */,
 				C41193F729D3D954003DBC15 /* Ex+UITableView.swift in Sources */,
 				C433A06D29EE53BB008B26DF /* HomeTableViewCell.swift in Sources */,

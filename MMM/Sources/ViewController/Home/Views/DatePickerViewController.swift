@@ -48,7 +48,6 @@ extension DatePickerViewController {
 		checkButton.tapPublisher
 			.sinkOnMainThread(receiveValue: willDismiss)
 			.store(in: &cancellables)
-
 	}
 	
 	func setAttribute() {

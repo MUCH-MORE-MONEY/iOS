@@ -82,6 +82,7 @@ extension HomeViewController {
 	}
 }
 
+
 //MARK: - Style & Layouts
 extension HomeViewController {
 	private func setup() {
@@ -280,6 +281,14 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 		if monthPosition == .next || monthPosition == .previous {
 			calendar.setCurrentPage(date, animated: true)
 		}
+	}
+	
+	//날짜별로 선택 컬러 변경
+	func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, fillSelectionColorFor date: Date) -> UIColor? {
+//		if date.getFormattedDefault() == Date().getFormattedDefault() {
+//			return appearance.selectionColor
+//		}
+		return .clear
 	}
 	
 	// 스크롤시, calendar 높이 조절

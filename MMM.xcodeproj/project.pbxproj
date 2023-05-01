@@ -20,7 +20,7 @@
 		6A0F234229DBA92D0063673B /* ServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0F234129DBA92D0063673B /* ServiceViewController.swift */; };
 		6A0F234429DBC0C30063673B /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0F234329DBC0C30063673B /* BaseViewController.swift */; };
 		6A0F234729DC0DB20063673B /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0F234629DC0DB20063673B /* TabBarController.swift */; };
-		6A12144729FA0C300076848A /* LoginResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A12144629FA0C300076848A /* LoginResponse.swift */; };
+		6A12144729FA0C300076848A /* AppleLoginResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A12144629FA0C300076848A /* AppleLoginResDto.swift */; };
 		6A12144929FA0FB50076848A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A12144829FA0FB50076848A /* Constants.swift */; };
 		6A1880C929EF85BC00D62F1A /* TabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1880C829EF85BB00D62F1A /* TabItem.swift */; };
 		6A1880CB29EF85EA00D62F1A /* OnboardingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1880CA29EF85EA00D62F1A /* OnboardingItem.swift */; };
@@ -112,7 +112,7 @@
 		6A0F234129DBA92D0063673B /* ServiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceViewController.swift; sourceTree = "<group>"; };
 		6A0F234329DBC0C30063673B /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		6A0F234629DC0DB20063673B /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
-		6A12144629FA0C300076848A /* LoginResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResponse.swift; sourceTree = "<group>"; };
+		6A12144629FA0C300076848A /* AppleLoginResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginResDto.swift; sourceTree = "<group>"; };
 		6A12144829FA0FB50076848A /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = ../../Sources/Services/Constants.swift; sourceTree = "<group>"; };
 		6A1880C829EF85BB00D62F1A /* TabItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabItem.swift; sourceTree = "<group>"; };
 		6A1880CA29EF85EA00D62F1A /* OnboardingItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingItem.swift; sourceTree = "<group>"; };
@@ -220,7 +220,7 @@
 		6A08B47E29FF60EB0080719E /* Responses */ = {
 			isa = PBXGroup;
 			children = (
-				6A12144629FA0C300076848A /* LoginResponse.swift */,
+				6A12144629FA0C300076848A /* AppleLoginResDto.swift */,
 			);
 			path = Responses;
 			sourceTree = "<group>";
@@ -816,7 +816,7 @@
 				6A08B47829FF5C7E0080719E /* APIParameters.swift in Sources */,
 				6A08B48029FF74B70080719E /* Ex+Encodable.swift in Sources */,
 				C41193E829D287E6003DBC15 /* Ex+View.swift in Sources */,
-				6A12144729FA0C300076848A /* LoginResponse.swift in Sources */,
+				6A12144729FA0C300076848A /* AppleLoginResDto.swift in Sources */,
 				6A0F234229DBA92D0063673B /* ServiceViewController.swift in Sources */,
 				C4DBAA3729DD7B2600D1BB97 /* CountPushLabel.swift in Sources */,
 				C41193E729D287E6003DBC15 /* Ex+Icon.swift in Sources */,

@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 
-// The Request Method
+/// HTTP 메서드
 enum HTTPMethod: String {
     case get     = "GET"
     case post    = "POST"
@@ -17,6 +17,7 @@ enum HTTPMethod: String {
     case delete  = "DELETE"
 }
 
+/// 통신 실패 시 나타는 오류
 enum NetworkRequestError: LocalizedError, Equatable {
     case invalidRequest
     case badRequest
@@ -32,7 +33,7 @@ enum NetworkRequestError: LocalizedError, Equatable {
     case unknownError
 }
 
-// Our Request Protocol
+/// Request 프로토콜
 protocol Request {
     var path: String { get }
     var method: HTTPMethod { get }
@@ -43,17 +44,15 @@ protocol Request {
     associatedtype ReturnType: Codable
 }
 
-// Defaults and Helper Methods
 extension Request {
-    
-    // Defaults
-    var method: HTTPMethod { return .get }
+    // default Request
+    var method: HTTPMethod { return .post }
     var contentType: String { return "application/json" }
     var queryParams: [String: Any]? { return nil }
     var body: [String: Any]? { return nil }
     var headers: [String: String]? { return nil }
     
-    /// Serializes an HTTP dictionary to a JSON Data Object
+    /// 딕셔너리 타입을 Data 타입을 바꾸는 메서드, Post시 body에 사용
     /// - Parameter params: HTTP Parameters dictionary
     /// - Returns: Encoded JSON
     private func requestBodyFrom(params: [String: Any]?) -> Data? {
@@ -64,6 +63,9 @@ extension Request {
         return httpBody
     }
     
+    /// URL params을 data로 바꾸는 메서드, Get 시 url에 사용
+    /// - Parameter queryParams: HTTP Parameters dictionary
+    /// - Returns: Encoded URLQueryItem
     func addQueryItems(queryParams: [String: Any]?) -> [URLQueryItem]? {
         guard let queryParams = queryParams else {
             return nil
@@ -71,7 +73,7 @@ extension Request {
         return queryParams.map({URLQueryItem(name: $0.key, value: "\($0.value)")})
     }
     
-    /// Transforms an Request into a standard URL request
+    /// Request를 URL로 바꿔주는 메서드
     /// - Parameter baseURL: API Base URL to be used
     /// - Returns: A ready to use URLRequest
     func asURLRequest(baseURL: String) -> URLRequest? {
@@ -84,11 +86,8 @@ extension Request {
         request.httpBody = requestBodyFrom(params: body)
         request.allHTTPHeaderFields = headers
         
-        ///Set your Common Headers here
-        ///Like: api secret key for authorization header
-        ///Or set your content type
-        //request.setValue("Your API Token key", forHTTPHeaderField: HTTPHeaderField.authorization.rawValue)
-        request.setValue(ContentType.json.rawValue, forHTTPHeaderField: HTTPHeaderField.acceptType.rawValue)
+        /// Header에 대한 Setting ->  request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(ContentType.json.rawValue, forHTTPHeaderField: HTTPHeaderField.contentType.rawValue)
       
         return request
     }
@@ -174,7 +173,6 @@ struct NetworkDispatcher {
 }
 
 struct APIClient {
-    
     static var networkDispatcher: NetworkDispatcher = NetworkDispatcher()
     
     /// Dispatches a Request and returns a publisher

@@ -273,7 +273,8 @@ extension OnboardingViewController: ASAuthorizationControllerDelegate {
             onboardingVM.identityToken = identityTokenStr
             onboardingVM.userIdentifier = userIdentifier
             
-            onboardingVM.loginServices()
+//            onboardingVM.loginServices()
+            onboardingVM.appleLogin()
         }
     }
     

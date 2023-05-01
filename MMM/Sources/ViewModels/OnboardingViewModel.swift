@@ -16,12 +16,59 @@ final class OnboardingViewModel {
     var email: String?
     var identityToken: String?
     var userIdentifier: String?
+    var cancellable: Set<AnyCancellable> = []
+    @Published var loginResponse: AppleLoginResDto = AppleLoginResDto(message: "", token: "")
     
     init(authorizationCode: String, email: String, identityToken: String, userIdentifier: String) {
         self.authorizationCode = authorizationCode
         self.email = email
         self.identityToken = identityToken
         self.userIdentifier = userIdentifier
+    }
+    
+    func appleLogin() {
+        APIClient.dispatch(
+            APIRouter.AppleLoginReqDto(body:
+                                        APIParameters.LoginReqDto(
+                                            authorizationCode: authorizationCode,
+                                            email: email,
+                                            identityToken: identityToken,
+                                            userIdentifier: userIdentifier)))
+        .sink(receiveCompletion: { error in
+            switch error {
+            case .failure(let data):
+                switch data {
+                case .error4xx(_):
+                    break
+                case .error5xx(_):
+                    break
+                case .decodingError(_):
+                    break
+                case .urlSessionFailed(_):
+                    break
+                case .timeOut:
+                    break
+                case .unknownError:
+                    break
+                default:
+                    break
+                }
+            case .finished:
+                break
+            }
+        }, receiveValue: { [weak self] value in
+            guard let self = self else { return }
+            loginResponse.message = value.message
+            loginResponse.token = value.token
+            print(value.message)
+            // 로그인 성공 시 tabbar로 메인 뷰 전환
+            if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+                let tabBarController = TabBarController()
+                sceneDelegate.window?.rootViewController = tabBarController
+            }
+        })
+        .store(in: &cancellable)
+
     }
     
     func loginServices() {
@@ -51,7 +98,7 @@ final class OnboardingViewModel {
                 guard let data = response.data else { return }
                 do {
                     let decoder = JSONDecoder()
-                    let json = try decoder.decode(LoginResponse.self, from: data)
+                    let json = try decoder.decode(AppleLoginResDto.self, from: data)
                     Constants.setKeychain(json.token, forKey: Constants.KeychainKey.accessToken)
                 } catch {
                     print("데이터 파싱 실패")

@@ -9,14 +9,13 @@ import Foundation
 
 /// API 라우터
 final class APIRouter {
-    
     /// 애플 로그인을 위한 Router
-    struct AppleLogin: Request {
-        typealias ReturnType = LoginResponse
+    struct AppleLoginReqDto: Request {
+        typealias ReturnType = AppleLoginResDto
         var path: String = "/login/apple"
         var method: HTTPMethod = .post
         var body: [String : Any]?
-        init(body: APIParameters.LoginReqDtoParams) {
+        init(body: APIParameters.LoginReqDto) {
             self.body = body.asDictionary
         }
     }

@@ -77,7 +77,9 @@ class BottomSheetViewController: UIViewController, BottomSheetChild {
 extension BottomSheetViewController {
 	
 	/// height : 높이,
-	/// isDrag : 드래그가 가능한지 (false = 불가능)
+	/// isDrag : 드래그가 가능한지 (false: 불가능, default: true)
+	/// isExpended : 확장 가능한지 (false: 불가능, default: false)
+	/// isShadow : 그림자가 보이게 할것인지 (true: 보임, default: false)
 	func setSetting(height: CGFloat, isDrag: Bool = true, isExpended: Bool = false, isShadow: Bool = false) {
 		self.defaultHeight = height
 		self.isDrag = isDrag
@@ -86,7 +88,9 @@ extension BottomSheetViewController {
 	}
 	
 	/// percentHeight : 퍼센트로 높이 설정(0~1, 범위내 값이 아니면 설정 안됨, 1은 하지 말기),
-	/// isDrag : 드래그가 가능한지 (false: 불가능)
+	/// isDrag : 드래그가 가능한지 (false: 불가능, default: true)
+	/// isExpended : 확장 가능한지 (false: 불가능, default: false)
+	/// isShadow : 그림자가 보이게 할것인지 (true: 보임, default: false)
 	func setSetting(percentHeight: CGFloat, isDrag: Bool = true, isExpended: Bool = false, isShadow: Bool = false) {
 		guard 0 < percentHeight && percentHeight <= 1 else { return }
 		

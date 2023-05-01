@@ -1,8 +1,19 @@
 {
   "images" : [
     {
-      "filename" : "mypage_bg.png",
-      "idiom" : "universal"
+      "filename" : "iconMypageBg.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "iconMypageBg@2x.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "iconMypageBg@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x"
     }
   ],
   "info" : {

@@ -21,9 +21,10 @@ class HomeViewController: UIViewController {
 	private lazy var monthButton = UIButton()
 	private lazy var todayButton = UIButton()
 	private lazy var settingButton = UIBarButtonItem()
-	private lazy var tableView = UITableView()
-	
+	private lazy var separator = UIView() // Nav separator
 	private lazy var calendar = FSCalendar()
+	private lazy var calendarHeaderView = HomeHeaderView()
+	private lazy var tableView = UITableView()
 	private lazy var headerView = UIView()
 	private lazy var dayLabel = UILabel()
 	private lazy var scopeGesture = UIPanGestureRecognizer()
@@ -69,7 +70,18 @@ extension HomeViewController {
 		self.calendar.select(Date())
 		self.dayLabel.text = Date().getFormattedDate(format: "dd일 (EEEEE)") // 선택된 날짜
 	}
+	
+	// 달력 Picker BottomSheet
+	func didTapMonthButton() {
+		let picker = DatePickerViewController()
+		let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
+		picker.delegate = bottomSheetVC
+		bottomSheetVC.modalPresentationStyle = .overFullScreen
+		bottomSheetVC.setSetting(height: 375, isExpended: false, isShadow: true)
+		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
+	}
 }
+
 
 //MARK: - Style & Layouts
 extension HomeViewController {
@@ -84,6 +96,10 @@ extension HomeViewController {
 		//MARK: input
 		todayButton.tapPublisher
 			.sinkOnMainThread(receiveValue: didTapTodayButton)
+			.store(in: &cancellables)
+		
+		monthButton.tapPublisher
+			.sinkOnMainThread(receiveValue: didTapMonthButton)
 			.store(in: &cancellables)
 //		checkButton.tapPublisher
 //			.receive(on: DispatchQueue.main)
@@ -157,14 +173,23 @@ extension HomeViewController {
 			$0.style = .plain
 		}
 		
+		separator = separator.then {
+			$0.backgroundColor = R.Color.gray800
+		}
+		
+		calendarHeaderView = calendarHeaderView.then {
+			$0.setUp(pay: 200000, earn: 21230)
+		}
+		
 		calendar = calendar.then {
 			$0.backgroundColor = R.Color.gray900
-			$0.scope = .month		// 한달 단위(기본값)로 보여주기
+			$0.scope = .month									// 한달 단위(기본값)로 보여주기
 			$0.delegate = self
 			$0.dataSource = self
 			$0.select(Date())
-			$0.today = nil			// default 오늘 표시 제거
-			$0.calendarHeaderView = FSCalendarHeaderView()
+			$0.today = nil										// default 오늘 표시 제거
+			$0.headerHeight = 8									// deafult header 제거
+			$0.calendarHeaderView.isHidden = true				// deafult header 제거
 			$0.appearance.titleTodayColor = R.Color.white
 			$0.appearance.titleDefaultColor = R.Color.gray300 	// 달력의 평일 날짜 색깔
 			$0.appearance.titleFont = R.Font.body5				// 달력의 평일 글자 폰트
@@ -208,21 +233,30 @@ extension HomeViewController {
 		}
 		
 		headerView.addSubview(dayLabel)
-		view.addSubviews(calendar, tableView)
+		view.addSubviews(calendarHeaderView, calendar, separator, tableView)
 	}
 	
 	private func setLayout() {
-		calendar.snp.makeConstraints {
-			$0.top.left.right.equalTo(view.safeAreaLayoutGuide)
-			$0.height.equalTo(314)
+		separator.snp.makeConstraints {
+			$0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(15)
+			$0.top.equalTo(view.safeAreaLayoutGuide)
+			$0.height.equalTo(1)
 		}
 		
-		headerView.snp.makeConstraints {
-			$0.left.right.equalToSuperview().inset(20)
+		calendarHeaderView.snp.makeConstraints {
+			$0.top.left.right.equalTo(view.safeAreaLayoutGuide)
+			$0.height.equalTo(46)
+		}
+				
+		calendar.snp.makeConstraints {
+			$0.top.equalTo(calendarHeaderView.snp.bottom)
+			$0.left.right.equalTo(view.safeAreaLayoutGuide)
+			$0.height.equalTo(268)
 		}
 
 		dayLabel.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(16)
+			$0.left.right.equalTo(view.safeAreaLayoutGuide).inset(20)
 		}
 		
 		tableView.snp.makeConstraints {
@@ -249,11 +283,24 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 		}
 	}
 	
+	//날짜별로 선택 컬러 변경
+	func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, fillSelectionColorFor date: Date) -> UIColor? {
+//		if date.getFormattedDefault() == Date().getFormattedDefault() {
+//			return appearance.selectionColor
+//		}
+		return .clear
+	}
+	
 	// 스크롤시, calendar 높이 조절
 	func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {
 		calendar.snp.updateConstraints {
 			$0.height.equalTo(bounds.height) // 높이 변경
 		}
+		
+		calendarHeaderView.snp.updateConstraints {
+			$0.height.equalTo(bounds.height <= 268 / 2 ? 0 : 46) // calendar 전체 높이에 따른 높이 변경
+		}
+		
 		self.view.layoutIfNeeded()
 	}
 

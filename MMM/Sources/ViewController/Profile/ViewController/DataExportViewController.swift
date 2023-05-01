@@ -20,8 +20,12 @@ final class DataExportViewController: BaseViewController {
     }
     
     private lazy var subLabel = UILabel().then {
-        $0.text = "기록한 경제활동 내역의 제목, 수입/지출, 상세 정보를 엑셀 파일로 첨부하여 메일로 전송합니다."
-        $0.font = R.Font.body1
+		let attrString = NSMutableAttributedString(string: "기록한 경제활동 내역의 제목, 수입/지출, 상세 정보를 엑셀 파일로 첨부하여 메일로 전송합니다.")
+		let paragraphStyle = NSMutableParagraphStyle()
+		paragraphStyle.lineSpacing = 2
+		attrString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, attrString.length))
+		$0.attributedText = attrString
+		$0.font = R.Font.body1
         $0.textColor = R.Color.gray800
         $0.numberOfLines = 2
 
@@ -76,7 +80,7 @@ private extension DataExportViewController {
         }
             
         subLabel.snp.makeConstraints {
-            $0.top.equalTo(mainLabel.snp.bottom).offset(24)
+            $0.top.equalTo(mainLabel.snp.bottom).offset(32)
             $0.left.right.equalToSuperview().inset(24)
         }
         

@@ -73,7 +73,7 @@ extension WithdrawViewController: CustomAlertDelegate {
 	}
 	
 	@objc func didTapWithdrawButton() {
-		self.showAlert(alertType: .canCancel, titleText: "정말 탈퇴하시겠어요?", contentText: "탈퇴하면 소장 중인 데이터가 삭제되며\n30일 이후에는 복구가 불가능합니다.", confirmButtonText: "탈퇴하기")
+		self.showAlert(alertType: .canCancel, titleText: "정말 탈퇴하시겠어요?", contentText: "탈퇴하면 소장 중인 데이터가 삭제되며 30일 이후에는 복구가 불가능합니다.", confirmButtonText: "탈퇴하기")
 	}
 	
 	// 확인 버튼 이벤트 처리
@@ -165,6 +165,7 @@ extension WithdrawViewController {
 			$0.axis = .vertical
 			$0.spacing = 16
 			$0.alignment = .leading
+			$0.distribution = .fill
 		}
 		
 		checkLabel = checkLabel.then {
@@ -178,7 +179,7 @@ extension WithdrawViewController {
 		}
 		
 		secondComfirm = secondComfirm.then {
-			$0.setUp(number: "2", title: "30일 이후에는 모든 기록이 사라져요.", content: "30일 뒤에 모든 데이터는 회원님의 소중한\n정보를 지키기 위해 개인정보 처리 방침에 따라\n복구가 불가능해요.")
+			$0.setUp(number: "2", title: "30일 이후에는 모든 기록이 사라져요.", content: "30일 뒤에 모든 데이터는 회원님의 소중한 정보를 지키기 위해 개인정보 처리 방침에 따라 복구가 불가능해요.")
 		}
 		
 		confirmStackView = confirmStackView.then {
@@ -242,26 +243,24 @@ extension WithdrawViewController {
 		}
 		
 		containView.snp.makeConstraints {
-			$0.top.equalTo(moneyLabel.snp.bottom).offset(48)
-			$0.left.right.equalTo(view.safeAreaLayoutGuide).inset(24)
-			$0.height.equalTo(242)
+			$0.top.greaterThanOrEqualTo(moneyLabel.snp.bottom).offset(48)
+			$0.left.right.equalToSuperview().inset(24)
 		}
 		
 		containerStackView.snp.makeConstraints {
-			$0.top.left.bottom.equalToSuperview().inset(16)
-			$0.right.equalToSuperview().inset(35)
+			$0.edges.equalToSuperview().inset(16)
 		}
 		
 		firstComfirm.snp.makeConstraints {
-			$0.height.equalTo(66)
+			$0.height.greaterThanOrEqualTo(66)
 		}
-		
+
 		secondComfirm.snp.makeConstraints {
-			$0.height.equalTo(90)
+			$0.height.greaterThanOrEqualTo(90)
 		}
 		
 		confirmStackView.snp.makeConstraints {
-			$0.top.equalTo(containView.snp.bottom).offset(24)
+			$0.top.equalTo(containView.snp.bottom).offset(27)
 			$0.left.right.equalTo(view.safeAreaLayoutGuide).inset(75)
 		}
 		

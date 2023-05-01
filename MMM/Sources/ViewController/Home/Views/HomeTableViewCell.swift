@@ -12,6 +12,7 @@ final class HomeTableViewCell: UITableViewCell {
 	private lazy var image = UIImageView().then {
 		$0.layer.cornerRadius = 20
 		$0.layer.backgroundColor = R.Color.gray100.cgColor
+		$0.layer.masksToBounds = true	// 모양대로 자르기
 		$0.contentMode = .scaleAspectFit
 	}
 	
@@ -35,7 +36,7 @@ final class HomeTableViewCell: UITableViewCell {
 	private lazy var contains3StackView = UIStackView().then {
 		$0.axis = .horizontal
 		$0.spacing = 4
-		$0.alignment = .leading
+		$0.alignment = .center
 		$0.distribution = .fill
 	}
 	
@@ -106,11 +107,8 @@ final class HomeTableViewCell: UITableViewCell {
 			$0.centerY.equalToSuperview()
 		}
 
-		contains2StackView.snp.makeConstraints {
-			$0.trailing.lessThanOrEqualTo(contains3StackView.snp.leading)
-		}
-
 		contains3StackView.snp.makeConstraints {
+			$0.leading.greaterThanOrEqualTo(titleLabel.snp.trailing).offset(11)
 			$0.trailing.equalToSuperview().inset(20)
 			$0.centerY.equalTo(titleLabel.snp.centerY)
 		}

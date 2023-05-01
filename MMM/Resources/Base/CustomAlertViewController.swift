@@ -53,7 +53,15 @@ class CustomAlertViewController: UIViewController {
 		$0.layer.cornerRadius = 16
 	}
 	
-	private lazy var containerStackView = UIStackView().then {
+	// (title & content)와 buttonStackView
+	private lazy var containerStackView1 = UIStackView().then {
+		$0.axis = .vertical
+		$0.spacing = 16
+		$0.alignment = .center
+	}
+	
+	// title 과 content
+	private lazy var containerStackView2 = UIStackView().then {
 		$0.axis = .vertical
 		$0.spacing = 8
 		$0.alignment = .center
@@ -115,8 +123,8 @@ extension CustomAlertViewController {
 		
 		let attributedString = NSMutableAttributedString(string: contentText)
 		let paragraphStyle = NSMutableParagraphStyle()
-		paragraphStyle.lineBreakMode = .byWordWrapping
-		paragraphStyle.lineSpacing = 8
+		paragraphStyle.lineBreakStrategy = .hangulWordPriority
+		paragraphStyle.lineSpacing = 2
 		paragraphStyle.alignment = .center
 		attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, attributedString.length))
 		self.contentLabel.attributedText = attributedString
@@ -175,10 +183,14 @@ extension CustomAlertViewController {
 		}
 		
 		view.addSubviews(bgView, alertView)
-		alertView.addSubview(containerStackView)
-		[titleLabel, contentLabel, buttonStackView].forEach {
-			containerStackView.addArrangedSubview($0)
+		[titleLabel, contentLabel].forEach {
+			containerStackView2.addArrangedSubview($0)
 		}
+		
+		[containerStackView2, buttonStackView].forEach {
+			containerStackView1.addArrangedSubview($0)
+		}
+		alertView.addSubview(containerStackView1)
 	}
 	
 	private func setLayout() {
@@ -194,25 +206,27 @@ extension CustomAlertViewController {
 			$0.centerY.equalToSuperview()
 		}
 		
-		containerStackView.snp.makeConstraints {
+		containerStackView1.snp.makeConstraints {
 			$0.top.equalTo(alertView.snp.top).inset(24)
 			$0.bottom.equalTo(alertView.snp.bottom).inset(24)
 			$0.left.equalTo(alertView.snp.left).inset(20)
 			$0.right.equalTo(alertView.snp.right).inset(20)
 		}
 		
+		containerStackView2.snp.makeConstraints {
+			$0.left.right.equalToSuperview()
+		}
+		
 		switch alertType {
 		case .onlyConfirm:
 			confirmButton.snp.makeConstraints {
-				$0.top.equalToSuperview().offset(8)
-				$0.width.equalTo(containerStackView.snp.width)
+				$0.width.equalTo(containerStackView2.snp.width)
 				$0.height.equalTo(40)
 			}
 
 		case .canCancel:
 			cancelButton.snp.makeConstraints {
-				$0.top.equalToSuperview().offset(8)
-				$0.width.greaterThanOrEqualTo(containerStackView.snp.width).multipliedBy(0.48)
+				$0.width.greaterThanOrEqualTo(containerStackView2.snp.width).multipliedBy(0.48)
 				$0.height.equalTo(40)
 			}
 		}

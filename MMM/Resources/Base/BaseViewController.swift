@@ -27,7 +27,6 @@ private extension BaseViewController {
     }
 }
 
-
 //MARK: - Style & Layouts
 extension BaseViewController {
     private func setup() {

@@ -116,8 +116,8 @@ final class HomeTableViewCell: UITableViewCell {
 }
 
 extension HomeTableViewCell {
-	func setUp(data: Calendar) {
-		image.image = data.image.isEmpty ? data.isEarn ? R.Icon.coinEarn40 : R.Icon.coinPay40 : R.Icon.mypageBg
+	func setUp(data: EconomicActivity) {
+		image.image = data.imageUrl.isEmpty ? data.type == "01" ? R.Icon.coinEarn40 : R.Icon.coinPay40 : R.Icon.mypageBg
 		
 		// star의 갯수
 		for _ in 0..<data.star {
@@ -133,7 +133,7 @@ extension HomeTableViewCell {
 		
 		titleLabel.text = data.title
 		memoLabel.text = data.memo
-		plusMinusImage.image = data.isEarn ? R.Icon.plus16 : R.Icon.minus16
-		priceLabel.text = data.price.withCommas()
+		plusMinusImage.image = data.type == "01" ? R.Icon.plus16 : R.Icon.minus16
+		priceLabel.text = data.amount.withCommas()
 	}
 }

@@ -29,7 +29,7 @@ class HomeViewController: UIViewController {
 	private lazy var dayLabel = UILabel()
 	private lazy var scopeGesture = UIPanGestureRecognizer()
 	
-	private lazy var selectData: [Calendar] = Calendar.getDummyList()
+	private lazy var selectData: [EconomicActivity] = EconomicActivity.getDummyList()
 	
 	public init() {
 		super.init(nibName: nil, bundle: nil)
@@ -359,7 +359,7 @@ extension HomeViewController: UITableViewDataSource {
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.className, for: indexPath) as! HomeTableViewCell
 		
-		cell.setUp(data: Calendar.getDummyList()[indexPath.row])
+		cell.setUp(data: EconomicActivity.getDummyList()[indexPath.row])
 		cell.backgroundColor = R.Color.gray100
 
 		if indexPath.row == selectData.count - 1 {

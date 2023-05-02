@@ -75,6 +75,7 @@ extension HomeViewController {
 		self.didSelectDate(Date())
 	}
 	
+	// 날짜 선택
 	func didSelectDate(_ date: Date) {
 		self.calendar.select(date)
 		self.dayLabel.text = date.getFormattedDate(format: "dd일 (EEEEE)") // 선택된 날짜

@@ -251,10 +251,10 @@ extension OnboardingViewController: ASAuthorizationControllerDelegate {
         if let credential = authorization.credential as? ASAuthorizationAppleIDCredential {
         
             guard let identityToken = credential.identityToken else { return }
-            let identityTokenStr = String(data: identityToken, encoding: .utf8)
+            let identityTokenStr = String(data: identityToken, encoding: .utf8) ?? ""
             
             guard let authorizationCode = credential.authorizationCode else { return }
-            let authorizationCodeStr = String(data: authorizationCode, encoding: .utf8)
+            let authorizationCodeStr = String(data: authorizationCode, encoding: .utf8) ?? ""
             let userIdentifier = credential.user
         
             /// 최초 로그인 시 credential에서 email 들어옴
@@ -265,16 +265,7 @@ extension OnboardingViewController: ASAuthorizationControllerDelegate {
                     email = onboardingVM.decode(jwtToken: tokenString)["email"] as? String ?? ""
                 }
             }
-            // 사용자의 이메일 저장
-            Constants.setKeychain(email, forKey: Constants.KeychainKey.accessToken)
-            
-            onboardingVM.authorizationCode = authorizationCodeStr
-            onboardingVM.email = email
-            onboardingVM.identityToken = identityTokenStr
-            onboardingVM.userIdentifier = userIdentifier
-            
-//            onboardingVM.loginServices()
-            onboardingVM.appleLogin()
+            onboardingVM.appleLogin(authorizationCodeStr, email, identityTokenStr, userIdentifier)
         }
     }
     

@@ -12,12 +12,11 @@ import Alamofire
 import SwiftKeychainWrapper
 
 final class OnboardingViewModel {
-    var authorizationCode: String?
-    var email: String?
-    var identityToken: String?
-    var userIdentifier: String?
+    var authorizationCode: String? = ""
+    var email: String? = ""
+    var identityToken: String? = ""
+    var userIdentifier: String? = ""
     var cancellable: Set<AnyCancellable> = []
-    @Published var loginResponse: AppleLoginResDto = AppleLoginResDto(message: "", token: "")
     
     init(authorizationCode: String, email: String, identityToken: String, userIdentifier: String) {
         self.authorizationCode = authorizationCode
@@ -26,7 +25,7 @@ final class OnboardingViewModel {
         self.userIdentifier = userIdentifier
     }
     
-    func appleLogin() {
+    func appleLogin(_ authorizationCode: String, _ email: String, _ identityToken: String, _ userIdentifier: String) {
         APIClient.dispatch(
             APIRouter.AppleLoginReqDto(body:
                                         APIParameters.LoginReqDto(
@@ -58,9 +57,15 @@ final class OnboardingViewModel {
             }
         }, receiveValue: { [weak self] value in
             guard let self = self else { return }
-            self.loginResponse.message = value.message
-            self.loginResponse.token = value.token
-            print(value.message)
+            self.authorizationCode = authorizationCode
+            self.email = email
+            self.identityToken = identityToken
+            self.userIdentifier = userIdentifier
+            
+            // 사용자의 이메일 저장
+            Constants.setKeychain(email, forKey: Constants.KeychainKey.email)
+            // 사용자 token 저장
+            Constants.setKeychain(value.token, forKey: Constants.KeychainKey.token)
             // 로그인 성공 시 tabbar로 메인 뷰 전환
             if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
                 let tabBarController = TabBarController()
@@ -69,5 +74,36 @@ final class OnboardingViewModel {
         })
         .store(in: &cancellable)
 
+    }
+    
+    /// JWTToken -> dictionary
+    func decode(jwtToken jwt: String) -> [String: Any] {
+        
+        func base64UrlDecode(_ value: String) -> Data? {
+            var base64 = value
+                .replacingOccurrences(of: "-", with: "+")
+                .replacingOccurrences(of: "_", with: "/")
+
+            let length = Double(base64.lengthOfBytes(using: String.Encoding.utf8))
+            let requiredLength = 4 * ceil(length / 4.0)
+            let paddingLength = requiredLength - length
+            if paddingLength > 0 {
+                let padding = "".padding(toLength: Int(paddingLength), withPad: "=", startingAt: 0)
+                base64 = base64 + padding
+            }
+            return Data(base64Encoded: base64, options: .ignoreUnknownCharacters)
+        }
+
+        func decodeJWTPart(_ value: String) -> [String: Any]? {
+            guard let bodyData = base64UrlDecode(value),
+                  let json = try? JSONSerialization.jsonObject(with: bodyData, options: []), let payload = json as? [String: Any] else {
+                return nil
+            }
+
+            return payload
+        }
+        
+        let segments = jwt.components(separatedBy: ".")
+        return decodeJWTPart(segments[1]) ?? [:]
     }
 }

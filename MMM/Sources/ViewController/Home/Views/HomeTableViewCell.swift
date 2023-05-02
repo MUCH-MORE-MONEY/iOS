@@ -89,6 +89,14 @@ final class HomeTableViewCell: UITableViewCell {
 		super.init(coder: coder)
 		fatalError("init(coder:) has not been implemented")
 	}
+	
+	// 재활용 셀 중접오류 해결
+	override func prepareForReuse() {
+		startList.forEach { iv in
+			iv.image = nil
+			iv.image = R.Icon.iconStarInActive
+		}
+	}
 
 	private func setLayout() {
 		contentView.addSubviews(image, containsStackView, contains3StackView)
@@ -138,11 +146,6 @@ extension HomeTableViewCell {
 		// star의 갯수
 		for i in 0..<data.star {
 			startList[i].image = R.Icon.iconStarActive
-		}
-		 
-		// 5 - star의 갯수
-		for i in data.star..<5 {
-			startList[i].image = R.Icon.iconStarInActive
 		}
 
 		titleLabel.text = data.title

@@ -148,7 +148,7 @@ extension HomeViewController {
 		navigationItem.rightBarButtonItems = [settingButton, todayButtonItem]
 
 		monthButton = monthButton.then {
-			$0.frame = .init(origin: .zero, size: .init(width: 100, height: 24))
+			$0.frame = .init(origin: .zero, size: .init(width: 150, height: 24))
 			$0.setTitle(Date().getFormattedDate(format: "M월"), for: .normal)
 			$0.setImage(R.Icon.arrowExpandMore16, for: .normal)
 			$0.setTitleColor(R.Color.white, for: .normal)
@@ -320,7 +320,11 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 
 	// page가 변경될때 month 변경
 	func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
-		monthButton.setTitle(calendar.currentPage.getFormattedDate(format: "M월"), for: .normal)
+		if Date().getFormattedDate(format: "yyyy") != calendar.currentPage.getFormattedDate(format: "yyyy") {
+			monthButton.setTitle(calendar.currentPage.getFormattedDate(format: "yyyy년 M월"), for: .normal)
+		} else {
+			monthButton.setTitle(calendar.currentPage.getFormattedDate(format: "M월"), for: .normal)
+		}
 	}
 }
 

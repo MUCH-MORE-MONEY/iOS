@@ -25,6 +25,7 @@ class HomeViewController: UIViewController {
 	private lazy var separator = UIView() // Nav separator
 	private lazy var calendar = FSCalendar()
 	private lazy var calendarHeaderView = HomeHeaderView()
+	private lazy var emptyView = HomeEmptyView()
 	private lazy var tableView = UITableView()
 	private lazy var headerView = UIView()
 	private lazy var dayLabel = UILabel()
@@ -113,7 +114,10 @@ extension HomeViewController {
 		
 		//MARK: output
 		viewModel.$dailyList
-			.sinkOnMainThread(receiveValue: { [weak self] _ in
+			.sinkOnMainThread(receiveValue: { [weak self] daily in
+				if daily.isEmpty {
+					
+				}
 				self?.tableView.reloadData()
 			})
 			.store(in: &self.cancellable)
@@ -239,7 +243,7 @@ extension HomeViewController {
 		}
 		
 		headerView.addSubview(dayLabel)
-		view.addSubviews(calendarHeaderView, calendar, separator, tableView)
+		view.addSubviews(calendarHeaderView, calendar, separator, tableView, emptyView)
 	}
 	
 	private func setLayout() {
@@ -269,6 +273,12 @@ extension HomeViewController {
 			$0.bottom.left.right.equalTo(view.safeAreaLayoutGuide)
 			$0.top.equalTo(calendar.snp.bottom)
 		}
+		
+		emptyView.snp.makeConstraints {
+//			$0.top.equalTo(headerView.snp.bottom).offset(24)
+			$0.centerX.equalTo(tableView.snp.centerX)
+			$0.centerY.equalTo(tableView.snp.centerY)
+		}
 	}
 }
 
@@ -278,11 +288,6 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 	func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
 		dayLabel.text = date.getFormattedDate(format: "dd일 (EEEEE)") // 선택된 날짜
 		viewModel.getDailyList(date.getFormattedYMD())
-//		if date.getFormattedDefault() == Date().getFormattedDefault() {
-//			selectData = []
-//		} else {
-//			selectData = Calendar.getDummyList()
-//		}
 		
 		if monthPosition == .next || monthPosition == .previous {
 			calendar.setCurrentPage(date, animated: true)
@@ -354,6 +359,8 @@ extension HomeViewController: UIGestureRecognizerDelegate {
 extension HomeViewController: UITableViewDataSource {
 
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		tableView.bounces = !viewModel.dailyList.isEmpty
+		emptyView.isHidden = !viewModel.dailyList.isEmpty
 		return viewModel.dailyList.count
 	}
 	
@@ -378,7 +385,7 @@ extension HomeViewController: UITableViewDataSource {
 		return cell
 	}
 }
-//MARK: - UITableView Delegate
+//MARK: - UITableView Delegate, UIScrollView Delegate
 extension HomeViewController: UITableViewDelegate {
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

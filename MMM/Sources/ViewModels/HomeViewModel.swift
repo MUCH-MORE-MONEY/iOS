@@ -33,6 +33,10 @@ final class HomeViewModel {
 			}
 		})
 		.eraseToAnyPublisher()
+	
+	init() {
+		self.getDailyList(Date().getFormattedYMD())
+	}
 }
 
 //MARK: Action

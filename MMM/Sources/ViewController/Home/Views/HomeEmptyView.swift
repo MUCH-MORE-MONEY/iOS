@@ -50,10 +50,15 @@ private extension HomeEmptyView {
 		}
 		
 		titleLabel = titleLabel.then {
-			$0.text = "아직 아무것도 없어요\n시작하면 통장에 돈이 쌓일지도?"
+			let attrString = NSMutableAttributedString(string: "아직 아무것도 없어요\n시작하면 통장에 돈이 쌓일지도?")
+			let paragraphStyle = NSMutableParagraphStyle()
+			paragraphStyle.lineSpacing = 2
+			attrString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, attrString.length))
+			$0.attributedText = attrString
 			$0.font = R.Font.prtendard(family: .medium, size: 14)
 			$0.textColor = R.Color.gray500
 			$0.textAlignment = .center
+			$0.numberOfLines = 2
 		}
 	}
 	

@@ -70,6 +70,7 @@ extension HomeViewController {
 	func didTapTodayButton() {
 		self.calendar.select(Date())
 		self.dayLabel.text = Date().getFormattedDate(format: "dd일 (EEEEE)") // 선택된 날짜
+		self.viewModel.getDailyList(Date().getFormattedYMD())
 	}
 	
 	// 달력 Picker BottomSheet

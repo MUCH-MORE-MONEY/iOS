@@ -7,14 +7,16 @@
 
 import Foundation
 import Combine
+import UIKit
 
 final class HomeViewModel {
 	// MARK: - Property Warraper
 	@Published var passwordInput: String = ""
 	@Published var passwordConfirmInput: String = ""
+	@Published var dailyList: [EconomicActivity] = []
 
 	// MARK: - Private properties
-	private var cancellables: Set<AnyCancellable> = .init()
+	private var cancellable: Set<AnyCancellable> = .init()
 	
 	// MARK: - Public properties
 	// 들어온 퍼블리셔들의 값 일치 여부를 반환하는 퍼블리셔
@@ -35,7 +37,27 @@ final class HomeViewModel {
 
 //MARK: Action
 extension HomeViewModel {
-	
+	func getDailyList(_ dateYMD: String) {
+		guard let date = Int(dateYMD), let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.accessToken) else { return }
+		
+		APIClient.dispatch(APIRouter.SelectListDailyReqDto( headers: APIHeader.Default(token: token), body: APIParameters.SelectListDailyReqDto(dateYMD: date)))
+			.sink(receiveCompletion: { error in
+				switch error {
+				case .failure(let data):
+					switch data {
+					default:
+						break
+					}
+				case .finished:
+					break
+				}
+			}, receiveValue: { [weak self] reponse in
+				guard let self = self, let dailyList = reponse.selectListDailyOutputDto else { return }
+//				print(#file, #function, #line, dailyList)
+				self.dailyList = dailyList
+			})
+			.store(in: &cancellable)
+	}
 }
 
 //MARK: State

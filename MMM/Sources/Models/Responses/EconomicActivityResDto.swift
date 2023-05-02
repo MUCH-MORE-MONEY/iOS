@@ -8,7 +8,7 @@
 import Foundation
 
 /// daily/list/select api
-struct EconomicActivityDailyResDto: Codable {
-	var message: String
-	var selectListDailyOutputDto: [EconomicActivity]
+struct EconomicActivitySelectListDailyResDto: Codable {
+	var message: String?
+	var selectListDailyOutputDto: [EconomicActivity]?
 }

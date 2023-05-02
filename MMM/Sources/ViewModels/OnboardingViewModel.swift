@@ -68,7 +68,6 @@ final class OnboardingViewModel {
             }
         })
         .store(in: &cancellable)
-
     }
     
     func loginServices() {

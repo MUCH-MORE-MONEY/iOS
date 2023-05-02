@@ -12,9 +12,10 @@ import SnapKit
 import FSCalendar
 
 class HomeViewController: UIViewController {
-	private lazy var cancellables: Set<AnyCancellable> = .init()
+	// MARK: - Properties
+	private lazy var cancellable: Set<AnyCancellable> = .init()
 	private let viewModel = HomeViewModel()
-
+	
 	// MARK: - UI Components
 	private lazy var monthButtonItem = UIBarButtonItem()
 	private lazy var todayButtonItem = UIBarButtonItem()
@@ -28,9 +29,7 @@ class HomeViewController: UIViewController {
 	private lazy var headerView = UIView()
 	private lazy var dayLabel = UILabel()
 	private lazy var scopeGesture = UIPanGestureRecognizer()
-	
-	private lazy var selectData: [EconomicActivity] = EconomicActivity.getDummyList()
-	
+		
 	public init() {
 		super.init(nibName: nil, bundle: nil)
 	}
@@ -96,11 +95,11 @@ extension HomeViewController {
 		//MARK: input
 		todayButton.tapPublisher
 			.sinkOnMainThread(receiveValue: didTapTodayButton)
-			.store(in: &cancellables)
+			.store(in: &cancellable)
 		
 		monthButton.tapPublisher
 			.sinkOnMainThread(receiveValue: didTapMonthButton)
-			.store(in: &cancellables)
+			.store(in: &cancellable)
 //		checkButton.tapPublisher
 //			.receive(on: DispatchQueue.main)
 //			.sinkOnMainThread(receiveValue: go)
@@ -113,6 +112,12 @@ extension HomeViewController {
 //			.store(in: &cancellables)
 		
 		//MARK: output
+		viewModel.$dailyList
+			.sinkOnMainThread(receiveValue: { [weak self] _ in
+				self?.tableView.reloadData()
+			})
+			.store(in: &self.cancellable)
+		
 //		viewModel
 //			.transform(input: viewModel.input.eraseToAnyPublisher())
 //			.sinkOnMainThread(receiveValue: { [weak self] state in
@@ -123,6 +128,7 @@ extension HomeViewController {
 //					self?.toggleCheckButton(isEnabled)
 //				}
 //			}).store(in: &cancellables)
+		
 //		viewModel.isMatchPasswordInput
 //			.receive(on: DispatchQueue.main)
 //			.sink(receiveValue: go2)
@@ -271,7 +277,7 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 	// 캘린더 선택
 	func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
 		dayLabel.text = date.getFormattedDate(format: "dd일 (EEEEE)") // 선택된 날짜
-		
+		viewModel.getDailyList(date.getFormattedYMD())
 //		if date.getFormattedDefault() == Date().getFormattedDefault() {
 //			selectData = []
 //		} else {
@@ -348,21 +354,21 @@ extension HomeViewController: UIGestureRecognizerDelegate {
 extension HomeViewController: UITableViewDataSource {
 
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return selectData.count // 임시
+		return viewModel.dailyList.count
 	}
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 		let padding: CGFloat = 24
-		return selectData[indexPath.row].memo.isEmpty ? 42 + padding : 64 + padding
+		return viewModel.dailyList[indexPath.row].memo.isEmpty ? 42 + padding : 64 + padding
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.className, for: indexPath) as! HomeTableViewCell
 		
-		cell.setUp(data: EconomicActivity.getDummyList()[indexPath.row])
+		cell.setUp(data: viewModel.dailyList[indexPath.row])
 		cell.backgroundColor = R.Color.gray100
 
-		if indexPath.row == selectData.count - 1 {
+		if indexPath.row == viewModel.dailyList.count - 1 {
 			// 마지막 cell은 bottom border 제거
 			DispatchQueue.main.async {
 				cell.addAboveTheBottomBorderWithColor(color: R.Color.gray100)

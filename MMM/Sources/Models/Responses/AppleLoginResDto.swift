@@ -12,4 +12,3 @@ struct AppleLoginResDto: Codable {
     var message: String
     var token: String
 }
-

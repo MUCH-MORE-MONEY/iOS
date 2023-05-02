@@ -8,8 +8,6 @@
 import Foundation
 import Combine
 
-
-
 enum HTTPHeaderField: String {
     case authentication = "Authentication"
     case contentType = "Content-Type"

@@ -11,6 +11,10 @@ import Then
 import SnapKit
 import FSCalendar
 
+protocol HomeViewProtocol: AnyObject {
+	func willPickerDismiss(_ date: Date)
+}
+
 class HomeViewController: UIViewController {
 	// MARK: - Properties
 	private lazy var cancellable: Set<AnyCancellable> = .init()
@@ -68,10 +72,14 @@ extension HomeViewController {
 
 	// 오늘 날짜로 돌아오기
 	func didTapTodayButton() {
-		self.calendar.select(Date())
-		self.dayLabel.text = Date().getFormattedDate(format: "dd일 (EEEEE)") // 선택된 날짜
-		self.preDate = Date().getFormattedYMD()
-		self.viewModel.getDailyList(Date().getFormattedYMD())
+		self.didSelectDate(Date())
+	}
+	
+	func didSelectDate(_ date: Date) {
+		self.calendar.select(date)
+		self.dayLabel.text = date.getFormattedDate(format: "dd일 (EEEEE)") // 선택된 날짜
+		self.preDate = date.getFormattedYMD()
+		self.viewModel.getDailyList(date.getFormattedYMD())
 	}
 	
 	// 달력 Picker BottomSheet
@@ -79,12 +87,12 @@ extension HomeViewController {
 		let picker = DatePickerViewController()
 		let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
 		picker.delegate = bottomSheetVC
+		picker.homeDelegate = self
 		bottomSheetVC.modalPresentationStyle = .overFullScreen
 		bottomSheetVC.setSetting(height: 375, isExpended: false, isShadow: true)
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
 	}
 }
-
 
 //MARK: - Style & Layouts
 extension HomeViewController {
@@ -400,5 +408,12 @@ extension HomeViewController: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		// 셀 터치시 회색 표시 없애기
 		tableView.deselectRow(at: indexPath, animated: true)
+	}
+}
+
+extension HomeViewController: HomeViewProtocol {
+	
+	func willPickerDismiss(_ date: Date) {
+		self.didSelectDate(date)
 	}
 }

@@ -151,7 +151,12 @@ extension HomeTableViewCell {
 		for i in 0..<data.star {
 			startList[i].image = R.Icon.iconStarActive
 		}
-		
+		 
+		// 5 - star의 갯수
+		for i in data.star..<5 {
+			startList[i].image = R.Icon.iconStarInActive
+		}
+
 		titleLabel.text = data.title
 		memoLabel.text = data.memo
 		plusMinusImage.image = data.type == "01" ? R.Icon.plus16 : R.Icon.minus16

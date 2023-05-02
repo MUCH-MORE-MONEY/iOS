@@ -131,8 +131,9 @@ final class HomeTableViewCell: UITableViewCell {
 extension HomeTableViewCell {
 	func setUp(data: EconomicActivity) {
 		// 이미지 비동기 처리
-		image.kf.indicatorType = .activity
-		image.setImage(urlStr: data.imageUrl, defaultImage: data.type == "01" ? R.Icon.plus16 : R.Icon.minus16)
+		DispatchQueue.main.async {
+			self.image.setImage(urlStr: data.imageUrl, defaultImage: data.type == "01" ? R.Icon.plus16 : R.Icon.minus16)
+		}
 		
 		// star의 갯수
 		for i in 0..<data.star {

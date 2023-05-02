@@ -11,6 +11,9 @@ import Kingfisher
 extension UIImageView {
 	// 비동기 처리
 	func setImage(urlStr: String, defaultImage: UIImage?) {
+		self.kf.indicatorType = .activity
+		let retryStrategy = DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(3)) // 이미지 로드 실패 시 재시도 - DelayRetryStrategy 인스턴스를 .retryStraregy() 생성자로 주입
+
 		ImageCache.default.retrieveImage(forKey: urlStr, options: nil) { result in
 			switch result {
 			case .success(let value):
@@ -24,7 +27,7 @@ extension UIImageView {
 						return
 					}
 					let resource = ImageResource(downloadURL: url, cacheKey: urlStr)
-					self.kf.setImage(with: resource, options: [.transition(.fade(1.2))]) // 이미지를 가져오는 1.2동안 애니메이션
+					self.kf.setImage(with: resource, options: [.retryStrategy(retryStrategy), .transition(.fade(1.0)), .forceTransition]) // 이미지를 가져오는 1.2동안 애니메이션
 				}
 			case .failure:
 				self.image = defaultImage

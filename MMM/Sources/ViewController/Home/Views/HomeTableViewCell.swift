@@ -8,7 +8,16 @@
 import UIKit
 
 final class HomeTableViewCell: UITableViewCell {
-	
+	// MARK: - Properties
+	private let startList: [UIImageView] = [
+		UIImageView(image: R.Icon.iconStarInActive),
+		UIImageView(image: R.Icon.iconStarInActive),
+		UIImageView(image: R.Icon.iconStarInActive),
+		UIImageView(image: R.Icon.iconStarInActive),
+		UIImageView(image: R.Icon.iconStarInActive)
+	]
+
+	// MARK: - UI Components
 	private lazy var image = UIImageView().then {
 		$0.layer.cornerRadius = 20
 		$0.layer.backgroundColor = R.Color.gray100.cgColor
@@ -83,6 +92,10 @@ final class HomeTableViewCell: UITableViewCell {
 
 	private func setLayout() {
 		contentView.addSubviews(image, containsStackView, contains3StackView)
+		startList.forEach { imageView in
+			starStackView.addArrangedSubview(imageView)
+		}
+		
 		[contains2StackView, memoLabel].forEach {
 			containsStackView.addArrangedSubview($0)
 		}
@@ -120,15 +133,8 @@ extension HomeTableViewCell {
 		image.image = data.imageUrl.isEmpty ? data.type == "01" ? R.Icon.coinEarn40 : R.Icon.coinPay40 : R.Icon.mypageBg
 		
 		// star의 갯수
-		for _ in 0..<data.star {
-			let star = UIImageView(image: R.Icon.iconStarActive)
-			starStackView.addArrangedSubview(star)
-		}
-		
-		// 5 - star의 갯수
-		for _ in 0..<5-data.star {
-			let star = UIImageView(image: R.Icon.iconStarInActive)
-			starStackView.addArrangedSubview(star)
+		for i in 0..<data.star {
+			startList[i].image = R.Icon.iconStarActive
 		}
 		
 		titleLabel.text = data.title

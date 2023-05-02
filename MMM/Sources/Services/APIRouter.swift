@@ -31,7 +31,6 @@ final class APIRouter {
 		init(headers: APIHeader.Default, body: APIParameters.SelectListDailyReqDto) {
 			self.headers = headers.asDictionary as? [String: String]
 			self.body = body.asDictionary
-			print(headers)
 		}
 	}
 }

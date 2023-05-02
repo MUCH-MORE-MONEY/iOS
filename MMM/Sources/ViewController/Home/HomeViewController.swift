@@ -276,7 +276,6 @@ extension HomeViewController {
 		}
 		
 		emptyView.snp.makeConstraints {
-//			$0.top.equalTo(headerView.snp.bottom).offset(24)
 			$0.centerX.equalTo(tableView.snp.centerX)
 			$0.centerY.equalTo(tableView.snp.centerY)
 		}
@@ -328,7 +327,7 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 //MARK: - FSCalendar Delegate Appearance
 extension HomeViewController: FSCalendarDelegateAppearance {
 	
-	// 오늘날짜에 대한 border
+	// 오늘 날짜에 대한 border
 	func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, borderDefaultColorFor date: Date) -> UIColor? {
 		return date.getFormattedDefault() == Date().getFormattedDefault() ? R.Color.white : appearance.borderDefaultColor
 	}

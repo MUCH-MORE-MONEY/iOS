@@ -130,7 +130,22 @@ final class HomeTableViewCell: UITableViewCell {
 
 extension HomeTableViewCell {
 	func setUp(data: EconomicActivity) {
-		image.image = data.imageUrl.isEmpty ? data.type == "01" ? R.Icon.coinEarn40 : R.Icon.coinPay40 : R.Icon.mypageBg
+		
+		// 이미지 비동기 처리
+		DispatchQueue.global().async {
+			if let imageURL = URL(string: data.imageUrl) {
+				if let data = try? Data(contentsOf: imageURL) {
+					DispatchQueue.main.async {
+						// MARK: Default 이미지가 있다면 ??에 넣어주기
+						self.image.image = UIImage(data: data) ?? UIImage()
+					}
+				}
+			} else {
+				DispatchQueue.main.async {
+					self.image.image = data.type == "01" ? R.Icon.coinEarn40 : R.Icon.coinPay40
+				}
+			}
+		}
 		
 		// star의 갯수
 		for i in 0..<data.star {

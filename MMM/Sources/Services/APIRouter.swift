@@ -19,4 +19,18 @@ final class APIRouter {
             self.body = body.asDictionary
         }
     }
+	
+	/// 일별 경제 활동 List를 위한 Router
+	struct SelectListDailyReqDto: Request {
+		typealias ReturnType = EconomicActivitySelectListDailyResDto
+		var path: String = "/economic_activity/daily/list/select"
+		var method: HTTPMethod = .post
+		var headers: [String:String]?
+		var body: [String : Any]?
+		
+		init(headers: APIHeader.Default, body: APIParameters.SelectListDailyReqDto) {
+			self.headers = headers.asDictionary as? [String: String]
+			self.body = body.asDictionary
+		}
+	}
 }

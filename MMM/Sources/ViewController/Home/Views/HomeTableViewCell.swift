@@ -8,7 +8,16 @@
 import UIKit
 
 final class HomeTableViewCell: UITableViewCell {
-	
+	// MARK: - Properties
+	private let startList: [UIImageView] = [
+		UIImageView(image: R.Icon.iconStarInActive),
+		UIImageView(image: R.Icon.iconStarInActive),
+		UIImageView(image: R.Icon.iconStarInActive),
+		UIImageView(image: R.Icon.iconStarInActive),
+		UIImageView(image: R.Icon.iconStarInActive)
+	]
+
+	// MARK: - UI Components
 	private lazy var image = UIImageView().then {
 		$0.layer.cornerRadius = 20
 		$0.layer.backgroundColor = R.Color.gray100.cgColor
@@ -80,9 +89,21 @@ final class HomeTableViewCell: UITableViewCell {
 		super.init(coder: coder)
 		fatalError("init(coder:) has not been implemented")
 	}
+	
+	// 재활용 셀 중접오류 해결
+	override func prepareForReuse() {
+		startList.forEach { iv in
+			iv.image = nil
+			iv.image = R.Icon.iconStarInActive
+		}
+	}
 
 	private func setLayout() {
 		contentView.addSubviews(image, containsStackView, contains3StackView)
+		startList.forEach { imageView in
+			starStackView.addArrangedSubview(imageView)
+		}
+		
 		[contains2StackView, memoLabel].forEach {
 			containsStackView.addArrangedSubview($0)
 		}
@@ -116,24 +137,20 @@ final class HomeTableViewCell: UITableViewCell {
 }
 
 extension HomeTableViewCell {
-	func setUp(data: Calendar) {
-		image.image = data.image.isEmpty ? data.isEarn ? R.Icon.coinEarn40 : R.Icon.coinPay40 : R.Icon.mypageBg
+	func setUp(data: EconomicActivity) {
+		// 이미지 비동기 처리
+		DispatchQueue.main.async {
+			self.image.setImage(urlStr: data.imageUrl, defaultImage: data.type == "01" ? R.Icon.plus16 : R.Icon.minus16)
+		}
 		
 		// star의 갯수
-		for _ in 0..<data.star {
-			let star = UIImageView(image: R.Icon.iconStarActive)
-			starStackView.addArrangedSubview(star)
+		for i in 0..<data.star {
+			startList[i].image = R.Icon.iconStarActive
 		}
-		
-		// 5 - star의 갯수
-		for _ in 0..<5-data.star {
-			let star = UIImageView(image: R.Icon.iconStarInActive)
-			starStackView.addArrangedSubview(star)
-		}
-		
+
 		titleLabel.text = data.title
 		memoLabel.text = data.memo
-		plusMinusImage.image = data.isEarn ? R.Icon.plus16 : R.Icon.minus16
-		priceLabel.text = data.price.withCommas()
+		plusMinusImage.image = data.type == "01" ? R.Icon.plus16 : R.Icon.minus16
+		priceLabel.text = data.amount.withCommas()
 	}
 }

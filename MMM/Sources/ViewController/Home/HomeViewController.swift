@@ -11,10 +11,16 @@ import Then
 import SnapKit
 import FSCalendar
 
-class HomeViewController: UIViewController {
-	private lazy var cancellables: Set<AnyCancellable> = .init()
-	private let viewModel = HomeViewModel()
+protocol HomeViewProtocol: AnyObject {
+	func willPickerDismiss(_ date: Date)
+}
 
+class HomeViewController: UIViewController {
+	// MARK: - Properties
+	private lazy var cancellable: Set<AnyCancellable> = .init()
+	private let viewModel = HomeViewModel()
+	private lazy var preDate = Date().getFormattedYMD() // yyyyMMdd
+	
 	// MARK: - UI Components
 	private lazy var monthButtonItem = UIBarButtonItem()
 	private lazy var todayButtonItem = UIBarButtonItem()
@@ -24,13 +30,12 @@ class HomeViewController: UIViewController {
 	private lazy var separator = UIView() // Nav separator
 	private lazy var calendar = FSCalendar()
 	private lazy var calendarHeaderView = HomeHeaderView()
+	private lazy var emptyView = HomeEmptyView()
 	private lazy var tableView = UITableView()
 	private lazy var headerView = UIView()
 	private lazy var dayLabel = UILabel()
 	private lazy var scopeGesture = UIPanGestureRecognizer()
-	
-	private lazy var selectData: [Calendar] = Calendar.getDummyList()
-	
+		
 	public init() {
 		super.init(nibName: nil, bundle: nil)
 	}
@@ -48,7 +53,7 @@ class HomeViewController: UIViewController {
 
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-//		tableView.reloadData()
+		tableView.reloadData()
 //		self.navigationController?.setNavigationBarHidden(true, animated: animated)	// navigation bar 숨김
 	}
 	
@@ -67,8 +72,15 @@ extension HomeViewController {
 
 	// 오늘 날짜로 돌아오기
 	func didTapTodayButton() {
-		self.calendar.select(Date())
-		self.dayLabel.text = Date().getFormattedDate(format: "dd일 (EEEEE)") // 선택된 날짜
+		self.didSelectDate(Date())
+	}
+	
+	// 날짜 선택
+	func didSelectDate(_ date: Date) {
+		self.calendar.select(date)
+		self.dayLabel.text = date.getFormattedDate(format: "dd일 (EEEEE)") // 선택된 날짜
+		self.preDate = date.getFormattedYMD()
+		self.viewModel.getDailyList(date.getFormattedYMD())
 	}
 	
 	// 달력 Picker BottomSheet
@@ -76,12 +88,12 @@ extension HomeViewController {
 		let picker = DatePickerViewController()
 		let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
 		picker.delegate = bottomSheetVC
+		picker.homeDelegate = self
 		bottomSheetVC.modalPresentationStyle = .overFullScreen
 		bottomSheetVC.setSetting(height: 375, isExpended: false, isShadow: true)
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
 	}
 }
-
 
 //MARK: - Style & Layouts
 extension HomeViewController {
@@ -96,11 +108,11 @@ extension HomeViewController {
 		//MARK: input
 		todayButton.tapPublisher
 			.sinkOnMainThread(receiveValue: didTapTodayButton)
-			.store(in: &cancellables)
+			.store(in: &cancellable)
 		
 		monthButton.tapPublisher
 			.sinkOnMainThread(receiveValue: didTapMonthButton)
-			.store(in: &cancellables)
+			.store(in: &cancellable)
 //		checkButton.tapPublisher
 //			.receive(on: DispatchQueue.main)
 //			.sinkOnMainThread(receiveValue: go)
@@ -113,6 +125,15 @@ extension HomeViewController {
 //			.store(in: &cancellables)
 		
 		//MARK: output
+		viewModel.$dailyList
+			.sinkOnMainThread(receiveValue: { [weak self] daily in
+				if daily.isEmpty {
+					
+				}
+				self?.tableView.reloadData()
+			})
+			.store(in: &self.cancellable)
+		
 //		viewModel
 //			.transform(input: viewModel.input.eraseToAnyPublisher())
 //			.sinkOnMainThread(receiveValue: { [weak self] state in
@@ -123,6 +144,7 @@ extension HomeViewController {
 //					self?.toggleCheckButton(isEnabled)
 //				}
 //			}).store(in: &cancellables)
+		
 //		viewModel.isMatchPasswordInput
 //			.receive(on: DispatchQueue.main)
 //			.sink(receiveValue: go2)
@@ -137,7 +159,7 @@ extension HomeViewController {
 		navigationItem.rightBarButtonItems = [settingButton, todayButtonItem]
 
 		monthButton = monthButton.then {
-			$0.frame = .init(origin: .zero, size: .init(width: 100, height: 24))
+			$0.frame = .init(origin: .zero, size: .init(width: 150, height: 24))
 			$0.setTitle(Date().getFormattedDate(format: "M월"), for: .normal)
 			$0.setImage(R.Icon.arrowExpandMore16, for: .normal)
 			$0.setTitleColor(R.Color.white, for: .normal)
@@ -233,7 +255,7 @@ extension HomeViewController {
 		}
 		
 		headerView.addSubview(dayLabel)
-		view.addSubviews(calendarHeaderView, calendar, separator, tableView)
+		view.addSubviews(calendarHeaderView, calendar, separator, tableView, emptyView)
 	}
 	
 	private func setLayout() {
@@ -263,6 +285,11 @@ extension HomeViewController {
 			$0.bottom.left.right.equalTo(view.safeAreaLayoutGuide)
 			$0.top.equalTo(calendar.snp.bottom)
 		}
+		
+		emptyView.snp.makeConstraints {
+			$0.centerX.equalTo(tableView.snp.centerX)
+			$0.centerY.equalTo(tableView.snp.centerY)
+		}
 	}
 }
 
@@ -270,13 +297,11 @@ extension HomeViewController {
 extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 	// 캘린더 선택
 	func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-		dayLabel.text = date.getFormattedDate(format: "dd일 (EEEEE)") // 선택된 날짜
+		guard preDate != date.getFormattedYMD() else { return } // 같은 날짜를 선택할 경우
 		
-//		if date.getFormattedDefault() == Date().getFormattedDefault() {
-//			selectData = []
-//		} else {
-//			selectData = Calendar.getDummyList()
-//		}
+		dayLabel.text = date.getFormattedDate(format: "dd일 (EEEEE)") // 선택된 날짜
+		viewModel.getDailyList(date.getFormattedYMD())
+		preDate = date.getFormattedYMD() // 이전 날짜로 저장
 		
 		if monthPosition == .next || monthPosition == .previous {
 			calendar.setCurrentPage(date, animated: true)
@@ -288,7 +313,7 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 //		if date.getFormattedDefault() == Date().getFormattedDefault() {
 //			return appearance.selectionColor
 //		}
-		return .clear
+		return appearance.selectionColor
 	}
 	
 	// 스크롤시, calendar 높이 조절
@@ -306,14 +331,18 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 
 	// page가 변경될때 month 변경
 	func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
-		monthButton.setTitle(calendar.currentPage.getFormattedDate(format: "M월"), for: .normal)
+		if Date().getFormattedDate(format: "yyyy") != calendar.currentPage.getFormattedDate(format: "yyyy") {
+			monthButton.setTitle(calendar.currentPage.getFormattedDate(format: "yyyy년 M월"), for: .normal)
+		} else {
+			monthButton.setTitle(calendar.currentPage.getFormattedDate(format: "M월"), for: .normal)
+		}
 	}
 }
 
 //MARK: - FSCalendar Delegate Appearance
 extension HomeViewController: FSCalendarDelegateAppearance {
 	
-	// 오늘날짜에 대한 border
+	// 오늘 날짜에 대한 border
 	func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, borderDefaultColorFor date: Date) -> UIColor? {
 		return date.getFormattedDefault() == Date().getFormattedDefault() ? R.Color.white : appearance.borderDefaultColor
 	}
@@ -348,21 +377,23 @@ extension HomeViewController: UIGestureRecognizerDelegate {
 extension HomeViewController: UITableViewDataSource {
 
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return selectData.count // 임시
+		tableView.bounces = !viewModel.dailyList.isEmpty
+		emptyView.isHidden = !viewModel.dailyList.isEmpty
+		return viewModel.dailyList.count
 	}
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 		let padding: CGFloat = 24
-		return selectData[indexPath.row].memo.isEmpty ? 42 + padding : 64 + padding
+		return viewModel.dailyList[indexPath.row].memo.isEmpty ? 42 + padding : 64 + padding
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.className, for: indexPath) as! HomeTableViewCell
 		
-		cell.setUp(data: Calendar.getDummyList()[indexPath.row])
+		cell.setUp(data: viewModel.dailyList[indexPath.row])
 		cell.backgroundColor = R.Color.gray100
 
-		if indexPath.row == selectData.count - 1 {
+		if indexPath.row == viewModel.dailyList.count - 1 {
 			// 마지막 cell은 bottom border 제거
 			DispatchQueue.main.async {
 				cell.addAboveTheBottomBorderWithColor(color: R.Color.gray100)
@@ -372,11 +403,18 @@ extension HomeViewController: UITableViewDataSource {
 		return cell
 	}
 }
-//MARK: - UITableView Delegate
+//MARK: - UITableView Delegate, UIScrollView Delegate
 extension HomeViewController: UITableViewDelegate {
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		// 셀 터치시 회색 표시 없애기
 		tableView.deselectRow(at: indexPath, animated: true)
+	}
+}
+
+extension HomeViewController: HomeViewProtocol {
+	
+	func willPickerDismiss(_ date: Date) {
+		self.didSelectDate(date)
 	}
 }

@@ -11,6 +11,7 @@ target 'MMM' do
   pod 'SwiftKeychainWrapper'
   pod 'FSCalendar'
   pod 'Alamofire'
+  pod 'Kingfisher', '~> 7.0'
 
 
   target 'MMMTests' do

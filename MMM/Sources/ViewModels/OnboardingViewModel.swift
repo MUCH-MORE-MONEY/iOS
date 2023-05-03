@@ -73,7 +73,6 @@ final class OnboardingViewModel {
             }
         })
         .store(in: &cancellable)
-
     }
     
     /// JWTToken -> dictionary

@@ -14,6 +14,7 @@ class DatePickerViewController: UIViewController {
 	// MARK: - Properties
 	private lazy var cancellables: Set<AnyCancellable> = .init()
 	weak var delegate: BottomSheetChild?
+	weak var homeDelegate: HomeViewProtocol?
 
 	// MARK: - UI
 	private lazy var stackView = UIStackView() // 날짜 이동, 확인 Button
@@ -31,6 +32,7 @@ extension DatePickerViewController {
 	
 	func willDismiss() {
 		delegate?.willDismiss()
+		homeDelegate?.willPickerDismiss(datePicker.date)
 	}
 }
 

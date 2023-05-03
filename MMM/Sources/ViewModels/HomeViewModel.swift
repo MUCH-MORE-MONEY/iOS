@@ -7,14 +7,16 @@
 
 import Foundation
 import Combine
+import UIKit
 
 final class HomeViewModel {
 	// MARK: - Property Warraper
 	@Published var passwordInput: String = ""
 	@Published var passwordConfirmInput: String = ""
+	@Published var dailyList: [EconomicActivity] = []
 
 	// MARK: - Private properties
-	private var cancellables: Set<AnyCancellable> = .init()
+	private var cancellable: Set<AnyCancellable> = .init()
 	
 	// MARK: - Public properties
 	// 들어온 퍼블리셔들의 값 일치 여부를 반환하는 퍼블리셔
@@ -31,11 +33,35 @@ final class HomeViewModel {
 			}
 		})
 		.eraseToAnyPublisher()
+	
+	init() {
+		self.getDailyList(Date().getFormattedYMD())
+	}
 }
 
 //MARK: Action
 extension HomeViewModel {
-	
+	func getDailyList(_ dateYMD: String) {
+		guard let date = Int(dateYMD), let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.accessToken) else { return }
+		
+		APIClient.dispatch(APIRouter.SelectListDailyReqDto( headers: APIHeader.Default(token: "eyJ0eXBlIjoidG9rZW4iLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTm8iOiIwMDAwMDAwMDAxIiwiZW1haWwiOiJyb3VuZzQxMTlAZ21haWwuY29tIiwic3ViIjoidXNlciIsImV4cCI6MTY5ODA0MjM2Nn0.U6iaocEuVr86hl9kDp9ot_tkcRiDnb_Y7-ZWQ9fv_cs"), body: APIParameters.SelectListDailyReqDto(dateYMD: date)))
+			.sink(receiveCompletion: { error in
+				switch error {
+				case .failure(let data):
+					switch data {
+					default:
+						break
+					}
+				case .finished:
+					break
+				}
+			}, receiveValue: { [weak self] reponse in
+				guard let self = self, let dailyList = reponse.selectListDailyOutputDto else { return }
+//				print(#file, #function, #line, dailyList)
+				self.dailyList = dailyList
+			})
+			.store(in: &cancellable)
+	}
 }
 
 //MARK: State

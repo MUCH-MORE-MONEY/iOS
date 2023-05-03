@@ -25,6 +25,7 @@ final class OnboardingViewController: UIViewController {
         $0.bounces = false // 경계 지점 scroll 유무
         $0.contentSize.width = view.frame.width * CGFloat(2)
     }
+	
     private lazy var pageControl = UIPageControl().then {
         $0.numberOfPages = 2
         $0.pageIndicatorTintColor = R.Color.gray200

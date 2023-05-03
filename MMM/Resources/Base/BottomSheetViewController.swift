@@ -38,6 +38,7 @@ class BottomSheetViewController: UIViewController, BottomSheetChild {
 	private var isDrag: Bool = true
 	private var isExpended: Bool = false
 	private var isShadow: Bool = false
+	private var isDark: Bool = false
 
 	// MARK: - UI
 	// contentVC: 보여질 UIViewController
@@ -80,24 +81,27 @@ extension BottomSheetViewController {
 	/// isDrag : 드래그가 가능한지 (false: 불가능, default: true)
 	/// isExpended : 확장 가능한지 (false: 불가능, default: false)
 	/// isShadow : 그림자가 보이게 할것인지 (true: 보임, default: false)
-	func setSetting(height: CGFloat, isDrag: Bool = true, isExpended: Bool = false, isShadow: Bool = false) {
+	func setSetting(height: CGFloat, isDrag: Bool = true, isExpended: Bool = false, isShadow: Bool = false, isDark: Bool = false) {
 		self.defaultHeight = height
 		self.isDrag = isDrag
 		self.isExpended = isExpended
 		self.isShadow = isShadow
+		self.isDark = isDark
 	}
 	
 	/// percentHeight : 퍼센트로 높이 설정(0~1, 범위내 값이 아니면 설정 안됨, 1은 하지 말기),
 	/// isDrag : 드래그가 가능한지 (false: 불가능, default: true)
 	/// isExpended : 확장 가능한지 (false: 불가능, default: false)
 	/// isShadow : 그림자가 보이게 할것인지 (true: 보임, default: false)
-	func setSetting(percentHeight: CGFloat, isDrag: Bool = true, isExpended: Bool = false, isShadow: Bool = false) {
+	/// isDark : 다크모드일떄, 색상인지 (true: white, default: false)
+	func setSetting(percentHeight: CGFloat, isDrag: Bool = true, isExpended: Bool = false, isShadow: Bool = false, isDark: Bool = false) {
 		guard 0 < percentHeight && percentHeight <= 1 else { return }
 		
 		self.defaultHeight = view.frame.height * percentHeight
 		self.isDrag = isDrag
 		self.isExpended = isExpended
 		self.isShadow = isShadow
+		self.isDark = isDark
 	}
 	
 	func willDismiss() {
@@ -229,14 +233,14 @@ private extension BottomSheetViewController {
 		}
 		
 		bottomSheetInnerView = bottomSheetInnerView.then {
-			$0.backgroundColor = .white
+			$0.backgroundColor = isDark ? R.Color.gray900 : .white
 			$0.layer.cornerRadius = 16
 			$0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner] // 상단 왼쪽, 오른쪽 모서리에만 cornerRadius 적용
 			$0.clipsToBounds = true
 		}
 		
 		dragAreaView = dragAreaView.then {
-			$0.backgroundColor = R.Color.white
+			$0.backgroundColor = isDark ? R.Color.gray900 : .white
 		}
 		
 		dragIndicatorView = dragIndicatorView.then {

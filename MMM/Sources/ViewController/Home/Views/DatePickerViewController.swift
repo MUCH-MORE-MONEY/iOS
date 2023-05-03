@@ -13,6 +13,7 @@ import SnapKit
 class DatePickerViewController: UIViewController {
 	// MARK: - Properties
 	private lazy var cancellables: Set<AnyCancellable> = .init()
+	private var isDark: Bool = false
 	weak var delegate: BottomSheetChild?
 	weak var homeDelegate: HomeViewProtocol?
 
@@ -34,10 +35,14 @@ extension DatePickerViewController {
 		delegate?.willDismiss()
 		homeDelegate?.willPickerDismiss(datePicker.date)
 	}
+	
+	func setUp(isDark: Bool = false) {
+		self.isDark = isDark
+	}
 }
 
 //MARK: - Style & Layouts
-extension DatePickerViewController {
+private extension DatePickerViewController {
 	
 	func setup() {
 		// 초기 셋업할 코드들
@@ -53,7 +58,7 @@ extension DatePickerViewController {
 	}
 	
 	func setAttribute() {
-		self.view.backgroundColor = .white
+		self.view.backgroundColor = isDark ? R.Color.gray900 : .white
 		
 		stackView = stackView.then {
 			$0.axis = .horizontal
@@ -64,14 +69,14 @@ extension DatePickerViewController {
 		titleLabel = titleLabel.then {
 			$0.text = "날짜 이동"
 			$0.font = R.Font.h5
-			$0.textColor = R.Color.black
+			$0.textColor = isDark ? R.Color.gray200 : R.Color.black
 			$0.textAlignment = .left
 		}
 		
 		checkButton = checkButton.then {
 			$0.setTitle("확인", for: .normal)
-			$0.setTitleColor(R.Color.black, for: .normal)
-			$0.setTitleColor(R.Color.black.withAlphaComponent(0.7), for: .highlighted)
+			$0.setTitleColor(isDark ? R.Color.gray200 : R.Color.black, for: .normal)
+			$0.setTitleColor(isDark ? R.Color.gray200.withAlphaComponent(0.7) : R.Color.black.withAlphaComponent(0.7), for: .highlighted)
 			$0.contentHorizontalAlignment = .right
 			$0.titleLabel?.font = R.Font.title3
 			$0.contentEdgeInsets = .init(top: 10, left: 10, bottom: 10, right: 10)
@@ -80,6 +85,7 @@ extension DatePickerViewController {
 		datePicker = datePicker.then {
 			$0.preferredDatePickerStyle = .wheels
 			$0.datePickerMode = .date
+			$0.setValue(isDark ? R.Color.gray200 : R.Color.black, forKeyPath: "textColor")
 		}
 	}
 	

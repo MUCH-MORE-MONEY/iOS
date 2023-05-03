@@ -89,8 +89,9 @@ extension HomeViewController {
 		let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
 		picker.delegate = bottomSheetVC
 		picker.homeDelegate = self
+		picker.setUp(isDark: true)
 		bottomSheetVC.modalPresentationStyle = .overFullScreen
-		bottomSheetVC.setSetting(height: 375, isExpended: false, isShadow: true)
+		bottomSheetVC.setSetting(height: 375, isExpended: false, isShadow: true, isDark: true)
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
 	}
 }

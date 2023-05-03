@@ -128,13 +128,13 @@ private extension OnboardingViewController {
             $0.top.left.right.equalToSuperview()
             $0.bottom.equalTo(scrollView.snp.top).offset(464)
         }
-        
+        // 온보딩 이미지의 크기 변경 사항
         onboardingViews[0].snp.makeConstraints {
             $0.top.left.equalToSuperview()
             $0.width.equalToSuperview()
             $0.height.equalTo(464)
         }
-        
+        // 온보딩 이미지의 크기 변경 사항
         onboardingViews[1].snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.width.equalToSuperview()
@@ -143,7 +143,7 @@ private extension OnboardingViewController {
         }
         
         mainLabel1.snp.makeConstraints {
-            $0.top.equalTo(onboardingViews[0].snp.bottom).offset(32)
+            $0.top.equalTo(onboardingViews[0].snp.bottom).offset(24)
             $0.left.right.equalToSuperview()
         }
         
@@ -158,22 +158,21 @@ private extension OnboardingViewController {
         }
         
         pageControl.snp.makeConstraints {
-            $0.top.equalTo(subLabel.snp.bottom).offset(30)
+            $0.top.equalTo(subLabel.snp.bottom).offset(32)
             $0.centerX.equalToSuperview()
-        }
-        
-        appleButton.snp.makeConstraints {
-            $0.left.right.equalToSuperview().inset(24)
-            $0.top.equalTo(pageControl.snp.bottom).offset(24)
-            $0.height.equalTo(40)
         }
         
         guideButton.snp.makeConstraints {
             $0.left.right.equalToSuperview().inset(100)
-            $0.top.equalTo(appleButton.snp.bottom).offset(16)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(16)
+        }
+        
+        appleButton.snp.makeConstraints {
+            $0.left.right.equalToSuperview().inset(24)
+            $0.bottom.equalTo(guideButton.snp.top).offset(-16)
+            $0.height.equalTo(40)
         }
     }
-    
 }
 
 // MARK: - Actions

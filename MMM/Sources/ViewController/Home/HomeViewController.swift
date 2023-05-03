@@ -313,7 +313,7 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 //		if date.getFormattedDefault() == Date().getFormattedDefault() {
 //			return appearance.selectionColor
 //		}
-		return .clear
+		return appearance.selectionColor
 	}
 	
 	// 스크롤시, calendar 높이 조절

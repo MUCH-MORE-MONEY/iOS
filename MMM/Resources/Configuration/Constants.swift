@@ -14,7 +14,7 @@ final class Constants {
      # (E) KeychainKey
      */
     enum KeychainKey: String {
-        case accessToken
+        case token
         case authorization
         case email
     }

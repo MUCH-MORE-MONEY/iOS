@@ -22,7 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		
 		onboarding = OnboardingViewController()
 		// 로그인이 되어 있을 경우
-        if Constants.getKeychainValue(forKey: Constants.KeychainKey.accessToken) != nil {
+        if Constants.getKeychainValue(forKey: Constants.KeychainKey.token) != nil {
             let mainViewController = TabBarController()
             window?.rootViewController = mainViewController
         } else {

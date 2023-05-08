@@ -127,9 +127,6 @@ extension HomeViewController {
 		//MARK: output
 		viewModel.$dailyList
 			.sinkOnMainThread(receiveValue: { [weak self] daily in
-				if daily.isEmpty {
-					
-				}
 				self?.tableView.reloadData()
 			})
 			.store(in: &self.cancellable)

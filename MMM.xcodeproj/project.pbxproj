@@ -75,6 +75,7 @@
 		C44807E129E648D300D4B090 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44807E029E648D300D4B090 /* HomeViewController.swift */; };
 		C44807E329E649A300D4B090 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44807E229E649A300D4B090 /* HomeViewModel.swift */; };
 		C44807E529E7E76800D4B090 /* Ex+UIControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44807E429E7E76800D4B090 /* Ex+UIControl.swift */; };
+		C4D7FC872A08942E00565291 /* Monthly.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D7FC862A08942E00565291 /* Monthly.swift */; };
 		C4DBAA2C29DBCB8B00D1BB97 /* Ex+Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBAA2B29DBCB8B00D1BB97 /* Ex+Button.swift */; };
 		C4DBAA2E29DC16A400D1BB97 /* WithdrawViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBAA2D29DC16A400D1BB97 /* WithdrawViewController.swift */; };
 		C4DBAA3029DD459100D1BB97 /* WithdrawConfirmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBAA2F29DD459100D1BB97 /* WithdrawConfirmView.swift */; };
@@ -182,6 +183,7 @@
 		C44807E029E648D300D4B090 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		C44807E229E649A300D4B090 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		C44807E429E7E76800D4B090 /* Ex+UIControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIControl.swift"; sourceTree = "<group>"; };
+		C4D7FC862A08942E00565291 /* Monthly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Monthly.swift; sourceTree = "<group>"; };
 		C4DBAA2B29DBCB8B00D1BB97 /* Ex+Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Button.swift"; sourceTree = "<group>"; };
 		C4DBAA2D29DC16A400D1BB97 /* WithdrawViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawViewController.swift; sourceTree = "<group>"; };
 		C4DBAA2F29DD459100D1BB97 /* WithdrawConfirmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawConfirmView.swift; sourceTree = "<group>"; };
@@ -476,6 +478,7 @@
 			children = (
 				6A08B47E29FF60EB0080719E /* Responses */,
 				C433A07029EE5516008B26DF /* EconomicActivity.swift */,
+				C4D7FC862A08942E00565291 /* Monthly.swift */,
 				6A1880CA29EF85EA00D62F1A /* OnboardingItem.swift */,
 				6A1880C829EF85BB00D62F1A /* TabItem.swift */,
 			);
@@ -869,6 +872,7 @@
 				C433A07129EE5516008B26DF /* EconomicActivity.swift in Sources */,
 				C41193E429D287E6003DBC15 /* Ex+Font.swift in Sources */,
 				C41193E529D287E6003DBC15 /* Ex+UIDevice.swift in Sources */,
+				C4D7FC872A08942E00565291 /* Monthly.swift in Sources */,
 				C411940729D53EA0003DBC15 /* NavigationController.swift in Sources */,
 				C4199DDF2A00B3FE006E5DA8 /* HomeEmptyView.swift in Sources */,
 				C41193F329D3AED5003DBC15 /* ProfileView.swift in Sources */,

@@ -45,7 +45,7 @@ extension TabBarController {
 		let homeTabItem = UITabBarItem(title: "소비", image: R.Icon.iconMoneyInActive, selectedImage: R.Icon.iconMoneyActive)
 		homeVC.tabBarItem = homeTabItem
 		
-        let addVC = NavigationController(rootViewController: AddViewController())
+        let addVC = NavigationController(rootViewController: DetailViewController())
         addVC.tabBarItem.image = R.Icon.iconPlus
         
         

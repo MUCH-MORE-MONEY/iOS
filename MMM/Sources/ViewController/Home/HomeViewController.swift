@@ -132,7 +132,8 @@ extension HomeViewController {
 			.store(in: &self.cancellable)
 		
 		viewModel.$monthlyList
-			.sinkOnMainThread(receiveValue: { [weak self] daily in
+			.sinkOnMainThread(receiveValue: { [weak self] monthly in
+				self?.calendarHeaderView.setUp(pay: monthly.reduce(0){$0 + $1.pay}, earn: monthly.reduce(0){$0 + $1.earn})
 				self?.calendar.reloadData()
 			})
 			.store(in: &self.cancellable)
@@ -200,10 +201,6 @@ extension HomeViewController {
 		
 		separator = separator.then {
 			$0.backgroundColor = R.Color.gray800
-		}
-		
-		calendarHeaderView = calendarHeaderView.then {
-			$0.setUp(pay: 200000, earn: 21230)
 		}
 		
 		calendar = calendar.then {

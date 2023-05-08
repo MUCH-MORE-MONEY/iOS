@@ -80,7 +80,7 @@ extension HomeViewModel {
 					break
 				}
 			}, receiveValue: { [weak self] reponse in
-				guard let self = self, let monthlyList = reponse.selectListMonthlyOutputDto else { return }
+				guard let self = self, let monthlyList = reponse.monthly else { return }
 //				print(#file, #function, #line, monthlyList)
 				self.monthlyList = monthlyList
 			})

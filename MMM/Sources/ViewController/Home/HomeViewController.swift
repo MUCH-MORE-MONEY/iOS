@@ -298,10 +298,6 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 	// 캘린더 선택
 	func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
 		guard preDate.getFormattedYMD() != date.getFormattedYMD() else { return } // 같은 날짜를 선택할 경우
-				
-		if preDate.getFormattedYM() != date.getFormattedYM() { // 다른 달인 경우
-			viewModel.getMonthlyList(date.getFormattedYM())
-		}
 		
 		dayLabel.text = date.getFormattedDate(format: "dd일 (EEEEE)") // 선택된 날짜
 		viewModel.getDailyList(date.getFormattedYMD())

@@ -19,7 +19,7 @@ class HomeViewController: UIViewController {
 	// MARK: - Properties
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 	private let viewModel = HomeViewModel()
-	private lazy var preDate = Date().getFormattedYMD() // yyyyMMdd
+	private lazy var preDate = Date() // yyyyMMdd
 	
 	// MARK: - UI Components
 	private lazy var monthButtonItem = UIBarButtonItem()
@@ -79,7 +79,7 @@ extension HomeViewController {
 	func didSelectDate(_ date: Date) {
 		self.calendar.select(date)
 		self.dayLabel.text = date.getFormattedDate(format: "dd일 (EEEEE)") // 선택된 날짜
-		self.preDate = date.getFormattedYMD()
+		self.preDate = date
 		self.viewModel.getDailyList(date.getFormattedYMD())
 	}
 	
@@ -128,6 +128,12 @@ extension HomeViewController {
 		viewModel.$dailyList
 			.sinkOnMainThread(receiveValue: { [weak self] daily in
 				self?.tableView.reloadData()
+			})
+			.store(in: &self.cancellable)
+		
+		viewModel.$monthlyList
+			.sinkOnMainThread(receiveValue: { [weak self] daily in
+				self?.calendar.reloadData()
 			})
 			.store(in: &self.cancellable)
 		
@@ -294,11 +300,15 @@ extension HomeViewController {
 extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 	// 캘린더 선택
 	func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-		guard preDate != date.getFormattedYMD() else { return } // 같은 날짜를 선택할 경우
+		guard preDate.getFormattedYMD() != date.getFormattedYMD() else { return } // 같은 날짜를 선택할 경우
+				
+		if preDate.getFormattedYM() != date.getFormattedYM() { // 다른 달인 경우
+			viewModel.getMonthlyList(date.getFormattedYM())
+		}
 		
 		dayLabel.text = date.getFormattedDate(format: "dd일 (EEEEE)") // 선택된 날짜
 		viewModel.getDailyList(date.getFormattedYMD())
-		preDate = date.getFormattedYMD() // 이전 날짜로 저장
+		preDate = date // 이전 날짜로 저장
 		
 		if monthPosition == .next || monthPosition == .previous {
 			calendar.setCurrentPage(date, animated: true)

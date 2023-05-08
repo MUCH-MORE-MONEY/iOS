@@ -14,6 +14,7 @@ final class HomeViewModel {
 	@Published var passwordInput: String = ""
 	@Published var passwordConfirmInput: String = ""
 	@Published var dailyList: [EconomicActivity] = []
+	@Published var monthlyList: [Monthly] = []
 
 	// MARK: - Private properties
 	private var cancellable: Set<AnyCancellable> = .init()
@@ -80,8 +81,8 @@ extension HomeViewModel {
 				}
 			}, receiveValue: { [weak self] reponse in
 				guard let self = self, let monthlyList = reponse.selectListMonthlyOutputDto else { return }
-				print(#file, #function, #line, monthlyList)
-//				self.dailyList = dailyList
+//				print(#file, #function, #line, monthlyList)
+				self.monthlyList = monthlyList
 			})
 			.store(in: &cancellable)
 	}

@@ -338,6 +338,8 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 
 	// page가 변경될때 month 변경
 	func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
+		viewModel.getMonthlyList(calendar.currentPage.getFormattedYM())
+		
 		if Date().getFormattedDate(format: "yyyy") != calendar.currentPage.getFormattedDate(format: "yyyy") {
 			monthButton.setTitle(calendar.currentPage.getFormattedDate(format: "yyyy년 M월"), for: .normal)
 		} else {

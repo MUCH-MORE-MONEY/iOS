@@ -215,11 +215,14 @@ extension HomeViewController {
 			$0.appearance.titleTodayColor = R.Color.white
 			$0.appearance.titleDefaultColor = R.Color.gray300 	// 달력의 평일 날짜 색깔
 			$0.appearance.titleFont = R.Font.body5				// 달력의 평일 글자 폰트
+			$0.appearance.titleOffset = .init(x: 0, y: 8)
+			$0.appearance.titlePlaceholderColor = R.Color.gray300.withAlphaComponent(0.5) // 달에 유효하지 않은 날짜의 색 지정
 			$0.appearance.weekdayTextColor = R.Color.gray100	// 달력의 요일 글자 색깔
 			$0.appearance.weekdayFont = R.Font.body5			// 달력의 요일 글자 폰트
 			$0.appearance.headerMinimumDissolvedAlpha = 0		// 년월에 흐릿하게 보이는 애들 없애기
-			$0.appearance.titlePlaceholderColor = R.Color.gray300.withAlphaComponent(0.5) // 달에 유효하지 않은 날짜의 색 지정
-			$0.appearance.subtitleOffset = CGPoint(x: 0, y: 6)	// 캘린더 숫자와 subtitle간의 간격 조정
+			$0.appearance.subtitleFont = R.Font.prtendard(size: 9)
+			$0.appearance.subtitleDefaultColor = R.Color.gray300
+			$0.appearance.subtitleOffset = CGPoint(x: 0, y: 22)	// 캘린더 숫자와 subtitle간의 간격 조정
 			$0.placeholderType = .none							// 달에 유효하지않은 날짜 지우기
 		}
 		

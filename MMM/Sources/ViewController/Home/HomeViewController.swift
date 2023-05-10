@@ -355,6 +355,16 @@ extension HomeViewController: FSCalendarDelegateAppearance {
 	func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, fillDefaultColorFor date: Date) -> UIColor? {
 		return nil
 	}
+	
+	// 선택시, title 색상
+	func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleSelectionColorFor date: Date) -> UIColor? {
+		return viewModel.monthlyList.contains(where: {$0.createAt == date.getFormattedYMD()}) ? R.Color.gray900 : R.Color.gray300
+	}
+	
+	// 선택시, subtitle 색상
+	func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, subtitleSelectionColorFor date: Date) -> UIColor? {
+		return R.Color.gray300
+	}
 }
 
 //MARK: - UIGesture Recognizer Delegate

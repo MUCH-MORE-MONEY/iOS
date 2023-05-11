@@ -8,16 +8,16 @@
 import Foundation
 
 struct EconomicActivityDetail: Codable {
-    let id: String
-    let amount: String
-    let type: String
-    let groupName: String
-    let groupNo: String
-    let title: String
-    let memo: String
-    let createAt: String
-    let imageUrl: String
-    let star: Int
+    let id: String              // 고유 id
+    let amount: String          // 수입/지출에 대한 양
+    let type: String            // 수입(01)/지출(02)
+    let groupName: String       // 속해 있는 그룹 이름
+    let groupNo: String         // 속해 있는 그룹 number
+    let title: String           // 제목
+    let memo: String            // subtitle
+    let createAt: String        // 생성일
+    let imageUrl: String        // image url
+    let star: Int               // 별 개수
     
     enum CodingKeys: String, CodingKey {
         case id = "economicActivityNo"

@@ -30,6 +30,7 @@ final class CalendarCell: FSCalendarCell {
 	
 	// 재활용 셀 중접오류 해결
 	override func prepareForReuse() {
+		super.prepareForReuse()
 		self.selectionLayer.fillColor = nil
 		self.borderLayer.isHidden = true
 	}

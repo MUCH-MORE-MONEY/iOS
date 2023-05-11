@@ -8,6 +8,7 @@
 import UIKit
 import Then
 import SnapKit
+import Combine
 
 class DetailViewController: BaseDetailViewController {
     // MARK: - UI Components
@@ -28,8 +29,10 @@ class DetailViewController: BaseDetailViewController {
     }
     
     // MARK: - Properties
+    private var viewModel = HomeDetailViewModel()
     private var economicActivityId: [String] = []
     private var index: Int = 0
+    private var cancellable = Set<AnyCancellable>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,15 +47,26 @@ extension DetailViewController {
     }
     
     private func setup() {
+        bind()
         setAttribute()
         setLayout()
     }
     
+    private func bind() {
+        viewModel.$detailActivity
+            .sinkOnMainThread { [weak self] value in
+                guard let self = self, let value = value else { return }
+                self.titleLabel.text = value.title
+            }.store(in: &cancellable)
+        
+        viewModel.fetchDetailActivity(id: economicActivityId[index])
+    }
+    
     private func setAttribute() {
-        titleLabel.text = "스타벅스 나들이를 해봤습니다!"
+        
+
         navigationItem.rightBarButtonItem = editButton
         view.addSubviews(starContainer, titleLabel)
-        title = economicActivityId[index]
     }
     
     private func setLayout() {
@@ -68,5 +82,6 @@ extension DetailViewController {
 private extension DetailViewController {
     @objc func didTapEditButton(_ sener: UITapGestureRecognizer) {
         print("edit Tapped")
+        print(viewModel.detailActivity?.title)
     }
 }

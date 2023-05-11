@@ -39,9 +39,11 @@ final class APIRouter {
         typealias ReturnType = SelectDetailResDto
         var path: String = "/economic_activity/detail/select"
         var method: HTTPMethod = .post
+        var headers: [String : String]?
         var body: [String: Any]?
         
-        init(body: APIParameters.SelectDetailReqDto) {
+        init(headers: APIHeader.Default, body: APIParameters.SelectDetailReqDto) {
+            self.headers = headers.asDictionary as? [String: String]
             self.body = body.asDictionary
         }
     }

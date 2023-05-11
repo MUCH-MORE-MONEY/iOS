@@ -212,9 +212,10 @@ extension HomeViewController {
 			$0.today = nil										// default 오늘 표시 제거
 			$0.headerHeight = 8									// deafult header 제거
 			$0.calendarHeaderView.isHidden = true				// deafult header 제거
+			$0.placeholderType = .none							// 달에 유효하지않은 날짜 지우기
 			$0.appearance.titleTodayColor = R.Color.white
 			$0.appearance.titleDefaultColor = R.Color.gray300 	// 달력의 평일 날짜 색깔
-			$0.appearance.titleFont = R.Font.body5				// 달력의 평일 글자 폰트
+			$0.appearance.titleFont = R.Font.body4				// 달력의 평일 글자 폰트
 			$0.appearance.titleOffset = .init(x: 0, y: 8)
 			$0.appearance.titlePlaceholderColor = R.Color.gray300.withAlphaComponent(0.5) // 달에 유효하지 않은 날짜의 색 지정
 			$0.appearance.weekdayTextColor = R.Color.gray100	// 달력의 요일 글자 색깔
@@ -223,7 +224,7 @@ extension HomeViewController {
 			$0.appearance.subtitleFont = R.Font.prtendard(size: 9)
 			$0.appearance.subtitleDefaultColor = R.Color.gray300
 			$0.appearance.subtitleOffset = CGPoint(x: 0, y: 22)	// 캘린더 숫자와 subtitle간의 간격 조정
-			$0.placeholderType = .none							// 달에 유효하지않은 날짜 지우기
+			$0.register(CalendarCell.self, forCellReuseIdentifier: "CalendarCell")
 		}
 		
 		scopeGesture = scopeGesture.then {
@@ -276,7 +277,7 @@ extension HomeViewController {
 		calendar.snp.makeConstraints {
 			$0.top.equalTo(calendarHeaderView.snp.bottom)
 			$0.left.right.equalTo(view.safeAreaLayoutGuide)
-			$0.height.equalTo(268)
+			$0.height.equalTo(300)
 		}
 
 		dayLabel.snp.makeConstraints {
@@ -298,6 +299,22 @@ extension HomeViewController {
 
 //MARK: - FSCalendar DataSource, Delegate
 extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
+	// 셀 정의
+	func calendar(_ calendar: FSCalendar, cellFor date: Date, at position: FSCalendarMonthPosition) -> FSCalendarCell {
+		let cell = calendar.dequeueReusableCell(withIdentifier: "CalendarCell", for: date, at: position) as! CalendarCell
+		
+		if viewModel.monthlyList.contains(where: {$0.createAt == date.getFormattedYMD()}) {
+			cell.setUp(color: R.Color.red500)
+		}
+		
+		// 오늘 날짜 border 처리
+		if Date().getFormattedYMD() == date.getFormattedYMD() {
+			cell.setUp(color: .clear, isToday: true)
+		}
+		
+		return cell
+	}
+	
 	// 캘린더 선택
 	func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
 		guard preDate.getFormattedYMD() != date.getFormattedYMD() else { return } // 같은 날짜를 선택할 경우
@@ -311,12 +328,13 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 		}
 	}
 	
-	//날짜별로 선택 컬러 변경
-	func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, fillSelectionColorFor date: Date) -> UIColor? {
-//		if date.getFormattedDefault() == Date().getFormattedDefault() {
-//			return appearance.selectionColor
-//		}
-		return appearance.selectionColor
+	// subTitle (수익/지출)
+	func calendar(_ calendar: FSCalendar, subtitleFor date: Date) -> String? {
+		if let index = viewModel.monthlyList.firstIndex(where: {$0.createAt == date.getFormattedYMD()}) {
+			return viewModel.monthlyList[index].total.withCommasAndPlus()
+		}
+		
+		return ""
 	}
 	
 	// 스크롤시, calendar 높이 조절
@@ -326,7 +344,7 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 		}
 		
 		calendarHeaderView.snp.updateConstraints {
-			$0.height.equalTo(bounds.height <= 268 / 2 ? 0 : 46) // calendar 전체 높이에 따른 높이 변경
+			$0.height.equalTo(bounds.height <= 300 / 2 ? 0 : 46) // calendar 전체 높이에 따른 높이 변경
 		}
 		
 		self.view.layoutIfNeeded()
@@ -335,6 +353,11 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 	// page가 변경될때 month 변경
 	func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
 		viewModel.getMonthlyList(calendar.currentPage.getFormattedYM())
+
+//		calendar.snp.updateConstraints {
+//			$0.height.equalTo(350)
+//		}
+//		calendar.adjustsBoundingRectWhenChangingMonths = true
 		
 		if Date().getFormattedDate(format: "yyyy") != calendar.currentPage.getFormattedDate(format: "yyyy") {
 			monthButton.setTitle(calendar.currentPage.getFormattedDate(format: "yyyy년 M월"), for: .normal)
@@ -347,18 +370,26 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 //MARK: - FSCalendar Delegate Appearance
 extension HomeViewController: FSCalendarDelegateAppearance {
 	
-	// 오늘 날짜에 대한 border
-	func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, borderDefaultColorFor date: Date) -> UIColor? {
-		return date.getFormattedDefault() == Date().getFormattedDefault() ? R.Color.white : appearance.borderDefaultColor
-	}
-	
-	func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, fillDefaultColorFor date: Date) -> UIColor? {
-		return nil
+	// 기본 cell title 색상
+	func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
+		if viewModel.monthlyList.contains(where: {$0.createAt == date.getFormattedYMD()}) {
+			return R.Color.gray900
+		} else if date.getFormattedYMD() == Date().getFormattedYMD() {
+			return R.Color.white
+		} else {
+			return R.Color.gray300
+		}
 	}
 	
 	// 선택시, title 색상
 	func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleSelectionColorFor date: Date) -> UIColor? {
-		return viewModel.monthlyList.contains(where: {$0.createAt == date.getFormattedYMD()}) ? R.Color.gray900 : R.Color.gray300
+		if viewModel.monthlyList.contains(where: {$0.createAt == date.getFormattedYMD()}) {
+			return R.Color.gray900
+		} else if date.getFormattedYMD() == Date().getFormattedYMD() {
+			return R.Color.white
+		} else {
+			return R.Color.gray300
+		}
 	}
 	
 	// 선택시, subtitle 색상

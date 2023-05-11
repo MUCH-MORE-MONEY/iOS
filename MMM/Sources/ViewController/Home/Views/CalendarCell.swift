@@ -46,8 +46,15 @@ final class CalendarCell: FSCalendarCell {
 		
 		self.selectionLayer.path = UIBezierPath(ovalIn: CGRect(x: x, y: y, width: diameter, height: diameter)).cgPath // 기본 선택에 대한 동그라미 path
 		self.borderLayer.path = UIBezierPath(roundedRect: CGRect(x: x, y: y, width: diameter, height: diameter), byRoundingCorners: .allCorners, cornerRadii: CGSize(width: 12, height: 12)).cgPath // 오늘 날짜의 border
-
-
+	}
+	
+	override func configureAppearance() {
+		super.configureAppearance()
+		
+		if self.dateIsToday {
+			// 오늘날짜에 대한 font
+			self.titleLabel.font = R.Font.body4
+		}
 	}
 }
 

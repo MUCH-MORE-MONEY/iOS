@@ -209,13 +209,13 @@ extension HomeViewController {
 			$0.delegate = self
 			$0.dataSource = self
 			$0.select(Date())
-			$0.today = nil										// default 오늘 표시 제거
+			$0.today = Date()										// default 오늘 표시 제거
 			$0.headerHeight = 8									// deafult header 제거
 			$0.calendarHeaderView.isHidden = true				// deafult header 제거
 			$0.placeholderType = .none							// 달에 유효하지않은 날짜 지우기
 			$0.appearance.titleTodayColor = R.Color.white
 			$0.appearance.titleDefaultColor = R.Color.gray300 	// 달력의 평일 날짜 색깔
-			$0.appearance.titleFont = R.Font.body4				// 달력의 평일 글자 폰트
+			$0.appearance.titleFont = R.Font.body5				// 달력의 평일 글자 폰트
 			$0.appearance.titleOffset = .init(x: 0, y: 8)
 			$0.appearance.titlePlaceholderColor = R.Color.gray300.withAlphaComponent(0.5) // 달에 유효하지 않은 날짜의 색 지정
 			$0.appearance.weekdayTextColor = R.Color.gray100	// 달력의 요일 글자 색깔

@@ -303,13 +303,10 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 	func calendar(_ calendar: FSCalendar, cellFor date: Date, at position: FSCalendarMonthPosition) -> FSCalendarCell {
 		let cell = calendar.dequeueReusableCell(withIdentifier: "CalendarCell", for: date, at: position) as! CalendarCell
 		
-		if viewModel.monthlyList.contains(where: {$0.createAt == date.getFormattedYMD()}) {
-			cell.setUp(color: R.Color.red500)
-		}
+		cell.setUp(color: .clear, isToday: Date().getFormattedYMD() == date.getFormattedYMD())
 		
-		// 오늘 날짜 border 처리
-		if Date().getFormattedYMD() == date.getFormattedYMD() {
-			cell.setUp(color: .clear, isToday: true)
+		if viewModel.monthlyList.contains(where: {$0.createAt == date.getFormattedYMD()}) {
+			cell.setUp(color: R.Color.orange200, isToday: Date().getFormattedYMD() == date.getFormattedYMD())
 		}
 		
 		return cell

@@ -28,6 +28,8 @@
 		6A1880CB29EF85EA00D62F1A /* OnboardingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1880CA29EF85EA00D62F1A /* OnboardingItem.swift */; };
 		6A1BAD4529E6550100818086 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1BAD4429E6550100818086 /* OnboardingViewModel.swift */; };
 		6A381E0A29E8F40700E0974F /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A381E0929E8F40700E0974F /* AddViewController.swift */; };
+		6A626BC12A0C7EE700BDD5C0 /* SelectDetailResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A626BC02A0C7EE700BDD5C0 /* SelectDetailResDto.swift */; };
+		6A626BC32A0C7F8B00BDD5C0 /* EconomicActivityDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A626BC22A0C7F8B00BDD5C0 /* EconomicActivityDetail.swift */; };
 		6A8B776329FF92CC0095ECFC /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8B776229FF92CC0095ECFC /* Constants.swift */; };
 		6A8B776529FF93530095ECFC /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8B776429FF93530095ECFC /* APIConstants.swift */; };
 		6AB1150F29EE372F00D3B813 /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB1150E29EE372F00D3B813 /* CustomTabBar.swift */; };
@@ -131,6 +133,8 @@
 		6A1880CA29EF85EA00D62F1A /* OnboardingItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingItem.swift; sourceTree = "<group>"; };
 		6A1BAD4429E6550100818086 /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
 		6A381E0929E8F40700E0974F /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
+		6A626BC02A0C7EE700BDD5C0 /* SelectDetailResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectDetailResDto.swift; sourceTree = "<group>"; };
+		6A626BC22A0C7F8B00BDD5C0 /* EconomicActivityDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EconomicActivityDetail.swift; sourceTree = "<group>"; };
 		6A8B776229FF92CC0095ECFC /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		6A8B776429FF93530095ECFC /* APIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConstants.swift; sourceTree = "<group>"; };
 		6AB1150E29EE372F00D3B813 /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
@@ -244,6 +248,7 @@
 			children = (
 				6A12144629FA0C300076848A /* AppleLoginResDto.swift */,
 				C4199DDC2A001001006E5DA8 /* EconomicActivityResDto.swift */,
+				6A626BC02A0C7EE700BDD5C0 /* SelectDetailResDto.swift */,
 			);
 			path = Responses;
 			sourceTree = "<group>";
@@ -499,6 +504,7 @@
 			children = (
 				6A08B47E29FF60EB0080719E /* Responses */,
 				C433A07029EE5516008B26DF /* EconomicActivity.swift */,
+				6A626BC22A0C7F8B00BDD5C0 /* EconomicActivityDetail.swift */,
 				6A1880CA29EF85EA00D62F1A /* OnboardingItem.swift */,
 				6A1880C829EF85BB00D62F1A /* TabItem.swift */,
 			);
@@ -847,6 +853,7 @@
 				C41193F529D3D7FB003DBC15 /* Ex+NSObject.swift in Sources */,
 				6A08B47D29FF5D530080719E /* Log.swift in Sources */,
 				6AB1150F29EE372F00D3B813 /* CustomTabBar.swift in Sources */,
+				6A626BC32A0C7F8B00BDD5C0 /* EconomicActivityDetail.swift in Sources */,
 				C411940B29DAEDF9003DBC15 /* CustomAlertViewController.swift in Sources */,
 				C4DBAA3029DD459100D1BB97 /* WithdrawConfirmView.swift in Sources */,
 				C41193FD29D42BD9003DBC15 /* ProfileFooterView.swift in Sources */,
@@ -901,6 +908,7 @@
 				C4199DDF2A00B3FE006E5DA8 /* HomeEmptyView.swift in Sources */,
 				C41193F329D3AED5003DBC15 /* ProfileView.swift in Sources */,
 				6A0D108529D3D209009D6DCA /* OnboardingView.swift in Sources */,
+				6A626BC12A0C7EE700BDD5C0 /* SelectDetailResDto.swift in Sources */,
 				C41193F729D3D954003DBC15 /* Ex+UITableView.swift in Sources */,
 				C433A06D29EE53BB008B26DF /* HomeTableViewCell.swift in Sources */,
 				C411939029D2817C003DBC15 /* SceneDelegate.swift in Sources */,

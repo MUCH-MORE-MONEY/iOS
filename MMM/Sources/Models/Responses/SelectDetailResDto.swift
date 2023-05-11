@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct SelectDetailResDto {
+struct SelectDetailResDto: Codable {
     var selectDetailOutputDto: EconomicActivityDetail
 }

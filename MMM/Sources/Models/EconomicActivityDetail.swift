@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct EconomicActivityDetail {
+struct EconomicActivityDetail: Codable {
     let id: String
     let amount: String
     let type: String

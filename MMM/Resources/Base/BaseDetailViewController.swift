@@ -21,7 +21,7 @@ class BaseDetailViewController: BaseViewController {
         $0.alignment = .center
     }
     
-    private lazy var totalPrice = UILabel().then {
+    lazy var totalPrice = UILabel().then {
         $0.font = R.Font.h2
         $0.textColor = R.Color.gray100
     }

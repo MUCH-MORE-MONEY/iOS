@@ -274,7 +274,7 @@ private extension BottomSheetViewController {
 		dragAreaView.snp.makeConstraints {
 			$0.top.equalToSuperview()
 			$0.leading.trailing.equalTo(view.safeAreaInsets)
-			$0.height.equalTo(34)
+			$0.height.equalTo(32)
 		}
 		
 		dragIndicatorView.snp.makeConstraints {

@@ -33,4 +33,13 @@ extension Date {
 		dateformat.dateFormat = "yyyyMMdd"
 		return dateformat.string(from: self)
 	}
+	
+	/// format: yyMM
+	func getFormattedYM() -> String {
+		let dateformat = DateFormatter()
+		dateformat.locale = Locale(identifier: "ko_KR")
+		dateformat.timeZone = TimeZone(abbreviation: "KST")
+		dateformat.dateFormat = "yyyyMM"
+		return dateformat.string(from: self)
+	}
 }

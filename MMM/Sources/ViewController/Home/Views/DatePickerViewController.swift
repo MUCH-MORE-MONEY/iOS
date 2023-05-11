@@ -10,7 +10,7 @@ import Combine
 import Then
 import SnapKit
 
-class DatePickerViewController: UIViewController {
+final class DatePickerViewController: UIViewController {
 	// MARK: - Properties
 	private lazy var cancellables: Set<AnyCancellable> = .init()
 	private var isDark: Bool = false

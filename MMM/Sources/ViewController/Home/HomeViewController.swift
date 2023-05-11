@@ -19,7 +19,7 @@ class HomeViewController: UIViewController {
 	// MARK: - Properties
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 	private let viewModel = HomeViewModel()
-	private lazy var preDate = Date().getFormattedYMD() // yyyyMMdd
+	private lazy var preDate = Date() // yyyyMMdd
 	
 	// MARK: - UI Components
 	private lazy var monthButtonItem = UIBarButtonItem()
@@ -79,7 +79,7 @@ extension HomeViewController {
 	func didSelectDate(_ date: Date) {
 		self.calendar.select(date)
 		self.dayLabel.text = date.getFormattedDate(format: "dd일 (EEEEE)") // 선택된 날짜
-		self.preDate = date.getFormattedYMD()
+		self.preDate = date
 		self.viewModel.getDailyList(date.getFormattedYMD())
 	}
 	
@@ -90,7 +90,7 @@ extension HomeViewController {
 		picker.delegate = bottomSheetVC
 		picker.homeDelegate = self
 		bottomSheetVC.modalPresentationStyle = .overFullScreen
-		bottomSheetVC.setSetting(height: 375, isExpended: false, isShadow: true)
+		bottomSheetVC.setSetting(height: 375)
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
 	}
 }
@@ -127,10 +127,14 @@ extension HomeViewController {
 		//MARK: output
 		viewModel.$dailyList
 			.sinkOnMainThread(receiveValue: { [weak self] daily in
-				if daily.isEmpty {
-					
-				}
 				self?.tableView.reloadData()
+			})
+			.store(in: &self.cancellable)
+		
+		viewModel.$monthlyList
+			.sinkOnMainThread(receiveValue: { [weak self] monthly in
+				self?.calendarHeaderView.setUp(pay: monthly.reduce(0){$0 + $1.pay}, earn: monthly.reduce(0){$0 + $1.earn})
+				self?.calendar.reloadData()
 			})
 			.store(in: &self.cancellable)
 		
@@ -199,28 +203,28 @@ extension HomeViewController {
 			$0.backgroundColor = R.Color.gray800
 		}
 		
-		calendarHeaderView = calendarHeaderView.then {
-			$0.setUp(pay: 200000, earn: 21230)
-		}
-		
 		calendar = calendar.then {
 			$0.backgroundColor = R.Color.gray900
 			$0.scope = .month									// 한달 단위(기본값)로 보여주기
 			$0.delegate = self
 			$0.dataSource = self
 			$0.select(Date())
-			$0.today = nil										// default 오늘 표시 제거
+			$0.today = Date()										// default 오늘 표시 제거
 			$0.headerHeight = 8									// deafult header 제거
 			$0.calendarHeaderView.isHidden = true				// deafult header 제거
+			$0.placeholderType = .none							// 달에 유효하지않은 날짜 지우기
 			$0.appearance.titleTodayColor = R.Color.white
 			$0.appearance.titleDefaultColor = R.Color.gray300 	// 달력의 평일 날짜 색깔
 			$0.appearance.titleFont = R.Font.body5				// 달력의 평일 글자 폰트
+			$0.appearance.titleOffset = .init(x: 0, y: 8)
+			$0.appearance.titlePlaceholderColor = R.Color.gray300.withAlphaComponent(0.5) // 달에 유효하지 않은 날짜의 색 지정
 			$0.appearance.weekdayTextColor = R.Color.gray100	// 달력의 요일 글자 색깔
 			$0.appearance.weekdayFont = R.Font.body5			// 달력의 요일 글자 폰트
 			$0.appearance.headerMinimumDissolvedAlpha = 0		// 년월에 흐릿하게 보이는 애들 없애기
-			$0.appearance.titlePlaceholderColor = R.Color.gray300.withAlphaComponent(0.5) // 달에 유효하지 않은 날짜의 색 지정
-			$0.appearance.subtitleOffset = CGPoint(x: 0, y: 6)	// 캘린더 숫자와 subtitle간의 간격 조정
-			$0.placeholderType = .none							// 달에 유효하지않은 날짜 지우기
+			$0.appearance.subtitleFont = R.Font.prtendard(size: 9)
+			$0.appearance.subtitleDefaultColor = R.Color.gray300
+			$0.appearance.subtitleOffset = CGPoint(x: 0, y: 22)	// 캘린더 숫자와 subtitle간의 간격 조정
+			$0.register(CalendarCell.self, forCellReuseIdentifier: "CalendarCell")
 		}
 		
 		scopeGesture = scopeGesture.then {
@@ -273,7 +277,7 @@ extension HomeViewController {
 		calendar.snp.makeConstraints {
 			$0.top.equalTo(calendarHeaderView.snp.bottom)
 			$0.left.right.equalTo(view.safeAreaLayoutGuide)
-			$0.height.equalTo(268)
+			$0.height.equalTo(300)
 		}
 
 		dayLabel.snp.makeConstraints {
@@ -295,25 +299,39 @@ extension HomeViewController {
 
 //MARK: - FSCalendar DataSource, Delegate
 extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
+	// 셀 정의
+	func calendar(_ calendar: FSCalendar, cellFor date: Date, at position: FSCalendarMonthPosition) -> FSCalendarCell {
+		let cell = calendar.dequeueReusableCell(withIdentifier: "CalendarCell", for: date, at: position) as! CalendarCell
+		
+		cell.setUp(color: .clear, isToday: Date().getFormattedYMD() == date.getFormattedYMD())
+		
+		if viewModel.monthlyList.contains(where: {$0.createAt == date.getFormattedYMD()}) {
+			cell.setUp(color: R.Color.orange200, isToday: Date().getFormattedYMD() == date.getFormattedYMD())
+		}
+		
+		return cell
+	}
+	
 	// 캘린더 선택
 	func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-		guard preDate != date.getFormattedYMD() else { return } // 같은 날짜를 선택할 경우
+		guard preDate.getFormattedYMD() != date.getFormattedYMD() else { return } // 같은 날짜를 선택할 경우
 		
 		dayLabel.text = date.getFormattedDate(format: "dd일 (EEEEE)") // 선택된 날짜
 		viewModel.getDailyList(date.getFormattedYMD())
-		preDate = date.getFormattedYMD() // 이전 날짜로 저장
+		preDate = date // 이전 날짜로 저장
 		
 		if monthPosition == .next || monthPosition == .previous {
 			calendar.setCurrentPage(date, animated: true)
 		}
 	}
 	
-	//날짜별로 선택 컬러 변경
-	func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, fillSelectionColorFor date: Date) -> UIColor? {
-//		if date.getFormattedDefault() == Date().getFormattedDefault() {
-//			return appearance.selectionColor
-//		}
-		return appearance.selectionColor
+	// subTitle (수익/지출)
+	func calendar(_ calendar: FSCalendar, subtitleFor date: Date) -> String? {
+		if let index = viewModel.monthlyList.firstIndex(where: {$0.createAt == date.getFormattedYMD()}) {
+			return viewModel.monthlyList[index].total.withCommasAndPlus()
+		}
+		
+		return ""
 	}
 	
 	// 스크롤시, calendar 높이 조절
@@ -323,7 +341,7 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 		}
 		
 		calendarHeaderView.snp.updateConstraints {
-			$0.height.equalTo(bounds.height <= 268 / 2 ? 0 : 46) // calendar 전체 높이에 따른 높이 변경
+			$0.height.equalTo(bounds.height <= 300 / 2 ? 0 : 46) // calendar 전체 높이에 따른 높이 변경
 		}
 		
 		self.view.layoutIfNeeded()
@@ -331,6 +349,13 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 
 	// page가 변경될때 month 변경
 	func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
+		viewModel.getMonthlyList(calendar.currentPage.getFormattedYM())
+
+//		calendar.snp.updateConstraints {
+//			$0.height.equalTo(350)
+//		}
+//		calendar.adjustsBoundingRectWhenChangingMonths = true
+		
 		if Date().getFormattedDate(format: "yyyy") != calendar.currentPage.getFormattedDate(format: "yyyy") {
 			monthButton.setTitle(calendar.currentPage.getFormattedDate(format: "yyyy년 M월"), for: .normal)
 		} else {
@@ -342,13 +367,31 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 //MARK: - FSCalendar Delegate Appearance
 extension HomeViewController: FSCalendarDelegateAppearance {
 	
-	// 오늘 날짜에 대한 border
-	func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, borderDefaultColorFor date: Date) -> UIColor? {
-		return date.getFormattedDefault() == Date().getFormattedDefault() ? R.Color.white : appearance.borderDefaultColor
+	// 기본 cell title 색상
+	func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
+		if viewModel.monthlyList.contains(where: {$0.createAt == date.getFormattedYMD()}) {
+			return R.Color.gray900
+		} else if date.getFormattedYMD() == Date().getFormattedYMD() {
+			return R.Color.white
+		} else {
+			return R.Color.gray300
+		}
 	}
 	
-	func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, fillDefaultColorFor date: Date) -> UIColor? {
-		return nil
+	// 선택시, title 색상
+	func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleSelectionColorFor date: Date) -> UIColor? {
+		if viewModel.monthlyList.contains(where: {$0.createAt == date.getFormattedYMD()}) {
+			return R.Color.gray900
+		} else if date.getFormattedYMD() == Date().getFormattedYMD() {
+			return R.Color.white
+		} else {
+			return R.Color.gray300
+		}
+	}
+	
+	// 선택시, subtitle 색상
+	func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, subtitleSelectionColorFor date: Date) -> UIColor? {
+		return R.Color.gray300
 	}
 }
 

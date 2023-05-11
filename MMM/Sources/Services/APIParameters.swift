@@ -23,6 +23,10 @@ struct APIParameters{
 	struct SelectListDailyReqDto: Encodable {
 		var dateYMD: Int?
 	}
+	
+	struct SelectListMonthlyReqDto: Encodable {
+		var dateYM: Int?
+	}
 }
 
 struct APIHeader {

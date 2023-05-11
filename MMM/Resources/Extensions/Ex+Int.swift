@@ -14,4 +14,12 @@ extension Int {
 		numberFormatter.numberStyle = .decimal
 		return numberFormatter.string(from: NSNumber(value:self))!
 	}
+	
+	// 100단위마다 "+", ","를 찍어주는 기능
+	func withCommasAndPlus() -> String {
+		let numberFormatter = NumberFormatter()
+		numberFormatter.numberStyle = .decimal
+		numberFormatter.positivePrefix = "+"
+		return numberFormatter.string(from: NSNumber(value:self))!
+	}
 }

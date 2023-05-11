@@ -14,6 +14,7 @@ final class HomeViewModel {
 	@Published var passwordInput: String = ""
 	@Published var passwordConfirmInput: String = ""
 	@Published var dailyList: [EconomicActivity] = []
+	@Published var monthlyList: [Monthly] = []
 
 	// MARK: - Private properties
 	private var cancellable: Set<AnyCancellable> = .init()
@@ -36,6 +37,7 @@ final class HomeViewModel {
 	
 	init() {
 		self.getDailyList(Date().getFormattedYMD())
+		self.getMonthlyList(Date().getFormattedYM())
 	}
 }
 
@@ -44,7 +46,7 @@ extension HomeViewModel {
 	func getDailyList(_ dateYMD: String) {
 		guard let date = Int(dateYMD), let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
 		
-		APIClient.dispatch(APIRouter.SelectListDailyReqDto( headers: APIHeader.Default(token: TempToken.token), body: APIParameters.SelectListDailyReqDto(dateYMD: date)))
+		APIClient.dispatch(APIRouter.SelectListDailyReqDto(headers: APIHeader.Default(token: TempToken.token), body: APIParameters.SelectListDailyReqDto(dateYMD: date)))
 			.sink(receiveCompletion: { error in
 				switch error {
 				case .failure(let data):
@@ -59,6 +61,28 @@ extension HomeViewModel {
 				guard let self = self, let dailyList = reponse.selectListDailyOutputDto else { return }
 //				print(#file, #function, #line, dailyList)
 				self.dailyList = dailyList
+			})
+			.store(in: &cancellable)
+	}
+	
+	func getMonthlyList(_ dateYM: String) {
+		guard let date = Int(dateYM), let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
+		
+		APIClient.dispatch(APIRouter.SelectListMonthlyReqDto(headers: APIHeader.Default(token: TempToken.token), body: APIParameters.SelectListMonthlyReqDto(dateYM: date)))
+			.sink(receiveCompletion: { error in
+				switch error {
+				case .failure(let data):
+					switch data {
+					default:
+						break
+					}
+				case .finished:
+					break
+				}
+			}, receiveValue: { [weak self] reponse in
+				guard let self = self, let monthlyList = reponse.monthly else { return }
+//				print(#file, #function, #line, monthlyList)
+				self.monthlyList = monthlyList
 			})
 			.store(in: &cancellable)
 	}

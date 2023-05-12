@@ -42,6 +42,8 @@ public extension MMMResource {
 		public static let mypageBg = UIImage(named: "iconMypageBg", in: .main, compatibleWith: nil)
 		public static let iconStarActive = UIImage(named: "iconStarActive24", in: .main, compatibleWith: nil)
 		public static let iconStarInActive = UIImage(named: "iconStarInActive24", in: .main, compatibleWith: nil)
+        public static let iconStarGray24 = UIImage(named: "iconStarGray24", in: .main, compatibleWith: nil)
+        public static let iconStarBlack24 = UIImage(named: "iconStarBlack24", in: .main, compatibleWith: nil)
 
 		
         // MARK: - TabBar Items

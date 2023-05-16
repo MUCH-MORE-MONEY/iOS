@@ -12,10 +12,9 @@ import SnapKit
 
 final class CalendarCell: FSCalendarCell {
 	// MARK: - Properties
-
 	// MARK: - UI
-	private lazy var selectionLayer = CAShapeLayer()
-	private lazy var borderLayer = CAShapeLayer()
+	lazy var selectionLayer = CAShapeLayer()
+	lazy var borderLayer = CAShapeLayer()
 
 	override init(frame: CGRect) {
 		super.init(frame: frame)
@@ -55,14 +54,16 @@ final class CalendarCell: FSCalendarCell {
 			// 오늘날짜에 대한 font
 			self.titleLabel.font = R.Font.body4
 		}
+		
+		// 선택한 date의 border 보임/이전 Border 숨김
+		self.borderLayer.isHidden = !self.isSelected
 	}
 }
 
 extension CalendarCell {
 	// 외부에서 입력
-	func setUp(color: UIColor, isToday: Bool = false) {
-		selectionLayer.fillColor = color.cgColor
-		borderLayer.isHidden = !isToday
+	func setUp(color: UIColor) {
+		self.selectionLayer.fillColor = color.cgColor
 	}
 }
 

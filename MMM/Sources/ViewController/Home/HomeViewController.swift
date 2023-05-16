@@ -303,10 +303,8 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 	func calendar(_ calendar: FSCalendar, cellFor date: Date, at position: FSCalendarMonthPosition) -> FSCalendarCell {
 		let cell = calendar.dequeueReusableCell(withIdentifier: "CalendarCell", for: date, at: position) as! CalendarCell
 		
-		cell.setUp(color: .clear, isToday: Date().getFormattedYMD() == date.getFormattedYMD())
-		
 		if viewModel.monthlyList.contains(where: {$0.createAt == date.getFormattedYMD()}) {
-			cell.setUp(color: R.Color.orange200, isToday: Date().getFormattedYMD() == date.getFormattedYMD())
+			cell.setUp(color: R.Color.orange200)
 		}
 		
 		return cell
@@ -316,13 +314,7 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 	func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
 		guard preDate.getFormattedYMD() != date.getFormattedYMD() else { return } // 같은 날짜를 선택할 경우
 		
-		dayLabel.text = date.getFormattedDate(format: "dd일 (EEEEE)") // 선택된 날짜
-		viewModel.getDailyList(date.getFormattedYMD())
-		preDate = date // 이전 날짜로 저장
-		
-		if monthPosition == .next || monthPosition == .previous {
-			calendar.setCurrentPage(date, animated: true)
-		}
+		self.didSelectDate(date)
 	}
 	
 	// subTitle (수익/지출)

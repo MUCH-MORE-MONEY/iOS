@@ -67,6 +67,7 @@ class DetailViewController: BaseDetailViewController {
         UIImageView(image: R.Icon.iconStarInActive)
     ]
     
+    private lazy var detailPageControl = DetailPageControlView()
     // MARK: - Properties
     private var viewModel = HomeDetailViewModel()
     private var economicActivityId: [String] = []
@@ -101,6 +102,23 @@ extension DetailViewController {
                 }
                 self.mainImage.setImage(urlStr: value.imageUrl, defaultImage: R.Icon.camera48)
                 self.memoLabel.text = value.memo
+                
+                switch value.star {
+                case 0:
+                    satisfactionLabel = BasePaddingLabel()
+                case 1:
+                    satisfactionLabel.text = "아쉬워요"
+                case 2:
+                    satisfactionLabel.text = "그저그래요"
+                case 3:
+                    satisfactionLabel.text = "괜찮아요"
+                case 4:
+                    satisfactionLabel.text = "만족해요"
+                case 5:
+                    satisfactionLabel.text = "완전 만족해요"
+                default:
+                    break
+                }
             }.store(in: &cancellable)
         
         viewModel.fetchDetailActivity(id: economicActivityId[index])
@@ -109,7 +127,7 @@ extension DetailViewController {
     private func setAttribute() {
         
         navigationItem.rightBarButtonItem = editButton
-        view.addSubviews(titleLabel, scrollView)
+        view.addSubviews(titleLabel, scrollView, detailPageControl)
 
         contentView.addSubviews(starStackView, mainImage, memoLabel, satisfactionLabel)
         scrollView.addSubviews(contentView)
@@ -157,6 +175,12 @@ extension DetailViewController {
         
         memoLabel.snp.makeConstraints {
             $0.top.equalTo(mainImage.snp.bottom).offset(16)
+            $0.left.right.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
+        
+        detailPageControl.snp.makeConstraints {
+            $0.height.equalTo(90)
             $0.left.right.equalToSuperview()
             $0.bottom.equalToSuperview()
         }

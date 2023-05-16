@@ -33,6 +33,7 @@ final class CalendarCell: FSCalendarCell {
 		super.prepareForReuse()
 		self.selectionLayer.fillColor = nil
 		self.borderLayer.isHidden = true
+		self.todayLayer.isHidden = true
 	}
 		
 	override func layoutSubviews() {

@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import Then
+import Combine
 
 final class DetailPageControlView: UIView {
     private lazy var previousButton = UIButton().then {
@@ -28,7 +29,7 @@ final class DetailPageControlView: UIView {
         $0.distribution = .equalCentering
         $0.alignment = .top
     }
-
+    private lazy var cancellable = Set<AnyCancellable>()
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -44,6 +45,16 @@ extension DetailPageControlView {
     private func setup() {
         setAttribute()
         setLayout()
+        bind()
+    }
+    
+    private func bind() {
+        nextButton.tapPublisher.sinkOnMainThread(receiveValue: didTapNextButton)
+            .store(in: &cancellable)
+        
+        previousButton.tapPublisher
+            .sinkOnMainThread(receiveValue: didTapPreviousButton)
+            .store(in: &cancellable)
     }
     
     private func setAttribute() {
@@ -66,5 +77,16 @@ extension DetailPageControlView {
         nextButton.snp.makeConstraints {
             $0.top.equalToSuperview().inset(16)
         }
+    }
+}
+
+// MARK: - Action
+extension DetailPageControlView {
+    func didTapPreviousButton() {
+        print("PreviousButton")
+    }
+    
+    func didTapNextButton() {
+        print("NextButotn")
     }
 }

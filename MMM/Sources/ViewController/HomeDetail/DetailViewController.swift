@@ -45,7 +45,6 @@ class DetailViewController: BaseDetailViewController {
         $0.clipsToBounds = true
         $0.textColor = R.Color.gray100
         $0.font = R.Font.body4
-        $0.text = "그저 그래요"
     }
 
     private lazy var mainImage = UIImageView().then {
@@ -100,12 +99,20 @@ extension DetailViewController {
                 for i in 0..<value.star {
                     starList[i].image = R.Icon.iconStarBlack24
                 }
-                self.mainImage.setImage(urlStr: value.imageUrl, defaultImage: R.Icon.camera48)
+                
+                if let url = URL(string: value.imageUrl) {
+                    self.mainImage.setImage(urlStr: value.imageUrl, defaultImage: R.Icon.camera48)
+                } else {
+                    setDefaultMainImage()
+                }
+                
+
                 self.memoLabel.text = value.memo
+                
                 
                 switch value.star {
                 case 0:
-                    satisfactionLabel = BasePaddingLabel()
+                    satisfactionLabel.isHidden = true
                 case 1:
                     satisfactionLabel.text = "아쉬워요"
                 case 2:
@@ -170,7 +177,6 @@ extension DetailViewController {
             $0.width.equalTo(view.safeAreaLayoutGuide).offset(-48)
             $0.height.equalTo(mainImage.image!.size.height * view.frame.width / mainImage.image!.size.width)
             $0.left.right.equalToSuperview()
-//            $0.centerY.equalToSuperview()
         }
         
         memoLabel.snp.makeConstraints {
@@ -181,8 +187,18 @@ extension DetailViewController {
         
         detailPageControl.snp.makeConstraints {
             $0.height.equalTo(90)
-            $0.left.right.equalToSuperview()
+            $0.left.right.equalToSuperview().inset(24)
             $0.bottom.equalToSuperview()
+        }
+    }
+    
+    func setDefaultMainImage() {
+        mainImage.contentMode = .scaleAspectFit
+        
+        mainImage.snp.makeConstraints {
+            $0.top.equalTo(starStackView.snp.bottom).offset(16)
+            $0.left.right.equalToSuperview().inset(28)
+            $0.bottom.equalToSuperview().inset(343)
         }
     }
 }

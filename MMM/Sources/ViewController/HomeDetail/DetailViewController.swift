@@ -106,7 +106,7 @@ extension DetailViewController {
                     setDefaultMainImage()
                 }
                 
-
+                self.totalPrice.text = Int(value.amount)?.withCommas()
                 self.memoLabel.text = value.memo
                 
                 

@@ -120,7 +120,7 @@ struct NetworkDispatcher {
     /// - Returns: A publisher with the provided decoded data or an error
     func dispatch<ReturnType: Codable>(request: URLRequest) -> AnyPublisher<ReturnType, NetworkRequestError> {
         //Log Request
-        print("[\(request.httpMethod?.uppercased() ?? "")] '\(request.url!)'")
+//        print("[\(request.httpMethod?.uppercased() ?? "")] '\(request.url!)'")
         return urlSession
             .dataTaskPublisher(for: request)
             .subscribe(on: DispatchQueue.global(qos: .default))
@@ -130,7 +130,7 @@ struct NetworkDispatcher {
                     throw httpError(0)
                 }
                 
-                print("[\(response.statusCode)] '\(request.url!)'")
+//                print("[\(response.statusCode)] '\(request.url!)'")
                 
                 if !(200...299).contains(response.statusCode) {
                     throw httpError(response.statusCode)

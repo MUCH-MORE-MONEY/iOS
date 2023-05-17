@@ -24,9 +24,13 @@ struct APIParameters{
 		var dateYMD: Int?
 	}
     
-    struct SelectDetailReqDto: Encodable {
-        var economicActivityNo: String?
-    }
+  struct SelectDetailReqDto: Encodable {
+    var economicActivityNo: String?
+  }
+	
+	struct SelectListMonthlyReqDto: Encodable {
+		var dateYM: Int?
+	}
 }
 
 struct APIHeader {

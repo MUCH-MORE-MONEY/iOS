@@ -32,7 +32,20 @@ final class APIRouter {
 			self.headers = headers.asDictionary as? [String: String]
 			self.body = body.asDictionary
 		}
-	}
+	}    
+    /// 일별 세부 경제활동을 위한 Router
+    struct SelectDetailReqDto: Request {
+        typealias ReturnType = SelectDetailResDto
+        var path: String = "/economic_activity/detail/select"
+        var method: HTTPMethod = .post
+        var headers: [String : String]?
+        var body: [String: Any]?
+        
+        init(headers: APIHeader.Default, body: APIParameters.SelectDetailReqDto) {
+            self.headers = headers.asDictionary as? [String: String]
+            self.body = body.asDictionary
+        }
+    }
 	
 	/// 월별 경제 활동 List를 위한 Router
 	struct SelectListMonthlyReqDto: Request {

@@ -199,7 +199,7 @@ extension OnboardingViewController: CustomAlertDelegate {
         request.requestedScopes = [.fullName, .email]
         
         let controller = ASAuthorizationController(authorizationRequests: [request])
-        controller.delegate = self as? ASAuthorizationControllerDelegate
+        controller.delegate = self
         controller.presentationContextProvider = self as? ASAuthorizationControllerPresentationContextProviding
         controller.performRequests()
     }

@@ -120,36 +120,29 @@ struct NetworkDispatcher {
     /// - Returns: A publisher with the provided decoded data or an error
     func dispatch<ReturnType: Codable>(request: URLRequest) -> AnyPublisher<ReturnType, NetworkRequestError> {
         //Log Request
-        print("[\(request.httpMethod?.uppercased() ?? "")] '\(request.url!)'")
+//        print("[\(request.httpMethod?.uppercased() ?? "")] '\(request.url!)'")
         return urlSession
             .dataTaskPublisher(for: request)
             .subscribe(on: DispatchQueue.global(qos: .default))
-            // Map on Request response
             .tryMap({ data, response in
-                
-                // If the response is invalid, throw an error
+                // Server Error
                 guard let response = response as? HTTPURLResponse else {
                     throw httpError(0)
                 }
                 
-                //Log Request result
-                print("[\(response.statusCode)] '\(request.url!)'")
+//                print("[\(response.statusCode)] '\(request.url!)'")
                 
                 if !(200...299).contains(response.statusCode) {
                     throw httpError(response.statusCode)
                 }
-                // Return Response data
                 return data
             })
             .receive(on: DispatchQueue.main)
-            // Decode data using our ReturnType
             .decode(type: ReturnType.self, decoder: JSONDecoder())
-            // Handle any decoding errors
-            .mapError { error in
+            .mapError { error in    // Client Error
                 Log.error("\(error)")
                 return handleError(error)
             }
-            // And finally, expose our publisher
             .eraseToAnyPublisher()
     }
     
@@ -188,7 +181,6 @@ struct NetworkDispatcher {
 
 struct APIClient {
     static var networkDispatcher: NetworkDispatcher = NetworkDispatcher()
-    
     /// Dispatches a Request and returns a publisher
     /// - Parameter request: Request to Dispatch
     /// - Returns: A publisher containing decoded data or an error

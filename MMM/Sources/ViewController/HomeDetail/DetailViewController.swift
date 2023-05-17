@@ -93,6 +93,9 @@ extension DetailViewController {
         self.index = index
     }
     
+    func setNavigation(_ title :String) {
+        self.title = title
+    }
     private func setup() {
         setAttribute()
         setLayout()

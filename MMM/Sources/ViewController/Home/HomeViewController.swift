@@ -413,7 +413,13 @@ extension HomeViewController: UITableViewDelegate {
         let economicActivityId = viewModel.dailyList.map{ $0.id }
         let index = indexPath.row
         vc.setData(economicActivityId: economicActivityId, index: index)
-
+        
+        let day = dayLabel.text?.components(separatedBy: "(")[0] ?? ""
+        let month = monthButton.title(for: .normal) ?? ""
+        
+        let title = "\(month) \(day) 경제활동"
+        
+        vc.setNavigation(title)
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
         

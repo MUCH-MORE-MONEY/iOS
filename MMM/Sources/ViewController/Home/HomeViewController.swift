@@ -95,7 +95,7 @@ extension HomeViewController {
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
 	}
 	
-	// Set Month Btn Text
+	/// Set Month Btn Text
 	private func setMonth(_ date: Date) {
 		if Date().getFormattedDate(format: "yyyy") != date.getFormattedDate(format: "yyyy") {
 			monthButton.setTitle(date.getFormattedDate(format: "yyyy년 M월"), for: .normal)

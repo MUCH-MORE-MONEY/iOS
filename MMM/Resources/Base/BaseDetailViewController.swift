@@ -15,7 +15,7 @@ class BaseDetailViewController: BaseViewController {
         $0.backgroundColor = R.Color.gray900
     }
     
-    private lazy var containerStackView = UIStackView().then {
+    lazy var containerStackView = UIStackView().then {
         $0.axis = .horizontal
         $0.spacing = 8
         $0.alignment = .center
@@ -60,13 +60,14 @@ private extension BaseDetailViewController {
     
     private func setLayout() {
         headerView.snp.makeConstraints {
-            $0.top.left.right.equalToSuperview()
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.top).offset(124)
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.left.right.equalToSuperview()
+            $0.bottom.equalTo(containerStackView.snp.bottom).offset(24)
         }
         
         containerStackView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(58)
             $0.left.equalToSuperview().inset(24)
-            $0.bottom.equalTo(headerView.snp.bottom).inset(24)
         }
     }
 }

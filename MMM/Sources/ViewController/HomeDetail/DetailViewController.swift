@@ -165,8 +165,8 @@ extension DetailViewController {
     
     private func setLayout() {
         titleLabel.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(24)
             $0.left.equalToSuperview().inset(24)
-            $0.bottom.equalTo(totalPrice.snp.top).offset(-8)
         }
         
         scrollView.snp.makeConstraints {

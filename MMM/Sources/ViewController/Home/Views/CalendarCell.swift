@@ -12,10 +12,10 @@ import SnapKit
 
 final class CalendarCell: FSCalendarCell {
 	// MARK: - Properties
-
 	// MARK: - UI
-	private lazy var selectionLayer = CAShapeLayer()
-	private lazy var borderLayer = CAShapeLayer()
+	lazy var selectionLayer = CAShapeLayer()
+	lazy var todayLayer = CAShapeLayer()
+	lazy var borderLayer = CAShapeLayer()
 
 	override init(frame: CGRect) {
 		super.init(frame: frame)
@@ -33,18 +33,21 @@ final class CalendarCell: FSCalendarCell {
 		super.prepareForReuse()
 		self.selectionLayer.fillColor = nil
 		self.borderLayer.isHidden = true
+		self.todayLayer.isHidden = true
 	}
 		
 	override func layoutSubviews() {
 		super.layoutSubviews()
 		self.backgroundView?.frame = self.bounds.insetBy(dx: 1, dy: 1)
 		self.selectionLayer.frame = .init(origin: .zero, size: .init(width: 24, height: 24))
+		self.todayLayer.frame = .init(origin: .zero, size: .init(width: 24, height: 24))
 		self.borderLayer.frame = .init(origin: .zero, size: .init(width: 24, height: 24))
 
 		let diameter: CGFloat = min(self.selectionLayer.frame.height, self.selectionLayer.frame.width)
 		let (x, y) = (self.contentView.frame.width / 2 - diameter / 2, self.contentView.frame.height / 2 - diameter / 2)
 		
 		self.selectionLayer.path = UIBezierPath(ovalIn: CGRect(x: x, y: y, width: diameter, height: diameter)).cgPath // 기본 선택에 대한 동그라미 path
+		self.todayLayer.path = UIBezierPath(roundedRect: CGRect(x: x, y: y, width: diameter, height: diameter), byRoundingCorners: .allCorners, cornerRadii: CGSize(width: 12, height: 12)).cgPath // 오늘 날짜의 border
 		self.borderLayer.path = UIBezierPath(roundedRect: CGRect(x: x, y: y, width: diameter, height: diameter), byRoundingCorners: .allCorners, cornerRadii: CGSize(width: 12, height: 12)).cgPath // 오늘 날짜의 border
 	}
 	
@@ -54,15 +57,18 @@ final class CalendarCell: FSCalendarCell {
 		if self.dateIsToday {
 			// 오늘날짜에 대한 font
 			self.titleLabel.font = R.Font.body4
+			self.todayLayer.isHidden = false
 		}
+		
+		// 선택한 date의 border 보임/이전 Border 숨김
+		self.borderLayer.isHidden = !self.isSelected
 	}
 }
 
 extension CalendarCell {
 	// 외부에서 입력
-	func setUp(color: UIColor, isToday: Bool = false) {
-		selectionLayer.fillColor = color.cgColor
-		borderLayer.isHidden = !isToday
+	func setUp(color: UIColor) {
+		self.selectionLayer.fillColor = color.cgColor
 	}
 }
 
@@ -92,11 +98,19 @@ private extension CalendarCell {
 			$0.lineWidth = 2
 			$0.isHidden = true
 		}
+		
+		todayLayer = CAShapeLayer().then {
+			$0.fillColor = UIColor.clear.cgColor
+			$0.strokeColor = R.Color.gray900.cgColor
+			$0.lineWidth = 3
+			$0.isHidden = true
+		}
 	}
 	
 	// 레이아웃
 	func setLayout() {
 		self.contentView.layer.insertSublayer(selectionLayer, below: self.titleLabel!.layer)
+		self.contentView.layer.insertSublayer(todayLayer, below: self.titleLabel!.layer)
 		self.contentView.layer.insertSublayer(borderLayer, below: self.titleLabel!.layer)
 	}
 }

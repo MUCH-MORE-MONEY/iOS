@@ -81,6 +81,7 @@ extension HomeViewController {
 		self.dayLabel.text = date.getFormattedDate(format: "dd일 (EEEEE)") // 선택된 날짜
 		self.preDate = date
 		self.viewModel.getDailyList(date.getFormattedYMD())
+		self.setMonth(date)
 	}
 	
 	// 달력 Picker BottomSheet
@@ -92,6 +93,15 @@ extension HomeViewController {
 		bottomSheetVC.modalPresentationStyle = .overFullScreen
 		bottomSheetVC.setSetting(height: 375)
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
+	}
+	
+	/// Set Month Btn Text
+	private func setMonth(_ date: Date) {
+		if Date().getFormattedDate(format: "yyyy") != date.getFormattedDate(format: "yyyy") {
+			monthButton.setTitle(date.getFormattedDate(format: "yyyy년 M월"), for: .normal)
+		} else {
+			monthButton.setTitle(date.getFormattedDate(format: "M월"), for: .normal)
+		}
 	}
 }
 
@@ -303,10 +313,8 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 	func calendar(_ calendar: FSCalendar, cellFor date: Date, at position: FSCalendarMonthPosition) -> FSCalendarCell {
 		let cell = calendar.dequeueReusableCell(withIdentifier: "CalendarCell", for: date, at: position) as! CalendarCell
 		
-		cell.setUp(color: .clear, isToday: Date().getFormattedYMD() == date.getFormattedYMD())
-		
 		if viewModel.monthlyList.contains(where: {$0.createAt == date.getFormattedYMD()}) {
-			cell.setUp(color: R.Color.orange200, isToday: Date().getFormattedYMD() == date.getFormattedYMD())
+			cell.setUp(color: R.Color.orange200)
 		}
 		
 		return cell
@@ -316,13 +324,7 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 	func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
 		guard preDate.getFormattedYMD() != date.getFormattedYMD() else { return } // 같은 날짜를 선택할 경우
 		
-		dayLabel.text = date.getFormattedDate(format: "dd일 (EEEEE)") // 선택된 날짜
-		viewModel.getDailyList(date.getFormattedYMD())
-		preDate = date // 이전 날짜로 저장
-		
-		if monthPosition == .next || monthPosition == .previous {
-			calendar.setCurrentPage(date, animated: true)
-		}
+		self.didSelectDate(date)
 	}
 	
 	// subTitle (수익/지출)
@@ -356,17 +358,12 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 //		}
 //		calendar.adjustsBoundingRectWhenChangingMonths = true
 		
-		if Date().getFormattedDate(format: "yyyy") != calendar.currentPage.getFormattedDate(format: "yyyy") {
-			monthButton.setTitle(calendar.currentPage.getFormattedDate(format: "yyyy년 M월"), for: .normal)
-		} else {
-			monthButton.setTitle(calendar.currentPage.getFormattedDate(format: "M월"), for: .normal)
-		}
+		self.setMonth(calendar.currentPage) // 월 설정
 	}
 }
 
 //MARK: - FSCalendar Delegate Appearance
 extension HomeViewController: FSCalendarDelegateAppearance {
-	
 	// 기본 cell title 색상
 	func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
 		if viewModel.monthlyList.contains(where: {$0.createAt == date.getFormattedYMD()}) {

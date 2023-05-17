@@ -78,19 +78,9 @@ extension BottomPageControlView {
     
     private func setLayout() {
         stackView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.equalToSuperview().inset(16)
+            $0.left.right.bottom.equalToSuperview()
         }
-//        previousButton.snp.makeConstraints {
-//            $0.top.equalToSuperview().inset(16)
-//        }
-//
-//        indexLabel.snp.makeConstraints {
-//            $0.top.equalToSuperview().inset(16)
-//        }
-//
-//        nextButton.snp.makeConstraints {
-//            $0.top.equalToSuperview().inset(16)
-//        }
     }
 }
 

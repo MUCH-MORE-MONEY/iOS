@@ -110,23 +110,23 @@ extension DetailViewController {
                 guard let self = self, let value = value else { return }
                 self.titleLabel.text = value.title
                 
-                starList.forEach {
+				self.starList.forEach {
                     $0.image = R.Icon.iconStarGray24
                 }
                 
                 for i in 0..<value.star {
-                    starList[i].image = R.Icon.iconStarBlack24
+					self.starList[i].image = R.Icon.iconStarBlack24
                 }
                 
                 if URL(string: value.imageUrl) != nil {
-                    mainImageView.isHidden = false
-                    cameraImageView.isHidden = true
+					self.mainImageView.isHidden = false
+					self.cameraImageView.isHidden = true
                     self.mainImageView.setImage(urlStr: value.imageUrl, defaultImage: R.Icon.camera48)
-                    remarkConstraintsByMainImageView()
+					self.remarkConstraintsByMainImageView()
                 } else {
-                    mainImageView.isHidden = true
-                    cameraImageView.isHidden = false
-                    remarkConstraintsByCameraImageView()
+					self.mainImageView.isHidden = true
+					self.cameraImageView.isHidden = false
+					self.remarkConstraintsByCameraImageView()
                 }
                 
                 if let amount = Int(value.amount) {
@@ -136,17 +136,17 @@ extension DetailViewController {
                 
                 switch value.star {
                 case 0:
-                    satisfactionLabel.isHidden = true
+					self.satisfactionLabel.isHidden = true
                 case 1:
-                    satisfactionLabel.text = "아쉬워요"
+					self.satisfactionLabel.text = "아쉬워요"
                 case 2:
-                    satisfactionLabel.text = "그저그래요"
+					self.satisfactionLabel.text = "그저그래요"
                 case 3:
-                    satisfactionLabel.text = "괜찮아요"
+					self.satisfactionLabel.text = "괜찮아요"
                 case 4:
-                    satisfactionLabel.text = "만족해요"
+					self.satisfactionLabel.text = "만족해요"
                 case 5:
-                    satisfactionLabel.text = "완전 만족해요"
+					self.satisfactionLabel.text = "완전 만족해요"
                 default:
                     break
                 }

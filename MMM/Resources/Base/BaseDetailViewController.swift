@@ -24,6 +24,7 @@ class BaseDetailViewController: BaseViewController {
     lazy var totalPrice = UILabel().then {
         $0.font = R.Font.h2
         $0.textColor = R.Color.gray100
+        $0.sizeToFit()
     }
     
     private lazy var activityType = BasePaddingLabel().then {
@@ -47,7 +48,7 @@ private extension BaseDetailViewController {
     }
     
     private func setAttribute() {
-        totalPrice.text = "2,000,000원"
+        totalPrice.text = "원"
         activityType.text = "지출"
         
         view.addSubviews(headerView, containerStackView)
@@ -65,7 +66,6 @@ private extension BaseDetailViewController {
         
         containerStackView.snp.makeConstraints {
             $0.left.equalToSuperview().inset(24)
-            $0.right.equalToSuperview().inset(163)
             $0.bottom.equalTo(headerView.snp.bottom).inset(24)
         }
         

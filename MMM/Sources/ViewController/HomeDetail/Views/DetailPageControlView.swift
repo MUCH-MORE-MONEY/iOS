@@ -97,12 +97,10 @@ extension DetailPageControlView {
             print("PreviousButton")
             index -= 1
             indexLabel.text = "\(index+1) / \(idSize)"
-//            let id = economicActivityId[index]
-//            viewModel?.fetchDetailActivity(id: id)
-        } else {
-            self.previousButton.isEnabled = false
+            let id = economicActivityId[index]
+            viewModel?.fetchDetailActivity(id: id)
+            print(id)
         }
-
     }
     
     func didTapNextButton() {
@@ -111,10 +109,10 @@ extension DetailPageControlView {
             print("NextButotn")
             index += 1
             indexLabel.text = "\(index+1) / \(idSize)"
-//            let id = economicActivityId[index]
-//            viewModel?.fetchDetailActivity(id: id)
-        } else {
-            self.nextButton.isEnabled = false
+            let id = economicActivityId[index]
+            viewModel?.fetchDetailActivity(id: id)
+            print(id)
+
         }
     }
     

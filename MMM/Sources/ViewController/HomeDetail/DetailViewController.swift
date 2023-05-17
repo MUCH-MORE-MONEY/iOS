@@ -100,17 +100,24 @@ extension DetailViewController {
             .sinkOnMainThread { [weak self] value in
                 guard let self = self, let value = value else { return }
                 self.titleLabel.text = value.title
+                
+                starList.forEach {
+                    $0.image = R.Icon.iconStarGray24
+                }
+                
                 for i in 0..<value.star {
                     starList[i].image = R.Icon.iconStarBlack24
                 }
                 
-                if let url = URL(string: value.imageUrl) {
+                if URL(string: value.imageUrl) != nil {
                     self.mainImage.setImage(urlStr: value.imageUrl, defaultImage: R.Icon.camera48)
                 } else {
                     setDefaultMainImage()
                 }
                 
-                self.totalPrice.text = Int(value.amount)?.withCommas()
+                if let amount = Int(value.amount) {
+                    self.totalPrice.text = "\(amount.withCommas())원"
+                }
                 self.memoLabel.text = value.memo
                 
                 
@@ -130,11 +137,9 @@ extension DetailViewController {
                 default:
                     break
                 }
-                detailPageControlView.setViewModel(viewModel, index, economicActivityId)
-
             }.store(in: &cancellable)
-                
-
+        
+        detailPageControlView.setViewModel(viewModel, index, economicActivityId)
     }
     
     private func setAttribute() {
@@ -152,7 +157,6 @@ extension DetailViewController {
     private func setLayout() {
         titleLabel.snp.makeConstraints {
             $0.left.equalToSuperview().inset(24)
-            $0.right.equalToSuperview().inset(135)
             $0.bottom.equalTo(totalPrice.snp.top).offset(-8)
         }
         

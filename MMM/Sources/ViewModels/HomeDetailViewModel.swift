@@ -17,7 +17,7 @@ final class HomeDetailViewModel {
 
     
     func fetchDetailActivity(id: String) {
-        guard let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
+        guard Constants.getKeychainValue(forKey: Constants.KeychainKey.token) != nil else { return }
         
         APIClient.dispatch(
             APIRouter.SelectDetailReqDto(

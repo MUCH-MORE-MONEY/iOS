@@ -8,16 +8,20 @@
 import UIKit
 import SnapKit
 import Then
+import Combine
 
 final class BaseCameraImageView: UIView {
     // MARK: - UI Components
     private lazy var view = UIView().then {
-        $0.backgroundColor = R.Color.gray100
+        $0.backgroundColor = R.Color.gray200
     }
     
     private lazy var cameraButton = UIButton().then {
         $0.setImage(R.Icon.camera48, for: .normal)
     }
+    
+    // MARK: - Properties
+    private lazy var cancallable = Set<AnyCancellable>()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,9 +38,18 @@ extension BaseCameraImageView {
     private func setup() {
         setAttribute()
         setLayout()
+        bind()
+    }
+    
+    private func bind() {
+        cameraButton.tapPublisher
+            .sinkOnMainThread(receiveValue: didTapCameraButton)
+            .store(in: &cancallable)
+
     }
     
     private func setAttribute() {
+        addSubviews(view)
         view.addSubviews(cameraButton)
     }
     
@@ -44,9 +57,21 @@ extension BaseCameraImageView {
         view.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+        
         cameraButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.centerY.equalToSuperview()
         }
+    }
+}
+
+// MARK: - Action
+extension BaseCameraImageView {
+    func isCameraButtonActive(_ flag: Bool) {
+        cameraButton.isEnabled = flag
+    }
+    
+    func didTapCameraButton() {
+        print("Camera Button")
     }
 }

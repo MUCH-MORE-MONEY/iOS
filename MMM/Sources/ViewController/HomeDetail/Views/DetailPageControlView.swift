@@ -93,27 +93,23 @@ extension DetailPageControlView {
 extension DetailPageControlView {
     func didTapPreviousButton() {
         if index != 0 {
-            let idSize = economicActivityId.count
-            print("PreviousButton")
             index -= 1
-            indexLabel.text = "\(index+1) / \(idSize)"
-            let id = economicActivityId[index]
-            viewModel?.fetchDetailActivity(id: id)
-            print(id)
+            updateView()
         }
     }
     
     func didTapNextButton() {
         if index != economicActivityId.count-1 {
-            let idSize = economicActivityId.count
-            print("NextButotn")
             index += 1
-            indexLabel.text = "\(index+1) / \(idSize)"
-            let id = economicActivityId[index]
-            viewModel?.fetchDetailActivity(id: id)
-            print(id)
-
+            updateView()
         }
+    }
+    
+    func updateView() {
+        let idSize = economicActivityId.count
+        indexLabel.text = "\(index+1) / \(idSize)"
+        let id = economicActivityId[index]
+        viewModel?.fetchDetailActivity(id: id)
     }
     
     func setViewModel(_ viewModel: HomeDetailViewModel, _ index: Int, _ economicActivityId: [String]) {

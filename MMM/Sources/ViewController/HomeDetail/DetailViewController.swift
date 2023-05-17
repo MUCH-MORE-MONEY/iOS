@@ -51,6 +51,7 @@ class DetailViewController: BaseDetailViewController {
         $0.image = R.Icon.camera48
         $0.backgroundColor = R.Color.gray100
         $0.contentMode = .scaleToFill
+        $0.isHidden = false
     }
     
     private lazy var memoLabel = UILabel().then {
@@ -67,6 +68,11 @@ class DetailViewController: BaseDetailViewController {
     ]
     
     private lazy var detailPageControlView = DetailPageControlView()
+    
+    private lazy var cameraImageView = BaseCameraImageView().then {
+        $0.isHidden = false
+        $0.layer.zPosition = 1000
+    }
     // MARK: - Properties
     private var viewModel = HomeDetailViewModel()
     /// cell에 보여지게 되는 id의 배열
@@ -110,10 +116,15 @@ extension DetailViewController {
                 }
                 
                 if URL(string: value.imageUrl) != nil {
+                    mainImage.isHidden = false
+                    cameraImageView.isHidden = true
                     self.mainImage.setImage(urlStr: value.imageUrl, defaultImage: R.Icon.camera48)
                 } else {
-                    setDefaultMainImage()
+                    mainImage.isHidden = true
+                    cameraImageView.isHidden = false
                 }
+                
+                setMemoLayout()
                 
                 if let amount = Int(value.amount) {
                     self.totalPrice.text = "\(amount.withCommas())원"
@@ -147,7 +158,7 @@ extension DetailViewController {
         navigationItem.rightBarButtonItem = editButton
         view.addSubviews(titleLabel, scrollView, detailPageControlView)
 
-        contentView.addSubviews(starStackView, mainImage, memoLabel, satisfactionLabel)
+        contentView.addSubviews(starStackView, mainImage, memoLabel, satisfactionLabel, cameraImageView)
         scrollView.addSubviews(contentView)
         starList.forEach {
             $0.contentMode = .scaleAspectFit
@@ -189,11 +200,13 @@ extension DetailViewController {
             $0.left.right.equalToSuperview()
         }
         
-        memoLabel.snp.makeConstraints {
-            $0.top.equalTo(mainImage.snp.bottom).offset(16)
+        cameraImageView.snp.makeConstraints {
+            $0.top.equalTo(starStackView.snp.bottom).offset(16)
             $0.left.right.equalToSuperview()
-            $0.bottom.equalToSuperview()
+            $0.height.equalTo(200)
         }
+        
+        setMemoLayout()
         
         detailPageControlView.snp.makeConstraints {
             $0.height.equalTo(90)
@@ -217,6 +230,20 @@ extension DetailViewController {
 private extension DetailViewController {
     @objc func didTapEditButton(_ sener: UITapGestureRecognizer) {
         print("edit Tapped")
+    }
+    
+    private func setMemoLayout() {
+        memoLabel.snp.makeConstraints {
+            if cameraImageView.isHidden {
+                $0.top.equalTo(mainImage.snp.bottom).offset(16)
+                $0.left.right.equalToSuperview()
+                $0.bottom.equalToSuperview()
+            } else {
+                $0.top.equalTo(cameraImageView.snp.bottom).offset(16)
+                $0.left.right.equalToSuperview()
+                $0.bottom.equalToSuperview()
+            }
+        }
     }
 }
 

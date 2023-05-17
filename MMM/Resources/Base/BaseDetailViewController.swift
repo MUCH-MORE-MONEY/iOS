@@ -68,6 +68,5 @@ private extension BaseDetailViewController {
             $0.left.equalToSuperview().inset(24)
             $0.bottom.equalTo(headerView.snp.bottom).inset(24)
         }
-        
     }
 }

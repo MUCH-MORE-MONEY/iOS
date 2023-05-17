@@ -10,7 +10,7 @@ import SnapKit
 import Then
 import Combine
 
-final class DetailPageControlView: UIView {
+final class BottomPageControlView: UIView {
     // MARK: - UI Components
     lazy var previousButton = UIButton().then {
         $0.setImage(R.Icon.arrowBackBlack24, for: .normal)
@@ -35,7 +35,6 @@ final class DetailPageControlView: UIView {
     
     var index: Int = 0 {
         didSet {
-            print("index : ", index, " size : ", economicActivityId.count)
             previousButton.isEnabled = index == 0 ? false : true
             nextButton.isEnabled = index == economicActivityId.count-1 ? false : true
         }
@@ -55,7 +54,7 @@ final class DetailPageControlView: UIView {
     }
 }
 
-extension DetailPageControlView {
+extension BottomPageControlView {
     // MARK: - Style & Layout
     private func setup() {
         setAttribute()
@@ -96,7 +95,7 @@ extension DetailPageControlView {
 }
 
 // MARK: - Action
-extension DetailPageControlView {
+extension BottomPageControlView {
     func didTapPreviousButton() {
         if index != 0 {
             index -= 1

@@ -47,12 +47,19 @@ class DetailViewController: BaseDetailViewController {
         $0.font = R.Font.body4
     }
 
-    private lazy var mainImage = UIImageView().then {
+    private lazy var mainImageView = UIImageView().then {
         $0.image = R.Icon.camera48
         $0.backgroundColor = R.Color.gray100
         $0.contentMode = .scaleToFill
         $0.isHidden = false
     }
+    
+    private lazy var cameraImageView = CameraImageView().then {
+        $0.isHidden = false
+        $0.layer.zPosition = 1000
+    }
+    
+    private lazy var bottomPageControlView = BottomPageControlView()
     
     private lazy var memoLabel = UILabel().then {
         $0.text = "이 활동은 어떤 활동이었는지 기록해봐요"
@@ -66,13 +73,6 @@ class DetailViewController: BaseDetailViewController {
         UIImageView(image: R.Icon.iconStarInActive),
         UIImageView(image: R.Icon.iconStarInActive)
     ]
-    
-    private lazy var detailPageControlView = DetailPageControlView()
-    
-    private lazy var cameraImageView = CameraImageView().then {
-        $0.isHidden = false
-        $0.layer.zPosition = 1000
-    }
     // MARK: - Properties
     private var viewModel = HomeDetailViewModel()
     /// cell에 보여지게 되는 id의 배열
@@ -116,21 +116,15 @@ extension DetailViewController {
                 }
                 
                 if URL(string: value.imageUrl) != nil {
-                    mainImage.isHidden = false
+                    mainImageView.isHidden = false
                     cameraImageView.isHidden = true
-                    self.mainImage.setImage(urlStr: value.imageUrl, defaultImage: R.Icon.camera48)
-                    
-                    memoLabel.snp.makeConstraints {
-                        $0.top.equalTo(self.mainImage.snp.bottom).offset(16)
-                    }
+                    self.mainImageView.setImage(urlStr: value.imageUrl, defaultImage: R.Icon.camera48)
+                    remarkConstraintsByMainImageView()
                 } else {
-                    mainImage.isHidden = true
+                    mainImageView.isHidden = true
                     cameraImageView.isHidden = false
-                    memoLabel.snp.makeConstraints {
-                        $0.top.equalTo(self.cameraImageView.snp.bottom).offset(16)
-                    }
+                    remarkConstraintsByCameraImageView()
                 }
-
                 
                 if let amount = Int(value.amount) {
                     self.totalPrice.text = "\(amount.withCommas())원"
@@ -153,26 +147,16 @@ extension DetailViewController {
                 default:
                     break
                 }
-                
-//                if index == 0 {
-//                    detailPageControlView.previousButton.isEnabled = false
-//                } else if index == economicActivityId.count {
-//                    detailPageControlView.nextButton.isEnabled = false
-//                } else {
-//                    detailPageControlView.previousButton.isEnabled = true
-//                    detailPageControlView.nextButton.isEnabled = true
-//                }
             }.store(in: &cancellable)
         
-        detailPageControlView.setViewModel(viewModel, index, economicActivityId)
+        bottomPageControlView.setViewModel(viewModel, index, economicActivityId)
     }
     
     private func setAttribute() {
         
         navigationItem.rightBarButtonItem = editButton
-        view.addSubviews(titleLabel, scrollView, detailPageControlView)
-
-        contentView.addSubviews(starStackView, mainImage, memoLabel, satisfactionLabel, cameraImageView)
+        view.addSubviews(titleLabel, scrollView, bottomPageControlView)
+        contentView.addSubviews(starStackView, mainImageView, cameraImageView, memoLabel, satisfactionLabel)
         scrollView.addSubviews(contentView)
         starList.forEach {
             $0.contentMode = .scaleAspectFit
@@ -207,10 +191,10 @@ extension DetailViewController {
             $0.centerY.equalTo(starStackView)
         }
         
-        mainImage.snp.makeConstraints {
+        mainImageView.snp.makeConstraints {
             $0.top.equalTo(starStackView.snp.bottom).offset(16)
             $0.width.equalTo(view.safeAreaLayoutGuide).offset(-48)
-            $0.height.equalTo(mainImage.image!.size.height * view.frame.width / mainImage.image!.size.width)
+            $0.height.equalTo(mainImageView.image!.size.height * view.frame.width / mainImageView.image!.size.width)
             $0.left.right.equalToSuperview()
         }
         
@@ -221,31 +205,31 @@ extension DetailViewController {
         }
         
         memoLabel.snp.makeConstraints {
-            if cameraImageView.isHidden {
-                $0.top.equalTo(mainImage.snp.bottom).offset(16)
-                $0.left.right.equalToSuperview()
-                $0.bottom.equalToSuperview()
-            } else {
-                $0.top.equalTo(cameraImageView.snp.bottom).offset(16)
-                $0.left.right.equalToSuperview()
-                $0.bottom.equalToSuperview()
-            }
+            $0.top.equalTo(cameraImageView.snp.bottom).offset(16)
+            $0.left.right.equalToSuperview()
+            $0.bottom.equalToSuperview()
         }
         
-        detailPageControlView.snp.makeConstraints {
+        bottomPageControlView.snp.makeConstraints {
             $0.height.equalTo(90)
             $0.left.right.equalToSuperview().inset(24)
             $0.bottom.equalToSuperview()
         }
     }
-    
-    func setDefaultMainImage() {
-        mainImage.contentMode = .scaleAspectFit
-        
-        mainImage.snp.makeConstraints {
-            $0.top.equalTo(starStackView.snp.bottom).offset(16)
-            $0.left.right.equalToSuperview().inset(28)
-            $0.bottom.equalToSuperview().inset(343)
+    /// mainImageView 기준으로 memoLabel의 뷰를 다시 배치하는 메서드
+    private func remarkConstraintsByMainImageView() {
+        memoLabel.snp.remakeConstraints {
+            $0.top.equalTo(mainImageView.snp.bottom).offset(16)
+            $0.left.right.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
+    }
+    /// cameraImageView 기준으로 memoLabel의 뷰를 다시 배치하는 메서드
+    private func remarkConstraintsByCameraImageView() {
+        memoLabel.snp.remakeConstraints {
+            $0.top.equalTo(cameraImageView.snp.bottom).offset(16)
+            $0.left.right.equalToSuperview()
+            $0.bottom.equalToSuperview()
         }
     }
 }
@@ -254,20 +238,6 @@ extension DetailViewController {
 private extension DetailViewController {
     @objc func didTapEditButton(_ sener: UITapGestureRecognizer) {
         print("edit Tapped")
-    }
-    
-    private func setMemoLayout() {
-        memoLabel.snp.makeConstraints {
-            if cameraImageView.isHidden {
-                $0.top.equalTo(mainImage.snp.bottom).offset(16)
-                $0.left.right.equalToSuperview()
-                $0.bottom.equalToSuperview()
-            } else {
-                $0.top.equalTo(cameraImageView.snp.bottom).offset(16)
-                $0.left.right.equalToSuperview()
-                $0.bottom.equalToSuperview()
-            }
-        }
     }
 }
 

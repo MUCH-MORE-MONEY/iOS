@@ -69,7 +69,7 @@ class DetailViewController: BaseDetailViewController {
     
     private lazy var detailPageControlView = DetailPageControlView()
     
-    private lazy var cameraImageView = BaseCameraImageView().then {
+    private lazy var cameraImageView = CameraImageView().then {
         $0.isHidden = false
         $0.layer.zPosition = 1000
     }
@@ -119,18 +119,23 @@ extension DetailViewController {
                     mainImage.isHidden = false
                     cameraImageView.isHidden = true
                     self.mainImage.setImage(urlStr: value.imageUrl, defaultImage: R.Icon.camera48)
+                    
+                    memoLabel.snp.makeConstraints {
+                        $0.top.equalTo(self.mainImage.snp.bottom).offset(16)
+                    }
                 } else {
                     mainImage.isHidden = true
                     cameraImageView.isHidden = false
+                    memoLabel.snp.makeConstraints {
+                        $0.top.equalTo(self.cameraImageView.snp.bottom).offset(16)
+                    }
                 }
-                
-                setMemoLayout()
+
                 
                 if let amount = Int(value.amount) {
                     self.totalPrice.text = "\(amount.withCommas())원"
                 }
                 self.memoLabel.text = value.memo
-                
                 
                 switch value.star {
                 case 0:
@@ -148,6 +153,15 @@ extension DetailViewController {
                 default:
                     break
                 }
+                
+//                if index == 0 {
+//                    detailPageControlView.previousButton.isEnabled = false
+//                } else if index == economicActivityId.count {
+//                    detailPageControlView.nextButton.isEnabled = false
+//                } else {
+//                    detailPageControlView.previousButton.isEnabled = true
+//                    detailPageControlView.nextButton.isEnabled = true
+//                }
             }.store(in: &cancellable)
         
         detailPageControlView.setViewModel(viewModel, index, economicActivityId)
@@ -206,7 +220,17 @@ extension DetailViewController {
             $0.height.equalTo(200)
         }
         
-        setMemoLayout()
+        memoLabel.snp.makeConstraints {
+            if cameraImageView.isHidden {
+                $0.top.equalTo(mainImage.snp.bottom).offset(16)
+                $0.left.right.equalToSuperview()
+                $0.bottom.equalToSuperview()
+            } else {
+                $0.top.equalTo(cameraImageView.snp.bottom).offset(16)
+                $0.left.right.equalToSuperview()
+                $0.bottom.equalToSuperview()
+            }
+        }
         
         detailPageControlView.snp.makeConstraints {
             $0.height.equalTo(90)

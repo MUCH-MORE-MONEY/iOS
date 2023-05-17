@@ -10,7 +10,7 @@ import SnapKit
 import Then
 import Combine
 
-final class BaseCameraImageView: UIView {
+final class CameraImageView: UIView {
     // MARK: - UI Components
     private lazy var view = UIView().then {
         $0.backgroundColor = R.Color.gray200
@@ -34,7 +34,7 @@ final class BaseCameraImageView: UIView {
 }
 
 // MARK: - Style & Layout
-extension BaseCameraImageView {
+extension CameraImageView {
     private func setup() {
         setAttribute()
         setLayout()
@@ -66,7 +66,7 @@ extension BaseCameraImageView {
 }
 
 // MARK: - Action
-extension BaseCameraImageView {
+extension CameraImageView {
     func isCameraButtonActive(_ flag: Bool) {
         cameraButton.isEnabled = flag
     }

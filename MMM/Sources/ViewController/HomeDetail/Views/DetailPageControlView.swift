@@ -12,11 +12,11 @@ import Combine
 
 final class DetailPageControlView: UIView {
     // MARK: - UI Components
-    private lazy var previousButton = UIButton().then {
+    lazy var previousButton = UIButton().then {
         $0.setImage(R.Icon.arrowBackBlack24, for: .normal)
     }
     
-    private lazy var nextButton = UIButton().then {
+    lazy var nextButton = UIButton().then {
         $0.setImage(R.Icon.arrowNextBlack24, for: .normal)
     }
     
@@ -33,7 +33,13 @@ final class DetailPageControlView: UIView {
     
     // MARK: - Properties
     
-    private var index: Int = 0
+    var index: Int = 0 {
+        didSet {
+            print("index : ", index, " size : ", economicActivityId.count)
+            previousButton.isEnabled = index == 0 ? false : true
+            nextButton.isEnabled = index == economicActivityId.count-1 ? false : true
+        }
+    }
     private var economicActivityId: [String] = []
     private var viewModel: HomeDetailViewModel?
     private lazy var cancellable = Set<AnyCancellable>()
@@ -75,17 +81,17 @@ extension DetailPageControlView {
         stackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
-        previousButton.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(16)
-        }
-
-        indexLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(16)
-        }
-
-        nextButton.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(16)
-        }
+//        previousButton.snp.makeConstraints {
+//            $0.top.equalToSuperview().inset(16)
+//        }
+//
+//        indexLabel.snp.makeConstraints {
+//            $0.top.equalToSuperview().inset(16)
+//        }
+//
+//        nextButton.snp.makeConstraints {
+//            $0.top.equalToSuperview().inset(16)
+//        }
     }
 }
 
@@ -114,8 +120,8 @@ extension DetailPageControlView {
     
     func setViewModel(_ viewModel: HomeDetailViewModel, _ index: Int, _ economicActivityId: [String]) {
         self.viewModel = viewModel
-        self.index = index
         self.economicActivityId = economicActivityId
+        self.index = index
         let idSize = economicActivityId.count
         indexLabel.text = "\(index+1) / \(idSize)"
     }

@@ -66,10 +66,12 @@ class DetailViewController: BaseDetailViewController {
         UIImageView(image: R.Icon.iconStarInActive)
     ]
     
-    private lazy var detailPageControl = DetailPageControlView()
+    private lazy var detailPageControlView = DetailPageControlView()
     // MARK: - Properties
     private var viewModel = HomeDetailViewModel()
+    /// cell에 보여지게 되는 id의 배열
     private var economicActivityId: [String] = []
+    /// 현재 보여지고 있는 indexPath.row
     private var index: Int = 0
     private var cancellable = Set<AnyCancellable>()
     
@@ -92,6 +94,8 @@ extension DetailViewController {
     }
     
     private func bind() {
+        viewModel.fetchDetailActivity(id: economicActivityId[index])
+        
         viewModel.$detailActivity
             .sinkOnMainThread { [weak self] value in
                 guard let self = self, let value = value else { return }
@@ -126,15 +130,17 @@ extension DetailViewController {
                 default:
                     break
                 }
+                detailPageControlView.setViewModel(viewModel, index, economicActivityId)
+
             }.store(in: &cancellable)
-        
-        viewModel.fetchDetailActivity(id: economicActivityId[index])
+                
+
     }
     
     private func setAttribute() {
         
         navigationItem.rightBarButtonItem = editButton
-        view.addSubviews(titleLabel, scrollView, detailPageControl)
+        view.addSubviews(titleLabel, scrollView, detailPageControlView)
 
         contentView.addSubviews(starStackView, mainImage, memoLabel, satisfactionLabel)
         scrollView.addSubviews(contentView)
@@ -185,7 +191,7 @@ extension DetailViewController {
             $0.bottom.equalToSuperview()
         }
         
-        detailPageControl.snp.makeConstraints {
+        detailPageControlView.snp.makeConstraints {
             $0.height.equalTo(90)
             $0.left.right.equalToSuperview().inset(24)
             $0.bottom.equalToSuperview()

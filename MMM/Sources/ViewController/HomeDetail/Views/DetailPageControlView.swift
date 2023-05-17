@@ -11,6 +11,7 @@ import Then
 import Combine
 
 final class DetailPageControlView: UIView {
+    // MARK: - UI Components
     private lazy var previousButton = UIButton().then {
         $0.setImage(R.Icon.arrowBackBlack24, for: .normal)
     }
@@ -29,7 +30,15 @@ final class DetailPageControlView: UIView {
         $0.distribution = .equalCentering
         $0.alignment = .top
     }
+    
+    // MARK: - Properties
+    
+    private var index: Int = 0
+    private var economicActivityId: [String] = []
+    private var viewModel: HomeDetailViewModel?
     private lazy var cancellable = Set<AnyCancellable>()
+
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -83,10 +92,37 @@ extension DetailPageControlView {
 // MARK: - Action
 extension DetailPageControlView {
     func didTapPreviousButton() {
-        print("PreviousButton")
+        if index != 0 {
+            let idSize = economicActivityId.count
+            print("PreviousButton")
+            index -= 1
+            indexLabel.text = "\(index+1) / \(idSize)"
+//            let id = economicActivityId[index]
+//            viewModel?.fetchDetailActivity(id: id)
+        } else {
+            self.previousButton.isEnabled = false
+        }
+
     }
     
     func didTapNextButton() {
-        print("NextButotn")
+        if index != economicActivityId.count-1 {
+            let idSize = economicActivityId.count
+            print("NextButotn")
+            index += 1
+            indexLabel.text = "\(index+1) / \(idSize)"
+//            let id = economicActivityId[index]
+//            viewModel?.fetchDetailActivity(id: id)
+        } else {
+            self.nextButton.isEnabled = false
+        }
+    }
+    
+    func setViewModel(_ viewModel: HomeDetailViewModel, _ index: Int, _ economicActivityId: [String]) {
+        self.viewModel = viewModel
+        self.index = index
+        self.economicActivityId = economicActivityId
+        let idSize = economicActivityId.count
+        indexLabel.text = "\(index+1) / \(idSize)"
     }
 }

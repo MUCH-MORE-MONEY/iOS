@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 import UIKit
+import SwiftKeychainWrapper
 
 final class HomeViewModel {
 	// MARK: - Property Warraper
@@ -15,6 +16,11 @@ final class HomeViewModel {
 	@Published var passwordConfirmInput: String = ""
 	@Published var dailyList: [EconomicActivity] = []
 	@Published var monthlyList: [Monthly] = []
+	@Published var isDailySetting: Bool = KeychainWrapper.standard.bool(forKey: "isDailySetting")! {
+		didSet {
+			KeychainWrapper.standard.set(isDailySetting, forKey: "isDailySetting")
+		}
+	}
 
 	// MARK: - Private properties
 	private var cancellable: Set<AnyCancellable> = .init()

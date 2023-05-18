@@ -13,6 +13,7 @@ import SnapKit
 final class HomeFilterViewController: BaseViewController {
 	// MARK: - Properties
 	private lazy var cancellable: Set<AnyCancellable> = .init()
+	private let viewModel: HomeViewModel
 
 	// MARK: - UI Components
 	private lazy var highlightLabel = UILabel()
@@ -26,6 +27,15 @@ final class HomeFilterViewController: BaseViewController {
 	private lazy var dailyTotalSwitch = UISwitch()
 	private lazy var dailyTotalDescriptionLabel = UILabel()
 
+	init(viewModel: HomeViewModel) {
+		self.viewModel = viewModel
+		super.init(nibName: nil, bundle: nil)
+	}
+	
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
     override func viewDidLoad() {
         super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
@@ -38,6 +48,11 @@ private extension HomeFilterViewController {
 	func toggleHighlightSwitch(_ isOn: Bool) {
 		earnView.toggleEnabled(isOn)
 		payView.toggleEnabled(isOn)
+	}
+	
+	/// 일별 금액 합계 isEnabled
+	func toggleDailyTotalSwitch(_ isOn: Bool) {
+		viewModel.isDailySetting = !viewModel.isDailySetting
 	}
 }
 
@@ -54,6 +69,10 @@ private extension HomeFilterViewController {
 		//MARK: input
 		highlightSwitch.statePublisher
 			.sinkOnMainThread(receiveValue: toggleHighlightSwitch)
+			.store(in: &cancellable)
+		
+		dailyTotalSwitch.statePublisher
+			.sinkOnMainThread(receiveValue: toggleDailyTotalSwitch)
 			.store(in: &cancellable)
 
 		//MARK: output
@@ -103,7 +122,7 @@ private extension HomeFilterViewController {
 		}
 		
 		dailyTotalSwitch = dailyTotalSwitch.then {
-			$0.isOn = true
+			$0.isOn = viewModel.isDailySetting
 			$0.onTintColor = R.Color.gray900
 		}
 		

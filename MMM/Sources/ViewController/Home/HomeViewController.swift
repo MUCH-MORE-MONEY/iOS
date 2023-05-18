@@ -54,6 +54,8 @@ final class HomeViewController: UIViewController {
 
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
+		setTitleOffset() // offset 설정
+		calendar.reloadData()
 		tableView.reloadData()
 //		self.navigationController?.setNavigationBarHidden(true, animated: animated)	// navigation bar 숨김
 	}
@@ -105,9 +107,15 @@ extension HomeViewController {
 		}
 	}
 	
+	/// Set Calendar Title Offset
+	private func setTitleOffset() {
+		calendar.appearance.titleOffset = .init(x: 0, y: viewModel.isDailySetting ? 8 : 4)
+
+	}
+	
 	/// Push Home Filter VC
 	private func didTapFilterButton() {
-		let vc = HomeFilterViewController()
+		let vc = HomeFilterViewController(viewModel: viewModel)
 		vc.hidesBottomBarWhenPushed = true	// TabBar Above
 		navigationController?.pushViewController(vc, animated: true)
 	}
@@ -159,7 +167,7 @@ extension HomeViewController {
 				self?.calendar.reloadData()
 			})
 			.store(in: &self.cancellable)
-		
+				
 //		viewModel
 //			.transform(input: viewModel.input.eraseToAnyPublisher())
 //			.sinkOnMainThread(receiveValue: { [weak self] state in
@@ -241,7 +249,7 @@ extension HomeViewController {
 			$0.appearance.titleTodayColor = R.Color.white
 			$0.appearance.titleDefaultColor = R.Color.gray300 	// 달력의 평일 날짜 색깔
 			$0.appearance.titleFont = R.Font.body5				// 달력의 평일 글자 폰트
-			$0.appearance.titleOffset = .init(x: 0, y: 8)
+			setTitleOffset()
 			$0.appearance.titlePlaceholderColor = R.Color.gray300.withAlphaComponent(0.5) // 달에 유효하지 않은 날짜의 색 지정
 			$0.appearance.weekdayTextColor = R.Color.gray100	// 달력의 요일 글자 색깔
 			$0.appearance.weekdayFont = R.Font.body5			// 달력의 요일 글자 폰트
@@ -344,6 +352,10 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 	
 	// subTitle (수익/지출)
 	func calendar(_ calendar: FSCalendar, subtitleFor date: Date) -> String? {
+		guard viewModel.isDailySetting else {
+			return nil
+		}
+		
 		if let index = viewModel.monthlyList.firstIndex(where: {$0.createAt == date.getFormattedYMD()}) {
 			return viewModel.monthlyList[index].total.withCommasAndPlus()
 		}

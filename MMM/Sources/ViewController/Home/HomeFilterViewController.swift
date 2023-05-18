@@ -54,6 +54,17 @@ private extension HomeFilterViewController {
 	func toggleDailyTotalSwitch(_ isOn: Bool) {
 		viewModel.isDailySetting = !viewModel.isDailySetting
 	}
+	
+	// Push Color BottomSheet
+	private func didTapColorButton(_ isEarn: Bool) {
+		print(isEarn)
+		let picker = DatePickerViewController()
+		let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
+		picker.delegate = bottomSheetVC
+		bottomSheetVC.modalPresentationStyle = .overFullScreen
+		bottomSheetVC.setSetting(height: 375)
+		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
+	}
 }
 
 //MARK: - Style & Layouts
@@ -76,7 +87,11 @@ private extension HomeFilterViewController {
 			.store(in: &cancellable)
 
 		//MARK: output
-
+		viewModel.$didTapColorButton
+			.sinkOnMainThread(receiveValue: { value in
+				guard let value = value else { return }
+				self.didTapColorButton(value)
+			}).store(in: &cancellable)
 	}
 	
 	private func setAttribute() {
@@ -108,11 +123,11 @@ private extension HomeFilterViewController {
 		}
 		
 		earnView = earnView.then {
-			$0.setup(isEarn: true)
+			$0.setup(viewModel: viewModel, isEarn: true)
 		}
 		
 		payView = payView.then {
-			$0.setup(isEarn: false)
+			$0.setup(viewModel: viewModel, isEarn: false)
 		}
 		
 		dailyTotalLabel = dailyTotalLabel.then {

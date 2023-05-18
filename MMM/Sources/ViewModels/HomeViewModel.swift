@@ -21,6 +21,7 @@ final class HomeViewModel {
 			KeychainWrapper.standard.set(isDailySetting, forKey: "isDailySetting")
 		}
 	}
+	@Published var didTapColorButton: Bool?
 
 	// MARK: - Private properties
 	private var cancellable: Set<AnyCancellable> = .init()

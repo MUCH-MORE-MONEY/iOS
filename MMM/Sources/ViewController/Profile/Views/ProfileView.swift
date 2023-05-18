@@ -1,5 +1,5 @@
 //
-//  ProfileView.swift
+//  ProfileHeaderView.swift
 //  MMM
 //
 //  Created by geonhyeong on 2023/03/29.
@@ -9,7 +9,7 @@ import UIKit
 import Then
 import SnapKit
 
-final class ProfileView: UIView {
+final class ProfileHeaderView: UIView {
 	
 	private lazy var imageView = UIImageView().then {
 		$0.contentMode = .scaleAspectFill
@@ -80,7 +80,7 @@ final class ProfileView: UIView {
 	}
 }
 
-extension ProfileView {
+extension ProfileHeaderView {
 	func setUp(email: String) {
 		phrasesLabel.text = "오늘도 화이팅!"
 		emailLabel.text = email

@@ -352,9 +352,7 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 	
 	// subTitle (수익/지출)
 	func calendar(_ calendar: FSCalendar, subtitleFor date: Date) -> String? {
-		guard viewModel.isDailySetting else {
-			return nil
-		}
+		guard viewModel.isDailySetting else { return nil }
 		
 		if let index = viewModel.monthlyList.firstIndex(where: {$0.createAt == date.getFormattedYMD()}) {
 			return viewModel.monthlyList[index].total.withCommasAndPlus()

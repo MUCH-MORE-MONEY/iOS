@@ -67,7 +67,7 @@ final class OnboardingViewModel {
             // 사용자 token 저장
             Constants.setKeychain(value.token, forKey: Constants.KeychainKey.token)
 			// 일별 금액 합계 설정
-			KeychainWrapper.standard.set(true, forKey: Constants.KeychainKey.isDailySetting.rawValue)
+			KeychainWrapper.standard.set(true, forKey: "isDailySetting")
 
             // 로그인 성공 시 tabbar로 메인 뷰 전환
             if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {

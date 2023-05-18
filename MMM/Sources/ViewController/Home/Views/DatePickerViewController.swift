@@ -29,6 +29,7 @@ final class DatePickerViewController: UIViewController {
 	}
 }
 
+//MARK: - Action
 extension DatePickerViewController {
 	
 	func willDismiss() {
@@ -43,9 +44,8 @@ extension DatePickerViewController {
 
 //MARK: - Style & Layouts
 private extension DatePickerViewController {
-	
+	// 초기 셋업할 코드들
 	func setup() {
-		// 초기 셋업할 코드들
 		bind()
 		setAttribute()
 		setLayout()

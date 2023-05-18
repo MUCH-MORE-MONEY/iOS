@@ -80,6 +80,7 @@
 		C433A07329EEE751008B26DF /* Ex+Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = C433A07229EEE751008B26DF /* Ex+Date.swift */; };
 		C4351B4A2A15C935005F95BE /* HomeFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4351B492A15C935005F95BE /* HomeFilterViewController.swift */; };
 		C4351B4C2A1601D3005F95BE /* HomeFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4351B4B2A1601D3005F95BE /* HomeFilterView.swift */; };
+		C4351B4E2A166DB0005F95BE /* SemanticContentAttributeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4351B4D2A166DB0005F95BE /* SemanticContentAttributeButton.swift */; };
 		C44807DE29E4FE8000D4B090 /* Ex+Publisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44807DD29E4FE8000D4B090 /* Ex+Publisher.swift */; };
 		C44807E129E648D300D4B090 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44807E029E648D300D4B090 /* HomeViewController.swift */; };
 		C44807E329E649A300D4B090 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44807E229E649A300D4B090 /* HomeViewModel.swift */; };
@@ -198,6 +199,7 @@
 		C433A07229EEE751008B26DF /* Ex+Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Date.swift"; sourceTree = "<group>"; };
 		C4351B492A15C935005F95BE /* HomeFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFilterViewController.swift; sourceTree = "<group>"; };
 		C4351B4B2A1601D3005F95BE /* HomeFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFilterView.swift; sourceTree = "<group>"; };
+		C4351B4D2A166DB0005F95BE /* SemanticContentAttributeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemanticContentAttributeButton.swift; sourceTree = "<group>"; };
 		C44807DD29E4FE8000D4B090 /* Ex+Publisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Publisher.swift"; sourceTree = "<group>"; };
 		C44807E029E648D300D4B090 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		C44807E229E649A300D4B090 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
@@ -588,6 +590,7 @@
 				C4199DD229FE3051006E5DA8 /* BottomSheetViewController.swift */,
 				C4DBAA3629DD7B2600D1BB97 /* CountPushLabel.swift */,
 				C411940A29DAEDF9003DBC15 /* CustomAlertViewController.swift */,
+				C4351B4D2A166DB0005F95BE /* SemanticContentAttributeButton.swift */,
 				C411940629D53EA0003DBC15 /* NavigationController.swift */,
 			);
 			path = Base;
@@ -902,6 +905,7 @@
 				6A4313E22A13046E00095041 /* BottomPageControlView.swift in Sources */,
 				C4351B4C2A1601D3005F95BE /* HomeFilterView.swift in Sources */,
 				C4DBAA3229DD763D00D1BB97 /* Ex+Int.swift in Sources */,
+				C4351B4E2A166DB0005F95BE /* SemanticContentAttributeButton.swift in Sources */,
 				6A626BC52A0C87E800BDD5C0 /* HomeDetailViewModel.swift in Sources */,
 				C41193EA29D2D7FE003DBC15 /* MMMResource.swift in Sources */,
 				6A381E0A29E8F40700E0974F /* AddViewController.swift in Sources */,

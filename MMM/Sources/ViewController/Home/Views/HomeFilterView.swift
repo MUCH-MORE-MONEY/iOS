@@ -39,6 +39,7 @@ extension HomeFilterView {
 	// 외부에서 설정
 	func setup(isEarn: Bool) {
 		titleLabel.text = isEarn ? "수입" : "지출"
+		circleButton.backgroundColor = isEarn ? R.Color.blue400 : R.Color.orange400
 	}
 	
 	func toggleEnabled(_ isOn: Bool) {

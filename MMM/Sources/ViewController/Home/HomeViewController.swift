@@ -25,7 +25,7 @@ final class HomeViewController: UIViewController {
 	private lazy var monthButtonItem = UIBarButtonItem()
 	private lazy var todayButtonItem = UIBarButtonItem()
 	private lazy var filterButtonItem = UIBarButtonItem()
-	private lazy var monthButton = UIButton()
+	private lazy var monthButton = SemanticContentAttributeButton()
 	private lazy var todayButton = UIButton()
 	private lazy var filterButton = UIButton()
 	private lazy var separator = UIView() // Nav separator
@@ -201,7 +201,6 @@ extension HomeViewController {
 			$0.imageView?.contentMode = .scaleAspectFit
 			$0.titleLabel?.font = R.Font.h5
 			$0.contentHorizontalAlignment = .left
-			$0.semanticContentAttribute = .forceRightToLeft //<- 중요
 			$0.imageEdgeInsets = .init(top: 0, left: 11, bottom: 0, right: 0) // 이미지 여백
 		}
 		

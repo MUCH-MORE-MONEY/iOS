@@ -122,8 +122,8 @@ private extension HomeFilterView {
 	}
 	
 	private func setLayout() {
-		addSubviews(titleLabel, containerView, separator1, separator2)
-		containerView.addSubviews(standardLabel, expandImageView, middleLabel, colorButton, lastLabel)
+		addSubviews(titleLabel, containerView, separator1, separator2, middleLabel, colorButton, lastLabel)
+		containerView.addSubviews(standardLabel, expandImageView)
 		
 		titleLabel.snp.makeConstraints {
 			$0.top.leading.equalToSuperview().inset(12)
@@ -132,7 +132,7 @@ private extension HomeFilterView {
 		containerView.snp.makeConstraints {
 			$0.top.equalTo(titleLabel.snp.bottom).offset(8)
 			$0.leading.equalToSuperview().inset(12)
-			$0.trailing.equalToSuperview()
+			$0.trailing.equalTo(expandImageView)
 		}
 		
 		standardLabel.snp.makeConstraints {
@@ -140,24 +140,24 @@ private extension HomeFilterView {
 		}
 		
 		expandImageView.snp.makeConstraints {
-			$0.top.bottom.equalToSuperview()
+			$0.top.bottom.equalTo(containerView)
 			$0.leading.greaterThanOrEqualTo(standardLabel.snp.trailing).offset(8)
 		}
 		
 		middleLabel.snp.makeConstraints {
-			$0.top.bottom.equalToSuperview()
+			$0.top.bottom.equalTo(containerView)
 			$0.leading.equalTo(expandImageView.snp.trailing).offset(4)
 		}
 		
 		colorButton.snp.makeConstraints {
-			$0.top.bottom.equalToSuperview()
+			$0.top.bottom.equalTo(containerView)
 			$0.leading.equalTo(middleLabel.snp.trailing).offset(8)
 			$0.width.height.equalTo(16)
 			$0.trailing.equalTo(lastLabel.snp.leading).offset(-8)
 		}
 		
 		lastLabel.snp.makeConstraints {
-			$0.top.bottom.equalToSuperview()
+			$0.top.bottom.equalTo(containerView)
 			$0.trailing.equalToSuperview().inset(35)
 		}
 		

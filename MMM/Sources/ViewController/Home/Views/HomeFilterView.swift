@@ -91,6 +91,7 @@ private extension HomeFilterView {
 		circleButton = circleButton.then {
 			$0.backgroundColor = R.Color.orange200
 			$0.layer.cornerRadius = 8
+			$0.contentEdgeInsets = .init(top: 4, left: 4, bottom: 4, right: 4)
 		}
 		
 		lastLabel = lastLabel.then {

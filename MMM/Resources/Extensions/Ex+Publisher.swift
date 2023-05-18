@@ -32,6 +32,15 @@ extension UIButton {
 	}
 }
 
+extension UISwitch {
+	var statePublisher: AnyPublisher<Bool, Never> {
+		controlPublisher(for: .valueChanged)
+			.map { $0 as! UISwitch }
+			.map { $0.isOn }
+			.eraseToAnyPublisher()
+	}
+}
+
 extension UITextField {
 	var textPublisher: AnyPublisher<String, Never> {
 		controlPublisher(for: .editingChanged)

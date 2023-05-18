@@ -599,9 +599,9 @@
 		C433A06B29EE537D008B26DF /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				C4EA5B3F29FA1A40008D1564 /* HomeHeaderView.swift */,
 				C4199DDE2A00B3FE006E5DA8 /* HomeEmptyView.swift */,
 				C4351B4B2A1601D3005F95BE /* HomeFilterView.swift */,
+				C4EA5B3F29FA1A40008D1564 /* HomeHeaderView.swift */,
 				C4EA5B4129FA26E0008D1564 /* HomeHeaderStackView.swift */,
 				C433A06C29EE53BB008B26DF /* HomeTableViewCell.swift */,
 				C4D7FC882A08A61C00565291 /* CalendarCell.swift */,

@@ -21,6 +21,10 @@ final class HomeFilterViewController: BaseViewController {
 
 	private lazy var earnView = HomeFilterView()
 	private lazy var payView = HomeFilterView()
+	
+	private lazy var dailyTotalLabel = UILabel()
+	private lazy var dailyTotalSwitch = UISwitch()
+	private lazy var dailyTotalDescriptionLabel = UILabel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -88,10 +92,33 @@ private extension HomeFilterViewController {
 		payView = payView.then {
 			$0.setup(isEarn: false)
 		}
+		
+		dailyTotalLabel = dailyTotalLabel.then {
+			$0.text = "일별 금액 합계 설정"
+			$0.font = R.Font.h5
+			$0.textColor = R.Color.gray800
+		}
+		
+		dailyTotalSwitch = dailyTotalSwitch.then {
+			$0.isOn = true
+			$0.onTintColor = R.Color.gray900
+		}
+		
+		dailyTotalDescriptionLabel = dailyTotalDescriptionLabel.then {
+			let attrString = NSMutableAttributedString(string: "하루에 기록한 수입과 지출의 총 합계를 달력에 보여줘요.")
+			let paragraphStyle = NSMutableParagraphStyle()
+			paragraphStyle.lineSpacing = 2
+			paragraphStyle.lineBreakMode = .byCharWrapping
+			attrString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, attrString.length))
+			$0.attributedText = attrString
+			$0.font = R.Font.body3
+			$0.textColor = R.Color.gray800
+			$0.numberOfLines = 0
+		}
 	}
 	
 	private func setLayout() {
-		view.addSubviews(highlightLabel, highlightSwitch, highlightDescriptionLabel, earnView, payView)
+		view.addSubviews(highlightLabel, highlightSwitch, highlightDescriptionLabel, earnView, payView, dailyTotalLabel, dailyTotalSwitch, dailyTotalDescriptionLabel)
 		
 		highlightLabel.snp.makeConstraints {
 			$0.top.leading.equalToSuperview().inset(24)
@@ -118,6 +145,21 @@ private extension HomeFilterViewController {
 			$0.top.equalTo(earnView.snp.bottom).offset(12)
 			$0.leading.trailing.equalToSuperview().inset(24)
 			$0.height.equalTo(88)
+		}
+		
+		dailyTotalLabel.snp.makeConstraints {
+			$0.top.equalTo(payView.snp.bottom).offset(48)
+			$0.leading.equalToSuperview().inset(24)
+		}
+		
+		dailyTotalSwitch.snp.makeConstraints {
+			$0.top.equalTo(payView.snp.bottom).offset(48)
+			$0.trailing.equalToSuperview().inset(24)
+		}
+
+		dailyTotalDescriptionLabel.snp.makeConstraints {
+			$0.top.equalTo(dailyTotalSwitch.snp.bottom).offset(12)
+			$0.leading.trailing.equalToSuperview().inset(24)
 		}
 	}
 }

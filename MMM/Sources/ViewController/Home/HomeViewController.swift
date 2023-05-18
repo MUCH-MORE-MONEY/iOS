@@ -24,9 +24,10 @@ final class HomeViewController: UIViewController {
 	// MARK: - UI Components
 	private lazy var monthButtonItem = UIBarButtonItem()
 	private lazy var todayButtonItem = UIBarButtonItem()
+	private lazy var FilterButtonItem = UIBarButtonItem()
 	private lazy var monthButton = UIButton()
 	private lazy var todayButton = UIButton()
-	private lazy var settingButton = UIBarButtonItem()
+	private lazy var FilterButton = UIButton()
 	private lazy var separator = UIView() // Nav separator
 	private lazy var calendar = FSCalendar()
 	private lazy var calendarHeaderView = HomeHeaderView()
@@ -103,6 +104,13 @@ extension HomeViewController {
 			monthButton.setTitle(date.getFormattedDate(format: "M월"), for: .normal)
 		}
 	}
+	
+	/// Push Home Filter VC
+	private func didTapFilterButton() {
+		let vc = HomeFilterViewController()
+		vc.hidesBottomBarWhenPushed = true	// TabBar Above
+		navigationController?.pushViewController(vc, animated: true)
+	}
 }
 
 //MARK: - Style & Layouts
@@ -122,6 +130,10 @@ extension HomeViewController {
 		
 		monthButton.tapPublisher
 			.sinkOnMainThread(receiveValue: didTapMonthButton)
+			.store(in: &cancellable)
+
+		FilterButton.tapPublisher
+			.sinkOnMainThread(receiveValue: didTapFilterButton)
 			.store(in: &cancellable)
 //		checkButton.tapPublisher
 //			.receive(on: DispatchQueue.main)
@@ -170,7 +182,7 @@ extension HomeViewController {
 		view.backgroundColor = R.Color.gray100
 		view.addGestureRecognizer(self.scopeGesture)
 		navigationItem.leftBarButtonItem = monthButtonItem
-		navigationItem.rightBarButtonItems = [settingButton, todayButtonItem]
+		navigationItem.rightBarButtonItems = [FilterButtonItem, todayButtonItem]
 
 		monthButton = monthButton.then {
 			$0.frame = .init(origin: .zero, size: .init(width: 150, height: 24))
@@ -204,9 +216,12 @@ extension HomeViewController {
 			$0.customView = todayButton
 		}
 		
-		settingButton = settingButton.then {
-			$0.image = R.Icon.setting
-			$0.style = .plain
+		FilterButton = FilterButton.then {
+			$0.setImage(R.Icon.setting, for: .normal)
+		}
+		
+		FilterButtonItem = FilterButtonItem.then {
+			$0.customView = FilterButton
 		}
 		
 		separator = separator.then {

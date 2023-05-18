@@ -10,7 +10,7 @@ import Combine
 import Then
 import SnapKit
 
-final class HomeFilterViewController: UIViewController {
+final class HomeFilterViewController: BaseViewController {
 	// MARK: - Properties
 	// MARK: - UI Components
 	
@@ -18,12 +18,6 @@ final class HomeFilterViewController: UIViewController {
         super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
     }
-	
-	// Compile time에 error를 발생시키는 코드
-	@available(*, unavailable)
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
 }
 
 //MARK: - Style & Layouts
@@ -39,6 +33,9 @@ private extension HomeFilterViewController {
 	}
 	
 	private func setAttribute() {
+		// [view]
+		view.backgroundColor = R.Color.gray100
+		title = "달력 관리"
 	}
 	
 	private func setLayout() {

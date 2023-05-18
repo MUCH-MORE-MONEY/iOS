@@ -57,7 +57,7 @@ extension HomeFilterView {
 	
 	// Set Standard 하이라이트
 	@objc private func handleTap(sender: UITapGestureRecognizer) {
-		guard let viewModel = self.viewModel else { return }
+		guard let viewModel = self.viewModel, viewModel.isHighlight else { return }
 		// 수입/지출에 따른 viewModel (수입:true, 지출:false)
 		viewModel.didTapHighlightButton = self.isEarn
 	}

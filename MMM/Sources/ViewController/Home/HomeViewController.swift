@@ -462,7 +462,6 @@ extension HomeViewController: UITableViewDelegate {
         vc.setNavigation(title)
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
-        
 	}
 }
 

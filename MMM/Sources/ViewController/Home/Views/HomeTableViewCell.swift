@@ -22,7 +22,7 @@ final class HomeTableViewCell: UITableViewCell {
 		$0.layer.cornerRadius = 20
 		$0.layer.backgroundColor = R.Color.gray100.cgColor
 		$0.layer.masksToBounds = true	// 모양대로 자르기
-		$0.contentMode = .scaleAspectFit
+		$0.contentMode = .scaleAspectFill
 	}
 	
 	// contains2StackView과 memoLabel 들어가는 view

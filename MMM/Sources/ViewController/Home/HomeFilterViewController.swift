@@ -12,14 +12,21 @@ import SnapKit
 
 final class HomeFilterViewController: BaseViewController {
 	// MARK: - Properties
+	private lazy var cancellable: Set<AnyCancellable> = .init()
+
 	// MARK: - UI Components
 	private lazy var highlightLabel = UILabel()
+	private lazy var highlightSwitch = UISwitch()
 	private lazy var highlightDescriptionLabel = UILabel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
     }
+}
+
+//MARK: - Action
+private extension HomeFilterViewController {
 }
 
 //MARK: - Style & Layouts
@@ -32,6 +39,15 @@ private extension HomeFilterViewController {
 	}
 	
 	private func bind() {
+		//MARK: input
+		highlightSwitch.statePublisher
+			.sinkOnMainThread { isOn in
+				// 임시: View enable 코드 작성 예정
+			}
+			.store(in: &cancellable)
+
+		//MARK: output
+
 	}
 	
 	private func setAttribute() {
@@ -43,6 +59,10 @@ private extension HomeFilterViewController {
 			$0.text = "금액 하이라이트 설정"
 			$0.font = R.Font.h5
 			$0.textColor = R.Color.gray800
+		}
+		
+		highlightSwitch = highlightSwitch.then {
+			$0.isOn = true
 		}
 		
 		highlightDescriptionLabel = highlightDescriptionLabel.then {
@@ -59,10 +79,14 @@ private extension HomeFilterViewController {
 	}
 	
 	private func setLayout() {
-		view.addSubviews(highlightLabel, highlightDescriptionLabel)
+		view.addSubviews(highlightLabel, highlightSwitch, highlightDescriptionLabel)
 		
 		highlightLabel.snp.makeConstraints {
-			$0.top.leading.trailing.equalToSuperview().inset(24)
+			$0.top.leading.equalToSuperview().inset(24)
+		}
+		
+		highlightSwitch.snp.makeConstraints {
+			$0.top.trailing.equalToSuperview().inset(24)
 		}
 		
 		highlightDescriptionLabel.snp.makeConstraints {

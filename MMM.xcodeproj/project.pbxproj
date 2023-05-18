@@ -489,7 +489,6 @@
 		C41193DC29D287E6003DBC15 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				6AB1151229EE6D9E00D3B813 /* Ex+UITabBar.swift */,
 				C4DBAA2B29DBCB8B00D1BB97 /* Ex+Button.swift */,
 				C41193E029D287E6003DBC15 /* Ex+Color.swift */,
 				C433A07229EEE751008B26DF /* Ex+Date.swift */,
@@ -503,9 +502,10 @@
 				C44807E429E7E76800D4B090 /* Ex+UIControl.swift */,
 				C41193DF29D287E6003DBC15 /* Ex+UIDevice.swift */,
 				C4199DE02A00F164006E5DA8 /* Ex+UIImageView.swift */,
+				C4EA5B4329FA2810008D1564 /* Ex+UIStackView.swift */,
+				6AB1151229EE6D9E00D3B813 /* Ex+UITabBar.swift */,
 				C41193F629D3D954003DBC15 /* Ex+UITableView.swift */,
 				C41193E229D287E6003DBC15 /* Ex+View.swift */,
-				C4EA5B4329FA2810008D1564 /* Ex+UIStackView.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";

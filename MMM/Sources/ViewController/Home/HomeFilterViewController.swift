@@ -34,6 +34,11 @@ final class HomeFilterViewController: BaseViewController {
 
 //MARK: - Action
 private extension HomeFilterViewController {
+	/// 금액 하이라이트 isEnabled
+	func toggleHighlightSwitch(_ isOn: Bool) {
+		earnView.toggleEnabled(isOn)
+		payView.toggleEnabled(isOn)
+	}
 }
 
 //MARK: - Style & Layouts
@@ -48,9 +53,7 @@ private extension HomeFilterViewController {
 	private func bind() {
 		//MARK: input
 		highlightSwitch.statePublisher
-			.sinkOnMainThread { isOn in
-				// 임시: View enable 코드 작성 예정
-			}
+			.sinkOnMainThread(receiveValue: toggleHighlightSwitch)
 			.store(in: &cancellable)
 
 		//MARK: output

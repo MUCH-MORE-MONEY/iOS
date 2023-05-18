@@ -40,6 +40,13 @@ extension HomeFilterView {
 	func setup(isEarn: Bool) {
 		titleLabel.text = isEarn ? "수입" : "지출"
 	}
+	
+	func toggleEnabled(_ isOn: Bool) {
+		backgroundColor = isOn ? R.Color.gray900 : R.Color.gray200
+		standardLabel.textColor = isOn ? R.Color.white : R.Color.gray400
+		circleButton.backgroundColor = isOn ? R.Color.orange200 : R.Color.gray400
+		circleButton.isEnabled = isOn
+	}
 }
 
 //MARK: - Style & Layouts

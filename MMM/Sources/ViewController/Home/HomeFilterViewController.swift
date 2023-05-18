@@ -48,6 +48,7 @@ private extension HomeFilterViewController {
 	func toggleHighlightSwitch(_ isOn: Bool) {
 		earnView.toggleEnabled(isOn)
 		payView.toggleEnabled(isOn)
+		viewModel.isHighlight = !viewModel.isHighlight
 	}
 	
 	/// 일별 금액 합계 isEnabled
@@ -106,7 +107,7 @@ private extension HomeFilterViewController {
 		}
 		
 		highlightSwitch = highlightSwitch.then {
-			$0.isOn = true
+			$0.isOn = viewModel.isHighlight
 			$0.onTintColor = R.Color.gray900
 		}
 		
@@ -124,10 +125,12 @@ private extension HomeFilterViewController {
 		
 		earnView = earnView.then {
 			$0.setup(viewModel: viewModel, isEarn: true)
+			$0.toggleEnabled(viewModel.isHighlight)
 		}
 		
 		payView = payView.then {
 			$0.setup(viewModel: viewModel, isEarn: false)
+			$0.toggleEnabled(viewModel.isHighlight)
 		}
 		
 		dailyTotalLabel = dailyTotalLabel.then {

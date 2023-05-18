@@ -110,7 +110,6 @@ extension HomeViewController {
 	/// Set Calendar Title Offset
 	private func setTitleOffset() {
 		calendar.appearance.titleOffset = .init(x: 0, y: viewModel.isDailySetting ? 8 : 4)
-
 	}
 	
 	/// Push Home Filter VC

@@ -16,7 +16,14 @@ final class HomeViewModel {
 	@Published var passwordConfirmInput: String = ""
 	@Published var dailyList: [EconomicActivity] = []
 	@Published var monthlyList: [Monthly] = []
+	@Published var isHighlight: Bool = KeychainWrapper.standard.bool(forKey: "isHighlight")! {
+		// 금액 하이라이트 설정
+		didSet {
+			KeychainWrapper.standard.set(isHighlight, forKey: "isHighlight")
+		}
+	}
 	@Published var isDailySetting: Bool = KeychainWrapper.standard.bool(forKey: "isDailySetting")! {
+		// 일별 금액 합계 설정
 		didSet {
 			KeychainWrapper.standard.set(isDailySetting, forKey: "isDailySetting")
 		}

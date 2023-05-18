@@ -13,6 +13,7 @@ import SnapKit
 final class HomeFilterViewController: BaseViewController {
 	// MARK: - Properties
 	// MARK: - UI Components
+	private lazy var highlightLabel = UILabel()
 	
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,8 +37,19 @@ private extension HomeFilterViewController {
 		// [view]
 		view.backgroundColor = R.Color.gray100
 		title = "달력 관리"
+		
+		highlightLabel = highlightLabel.then {
+			$0.text = "금액 하이라이트 설정"
+			$0.font = R.Font.h5
+			$0.textColor = R.Color.gray800
+		}
 	}
 	
 	private func setLayout() {
+		view.addSubviews(highlightLabel)
+		
+		highlightLabel.snp.makeConstraints {
+			$0.top.leading.equalToSuperview().inset(24)
+		}
 	}
 }

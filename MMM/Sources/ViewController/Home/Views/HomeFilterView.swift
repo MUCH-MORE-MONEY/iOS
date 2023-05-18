@@ -47,6 +47,7 @@ extension HomeFilterView {
 		colorButton.backgroundColor = isEarn ? R.Color.blue400 : R.Color.orange400
 	}
 	
+	// 외부에서 설정
 	func toggleEnabled(_ isOn: Bool) {
 		backgroundColor = isOn ? R.Color.gray900 : R.Color.gray200
 		standardLabel.textColor = isOn ? R.Color.white : R.Color.gray400
@@ -55,7 +56,7 @@ extension HomeFilterView {
 	}
 	
 	// Set Standard 하이라이트
-	@objc func handleTap(sender: UITapGestureRecognizer) {
+	@objc private func handleTap(sender: UITapGestureRecognizer) {
 		guard let viewModel = self.viewModel else { return }
 		// 수입/지출에 따른 viewModel (수입:true, 지출:false)
 		viewModel.didTapHighlightButton = self.isEarn

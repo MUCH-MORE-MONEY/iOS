@@ -19,8 +19,8 @@ final class HomeFilterViewController: BaseViewController {
 	private lazy var highlightSwitch = UISwitch()
 	private lazy var highlightDescriptionLabel = UILabel()
 
-	private lazy var earnView = UIView()
-	private lazy var earnLabel = UILabel()
+	private lazy var earnView = HomeFilterView()
+	private lazy var payView = HomeFilterView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,22 +81,17 @@ private extension HomeFilterViewController {
 			$0.numberOfLines = 0
 		}
 		
-		// 수입(Earn) filter view
 		earnView = earnView.then {
-			$0.backgroundColor = R.Color.gray900
-			$0.layer.cornerRadius = 4
+			$0.setup(isEarn: true)
 		}
 		
-		earnLabel = earnLabel.then {
-			$0.text = "수입"
-			$0.font = R.Font.title3
-			$0.textColor = R.Color.gray300
+		payView = payView.then {
+			$0.setup(isEarn: false)
 		}
 	}
 	
 	private func setLayout() {
-		view.addSubviews(highlightLabel, highlightSwitch, highlightDescriptionLabel, earnView)
-		earnView.addSubviews(earnLabel)
+		view.addSubviews(highlightLabel, highlightSwitch, highlightDescriptionLabel, earnView, payView)
 		
 		highlightLabel.snp.makeConstraints {
 			$0.top.leading.equalToSuperview().inset(24)
@@ -111,14 +106,18 @@ private extension HomeFilterViewController {
 			$0.leading.trailing.equalToSuperview().inset(24)
 		}
 		
+		// 수입 Filter View
 		earnView.snp.makeConstraints {
 			$0.top.equalTo(highlightDescriptionLabel.snp.bottom).offset(24)
 			$0.leading.trailing.equalToSuperview().inset(24)
 			$0.height.equalTo(88)
 		}
 		
-		earnLabel.snp.makeConstraints {
-			$0.top.leading.equalToSuperview().offset(12)
+		// 지출 Filter View
+		payView.snp.makeConstraints {
+			$0.top.equalTo(earnView.snp.bottom).offset(12)
+			$0.leading.trailing.equalToSuperview().inset(24)
+			$0.height.equalTo(88)
 		}
 	}
 }

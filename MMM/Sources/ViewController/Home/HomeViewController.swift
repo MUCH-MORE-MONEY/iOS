@@ -24,10 +24,10 @@ final class HomeViewController: UIViewController {
 	// MARK: - UI Components
 	private lazy var monthButtonItem = UIBarButtonItem()
 	private lazy var todayButtonItem = UIBarButtonItem()
-	private lazy var FilterButtonItem = UIBarButtonItem()
+	private lazy var filterButtonItem = UIBarButtonItem()
 	private lazy var monthButton = UIButton()
 	private lazy var todayButton = UIButton()
-	private lazy var FilterButton = UIButton()
+	private lazy var filterButton = UIButton()
 	private lazy var separator = UIView() // Nav separator
 	private lazy var calendar = FSCalendar()
 	private lazy var calendarHeaderView = HomeHeaderView()
@@ -132,7 +132,7 @@ extension HomeViewController {
 			.sinkOnMainThread(receiveValue: didTapMonthButton)
 			.store(in: &cancellable)
 
-		FilterButton.tapPublisher
+		filterButton.tapPublisher
 			.sinkOnMainThread(receiveValue: didTapFilterButton)
 			.store(in: &cancellable)
 //		checkButton.tapPublisher
@@ -182,7 +182,7 @@ extension HomeViewController {
 		view.backgroundColor = R.Color.gray100
 		view.addGestureRecognizer(self.scopeGesture)
 		navigationItem.leftBarButtonItem = monthButtonItem
-		navigationItem.rightBarButtonItems = [FilterButtonItem, todayButtonItem]
+		navigationItem.rightBarButtonItems = [filterButtonItem, todayButtonItem]
 
 		monthButton = monthButton.then {
 			$0.frame = .init(origin: .zero, size: .init(width: 150, height: 24))
@@ -216,12 +216,12 @@ extension HomeViewController {
 			$0.customView = todayButton
 		}
 		
-		FilterButton = FilterButton.then {
+		filterButton = filterButton.then {
 			$0.setImage(R.Icon.setting, for: .normal)
 		}
 		
-		FilterButtonItem = FilterButtonItem.then {
-			$0.customView = FilterButton
+		filterButtonItem = filterButtonItem.then {
+			$0.customView = filterButton
 		}
 		
 		separator = separator.then {

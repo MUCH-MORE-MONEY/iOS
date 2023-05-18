@@ -53,6 +53,13 @@ extension HomeFilterView {
 		colorButton.backgroundColor = isOn ? R.Color.orange200 : R.Color.gray400
 		colorButton.isEnabled = isOn
 	}
+	
+	// Set Standard 하이라이트
+	@objc func handleTap(sender: UITapGestureRecognizer) {
+		guard let viewModel = self.viewModel else { return }
+		// 수입/지출에 따른 viewModel (수입:true, 지출:false)
+		viewModel.didTapHighlightButton = self.isEarn
+	}
 }
 
 //MARK: - Style & Layouts
@@ -82,6 +89,11 @@ private extension HomeFilterView {
 		titleLabel = titleLabel.then {
 			$0.font = R.Font.title3
 			$0.textColor = R.Color.gray300
+		}
+		
+		containerView = containerView.then {
+			let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+			$0.addGestureRecognizer(tapGesture)
 		}
 		
 		standardLabel = standardLabel.then {

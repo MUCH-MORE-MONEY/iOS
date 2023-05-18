@@ -28,6 +28,7 @@ final class HomeViewModel {
 			KeychainWrapper.standard.set(isDailySetting, forKey: "isDailySetting")
 		}
 	}
+	@Published var didTapHighlightButton: Bool?
 	@Published var didTapColorButton: Bool?
 
 	// MARK: - Private properties

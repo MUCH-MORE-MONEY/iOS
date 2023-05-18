@@ -56,6 +56,17 @@ private extension HomeFilterViewController {
 		viewModel.isDailySetting = !viewModel.isDailySetting
 	}
 	
+	// Push Highlight BottomSheet
+	private func didTapHighlightButton(_ isEarn: Bool) {
+		print(isEarn)
+		let picker = DatePickerViewController()
+		let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
+		picker.delegate = bottomSheetVC
+		bottomSheetVC.modalPresentationStyle = .overFullScreen
+		bottomSheetVC.setSetting(height: 375)
+		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
+	}
+	
 	// Push Color BottomSheet
 	private func didTapColorButton(_ isEarn: Bool) {
 		print(isEarn)
@@ -88,6 +99,12 @@ private extension HomeFilterViewController {
 			.store(in: &cancellable)
 
 		//MARK: output
+		viewModel.$didTapHighlightButton
+			.sinkOnMainThread(receiveValue: { value in
+				guard let value = value else { return }
+				self.didTapHighlightButton(value)
+			}).store(in: &cancellable)
+		
 		viewModel.$didTapColorButton
 			.sinkOnMainThread(receiveValue: { value in
 				guard let value = value else { return }

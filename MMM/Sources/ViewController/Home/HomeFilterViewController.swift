@@ -63,6 +63,7 @@ private extension HomeFilterViewController {
 		
 		highlightSwitch = highlightSwitch.then {
 			$0.isOn = true
+			$0.onTintColor = R.Color.gray900
 		}
 		
 		highlightDescriptionLabel = highlightDescriptionLabel.then {

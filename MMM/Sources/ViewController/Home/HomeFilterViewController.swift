@@ -18,6 +18,7 @@ final class HomeFilterViewController: BaseViewController {
 	private lazy var highlightLabel = UILabel()
 	private lazy var highlightSwitch = UISwitch()
 	private lazy var highlightDescriptionLabel = UILabel()
+	private lazy var earnView = UIView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,10 +78,16 @@ private extension HomeFilterViewController {
 			$0.textColor = R.Color.gray800
 			$0.numberOfLines = 0
 		}
+		
+		// 수입(Earn) filter view
+		earnView = earnView.then {
+			$0.backgroundColor = R.Color.gray900
+			$0.layer.cornerRadius = 4
+		}
 	}
 	
 	private func setLayout() {
-		view.addSubviews(highlightLabel, highlightSwitch, highlightDescriptionLabel)
+		view.addSubviews(highlightLabel, highlightSwitch, highlightDescriptionLabel, earnView)
 		
 		highlightLabel.snp.makeConstraints {
 			$0.top.leading.equalToSuperview().inset(24)
@@ -91,8 +98,14 @@ private extension HomeFilterViewController {
 		}
 		
 		highlightDescriptionLabel.snp.makeConstraints {
+			$0.top.equalTo(highlightSwitch.snp.bottom).offset(12)
 			$0.leading.trailing.equalToSuperview().inset(24)
-			$0.top.equalTo(highlightLabel.snp.bottom).offset(13)
+		}
+		
+		earnView.snp.makeConstraints {
+			$0.top.equalTo(highlightDescriptionLabel.snp.bottom).offset(24)
+			$0.leading.trailing.equalToSuperview().inset(24)
+			$0.height.equalTo(88)
 		}
 	}
 }

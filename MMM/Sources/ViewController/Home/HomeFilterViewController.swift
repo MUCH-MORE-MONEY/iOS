@@ -6,24 +6,41 @@
 //
 
 import UIKit
+import Combine
+import Then
+import SnapKit
 
-class HomeFilterViewController: UIViewController {
-
+final class HomeFilterViewController: UIViewController {
+	// MARK: - Properties
+	// MARK: - UI Components
+	
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+		setup()		// 초기 셋업할 코드들
     }
-    
+	
+	// Compile time에 error를 발생시키는 코드
+	@available(*, unavailable)
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+}
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+//MARK: - Style & Layouts
+private extension HomeFilterViewController {
+	// 초기 셋업할 코드들
+	private func setup() {
+		bind()
+		setAttribute()
+		setLayout()
+	}
+	
+	private func bind() {
+	}
+	
+	private func setAttribute() {
+	}
+	
+	private func setLayout() {
+	}
 }

@@ -15,7 +15,7 @@ protocol HomeViewProtocol: AnyObject {
 	func willPickerDismiss(_ date: Date)
 }
 
-class HomeViewController: UIViewController {
+final class HomeViewController: UIViewController {
 	// MARK: - Properties
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 	private let viewModel = HomeViewModel()
@@ -107,8 +107,8 @@ extension HomeViewController {
 
 //MARK: - Style & Layouts
 extension HomeViewController {
+	// 초기 셋업할 코드들
 	private func setup() {
-		// 초기 셋업할 코드들
 		bind()
 		setAttribute()
 		setLayout()

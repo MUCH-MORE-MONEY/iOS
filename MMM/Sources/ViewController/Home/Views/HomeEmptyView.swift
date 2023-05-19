@@ -11,7 +11,6 @@ import SnapKit
 
 final class HomeEmptyView: UIView {
 	// MARK: - Properties
-
 	// MARK: - UI Components
 	private lazy var stackView = UIStackView() // imageView, label
 	private lazy var ivEmpty = UIImageView()
@@ -19,24 +18,24 @@ final class HomeEmptyView: UIView {
 
 	override init(frame: CGRect) {
 		super.init(frame: frame)
-		setup()
+		setup() // 초기 셋업할 코드들
 	}
 	
+	// Compile time에 error를 발생시키는 코드
+	@available(*, unavailable)
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
 }
-
+//MARK: - Style & Layouts
 private extension HomeEmptyView {
-	
-	func setup() {
-		// 초기 셋업할 코드들
+	// 초기 셋업할 코드들
+	private func setup() {
 		setAttribute()
 		setLayout()
 	}
 	
-	func setAttribute() {
-		
+	private func setAttribute() {
 		stackView = stackView.then {
 			$0.axis = .vertical
 			$0.alignment = .center
@@ -62,7 +61,7 @@ private extension HomeEmptyView {
 		}
 	}
 	
-	func setLayout() {
+	private func setLayout() {
 		addSubviews(stackView)
 		stackView.addArrangedSubviews(ivEmpty, titleLabel)
 		

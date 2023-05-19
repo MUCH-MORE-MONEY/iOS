@@ -16,7 +16,7 @@ final class HighlightViewController: UIViewController {
 	private let viewModel: HomeViewModel
 	weak var delegate: BottomSheetChild?
 
-	// MARK: - UI
+	// MARK: - UI Components
 	private lazy var stackView = UIStackView() // title Label, 확인 Button
 	private lazy var titleLabel = UILabel()
 	private lazy var checkButton = UIButton()
@@ -38,15 +38,13 @@ final class HighlightViewController: UIViewController {
 		setup()		// 초기 셋업할 코드들
     }
 }
-
 //MARK: - Action
 private extension HighlightViewController {
-	
-	func willDismiss() {
+	// 닫힐때
+	private func willDismiss() {
 		delegate?.willDismiss()
 	}
 }
-
 //MARK: - Style & Layouts
 private extension HighlightViewController {
 	// 초기 셋업할 코드들
@@ -86,7 +84,7 @@ private extension HighlightViewController {
 			$0.setTitleColor(R.Color.black.withAlphaComponent(0.7), for: .highlighted)
 			$0.contentHorizontalAlignment = .right
 			$0.titleLabel?.font = R.Font.title3
-			$0.contentEdgeInsets = .init(top: 10, left: 10, bottom: 10, right: 10)
+			$0.contentEdgeInsets = .init(top: 10, left: 10, bottom: 10, right: 10) // touch 영역 늘리기
 		}
 	}
 	

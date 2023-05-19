@@ -32,6 +32,8 @@ final class HomeFilterViewController: BaseViewController {
 		super.init(nibName: nil, bundle: nil)
 	}
 	
+	// Compile time에 error를 발생시키는 코드
+	@available(*, unavailable)
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
@@ -62,6 +64,7 @@ private extension HomeFilterViewController {
 		viewModel.isDailySetting = !viewModel.isDailySetting
 	}
 	
+	//MARK: - Private
 	// Push Highlight BottomSheet
 	private func didTapHighlightButton(_ isEarn: Bool) {
 		let vc = HighlightViewController(viewModel: viewModel)

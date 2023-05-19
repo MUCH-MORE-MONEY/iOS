@@ -57,7 +57,6 @@ final class HomeViewController: UIViewController {
 		setTitleOffset() // offset 설정
 		calendar.reloadData()
 		tableView.reloadData()
-//		self.navigationController?.setNavigationBarHidden(true, animated: animated)	// navigation bar 숨김
 	}
 	
 	override func viewWillDisappear(_ animated: Bool) {
@@ -69,10 +68,8 @@ final class HomeViewController: UIViewController {
 		return .lightContent // status text color 변경
 	}
 }
-
 //MARK: - Action
 extension HomeViewController {
-
 	// 오늘 날짜로 돌아오기
 	func didTapTodayButton() {
 		self.didSelectDate(Date())
@@ -98,6 +95,7 @@ extension HomeViewController {
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
 	}
 	
+	//MARK: - Private
 	/// Set Month Btn Text
 	private func setMonth(_ date: Date) {
 		if Date().getFormattedDate(format: "yyyy") != date.getFormattedDate(format: "yyyy") {
@@ -119,9 +117,8 @@ extension HomeViewController {
 		navigationController?.pushViewController(vc, animated: true)
 	}
 }
-
 //MARK: - Style & Layouts
-extension HomeViewController {
+private extension HomeViewController {
 	// 초기 셋업할 코드들
 	private func setup() {
 		bind()
@@ -142,11 +139,7 @@ extension HomeViewController {
 		filterButton.tapPublisher
 			.sinkOnMainThread(receiveValue: didTapFilterButton)
 			.store(in: &cancellable)
-//		checkButton.tapPublisher
-//			.receive(on: DispatchQueue.main)
-//			.sinkOnMainThread(receiveValue: go)
-//			.store(in: &cancellables)
-		
+
 		// 예시
 //		UITextField().textPublisher
 //			.receive(on: DispatchQueue.main)
@@ -177,11 +170,6 @@ extension HomeViewController {
 //					self?.toggleCheckButton(isEnabled)
 //				}
 //			}).store(in: &cancellables)
-		
-//		viewModel.isMatchPasswordInput
-//			.receive(on: DispatchQueue.main)
-//			.sink(receiveValue: go2)
-//			.store(in: &cancellables)
 	}
 	
 	private func setAttribute() {
@@ -288,12 +276,12 @@ extension HomeViewController {
 			$0.textColor = R.Color.gray900
 			$0.textAlignment = .left
 		}
-		
-		headerView.addSubview(dayLabel)
-		view.addSubviews(calendarHeaderView, calendar, separator, tableView, emptyView)
 	}
 	
 	private func setLayout() {
+		headerView.addSubview(dayLabel)
+		view.addSubviews(calendarHeaderView, calendar, separator, tableView, emptyView)
+
 		separator.snp.makeConstraints {
 			$0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(15)
 			$0.top.equalTo(view.safeAreaLayoutGuide)
@@ -489,7 +477,7 @@ extension HomeViewController: UITableViewDelegate {
 }
 
 extension HomeViewController: HomeViewProtocol {
-	
+	// 닫힐때
 	func willPickerDismiss(_ date: Date) {
 		self.didSelectDate(date)
 	}

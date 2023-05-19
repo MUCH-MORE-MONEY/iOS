@@ -29,7 +29,7 @@ final class HomeFilterView: UIView {
 
 	override init(frame: CGRect) {
 		super.init(frame: frame)
-		setup()
+		setup() // 초기 셋업할 코드들
 	}
 	
 	// Compile time에 error를 발생시키는 코드
@@ -38,7 +38,6 @@ final class HomeFilterView: UIView {
 		fatalError("init(coder:) has not been implemented")
 	}
 }
-
 //MARK: - Action
 extension HomeFilterView {
 	// 외부에서 설정
@@ -57,14 +56,16 @@ extension HomeFilterView {
 		colorButton.isEnabled = isOn
 	}
 	
+	//MARK: - Private
 	// Set Standard 하이라이트
 	@objc private func handleTap(sender: UITapGestureRecognizer) {
+		// viewModel.isHighlight가 Toggle이 유무
 		guard let viewModel = self.viewModel, viewModel.isHighlight else { return }
+		
 		// 수입/지출에 따른 viewModel (수입:true, 지출:false)
 		viewModel.didTapHighlightButton = self.isEarn
 	}
 }
-
 //MARK: - Style & Layouts
 private extension HomeFilterView {
 	// 초기 셋업할 코드들
@@ -95,7 +96,7 @@ private extension HomeFilterView {
 		}
 		
 		containerView = containerView.then {
-			let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+			let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.handleTap))
 			$0.addGestureRecognizer(tapGesture)
 		}
 		
@@ -118,7 +119,7 @@ private extension HomeFilterView {
 		
 		colorButton = colorButton.then {
 			$0.layer.cornerRadius = 8
-			$0.contentEdgeInsets = .init(top: 4, left: 4, bottom: 4, right: 4)
+			$0.contentEdgeInsets = .init(top: 10, left: 10, bottom: 10, right: 10) // touch 영역 늘리기
 		}
 		
 		lastLabel = lastLabel.then {

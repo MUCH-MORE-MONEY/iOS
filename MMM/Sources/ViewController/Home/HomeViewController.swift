@@ -357,6 +357,7 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 			$0.height.equalTo(bounds.height <= 300 / 2 ? 0 : 46) // calendar 전체 높이에 따른 높이 변경
 		}
 		
+		self.setMonth(calendar.currentPage)
 		self.view.layoutIfNeeded()
 	}
 

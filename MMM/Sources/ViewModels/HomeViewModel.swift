@@ -98,4 +98,41 @@ extension HomeViewModel {
 				self.monthlyList = monthlyList
 			}).store(in: &cancellable)
 	}
+	
+	func getWeeklyList(_ date1YM: String, _ date2YM: String) {
+		guard let date1 = Int(date1YM), let date2 = Int(date2YM), let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
+		
+		APIClient.dispatch(APIRouter.SelectListMonthlyReqDto(headers: APIHeader.Default(token: TempToken.token), body: APIParameters.SelectListMonthlyReqDto(dateYM: date1)))
+			.sink(receiveCompletion: { error in
+				switch error {
+				case .failure(let data):
+					switch data {
+					default:
+						break
+					}
+				case .finished:
+					break
+				}
+			}, receiveValue: { [weak self] reponse1 in
+				guard let self = self, let monthlyList1 = reponse1.monthly else { return }
+//				print(#file, #function, #line, monthlyList)
+				
+				APIClient.dispatch(APIRouter.SelectListMonthlyReqDto(headers: APIHeader.Default(token: TempToken.token), body: APIParameters.SelectListMonthlyReqDto(dateYM: date2)))
+					.sink(receiveCompletion: { error in
+						switch error {
+						case .failure(let data):
+							switch data {
+							default:
+								break
+							}
+						case .finished:
+							break
+						}
+					}, receiveValue: { [weak self] reponse2 in
+						guard let self = self, let monthlyList2 = reponse2.monthly else { return }
+		//				print(#file, #function, #line, monthlyList)
+						self.monthlyList = monthlyList1 + monthlyList2
+					}).store(in: &self.cancellable)
+			}).store(in: &cancellable)
+	}
 }

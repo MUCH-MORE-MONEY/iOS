@@ -84,8 +84,9 @@ extension HomeViewController {
 		self.setMonth(date)
 	}
 	
-	// 달력 Picker BottomSheet
-	func didTapMonthButton() {
+	//MARK: - Private
+	/// 달력 Picker Bottom Sheet
+	private func didTapMonthButton() {
 		let picker = DatePickerViewController()
 		let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
 		picker.delegate = bottomSheetVC
@@ -95,7 +96,6 @@ extension HomeViewController {
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
 	}
 	
-	//MARK: - Private
 	/// Set Month Btn Text
 	private func setMonth(_ date: Date) {
 		if Date().getFormattedDate(format: "yyyy") != date.getFormattedDate(format: "yyyy") {
@@ -362,14 +362,22 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 
 	// page가 변경될때 month 변경
 	func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
-		viewModel.getMonthlyList(calendar.currentPage.getFormattedYM())
-
+		let date = calendar.currentPage.getFormattedYM()
+		
+		if calendar.scope == .week { // 주 단위
+			if let dateAfter = Calendar.current.date(byAdding: .day, value: 6, to: calendar.currentPage) { // 해당 주의 마지막 날짜
+				if date != dateAfter.getFormattedYM() {
+					viewModel.getWeeklyList(date, dateAfter.getFormattedYM())
+				}
+			}
+		} else { // 월 단위
+			viewModel.getMonthlyList(date)
+		}
+		self.setMonth(calendar.currentPage) // 월 설정
 //		calendar.snp.updateConstraints {
 //			$0.height.equalTo(350)
 //		}
 //		calendar.adjustsBoundingRectWhenChangingMonths = true
-		
-		self.setMonth(calendar.currentPage) // 월 설정
 	}
 }
 

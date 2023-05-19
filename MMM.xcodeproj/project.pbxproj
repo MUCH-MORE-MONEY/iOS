@@ -606,9 +606,7 @@
 				C4EA5B3F29FA1A40008D1564 /* HomeHeaderView.swift */,
 				C4EA5B4129FA26E0008D1564 /* HomeHeaderStackView.swift */,
 				C433A06C29EE53BB008B26DF /* HomeTableViewCell.swift */,
-				C4351B4F2A1691FB005F95BE /* HighlightViewController.swift */,
 				C4D7FC882A08A61C00565291 /* CalendarCell.swift */,
-				C4199DD829FE6BE1006E5DA8 /* DatePickerViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -619,6 +617,8 @@
 				C433A06B29EE537D008B26DF /* Views */,
 				C44807E029E648D300D4B090 /* HomeViewController.swift */,
 				C4351B492A15C935005F95BE /* HomeFilterViewController.swift */,
+				C4351B4F2A1691FB005F95BE /* HighlightViewController.swift */,
+				C4199DD829FE6BE1006E5DA8 /* DatePickerViewController.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";

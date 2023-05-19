@@ -18,7 +18,7 @@ final class DatePickerViewController: UIViewController {
 	weak var homeDelegate: HomeViewProtocol?
 
 	// MARK: - UI
-	private lazy var stackView = UIStackView() // 날짜 이동, 확인 Button
+	private lazy var stackView = UIStackView() // 날짜 이동 Label, 확인 Button
 	private lazy var titleLabel = UILabel()
 	private lazy var checkButton = UIButton()
 	private lazy var datePicker = UIDatePicker()

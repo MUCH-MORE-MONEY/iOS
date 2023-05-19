@@ -40,6 +40,12 @@ final class HomeFilterViewController: BaseViewController {
         super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
     }
+	
+	override func viewWillDisappear(_ animated: Bool) {
+		// 한번 click되면 nil이 아니라 modal 되는 문제 해결
+		viewModel.didTapHighlightButton = nil
+		viewModel.didTapColorButton = nil
+	}
 }
 
 //MARK: - Action
@@ -58,10 +64,9 @@ private extension HomeFilterViewController {
 	
 	// Push Highlight BottomSheet
 	private func didTapHighlightButton(_ isEarn: Bool) {
-		print(isEarn)
-		let picker = DatePickerViewController()
-		let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
-		picker.delegate = bottomSheetVC
+		let vc = HighlightViewController(viewModel: viewModel)
+		let bottomSheetVC = BottomSheetViewController(contentViewController: vc)
+		vc.delegate = bottomSheetVC
 		bottomSheetVC.modalPresentationStyle = .overFullScreen
 		bottomSheetVC.setSetting(height: 174)
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
@@ -69,7 +74,6 @@ private extension HomeFilterViewController {
 	
 	// Push Color BottomSheet
 	private func didTapColorButton(_ isEarn: Bool) {
-		print(isEarn)
 		let picker = DatePickerViewController()
 		let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
 		picker.delegate = bottomSheetVC

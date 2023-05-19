@@ -16,6 +16,8 @@ final class HomeViewModel {
 	@Published var passwordConfirmInput: String = ""
 	@Published var dailyList: [EconomicActivity] = []
 	@Published var monthlyList: [Monthly] = []
+	@Published var didTapHighlightButton: Bool?	// bottom sheet
+	@Published var didTapColorButton: Bool?		// bottom sheet
 	@Published var isHighlight: Bool = KeychainWrapper.standard.bool(forKey: "isHighlight")! {
 		// 금액 하이라이트 설정
 		didSet {
@@ -28,8 +30,6 @@ final class HomeViewModel {
 			KeychainWrapper.standard.set(isDailySetting, forKey: "isDailySetting")
 		}
 	}
-	@Published var didTapHighlightButton: Bool?
-	@Published var didTapColorButton: Bool?
 
 	// MARK: - Private properties
 	private var cancellable: Set<AnyCancellable> = .init()
@@ -55,7 +55,6 @@ final class HomeViewModel {
 		self.getMonthlyList(Date().getFormattedYM())
 	}
 }
-
 //MARK: Action
 extension HomeViewModel {
 	func getDailyList(_ dateYMD: String) {
@@ -76,8 +75,7 @@ extension HomeViewModel {
 				guard let self = self, let dailyList = reponse.selectListDailyOutputDto else { return }
 //				print(#file, #function, #line, dailyList)
 				self.dailyList = dailyList
-			})
-			.store(in: &cancellable)
+			}).store(in: &cancellable)
 	}
 	
 	func getMonthlyList(_ dateYM: String) {
@@ -98,12 +96,6 @@ extension HomeViewModel {
 				guard let self = self, let monthlyList = reponse.monthly else { return }
 //				print(#file, #function, #line, monthlyList)
 				self.monthlyList = monthlyList
-			})
-			.store(in: &cancellable)
+			}).store(in: &cancellable)
 	}
-}
-
-//MARK: State
-extension HomeViewModel {
-	
 }

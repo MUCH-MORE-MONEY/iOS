@@ -346,6 +346,9 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 			$0.height.equalTo(bounds.height) // 높이 변경
 		}
 		
+		// 46 : calendarHeaderView 높이
+		// 300 : calendar 높이
+		// 85 : calendar 주 단위 높이
 		calendarHeaderView.snp.updateConstraints {
 			$0.height.equalTo(46 * (bounds.height - 85) / (300 - 85)) // calendar 전체 높이에 따른 높이 변경
 		}
@@ -368,10 +371,6 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 			viewModel.getMonthlyList(date)
 		}
 		self.setMonth(calendar.currentPage) // 월 설정
-//		calendar.snp.updateConstraints {
-//			$0.height.equalTo(350)
-//		}
-//		calendar.adjustsBoundingRectWhenChangingMonths = true
 	}
 }
 

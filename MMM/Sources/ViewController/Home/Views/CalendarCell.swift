@@ -44,11 +44,11 @@ final class CalendarCell: FSCalendarCell {
 		self.borderLayer.frame = .init(origin: .zero, size: .init(width: 24, height: 24))
 
 		let diameter: CGFloat = min(self.selectionLayer.frame.height, self.selectionLayer.frame.width)
-		let (x, y) = (self.contentView.frame.width / 2 - diameter / 2, self.contentView.frame.height / 2 - diameter / 2)
+		let (x, _) = (self.contentView.frame.width / 2 - diameter / 2, self.contentView.frame.height / 2 - diameter / 2)
 		
-		self.selectionLayer.path = UIBezierPath(ovalIn: CGRect(x: x, y: y, width: diameter, height: diameter)).cgPath // 기본 선택에 대한 동그라미 path
-		self.todayLayer.path = UIBezierPath(roundedRect: CGRect(x: x, y: y, width: diameter, height: diameter), byRoundingCorners: .allCorners, cornerRadii: CGSize(width: 12, height: 12)).cgPath // 오늘 날짜의 border
-		self.borderLayer.path = UIBezierPath(roundedRect: CGRect(x: x, y: y, width: diameter, height: diameter), byRoundingCorners: .allCorners, cornerRadii: CGSize(width: 12, height: 12)).cgPath // 오늘 날짜의 border
+		self.selectionLayer.path = UIBezierPath(ovalIn: CGRect(x: x, y: 0, width: diameter, height: diameter)).cgPath // 기본 선택에 대한 동그라미 path
+		self.todayLayer.path = UIBezierPath(roundedRect: CGRect(x: x, y: 0, width: diameter, height: diameter), byRoundingCorners: .allCorners, cornerRadii: CGSize(width: 12, height: 12)).cgPath // 오늘 날짜의 border
+		self.borderLayer.path = UIBezierPath(roundedRect: CGRect(x: x, y: 0, width: diameter, height: diameter), byRoundingCorners: .allCorners, cornerRadii: CGSize(width: 12, height: 12)).cgPath // 오늘 날짜의 border
 	}
 	
 	override func configureAppearance() {

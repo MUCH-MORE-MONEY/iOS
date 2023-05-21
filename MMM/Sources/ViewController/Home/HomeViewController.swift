@@ -20,7 +20,7 @@ final class HomeViewController: UIViewController {
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 	private let viewModel = HomeViewModel()
 	private lazy var preDate = Date() // yyyyMMdd
-	
+
 	// MARK: - UI Components
 	private lazy var monthButtonItem = UIBarButtonItem()
 	private lazy var todayButtonItem = UIBarButtonItem()
@@ -54,7 +54,6 @@ final class HomeViewController: UIViewController {
 
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-		setTitleOffset() // offset 설정
 		calendar.reloadData()
 		tableView.reloadData()
 	}
@@ -103,11 +102,6 @@ extension HomeViewController {
 		} else {
 			monthButton.setTitle(date.getFormattedDate(format: "M월"), for: .normal)
 		}
-	}
-	
-	/// Set Calendar Title Offset
-	private func setTitleOffset() {
-		calendar.appearance.titleOffset = .init(x: 0, y: viewModel.isDailySetting ? 8 : 4)
 	}
 	
 	/// Push Home Filter VC
@@ -235,14 +229,13 @@ private extension HomeViewController {
 			$0.appearance.titleTodayColor = R.Color.white
 			$0.appearance.titleDefaultColor = R.Color.gray300 	// 달력의 평일 날짜 색깔
 			$0.appearance.titleFont = R.Font.body5				// 달력의 평일 글자 폰트
-			setTitleOffset()
 			$0.appearance.titlePlaceholderColor = R.Color.gray300.withAlphaComponent(0.5) // 달에 유효하지 않은 날짜의 색 지정
 			$0.appearance.weekdayTextColor = R.Color.gray100	// 달력의 요일 글자 색깔
 			$0.appearance.weekdayFont = R.Font.body5			// 달력의 요일 글자 폰트
 			$0.appearance.headerMinimumDissolvedAlpha = 0		// 년월에 흐릿하게 보이는 애들 없애기
 			$0.appearance.subtitleFont = R.Font.prtendard(size: 9)
 			$0.appearance.subtitleDefaultColor = R.Color.gray300
-			$0.appearance.subtitleOffset = CGPoint(x: 0, y: 22)	// 캘린더 숫자와 subtitle간의 간격 조정
+			$0.appearance.subtitleOffset = CGPoint(x: 0, y: 12)	// 캘린더 숫자와 subtitle간의 간격 조정
 			$0.register(CalendarCell.self, forCellReuseIdentifier: "CalendarCell")
 		}
 		
@@ -354,10 +347,10 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 		}
 		
 		calendarHeaderView.snp.updateConstraints {
-			$0.height.equalTo(bounds.height <= 300 / 2 ? 0 : 46) // calendar 전체 높이에 따른 높이 변경
+			$0.height.equalTo(46 * (bounds.height - 85) / (300 - 85)) // calendar 전체 높이에 따른 높이 변경
 		}
 		
-		self.setMonth(calendar.currentPage)
+		self.setMonth(calendar.currentPage) // 월 Text 변경
 		self.view.layoutIfNeeded()
 	}
 
@@ -416,7 +409,6 @@ extension HomeViewController: FSCalendarDelegateAppearance {
 extension HomeViewController: UIGestureRecognizerDelegate {
 	// 스크롤 제스쳐
 	func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-		
 		let shouldBegin = self.tableView.contentOffset.y <= -self.tableView.contentInset.top
 		if shouldBegin {
 			let velocity = self.scopeGesture.velocity(in: self.view)

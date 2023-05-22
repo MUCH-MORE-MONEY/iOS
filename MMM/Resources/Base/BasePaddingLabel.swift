@@ -27,3 +27,24 @@ class BasePaddingLabel: UILabel {
         return contentSize
     }
 }
+
+extension BasePaddingLabel {
+    func setSatisfyingLabel(by star: Int) {
+        switch star {
+        case 0:
+            self.isHidden = true
+        case 1:
+            self.text = "아쉬워요"
+        case 2:
+            self.text = "그저그래요"
+        case 3:
+            self.text = "괜찮아요"
+        case 4:
+            self.text = "만족해요"
+        case 5:
+            self.text = "완전 만족해요"
+        default:
+            break
+        }
+    }
+}

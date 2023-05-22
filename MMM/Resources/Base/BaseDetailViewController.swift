@@ -41,14 +41,22 @@ class BaseDetailViewController: BaseViewController {
     }
 }
 
-private extension BaseDetailViewController {
+extension BaseDetailViewController {
     private func setup() {
         setAttribute()
         setLayout()
     }
     
+//    func setData(totalPrice: String) {
+//        DispatchQueue.main.async {
+//            self.totalPrice.text = totalPrice
+//        }
+//
+//        print("baseVC total price : ", self.totalPrice.text)
+//    }
+    
     private func setAttribute() {
-        totalPrice.text = "원"
+        totalPrice.text = "11원"
         activityType.text = "지출"
         
         view.addSubviews(headerView, containerStackView)

@@ -18,11 +18,10 @@ class DetailViewController: BaseDetailViewController {
         $0.spacing = 7.54
     }
     
-    private lazy var editButton = UIBarButtonItem().then {
-        $0.title = "편집"
-        $0.style = .plain
-        $0.target = self
-        $0.action = #selector(didTapEditButton)
+    private lazy var editActivityButtonItem = UIBarButtonItem()
+    
+    private lazy var editButton = UIButton().then {
+        $0.setTitle("편집", for: .normal)
     }
     
     private lazy var titleLabel = UILabel().then {
@@ -105,6 +104,10 @@ extension DetailViewController {
     private func bind() {
         viewModel.fetchDetailActivity(id: economicActivityId[index])
         
+        editButton.tapPublisher
+            .sinkOnMainThread(receiveValue: didTapEditButton)
+            .store(in: &cancellable)
+        
         viewModel.$detailActivity
             .sinkOnMainThread { [weak self] value in
                 guard let self = self, let value = value else { return }
@@ -126,30 +129,14 @@ extension DetailViewController {
                 } else {
 					self.mainImageView.isHidden = true
 					self.cameraImageView.isHidden = false
-					self.remarkConstraintsByCameraImageView()
+					self.remakeConstraintsByCameraImageView()
                 }
                 
                 if let amount = Int(value.amount) {
                     self.totalPrice.text = "\(amount.withCommas())원"
                 }
                 self.memoLabel.text = value.memo
-                
-                switch value.star {
-                case 0:
-					self.satisfactionLabel.isHidden = true
-                case 1:
-					self.satisfactionLabel.text = "아쉬워요"
-                case 2:
-					self.satisfactionLabel.text = "그저그래요"
-                case 3:
-					self.satisfactionLabel.text = "괜찮아요"
-                case 4:
-					self.satisfactionLabel.text = "만족해요"
-                case 5:
-					self.satisfactionLabel.text = "완전 만족해요"
-                default:
-                    break
-                }
+                self.satisfactionLabel.setSatisfyingLabel(by: value.star)
             }.store(in: &cancellable)
         
         bottomPageControlView.setViewModel(viewModel, index, economicActivityId)
@@ -157,7 +144,12 @@ extension DetailViewController {
     
     private func setAttribute() {
         
-        navigationItem.rightBarButtonItem = editButton
+        editActivityButtonItem = editActivityButtonItem.then {
+            $0.customView = editButton
+        }
+        
+        navigationItem.rightBarButtonItem = editActivityButtonItem
+        
         view.addSubviews(titleLabel, scrollView, bottomPageControlView)
         contentView.addSubviews(starStackView, mainImageView, cameraImageView, memoLabel, satisfactionLabel)
         scrollView.addSubviews(contentView)
@@ -228,7 +220,7 @@ extension DetailViewController {
         }
     }
     /// cameraImageView 기준으로 memoLabel의 뷰를 다시 배치하는 메서드
-    private func remarkConstraintsByCameraImageView() {
+    private func remakeConstraintsByCameraImageView() {
         memoLabel.snp.remakeConstraints {
             $0.top.equalTo(cameraImageView.snp.bottom).offset(16)
             $0.left.right.equalToSuperview()
@@ -239,8 +231,15 @@ extension DetailViewController {
 
 // MARK: - Action
 private extension DetailViewController {
-    @objc func didTapEditButton(_ sener: UITapGestureRecognizer) {
-        print("edit Tapped")
+    func didTapEditButton() {
+        let vc = AddActivityViewController()
+        
+        let title = titleLabel.text ?? ""
+        let price = totalPrice.text ?? "11"
+        let memo = memoLabel.text ?? ""
+        let star = viewModel.detailActivity?.star ?? 0
+        vc.setData(title: title, price: price, memo: memo, star: star)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 

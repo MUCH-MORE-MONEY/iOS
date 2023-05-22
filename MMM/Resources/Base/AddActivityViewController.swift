@@ -31,6 +31,9 @@ final class AddActivityViewController: BaseDetailViewController {
         UIImageView(image: R.Icon.iconStarInActive)
     ]
     
+    private var cancellable = Set<AnyCancellable>()
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -162,6 +165,6 @@ extension AddActivityViewController {
     }
     
     private func bind() {
-        
+
     }
 }

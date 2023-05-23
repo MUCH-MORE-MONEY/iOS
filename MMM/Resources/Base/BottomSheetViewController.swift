@@ -40,7 +40,7 @@ class BottomSheetViewController: UIViewController, BottomSheetChild {
 	private var isShadow: Bool = false
 	private var isDark: Bool = false
 
-	// MARK: - UI
+	// MARK: - UI Components
 	// contentVC: 보여질 UIViewController
 	// bgView: bottomSheet 뒤에 깔릴 어두운 UIView
 	// bottomSheetView: contentViewController가 올라갈 UIView 그자체
@@ -262,31 +262,31 @@ private extension BottomSheetViewController {
 		}
 				
 		bottomSheetOuterView.snp.makeConstraints {
-			topConstraint = $0.top.equalTo(self.view.safeAreaLayoutGuide).offset(safeAreaHeight + bottomPadding).constraint
-			$0.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
+			topConstraint = $0.top.equalTo(view.safeAreaLayoutGuide).offset(safeAreaHeight + bottomPadding).constraint
+			$0.leading.trailing.equalToSuperview()
 			$0.bottom.equalToSuperview()
 		}
-		
+
 		bottomSheetInnerView.snp.makeConstraints {
 			$0.edges.equalToSuperview()
 		}
-		
+
 		dragAreaView.snp.makeConstraints {
 			$0.top.equalToSuperview()
-			$0.leading.trailing.equalTo(view.safeAreaInsets)
+			$0.leading.trailing.equalToSuperview()
 			$0.height.equalTo(32)
 		}
-		
+
 		dragIndicatorView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(12)
 			$0.centerX.equalToSuperview()
 			$0.width.equalTo(40)
 			$0.height.equalTo(4)
 		}
-		
+
 		contentVC.view.snp.makeConstraints {
-			$0.top.equalTo(dragAreaView.snp.bottom)
-			$0.leading.trailing.bottom.equalToSuperview()
+			$0.top.equalToSuperview().inset(32)
+			$0.leading.trailing.equalToSuperview()
 		}
 	}
 	

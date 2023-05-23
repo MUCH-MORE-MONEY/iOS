@@ -14,7 +14,7 @@ class BaseAddActivityViewController: BaseDetailViewController {
     // MARK: - UI Components
     lazy var titleTextFeild = UITextField()
     private lazy var starStackView = UIStackView()
-    lazy var cameraImageView = CameraImageView()
+    lazy var cameraImageView = AddImageView()
     lazy var mainImageView = UIImageView()
     private lazy var cameraButtonStackView = UIStackView()
     private lazy var scrollView = UIScrollView()
@@ -82,6 +82,10 @@ extension BaseAddActivityViewController {
             $0.axis = .horizontal
             $0.distribution = .fillEqually
             $0.spacing = 7.54
+        }
+        
+        cameraImageView = cameraImageView.then {
+            $0.backgroundColor = R.Color.gray100
         }
         
         mainImageView = mainImageView.then {

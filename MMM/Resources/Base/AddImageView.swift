@@ -17,7 +17,8 @@ class AddImageView: UIView {
     private lazy var addButton = UIButton()
     
     private lazy var cancellable = Set<AnyCancellable>()
-
+    
+    var viewModel: AddActivityViewModel?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -27,8 +28,11 @@ class AddImageView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
+
+}
+
+extension AddImageView {
+    // MARK: - Style & Layout
     private func setup() {
         setAttribute()
         setLayout()
@@ -81,14 +85,16 @@ class AddImageView: UIView {
     }
     
     private func bind() {
-        addButton.tapPublisher.sinkOnMainThread(receiveValue: didTapAddButton)
+        addButton.tapPublisher
+            .sinkOnMainThread {
+                if let viewModel = self.viewModel {
+                    viewModel.didTapAddButton = true
+                }
+            }
             .store(in: &cancellable)
     }
-}
-
-// MARK: - Action
-extension AddImageView {
-    func didTapAddButton() {
-        print("Tapped")
+    
+    func setData(viewModel: AddActivityViewModel) {
+        self.viewModel = viewModel
     }
 }

@@ -32,6 +32,8 @@ class BaseAddActivityViewController: BaseDetailViewController {
     ]
     var hasImage = false
     private var cancellable = Set<AnyCancellable>()
+    private var imagePickerVC = UIImagePickerController()
+    private var viewModel = AddActivityViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,13 +47,6 @@ extension BaseAddActivityViewController {
         setAttribute()
         setLayout()
         bind()
-    }
-    
-    func setMainImage(hasImage: Bool, image: UIImage?) {
-        self.hasImage = hasImage
-        if let image = image {
-            self.mainImageView.image = image
-        }
     }
     
     private func setAttribute() {
@@ -112,6 +107,7 @@ extension BaseAddActivityViewController {
             $0.setButtonLayer()
             $0.isEnabled = false
         }
+        // CameraImageView와 ViewModel 공유
     }
     
     private func setLayout() {
@@ -200,7 +196,24 @@ extension BaseAddActivityViewController {
     }
     
     private func bind() {
-        
+        cameraImageView.setData(viewModel: viewModel)
+        viewModel.$didTapAddButton
+            .sinkOnMainThread(receiveValue: { [weak self] in
+                guard let self = self else { return }
+                if $0 {
+                    self.showPicker()
+                }
+            })
+            .store(in: &cancellable)
+    }
+    
+    func showPicker() {
+        imagePickerVC.sourceType = .photoLibrary
+        imagePickerVC.allowsEditing = true
+        present(imagePickerVC, animated: true)
     }
 }
 
+extension BaseAddActivityViewController: UIImagePickerControllerDelegate {
+    
+}

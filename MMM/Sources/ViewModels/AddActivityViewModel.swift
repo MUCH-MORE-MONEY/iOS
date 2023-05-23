@@ -6,8 +6,28 @@
 //
 
 import UIKit
+import Photos
 
 final class AddActivityViewModel {
     @Published var didTapAddButton: Bool = false
+    
+    func requestPHPhotoLibraryAuthorization(completion: @escaping () -> Void) {
+        if #available(iOS 14, *) {
+            PHPhotoLibrary.requestAuthorization(for: .readWrite) { authorizationStatus in
+                switch authorizationStatus {
+                case .limited:
+                    completion()
+                    print("limited authorization granted")
+                case .authorized:
+                    completion()
+                    print("authorization granted")
+                default:
+                    print("Unimplemented")
+                }
+            }
+        }
+    }
+    
+    
 }
 

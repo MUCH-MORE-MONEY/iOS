@@ -100,7 +100,7 @@ extension DetailViewController {
         setLayout()
         bind()
     }
-    
+    // MARK: - Bind
     private func bind() {
         viewModel.fetchDetailActivity(id: economicActivityId[index])
         
@@ -125,7 +125,7 @@ extension DetailViewController {
 					self.mainImageView.isHidden = false
 					self.cameraImageView.isHidden = true
                     self.mainImageView.setImage(urlStr: value.imageUrl, defaultImage: R.Icon.camera48)
-					self.remarkConstraintsByMainImageView()
+					self.remakeConstraintsByMainImageView()
                 } else {
 					self.mainImageView.isHidden = true
 					self.cameraImageView.isHidden = false
@@ -137,6 +137,7 @@ extension DetailViewController {
                 }
                 self.memoLabel.text = value.memo
                 self.satisfactionLabel.setSatisfyingLabel(by: value.star)
+                print("DetailAdd : \(mainImageView.frame.height)")
             }.store(in: &cancellable)
         
         bottomPageControlView.setViewModel(viewModel, index, economicActivityId)
@@ -212,7 +213,7 @@ extension DetailViewController {
         }
     }
     /// mainImageView 기준으로 memoLabel의 뷰를 다시 배치하는 메서드
-    private func remarkConstraintsByMainImageView() {
+    private func remakeConstraintsByMainImageView() {
         memoLabel.snp.remakeConstraints {
             $0.top.equalTo(mainImageView.snp.bottom).offset(16)
             $0.left.right.equalToSuperview()
@@ -232,13 +233,9 @@ extension DetailViewController {
 // MARK: - Action
 private extension DetailViewController {
     func didTapEditButton() {
-        let vc = AddActivityViewController()
+        let vc = EditActivityViewController()
         
-        let title = titleLabel.text ?? ""
-        let price = totalPrice.text ?? "11"
-        let memo = memoLabel.text ?? ""
-        let star = viewModel.detailActivity?.star ?? 0
-        vc.setData(title: title, price: price, memo: memo, star: star)
+        vc.setVM(viewModel)
         navigationController?.pushViewController(vc, animated: true)
     }
 }

@@ -25,11 +25,13 @@
 		6A1322ED2A088F7F00CEEC81 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1322EC2A088F7F00CEEC81 /* DetailViewController.swift */; };
 		6A1322F12A089B2900CEEC81 /* BasePaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1322F02A089B2900CEEC81 /* BasePaddingLabel.swift */; };
 		6A1479632A0DE0690045B8C1 /* CameraImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1479622A0DE0690045B8C1 /* CameraImageView.swift */; };
-		6A15B0EC2A15B68D00EADAC5 /* AddActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A15B0EB2A15B68D00EADAC5 /* AddActivityViewController.swift */; };
+		6A15B0EC2A15B68D00EADAC5 /* BaseAddActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A15B0EB2A15B68D00EADAC5 /* BaseAddActivityViewController.swift */; };
 		6A1880C929EF85BC00D62F1A /* TabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1880C829EF85BB00D62F1A /* TabItem.swift */; };
 		6A1880CB29EF85EA00D62F1A /* OnboardingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1880CA29EF85EA00D62F1A /* OnboardingItem.swift */; };
 		6A1BAD4529E6550100818086 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1BAD4429E6550100818086 /* OnboardingViewModel.swift */; };
 		6A223FFA2A1B271B0058C877 /* Ex+UITapGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A223FF92A1B271B0058C877 /* Ex+UITapGestureRecognizer.swift */; };
+		6A223FFC2A1B3D590058C877 /* EditActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A223FFB2A1B3D590058C877 /* EditActivityViewController.swift */; };
+		6A223FFE2A1B73890058C877 /* EditActivityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A223FFD2A1B73890058C877 /* EditActivityViewModel.swift */; };
 		6A381E0A29E8F40700E0974F /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A381E0929E8F40700E0974F /* AddViewController.swift */; };
 		6A4313E22A13046E00095041 /* BottomPageControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4313E12A13046E00095041 /* BottomPageControlView.swift */; };
 		6A626BC12A0C7EE700BDD5C0 /* SelectDetailResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A626BC02A0C7EE700BDD5C0 /* SelectDetailResDto.swift */; };
@@ -136,11 +138,13 @@
 		6A1322EC2A088F7F00CEEC81 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		6A1322F02A089B2900CEEC81 /* BasePaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasePaddingLabel.swift; sourceTree = "<group>"; };
 		6A1479622A0DE0690045B8C1 /* CameraImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraImageView.swift; sourceTree = "<group>"; };
-		6A15B0EB2A15B68D00EADAC5 /* AddActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddActivityViewController.swift; sourceTree = "<group>"; };
+		6A15B0EB2A15B68D00EADAC5 /* BaseAddActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAddActivityViewController.swift; sourceTree = "<group>"; };
 		6A1880C829EF85BB00D62F1A /* TabItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabItem.swift; sourceTree = "<group>"; };
 		6A1880CA29EF85EA00D62F1A /* OnboardingItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingItem.swift; sourceTree = "<group>"; };
 		6A1BAD4429E6550100818086 /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
 		6A223FF92A1B271B0058C877 /* Ex+UITapGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UITapGestureRecognizer.swift"; sourceTree = "<group>"; };
+		6A223FFB2A1B3D590058C877 /* EditActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditActivityViewController.swift; sourceTree = "<group>"; };
+		6A223FFD2A1B73890058C877 /* EditActivityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditActivityViewModel.swift; sourceTree = "<group>"; };
 		6A381E0929E8F40700E0974F /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 		6A4313E12A13046E00095041 /* BottomPageControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomPageControlView.swift; sourceTree = "<group>"; };
 		6A626BC02A0C7EE700BDD5C0 /* SelectDetailResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectDetailResDto.swift; sourceTree = "<group>"; };
@@ -296,6 +300,7 @@
 			children = (
 				6A1322EB2A088F6E00CEEC81 /* Views */,
 				6A1322EC2A088F7F00CEEC81 /* DetailViewController.swift */,
+				6A223FFB2A1B3D590058C877 /* EditActivityViewController.swift */,
 			);
 			path = HomeDetail;
 			sourceTree = "<group>";
@@ -542,6 +547,7 @@
 				6A626BC42A0C87E800BDD5C0 /* HomeDetailViewModel.swift */,
 				C44807E229E649A300D4B090 /* HomeViewModel.swift */,
 				6A1BAD4429E6550100818086 /* OnboardingViewModel.swift */,
+				6A223FFD2A1B73890058C877 /* EditActivityViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -582,7 +588,7 @@
 		C411940529D53E77003DBC15 /* Base */ = {
 			isa = PBXGroup;
 			children = (
-				6A15B0EB2A15B68D00EADAC5 /* AddActivityViewController.swift */,
+				6A15B0EB2A15B68D00EADAC5 /* BaseAddActivityViewController.swift */,
 				6A1322E82A088DD700CEEC81 /* BaseDetailViewController.swift */,
 				6A1322F02A089B2900CEEC81 /* BasePaddingLabel.swift */,
 				6A0F234329DBC0C30063673B /* BaseViewController.swift */,
@@ -878,6 +884,7 @@
 				C44807DE29E4FE8000D4B090 /* Ex+Publisher.swift in Sources */,
 				C4DBAA2E29DC16A400D1BB97 /* WithdrawViewController.swift in Sources */,
 				6A1880C929EF85BC00D62F1A /* TabItem.swift in Sources */,
+				6A223FFC2A1B3D590058C877 /* EditActivityViewController.swift in Sources */,
 				6A0F234429DBC0C30063673B /* BaseViewController.swift in Sources */,
 				C41193F929D3DD9A003DBC15 /* ProfileTableViewCell.swift in Sources */,
 				6A08B47629FF5B150080719E /* APIRouter.swift in Sources */,
@@ -906,7 +913,7 @@
 				6A381E0A29E8F40700E0974F /* AddViewController.swift in Sources */,
 				6A0F234029DBA8AA0063673B /* DataExportViewController.swift in Sources */,
 				C44807E329E649A300D4B090 /* HomeViewModel.swift in Sources */,
-				6A15B0EC2A15B68D00EADAC5 /* AddActivityViewController.swift in Sources */,
+				6A15B0EC2A15B68D00EADAC5 /* BaseAddActivityViewController.swift in Sources */,
 				C411939229D2817C003DBC15 /* ProfileViewController.swift in Sources */,
 				6A8B776529FF93530095ECFC /* APIConstants.swift in Sources */,
 				C433A07329EEE751008B26DF /* Ex+Date.swift in Sources */,
@@ -919,6 +926,7 @@
 				6A1479632A0DE0690045B8C1 /* CameraImageView.swift in Sources */,
 				C41193E629D287E6003DBC15 /* Ex+Color.swift in Sources */,
 				6A1322ED2A088F7F00CEEC81 /* DetailViewController.swift in Sources */,
+				6A223FFE2A1B73890058C877 /* EditActivityViewModel.swift in Sources */,
 				C4DBAA2C29DBCB8B00D1BB97 /* Ex+Button.swift in Sources */,
 				C4199DE12A00F164006E5DA8 /* Ex+UIImageView.swift in Sources */,
 				6A0D108229D3CF1B009D6DCA /* OnboardingViewController.swift in Sources */,

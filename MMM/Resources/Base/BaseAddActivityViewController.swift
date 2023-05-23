@@ -10,29 +10,29 @@ import SnapKit
 import Then
 import Combine
 
-final class AddActivityViewController: BaseDetailViewController {
+class BaseAddActivityViewController: BaseDetailViewController {
     // MARK: - UI Components
-    private lazy var titleTextFeild = UITextField()
+    lazy var titleTextFeild = UITextField()
     private lazy var starStackView = UIStackView()
-    private lazy var starLabelStackView = UIStackView()
-    private lazy var satisfactionLabel = BasePaddingLabel(padding: UIEdgeInsets(top: 3, left: 12, bottom: 3, right: 12))
     private lazy var cameraImageView = CameraImageView()
+    private lazy var mainImageView = UIImageView()
     private lazy var cameraButtonStackView = UIStackView()
     private lazy var scrollView = UIScrollView()
+    private lazy var contentView = UIView()
     private lazy var addImageButton = UIButton()
-    private lazy var memoTextView = UITextView()
+    lazy var memoTextView = UITextView()
     private lazy var saveButton = UIButton()
     // MARK: - Properties
-    private lazy var starList: [UIImageView] = [
+    lazy var starList: [UIImageView] = [
         UIImageView(image: R.Icon.iconStarInActive),
         UIImageView(image: R.Icon.iconStarInActive),
         UIImageView(image: R.Icon.iconStarInActive),
         UIImageView(image: R.Icon.iconStarInActive),
         UIImageView(image: R.Icon.iconStarInActive)
     ]
-    
+    private var hasImage = false
+    private var starCount = 0
     private var cancellable = Set<AnyCancellable>()
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,42 +41,36 @@ final class AddActivityViewController: BaseDetailViewController {
 }
 
 // MARK: - Style & Layout
-extension AddActivityViewController {
+extension BaseAddActivityViewController {
     private func setup() {
         setAttribute()
         setLayout()
         bind()
     }
     
-    func setData(title: String, price: String, memo: String, star: Int) {
-        titleTextFeild.text = title
-        self.memoTextView.text = memo
-
-        DispatchQueue.main.async {
-            self.totalPrice.text = price
-        }
-        
-        for i in 0..<star {
-            self.starList[i].image = R.Icon.iconStarBlack24
+    func setMainImage(hasImage: Bool, image: UIImage?) {
+        self.hasImage = hasImage
+        if let image = image {
+            self.mainImageView.image = image
         }
     }
     
     private func setAttribute() {
         view.addSubviews(titleTextFeild, scrollView, saveButton)
         
-        scrollView.addSubviews(starLabelStackView, cameraImageView, memoTextView)
-        
+        contentView.addSubviews(starStackView, mainImageView, cameraImageView, memoTextView)
         
         starList.forEach {
             $0.contentMode = .scaleAspectFit
             starStackView.addArrangedSubview($0)
         }
-    
-        let star = starList.filter{ $0.image == R.Icon.iconStarActive}.count
-
-        satisfactionLabel.setSatisfyingLabel(by: star)
         
-        starLabelStackView.addArrangedSubviews(starStackView, satisfactionLabel)
+        scrollView.addSubview(contentView)
+        
+        
+        scrollView = scrollView.then {
+            $0.showsVerticalScrollIndicator = false
+        }
         
         titleTextFeild = titleTextFeild.then {
             $0.font = R.Font.body0
@@ -91,23 +85,18 @@ extension AddActivityViewController {
             $0.spacing = 7.54
         }
         
-        satisfactionLabel = satisfactionLabel.then {
-            $0.backgroundColor = R.Color.gray700
-            $0.layer.cornerRadius = 12
-            $0.clipsToBounds = true
-            $0.textColor = R.Color.gray100
-            $0.font = R.Font.body4
-        }
-        
-        starLabelStackView = starLabelStackView.then {
-            $0.axis = .horizontal
-            $0.distribution = .fillProportionally
+        mainImageView = mainImageView.then {
+            $0.contentMode = .scaleToFill
         }
         
         memoTextView = memoTextView.then {
             $0.font = R.Font.body3
             $0.textColor = R.Color.gray400
             $0.text = "어떤 경제활동이었나요?\n남기고 싶은 내용이나 감정을 기록해보세요."
+            $0.translatesAutoresizingMaskIntoConstraints = true
+            $0.sizeToFit()
+            $0.isScrollEnabled = false
+            $0.backgroundColor = R.Color.gray100
         }
         
         saveButton = saveButton.then {
@@ -132,25 +121,32 @@ extension AddActivityViewController {
             $0.bottom.equalTo(saveButton.snp.top)
         }
         
+        contentView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        
         starStackView.snp.makeConstraints {
-            $0.left.right.equalToSuperview()
-            $0.top.equalToSuperview()
-            $0.height.equalTo(24)
+            $0.top.equalToSuperview().inset(24)
             $0.width.equalTo(120)
+            $0.height.equalTo(24)
         }
         
-        starLabelStackView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(16)
-            $0.left.equalToSuperview()
+        if hasImage {
+            mainImageView.snp.makeConstraints {
+                $0.top.equalTo(starStackView.snp.bottom).offset(16)
+                $0.width.equalTo(view.safeAreaLayoutGuide).offset(-48)
+                $0.height.equalTo(mainImageView.image!.size.height * view.frame.width / mainImageView.image!.size.width)
+                $0.left.right.equalToSuperview()
+            }
+        } else {
+            cameraImageView.snp.makeConstraints {
+                $0.top.equalTo(starStackView.snp.bottom).offset(16)
+                $0.left.right.equalToSuperview()
+                $0.height.equalTo(144)
+                $0.width.equalToSuperview()
+            }
         }
-        
-        cameraImageView.snp.makeConstraints {
-            $0.top.equalTo(starLabelStackView.snp.bottom).offset(8)
-            $0.left.right.equalToSuperview()
-            $0.height.equalTo(144)
-            $0.width.equalToSuperview()
-        }
-        
+
         memoTextView.snp.makeConstraints {
             $0.top.equalTo(cameraImageView.snp.bottom).offset(16)
             $0.left.right.equalToSuperview()
@@ -164,7 +160,38 @@ extension AddActivityViewController {
         }
     }
     
+    /// mainImageView 기준으로 memoLabel의 뷰를 다시 배치하는 메서드
+    private func remakeConstraintsByMainImageView() {
+        memoTextView.snp.remakeConstraints {
+            $0.top.equalTo(mainImageView.snp.bottom).offset(16)
+            $0.left.right.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
+    }
+    /// cameraImageView 기준으로 memoLabel의 뷰를 다시 배치하는 메서드
+    private func remakeConstraintsByCameraImageView() {
+        memoTextView.snp.remakeConstraints {
+            $0.top.equalTo(cameraImageView.snp.bottom).offset(16)
+            $0.left.right.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
+    }
+    
     private func bind() {
+        if hasImage {
+            cameraImageView.isHidden = true
+            remakeConstraintsByMainImageView()
+        } else {
+            mainImageView.isHidden = true
+            remakeConstraintsByCameraImageView()
+        }
+        
+    }
+}
 
+// MARK: - Action
+extension BaseAddActivityViewController {
+    private func setSatisfactionLabel() {
+        print("hi")
     }
 }

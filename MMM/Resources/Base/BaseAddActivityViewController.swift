@@ -55,6 +55,8 @@ extension BaseAddActivityViewController {
     }
     
     private func setAttribute() {
+        // titleTextField 헤더뷰에 넣기
+
         view.addSubviews(titleTextFeild, scrollView, saveButton)
         
         contentView.addSubviews(starStackView, mainImageView, cameraImageView, memoTextView)
@@ -142,11 +144,13 @@ extension BaseAddActivityViewController {
                 $0.left.right.equalToSuperview()
             }
         } else {
-            cameraImageView.snp.makeConstraints {
-                $0.top.equalTo(starStackView.snp.bottom).offset(16)
-                $0.left.right.equalToSuperview()
-                $0.height.equalTo(144)
-            }
+
+        }
+        
+        cameraImageView.snp.makeConstraints {
+            $0.top.equalTo(starStackView.snp.bottom).offset(16)
+            $0.left.right.equalToSuperview()
+            $0.height.equalTo(144)
         }
 
         memoTextView.snp.makeConstraints {
@@ -181,8 +185,8 @@ extension BaseAddActivityViewController {
     /// cameraImageView 기준으로 memoLabel의 뷰를 다시 배치하는 메서드
     func remakeConstraintsByCameraImageView() {
         mainImageView.isHidden = true
-        
-        cameraImageView.snp.makeConstraints {
+
+        cameraImageView.snp.updateConstraints {
             $0.top.equalTo(starStackView.snp.bottom).offset(16)
             $0.left.right.equalToSuperview()
             $0.height.equalTo(144)
@@ -200,9 +204,3 @@ extension BaseAddActivityViewController {
     }
 }
 
-// MARK: - Action
-extension BaseAddActivityViewController {
-    private func setSatisfactionLabel() {
-        print("hi")
-    }
-}

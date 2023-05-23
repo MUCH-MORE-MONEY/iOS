@@ -145,14 +145,14 @@ private extension HomeViewController {
 			.sinkOnMainThread(receiveValue: { [weak self] daily in
 				self?.tableView.reloadData()
 			})
-			.store(in: &self.cancellable)
+			.store(in: &cancellable)
 		
 		viewModel.$monthlyList
 			.sinkOnMainThread(receiveValue: { [weak self] monthly in
 				self?.calendarHeaderView.setUp(pay: monthly.reduce(0){$0 + $1.pay}, earn: monthly.reduce(0){$0 + $1.earn})
 				self?.calendar.reloadData()
 			})
-			.store(in: &self.cancellable)
+			.store(in: &cancellable)
 				
 //		viewModel
 //			.transform(input: viewModel.input.eraseToAnyPublisher())
@@ -282,23 +282,23 @@ private extension HomeViewController {
 		}
 		
 		calendarHeaderView.snp.makeConstraints {
-			$0.top.left.right.equalTo(view.safeAreaLayoutGuide)
+			$0.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
 			$0.height.equalTo(46)
 		}
 				
 		calendar.snp.makeConstraints {
 			$0.top.equalTo(calendarHeaderView.snp.bottom)
-			$0.left.right.equalTo(view.safeAreaLayoutGuide)
+			$0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
 			$0.height.equalTo(300)
 		}
 
 		dayLabel.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(16)
-			$0.left.right.equalTo(view.safeAreaLayoutGuide).inset(20)
+			$0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(20)
 		}
 		
 		tableView.snp.makeConstraints {
-			$0.bottom.left.right.equalTo(view.safeAreaLayoutGuide)
+			$0.bottom.leading.trailing.equalTo(view.safeAreaLayoutGuide)
 			$0.top.equalTo(calendar.snp.bottom)
 		}
 		

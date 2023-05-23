@@ -38,7 +38,7 @@ enum AlertType {
 	case canCancel      // 확인 + 취소 버튼
 }
 
-class CustomAlertViewController: UIViewController {
+final class CustomAlertViewController: UIViewController {
 	
 	weak var delegate: CustomAlertDelegate?
 	

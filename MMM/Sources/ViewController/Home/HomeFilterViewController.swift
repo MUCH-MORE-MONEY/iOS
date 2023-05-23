@@ -67,7 +67,7 @@ private extension HomeFilterViewController {
 	//MARK: - Private
 	// Push Highlight BottomSheet
 	private func didTapHighlightButton(_ isEarn: Bool) {
-		let vc = HighlightViewController(viewModel: viewModel)
+		let vc = HighlightViewController(homeViewModel: viewModel)
 		let bottomSheetVC = BottomSheetViewController(contentViewController: vc)
 		vc.delegate = bottomSheetVC
 		bottomSheetVC.modalPresentationStyle = .overFullScreen

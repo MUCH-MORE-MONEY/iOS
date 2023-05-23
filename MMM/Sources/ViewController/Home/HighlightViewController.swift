@@ -13,16 +13,18 @@ import SnapKit
 final class HighlightViewController: UIViewController {
 	// MARK: - Properties
 	private lazy var cancellable: Set<AnyCancellable> = .init()
-	private let viewModel: HomeViewModel
+	private let viewModel = HomeHighlightViewModel()
+	private let homeViewModel: HomeViewModel
 	weak var delegate: BottomSheetChild?
 
 	// MARK: - UI Components
 	private lazy var stackView = UIStackView() // title Label, 확인 Button
 	private lazy var titleLabel = UILabel()
 	private lazy var checkButton = UIButton()
-
-	init(viewModel: HomeViewModel) {
-		self.viewModel = viewModel
+	private lazy var priceTextFiled = UITextField()
+	
+	init(homeViewModel: HomeViewModel) {
+		self.homeViewModel = homeViewModel
 		super.init(nibName: nil, bundle: nil)
 	}
 	
@@ -58,6 +60,17 @@ private extension HighlightViewController {
 		//MARK: input
 		checkButton.tapPublisher
 			.sinkOnMainThread(receiveValue: willDismiss)
+			.store(in: &cancellable)
+		
+		priceTextFiled.textPublisher
+			.assignOnMainThread(to: \.priceInput, on: viewModel)
+			.store(in: &cancellable)
+		
+		//MARK: output
+		viewModel.isVaild
+			.sinkOnMainThread(receiveValue: {
+				priceTextFiled.textColor = R.
+			})
 			.store(in: &cancellable)
 	}
 	

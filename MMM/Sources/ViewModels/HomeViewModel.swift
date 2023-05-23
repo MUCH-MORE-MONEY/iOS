@@ -5,15 +5,12 @@
 //  Created by geonhyeong on 2023/04/12.
 //
 
-import Foundation
-import Combine
 import UIKit
+import Combine
 import SwiftKeychainWrapper
 
 final class HomeViewModel {
 	// MARK: - Property Warraper
-	@Published var passwordInput: String = ""
-	@Published var passwordConfirmInput: String = ""
 	@Published var dailyList: [EconomicActivity] = []
 	@Published var monthlyList: [Monthly] = []
 	@Published var didTapHighlightButton: Bool?	// bottom sheet
@@ -33,23 +30,7 @@ final class HomeViewModel {
 
 	// MARK: - Private properties
 	private var cancellable: Set<AnyCancellable> = .init()
-	
-	// MARK: - Public properties
-	// 들어온 퍼블리셔들의 값 일치 여부를 반환하는 퍼블리셔
-	lazy var isMatchPasswordInput: AnyPublisher<Bool, Never> = Publishers
-		.CombineLatest($passwordInput, $passwordConfirmInput)
-		.map( { (password: String, passwordConfirm: String) in
-			if password == "" || passwordConfirm == "" {
-				return false
-			}
-			if password == passwordConfirm {
-				return true
-			} else {
-				return false
-			}
-		})
-		.eraseToAnyPublisher()
-	
+		
 	init() {
 		self.getDailyList(Date().getFormattedYMD())
 		self.getMonthlyList(Date().getFormattedYM())

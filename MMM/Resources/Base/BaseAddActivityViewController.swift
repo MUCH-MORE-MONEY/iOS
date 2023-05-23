@@ -14,8 +14,8 @@ class BaseAddActivityViewController: BaseDetailViewController {
     // MARK: - UI Components
     lazy var titleTextFeild = UITextField()
     private lazy var starStackView = UIStackView()
-    private lazy var cameraImageView = CameraImageView()
-    private lazy var mainImageView = UIImageView()
+    lazy var cameraImageView = CameraImageView()
+    lazy var mainImageView = UIImageView()
     private lazy var cameraButtonStackView = UIStackView()
     private lazy var scrollView = UIScrollView()
     private lazy var contentView = UIView()
@@ -30,8 +30,7 @@ class BaseAddActivityViewController: BaseDetailViewController {
         UIImageView(image: R.Icon.iconStarInActive),
         UIImageView(image: R.Icon.iconStarInActive)
     ]
-    private var hasImage = false
-    private var starCount = 0
+    var hasImage = false
     private var cancellable = Set<AnyCancellable>()
     
     override func viewDidLoad() {
@@ -143,7 +142,6 @@ extension BaseAddActivityViewController {
                 $0.top.equalTo(starStackView.snp.bottom).offset(16)
                 $0.left.right.equalToSuperview()
                 $0.height.equalTo(144)
-                $0.width.equalToSuperview()
             }
         }
 
@@ -161,7 +159,15 @@ extension BaseAddActivityViewController {
     }
     
     /// mainImageView 기준으로 memoLabel의 뷰를 다시 배치하는 메서드
-    private func remakeConstraintsByMainImageView() {
+    func remakeConstraintsByMainImageView() {
+        cameraImageView.isHidden = true
+        
+        mainImageView.snp.makeConstraints {
+            $0.top.equalTo(starStackView.snp.bottom).offset(16)
+            $0.width.equalTo(view.safeAreaLayoutGuide).offset(-48)
+            $0.height.equalTo(mainImageView.image!.size.height * view.frame.width / mainImageView.image!.size.width)
+            $0.left.right.equalToSuperview()
+        }
         memoTextView.snp.remakeConstraints {
             $0.top.equalTo(mainImageView.snp.bottom).offset(16)
             $0.left.right.equalToSuperview()
@@ -169,7 +175,15 @@ extension BaseAddActivityViewController {
         }
     }
     /// cameraImageView 기준으로 memoLabel의 뷰를 다시 배치하는 메서드
-    private func remakeConstraintsByCameraImageView() {
+    func remakeConstraintsByCameraImageView() {
+        mainImageView.isHidden = true
+        
+        cameraImageView.snp.makeConstraints {
+            $0.top.equalTo(starStackView.snp.bottom).offset(16)
+            $0.left.right.equalToSuperview()
+            $0.height.equalTo(144)
+        }
+        
         memoTextView.snp.remakeConstraints {
             $0.top.equalTo(cameraImageView.snp.bottom).offset(16)
             $0.left.right.equalToSuperview()
@@ -178,13 +192,6 @@ extension BaseAddActivityViewController {
     }
     
     private func bind() {
-        if hasImage {
-            cameraImageView.isHidden = true
-            remakeConstraintsByMainImageView()
-        } else {
-            mainImageView.isHidden = true
-            remakeConstraintsByCameraImageView()
-        }
         
     }
 }

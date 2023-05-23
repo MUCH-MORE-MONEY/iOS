@@ -126,10 +126,12 @@ extension DetailViewController {
 					self.cameraImageView.isHidden = true
                     self.mainImageView.setImage(urlStr: value.imageUrl, defaultImage: R.Icon.camera48)
 					self.remakeConstraintsByMainImageView()
+                    viewModel.hasImage = true
                 } else {
 					self.mainImageView.isHidden = true
 					self.cameraImageView.isHidden = false
 					self.remakeConstraintsByCameraImageView()
+                    viewModel.hasImage = false
                 }
                 
                 if let amount = Int(value.amount) {
@@ -137,7 +139,8 @@ extension DetailViewController {
                 }
                 self.memoLabel.text = value.memo
                 self.satisfactionLabel.setSatisfyingLabel(by: value.star)
-                print("DetailAdd : \(mainImageView.frame.height)")
+                print("detailView : \(mainImageView.frame.height)")
+
             }.store(in: &cancellable)
         
         bottomPageControlView.setViewModel(viewModel, index, economicActivityId)
@@ -233,9 +236,15 @@ extension DetailViewController {
 // MARK: - Action
 private extension DetailViewController {
     func didTapEditButton() {
-        let vc = EditActivityViewController()
+        if cameraImageView.isHidden {
+            let mainImage = mainImageView.image
+            viewModel.mainImage = mainImage
+        } else {
+            viewModel.mainImage = nil
+        }
+
+        let vc = EditActivityViewController(viewModel: viewModel)
         
-        vc.setVM(viewModel)
         navigationController?.pushViewController(vc, animated: true)
     }
 }

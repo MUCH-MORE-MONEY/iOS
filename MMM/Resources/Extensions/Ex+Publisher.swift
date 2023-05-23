@@ -5,7 +5,6 @@
 //  Created by geonhyeong on 2023/04/11.
 //
 
-import Foundation
 import Combine
 import UIKit
 
@@ -21,6 +20,12 @@ public extension Publisher {
 		
 		return receive(on: DispatchQueue.main)
 			.sink(receiveValue: receiveValue)
+	}
+	
+	func assignOnMainThread<Root>(to: ReferenceWritableKeyPath<Root, Self.Output>, on: Root) -> AnyCancellable where Self.Failure == Never {
+		
+		return receive(on: DispatchQueue.main)
+			.assign(to: to, on: on)
 	}
 }
 

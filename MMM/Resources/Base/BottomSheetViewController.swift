@@ -73,6 +73,13 @@ class BottomSheetViewController: UIViewController, BottomSheetChild {
 		super.viewDidAppear(animated)
 		self.showSheet()
 	}
+	
+	override func viewWillDisappear(_ animated: Bool) {
+		super.viewWillDisappear(animated)
+		
+		NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+		NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+	}
 }
 
 extension BottomSheetViewController {
@@ -319,8 +326,8 @@ private extension BottomSheetViewController {
 		}
 
 		contentVC.view.snp.makeConstraints {
-			$0.top.equalToSuperview().inset(32)
-			$0.leading.trailing.equalToSuperview()
+			$0.top.lessThanOrEqualTo(dragAreaView.snp.bottom) // lessThan으로 snapkit 오류 해결
+			$0.leading.trailing.bottom.equalToSuperview()
 		}
 	}
 	

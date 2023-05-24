@@ -39,6 +39,12 @@ final class HighlightViewController: UIViewController {
         super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
     }
+	
+	
+	override func viewDidLayoutSubviews() {
+		// Underline 호출
+		priceTextFiled.setUnderLine(color: R.Color.orange500)
+	}
 }
 //MARK: - Action
 private extension HighlightViewController {
@@ -68,8 +74,8 @@ private extension HighlightViewController {
 		
 		//MARK: output
 		viewModel.isVaild
-			.sinkOnMainThread(receiveValue: {
-				priceTextFiled.textColor = R.
+			.sinkOnMainThread(receiveValue: { _ in
+				// 임시
 			})
 			.store(in: &cancellable)
 	}
@@ -99,16 +105,30 @@ private extension HighlightViewController {
 			$0.titleLabel?.font = R.Font.title3
 			$0.contentEdgeInsets = .init(top: 10, left: 10, bottom: 10, right: 10) // touch 영역 늘리기
 		}
+		
+		priceTextFiled = priceTextFiled.then {
+			$0.placeholder = "만원 단위로 입력"
+			$0.font = R.Font.h2
+			$0.textColor = R.Color.gray900
+			$0.keyboardType = .numberPad // 숫자 키보드
+			$0.setClearButton(with: R.Icon.cancel, mode: .whileEditing) // clear 버튼
+			$0.becomeFirstResponder()
+		}
 	}
 	
 	private func setLayout() {
-		view.addSubviews(stackView)
+		view.addSubviews(stackView, priceTextFiled)
 		stackView.addArrangedSubviews(titleLabel, checkButton)
 
 		stackView.snp.makeConstraints {
 			$0.top.equalToSuperview()
 			$0.leading.equalToSuperview().inset(24)
 			$0.trailing.equalToSuperview().inset(28)
+		}
+		
+		priceTextFiled.snp.makeConstraints {
+			$0.top.equalTo(stackView.snp.bottom).offset(24)
+			$0.leading.trailing.equalToSuperview().inset(24)
 		}
 	}
 }

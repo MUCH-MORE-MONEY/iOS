@@ -13,7 +13,9 @@ import SnapKit
 class EditActivityViewController: BaseAddActivityViewController {
     // MARK: - UI Components
     private lazy var editIconImage = UIImageView()
-    
+    private lazy var titleStackView = UIStackView()
+    private lazy var titleIcon = UIImageView()
+    private lazy var titleText = UILabel()
     // MARK: - Properties
     var viewModel: HomeDetailViewModel
     var date: Date
@@ -46,12 +48,30 @@ extension EditActivityViewController {
         bind()
     }
     
-    func setVM(_ viewModel: HomeDetailViewModel) {
-        self.viewModel = viewModel
+    private func setCustomTitle() {
+        view.addSubview(titleStackView)
+        titleStackView.addArrangedSubviews(titleText, titleIcon)
+        titleStackView = titleStackView.then {
+            $0.axis = .horizontal
+            $0.spacing = 4
+            $0.distribution = .fillProportionally
+        }
+        titleText = titleText.then {
+            $0.text = navigationTitle
+            $0.font = R.Font.title3
+            $0.textColor = .white
+        }
+        
+        titleIcon = titleIcon.then {
+            $0.image = R.Icon.arrowExpandMore16
+            $0.contentMode = .scaleAspectFit
+        }
+        
+        navigationItem.titleView = titleStackView
     }
     
     private func setAttribute() {
-        title = navigationTitle
+        setCustomTitle()
         view.addSubviews(editIconImage)
         
         editIconImage = editIconImage.then {

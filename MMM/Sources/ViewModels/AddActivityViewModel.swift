@@ -7,11 +7,17 @@
 
 import UIKit
 import Photos
+import Combine
 
 final class AddActivityViewModel {
     @Published var didTapAddButton: Bool = false
     @Published var titleText = ""
     @Published var memoText = ""
+    @Published var isTitleEmpty = false
+    
+    lazy var isVaild: AnyPublisher<Bool, Never> = $titleText
+            .map { $0.count <= 16 } // 16자리 이하
+            .eraseToAnyPublisher()
     
     func requestPHPhotoLibraryAuthorization(completion: @escaping () -> Void) {
         if #available(iOS 14, *) {

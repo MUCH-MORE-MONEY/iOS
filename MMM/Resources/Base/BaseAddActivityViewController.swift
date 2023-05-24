@@ -34,7 +34,7 @@ class BaseAddActivityViewController: BaseDetailViewController {
     var hasImage = false
     private var cancellable = Set<AnyCancellable>()
     private var imagePickerVC = UIImagePickerController()
-    var AddViewModel = AddActivityViewModel()
+    var addViewModel = AddActivityViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -106,7 +106,6 @@ extension BaseAddActivityViewController {
             $0.setTitleColor(R.Color.gray100, for: .normal)
             $0.titleLabel?.font = R.Font.title1
             $0.setButtonLayer()
-            $0.isEnabled = false
         }
         // CameraImageView와 ViewModel 공유
             
@@ -210,12 +209,12 @@ extension BaseAddActivityViewController {
     }
     
     private func bind() {
-        cameraImageView.setData(viewModel: AddViewModel)
-        AddViewModel.$didTapAddButton
+        cameraImageView.setData(viewModel: addViewModel)
+        addViewModel.$didTapAddButton
             .sinkOnMainThread(receiveValue: { [weak self] in
                 guard let self = self else { return }
                 if $0 {
-                    AddViewModel.requestPHPhotoLibraryAuthorization {
+                    addViewModel.requestPHPhotoLibraryAuthorization {
                         DispatchQueue.main.async {
                             self.showPicker()
                         }
@@ -224,16 +223,30 @@ extension BaseAddActivityViewController {
             })
             .store(in: &cancellable)
         
+        addViewModel.$isTitleEmpty
+            .sinkOnMainThread {
+                self.saveButton.isEnabled = !$0
+            }
+        addViewModel.isVaild
+            .sinkOnMainThread(receiveValue: {
+                if !$0 {
+                    self.titleTextFeild.text?.removeLast()
+                }
+            }).store(in: &cancellable)
+        
         titleTextFeild.textPublisher
             .receive(on: RunLoop.main)
-            .assign(to: \.titleText, on: AddViewModel)
+            .assign(to: \.titleText, on: addViewModel)
             .store(in: &cancellable)
         
         memoTextView.textPublisher
-            .sink { text in
-                print("text Changed : \(text)")
-            }
-//            .assign(to: \.memoText, on: AddViewModel)
+            .sink(receiveValue: { text in
+                self.addViewModel.memoText = text
+            })
+            .store(in: &cancellable)
+        
+        saveButton.tapPublisher
+            .sinkOnMainThread(receiveValue: didSaveButtonTapped)
             .store(in: &cancellable)
     }
     
@@ -242,6 +255,20 @@ extension BaseAddActivityViewController {
         imagePickerVC.allowsEditing = true
         present(imagePickerVC, animated: true)
     }
+    
+    func didSaveButtonTapped() {
+        print("\(addViewModel.titleText)")
+        print("\(addViewModel.memoText)")
+    }
+    
+    private func limitTextLength(_ text: String, maxLength: Int) -> String {
+            let length = text.count
+            if length > maxLength {
+                let endIndex = text.index(text.startIndex, offsetBy: maxLength)
+                return String(text[..<endIndex])
+            }
+            return text
+        }
 }
 
 extension BaseAddActivityViewController: UIImagePickerControllerDelegate {

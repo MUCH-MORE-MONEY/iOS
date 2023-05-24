@@ -72,7 +72,8 @@ extension EditActivityViewController {
     }
     
     private func bind() {
-        
+        addViewModel.titleText = detailViewModel.detailActivity?.title ?? ""
+        addViewModel.memoText = detailViewModel.detailActivity?.memo ?? ""
     }
 }
 

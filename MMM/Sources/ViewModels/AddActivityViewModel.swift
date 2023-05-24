@@ -10,6 +10,8 @@ import Photos
 
 final class AddActivityViewModel {
     @Published var didTapAddButton: Bool = false
+    @Published var titleText = ""
+    @Published var memoText = ""
     
     func requestPHPhotoLibraryAuthorization(completion: @escaping () -> Void) {
         if #available(iOS 14, *) {

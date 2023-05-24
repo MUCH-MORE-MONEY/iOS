@@ -13,7 +13,7 @@ import Combine
 class BaseAddActivityViewController: BaseDetailViewController {
     // MARK: - UI Components
     lazy var titleTextFeild = UITextField()
-    private lazy var starStackView = UIStackView()
+    lazy var starStackView = UIStackView()
     lazy var cameraImageView = AddImageView()
     lazy var mainImageView = UIImageView()
     private lazy var cameraButtonStackView = UIStackView()
@@ -22,6 +22,7 @@ class BaseAddActivityViewController: BaseDetailViewController {
     private lazy var addImageButton = UIButton()
     lazy var memoTextView = UITextView()
     private lazy var saveButton = UIButton()
+    lazy var satisfyingLabel = BasePaddingLabel(padding: UIEdgeInsets(top: 3, left: 12, bottom: 3, right: 12))
     // MARK: - Properties
     lazy var starList: [UIImageView] = [
         UIImageView(image: R.Icon.iconStarInActive),
@@ -33,7 +34,7 @@ class BaseAddActivityViewController: BaseDetailViewController {
     var hasImage = false
     private var cancellable = Set<AnyCancellable>()
     private var imagePickerVC = UIImagePickerController()
-    private var viewModel = AddActivityViewModel()
+    var AddViewModel = AddActivityViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,7 +55,7 @@ extension BaseAddActivityViewController {
 
         view.addSubviews(titleTextFeild, scrollView, saveButton)
         
-        contentView.addSubviews(starStackView, mainImageView, cameraImageView, memoTextView)
+        contentView.addSubviews(starStackView, satisfyingLabel, mainImageView, cameraImageView, memoTextView)
         
         starList.forEach {
             $0.contentMode = .scaleAspectFit
@@ -108,6 +109,14 @@ extension BaseAddActivityViewController {
             $0.isEnabled = false
         }
         // CameraImageView와 ViewModel 공유
+            
+        satisfyingLabel = satisfyingLabel.then {
+            $0.backgroundColor = R.Color.gray600
+            $0.font = R.Font.body4
+            $0.textColor = R.Color.gray300
+            $0.layer.cornerRadius = 12
+            $0.clipsToBounds = true
+        }
     }
     
     private func setLayout() {
@@ -130,6 +139,11 @@ extension BaseAddActivityViewController {
             $0.top.equalToSuperview().inset(24)
             $0.width.equalTo(120)
             $0.height.equalTo(24)
+        }
+        
+        satisfyingLabel.snp.makeConstraints {
+            $0.left.equalTo(starStackView.snp.right).offset(4)
+            $0.centerY.equalTo(starStackView)
         }
         
         if hasImage {
@@ -196,18 +210,30 @@ extension BaseAddActivityViewController {
     }
     
     private func bind() {
-        cameraImageView.setData(viewModel: viewModel)
-        viewModel.$didTapAddButton
+        cameraImageView.setData(viewModel: AddViewModel)
+        AddViewModel.$didTapAddButton
             .sinkOnMainThread(receiveValue: { [weak self] in
                 guard let self = self else { return }
                 if $0 {
-                    viewModel.requestPHPhotoLibraryAuthorization {
+                    AddViewModel.requestPHPhotoLibraryAuthorization {
                         DispatchQueue.main.async {
                             self.showPicker()
                         }
                     }
                 }
             })
+            .store(in: &cancellable)
+        
+        titleTextFeild.textPublisher
+            .receive(on: RunLoop.main)
+            .assign(to: \.titleText, on: AddViewModel)
+            .store(in: &cancellable)
+        
+        memoTextView.textPublisher
+            .sink { text in
+                print("text Changed : \(text)")
+            }
+//            .assign(to: \.memoText, on: AddViewModel)
             .store(in: &cancellable)
     }
     

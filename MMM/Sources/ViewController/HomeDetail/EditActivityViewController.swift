@@ -16,16 +16,17 @@ class EditActivityViewController: BaseAddActivityViewController {
     private lazy var titleStackView = UIStackView()
     private lazy var titleIcon = UIImageView()
     private lazy var titleText = UILabel()
+    
     // MARK: - Properties
-    var viewModel: HomeDetailViewModel
-    var date: Date
-    var navigationTitle: String {
+    private var detailViewModel: HomeDetailViewModel
+    private var date: Date
+    private var navigationTitle: String {
         return date.getFormattedDate(format: "yyyy.MM.dd")
     }
     
     
     init(viewModel: HomeDetailViewModel, date: Date) {
-        self.viewModel = viewModel
+        self.detailViewModel = viewModel
         self.date = date
         super.init(nibName: nil, bundle: nil)
     }
@@ -47,7 +48,36 @@ extension EditActivityViewController {
         setLayout()
         bind()
     }
+        
+    private func setAttribute() {
+        setCustomTitle()
+        view.addSubviews(editIconImage)
+        
+        editIconImage = editIconImage.then {
+            $0.image = R.Icon.iconEditGray24
+            $0.contentMode = .scaleAspectFit
+        }
+        
+
+        
+        setUIByViewModel()
+
+    }
     
+    private func setLayout() {
+        editIconImage.snp.makeConstraints {
+            $0.left.equalTo(activityType.snp.right).offset(15)
+            $0.centerY.equalTo(activityType)
+        }
+    }
+    
+    private func bind() {
+        
+    }
+}
+
+// MARK: - UI Funcitons
+extension EditActivityViewController {
     private func setCustomTitle() {
         view.addSubview(titleStackView)
         titleStackView.addArrangedSubviews(titleText, titleIcon)
@@ -70,29 +100,24 @@ extension EditActivityViewController {
         navigationItem.titleView = titleStackView
     }
     
-    private func setAttribute() {
-        setCustomTitle()
-        view.addSubviews(editIconImage)
-        
-        editIconImage = editIconImage.then {
-            $0.image = R.Icon.iconEditGray24
-            $0.contentMode = .scaleAspectFit
-        }
-        
-        memoTextView.text = viewModel.detailActivity?.memo
-        titleTextFeild.text = viewModel.detailActivity?.title
-        totalPrice.text = viewModel.detailActivity?.amount
-        for i in 0..<(viewModel.detailActivity?.star ?? 0) {
+    private func setUIByViewModel() {
+
+        satisfyingLabel.setSatisfyingLabelEdit(by: detailViewModel.detailActivity?.star ?? 0)
+
+        memoTextView.text = detailViewModel.detailActivity?.memo
+        titleTextFeild.text = detailViewModel.detailActivity?.title
+        totalPrice.text = detailViewModel.detailActivity?.amount
+        for i in 0..<(detailViewModel.detailActivity?.star ?? 0) {
             starList[i].image = R.Icon.iconStarBlack24
         }
         
-        if let amount = Int(viewModel.detailActivity?.amount ?? "0") {
+        if let amount = Int(detailViewModel.detailActivity?.amount ?? "0") {
             self.totalPrice.text = "\(amount.withCommas())원"
         }
-        if let image = viewModel.mainImage {
+        if let image = detailViewModel.mainImage {
             mainImageView.image = image
         }
-        hasImage = viewModel.hasImage
+        hasImage = detailViewModel.hasImage
         print("hasImage \(hasImage)")
 
         if hasImage {
@@ -102,16 +127,5 @@ extension EditActivityViewController {
         }
         print("editView : \(mainImageView.frame.height)")
     }
-    
-    private func setLayout() {
-        editIconImage.snp.makeConstraints {
-            $0.left.equalTo(activityType.snp.right).offset(15)
-            $0.centerY.equalTo(activityType)
-        }
-        
-    }
-    
-    private func bind() {
-        
-    }
+
 }

@@ -31,7 +31,10 @@ final class DatePickerViewController: UIViewController {
 //MARK: - Action
 extension DatePickerViewController {
 	// 외부에서 설정
-	func setUp(isDark: Bool = false) {
+	func setUp(title: String, isDark: Bool = false) {
+		DispatchQueue.main.async {
+			self.titleLabel.text = title
+		}
 		self.isDark = isDark
 	}
 	
@@ -41,7 +44,6 @@ extension DatePickerViewController {
 		homeDelegate?.willPickerDismiss(datePicker.date)
 	}
 }
-
 //MARK: - Style & Layouts
 private extension DatePickerViewController {
 	// 초기 셋업할 코드들

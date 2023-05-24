@@ -40,7 +40,6 @@ final class HighlightViewController: UIViewController {
 		setup()		// 초기 셋업할 코드들
     }
 	
-	
 	override func viewDidLayoutSubviews() {
 		// Underline 호출
 		priceTextFiled.setUnderLine(color: R.Color.orange500)

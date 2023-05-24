@@ -475,7 +475,6 @@ extension HomeViewController: UITableViewDelegate {
         navigationController?.pushViewController(vc, animated: true)
 	}
 }
-
 extension HomeViewController: HomeViewProtocol {
 	// 닫힐때
 	func willPickerDismiss(_ date: Date) {

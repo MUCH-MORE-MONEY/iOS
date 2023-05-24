@@ -73,12 +73,17 @@ class DetailViewController: BaseDetailViewController {
         UIImageView(image: R.Icon.iconStarInActive)
     ]
     // MARK: - Properties
+    private var date = Date()
     private var viewModel = HomeDetailViewModel()
     /// cell에 보여지게 되는 id의 배열
     private var economicActivityId: [String] = []
     /// 현재 보여지고 있는 indexPath.row
     private var index: Int = 0
     private var cancellable = Set<AnyCancellable>()
+    
+    private var navigationTitle: String {
+        return date.getFormattedDate(format: "M월 dd일 경제활동")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -87,14 +92,12 @@ class DetailViewController: BaseDetailViewController {
 }
 
 extension DetailViewController {
-    func setData(economicActivityId: [String], index: Int) {
+    func setData(economicActivityId: [String], index: Int, date: Date) {
         self.economicActivityId = economicActivityId
         self.index = index
+        self.date = date
     }
     
-    func setNavigation(_ title :String) {
-        self.title = title
-    }
     private func setup() {
         setAttribute()
         setLayout()
@@ -147,7 +150,7 @@ extension DetailViewController {
     }
     
     private func setAttribute() {
-        
+        title = navigationTitle
         editActivityButtonItem = editActivityButtonItem.then {
             $0.customView = editButton
         }

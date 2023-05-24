@@ -11,7 +11,7 @@ import Then
 import SnapKit
 
 class EditActivityViewController: BaseAddActivityViewController {
-    private lazy var editIconLabel = UIImageView()
+    private lazy var editIconImage = UIImageView()
     
     var viewModel: HomeDetailViewModel
     
@@ -43,9 +43,9 @@ extension EditActivityViewController {
     }
     
     private func setAttribute() {
-        view.addSubviews(editIconLabel)
+        view.addSubviews(editIconImage)
         
-        editIconLabel = editIconLabel.then {
+        editIconImage = editIconImage.then {
             $0.image = R.Icon.iconEditGray24
             $0.contentMode = .scaleAspectFit
         }
@@ -75,7 +75,7 @@ extension EditActivityViewController {
     }
     
     private func setLayout() {
-        editIconLabel.snp.makeConstraints {
+        editIconImage.snp.makeConstraints {
             $0.left.equalTo(activityType.snp.right).offset(15)
             $0.centerY.equalTo(activityType)
         }

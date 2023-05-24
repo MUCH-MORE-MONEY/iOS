@@ -11,6 +11,8 @@ import Then
 import SnapKit
 
 class EditActivityViewController: BaseAddActivityViewController {
+    private lazy var editIconLabel = UIImageView()
+    
     var viewModel: HomeDetailViewModel
     
     init(viewModel: HomeDetailViewModel) {
@@ -41,6 +43,13 @@ extension EditActivityViewController {
     }
     
     private func setAttribute() {
+        view.addSubviews(editIconLabel)
+        
+        editIconLabel = editIconLabel.then {
+            $0.image = R.Icon.iconEditGray24
+            $0.contentMode = .scaleAspectFit
+        }
+        
         memoTextView.text = viewModel.detailActivity?.memo
         titleTextFeild.text = viewModel.detailActivity?.title
         totalPrice.text = viewModel.detailActivity?.amount
@@ -66,7 +75,10 @@ extension EditActivityViewController {
     }
     
     private func setLayout() {
-
+        editIconLabel.snp.makeConstraints {
+            $0.left.equalTo(activityType.snp.right).offset(15)
+            $0.centerY.equalTo(activityType)
+        }
         
     }
     

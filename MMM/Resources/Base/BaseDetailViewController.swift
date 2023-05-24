@@ -27,7 +27,7 @@ class BaseDetailViewController: BaseViewController {
         $0.sizeToFit()
     }
     
-    private lazy var activityType = BasePaddingLabel().then {
+    var activityType = BasePaddingLabel().then {
         $0.font = R.Font.body4
         $0.textColor = R.Color.gray100
         $0.backgroundColor = R.Color.orange500

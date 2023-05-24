@@ -5,7 +5,6 @@
 //  Created by geonhyeong on 2023/04/11.
 //
 
-import Foundation
 import Combine
 import UIKit
 
@@ -22,12 +21,27 @@ public extension Publisher {
 		return receive(on: DispatchQueue.main)
 			.sink(receiveValue: receiveValue)
 	}
+	
+	func assignOnMainThread<Root>(to: ReferenceWritableKeyPath<Root, Self.Output>, on: Root) -> AnyCancellable where Self.Failure == Never {
+		
+		return receive(on: DispatchQueue.main)
+			.assign(to: to, on: on)
+	}
 }
 
 extension UIButton {
 	var tapPublisher: AnyPublisher<Void, Never> {
 		controlPublisher(for: .touchUpInside)
 			.map { _ in }
+			.eraseToAnyPublisher()
+	}
+}
+
+extension UISwitch {
+	var statePublisher: AnyPublisher<Bool, Never> {
+		controlPublisher(for: .valueChanged)
+			.map { $0 as! UISwitch }
+			.map { $0.isOn }
 			.eraseToAnyPublisher()
 	}
 }

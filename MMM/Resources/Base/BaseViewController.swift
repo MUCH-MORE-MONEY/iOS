@@ -22,7 +22,6 @@ class BaseViewController: UIViewController {
 private extension BaseViewController {
     
     @objc func didTapBackButton(_ sender: UITapGestureRecognizer) {
-        print()
         navigationController?.popViewController(animated: true)
     }
 }

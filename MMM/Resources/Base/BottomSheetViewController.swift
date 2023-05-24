@@ -40,7 +40,7 @@ class BottomSheetViewController: UIViewController, BottomSheetChild {
 	private var isShadow: Bool = false
 	private var isDark: Bool = false
 
-	// MARK: - UI
+	// MARK: - UI Components
 	// contentVC: 보여질 UIViewController
 	// bgView: bottomSheet 뒤에 깔릴 어두운 UIView
 	// bottomSheetView: contentViewController가 올라갈 UIView 그자체
@@ -72,6 +72,13 @@ class BottomSheetViewController: UIViewController, BottomSheetChild {
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 		self.showSheet()
+	}
+	
+	override func viewWillDisappear(_ animated: Bool) {
+		super.viewWillDisappear(animated)
+		
+		NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+		NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
 	}
 }
 
@@ -105,8 +112,6 @@ extension BottomSheetViewController {
 	}
 	
 	func willDismiss() {
-		self.view.layoutIfNeeded()
-		
 		topConstraint.update(offset: safeAreaHeight + bottomPadding)
 		
 		let showSheet = UIViewPropertyAnimator(duration: 0.25, curve: .easeIn) {
@@ -132,15 +137,14 @@ private extension BottomSheetViewController {
 	
 	// Sheet를 보이게 하는 메소드
 	func showSheet(atState: BottomSheetViewState = .normal) {
-		self.view.layoutIfNeeded()
-		
 		if atState == .normal {
 			topConstraint.update(offset: (safeAreaHeight + bottomPadding) - defaultHeight)
 		} else {
 			topConstraint.update(offset: bottomSheetPanMinTopConstant)
 		}
-				
-		let showSheet = UIViewPropertyAnimator(duration: 0.25, curve: .easeIn) {
+		
+		// keyboard 열리는 속도가 0.25인데 그것보다 빠르게(0.5) 나와야함
+		let showSheet = UIViewPropertyAnimator(duration: 0.2, curve: .easeIn) {
 			self.view.layoutIfNeeded()
 		}
 		
@@ -157,6 +161,7 @@ private extension BottomSheetViewController {
 	
 	// Sheet를 숨기거나 닫히는 메소드
 	@objc func hideAndCloseSheet() {
+		view.endEditing(true) // keyboard 닫힘
 		willDismiss()
 	}
 	
@@ -217,9 +222,45 @@ private extension BottomSheetViewController {
 		setPanGesture()
 	}
 	
+	@objc func keyboardWillShow(_ notification: NSNotification) {
+		moveViewWithKeyboard(notification: notification, keyboardWillShow: true)
+	}
+	
+	@objc func keyboardWillHide(_ notification: NSNotification) {
+		moveViewWithKeyboard(notification: notification, keyboardWillShow: false)
+	}
+	
+	func moveViewWithKeyboard(notification: NSNotification, keyboardWillShow: Bool) {
+		// Keyboard's size
+		guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+		let keyboardHeight = keyboardSize.height
+		
+		// Keyboard's animation duration
+		let keyboardDuration = notification.userInfo![UIResponder.keyboardAnimationDurationUserInfoKey] as! Double
+		
+		// Keyboard's animation curve
+		let keyboardCurve = UIView.AnimationCurve(rawValue: notification.userInfo![UIResponder.keyboardAnimationCurveUserInfoKey] as! Int)!
+
+		if keyboardWillShow {
+			topConstraint.update(offset: (safeAreaHeight + bottomPadding) - defaultHeight - keyboardHeight)
+		} else {
+			topConstraint.update(offset: (safeAreaHeight + bottomPadding) - defaultHeight)
+		}
+		
+		// 키보드 애니메이션과 동일한 방식으로 보기 애니메이션 적용하기
+		let animator = UIViewPropertyAnimator(duration: keyboardDuration, curve: keyboardCurve) { [weak self] in
+			// Update Constraints
+			self?.view.layoutIfNeeded()
+		}
+		
+		animator.startAnimation()
+	}
+	
 	func setAttribute() {
 		self.view.backgroundColor = .clear
-
+		NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+		
 		bgView = bgView.then {
 			$0.backgroundColor = R.Color.gray900 // backgroundColor
 			$0.alpha = 0.0 // 스르륵 나타나는 애니메이션 효과를 위해 초기값 0.0으로 지정
@@ -262,30 +303,30 @@ private extension BottomSheetViewController {
 		}
 				
 		bottomSheetOuterView.snp.makeConstraints {
-			topConstraint = $0.top.equalTo(self.view.safeAreaLayoutGuide).offset(safeAreaHeight + bottomPadding).constraint
-			$0.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
+			topConstraint = $0.top.equalTo(view.safeAreaLayoutGuide).offset(safeAreaHeight + bottomPadding).constraint
+			$0.leading.trailing.equalToSuperview()
 			$0.bottom.equalToSuperview()
 		}
-		
+
 		bottomSheetInnerView.snp.makeConstraints {
 			$0.edges.equalToSuperview()
 		}
-		
+
 		dragAreaView.snp.makeConstraints {
 			$0.top.equalToSuperview()
-			$0.leading.trailing.equalTo(view.safeAreaInsets)
+			$0.leading.trailing.equalToSuperview()
 			$0.height.equalTo(32)
 		}
-		
+
 		dragIndicatorView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(12)
 			$0.centerX.equalToSuperview()
 			$0.width.equalTo(40)
 			$0.height.equalTo(4)
 		}
-		
+
 		contentVC.view.snp.makeConstraints {
-			$0.top.equalTo(dragAreaView.snp.bottom)
+			$0.top.lessThanOrEqualTo(dragAreaView.snp.bottom) // lessThan으로 snapkit 오류 해결
 			$0.leading.trailing.bottom.equalToSuperview()
 		}
 	}

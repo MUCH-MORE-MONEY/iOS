@@ -14,7 +14,7 @@ final class ProfileViewController: UIViewController {
 		
 	private lazy var topArea = UIView()
 		
-	private lazy var profileView = ProfileView()
+	private lazy var profileView = ProfileHeaderView()
 	
 	private lazy var profileFooterView = ProfileFooterView()
 	

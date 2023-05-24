@@ -15,18 +15,19 @@ protocol HomeViewProtocol: AnyObject {
 	func willPickerDismiss(_ date: Date)
 }
 
-class HomeViewController: UIViewController {
+final class HomeViewController: UIViewController {
 	// MARK: - Properties
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 	private let viewModel = HomeViewModel()
 	private lazy var preDate = Date() // yyyyMMdd
-	
+
 	// MARK: - UI Components
 	private lazy var monthButtonItem = UIBarButtonItem()
 	private lazy var todayButtonItem = UIBarButtonItem()
-	private lazy var monthButton = UIButton()
+	private lazy var filterButtonItem = UIBarButtonItem()
+	private lazy var monthButton = SemanticContentAttributeButton()
 	private lazy var todayButton = UIButton()
-	private lazy var settingButton = UIBarButtonItem()
+	private lazy var filterButton = UIButton()
 	private lazy var separator = UIView() // Nav separator
 	private lazy var calendar = FSCalendar()
 	private lazy var calendarHeaderView = HomeHeaderView()
@@ -53,8 +54,8 @@ class HomeViewController: UIViewController {
 
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
+		calendar.reloadData()
 		tableView.reloadData()
-//		self.navigationController?.setNavigationBarHidden(true, animated: animated)	// navigation bar 숨김
 	}
 	
 	override func viewWillDisappear(_ animated: Bool) {
@@ -66,10 +67,8 @@ class HomeViewController: UIViewController {
 		return .lightContent // status text color 변경
 	}
 }
-
 //MARK: - Action
 extension HomeViewController {
-
 	// 오늘 날짜로 돌아오기
 	func didTapTodayButton() {
 		self.didSelectDate(Date())
@@ -84,8 +83,9 @@ extension HomeViewController {
 		self.setMonth(date)
 	}
 	
-	// 달력 Picker BottomSheet
-	func didTapMonthButton() {
+	//MARK: - Private
+	/// 달력 Picker Bottom Sheet
+	private func didTapMonthButton() {
 		let picker = DatePickerViewController()
 		let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
 		picker.delegate = bottomSheetVC
@@ -103,12 +103,18 @@ extension HomeViewController {
 			monthButton.setTitle(date.getFormattedDate(format: "M월"), for: .normal)
 		}
 	}
+	
+	/// Push Home Filter VC
+	private func didTapFilterButton() {
+		let vc = HomeFilterViewController(viewModel: viewModel)
+		vc.hidesBottomBarWhenPushed = true	// TabBar Above
+		navigationController?.pushViewController(vc, animated: true)
+	}
 }
-
 //MARK: - Style & Layouts
-extension HomeViewController {
+private extension HomeViewController {
+	// 초기 셋업할 코드들
 	private func setup() {
-		// 초기 셋업할 코드들
 		bind()
 		setAttribute()
 		setLayout()
@@ -123,11 +129,11 @@ extension HomeViewController {
 		monthButton.tapPublisher
 			.sinkOnMainThread(receiveValue: didTapMonthButton)
 			.store(in: &cancellable)
-//		checkButton.tapPublisher
-//			.receive(on: DispatchQueue.main)
-//			.sinkOnMainThread(receiveValue: go)
-//			.store(in: &cancellables)
-		
+
+		filterButton.tapPublisher
+			.sinkOnMainThread(receiveValue: didTapFilterButton)
+			.store(in: &cancellable)
+
 		// 예시
 //		UITextField().textPublisher
 //			.receive(on: DispatchQueue.main)
@@ -139,15 +145,15 @@ extension HomeViewController {
 			.sinkOnMainThread(receiveValue: { [weak self] daily in
 				self?.tableView.reloadData()
 			})
-			.store(in: &self.cancellable)
+			.store(in: &cancellable)
 		
 		viewModel.$monthlyList
 			.sinkOnMainThread(receiveValue: { [weak self] monthly in
 				self?.calendarHeaderView.setUp(pay: monthly.reduce(0){$0 + $1.pay}, earn: monthly.reduce(0){$0 + $1.earn})
 				self?.calendar.reloadData()
 			})
-			.store(in: &self.cancellable)
-		
+			.store(in: &cancellable)
+				
 //		viewModel
 //			.transform(input: viewModel.input.eraseToAnyPublisher())
 //			.sinkOnMainThread(receiveValue: { [weak self] state in
@@ -158,11 +164,6 @@ extension HomeViewController {
 //					self?.toggleCheckButton(isEnabled)
 //				}
 //			}).store(in: &cancellables)
-		
-//		viewModel.isMatchPasswordInput
-//			.receive(on: DispatchQueue.main)
-//			.sink(receiveValue: go2)
-//			.store(in: &cancellables)
 	}
 	
 	private func setAttribute() {
@@ -170,7 +171,7 @@ extension HomeViewController {
 		view.backgroundColor = R.Color.gray100
 		view.addGestureRecognizer(self.scopeGesture)
 		navigationItem.leftBarButtonItem = monthButtonItem
-		navigationItem.rightBarButtonItems = [settingButton, todayButtonItem]
+		navigationItem.rightBarButtonItems = [filterButtonItem, todayButtonItem]
 
 		monthButton = monthButton.then {
 			$0.frame = .init(origin: .zero, size: .init(width: 150, height: 24))
@@ -181,7 +182,6 @@ extension HomeViewController {
 			$0.imageView?.contentMode = .scaleAspectFit
 			$0.titleLabel?.font = R.Font.h5
 			$0.contentHorizontalAlignment = .left
-			$0.semanticContentAttribute = .forceRightToLeft //<- 중요
 			$0.imageEdgeInsets = .init(top: 0, left: 11, bottom: 0, right: 0) // 이미지 여백
 		}
 		
@@ -204,9 +204,12 @@ extension HomeViewController {
 			$0.customView = todayButton
 		}
 		
-		settingButton = settingButton.then {
-			$0.image = R.Icon.setting
-			$0.style = .plain
+		filterButton = filterButton.then {
+			$0.setImage(R.Icon.setting, for: .normal)
+		}
+		
+		filterButtonItem = filterButtonItem.then {
+			$0.customView = filterButton
 		}
 		
 		separator = separator.then {
@@ -226,14 +229,13 @@ extension HomeViewController {
 			$0.appearance.titleTodayColor = R.Color.white
 			$0.appearance.titleDefaultColor = R.Color.gray300 	// 달력의 평일 날짜 색깔
 			$0.appearance.titleFont = R.Font.body5				// 달력의 평일 글자 폰트
-			$0.appearance.titleOffset = .init(x: 0, y: 8)
 			$0.appearance.titlePlaceholderColor = R.Color.gray300.withAlphaComponent(0.5) // 달에 유효하지 않은 날짜의 색 지정
 			$0.appearance.weekdayTextColor = R.Color.gray100	// 달력의 요일 글자 색깔
 			$0.appearance.weekdayFont = R.Font.body5			// 달력의 요일 글자 폰트
 			$0.appearance.headerMinimumDissolvedAlpha = 0		// 년월에 흐릿하게 보이는 애들 없애기
 			$0.appearance.subtitleFont = R.Font.prtendard(size: 9)
 			$0.appearance.subtitleDefaultColor = R.Color.gray300
-			$0.appearance.subtitleOffset = CGPoint(x: 0, y: 22)	// 캘린더 숫자와 subtitle간의 간격 조정
+			$0.appearance.subtitleOffset = CGPoint(x: 0, y: 12)	// 캘린더 숫자와 subtitle간의 간격 조정
 			$0.register(CalendarCell.self, forCellReuseIdentifier: "CalendarCell")
 		}
 		
@@ -267,12 +269,12 @@ extension HomeViewController {
 			$0.textColor = R.Color.gray900
 			$0.textAlignment = .left
 		}
-		
-		headerView.addSubview(dayLabel)
-		view.addSubviews(calendarHeaderView, calendar, separator, tableView, emptyView)
 	}
 	
 	private func setLayout() {
+		headerView.addSubview(dayLabel)
+		view.addSubviews(calendarHeaderView, calendar, separator, tableView, emptyView)
+
 		separator.snp.makeConstraints {
 			$0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(15)
 			$0.top.equalTo(view.safeAreaLayoutGuide)
@@ -280,23 +282,23 @@ extension HomeViewController {
 		}
 		
 		calendarHeaderView.snp.makeConstraints {
-			$0.top.left.right.equalTo(view.safeAreaLayoutGuide)
+			$0.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
 			$0.height.equalTo(46)
 		}
 				
 		calendar.snp.makeConstraints {
 			$0.top.equalTo(calendarHeaderView.snp.bottom)
-			$0.left.right.equalTo(view.safeAreaLayoutGuide)
+			$0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
 			$0.height.equalTo(300)
 		}
 
 		dayLabel.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(16)
-			$0.left.right.equalTo(view.safeAreaLayoutGuide).inset(20)
+			$0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(20)
 		}
 		
 		tableView.snp.makeConstraints {
-			$0.bottom.left.right.equalTo(view.safeAreaLayoutGuide)
+			$0.bottom.leading.trailing.equalTo(view.safeAreaLayoutGuide)
 			$0.top.equalTo(calendar.snp.bottom)
 		}
 		
@@ -329,6 +331,8 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 	
 	// subTitle (수익/지출)
 	func calendar(_ calendar: FSCalendar, subtitleFor date: Date) -> String? {
+		guard viewModel.isDailySetting else { return nil }
+		
 		if let index = viewModel.monthlyList.firstIndex(where: {$0.createAt == date.getFormattedYMD()}) {
 			return viewModel.monthlyList[index].total.withCommasAndPlus()
 		}
@@ -342,22 +346,30 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 			$0.height.equalTo(bounds.height) // 높이 변경
 		}
 		
+		// 46 : calendarHeaderView 높이
+		// 300 : calendar 높이
+		// 85 : calendar 주 단위 높이
 		calendarHeaderView.snp.updateConstraints {
-			$0.height.equalTo(bounds.height <= 300 / 2 ? 0 : 46) // calendar 전체 높이에 따른 높이 변경
+			$0.height.equalTo(46 * (bounds.height - 85) / (300 - 85)) // calendar 전체 높이에 따른 높이 변경
 		}
 		
+		self.setMonth(calendar.currentPage) // 월 Text 변경
 		self.view.layoutIfNeeded()
 	}
 
 	// page가 변경될때 month 변경
 	func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
-		viewModel.getMonthlyList(calendar.currentPage.getFormattedYM())
-
-//		calendar.snp.updateConstraints {
-//			$0.height.equalTo(350)
-//		}
-//		calendar.adjustsBoundingRectWhenChangingMonths = true
+		let date = calendar.currentPage.getFormattedYM()
 		
+		if calendar.scope == .week { // 주 단위
+			if let dateAfter = Calendar.current.date(byAdding: .day, value: 6, to: calendar.currentPage) { // 해당 주의 마지막 날짜
+				if date != dateAfter.getFormattedYM() {
+					viewModel.getWeeklyList(date, dateAfter.getFormattedYM())
+				}
+			}
+		} else { // 월 단위
+			viewModel.getMonthlyList(date)
+		}
 		self.setMonth(calendar.currentPage) // 월 설정
 	}
 }
@@ -396,7 +408,6 @@ extension HomeViewController: FSCalendarDelegateAppearance {
 extension HomeViewController: UIGestureRecognizerDelegate {
 	// 스크롤 제스쳐
 	func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-		
 		let shouldBegin = self.tableView.contentOffset.y <= -self.tableView.contentInset.top
 		if shouldBegin {
 			let velocity = self.scopeGesture.velocity(in: self.view)
@@ -457,12 +468,10 @@ extension HomeViewController: UITableViewDelegate {
 
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
-        
 	}
 }
-
 extension HomeViewController: HomeViewProtocol {
-	
+	// 닫힐때
 	func willPickerDismiss(_ date: Date) {
 		self.didSelectDate(date)
 	}

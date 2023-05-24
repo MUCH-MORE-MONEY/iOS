@@ -6,85 +6,33 @@
 //
 
 import UIKit
+import Then
+import SnapKit
 
 final class HomeTableViewCell: UITableViewCell {
 	// MARK: - Properties
-	private let startList: [UIImageView] = [
-		UIImageView(image: R.Icon.iconStarInActive),
-		UIImageView(image: R.Icon.iconStarInActive),
-		UIImageView(image: R.Icon.iconStarInActive),
-		UIImageView(image: R.Icon.iconStarInActive),
-		UIImageView(image: R.Icon.iconStarInActive)
-	]
-
 	// MARK: - UI Components
-	private lazy var image = UIImageView().then {
-		$0.layer.cornerRadius = 20
-		$0.layer.backgroundColor = R.Color.gray100.cgColor
-		$0.layer.masksToBounds = true	// 모양대로 자르기
-		$0.contentMode = .scaleAspectFit
-	}
-	
+	private lazy var startList = [UIImageView]()
+	private lazy var thumbnailImageView = UIImageView()
 	// contains2StackView과 memoLabel 들어가는 view
-	private lazy var containsStackView = UIStackView().then {
-		$0.axis = .vertical
-		$0.spacing = 7
-		$0.alignment = .leading
-		$0.distribution = .fill
-	}
-	
+	private lazy var containsStackView = UIStackView()
 	// starStackView과 title이 들어가는 view
-	private lazy var contains2StackView = UIStackView().then {
-		$0.axis = .vertical
-		$0.spacing = 4
-		$0.alignment = .leading
-		$0.distribution = .fill
-	}
-	
+	private lazy var contains2StackView = UIStackView()
 	// +/- imageView와 가격이 들어가는 view
-	private lazy var contains3StackView = UIStackView().then {
-		$0.axis = .horizontal
-		$0.spacing = 4
-		$0.alignment = .center
-		$0.distribution = .fill
-	}
-	
-	private lazy var starStackView = UIStackView().then {
-		$0.axis = .horizontal
-		$0.spacing = 3.77
-		$0.alignment = .leading
-		$0.distribution = .fillEqually
-	}
-	
-	private lazy var titleLabel = UILabel().then {
-		$0.font = R.Font.body2
-		$0.textColor = R.Color.black
-		$0.textAlignment = .left
-		$0.numberOfLines = 1
-	}
-	
-	private lazy var memoLabel = UILabel().then {
-		$0.font = R.Font.body5
-		$0.textColor = R.Color.gray600
-		$0.textAlignment = .left
-		$0.numberOfLines = 1
-	}
-	
-	private lazy var plusMinusImage = UIImageView().then {
-		$0.contentMode = .scaleAspectFit
-	}
-		
-	private lazy var priceLabel = UILabel().then {
-		$0.font = R.Font.prtendard(family: .medium, size: 16)
-		$0.textColor = R.Color.black
-		$0.textAlignment = .left
-	}
+	private lazy var contains3StackView = UIStackView()
+	private lazy var starStackView = UIStackView()
+	private lazy var titleLabel = UILabel()
+	private lazy var memoLabel = UILabel()
+	private lazy var plusMinusImage = UIImageView()
+	private lazy var priceLabel = UILabel()
 
 	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
-		setLayout()
+		setup() // 초기 셋업할 코드들
 	}
-
+	
+	// Compile time에 error를 발생시키는 코드
+	@available(*, unavailable)
 	required init?(coder: NSCoder) {
 		super.init(coder: coder)
 		fatalError("init(coder:) has not been implemented")
@@ -97,9 +45,103 @@ final class HomeTableViewCell: UITableViewCell {
 			iv.image = R.Icon.iconStarInActive
 		}
 	}
+}
+//MARK: - Action
+extension HomeTableViewCell {
+	// 외부에서 설정
+	func setUp(data: EconomicActivity) {
+		// 이미지 비동기 처리
+		DispatchQueue.main.async {
+			self.thumbnailImageView.setImage(urlStr: data.imageUrl, defaultImage: data.type == "01" ? R.Icon.coinEarn40 : R.Icon.coinPay40)
+		}
+		
+		// star의 갯수
+		for i in 0..<data.star {
+			startList[i].image = R.Icon.iconStarActive
+		}
 
+		titleLabel.text = data.title
+		memoLabel.text = data.memo
+		plusMinusImage.image = data.type == "01" ? R.Icon.plus16 : R.Icon.minus16
+		priceLabel.text = data.amount.withCommas()
+	}
+}
+//MARK: - Style & Layouts
+private extension HomeTableViewCell {
+	// 초기 셋업할 코드들
+	private func setup() {
+		setAttribute()
+		setLayout()
+	}
+	
+	private func setAttribute() {
+		startList = [UIImageView(image: R.Icon.iconStarInActive),
+					 UIImageView(image: R.Icon.iconStarInActive),
+					 UIImageView(image: R.Icon.iconStarInActive),
+					 UIImageView(image: R.Icon.iconStarInActive),
+					 UIImageView(image: R.Icon.iconStarInActive)]
+		
+		thumbnailImageView = thumbnailImageView.then {
+			$0.layer.cornerRadius = 20
+			$0.layer.backgroundColor = R.Color.gray100.cgColor
+			$0.layer.masksToBounds = true	// 모양대로 자르기
+			$0.contentMode = .scaleAspectFill
+		}
+		
+		containsStackView = containsStackView.then {
+			$0.axis = .vertical
+			$0.spacing = 7
+			$0.alignment = .leading
+			$0.distribution = .fill
+		}
+		
+		contains2StackView = contains2StackView.then {
+			$0.axis = .vertical
+			$0.spacing = 4
+			$0.alignment = .leading
+			$0.distribution = .fill
+		}
+		
+		contains3StackView = contains3StackView.then {
+			$0.axis = .horizontal
+			$0.spacing = 4
+			$0.alignment = .center
+			$0.distribution = .fill
+		}
+		
+		starStackView = starStackView.then {
+			$0.axis = .horizontal
+			$0.spacing = 3.77
+			$0.alignment = .leading
+			$0.distribution = .fillEqually
+		}
+		
+		titleLabel = titleLabel.then {
+			$0.font = R.Font.body2
+			$0.textColor = R.Color.black
+			$0.textAlignment = .left
+			$0.numberOfLines = 1
+		}
+		memoLabel = memoLabel.then {
+			$0.font = R.Font.body5
+			$0.textColor = R.Color.gray600
+			$0.textAlignment = .left
+			$0.numberOfLines = 1
+		}
+		
+		plusMinusImage = plusMinusImage.then {
+			$0.contentMode = .scaleAspectFit
+		}
+		
+		priceLabel = priceLabel.then {
+			$0.font = R.Font.prtendard(family: .medium, size: 16)
+			$0.textColor = R.Color.black
+			$0.textAlignment = .left
+		}
+	}
+	
 	private func setLayout() {
-		contentView.addSubviews(image, containsStackView, contains3StackView)
+		contentView.addSubviews(thumbnailImageView, containsStackView, contains3StackView)
 		startList.forEach { imageView in
 			starStackView.addArrangedSubview(imageView)
 		}
@@ -116,14 +158,14 @@ final class HomeTableViewCell: UITableViewCell {
 			contains3StackView.addArrangedSubview($0)
 		}
 
-		image.snp.makeConstraints {
+		thumbnailImageView.snp.makeConstraints {
 			$0.leading.equalToSuperview().inset(20)
 			$0.centerY.equalToSuperview()
 			$0.width.height.equalTo(40)
 		}
 
 		containsStackView.snp.makeConstraints {
-			$0.leading.equalTo(image.snp.trailing).offset(16)
+			$0.leading.equalTo(thumbnailImageView.snp.trailing).offset(16)
 			$0.trailing.equalToSuperview().inset(20)
 			$0.centerY.equalToSuperview()
 		}
@@ -133,24 +175,5 @@ final class HomeTableViewCell: UITableViewCell {
 			$0.trailing.equalToSuperview().inset(20)
 			$0.centerY.equalTo(titleLabel.snp.centerY)
 		}
-	}
-}
-
-extension HomeTableViewCell {
-	func setUp(data: EconomicActivity) {
-		// 이미지 비동기 처리
-		DispatchQueue.main.async {
-			self.image.setImage(urlStr: data.imageUrl, defaultImage: data.type == "01" ? R.Icon.plus16 : R.Icon.minus16)
-		}
-		
-		// star의 갯수
-		for i in 0..<data.star {
-			startList[i].image = R.Icon.iconStarActive
-		}
-
-		titleLabel.text = data.title
-		memoLabel.text = data.memo
-		plusMinusImage.image = data.type == "01" ? R.Icon.plus16 : R.Icon.minus16
-		priceLabel.text = data.amount.withCommas()
 	}
 }

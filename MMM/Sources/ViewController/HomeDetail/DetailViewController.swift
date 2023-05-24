@@ -246,7 +246,7 @@ private extension DetailViewController {
             viewModel.mainImage = nil
         }
 
-        let vc = EditActivityViewController(viewModel: viewModel)
+        let vc = EditActivityViewController(viewModel: viewModel, date: date)
         
         navigationController?.pushViewController(vc, animated: true)
     }

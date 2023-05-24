@@ -11,12 +11,20 @@ import Then
 import SnapKit
 
 class EditActivityViewController: BaseAddActivityViewController {
+    // MARK: - UI Components
     private lazy var editIconImage = UIImageView()
     
+    // MARK: - Properties
     var viewModel: HomeDetailViewModel
+    var date: Date
+    var navigationTitle: String {
+        return date.getFormattedDate(format: "yyyy.MM.dd")
+    }
     
-    init(viewModel: HomeDetailViewModel) {
+    
+    init(viewModel: HomeDetailViewModel, date: Date) {
         self.viewModel = viewModel
+        self.date = date
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -43,6 +51,7 @@ extension EditActivityViewController {
     }
     
     private func setAttribute() {
+        title = navigationTitle
         view.addSubviews(editIconImage)
         
         editIconImage = editIconImage.then {

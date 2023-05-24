@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "iconStarBlack24.png",
+      "filename" : "iconEditBlack24.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "iconStarBlack24 1.png",
+      "filename" : "icon-edit-black-24.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "iconStarBlack24 2.png",
+      "filename" : "icon-edit-black-24 1.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
@@ -19,8 +19,5 @@
   "info" : {
     "author" : "xcode",
     "version" : 1
-  },
-  "properties" : {
-    "template-rendering-intent" : "original"
   }
 }

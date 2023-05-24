@@ -18,11 +18,10 @@ class DetailViewController: BaseDetailViewController {
         $0.spacing = 7.54
     }
     
-    private lazy var editButton = UIBarButtonItem().then {
-        $0.title = "편집"
-        $0.style = .plain
-        $0.target = self
-        $0.action = #selector(didTapEditButton)
+    private lazy var editActivityButtonItem = UIBarButtonItem()
+    
+    private lazy var editButton = UIButton().then {
+        $0.setTitle("편집", for: .normal)
     }
     
     private lazy var titleLabel = UILabel().then {
@@ -74,12 +73,17 @@ class DetailViewController: BaseDetailViewController {
         UIImageView(image: R.Icon.iconStarInActive)
     ]
     // MARK: - Properties
+    private var date = Date()
     private var viewModel = HomeDetailViewModel()
     /// cell에 보여지게 되는 id의 배열
     private var economicActivityId: [String] = []
     /// 현재 보여지고 있는 indexPath.row
     private var index: Int = 0
     private var cancellable = Set<AnyCancellable>()
+    
+    private var navigationTitle: String {
+        return date.getFormattedDate(format: "M월 dd일 경제활동")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -88,22 +92,24 @@ class DetailViewController: BaseDetailViewController {
 }
 
 extension DetailViewController {
-    func setData(economicActivityId: [String], index: Int) {
+    func setData(economicActivityId: [String], index: Int, date: Date) {
         self.economicActivityId = economicActivityId
         self.index = index
+        self.date = date
     }
     
-    func setNavigation(_ title :String) {
-        self.title = title
-    }
     private func setup() {
         setAttribute()
         setLayout()
         bind()
     }
-    
+    // MARK: - Bind
     private func bind() {
         viewModel.fetchDetailActivity(id: economicActivityId[index])
+        
+        editButton.tapPublisher
+            .sinkOnMainThread(receiveValue: didTapEditButton)
+            .store(in: &cancellable)
         
         viewModel.$detailActivity
             .sinkOnMainThread { [weak self] value in
@@ -122,42 +128,35 @@ extension DetailViewController {
 					self.mainImageView.isHidden = false
 					self.cameraImageView.isHidden = true
                     self.mainImageView.setImage(urlStr: value.imageUrl, defaultImage: R.Icon.camera48)
-					self.remarkConstraintsByMainImageView()
+					self.remakeConstraintsByMainImageView()
+                    viewModel.hasImage = true
                 } else {
 					self.mainImageView.isHidden = true
 					self.cameraImageView.isHidden = false
-					self.remarkConstraintsByCameraImageView()
+					self.remakeConstraintsByCameraImageView()
+                    viewModel.hasImage = false
                 }
                 
                 if let amount = Int(value.amount) {
                     self.totalPrice.text = "\(amount.withCommas())원"
                 }
                 self.memoLabel.text = value.memo
-                
-                switch value.star {
-                case 0:
-					self.satisfactionLabel.isHidden = true
-                case 1:
-					self.satisfactionLabel.text = "아쉬워요"
-                case 2:
-					self.satisfactionLabel.text = "그저그래요"
-                case 3:
-					self.satisfactionLabel.text = "괜찮아요"
-                case 4:
-					self.satisfactionLabel.text = "만족해요"
-                case 5:
-					self.satisfactionLabel.text = "완전 만족해요"
-                default:
-                    break
-                }
+                self.satisfactionLabel.setSatisfyingLabel(by: value.star)
+                print("detailView : \(mainImageView.frame.height)")
+
             }.store(in: &cancellable)
         
         bottomPageControlView.setViewModel(viewModel, index, economicActivityId)
     }
     
     private func setAttribute() {
+        title = navigationTitle
+        editActivityButtonItem = editActivityButtonItem.then {
+            $0.customView = editButton
+        }
         
-        navigationItem.rightBarButtonItem = editButton
+        navigationItem.rightBarButtonItem = editActivityButtonItem
+        
         view.addSubviews(titleLabel, scrollView, bottomPageControlView)
         contentView.addSubviews(starStackView, mainImageView, cameraImageView, memoLabel, satisfactionLabel)
         scrollView.addSubviews(contentView)
@@ -220,7 +219,7 @@ extension DetailViewController {
         }
     }
     /// mainImageView 기준으로 memoLabel의 뷰를 다시 배치하는 메서드
-    private func remarkConstraintsByMainImageView() {
+    private func remakeConstraintsByMainImageView() {
         memoLabel.snp.remakeConstraints {
             $0.top.equalTo(mainImageView.snp.bottom).offset(16)
             $0.left.right.equalToSuperview()
@@ -228,7 +227,7 @@ extension DetailViewController {
         }
     }
     /// cameraImageView 기준으로 memoLabel의 뷰를 다시 배치하는 메서드
-    private func remarkConstraintsByCameraImageView() {
+    private func remakeConstraintsByCameraImageView() {
         memoLabel.snp.remakeConstraints {
             $0.top.equalTo(cameraImageView.snp.bottom).offset(16)
             $0.left.right.equalToSuperview()
@@ -239,8 +238,17 @@ extension DetailViewController {
 
 // MARK: - Action
 private extension DetailViewController {
-    @objc func didTapEditButton(_ sener: UITapGestureRecognizer) {
-        print("edit Tapped")
+    func didTapEditButton() {
+        if cameraImageView.isHidden {
+            let mainImage = mainImageView.image
+            viewModel.mainImage = mainImage
+        } else {
+            viewModel.mainImage = nil
+        }
+
+        let vc = EditActivityViewController(viewModel: viewModel, date: date)
+        
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 

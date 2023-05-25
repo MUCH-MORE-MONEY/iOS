@@ -315,8 +315,24 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 	func calendar(_ calendar: FSCalendar, cellFor date: Date, at position: FSCalendarMonthPosition) -> FSCalendarCell {
 		let cell = calendar.dequeueReusableCell(withIdentifier: "CalendarCell", for: date, at: position) as! CalendarCell
 		
-		if viewModel.monthlyList.contains(where: {$0.createAt == date.getFormattedYMD()}) {
-			cell.setData(color: R.Color.orange200)
+		if let index = viewModel.monthlyList.firstIndex(where: {$0.createAt == date.getFormattedYMD()}) {
+			let price = viewModel.monthlyList[index].total
+			switch price {
+			case ..<0: // - 지출
+				if viewModel.isHighlight { // 하이라이트가 켜져 있을 경우
+					cell.setData(color: viewModel.payStandard <= -price ? R.Color.orange400 : R.Color.orange200)
+				} else {
+					cell.setData(color: R.Color.orange200)
+				}
+			case 1...: // + 수입
+				if viewModel.isHighlight {
+					cell.setData(color: viewModel.earnStandard <= price ? R.Color.blue400 : R.Color.blue200)
+				} else {
+					cell.setData(color: R.Color.blue200)
+				}
+			default: // 0
+				cell.setData(color: R.Color.white)
+			}
 		}
 		
 		return cell

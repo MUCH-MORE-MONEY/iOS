@@ -46,7 +46,7 @@ extension HomeFilterView {
 		self.isEarn = isEarn
 		titleLabel.text = isEarn ? "수입" : "지출"
 		DispatchQueue.main.async {
-			self.colorButton.backgroundColor = isEarn ? R.Color.blue400 : R.Color.orange400
+			self.colorButton.backgroundColor = viewModel.isHighlight ? isEarn ? R.Color.blue400 : R.Color.orange400 : R.Color.gray400
 		}
 	}
 	
@@ -59,7 +59,7 @@ extension HomeFilterView {
 	func toggleEnabled(_ isOn: Bool) {
 		backgroundColor = isOn ? R.Color.gray900 : R.Color.gray200
 		standardLabel.textColor = isOn ? R.Color.white : R.Color.gray400
-		colorButton.backgroundColor = isOn ? R.Color.orange200 : R.Color.gray400
+		colorButton.backgroundColor = isOn ? isEarn ? R.Color.blue400 : R.Color.orange400 : R.Color.gray400
 		colorButton.isEnabled = isOn
 	}
 	

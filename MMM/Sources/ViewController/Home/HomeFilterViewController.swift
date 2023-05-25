@@ -64,7 +64,7 @@ private extension HomeFilterViewController {
 		viewModel.isDailySetting = !viewModel.isDailySetting
 	}
 	
-	//MARK: - Private
+	// MARK: - Private
 	// Push Highlight BottomSheet
 	private func didTapHighlightButton(_ isEarn: Bool) {
 		let vc = HighlightViewController(homeViewModel: viewModel)
@@ -148,12 +148,12 @@ private extension HomeFilterViewController {
 		}
 		
 		earnView = earnView.then {
-			$0.setup(viewModel: viewModel, isEarn: true)
+			$0.setData(viewModel: viewModel, isEarn: true)
 			$0.toggleEnabled(viewModel.isHighlight)
 		}
 		
 		payView = payView.then {
-			$0.setup(viewModel: viewModel, isEarn: false)
+			$0.setData(viewModel: viewModel, isEarn: false)
 			$0.toggleEnabled(viewModel.isHighlight)
 		}
 		

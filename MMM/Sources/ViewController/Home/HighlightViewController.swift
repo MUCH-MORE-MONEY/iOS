@@ -15,8 +15,9 @@ final class HighlightViewController: UIViewController {
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 	private let viewModel = HomeHighlightViewModel()
 	private let homeViewModel: HomeViewModel
+	private var isEarn: Bool = true
 	weak var delegate: BottomSheetChild?
-
+	
 	// MARK: - UI Components
 	private lazy var stackView = UIStackView() // title Label, 확인 Button
 	private lazy var titleLabel = UILabel()
@@ -47,7 +48,9 @@ final class HighlightViewController: UIViewController {
 	}
 }
 //MARK: - Action
-private extension HighlightViewController {
+extension HighlightViewController {
+	
+	// MARK: - Private
 	// 닫힐때
 	private func willDismiss() {
 		delegate?.willDismiss()

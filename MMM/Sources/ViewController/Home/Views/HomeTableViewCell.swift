@@ -49,7 +49,7 @@ final class HomeTableViewCell: UITableViewCell {
 //MARK: - Action
 extension HomeTableViewCell {
 	// 외부에서 설정
-	func setUp(data: EconomicActivity) {
+	func setData(data: EconomicActivity) {
 		// 이미지 비동기 처리
 		DispatchQueue.main.async {
 			self.thumbnailImageView.setImage(urlStr: data.imageUrl, defaultImage: data.type == "01" ? R.Icon.coinEarn40 : R.Icon.coinPay40)

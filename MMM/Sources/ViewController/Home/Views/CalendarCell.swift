@@ -66,7 +66,7 @@ final class CalendarCell: FSCalendarCell {
 //MARK: - Action
 extension CalendarCell {
 	// 외부에서 입력
-	func setUp(color: UIColor) {
+	func setData(color: UIColor) {
 		self.selectionLayer.fillColor = color.cgColor
 	}
 }

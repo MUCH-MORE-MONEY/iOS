@@ -29,9 +29,9 @@ final class HomeHeaderView: UIView {
 //MARK: - Action
 extension HomeHeaderView {
 	// 외부에서 설정
-	func setUp(pay: Int, earn: Int) {
-		payView.setUp(isEarn: false, money: pay)
-		earnView.setUp(isEarn: true, money: earn)
+	func setData(pay: Int, earn: Int) {
+		payView.setData(isEarn: false, money: pay)
+		earnView.setData(isEarn: true, money: earn)
 	}
 }
 //MARK: - Style & Layouts

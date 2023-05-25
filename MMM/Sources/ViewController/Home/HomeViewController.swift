@@ -83,7 +83,7 @@ extension HomeViewController {
 		self.setMonth(date)
 	}
 	
-	//MARK: - Private
+	// MARK: - Private
 	/// 달력 Picker Bottom Sheet
 	private func didTapMonthButton() {
 		let picker = DatePickerViewController()
@@ -149,7 +149,7 @@ private extension HomeViewController {
 		
 		viewModel.$monthlyList
 			.sinkOnMainThread(receiveValue: { [weak self] monthly in
-				self?.calendarHeaderView.setUp(pay: monthly.reduce(0){$0 + $1.pay}, earn: monthly.reduce(0){$0 + $1.earn})
+				self?.calendarHeaderView.setData(pay: monthly.reduce(0){$0 + $1.pay}, earn: monthly.reduce(0){$0 + $1.earn})
 				self?.calendar.reloadData()
 			})
 			.store(in: &cancellable)
@@ -316,7 +316,7 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 		let cell = calendar.dequeueReusableCell(withIdentifier: "CalendarCell", for: date, at: position) as! CalendarCell
 		
 		if viewModel.monthlyList.contains(where: {$0.createAt == date.getFormattedYMD()}) {
-			cell.setUp(color: R.Color.orange200)
+			cell.setData(color: R.Color.orange200)
 		}
 		
 		return cell
@@ -441,7 +441,7 @@ extension HomeViewController: UITableViewDataSource {
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.className, for: indexPath) as! HomeTableViewCell
 		
-		cell.setUp(data: viewModel.dailyList[indexPath.row])
+		cell.setData(data: viewModel.dailyList[indexPath.row])
 		cell.backgroundColor = R.Color.gray100
 
 		if indexPath.row == viewModel.dailyList.count - 1 {

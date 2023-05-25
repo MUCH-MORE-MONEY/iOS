@@ -41,7 +41,7 @@ final class HomeFilterView: UIView {
 //MARK: - Action
 extension HomeFilterView {
 	// 외부에서 설정
-	func setup(viewModel: HomeViewModel, isEarn: Bool) {
+	func setData(viewModel: HomeViewModel, isEarn: Bool) {
 		self.viewModel = viewModel
 		self.isEarn = isEarn
 		titleLabel.text = isEarn ? "수입" : "지출"

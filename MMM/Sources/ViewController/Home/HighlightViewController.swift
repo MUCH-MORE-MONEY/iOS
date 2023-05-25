@@ -57,10 +57,11 @@ extension HighlightViewController {
 	// MARK: - Private
 	// 확인 후 닫힐때
 	private func willDismiss() {
+		guard let value = Int(viewModel.priceInput) else { return }
 		if isEarn { // 수입
-			homeViewModel.earnStandard = viewModel.priceInput
+			homeViewModel.earnStandard = value * 10_000 // 만 단위
 		} else { // 지출
-			homeViewModel.payStandard = viewModel.priceInput
+			homeViewModel.payStandard = value * 10_000
 		}
 		delegate?.willDismiss()
 	}

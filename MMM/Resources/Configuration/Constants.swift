@@ -34,6 +34,10 @@ final class Constants {
         KeychainWrapper.standard.set(value, forKey: keychainKey.rawValue)
     }
 	
+	static func setKeychain(_ value: Int, forKey keychainKey: KeychainKey) {
+		KeychainWrapper.standard.set(value, forKey: keychainKey.rawValue)
+	}
+	
 	static func setKeychain(_ value: Bool, forKey keychainKey: KeychainKey) {
 		KeychainWrapper.standard.set(value, forKey: keychainKey.rawValue)
 	}
@@ -47,6 +51,10 @@ final class Constants {
     static func getKeychainValue(forKey keychainKey: KeychainKey) -> String? {
         return KeychainWrapper.standard.string(forKey: keychainKey.rawValue)
     }
+	
+	static func getKeychainValueByInt(forKey keychainKey: KeychainKey) -> Int? {
+		return KeychainWrapper.standard.integer(forKey: keychainKey.rawValue)
+	}
 	
 	static func getKeychainValueByBool(forKey keychainKey: KeychainKey) -> Bool? {
 		return KeychainWrapper.standard.bool(forKey: keychainKey.rawValue)

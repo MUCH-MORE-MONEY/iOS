@@ -27,13 +27,13 @@ final class HomeViewModel {
 			Constants.setKeychain(isDailySetting, forKey: Constants.KeychainKey.isDailySetting)
 		}
 	}
-	@Published var earnStandard: String = Constants.getKeychainValue(forKey: Constants.KeychainKey.earnStandard) ?? "1" {
+	@Published var earnStandard: Int = Constants.getKeychainValueByInt(forKey: Constants.KeychainKey.earnStandard) ?? 10_000 {
 		// 금액 하이라이트 설정 - 수입
 		didSet {
 			Constants.setKeychain(earnStandard, forKey: Constants.KeychainKey.earnStandard)
 		}
 	}
-	@Published var payStandard: String = Constants.getKeychainValue(forKey: Constants.KeychainKey.payStandard) ?? "1" {
+	@Published var payStandard: Int = Constants.getKeychainValueByInt(forKey: Constants.KeychainKey.payStandard) ?? 10_000 {
 		// 금액 하이라이트 설정 - 지출
 		didSet {
 			Constants.setKeychain(payStandard, forKey: Constants.KeychainKey.payStandard)

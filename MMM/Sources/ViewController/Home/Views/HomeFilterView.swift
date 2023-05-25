@@ -51,8 +51,8 @@ extension HomeFilterView {
 	}
 	
 	// 외부에서 설정
-	func setData(price: String) {
-		self.standardLabel.text = (Int(price) ?? 1).withCommas() + "만원 이상"
+	func setData(price: Int) {
+		self.standardLabel.text = (price / 10_000).withCommas() + "만원 이상"
 	}
 	
 	// 외부에서 설정

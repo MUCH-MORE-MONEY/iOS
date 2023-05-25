@@ -49,10 +49,19 @@ final class HighlightViewController: UIViewController {
 }
 //MARK: - Action
 extension HighlightViewController {
+	// 외부에서 설정
+	func setData(isEarn: Bool) {
+		self.isEarn = isEarn
+	}
 	
 	// MARK: - Private
-	// 닫힐때
+	// 확인 후 닫힐때
 	private func willDismiss() {
+		if isEarn { // 수입
+			homeViewModel.earnStandard = viewModel.priceInput
+		} else { // 지출
+			homeViewModel.payStandard = viewModel.priceInput
+		}
 		delegate?.willDismiss()
 	}
 	

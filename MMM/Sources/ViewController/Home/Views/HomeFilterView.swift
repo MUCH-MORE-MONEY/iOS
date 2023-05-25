@@ -45,7 +45,14 @@ extension HomeFilterView {
 		self.viewModel = viewModel
 		self.isEarn = isEarn
 		titleLabel.text = isEarn ? "수입" : "지출"
-		colorButton.backgroundColor = isEarn ? R.Color.blue400 : R.Color.orange400
+		DispatchQueue.main.async {
+			self.colorButton.backgroundColor = isEarn ? R.Color.blue400 : R.Color.orange400
+		}
+	}
+	
+	// 외부에서 설정
+	func setData(price: String) {
+		self.standardLabel.text = (Int(price) ?? 1).withCommas() + "만원 이상"
 	}
 	
 	// 외부에서 설정

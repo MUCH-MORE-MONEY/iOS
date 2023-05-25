@@ -70,6 +70,7 @@ private extension HomeFilterViewController {
 		let vc = HighlightViewController(homeViewModel: viewModel)
 		let bottomSheetVC = BottomSheetViewController(contentViewController: vc)
 		vc.delegate = bottomSheetVC
+		vc.setData(isEarn: isEarn)
 		bottomSheetVC.modalPresentationStyle = .overFullScreen
 		bottomSheetVC.setSetting(height: 174)
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
@@ -116,6 +117,18 @@ private extension HomeFilterViewController {
 			.sinkOnMainThread(receiveValue: { value in
 				guard let value = value else { return }
 				self.didTapColorButton(value)
+			}).store(in: &cancellable)
+		
+		// 수입
+		viewModel.$earnStandard
+			.sinkOnMainThread(receiveValue: { value in
+				self.earnView.setData(price: value)
+			}).store(in: &cancellable)
+		
+		// 지출
+		viewModel.$payStandard
+			.sinkOnMainThread(receiveValue: { value in
+				self.payView.setData(price: value)
 			}).store(in: &cancellable)
 	}
 	

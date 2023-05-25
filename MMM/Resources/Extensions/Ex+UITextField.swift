@@ -71,7 +71,7 @@ extension UITextField: UITextFieldDelegate {
 		let numberFormatter = NumberFormatter()
 		numberFormatter.numberStyle = .decimal // 콤마 생성
 		
-		guard let price = Int(newStringOnlyNumber), var result = numberFormatter.string(from: NSNumber(value: price)) else {
+		guard let price = Int(newStringOnlyNumber), let result = numberFormatter.string(from: NSNumber(value: price)) else {
 			self.text = ""
 			sendActions(for: .editingChanged)
 			return true

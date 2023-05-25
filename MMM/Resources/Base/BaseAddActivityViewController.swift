@@ -214,7 +214,7 @@ extension BaseAddActivityViewController {
             .sinkOnMainThread(receiveValue: { [weak self] in
                 guard let self = self else { return }
                 if $0 {
-                    addViewModel.requestPHPhotoLibraryAuthorization {
+					self.addViewModel.requestPHPhotoLibraryAuthorization {
                         DispatchQueue.main.async {
                             self.showPicker()
                         }

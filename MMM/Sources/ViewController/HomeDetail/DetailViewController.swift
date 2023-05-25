@@ -129,12 +129,12 @@ extension DetailViewController {
 					self.cameraImageView.isHidden = true
                     self.mainImageView.setImage(urlStr: value.imageUrl, defaultImage: R.Icon.camera48)
 					self.remakeConstraintsByMainImageView()
-                    viewModel.hasImage = true
+					self.viewModel.hasImage = true
                 } else {
 					self.mainImageView.isHidden = true
 					self.cameraImageView.isHidden = false
 					self.remakeConstraintsByCameraImageView()
-                    viewModel.hasImage = false
+					self.viewModel.hasImage = false
                 }
                 
                 if let amount = Int(value.amount) {
@@ -142,7 +142,7 @@ extension DetailViewController {
                 }
                 self.memoLabel.text = value.memo
                 self.satisfactionLabel.setSatisfyingLabel(by: value.star)
-                print("detailView : \(mainImageView.frame.height)")
+				print("detailView : \(self.mainImageView.frame.height)")
 
             }.store(in: &cancellable)
         

@@ -42,7 +42,7 @@ final class HighlightViewController: UIViewController {
 	
 	override func viewDidLayoutSubviews() {
 		// Underline 호출
-		priceTextFiled.setUnderLine(color: R.Color.orange500)
+		priceTextField.setUnderLine(color: R.Color.orange500)
 	}
 }
 //MARK: - Action
@@ -67,7 +67,7 @@ private extension HighlightViewController {
 			.sinkOnMainThread(receiveValue: willDismiss)
 			.store(in: &cancellable)
 		
-		priceTextFiled.textPublisher
+		priceTextField.textPublisher
 			.assignOnMainThread(to: \.priceInput, on: viewModel)
 			.store(in: &cancellable)
 		

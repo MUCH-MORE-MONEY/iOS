@@ -27,7 +27,7 @@ class BaseDetailViewController: BaseViewController {
         $0.sizeToFit()
     }
     
-    private lazy var activityType = BasePaddingLabel().then {
+    var activityType = BasePaddingLabel().then {
         $0.font = R.Font.body4
         $0.textColor = R.Color.gray100
         $0.backgroundColor = R.Color.orange500
@@ -41,14 +41,22 @@ class BaseDetailViewController: BaseViewController {
     }
 }
 
-private extension BaseDetailViewController {
+extension BaseDetailViewController {
     private func setup() {
         setAttribute()
         setLayout()
     }
     
+//    func setData(totalPrice: String) {
+//        DispatchQueue.main.async {
+//            self.totalPrice.text = totalPrice
+//        }
+//
+//        print("baseVC total price : ", self.totalPrice.text)
+//    }
+    
     private func setAttribute() {
-        totalPrice.text = "원"
+        totalPrice.text = "11원"
         activityType.text = "지출"
         
         view.addSubviews(headerView, containerStackView)

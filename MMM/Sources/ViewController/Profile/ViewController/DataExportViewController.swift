@@ -34,11 +34,7 @@ final class DataExportViewController: BaseViewController {
         $0.setTitle("데이터 내보내기", for: .normal)
         $0.titleLabel?.font = R.Font.title1
         $0.backgroundColor = R.Color.gray900
-        $0.layer.cornerRadius = 4
-        $0.layer.shadowColor = UIColor.black.cgColor
-        $0.layer.shadowOpacity = 0.25
-        $0.layer.shadowOffset = CGSize(width: 0, height: 2)
-        $0.layer.shadowRadius = 8
+        $0.setButtonLayer()
         $0.addTarget(self, action: #selector(presentShareSheet), for: .touchUpInside)
     }
     override func viewDidLoad() {

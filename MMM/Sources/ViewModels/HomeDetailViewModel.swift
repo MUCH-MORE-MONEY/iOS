@@ -5,13 +5,14 @@
 //  Created by Park Jungwoo on 2023/05/11.
 //
 
-import Foundation
+import UIKit
 import Combine
 
 final class HomeDetailViewModel {
     // MARK: - Property Wrapper
     @Published var detailActivity: SelectDetailResDto?
-    
+    @Published var hasImage = false
+    @Published var mainImage: UIImage?
     // MARK: - Porperties
     private var cancellable: Set<AnyCancellable> = []
 

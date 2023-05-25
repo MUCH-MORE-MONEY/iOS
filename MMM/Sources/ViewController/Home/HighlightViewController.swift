@@ -52,6 +52,9 @@ extension HighlightViewController {
 	// 외부에서 설정
 	func setData(isEarn: Bool) {
 		self.isEarn = isEarn
+		DispatchQueue.main.async {
+			self.titleLabel.text = isEarn ? "수입 하이라이트 금액" : "지출 하이라이트 금액"
+		}
 	}
 	
 	// MARK: - Private

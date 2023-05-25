@@ -28,7 +28,6 @@ final class DataExportViewController: BaseViewController {
 		$0.font = R.Font.body1
         $0.textColor = R.Color.gray800
         $0.numberOfLines = 2
-
     }
     
     private lazy var exportButton = UIButton().then {

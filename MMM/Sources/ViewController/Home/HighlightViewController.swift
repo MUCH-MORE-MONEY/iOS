@@ -21,7 +21,7 @@ final class HighlightViewController: UIViewController {
 	private lazy var stackView = UIStackView() // title Label, 확인 Button
 	private lazy var titleLabel = UILabel()
 	private lazy var checkButton = UIButton()
-	private lazy var priceTextFiled = UITextField()
+	private lazy var priceTextField = UITextField()
 	
 	init(homeViewModel: HomeViewModel) {
 		self.homeViewModel = homeViewModel
@@ -105,18 +105,20 @@ private extension HighlightViewController {
 			$0.contentEdgeInsets = .init(top: 10, left: 10, bottom: 10, right: 10) // touch 영역 늘리기
 		}
 		
-		priceTextFiled = priceTextFiled.then {
+		priceTextField = priceTextField.then {
 			$0.placeholder = "만원 단위로 입력"
 			$0.font = R.Font.h2
 			$0.textColor = R.Color.gray900
 			$0.keyboardType = .numberPad // 숫자 키보드
+			$0.tintColor = R.Color.gray400 // cursor color
 			$0.setClearButton(with: R.Icon.cancel, mode: .whileEditing) // clear 버튼
+			$0.setNumberMode(unit: "만원") // 단위 설정
 			$0.becomeFirstResponder()
 		}
 	}
 	
 	private func setLayout() {
-		view.addSubviews(stackView, priceTextFiled)
+		view.addSubviews(stackView, priceTextField)
 		stackView.addArrangedSubviews(titleLabel, checkButton)
 
 		stackView.snp.makeConstraints {
@@ -125,7 +127,7 @@ private extension HighlightViewController {
 			$0.trailing.equalToSuperview().inset(28)
 		}
 		
-		priceTextFiled.snp.makeConstraints {
+		priceTextField.snp.makeConstraints {
 			$0.top.equalTo(stackView.snp.bottom).offset(24)
 			$0.leading.trailing.equalToSuperview().inset(24)
 		}

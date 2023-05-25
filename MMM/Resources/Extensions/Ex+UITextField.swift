@@ -67,20 +67,49 @@ extension UITextField: UITextFieldDelegate {
 		let newString = oldString.replacingCharacters(in: newRange, with: inputString)
 			.trimmingCharacters(in: .whitespacesAndNewlines)
 		let newStringOnlyNumber = newString.filter { $0.isNumber }
-		
+				
 		let numberFormatter = NumberFormatter()
 		numberFormatter.numberStyle = .decimal // 콤마 생성
 		
-		guard let price = Int(newStringOnlyNumber), let result = numberFormatter.string(from: NSNumber(value: price)) else {
+		guard let price = Int(newStringOnlyNumber), var result = numberFormatter.string(from: NSNumber(value: price)) else {
 			self.text = ""
+			sendActions(for: .editingChanged)
 			return true
 		}
 		
+		// 단위에 따른 unuit, 색상 변경
+		var limit = Int.max
+		var unit = ""
 		switch self.tag {
-		case 1: self.text = "\(result) 원"
-		case 2: self.text = "\(result)만원"
-		default: self.text = "\(result)원"
+		case 1:
+			unit = " 원"
+		case 2:
+			unit = "만원"
+			limit = 10_000
+		default:
+			unit = "원"
 		}
+
+		// 단위에 따른 color 변경
+		self.textColor = price > limit ? R.Color.red500 : R.Color.gray900
+		if price > limit {
+			DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+				self.text = limit.withCommas() + unit
+				self.textColor = R.Color.gray900
+				// cursor 위치 변경
+				if let newPosition = self.position(from: self.endOfDocument, offset: -unit.count) {
+					let newSelectedRange = textField.textRange(from: newPosition, to: newPosition)
+					self.selectedTextRange = newSelectedRange
+				}
+				self.sendActions(for: .editingChanged)
+			}
+			if let old = Int(oldString.filter{ $0.isNumber }), old > limit {
+				return false
+			}
+		}
+		
+		// 단위에 따른 unuit 변경
+		self.text = result + unit
 		
 		// 콤마(,) 추가/삭제로 인한 cursor 위치 변경
 		let diffComma = abs(result.filter{$0 == ","}.count - newString.filter{$0 == ","}.count) == 1
@@ -94,6 +123,7 @@ extension UITextField: UITextFieldDelegate {
 		}
 		
 		sendActions(for: .editingChanged)
+
 		return false
 	}
 }

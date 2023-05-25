@@ -20,6 +20,7 @@ final class HighlightViewController: UIViewController {
 	// MARK: - UI Components
 	private lazy var stackView = UIStackView() // title Label, 확인 Button
 	private lazy var titleLabel = UILabel()
+	private lazy var warningLabel = UILabel()
 	private lazy var checkButton = UIButton()
 	private lazy var priceTextField = UITextField()
 	
@@ -51,6 +52,13 @@ private extension HighlightViewController {
 	private func willDismiss() {
 		delegate?.willDismiss()
 	}
+	
+	// 유무에 따른 attribute 변경
+	private func setValid(_ isVaild: Bool) {
+		checkButton.setTitleColor(isVaild ? R.Color.black : R.Color.gray500, for: .normal)
+		checkButton.isEnabled = isVaild
+		warningLabel.isHidden = priceTextField.text!.isEmpty != isVaild
+	}
 }
 //MARK: - Style & Layouts
 private extension HighlightViewController {
@@ -68,14 +76,13 @@ private extension HighlightViewController {
 			.store(in: &cancellable)
 		
 		priceTextField.textPublisher
+			.map{String(Array($0).filter{$0.isNumber})} // 숫자만 추출
 			.assignOnMainThread(to: \.priceInput, on: viewModel)
 			.store(in: &cancellable)
 		
 		//MARK: output
 		viewModel.isVaild
-			.sinkOnMainThread(receiveValue: { _ in
-				// 임시
-			})
+			.sinkOnMainThread(receiveValue: setValid)
 			.store(in: &cancellable)
 	}
 	
@@ -98,27 +105,36 @@ private extension HighlightViewController {
 		
 		checkButton = checkButton.then {
 			$0.setTitle("확인", for: .normal)
-			$0.setTitleColor(R.Color.black, for: .normal)
+			$0.setTitleColor(R.Color.gray500, for: .normal)
 			$0.setTitleColor(R.Color.black.withAlphaComponent(0.7), for: .highlighted)
 			$0.contentHorizontalAlignment = .right
 			$0.titleLabel?.font = R.Font.title3
 			$0.contentEdgeInsets = .init(top: 10, left: 10, bottom: 10, right: 10) // touch 영역 늘리기
+			$0.isEnabled = false // 초기 비활성화
 		}
 		
 		priceTextField = priceTextField.then {
 			$0.placeholder = "만원 단위로 입력"
 			$0.font = R.Font.h2
 			$0.textColor = R.Color.gray900
-			$0.keyboardType = .numberPad // 숫자 키보드
-			$0.tintColor = R.Color.gray400 // cursor color
+			$0.keyboardType = .numberPad 	// 숫자 키보드
+			$0.tintColor = R.Color.gray400 	// cursor color
+			$0.setNumberMode(unit: "만원") 	// 단위 설정
 			$0.setClearButton(with: R.Icon.cancel, mode: .whileEditing) // clear 버튼
-			$0.setNumberMode(unit: "만원") // 단위 설정
 			$0.becomeFirstResponder()
+		}
+		
+		warningLabel = warningLabel.then {
+			$0.text = "최대 작성 단위을 넘어선 금액이에요"
+			$0.font = R.Font.body3
+			$0.textColor = R.Color.red500
+			$0.textAlignment = .left
+			$0.isHidden = true
 		}
 	}
 	
 	private func setLayout() {
-		view.addSubviews(stackView, priceTextField)
+		view.addSubviews(stackView, priceTextField, warningLabel)
 		stackView.addArrangedSubviews(titleLabel, checkButton)
 
 		stackView.snp.makeConstraints {
@@ -129,6 +145,11 @@ private extension HighlightViewController {
 		
 		priceTextField.snp.makeConstraints {
 			$0.top.equalTo(stackView.snp.bottom).offset(24)
+			$0.leading.trailing.equalToSuperview().inset(24)
+		}
+		
+		warningLabel.snp.makeConstraints {
+			$0.top.equalTo(priceTextField.snp.bottom).offset(8)
 			$0.leading.trailing.equalToSuperview().inset(24)
 		}
 	}

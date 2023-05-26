@@ -91,6 +91,7 @@ extension BaseAddActivityViewController {
             $0.image = R.Icon.camera48
             $0.contentMode = .scaleToFill
             $0.isHidden = true
+            $0.isUserInteractionEnabled = true
         }
         
         memoTextView = memoTextView.then {
@@ -118,6 +119,7 @@ extension BaseAddActivityViewController {
             $0.textColor = R.Color.gray300
             $0.layer.cornerRadius = 12
             $0.clipsToBounds = true
+            $0.isUserInteractionEnabled = true
         }
     }
 

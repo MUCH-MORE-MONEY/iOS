@@ -12,13 +12,8 @@ import Combine
 
 final class CameraImageView: UIView {
     // MARK: - UI Components
-    private lazy var view = UIView().then {
-        $0.backgroundColor = R.Color.gray200
-    }
-    
-    private lazy var cameraButton = UIButton().then {
-        $0.setImage(R.Icon.camera48, for: .normal)
-    }
+    private lazy var view = UIView()
+    private lazy var cameraButton = UIButton()
     
     // MARK: - Properties
     private lazy var cancallable = Set<AnyCancellable>()
@@ -51,6 +46,15 @@ extension CameraImageView {
     private func setAttribute() {
         addSubviews(view)
         view.addSubviews(cameraButton)
+        
+        view = view.then {
+            $0.backgroundColor = R.Color.gray200
+        }
+        
+        cameraButton = cameraButton.then {
+            $0.setImage(R.Icon.camera48, for: .normal)
+            $0.isEnabled = false
+        }
     }
     
     private func setLayout() {

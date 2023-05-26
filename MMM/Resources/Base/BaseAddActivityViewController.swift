@@ -52,7 +52,7 @@ extension BaseAddActivityViewController {
     
     private func setAttribute() {
         // titleTextField 헤더뷰에 넣기
-
+        
         view.addSubviews(titleTextFeild, scrollView, saveButton)
         
         contentView.addSubviews(starStackView, satisfyingLabel, mainImageView, cameraImageView, memoTextView)
@@ -73,7 +73,7 @@ extension BaseAddActivityViewController {
             $0.font = R.Font.body0
             $0.textColor = R.Color.gray200
             $0.attributedPlaceholder = NSAttributedString(string: "경제활동의 제목을 입력해주세요.", attributes: [NSAttributedString.Key.foregroundColor : R.Color.gray400])
-
+            
         }
         
         starStackView = starStackView.then {
@@ -108,7 +108,7 @@ extension BaseAddActivityViewController {
             $0.setButtonLayer()
         }
         // CameraImageView와 ViewModel 공유
-            
+        
         satisfyingLabel = satisfyingLabel.then {
             $0.backgroundColor = R.Color.gray600
             $0.font = R.Font.body4
@@ -117,8 +117,9 @@ extension BaseAddActivityViewController {
             $0.clipsToBounds = true
         }
     }
-    
+
     private func setLayout() {
+        // FIXME: -title Text의 위치를 대충 잡아버림
         titleTextFeild.snp.makeConstraints {
             $0.left.right.equalToSuperview().inset(24)
             $0.bottom.equalTo(totalPrice.snp.top).offset(-20)
@@ -127,7 +128,7 @@ extension BaseAddActivityViewController {
         scrollView.snp.makeConstraints {
             $0.top.equalTo(headerView.snp.bottom)
             $0.left.right.equalToSuperview().inset(24)
-            $0.bottom.equalTo(saveButton.snp.top)
+            $0.bottom.equalTo(saveButton.snp.top).offset(-16)
         }
         
         contentView.snp.makeConstraints {
@@ -153,7 +154,7 @@ extension BaseAddActivityViewController {
                 $0.left.right.equalToSuperview()
             }
         } else {
-
+            
         }
         
         cameraImageView.snp.makeConstraints {
@@ -161,7 +162,7 @@ extension BaseAddActivityViewController {
             $0.left.right.equalToSuperview()
             $0.height.equalTo(144)
         }
-
+        
         memoTextView.snp.makeConstraints {
             $0.top.equalTo(cameraImageView.snp.bottom).offset(16)
             $0.left.right.equalToSuperview()
@@ -194,7 +195,7 @@ extension BaseAddActivityViewController {
     /// cameraImageView 기준으로 memoLabel의 뷰를 다시 배치하는 메서드
     func remakeConstraintsByCameraImageView() {
         mainImageView.isHidden = true
-
+        
         cameraImageView.snp.updateConstraints {
             $0.top.equalTo(starStackView.snp.bottom).offset(16)
             $0.left.right.equalToSuperview()
@@ -208,6 +209,7 @@ extension BaseAddActivityViewController {
         }
     }
     
+    // MARK: - Bind
     private func bind() {
         cameraImageView.setData(viewModel: addViewModel)
         addViewModel.$didTapAddButton
@@ -262,13 +264,13 @@ extension BaseAddActivityViewController {
     }
     
     private func limitTextLength(_ text: String, maxLength: Int) -> String {
-            let length = text.count
-            if length > maxLength {
-                let endIndex = text.index(text.startIndex, offsetBy: maxLength)
-                return String(text[..<endIndex])
-            }
-            return text
+        let length = text.count
+        if length > maxLength {
+            let endIndex = text.index(text.startIndex, offsetBy: maxLength)
+            return String(text[..<endIndex])
         }
+        return text
+    }
 }
 
 extension BaseAddActivityViewController: UIImagePickerControllerDelegate {

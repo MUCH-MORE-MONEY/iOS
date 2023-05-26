@@ -52,7 +52,7 @@ extension EditActivityViewController {
         
     private func setAttribute() {
         setCustomTitle()
-        view.addSubviews(editIconImage)
+        containerStackView.addArrangedSubview(editIconImage)
         
         editIconImage = editIconImage.then {
             $0.image = R.Icon.iconEditGray24
@@ -65,23 +65,74 @@ extension EditActivityViewController {
 
     }
     
-    private func setLayout() {
-        editIconImage.snp.makeConstraints {
-            $0.left.equalTo(activityType.snp.right).offset(15)
-            $0.centerY.equalTo(activityType)
-        }
-    }
+    private func setLayout() {  }
     
     private func bind() {
         addViewModel.titleText = detailViewModel.detailActivity?.title ?? ""
         addViewModel.memoText = detailViewModel.detailActivity?.memo ?? ""
         
         titleStackView.gesturePublisher()
+            .receive(on: DispatchQueue.main)
             .sink { _ in
-                print("stackview touched")
+                self.didTapDateTitle()
+            }.store(in: &cancellable)
+        
+        containerStackView.gesturePublisher()
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+                self.didTapMoneyLabel()
+            }.store(in: &cancellable)
+        
+        starStackView.gesturePublisher()
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+                self.didTapStarLabel()
+            }.store(in: &cancellable)
+        
+        satisfyingLabel.gesturePublisher1()
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+                self.didTapStarLabel()
+            }.store(in: &cancellable)
+        
+        mainImageView.gesturePublisher()
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+                print("ImageVIew Tapped")
             }.store(in: &cancellable)
     }
 }
+
+// MARK: - Action
+extension EditActivityViewController {
+    func didTapDateTitle() {
+        let picker = DatePickerViewController()
+        let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
+        picker.delegate = bottomSheetVC
+        bottomSheetVC.modalPresentationStyle = .overFullScreen
+        bottomSheetVC.setSetting(height: 375)
+        self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
+    }
+    
+    func didTapMoneyLabel() {
+        let picker = DatePickerViewController()
+        let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
+        picker.delegate = bottomSheetVC
+        bottomSheetVC.modalPresentationStyle = .overFullScreen
+        bottomSheetVC.setSetting(height: 375)
+        self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
+    }
+    
+    func didTapStarLabel() {
+        let picker = DatePickerViewController()
+        let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
+        picker.delegate = bottomSheetVC
+        bottomSheetVC.modalPresentationStyle = .overFullScreen
+        bottomSheetVC.setSetting(height: 375)
+        self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
+    }
+}
+
 
 // MARK: - UI Funcitons
 extension EditActivityViewController {

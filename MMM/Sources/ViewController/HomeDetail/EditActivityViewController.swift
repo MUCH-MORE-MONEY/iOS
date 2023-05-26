@@ -183,7 +183,6 @@ extension EditActivityViewController {
         } else {
             remakeConstraintsByCameraImageView()
         }
-        print("editView : \(mainImageView.frame.height)")
     }
 
 }

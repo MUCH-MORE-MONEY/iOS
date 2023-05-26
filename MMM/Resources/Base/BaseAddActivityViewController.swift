@@ -84,10 +84,13 @@ extension BaseAddActivityViewController {
         
         cameraImageView = cameraImageView.then {
             $0.backgroundColor = R.Color.gray100
+            $0.isHidden = true
         }
         
         mainImageView = mainImageView.then {
+            $0.image = R.Icon.camera48
             $0.contentMode = .scaleToFill
+            $0.isHidden = true
         }
         
         memoTextView = memoTextView.then {
@@ -146,15 +149,11 @@ extension BaseAddActivityViewController {
             $0.centerY.equalTo(starStackView)
         }
         
-        if hasImage {
-            mainImageView.snp.makeConstraints {
-                $0.top.equalTo(starStackView.snp.bottom).offset(16)
-                $0.width.equalTo(view.safeAreaLayoutGuide).offset(-48)
-                $0.height.equalTo(mainImageView.image!.size.height * view.frame.width / mainImageView.image!.size.width)
-                $0.left.right.equalToSuperview()
-            }
-        } else {
-            
+        mainImageView.snp.makeConstraints {
+            $0.top.equalTo(starStackView.snp.bottom).offset(16)
+            $0.width.equalTo(view.safeAreaLayoutGuide).offset(-48)
+            $0.height.equalTo(mainImageView.image!.size.height * view.frame.width / mainImageView.image!.size.width)
+            $0.left.right.equalToSuperview()
         }
         
         cameraImageView.snp.makeConstraints {
@@ -178,14 +177,9 @@ extension BaseAddActivityViewController {
     
     /// mainImageView 기준으로 memoLabel의 뷰를 다시 배치하는 메서드
     func remakeConstraintsByMainImageView() {
+        mainImageView.isHidden = false
         cameraImageView.isHidden = true
         
-        mainImageView.snp.makeConstraints {
-            $0.top.equalTo(starStackView.snp.bottom).offset(16)
-            $0.width.equalTo(view.safeAreaLayoutGuide).offset(-48)
-            $0.height.equalTo(mainImageView.image!.size.height * view.frame.width / mainImageView.image!.size.width)
-            $0.left.right.equalToSuperview()
-        }
         memoTextView.snp.remakeConstraints {
             $0.top.equalTo(mainImageView.snp.bottom).offset(16)
             $0.left.right.equalToSuperview()
@@ -194,13 +188,8 @@ extension BaseAddActivityViewController {
     }
     /// cameraImageView 기준으로 memoLabel의 뷰를 다시 배치하는 메서드
     func remakeConstraintsByCameraImageView() {
+        cameraImageView.isHidden = false
         mainImageView.isHidden = true
-        
-        cameraImageView.snp.updateConstraints {
-            $0.top.equalTo(starStackView.snp.bottom).offset(16)
-            $0.left.right.equalToSuperview()
-            $0.height.equalTo(144)
-        }
         
         memoTextView.snp.remakeConstraints {
             $0.top.equalTo(cameraImageView.snp.bottom).offset(16)
@@ -218,17 +207,19 @@ extension BaseAddActivityViewController {
                 if $0 {
                     addViewModel.requestPHPhotoLibraryAuthorization {
                         DispatchQueue.main.async {
-                            self.showPicker()
+                            self.didTapAlbumButton()
                         }
                     }
                 }
             })
             .store(in: &cancellable)
         
-        addViewModel.$isTitleEmpty
-            .sinkOnMainThread {
-                self.saveButton.isEnabled = !$0
-            }
+//        addViewModel.$isTitleEmpty
+//            .sinkOnMainThread {
+//                self.saveButton.isEnabled = !$0
+//            }
+        
+        
         addViewModel.isVaild
             .sinkOnMainThread(receiveValue: {
                 if !$0 {
@@ -248,17 +239,21 @@ extension BaseAddActivityViewController {
             .store(in: &cancellable)
         
         saveButton.tapPublisher
-            .sinkOnMainThread(receiveValue: didSaveButtonTapped)
+            .sinkOnMainThread(receiveValue: didTapSaveButton)
             .store(in: &cancellable)
     }
     
-    func showPicker() {
+    func didTapAlbumButton() {
         imagePickerVC.sourceType = .photoLibrary
         imagePickerVC.allowsEditing = true
         present(imagePickerVC, animated: true)
     }
     
-    func didSaveButtonTapped() {
+    func didTapSaveButton() {
+        print("view height: \(mainImageView.frame.height )")
+        print("image height: \(mainImageView.image!.size.height)")
+        print("frame : \(view.frame.width)")
+        
         print("\(addViewModel.titleText)")
         print("\(addViewModel.memoText)")
     }

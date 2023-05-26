@@ -24,7 +24,8 @@ class EditActivityViewController: BaseAddActivityViewController {
     private var navigationTitle: String {
         return date.getFormattedDate(format: "yyyy.MM.dd")
     }
-    
+    private let alertTitle = "편집을 그만두시겠어요?"
+    private let alertContentText = "편집한 내용이 사라지니 유의해주세요!"
     
     init(viewModel: HomeDetailViewModel, date: Date) {
         self.detailViewModel = viewModel
@@ -39,6 +40,10 @@ class EditActivityViewController: BaseAddActivityViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+    }
+    
+    override func didTapBackButton() {
+        showAlert(alertType: .canCancel, titleText: alertTitle, contentText: alertContentText, cancelButtonText: "닫기", confirmButtonText: "그만두기")
     }
 }
 
@@ -185,4 +190,12 @@ extension EditActivityViewController {
         }
     }
 
+}
+
+extension EditActivityViewController: CustomAlertDelegate {
+    func didAlertCofirmButton() {
+        super.didTapBackButton()
+    }
+    
+    func didAlertCacelButton() { }
 }

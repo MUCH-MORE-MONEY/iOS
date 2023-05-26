@@ -10,7 +10,7 @@ import UIKit
 import Combine
 
 extension UIView {
-    
+    /// UIView를 상속받는 클래스의 tap Gesture Publisher
     func gesturePublisher(_ gestureType: GestureType = .tap()) ->
     GesturePublisher {
         .init(view: self, gestureType: gestureType)

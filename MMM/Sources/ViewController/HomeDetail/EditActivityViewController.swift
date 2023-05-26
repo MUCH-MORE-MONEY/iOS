@@ -18,6 +18,7 @@ class EditActivityViewController: BaseAddActivityViewController {
     private lazy var titleText = UILabel()
     
     // MARK: - Properties
+    private var cancellable = Set<AnyCancellable>()
     private var detailViewModel: HomeDetailViewModel
     private var date: Date
     private var navigationTitle: String {
@@ -74,6 +75,11 @@ extension EditActivityViewController {
     private func bind() {
         addViewModel.titleText = detailViewModel.detailActivity?.title ?? ""
         addViewModel.memoText = detailViewModel.detailActivity?.memo ?? ""
+        
+        titleStackView.gesturePublisher()
+            .sink { _ in
+                print("stackview touched")
+            }.store(in: &cancellable)
     }
 }
 

@@ -89,7 +89,7 @@ extension EditActivityViewController {
                 self.didTapStarLabel()
             }.store(in: &cancellable)
         
-        satisfyingLabel.gesturePublisher1()
+        satisfyingLabel.gesturePublisher()
             .receive(on: DispatchQueue.main)
             .sink { _ in
                 self.didTapStarLabel()

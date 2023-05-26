@@ -34,7 +34,6 @@
 		6A1BAD4529E6550100818086 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1BAD4429E6550100818086 /* OnboardingViewModel.swift */; };
 		6A223FFC2A1B3D590058C877 /* EditActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A223FFB2A1B3D590058C877 /* EditActivityViewController.swift */; };
 		6A27E6952A205338001A7F04 /* Ex+UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A27E6942A205338001A7F04 /* Ex+UITextField.swift */; };
-		6A27E6972A206B74001A7F04 /* Ex+UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A27E6962A206B74001A7F04 /* Ex+UILabel.swift */; };
 		6A381E0A29E8F40700E0974F /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A381E0929E8F40700E0974F /* AddViewController.swift */; };
 		6A4313E22A13046E00095041 /* BottomPageControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4313E12A13046E00095041 /* BottomPageControlView.swift */; };
 		6A626BC12A0C7EE700BDD5C0 /* SelectDetailResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A626BC02A0C7EE700BDD5C0 /* SelectDetailResDto.swift */; };
@@ -155,7 +154,6 @@
 		6A1BAD4429E6550100818086 /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
 		6A223FFB2A1B3D590058C877 /* EditActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditActivityViewController.swift; sourceTree = "<group>"; };
 		6A27E6942A205338001A7F04 /* Ex+UITextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UITextField.swift"; sourceTree = "<group>"; };
-		6A27E6962A206B74001A7F04 /* Ex+UILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UILabel.swift"; sourceTree = "<group>"; };
 		6A381E0929E8F40700E0974F /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 		6A4313E12A13046E00095041 /* BottomPageControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomPageControlView.swift; sourceTree = "<group>"; };
 		6A626BC02A0C7EE700BDD5C0 /* SelectDetailResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectDetailResDto.swift; sourceTree = "<group>"; };
@@ -541,7 +539,6 @@
 				6A27E6942A205338001A7F04 /* Ex+UITextField.swift */,
 				6A0B08E92A1DA9D30072E993 /* Ex+UITextView.swift */,
 				C41193E229D287E6003DBC15 /* Ex+View.swift */,
-				6A27E6962A206B74001A7F04 /* Ex+UILabel.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -940,7 +937,6 @@
 				C4199DD929FE6BE1006E5DA8 /* DatePickerViewController.swift in Sources */,
 				C4EA5B4429FA2810008D1564 /* Ex+UIStackView.swift in Sources */,
 				6A0F234729DC0DB20063673B /* TabBarController.swift in Sources */,
-				6A27E6972A206B74001A7F04 /* Ex+UILabel.swift in Sources */,
 				6A0B08EA2A1DA9D30072E993 /* Ex+UITextView.swift in Sources */,
 				6A27E6952A205338001A7F04 /* Ex+UITextField.swift in Sources */,
 				6AB1151329EE6D9E00D3B813 /* Ex+UITabBar.swift in Sources */,

@@ -78,8 +78,12 @@ extension EditActivityViewController {
     
     // MARK: - Bind
     private func bind() {
-        editViewModel.titleText = detailViewModel.detailActivity?.title ?? ""
-        editViewModel.memoText = detailViewModel.detailActivity?.memo ?? ""
+        editViewModel.title = detailViewModel.detailActivity?.title ?? ""
+        editViewModel.memo = detailViewModel.detailActivity?.memo ?? ""
+        editViewModel.amount = Int(detailViewModel.detailActivity?.amount ?? "0")!
+        editViewModel.createAt = detailViewModel.detailActivity?.createAt ?? ""
+        editViewModel.star = detailViewModel.detailActivity?.star ?? 0
+        editViewModel.type = detailViewModel.detailActivity?.type ?? ""
         
         editViewModel.isVaild
             .sinkOnMainThread(receiveValue: {
@@ -90,12 +94,12 @@ extension EditActivityViewController {
         
         titleTextFeild.textPublisher
             .receive(on: RunLoop.main)
-            .assign(to: \.titleText, on: editViewModel)
+            .assign(to: \.title, on: editViewModel)
             .store(in: &cancellable)
         
         memoTextView.textPublisher
             .sink(receiveValue: { text in
-                self.editViewModel.memoText = text
+                self.editViewModel.memo = text
             })
             .store(in: &cancellable)
         
@@ -181,8 +185,8 @@ extension EditActivityViewController {
     func didTapSaveButton() {
         detailViewModel.isShowToastMessage = true
         self.navigationController?.popViewController(animated: true)
-        print("\(editViewModel.titleText)")
-        print("\(editViewModel.memoText)")
+        editViewModel.insertDetailActivity()
+        print(self.editViewModel.economicActivity)
     }
     
     func didTapAlbumButton() {

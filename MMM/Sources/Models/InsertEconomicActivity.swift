@@ -8,13 +8,13 @@
 import Foundation
 
 struct InsertEconomicActivity: Codable {
-    let binaryFileList: [BinaryFileList]
-    let amount: Int
-    let type: String
-    let title: String
-    let memo: String
-    let createAt: Int
-    let star: Int
+    var binaryFileList: [BinaryFileList]
+    var amount: Int
+    var type: String
+    var title: String
+    var memo: String
+    var createAt: String
+    var star: Int
     
     enum CodingKeys: String, CodingKey {
         case binaryFileList

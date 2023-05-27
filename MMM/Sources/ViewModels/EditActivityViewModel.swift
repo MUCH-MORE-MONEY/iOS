@@ -11,11 +11,18 @@ import Combine
 
 final class EditActivityViewModel {
     @Published var didTapAddButton: Bool = false
-    @Published var titleText = ""
-    @Published var memoText = ""
     @Published var isTitleEmpty = false
+    // MARK: - API Request를 위한 Property Wrapper
+    @Published var economicActivity: InsertEconomicActivity?
+    @Published var title = ""
+    @Published var memo = ""
+    @Published var amount = 20000
+    @Published var createAt = ""
+    @Published var star = 5
+    @Published var type = ""
+    @Published var binaryFileList: [BinaryFileList] = []
     
-    lazy var isVaild: AnyPublisher<Bool, Never> = $titleText
+    lazy var isVaild: AnyPublisher<Bool, Never> = $title
             .map { $0.count <= 16 } // 16자리 이하
             .eraseToAnyPublisher()
     
@@ -36,6 +43,9 @@ final class EditActivityViewModel {
         }
     }
     
+    func insertDetailActivity() {
+        economicActivity = InsertEconomicActivity(binaryFileList: binaryFileList, amount: amount, type: type, title: title, memo: memo, createAt: createAt, star: star)
+    }
     
 }
 

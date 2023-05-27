@@ -189,6 +189,12 @@ extension DetailViewController {
             .sinkOnMainThread(receiveValue: didTapEditButton)
             .store(in: &cancellable)
         
+        viewModel.$isShowToastMessage
+            .receive(on: DispatchQueue.main)
+            .sink {
+                if $0 { self.showToast() }
+            }.store(in: &cancellable)
+        
         viewModel.$detailActivity
             .sinkOnMainThread { [weak self] value in
                 guard let self = self, let value = value else { return }
@@ -256,6 +262,33 @@ private extension DetailViewController {
         let vc = EditActivityViewController(viewModel: viewModel, date: date)
         
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func showToast() {
+        var toastLabel = BasePaddingLabel(padding: UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16))
+        
+        self.view.addSubview(toastLabel)
+        
+        toastLabel = toastLabel.then {
+            $0.text = "경제활동 편집 내용을 저장했습니다."
+            $0.backgroundColor = R.Color.black.withAlphaComponent(0.9)
+            $0.font = R.Font.body1
+            $0.textColor = R.Color.white
+            $0.alpha = 1.0
+            $0.layer.cornerRadius = 8
+            $0.clipsToBounds = true
+        }
+        
+        toastLabel.snp.makeConstraints {
+            $0.left.right.equalTo(view.safeAreaLayoutGuide).inset(24)
+            $0.bottom.equalTo(bottomPageControlView.snp.top).offset(-16)
+        }
+
+        UIView.animate(withDuration: 3.0, delay: 0.1, options: .curveEaseOut, animations: {
+             toastLabel.alpha = 0.0
+        }, completion: {(isCompleted) in
+            toastLabel.removeFromSuperview()
+        })
     }
 }
 

@@ -13,6 +13,7 @@ final class HomeDetailViewModel {
     @Published var detailActivity: SelectDetailResDto?
     @Published var hasImage = false
     @Published var mainImage: UIImage?
+    @Published var isShowToastMessage = false
     // MARK: - Porperties
     private var cancellable: Set<AnyCancellable> = []
 

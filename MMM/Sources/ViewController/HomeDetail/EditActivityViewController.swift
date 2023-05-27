@@ -105,6 +105,10 @@ extension EditActivityViewController {
             .sink { _ in
                 print("ImageVIew Tapped")
             }.store(in: &cancellable)
+        
+        saveButton.tapPublisher
+            .sinkOnMainThread(receiveValue: didTapSaveButton)
+            .store(in: &cancellable)
     }
 }
 
@@ -135,6 +139,13 @@ extension EditActivityViewController {
         bottomSheetVC.modalPresentationStyle = .overFullScreen
         bottomSheetVC.setSetting(height: 375)
         self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
+    }
+    
+    func didTapSaveButton() {
+        detailViewModel.isShowToastMessage = true
+        self.navigationController?.popViewController(animated: true)
+        print("\(addViewModel.titleText)")
+        print("\(addViewModel.memoText)")
     }
 }
 

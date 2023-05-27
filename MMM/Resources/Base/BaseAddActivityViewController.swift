@@ -21,7 +21,7 @@ class BaseAddActivityViewController: BaseDetailViewController {
     private lazy var contentView = UIView()
     private lazy var addImageButton = UIButton()
     lazy var memoTextView = UITextView()
-    private lazy var saveButton = UIButton()
+    lazy var saveButton = UIButton()
     lazy var satisfyingLabel = BasePaddingLabel(padding: UIEdgeInsets(top: 3, left: 12, bottom: 3, right: 12))
     // MARK: - Properties
     lazy var starList: [UIImageView] = [
@@ -239,25 +239,12 @@ extension BaseAddActivityViewController {
                 self.addViewModel.memoText = text
             })
             .store(in: &cancellable)
-        
-        saveButton.tapPublisher
-            .sinkOnMainThread(receiveValue: didTapSaveButton)
-            .store(in: &cancellable)
     }
     
     func didTapAlbumButton() {
         imagePickerVC.sourceType = .photoLibrary
         imagePickerVC.allowsEditing = true
         present(imagePickerVC, animated: true)
-    }
-    
-    func didTapSaveButton() {
-        print("view height: \(mainImageView.frame.height )")
-        print("image height: \(mainImageView.image!.size.height)")
-        print("frame : \(view.frame.width)")
-        
-        print("\(addViewModel.titleText)")
-        print("\(addViewModel.memoText)")
     }
     
     private func limitTextLength(_ text: String, maxLength: Int) -> String {

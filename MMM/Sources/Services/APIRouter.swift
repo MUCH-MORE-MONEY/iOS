@@ -60,4 +60,17 @@ final class APIRouter {
 			self.body = body.asDictionary
 		}
 	}
+    
+    struct InsertReqDto: Request {
+        typealias ReturnType = InsertResDto
+        var path: String = "/economic_activity/insert"
+        var method: HTTPMethod = .post
+        var headers: [String : String]?
+        var body: [String : Any]?
+        
+        init(headers: APIHeader.Default, body: APIParameters.InsertEconomicActivityReqDto) {
+            self.headers = headers.asDictionary as? [String: String]
+            self.body = body.asDictionary
+        }
+    }
 }

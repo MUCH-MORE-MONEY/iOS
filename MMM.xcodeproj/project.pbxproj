@@ -11,7 +11,7 @@
 		62AC9C989058B479AA52D81F /* Pods_MMMTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BC1A763E0587F6517C3A5E7 /* Pods_MMMTests.framework */; };
 		6A04FA052A1C4BB00034C114 /* AddImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A04FA042A1C4BB00034C114 /* AddImageView.swift */; };
 		6A04FA092A1C7EE80034C114 /* EditActivityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A04FA082A1C7EE80034C114 /* EditActivityViewModel.swift */; };
-		6A0531202A2209A90065DB54 /* InsertEconomicActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A05311F2A2209A90065DB54 /* InsertEconomicActivity.swift */; };
+		6A0531222A22183D0065DB54 /* InsertResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0531212A22183D0065DB54 /* InsertResDto.swift */; };
 		6A08B47629FF5B150080719E /* APIRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A08B47529FF5B150080719E /* APIRouter.swift */; };
 		6A08B47829FF5C7E0080719E /* APIParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A08B47729FF5C7E0080719E /* APIParameters.swift */; };
 		6A08B47A29FF5CA90080719E /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A08B47929FF5CA90080719E /* APIClient.swift */; };
@@ -132,7 +132,7 @@
 		58A4D4522CDE75108D91C22E /* Pods-MMM-MMMUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMM-MMMUITests.debug.xcconfig"; path = "Target Support Files/Pods-MMM-MMMUITests/Pods-MMM-MMMUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		6A04FA042A1C4BB00034C114 /* AddImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddImageView.swift; sourceTree = "<group>"; };
 		6A04FA082A1C7EE80034C114 /* EditActivityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditActivityViewModel.swift; sourceTree = "<group>"; };
-		6A05311F2A2209A90065DB54 /* InsertEconomicActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertEconomicActivity.swift; sourceTree = "<group>"; };
+		6A0531212A22183D0065DB54 /* InsertResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertResDto.swift; sourceTree = "<group>"; };
 		6A08B47529FF5B150080719E /* APIRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRouter.swift; sourceTree = "<group>"; };
 		6A08B47729FF5C7E0080719E /* APIParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIParameters.swift; sourceTree = "<group>"; };
 		6A08B47929FF5CA90080719E /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
@@ -281,6 +281,7 @@
 			children = (
 				6A12144629FA0C300076848A /* AppleLoginResDto.swift */,
 				C4199DDC2A001001006E5DA8 /* EconomicActivityResDto.swift */,
+				6A0531212A22183D0065DB54 /* InsertResDto.swift */,
 				6A626BC02A0C7EE700BDD5C0 /* SelectDetailResDto.swift */,
 			);
 			path = Responses;
@@ -550,7 +551,6 @@
 			children = (
 				6A08B47E29FF60EB0080719E /* Responses */,
 				C433A07029EE5516008B26DF /* EconomicActivity.swift */,
-				6A05311F2A2209A90065DB54 /* InsertEconomicActivity.swift */,
 				C4D7FC862A08942E00565291 /* Monthly.swift */,
 				6A1880CA29EF85EA00D62F1A /* OnboardingItem.swift */,
 				6A1880C829EF85BB00D62F1A /* TabItem.swift */,
@@ -907,7 +907,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6A0531202A2209A90065DB54 /* InsertEconomicActivity.swift in Sources */,
 				C411940429D53DDF003DBC15 /* ManagementViewController.swift in Sources */,
 				C41193F529D3D7FB003DBC15 /* Ex+NSObject.swift in Sources */,
 				6A08B47D29FF5D530080719E /* Log.swift in Sources */,
@@ -942,6 +941,7 @@
 				C4EA5B4429FA2810008D1564 /* Ex+UIStackView.swift in Sources */,
 				6A0F234729DC0DB20063673B /* TabBarController.swift in Sources */,
 				6A0B08EA2A1DA9D30072E993 /* Ex+UITextView.swift in Sources */,
+				6A0531222A22183D0065DB54 /* InsertResDto.swift in Sources */,
 				6A27E6952A205338001A7F04 /* Ex+UITextField.swift in Sources */,
 				6AB1151329EE6D9E00D3B813 /* Ex+UITabBar.swift in Sources */,
 				C4351B502A1691FB005F95BE /* HighlightViewController.swift in Sources */,

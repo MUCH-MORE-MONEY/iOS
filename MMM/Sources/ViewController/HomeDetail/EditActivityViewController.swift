@@ -186,7 +186,6 @@ extension EditActivityViewController {
         detailViewModel.isShowToastMessage = true
         self.navigationController?.popViewController(animated: true)
         editViewModel.insertDetailActivity()
-        print(self.editViewModel.economicActivity)
     }
     
     func didTapAlbumButton() {

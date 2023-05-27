@@ -1,5 +1,5 @@
 //
-//  AddActivityViewModel.swift
+//  EditActivityViewModel.swift
 //  MMM
 //
 //  Created by Park Jungwoo on 2023/05/23.
@@ -9,7 +9,7 @@ import UIKit
 import Photos
 import Combine
 
-final class AddActivityViewModel {
+final class EditActivityViewModel {
     @Published var didTapAddButton: Bool = false
     @Published var titleText = ""
     @Published var memoText = ""

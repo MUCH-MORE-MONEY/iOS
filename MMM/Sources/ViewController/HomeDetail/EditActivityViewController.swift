@@ -16,10 +16,12 @@ class EditActivityViewController: BaseAddActivityViewController {
     private lazy var titleStackView = UIStackView()
     private lazy var titleIcon = UIImageView()
     private lazy var titleText = UILabel()
-    
+    private var imagePickerVC = UIImagePickerController()
+
     // MARK: - Properties
     private var cancellable = Set<AnyCancellable>()
     private var detailViewModel: HomeDetailViewModel
+    private var editViewModel = EditActivityViewModel()
     private var date: Date
     private var navigationTitle: String {
         return date.getFormattedDate(format: "yyyy.MM.dd")
@@ -72,9 +74,42 @@ extension EditActivityViewController {
     
     private func setLayout() {  }
     
+    // MARK: - Bind
     private func bind() {
-        addViewModel.titleText = detailViewModel.detailActivity?.title ?? ""
-        addViewModel.memoText = detailViewModel.detailActivity?.memo ?? ""
+        editViewModel.titleText = detailViewModel.detailActivity?.title ?? ""
+        editViewModel.memoText = detailViewModel.detailActivity?.memo ?? ""
+        
+        editViewModel.isVaild
+            .sinkOnMainThread(receiveValue: {
+                if !$0 {
+                    self.titleTextFeild.text?.removeLast()
+                }
+            }).store(in: &cancellable)
+        
+        titleTextFeild.textPublisher
+            .receive(on: RunLoop.main)
+            .assign(to: \.titleText, on: editViewModel)
+            .store(in: &cancellable)
+        
+        memoTextView.textPublisher
+            .sink(receiveValue: { text in
+                self.editViewModel.memoText = text
+            })
+            .store(in: &cancellable)
+        
+        cameraImageView.setData(viewModel: editViewModel)
+        editViewModel.$didTapAddButton
+            .sinkOnMainThread(receiveValue: { [weak self] in
+                guard let self = self else { return }
+                if $0 {
+                    editViewModel.requestPHPhotoLibraryAuthorization {
+                        DispatchQueue.main.async {
+                            self.didTapAlbumButton()
+                        }
+                    }
+                }
+            })
+            .store(in: &cancellable)
         
         titleStackView.gesturePublisher()
             .receive(on: DispatchQueue.main)
@@ -144,8 +179,23 @@ extension EditActivityViewController {
     func didTapSaveButton() {
         detailViewModel.isShowToastMessage = true
         self.navigationController?.popViewController(animated: true)
-        print("\(addViewModel.titleText)")
-        print("\(addViewModel.memoText)")
+        print("\(editViewModel.titleText)")
+        print("\(editViewModel.memoText)")
+    }
+    
+    func didTapAlbumButton() {
+        imagePickerVC.sourceType = .photoLibrary
+        imagePickerVC.allowsEditing = true
+        present(imagePickerVC, animated: true)
+    }
+    
+    private func limitTextLength(_ text: String, maxLength: Int) -> String {
+        let length = text.count
+        if length > maxLength {
+            let endIndex = text.index(text.startIndex, offsetBy: maxLength)
+            return String(text[..<endIndex])
+        }
+        return text
     }
 }
 

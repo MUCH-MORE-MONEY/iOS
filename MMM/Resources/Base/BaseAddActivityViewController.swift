@@ -33,8 +33,6 @@ class BaseAddActivityViewController: BaseDetailViewController {
     ]
     var hasImage = false
     private var cancellable = Set<AnyCancellable>()
-    private var imagePickerVC = UIImagePickerController()
-    var addViewModel = AddActivityViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -202,19 +200,7 @@ extension BaseAddActivityViewController {
     
     // MARK: - Bind
     private func bind() {
-        cameraImageView.setData(viewModel: addViewModel)
-        addViewModel.$didTapAddButton
-            .sinkOnMainThread(receiveValue: { [weak self] in
-                guard let self = self else { return }
-                if $0 {
-                    addViewModel.requestPHPhotoLibraryAuthorization {
-                        DispatchQueue.main.async {
-                            self.didTapAlbumButton()
-                        }
-                    }
-                }
-            })
-            .store(in: &cancellable)
+
         
 //        addViewModel.$isTitleEmpty
 //            .sinkOnMainThread {
@@ -222,39 +208,10 @@ extension BaseAddActivityViewController {
 //            }
         
         
-        addViewModel.isVaild
-            .sinkOnMainThread(receiveValue: {
-                if !$0 {
-                    self.titleTextFeild.text?.removeLast()
-                }
-            }).store(in: &cancellable)
-        
-        titleTextFeild.textPublisher
-            .receive(on: RunLoop.main)
-            .assign(to: \.titleText, on: addViewModel)
-            .store(in: &cancellable)
-        
-        memoTextView.textPublisher
-            .sink(receiveValue: { text in
-                self.addViewModel.memoText = text
-            })
-            .store(in: &cancellable)
+
     }
     
-    func didTapAlbumButton() {
-        imagePickerVC.sourceType = .photoLibrary
-        imagePickerVC.allowsEditing = true
-        present(imagePickerVC, animated: true)
-    }
-    
-    private func limitTextLength(_ text: String, maxLength: Int) -> String {
-        let length = text.count
-        if length > maxLength {
-            let endIndex = text.index(text.startIndex, offsetBy: maxLength)
-            return String(text[..<endIndex])
-        }
-        return text
-    }
+
 }
 
 extension BaseAddActivityViewController: UIImagePickerControllerDelegate {

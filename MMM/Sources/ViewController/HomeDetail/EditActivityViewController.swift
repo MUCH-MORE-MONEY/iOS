@@ -45,7 +45,9 @@ class EditActivityViewController: BaseAddActivityViewController {
     }
     
     override func didTapBackButton() {
-        showAlert(alertType: .canCancel, titleText: alertTitle, contentText: alertContentText, cancelButtonText: "닫기", confirmButtonText: "그만두기")
+        super.didTapBackButton()
+        //FIXME: - showAlert에서 super.didTapBackButton()호출하면 문제생김
+//        showAlert(alertType: .canCancel, titleText: alertTitle, contentText: alertContentText, cancelButtonText: "닫기", confirmButtonText: "그만두기")
     }
 }
 
@@ -138,7 +140,7 @@ extension EditActivityViewController {
         mainImageView.gesturePublisher()
             .receive(on: DispatchQueue.main)
             .sink { _ in
-                print("ImageVIew Tapped")
+                self.didTapAlbumButton()
             }.store(in: &cancellable)
         
         saveButton.tapPublisher

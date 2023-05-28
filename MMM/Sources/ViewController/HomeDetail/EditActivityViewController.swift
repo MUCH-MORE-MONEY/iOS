@@ -209,8 +209,11 @@ extension EditActivityViewController {
         }))
         
         //이웃 끊기 버튼 - 스타일(destructive)
-        actionSheet.addAction(UIAlertAction(title: "사진삭제", style: .destructive, handler: {(ACTION:UIAlertAction) in
+        actionSheet.addAction(UIAlertAction(title: "사진삭제", style: .destructive, handler: { [weak self] (ACTION:UIAlertAction) in
+            guard let self = self else { return }
+            self.mainImageView.image = nil
             print("사진삭제")
+            self.remakeConstraintsByCameraImageView()
         }))
         
         //취소 버튼 - 스타일(cancel)

@@ -84,12 +84,13 @@ private extension HomeFilterView {
 	
 	private func bind() {
 		//MARK: input
-		colorButton.tapPublisher
-			.sinkOnMainThread(receiveValue: {
-				guard let viewModel = self.viewModel else { return }
-				// 수입/지출에 따른 viewModel (수입:true, 지출:false)
-				viewModel.didTapColorButton = self.isEarn
-			}).store(in: &cancellable)
+		// 임시: 다음 버전에서 적용
+//		colorButton.tapPublisher
+//			.sinkOnMainThread(receiveValue: {
+//				guard let viewModel = self.viewModel else { return }
+//				// 수입/지출에 따른 viewModel (수입:true, 지출:false)
+//				viewModel.didTapColorButton = self.isEarn
+//			}).store(in: &cancellable)
 	}
 	
 	private func setAttribute() {

@@ -174,11 +174,11 @@ extension EditActivityViewController {
     }
     
     func didTapStarLabel() {
-        let picker = DatePickerViewController()
+        let picker = StarPickerViewController()
         let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
         picker.delegate = bottomSheetVC
         bottomSheetVC.modalPresentationStyle = .overFullScreen
-        bottomSheetVC.setSetting(height: 375)
+        bottomSheetVC.setSetting(height: 288)
         self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
     }
     

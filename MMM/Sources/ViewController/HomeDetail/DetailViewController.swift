@@ -24,11 +24,11 @@ class DetailViewController: BaseDetailViewController {
     private lazy var bottomPageControlView = BottomPageControlView()
     private lazy var memoLabel = UILabel()
     private lazy var starList: [UIImageView] = [
-        UIImageView(image: R.Icon.iconStarInActive),
-        UIImageView(image: R.Icon.iconStarInActive),
-        UIImageView(image: R.Icon.iconStarInActive),
-        UIImageView(image: R.Icon.iconStarInActive),
-        UIImageView(image: R.Icon.iconStarInActive)
+        UIImageView(image: R.Icon.iconStarDisabled24),
+        UIImageView(image: R.Icon.iconStarDisabled24),
+        UIImageView(image: R.Icon.iconStarDisabled24),
+        UIImageView(image: R.Icon.iconStarDisabled24),
+        UIImageView(image: R.Icon.iconStarDisabled24)
     ]
     // MARK: - Properties
     private var date = Date()

@@ -44,10 +44,9 @@ public extension MMMResource {
 		public static let onboarding1 = UIImage(named: "iconOnboarding1", in: .main, compatibleWith: nil)
 		public static let onboarding2 = UIImage(named: "iconOnboarding2", in: .main, compatibleWith: nil)
 		public static let mypageBg = UIImage(named: "iconMypageBg", in: .main, compatibleWith: nil)
-		public static let iconStarActive = UIImage(named: "iconStarActive24", in: .main, compatibleWith: nil)
-		public static let iconStarInActive = UIImage(named: "iconStarInActive24", in: .main, compatibleWith: nil)
+		public static let iconStarBlack24 = UIImage(named: "iconStarBlack24", in: .main, compatibleWith: nil)
+		public static let iconStarDisabled24 = UIImage(named: "iconStarDisabled24", in: .main, compatibleWith: nil)
         public static let iconStarGray24 = UIImage(named: "iconStarGray24", in: .main, compatibleWith: nil)
-        public static let iconStarBlack24 = UIImage(named: "iconStarBlack24", in: .main, compatibleWith: nil)
         public static let iconStarBlack48 = UIImage(named: "iconStarBlack48", in: .main, compatibleWith: nil)
         public static let iconStarGray48 = UIImage(named: "iconStarGray48", in: .main, compatibleWith: nil)
 

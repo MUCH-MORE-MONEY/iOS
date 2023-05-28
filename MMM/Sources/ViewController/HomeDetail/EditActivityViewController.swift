@@ -10,6 +10,10 @@ import Combine
 import Then
 import SnapKit
 
+//protocol EditViewProtocol: AnyObject {
+//    func willPickerDismiss(_ date: Date)
+//}
+
 class EditActivityViewController: BaseAddActivityViewController {
     // MARK: - UI Components
     private lazy var editIconImage = UIImageView()
@@ -159,6 +163,7 @@ extension EditActivityViewController {
         let picker = DatePickerViewController()
         let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
         picker.delegate = bottomSheetVC
+        picker.homeDelegate = self
         bottomSheetVC.modalPresentationStyle = .overFullScreen
         bottomSheetVC.setSetting(height: 375)
         self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
@@ -284,4 +289,14 @@ extension EditActivityViewController: CustomAlertDelegate {
     }
     
     func didAlertCacelButton() { }
+}
+
+extension EditActivityViewController: HomeViewProtocol {
+    func willPickerDismiss(_ date: Date) {
+        self.date = date
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.titleText.text = self.navigationTitle
+        }
+    }
 }

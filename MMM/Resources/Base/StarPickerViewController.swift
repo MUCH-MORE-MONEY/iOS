@@ -73,6 +73,7 @@ extension StarPickerViewController {
         }
         
         satisfyingLabel = satisfyingLabel.then {
+            $0.text = "별점이 비어있어요"
             $0.backgroundColor = R.Color.gray700
             $0.layer.cornerRadius = 12
             $0.clipsToBounds = true

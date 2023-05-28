@@ -144,7 +144,7 @@ extension EditActivityViewController {
         mainImageView.gesturePublisher()
             .receive(on: DispatchQueue.main)
             .sink { _ in
-                self.didTapAlbumButton()
+                self.didTapImageView()
             }.store(in: &cancellable)
         
         saveButton.tapPublisher
@@ -192,6 +192,26 @@ extension EditActivityViewController {
         imagePickerVC.sourceType = .photoLibrary
         imagePickerVC.allowsEditing = true
         present(imagePickerVC, animated: true)
+    }
+    
+    func didTapImageView() {
+        
+        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        //블로그 방문하기 버튼 - 스타일(default)
+        actionSheet.addAction(UIAlertAction(title: "앨범선택", style: .default, handler: {(ACTION:UIAlertAction) in
+            print("앨범선택")
+        }))
+        
+        //이웃 끊기 버튼 - 스타일(destructive)
+        actionSheet.addAction(UIAlertAction(title: "사진삭제", style: .destructive, handler: {(ACTION:UIAlertAction) in
+            print("사진삭제")
+        }))
+        
+        //취소 버튼 - 스타일(cancel)
+        actionSheet.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        
+        self.present(actionSheet, animated: true, completion: nil)
     }
     
     private func limitTextLength(_ text: String, maxLength: Int) -> String {

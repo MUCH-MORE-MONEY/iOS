@@ -131,6 +131,7 @@ private extension HomeViewController {
 			.store(in: &cancellable)
 
 		filterButton.tapPublisher
+			.throttle(for: .seconds(1), scheduler: DispatchQueue.main, latest: false) // 처음에 구독한 시점에 value를 한번 바로 방출
 			.sinkOnMainThread(receiveValue: didTapFilterButton)
 			.store(in: &cancellable)
 

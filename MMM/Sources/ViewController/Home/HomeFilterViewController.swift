@@ -49,7 +49,6 @@ final class HomeFilterViewController: BaseViewController {
 		viewModel.didTapColorButton = nil
 	}
 }
-
 //MARK: - Action
 private extension HomeFilterViewController {
 	/// 금액 하이라이트 isEnabled

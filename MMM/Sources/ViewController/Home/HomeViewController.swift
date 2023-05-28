@@ -144,15 +144,13 @@ private extension HomeViewController {
 		viewModel.$dailyList
 			.sinkOnMainThread(receiveValue: { [weak self] daily in
 				self?.tableView.reloadData()
-			})
-			.store(in: &cancellable)
+			}).store(in: &cancellable)
 		
 		viewModel.$monthlyList
 			.sinkOnMainThread(receiveValue: { [weak self] monthly in
 				self?.calendarHeaderView.setData(pay: monthly.reduce(0){$0 + $1.pay}, earn: monthly.reduce(0){$0 + $1.earn})
 				self?.calendar.reloadData()
-			})
-			.store(in: &cancellable)
+			}).store(in: &cancellable)
 				
 //		viewModel
 //			.transform(input: viewModel.input.eraseToAnyPublisher())
@@ -389,7 +387,6 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 		self.setMonth(calendar.currentPage) // 월 설정
 	}
 }
-
 //MARK: - FSCalendar Delegate Appearance
 extension HomeViewController: FSCalendarDelegateAppearance {
 	// 기본 cell title 색상
@@ -419,7 +416,6 @@ extension HomeViewController: FSCalendarDelegateAppearance {
 		return R.Color.gray300
 	}
 }
-
 //MARK: - UIGesture Recognizer Delegate
 extension HomeViewController: UIGestureRecognizerDelegate {
 	// 스크롤 제스쳐
@@ -439,7 +435,6 @@ extension HomeViewController: UIGestureRecognizerDelegate {
 		return shouldBegin
 	}
 }
-
 //MARK: - UITableView DataSource
 extension HomeViewController: UITableViewDataSource {
 

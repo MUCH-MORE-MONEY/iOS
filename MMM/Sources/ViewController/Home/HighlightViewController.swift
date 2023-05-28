@@ -74,6 +74,11 @@ extension HighlightViewController {
 		checkButton.setTitleColor(isVaild ? R.Color.black : R.Color.gray500, for: .normal)
 		checkButton.isEnabled = isVaild
 		warningLabel.isHidden = priceTextField.text!.isEmpty != isVaild
+		
+		// shake 에니메이션
+		if !isVaild {
+			priceTextField.shake()
+		}
 	}
 }
 //MARK: - Style & Layouts

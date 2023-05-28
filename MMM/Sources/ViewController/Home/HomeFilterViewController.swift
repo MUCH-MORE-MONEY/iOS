@@ -31,7 +31,7 @@ final class HomeFilterViewController: BaseViewController {
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)
 	}
-	
+
 	// Compile time에 error를 발생시키는 코드
 	@available(*, unavailable)
 	required init?(coder: NSCoder) {

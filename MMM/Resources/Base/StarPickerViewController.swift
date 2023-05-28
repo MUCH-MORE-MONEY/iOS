@@ -18,11 +18,11 @@ class StarPickerViewController: UIViewController {
     private lazy var satisfyingLabel = BasePaddingLabel(padding: UIEdgeInsets(top: 4, left: 12, bottom: 4, right: 12))
     private lazy var starStackView = UIStackView()
     private lazy var starList: [UIImageView] = [
-        UIImageView(image: R.Icon.iconStarInActive),
-        UIImageView(image: R.Icon.iconStarInActive),
-        UIImageView(image: R.Icon.iconStarInActive),
-        UIImageView(image: R.Icon.iconStarInActive),
-        UIImageView(image: R.Icon.iconStarInActive)
+        UIImageView(image: R.Icon.iconStarGray48),
+        UIImageView(image: R.Icon.iconStarGray48),
+        UIImageView(image: R.Icon.iconStarGray48),
+        UIImageView(image: R.Icon.iconStarGray48),
+        UIImageView(image: R.Icon.iconStarGray48)
     ]
     // MARK: - Properties
     private var cancellable = Set<AnyCancellable>()
@@ -82,7 +82,7 @@ extension StarPickerViewController {
         
         starStackView = starStackView.then {
             $0.axis = .horizontal
-            $0.spacing = 8
+            $0.spacing = 23
             $0.distribution = .fillEqually
         }
     }

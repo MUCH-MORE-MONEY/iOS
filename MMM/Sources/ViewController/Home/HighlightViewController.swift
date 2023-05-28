@@ -76,7 +76,7 @@ extension HighlightViewController {
 		warningLabel.isHidden = priceTextField.text!.isEmpty != isVaild
 		
 		// shake 에니메이션
-		if !isVaild {
+		if !priceTextField.text!.isEmpty && !isVaild {
 			priceTextField.shake()
 		}
 	}

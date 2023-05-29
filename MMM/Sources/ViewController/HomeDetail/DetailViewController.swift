@@ -213,12 +213,12 @@ extension DetailViewController {
                     self.cameraImageView.isHidden = true
                     self.mainImageView.setImage(urlStr: value.imageUrl, defaultImage: R.Icon.camera48)
                     self.remakeConstraintsByMainImageView()
-                    viewModel.hasImage = true
+                    self.viewModel.hasImage = true
                 } else {
                     self.mainImageView.isHidden = true
                     self.cameraImageView.isHidden = false
                     self.remakeConstraintsByCameraImageView()
-                    viewModel.hasImage = false
+                    self.viewModel.hasImage = false
                 }
                 
                 self.totalPrice.text = "\(value.amount.withCommas())원"

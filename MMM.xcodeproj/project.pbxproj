@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		003B832595A61A7EA6CCC014 /* Pods_MMM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A564931308C77DE145181BBF /* Pods_MMM.framework */; };
 		62AC9C989058B479AA52D81F /* Pods_MMMTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BC1A763E0587F6517C3A5E7 /* Pods_MMMTests.framework */; };
+		6A0379752A2443B9005EE07F /* Ex+UITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0379742A2443B9005EE07F /* Ex+UITextView.swift */; };
 		6A04FA052A1C4BB00034C114 /* AddImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A04FA042A1C4BB00034C114 /* AddImageView.swift */; };
 		6A04FA092A1C7EE80034C114 /* EditActivityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A04FA082A1C7EE80034C114 /* EditActivityViewModel.swift */; };
 		6A0531222A22183D0065DB54 /* InsertResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0531212A22183D0065DB54 /* InsertResDto.swift */; };
@@ -94,8 +95,6 @@
 		C44807E329E649A300D4B090 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44807E229E649A300D4B090 /* HomeViewModel.swift */; };
 		C44807E529E7E76800D4B090 /* Ex+UIControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44807E429E7E76800D4B090 /* Ex+UIControl.swift */; };
 		C4C0CAF52A1C88DC00C41FF4 /* HomeHighlightViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0CAF42A1C88DC00C41FF4 /* HomeHighlightViewModel.swift */; };
-		C4C0CAFC2A1F201100C41FF4 /* Ex+UITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0CAFB2A1F201100C41FF4 /* Ex+UITextView.swift */; };
-		C4C0CAFE2A1F205100C41FF4 /* Ex+UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0CAFD2A1F205100C41FF4 /* Ex+UITextField.swift */; };
 		C4C0CB022A23A07000C41FF4 /* EditPriceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0CB012A23A06F00C41FF4 /* EditPriceViewController.swift */; };
 		C4D7FC872A08942E00565291 /* Monthly.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D7FC862A08942E00565291 /* Monthly.swift */; };
 		C4D7FC892A08A61C00565291 /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D7FC882A08A61C00565291 /* CalendarCell.swift */; };
@@ -133,6 +132,7 @@
 		1E035A75D3A833AD01047796 /* Pods-MMMTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMMTests.debug.xcconfig"; path = "Target Support Files/Pods-MMMTests/Pods-MMMTests.debug.xcconfig"; sourceTree = "<group>"; };
 		2BC1A763E0587F6517C3A5E7 /* Pods_MMMTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MMMTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		58A4D4522CDE75108D91C22E /* Pods-MMM-MMMUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMM-MMMUITests.debug.xcconfig"; path = "Target Support Files/Pods-MMM-MMMUITests/Pods-MMM-MMMUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		6A0379742A2443B9005EE07F /* Ex+UITextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UITextView.swift"; sourceTree = "<group>"; };
 		6A04FA042A1C4BB00034C114 /* AddImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddImageView.swift; sourceTree = "<group>"; };
 		6A04FA082A1C7EE80034C114 /* EditActivityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditActivityViewModel.swift; sourceTree = "<group>"; };
 		6A0531212A22183D0065DB54 /* InsertResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertResDto.swift; sourceTree = "<group>"; };
@@ -338,14 +338,6 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		6A27E6932A205219001A7F04 /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				C4C0CAF62A1C9B3400C41FF4 /* Ex+UITextField.swift */,
-			);
-			name = "Recovered References";
-			sourceTree = "<group>";
-		};
 		6A381E0829E8F3C100E0974F /* Add */ = {
 			isa = PBXGroup;
 			children = (
@@ -546,9 +538,8 @@
 				C4EA5B4329FA2810008D1564 /* Ex+UIStackView.swift */,
 				6AB1151229EE6D9E00D3B813 /* Ex+UITabBar.swift */,
 				C41193F629D3D954003DBC15 /* Ex+UITableView.swift */,
-				6A223FF92A1B271B0058C877 /* Ex+UITapGestureRecognizer.swift */,
 				6A27E6942A205338001A7F04 /* Ex+UITextField.swift */,
-				6A0B08E92A1DA9D30072E993 /* Ex+UITextView.swift */,
+				6A0379742A2443B9005EE07F /* Ex+UITextView.swift */,
 				C41193E229D287E6003DBC15 /* Ex+View.swift */,
 			);
 			path = Extensions;
@@ -583,7 +574,6 @@
 				C44807E229E649A300D4B090 /* HomeViewModel.swift */,
 				6A626BC42A0C87E800BDD5C0 /* HomeDetailViewModel.swift */,
 				C4C0CAF42A1C88DC00C41FF4 /* HomeHighlightViewModel.swift */,
-				6A04FA082A1C7EE80034C114 /* AddActivityViewModel.swift */,
 				6A04FA082A1C7EE80034C114 /* EditActivityViewModel.swift */,
 				6A1BAD4429E6550100818086 /* OnboardingViewModel.swift */,
 			);
@@ -628,9 +618,6 @@
 			children = (
 				6A04FA042A1C4BB00034C114 /* AddImageView.swift */,
 				6A15B0EB2A15B68D00EADAC5 /* BaseAddActivityViewController.swift */,
-				6A1479622A0DE0690045B8C1 /* CameraImageView.swift */,
-				C4DBAA3629DD7B2600D1BB97 /* CountPushLabel.swift */,
-				C411940A29DAEDF9003DBC15 /* CustomAlertViewController.swift */,
 				6A1322E82A088DD700CEEC81 /* BaseDetailViewController.swift */,
 				6A1322F02A089B2900CEEC81 /* BasePaddingLabel.swift */,
 				6A0F234329DBC0C30063673B /* BaseViewController.swift */,
@@ -674,6 +661,8 @@
 			isa = PBXGroup;
 			children = (
 				C4C0CAF62A1C9B3400C41FF4 /* Ex+UITextField.swift */,
+				C4C0CAFD2A1F205100C41FF4 /* Ex+UITextField.swift */,
+				C4C0CAFB2A1F201100C41FF4 /* Ex+UITextView.swift */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -928,12 +917,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C4C0CAFE2A1F205100C41FF4 /* Ex+UITextField.swift in Sources */,
 				C411940429D53DDF003DBC15 /* ManagementViewController.swift in Sources */,
 				C41193F529D3D7FB003DBC15 /* Ex+NSObject.swift in Sources */,
 				6A08B47D29FF5D530080719E /* Log.swift in Sources */,
 				6AB1150F29EE372F00D3B813 /* CustomTabBar.swift in Sources */,
-				C4C0CAFC2A1F201100C41FF4 /* Ex+UITextView.swift in Sources */,
 				C411940B29DAEDF9003DBC15 /* CustomAlertViewController.swift in Sources */,
 				C4DBAA3029DD459100D1BB97 /* WithdrawConfirmView.swift in Sources */,
 				C41193FD29D42BD9003DBC15 /* ProfileFooterView.swift in Sources */,
@@ -956,6 +943,7 @@
 				C4C0CAF52A1C88DC00C41FF4 /* HomeHighlightViewModel.swift in Sources */,
 				6A08B48029FF74B70080719E /* Ex+Encodable.swift in Sources */,
 				C41193E829D287E6003DBC15 /* Ex+View.swift in Sources */,
+				6A0379752A2443B9005EE07F /* Ex+UITextView.swift in Sources */,
 				6A12144729FA0C300076848A /* AppleLoginResDto.swift in Sources */,
 				6A0F234229DBA92D0063673B /* ServiceViewController.swift in Sources */,
 				C4DBAA3729DD7B2600D1BB97 /* CountPushLabel.swift in Sources */,
@@ -963,7 +951,6 @@
 				C4199DD929FE6BE1006E5DA8 /* DatePickerViewController.swift in Sources */,
 				C4EA5B4429FA2810008D1564 /* Ex+UIStackView.swift in Sources */,
 				6A0F234729DC0DB20063673B /* TabBarController.swift in Sources */,
-				6A0B08EA2A1DA9D30072E993 /* Ex+UITextView.swift in Sources */,
 				6A0531222A22183D0065DB54 /* InsertResDto.swift in Sources */,
 				6A27E6952A205338001A7F04 /* Ex+UITextField.swift in Sources */,
 				6AB1151329EE6D9E00D3B813 /* Ex+UITabBar.swift in Sources */,

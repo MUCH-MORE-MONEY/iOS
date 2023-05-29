@@ -61,52 +61,6 @@ extension DetailViewController {
         setLayout()
         bind()
     }
-  
-    // MARK: - Bind
-    private func bind() {
-        viewModel.fetchDetailActivity(id: economicActivityId[index])
-        
-        editButton.tapPublisher
-            .sinkOnMainThread(receiveValue: didTapEditButton)
-            .store(in: &cancellable)
-        
-        viewModel.$detailActivity
-            .sinkOnMainThread { [weak self] value in
-                guard let self = self, let value = value else { return }
-                self.titleLabel.text = value.title
-                
-				self.starList.forEach {
-                    $0.image = R.Icon.iconStarGray24
-                }
-                
-                for i in 0..<value.star {
-					self.starList[i].image = R.Icon.iconStarBlack24
-                }
-                
-                if URL(string: value.imageUrl) != nil {
-					self.mainImageView.isHidden = false
-					self.cameraImageView.isHidden = true
-                    self.mainImageView.setImage(urlStr: value.imageUrl, defaultImage: R.Icon.camera48)
-					self.remakeConstraintsByMainImageView()
-					self.viewModel.hasImage = true
-                } else {
-					self.mainImageView.isHidden = true
-					self.cameraImageView.isHidden = false
-					self.remakeConstraintsByCameraImageView()
-					self.viewModel.hasImage = false
-                }
-                
-                if let amount = Int(value.amount) {
-                    self.totalPrice.text = "\(amount.withCommas())원"
-                }
-                self.memoLabel.text = value.memo
-                self.satisfactionLabel.setSatisfyingLabel(by: value.star)
-				print("detailView : \(self.mainImageView.frame.height)")
-
-            }.store(in: &cancellable)
-        
-        bottomPageControlView.setViewModel(viewModel, index, economicActivityId)
-    }
     
     private func setAttribute() {
         title = navigationTitle

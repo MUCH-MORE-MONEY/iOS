@@ -42,7 +42,7 @@ final class HomeTableViewCell: UITableViewCell {
 	override func prepareForReuse() {
 		startList.forEach { iv in
 			iv.image = nil
-			iv.image = R.Icon.iconStarDisabled24
+			iv.image = R.Icon.iconStarDisabled8
 		}
 	}
 }
@@ -57,7 +57,7 @@ extension HomeTableViewCell {
 		
 		// star의 갯수
 		for i in 0..<data.star {
-			startList[i].image = R.Icon.iconStarBlack24
+			startList[i].image = R.Icon.iconStarBlack8
 		}
 
 		titleLabel.text = data.title
@@ -75,11 +75,11 @@ private extension HomeTableViewCell {
 	}
 	
 	private func setAttribute() {
-		startList = [UIImageView(image: R.Icon.iconStarDisabled24),
-					 UIImageView(image: R.Icon.iconStarDisabled24),
-					 UIImageView(image: R.Icon.iconStarDisabled24),
-					 UIImageView(image: R.Icon.iconStarDisabled24),
-					 UIImageView(image: R.Icon.iconStarDisabled24)]
+		startList = [UIImageView(image: R.Icon.iconStarDisabled8),
+					 UIImageView(image: R.Icon.iconStarDisabled8),
+					 UIImageView(image: R.Icon.iconStarDisabled8),
+					 UIImageView(image: R.Icon.iconStarDisabled8),
+					 UIImageView(image: R.Icon.iconStarDisabled8)]
 		
 		thumbnailImageView = thumbnailImageView.then {
 			$0.layer.cornerRadius = 20

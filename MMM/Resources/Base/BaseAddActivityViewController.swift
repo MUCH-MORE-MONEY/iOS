@@ -25,11 +25,11 @@ class BaseAddActivityViewController: BaseDetailViewController {
     lazy var satisfyingLabel = BasePaddingLabel(padding: UIEdgeInsets(top: 3, left: 12, bottom: 3, right: 12))
     // MARK: - Properties
     lazy var starList: [UIImageView] = [
-        UIImageView(image: R.Icon.iconStarDisabled24),
-        UIImageView(image: R.Icon.iconStarDisabled24),
-        UIImageView(image: R.Icon.iconStarDisabled24),
-        UIImageView(image: R.Icon.iconStarDisabled24),
-        UIImageView(image: R.Icon.iconStarDisabled24)
+        UIImageView(image: R.Icon.iconStarDisabled16),
+        UIImageView(image: R.Icon.iconStarDisabled16),
+        UIImageView(image: R.Icon.iconStarDisabled16),
+        UIImageView(image: R.Icon.iconStarDisabled16),
+        UIImageView(image: R.Icon.iconStarDisabled16)
     ]
     var hasImage = false
     private var cancellable = Set<AnyCancellable>()

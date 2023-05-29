@@ -24,11 +24,11 @@ class DetailViewController: BaseDetailViewController {
     private lazy var bottomPageControlView = BottomPageControlView()
     private lazy var memoLabel = UILabel()
     private lazy var starList: [UIImageView] = [
-        UIImageView(image: R.Icon.iconStarDisabled24),
-        UIImageView(image: R.Icon.iconStarDisabled24),
-        UIImageView(image: R.Icon.iconStarDisabled24),
-        UIImageView(image: R.Icon.iconStarDisabled24),
-        UIImageView(image: R.Icon.iconStarDisabled24)
+        UIImageView(image: R.Icon.iconStarDisabled16),
+        UIImageView(image: R.Icon.iconStarDisabled16),
+        UIImageView(image: R.Icon.iconStarDisabled16),
+        UIImageView(image: R.Icon.iconStarDisabled16),
+        UIImageView(image: R.Icon.iconStarDisabled16)
     ]
     // MARK: - Properties
     private var date = Date()
@@ -201,11 +201,11 @@ extension DetailViewController {
                 self.titleLabel.text = value.title
                 
                 self.starList.forEach {
-                    $0.image = R.Icon.iconStarGray24
+                    $0.image = R.Icon.iconStarGray16
                 }
                 
                 for i in 0..<value.star {
-                    self.starList[i].image = R.Icon.iconStarBlack24
+                    self.starList[i].image = R.Icon.iconStarBlack16
                 }
                 
                 if URL(string: value.imageUrl) != nil {

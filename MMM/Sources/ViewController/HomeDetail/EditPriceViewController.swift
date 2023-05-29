@@ -170,7 +170,9 @@ private extension EditPriceViewController {
 		}
 		
 		priceTextField = priceTextField.then {
-			$0.text = (isEarn ? editViewModel.amount.withCommas() : editViewModel.amount.withCommas()) + " 원"
+			let price = editViewModel.amount
+			$0.text = price.withCommas() + " 원"
+			viewModel.priceInput = String(price)
 			$0.placeholder = "원 단위로 입력"
 			$0.font = R.Font.h2
 			$0.textColor = R.Color.gray900

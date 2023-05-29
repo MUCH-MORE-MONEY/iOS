@@ -94,16 +94,16 @@ extension UITextField: UITextFieldDelegate {
 		// 단위에 따른 color 변경
 		self.textColor = price > limit ? R.Color.red500 : R.Color.gray900
 		if price > limit {
-			DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-				self.text = limit.withCommas() + unit
-				self.textColor = R.Color.gray900
-				// cursor 위치 변경
-				if let newPosition = self.position(from: self.endOfDocument, offset: -unit.count) {
-					let newSelectedRange = textField.textRange(from: newPosition, to: newPosition)
-					self.selectedTextRange = newSelectedRange
-				}
-				self.sendActions(for: .editingChanged)
-			}
+//			DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+//				self.text = limit.withCommas() + unit
+//				self.textColor = R.Color.gray900
+//				// cursor 위치 변경
+//				if let newPosition = self.position(from: self.endOfDocument, offset: -unit.count) {
+//					let newSelectedRange = textField.textRange(from: newPosition, to: newPosition)
+//					self.selectedTextRange = newSelectedRange
+//				}
+//				self.sendActions(for: .editingChanged)
+//			}
 			if let old = Int(oldString.filter{ $0.isNumber }), old > limit {
 				return false
 			}

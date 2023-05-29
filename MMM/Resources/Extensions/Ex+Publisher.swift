@@ -54,4 +54,3 @@ extension UITextField {
 			.eraseToAnyPublisher()
 	}
 }
-

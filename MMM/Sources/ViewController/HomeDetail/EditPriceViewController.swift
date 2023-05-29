@@ -13,7 +13,7 @@ import SnapKit
 final class EditPriceViewController: UIViewController {
 	// MARK: - Properties
 	private lazy var cancellable: Set<AnyCancellable> = .init()
-	private let viewModel = HomeHighlightViewModel()
+	private let viewModel = PriceViewModel()
 	private let editViewModel: EditActivityViewModel
 	private var isEarn: Bool = true
 	weak var delegate: BottomSheetChild?
@@ -43,19 +43,16 @@ final class EditPriceViewController: UIViewController {
 		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
 	}
-	
-	override func viewDidAppear(_ animated: Bool) {
-		super.viewDidAppear(animated)
+
+	override func viewDidLayoutSubviews() {
+		// Underline 호출
+		priceTextField.setUnderLine(color: R.Color.orange500)
+		
 		// cursor 위치 변경
 		if let newPosition = priceTextField.position(from: priceTextField.endOfDocument, offset: -2) {
 			let newSelectedRange = priceTextField.textRange(from: newPosition, to: newPosition)
 			priceTextField.selectedTextRange = newSelectedRange
 		}
-	}
-	
-	override func viewDidLayoutSubviews() {
-		// Underline 호출
-		priceTextField.setUnderLine(color: R.Color.orange500)
 	}
 }
 //MARK: - Action

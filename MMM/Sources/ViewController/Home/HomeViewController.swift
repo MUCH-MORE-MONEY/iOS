@@ -11,10 +11,6 @@ import Then
 import SnapKit
 import FSCalendar
 
-protocol HomeViewProtocol: AnyObject {
-	func willPickerDismiss(_ date: Date)
-}
-
 final class HomeViewController: UIViewController {
 	// MARK: - Properties
 	private lazy var cancellable: Set<AnyCancellable> = .init()
@@ -86,10 +82,9 @@ extension HomeViewController {
 	// MARK: - Private
 	/// 달력 Picker Bottom Sheet
 	private func didTapMonthButton() {
-		let picker = DatePickerViewController(date: Date())
+		let picker = DatePickerViewController(viewModel: viewModel, date: Date())
 		let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
 		picker.delegate = bottomSheetVC
-		picker.homeDelegate = self
 		bottomSheetVC.modalPresentationStyle = .overFullScreen
 		bottomSheetVC.setSetting(height: 375)
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
@@ -153,6 +148,11 @@ private extension HomeViewController {
 				self?.calendar.reloadData()
 			}).store(in: &cancellable)
 				
+		viewModel.$date
+			.sinkOnMainThread(receiveValue: { [weak self] date in
+				self?.didSelectDate(date)
+			}).store(in: &cancellable)
+
 //		viewModel
 //			.transform(input: viewModel.input.eraseToAnyPublisher())
 //			.sinkOnMainThread(receiveValue: { [weak self] state in
@@ -479,11 +479,5 @@ extension HomeViewController: UITableViewDelegate {
 
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
-	}
-}
-extension HomeViewController: HomeViewProtocol {
-	// 닫힐때
-	func willPickerDismiss(_ date: Date) {
-		self.didSelectDate(date)
 	}
 }

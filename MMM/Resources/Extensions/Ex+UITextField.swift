@@ -89,10 +89,12 @@ extension UITextField: UITextFieldDelegate {
 			limit = 10_000
 		default:
 			unit = "원"
+			limit = 100_000_000
 		}
 
 		// 단위에 따른 color 변경
-		self.textColor = price > limit ? R.Color.red500 : R.Color.gray900
+		
+		self.textColor = price > limit ? R.Color.red500 : self.tag == 0 ? R.Color.white : R.Color.gray900
 		if price > limit {
 //			DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
 //				self.text = limit.withCommas() + unit
@@ -104,6 +106,7 @@ extension UITextField: UITextFieldDelegate {
 //				}
 //				self.sendActions(for: .editingChanged)
 //			}
+			
 			if let old = Int(oldString.filter{ $0.isNumber }), old > limit {
 				return false
 			}

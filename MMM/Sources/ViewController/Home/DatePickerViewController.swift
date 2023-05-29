@@ -15,8 +15,9 @@ final class DatePickerViewController: UIViewController {
 	private lazy var cancellables: Set<AnyCancellable> = .init()
 	private var isDark: Bool = false
 	private var date: Date
+	private var viewModel: AnyObject
 	weak var delegate: BottomSheetChild?
-	weak var homeDelegate: HomeViewProtocol?
+//	weak var homeDelegate: HomeViewProtocol?
 
 	// MARK: - UI Components
 	private lazy var stackView = UIStackView() // 날짜 이동 Label, 확인 Button
@@ -24,8 +25,9 @@ final class DatePickerViewController: UIViewController {
 	private lazy var checkButton = UIButton()
 	private lazy var datePicker = UIDatePicker()
 	
-	init(date: Date) {
+	init(viewModel: AnyObject, date: Date = Date()) {
 		self.date = date
+		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)
 	}
 	
@@ -52,8 +54,20 @@ extension DatePickerViewController {
 	// MARK: - Private
 	// 닫힐때
 	private func willDismiss() {
+		switch viewModel {
+		case is HomeViewModel:
+			let viewModel = viewModel as! HomeViewModel
+			viewModel.date = datePicker.date
+		case is EditActivityViewModel:
+			let viewModel = viewModel as! EditActivityViewModel
+			viewModel.date = datePicker.date
+		case is AddViewModel:
+			let viewModel = viewModel as! AddViewModel
+			viewModel.date = datePicker.date
+		default:
+			break
+		}
 		delegate?.willDismiss()
-		homeDelegate?.willPickerDismiss(datePicker.date)
 	}
 }
 //MARK: - Style & Layouts

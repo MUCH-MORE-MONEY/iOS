@@ -15,16 +15,28 @@ final class HomeViewModel {
 	@Published var monthlyList: [Monthly] = []
 	@Published var didTapHighlightButton: Bool?	// bottom sheet
 	@Published var didTapColorButton: Bool?		// bottom sheet
-	@Published var isHighlight: Bool = KeychainWrapper.standard.bool(forKey: "isHighlight")! {
+	@Published var isHighlight: Bool = Constants.getKeychainValueByBool(forKey: Constants.KeychainKey.isHighlight) ?? true {
 		// 금액 하이라이트 설정
 		didSet {
-			KeychainWrapper.standard.set(isHighlight, forKey: "isHighlight")
+			Constants.setKeychain(isHighlight, forKey: Constants.KeychainKey.isHighlight)
 		}
 	}
-	@Published var isDailySetting: Bool = KeychainWrapper.standard.bool(forKey: "isDailySetting")! {
+	@Published var isDailySetting: Bool = Constants.getKeychainValueByBool(forKey: Constants.KeychainKey.isDailySetting) ?? true {
 		// 일별 금액 합계 설정
 		didSet {
-			KeychainWrapper.standard.set(isDailySetting, forKey: "isDailySetting")
+			Constants.setKeychain(isDailySetting, forKey: Constants.KeychainKey.isDailySetting)
+		}
+	}
+	@Published var earnStandard: Int = Constants.getKeychainValueByInt(forKey: Constants.KeychainKey.earnStandard) ?? 10_000 {
+		// 금액 하이라이트 설정 - 수입
+		didSet {
+			Constants.setKeychain(earnStandard, forKey: Constants.KeychainKey.earnStandard)
+		}
+	}
+	@Published var payStandard: Int = Constants.getKeychainValueByInt(forKey: Constants.KeychainKey.payStandard) ?? 10_000 {
+		// 금액 하이라이트 설정 - 지출
+		didSet {
+			Constants.setKeychain(payStandard, forKey: Constants.KeychainKey.payStandard)
 		}
 	}
 

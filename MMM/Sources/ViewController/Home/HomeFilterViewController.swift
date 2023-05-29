@@ -31,7 +31,7 @@ final class HomeFilterViewController: BaseViewController {
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)
 	}
-	
+
 	// Compile time에 error를 발생시키는 코드
 	@available(*, unavailable)
 	required init?(coder: NSCoder) {
@@ -49,7 +49,6 @@ final class HomeFilterViewController: BaseViewController {
 		viewModel.didTapColorButton = nil
 	}
 }
-
 //MARK: - Action
 private extension HomeFilterViewController {
 	/// 금액 하이라이트 isEnabled
@@ -64,14 +63,15 @@ private extension HomeFilterViewController {
 		viewModel.isDailySetting = !viewModel.isDailySetting
 	}
 	
-	//MARK: - Private
+	// MARK: - Private
 	// Push Highlight BottomSheet
 	private func didTapHighlightButton(_ isEarn: Bool) {
 		let vc = HighlightViewController(homeViewModel: viewModel)
 		let bottomSheetVC = BottomSheetViewController(contentViewController: vc)
 		vc.delegate = bottomSheetVC
+		vc.setData(isEarn: isEarn)
 		bottomSheetVC.modalPresentationStyle = .overFullScreen
-		bottomSheetVC.setSetting(height: 174)
+		bottomSheetVC.setSetting(height: 174, isDrag: false)
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
 	}
 	
@@ -117,6 +117,18 @@ private extension HomeFilterViewController {
 				guard let value = value else { return }
 				self.didTapColorButton(value)
 			}).store(in: &cancellable)
+		
+		// 수입
+		viewModel.$earnStandard
+			.sinkOnMainThread(receiveValue: { value in
+				self.earnView.setData(price: value)
+			}).store(in: &cancellable)
+		
+		// 지출
+		viewModel.$payStandard
+			.sinkOnMainThread(receiveValue: { value in
+				self.payView.setData(price: value)
+			}).store(in: &cancellable)
 	}
 	
 	private func setAttribute() {
@@ -148,12 +160,12 @@ private extension HomeFilterViewController {
 		}
 		
 		earnView = earnView.then {
-			$0.setup(viewModel: viewModel, isEarn: true)
+			$0.setData(viewModel: viewModel, isEarn: true)
 			$0.toggleEnabled(viewModel.isHighlight)
 		}
 		
 		payView = payView.then {
-			$0.setup(viewModel: viewModel, isEarn: false)
+			$0.setData(viewModel: viewModel, isEarn: false)
 			$0.toggleEnabled(viewModel.isHighlight)
 		}
 		

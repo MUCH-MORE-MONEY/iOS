@@ -94,6 +94,8 @@ extension BottomSheetViewController {
 		self.isExpended = isExpended
 		self.isShadow = isShadow
 		self.isDark = isDark
+		
+		self.dragIndicatorView.isHidden = !isDrag
 	}
 	
 	/// percentHeight : 퍼센트로 높이 설정(0~1, 범위내 값이 아니면 설정 안됨, 1은 하지 말기),
@@ -109,6 +111,8 @@ extension BottomSheetViewController {
 		self.isExpended = isExpended
 		self.isShadow = isShadow
 		self.isDark = isDark
+		
+		self.dragIndicatorView.isHidden = !isDrag
 	}
 	
 	func willDismiss() {

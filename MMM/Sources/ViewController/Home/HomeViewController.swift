@@ -83,7 +83,7 @@ extension HomeViewController {
 		self.setMonth(date)
 	}
 	
-	//MARK: - Private
+	// MARK: - Private
 	/// 달력 Picker Bottom Sheet
 	private func didTapMonthButton() {
 		let picker = DatePickerViewController()
@@ -131,6 +131,7 @@ private extension HomeViewController {
 			.store(in: &cancellable)
 
 		filterButton.tapPublisher
+			.throttle(for: .seconds(1), scheduler: DispatchQueue.main, latest: false) // 처음에 구독한 시점에 value를 한번 바로 방출
 			.sinkOnMainThread(receiveValue: didTapFilterButton)
 			.store(in: &cancellable)
 
@@ -144,15 +145,13 @@ private extension HomeViewController {
 		viewModel.$dailyList
 			.sinkOnMainThread(receiveValue: { [weak self] daily in
 				self?.tableView.reloadData()
-			})
-			.store(in: &cancellable)
+			}).store(in: &cancellable)
 		
 		viewModel.$monthlyList
 			.sinkOnMainThread(receiveValue: { [weak self] monthly in
-				self?.calendarHeaderView.setUp(pay: monthly.reduce(0){$0 + $1.pay}, earn: monthly.reduce(0){$0 + $1.earn})
+				self?.calendarHeaderView.setData(pay: monthly.reduce(0){$0 + $1.pay}, earn: monthly.reduce(0){$0 + $1.earn})
 				self?.calendar.reloadData()
-			})
-			.store(in: &cancellable)
+			}).store(in: &cancellable)
 				
 //		viewModel
 //			.transform(input: viewModel.input.eraseToAnyPublisher())
@@ -308,15 +307,30 @@ private extension HomeViewController {
 		}
 	}
 }
-
 //MARK: - FSCalendar DataSource, Delegate
 extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 	// 셀 정의
 	func calendar(_ calendar: FSCalendar, cellFor date: Date, at position: FSCalendarMonthPosition) -> FSCalendarCell {
 		let cell = calendar.dequeueReusableCell(withIdentifier: "CalendarCell", for: date, at: position) as! CalendarCell
 		
-		if viewModel.monthlyList.contains(where: {$0.createAt == date.getFormattedYMD()}) {
-			cell.setUp(color: R.Color.orange200)
+		if let index = viewModel.monthlyList.firstIndex(where: {$0.createAt == date.getFormattedYMD()}) {
+			let price = viewModel.monthlyList[index].total
+			switch price {
+			case ..<0: // - 지출
+				if viewModel.isHighlight { // 하이라이트가 켜져 있을 경우
+					cell.setData(color: viewModel.payStandard <= -price ? R.Color.orange400 : R.Color.orange200)
+				} else {
+					cell.setData(color: R.Color.orange200)
+				}
+			case 1...: // + 수입
+				if viewModel.isHighlight {
+					cell.setData(color: viewModel.earnStandard <= price ? R.Color.blue400 : R.Color.blue200)
+				} else {
+					cell.setData(color: R.Color.blue200)
+				}
+			default: // 0
+				cell.setData(color: R.Color.white)
+			}
 		}
 		
 		return cell
@@ -339,7 +353,7 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 		
 		return ""
 	}
-	
+		
 	// 스크롤시, calendar 높이 조절
 	func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {
 		calendar.snp.updateConstraints {
@@ -373,7 +387,6 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 		self.setMonth(calendar.currentPage) // 월 설정
 	}
 }
-
 //MARK: - FSCalendar Delegate Appearance
 extension HomeViewController: FSCalendarDelegateAppearance {
 	// 기본 cell title 색상
@@ -403,7 +416,6 @@ extension HomeViewController: FSCalendarDelegateAppearance {
 		return R.Color.gray300
 	}
 }
-
 //MARK: - UIGesture Recognizer Delegate
 extension HomeViewController: UIGestureRecognizerDelegate {
 	// 스크롤 제스쳐
@@ -423,7 +435,6 @@ extension HomeViewController: UIGestureRecognizerDelegate {
 		return shouldBegin
 	}
 }
-
 //MARK: - UITableView DataSource
 extension HomeViewController: UITableViewDataSource {
 
@@ -441,7 +452,7 @@ extension HomeViewController: UITableViewDataSource {
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.className, for: indexPath) as! HomeTableViewCell
 		
-		cell.setUp(data: viewModel.dailyList[indexPath.row])
+		cell.setData(data: viewModel.dailyList[indexPath.row])
 		cell.backgroundColor = R.Color.gray100
 
 		if indexPath.row == viewModel.dailyList.count - 1 {

@@ -200,7 +200,6 @@ extension BaseAddActivityViewController {
     
     // MARK: - Bind
     private func bind() {
-
         
 //        addViewModel.$isTitleEmpty
 //            .sinkOnMainThread {

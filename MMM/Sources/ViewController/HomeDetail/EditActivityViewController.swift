@@ -83,11 +83,11 @@ extension EditActivityViewController {
         editViewModel.createAt = detailViewModel.detailActivity?.createAt ?? ""
         editViewModel.star = detailViewModel.detailActivity?.star ?? 0
         editViewModel.type = detailViewModel.detailActivity?.type ?? ""
-		
+        
 		editViewModel.$type
 			.receive(on: DispatchQueue.main)
 			.sink { _ in
-				self.activityType.text = self.editViewModel.type
+                self.activityType.text = self.editViewModel.type == "01" ? "수입" : "지출"
 			}.store(in: &cancellable)
 		
 		editViewModel.$amount
@@ -314,6 +314,8 @@ extension EditActivityViewController: HomeViewProtocol {
         self.date = date
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
+            let createdAt = date.getFormattedDate(format: "yyyyMMdd")
+            self.editViewModel.createAt = createdAt
             self.titleText.text = self.navigationTitle
         }
     }

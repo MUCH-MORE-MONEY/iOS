@@ -16,7 +16,7 @@ final class EditActivityViewModel {
     // MARK: - API Request를 위한 Property Wrapper
     @Published var title = ""
     @Published var memo = ""
-    @Published var activityNumber = ""
+    @Published var id = ""
     @Published var amount = 20000
     @Published var createAt = ""
     @Published var star = 5
@@ -26,11 +26,12 @@ final class EditActivityViewModel {
     
     @Published var data: InsertResDto?
     @Published var editResponse: UpdateResDto?
+    @Published var deleteResponse: DeleteResDto?
     // MARK: - Porperties
     private var cancellable: Set<AnyCancellable> = []
     lazy var isVaild: AnyPublisher<Bool, Never> = $title
-            .map { $0.count <= 16 } // 16자리 이하
-            .eraseToAnyPublisher()
+        .map { $0.count <= 16 } // 16자리 이하
+        .eraseToAnyPublisher()
     
     func requestPHPhotoLibraryAuthorization(completion: @escaping () -> Void) {
         if #available(iOS 14, *) {
@@ -77,22 +78,23 @@ final class EditActivityViewModel {
     }
     
     
-//    경제활동 수정 API
-//    파일유지->fileNo req body에 유지,
-//    파일 삭제-> fileNo=''
-//    파일 변경 -> fileNo='' and BinaryFileList 추가
+    //    경제활동 수정 API
+    //    파일유지->fileNo req body에 유지,
+    //    파일 삭제-> fileNo=''
+    //    파일 변경 -> fileNo='' and BinaryFileList 추가
     func updateDetailActivity() {
-        APIClient.dispatch(APIRouter.UpdateReqDto(
-            headers: APIHeader.Default(token: TempToken.token),
-            body: APIParameters.UpdateReqDto(
-                binaryFileList: binaryFileList,
-                amount: amount,
-                type: type,
-                title: title,
-                memo: memo,
-                activityNumber: activityNumber,
-                createAt: createAt,
-                star: star)))
+        APIClient.dispatch(
+            APIRouter.UpdateReqDto(
+                headers: APIHeader.Default(token: TempToken.token),
+                body: APIParameters.UpdateReqDto(
+                    binaryFileList: binaryFileList,
+                    amount: amount,
+                    type: type,
+                    title: title,
+                    memo: memo,
+                    id: id,
+                    createAt: createAt,
+                    star: star)))
         .sink { data in
             switch data {
             case .failure(_):
@@ -103,6 +105,25 @@ final class EditActivityViewModel {
         } receiveValue: { response in
             self.editResponse = response
             print(self.editResponse)
+        }.store(in: &cancellable)
+    }
+    
+    func deleteDetailActivity() {
+        APIClient.dispatch(
+            APIRouter.DeleteReqDto(
+                headers: APIHeader.Default(
+                    token: TempToken.token),
+                body: APIParameters.DeleteReqDto(id: id)))
+        .sink { data in
+            switch data {
+            case .failure(_):
+                break
+            case .finished:
+                break
+            }
+        } receiveValue: { response in
+            self.deleteResponse = response
+            print(self.deleteResponse)
         }.store(in: &cancellable)
 
     }

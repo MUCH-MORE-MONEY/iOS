@@ -65,7 +65,7 @@ struct APIParameters{
         var type: String
         var title: String
         var memo: String
-        var activityNumber: String
+        var id: String
         var createAt: String
         var star: Int
         
@@ -75,7 +75,7 @@ struct APIParameters{
             case amount = "economicActivityAmt"
             case title = "economicActivityMm"
             case memo = "economicActivityNm"
-            case activityNumber = "economicActivityNo"
+            case id = "economicActivityNo"
             case createAt = "economicActivityYMD"
             case star = "valueScore"
         }
@@ -83,6 +83,15 @@ struct APIParameters{
         struct BinaryFileList: Codable {
             let binaryData: String
             let fileNm: String
+        }
+    }
+
+    /// 경제활동 삭제를 위한 Request
+    struct DeleteReqDto: Encodable {
+        var id: String
+        
+        enum CodingKeys: String, CodingKey {
+            case id = "economicActivityNo"
         }
     }
 }

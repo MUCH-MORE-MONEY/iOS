@@ -95,10 +95,7 @@ extension EditActivityViewController {
     
     // MARK: - Bind
     private func bind() {
-        deleteButton.tapPublisher
-            .sinkOnMainThread(receiveValue: didTapDeleteButton)
-            .store(in: &cancellable)
-        
+        // MARK: - detailVM -> editVM 데이터 주입
         editViewModel.title = detailViewModel.detailActivity?.title ?? ""
         editViewModel.memo = detailViewModel.detailActivity?.memo ?? ""
         editViewModel.amount = detailViewModel.detailActivity?.amount ?? 0
@@ -106,8 +103,9 @@ extension EditActivityViewController {
         editViewModel.star = detailViewModel.detailActivity?.star ?? 0
         editViewModel.type = detailViewModel.detailActivity?.type ?? ""
         editViewModel.fileNo = detailViewModel.detailActivity?.fileNo ?? ""
+        editViewModel.id = detailViewModel.detailActivity?.id ?? ""
         
-        
+        // MARK: - UI Bind
         editViewModel.$star
             .receive(on: DispatchQueue.main)
             .sink { [weak self] value in
@@ -115,7 +113,6 @@ extension EditActivityViewController {
                 self.satisfyingLabel.setSatisfyingLabelEdit(by: value)
                 self.setStarImage(Int(value))
             }.store(in: &cancellable)
-        
         
 		editViewModel.$type
 			.receive(on: DispatchQueue.main)
@@ -161,6 +158,7 @@ extension EditActivityViewController {
             })
             .store(in: &cancellable)
         
+        // MARK: - Gesture Publisher
         titleStackView.gesturePublisher()
             .receive(on: DispatchQueue.main)
             .sink { _ in
@@ -191,19 +189,20 @@ extension EditActivityViewController {
                 self.didTapImageView()
             }.store(in: &cancellable)
         
+        
+        // MARK: - CRUD Publisher
         saveButton.tapPublisher
             .sinkOnMainThread(receiveValue: didTapSaveButton)
+            .store(in: &cancellable)
+        
+        deleteButton.tapPublisher
+            .sinkOnMainThread(receiveValue: didTapDeleteButton)
             .store(in: &cancellable)
     }
 }
 
 // MARK: - Action
 extension EditActivityViewController {
-    func didTapDeleteButton() {
-        //FIXME: - showAlert에서 super.didTapBackButton()호출하면 문제생김
-        showAlert(alertType: .canCancel, titleText: deleteAlertTitle, contentText: deleteAlertContentText, cancelButtonText: "닫기", confirmButtonText: "그만두기")
-    }
-    
     func didTapDateTitle() {
         let picker = DatePickerViewController()
         let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
@@ -236,7 +235,14 @@ extension EditActivityViewController {
     func didTapSaveButton() {
         detailViewModel.isShowToastMessage = true
         self.navigationController?.popViewController(animated: true)
-        editViewModel.insertDetailActivity()
+        editViewModel.updateDetailActivity()
+    }
+    
+    func didTapDeleteButton() {
+        //FIXME: - showAlert에서 super.didTapBackButton()호출하면 문제생김
+//        showAlert(alertType: .canCancel, titleText: deleteAlertTitle, contentText: deleteAlertContentText, cancelButtonText: "닫기", confirmButtonText: "그만두기")
+        self.navigationController?.popViewController(animated: true)
+        editViewModel.deleteDetailActivity()
     }
     
     func didTapAlbumButton() {

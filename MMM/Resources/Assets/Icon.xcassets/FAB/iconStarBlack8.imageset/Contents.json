@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "iconStarGray24.png",
+      "filename" : "iconStarBlack8.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "iconStarGray24 1.png",
+      "filename" : "icon-star-black-12.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "iconStarGray24 2.png",
+      "filename" : "icon-star-black-12 1.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

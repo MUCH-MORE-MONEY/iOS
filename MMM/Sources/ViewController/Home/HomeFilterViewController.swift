@@ -71,7 +71,7 @@ private extension HomeFilterViewController {
 		vc.delegate = bottomSheetVC
 		vc.setData(isEarn: isEarn)
 		bottomSheetVC.modalPresentationStyle = .overFullScreen
-		bottomSheetVC.setSetting(height: 174)
+		bottomSheetVC.setSetting(height: 174, isDrag: false)
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
 	}
 	

@@ -94,6 +94,7 @@
 		C4C0CAF52A1C88DC00C41FF4 /* HomeHighlightViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0CAF42A1C88DC00C41FF4 /* HomeHighlightViewModel.swift */; };
 		C4C0CAFC2A1F201100C41FF4 /* Ex+UITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0CAFB2A1F201100C41FF4 /* Ex+UITextView.swift */; };
 		C4C0CAFE2A1F205100C41FF4 /* Ex+UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0CAFD2A1F205100C41FF4 /* Ex+UITextField.swift */; };
+		C4C0CB022A23A07000C41FF4 /* EditPriceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0CB012A23A06F00C41FF4 /* EditPriceViewController.swift */; };
 		C4D7FC872A08942E00565291 /* Monthly.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D7FC862A08942E00565291 /* Monthly.swift */; };
 		C4D7FC892A08A61C00565291 /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D7FC882A08A61C00565291 /* CalendarCell.swift */; };
 		C4DBAA2C29DBCB8B00D1BB97 /* Ex+Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBAA2B29DBCB8B00D1BB97 /* Ex+Button.swift */; };
@@ -223,6 +224,7 @@
 		C4C0CAF62A1C9B3400C41FF4 /* Ex+UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UITextField.swift"; sourceTree = "<group>"; };
 		C4C0CAFB2A1F201100C41FF4 /* Ex+UITextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UITextView.swift"; sourceTree = "<group>"; };
 		C4C0CAFD2A1F205100C41FF4 /* Ex+UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UITextField.swift"; sourceTree = "<group>"; };
+		C4C0CB012A23A06F00C41FF4 /* EditPriceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPriceViewController.swift; sourceTree = "<group>"; };
 		C4D7FC862A08942E00565291 /* Monthly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Monthly.swift; sourceTree = "<group>"; };
 		C4D7FC882A08A61C00565291 /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
 		C4DBAA2B29DBCB8B00D1BB97 /* Ex+Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Button.swift"; sourceTree = "<group>"; };
@@ -318,6 +320,7 @@
 				6A1322EB2A088F6E00CEEC81 /* Views */,
 				6A1322EC2A088F7F00CEEC81 /* DetailViewController.swift */,
 				6A223FFB2A1B3D590058C877 /* EditActivityViewController.swift */,
+				C4C0CB012A23A06F00C41FF4 /* EditPriceViewController.swift */,
 			);
 			path = HomeDetail;
 			sourceTree = "<group>";
@@ -980,6 +983,7 @@
 				C411940729D53EA0003DBC15 /* NavigationController.swift in Sources */,
 				C4199DDF2A00B3FE006E5DA8 /* HomeEmptyView.swift in Sources */,
 				C41193F329D3AED5003DBC15 /* ProfileView.swift in Sources */,
+				C4C0CB022A23A07000C41FF4 /* EditPriceViewController.swift in Sources */,
 				6A0D108529D3D209009D6DCA /* OnboardingView.swift in Sources */,
 				6A626BC12A0C7EE700BDD5C0 /* SelectDetailResDto.swift in Sources */,
 				C41193F729D3D954003DBC15 /* Ex+UITableView.swift in Sources */,

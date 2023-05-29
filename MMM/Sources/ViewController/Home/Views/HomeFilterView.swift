@@ -18,7 +18,7 @@ final class HomeFilterView: UIView {
 
 	// MARK: - UI Components
 	private lazy var titleLabel = UILabel()
-	private lazy var containerView = UIView()
+	private lazy var standardView = UIView()
 	private lazy var standardLabel = UILabel()
 	private lazy var expandImageView = UIImageView()
 	private lazy var middleLabel = UILabel()
@@ -103,7 +103,7 @@ private extension HomeFilterView {
 			$0.textColor = R.Color.gray300
 		}
 		
-		containerView = containerView.then {
+		standardView = standardView.then {
 			let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.handleTap))
 			$0.addGestureRecognizer(tapGesture)
 		}
@@ -146,15 +146,16 @@ private extension HomeFilterView {
 	}
 	
 	private func setLayout() {
-		addSubviews(titleLabel, containerView, separator1, separator2, middleLabel, colorButton, lastLabel)
-		containerView.addSubviews(standardLabel, expandImageView)
+		addSubviews(titleLabel, standardView, separator1, separator2, middleLabel, colorButton, lastLabel)
+		standardView.addSubviews(standardLabel, expandImageView)
 		
 		titleLabel.snp.makeConstraints {
 			$0.top.leading.equalToSuperview().inset(12)
 		}
 		
-		containerView.snp.makeConstraints {
+		standardView.snp.makeConstraints {
 			$0.top.equalTo(titleLabel.snp.bottom).offset(8)
+
 			$0.leading.equalToSuperview().inset(12)
 			$0.trailing.equalTo(expandImageView)
 		}
@@ -164,29 +165,29 @@ private extension HomeFilterView {
 		}
 		
 		expandImageView.snp.makeConstraints {
-			$0.top.bottom.equalTo(containerView)
+			$0.top.bottom.equalTo(standardView)
 			$0.leading.greaterThanOrEqualTo(standardLabel.snp.trailing).offset(8)
 		}
 		
 		middleLabel.snp.makeConstraints {
-			$0.top.bottom.equalTo(containerView)
+			$0.top.bottom.equalTo(standardView)
 			$0.leading.equalTo(expandImageView.snp.trailing).offset(4)
 		}
 		
 		colorButton.snp.makeConstraints {
-			$0.top.bottom.equalTo(containerView)
+			$0.top.bottom.equalTo(standardView)
 			$0.leading.equalTo(middleLabel.snp.trailing).offset(8)
 			$0.width.height.equalTo(16)
 			$0.trailing.equalTo(lastLabel.snp.leading).offset(-8)
 		}
 		
 		lastLabel.snp.makeConstraints {
-			$0.top.bottom.equalTo(containerView)
+			$0.top.bottom.equalTo(standardView)
 			$0.trailing.equalToSuperview().inset(35)
 		}
 		
 		separator1.snp.makeConstraints {
-			$0.top.equalTo(containerView.snp.bottom).offset(8)
+			$0.top.equalTo(standardView.snp.bottom).offset(8)
 			$0.bottom.equalToSuperview().inset(14)
 			$0.leading.equalToSuperview().inset(12)
 			$0.trailing.equalTo(expandImageView)
@@ -194,7 +195,7 @@ private extension HomeFilterView {
 		}
 		
 		separator2.snp.makeConstraints {
-			$0.top.equalTo(containerView.snp.bottom).offset(8)
+			$0.top.equalTo(standardView.snp.bottom).offset(8)
 			$0.bottom.equalToSuperview().inset(14)
 			$0.leading.equalTo(colorButton).offset(-4)
 			$0.trailing.equalTo(colorButton).offset(4)

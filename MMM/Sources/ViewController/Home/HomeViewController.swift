@@ -307,7 +307,6 @@ private extension HomeViewController {
 		}
 	}
 }
-
 //MARK: - FSCalendar DataSource, Delegate
 extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 	// 셀 정의
@@ -354,7 +353,7 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 		
 		return ""
 	}
-	
+		
 	// 스크롤시, calendar 높이 조절
 	func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {
 		calendar.snp.updateConstraints {

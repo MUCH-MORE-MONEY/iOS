@@ -83,6 +83,7 @@ extension UITextField: UITextFieldDelegate {
 		switch self.tag {
 		case 1:
 			unit = " 원"
+			limit = 100_000_000
 		case 2:
 			unit = "만원"
 			limit = 10_000

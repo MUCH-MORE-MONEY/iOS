@@ -129,12 +129,6 @@ private extension HomeViewController {
 			.throttle(for: .seconds(1), scheduler: DispatchQueue.main, latest: false) // 처음에 구독한 시점에 value를 한번 바로 방출
 			.sinkOnMainThread(receiveValue: didTapFilterButton)
 			.store(in: &cancellable)
-
-		// 예시
-//		UITextField().textPublisher
-//			.receive(on: DispatchQueue.main)
-//			.assign(to: \.passwordInput, on: viewModel)
-//			.store(in: &cancellables)
 		
 		//MARK: output
 		viewModel.$dailyList

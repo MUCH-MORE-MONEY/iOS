@@ -15,7 +15,7 @@ final class EditPriceViewController: UIViewController {
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 	private let viewModel = PriceViewModel()
 	private let editViewModel: EditActivityViewModel
-	private var isEarn: Bool = true
+	private lazy var isEarn: Bool = true
 	weak var delegate: BottomSheetChild?
 	
 	// MARK: - UI Components

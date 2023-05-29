@@ -19,8 +19,13 @@ final class AddViewController: BaseViewController {
 	// MARK: - UI Components
 	private lazy var scrollView = UIScrollView()
 	private lazy var contentView = UIView()
-	private lazy var typeLabel = UILabel()
 	
+	private lazy var isEarn: Bool = true
+	private lazy var typeLabel = UILabel()
+	private lazy var buttonStackView = UIStackView()
+	private lazy var earnButton = UIButton()
+	private lazy var payButton = UIButton()
+
 	private lazy var dateLabel = UILabel()
 	private lazy var dateButton = UIButton()
 
@@ -77,12 +82,33 @@ extension AddViewController {
 	
 	// Push Date BottomSheet
 	private func didTapDateButton() {
-		let picker = DatePickerViewController(viewModel: addViewModel)
+		let picker = DatePickerViewController(viewModel: addViewModel, date: addViewModel.date)
 		let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
 		picker.delegate = bottomSheetVC
 		bottomSheetVC.modalPresentationStyle = .overFullScreen
 		bottomSheetVC.setSetting(height: 375)
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
+	}
+	
+	// 수입/지출 button
+	private func didTogglePriceTypeButton(_ tag: Int) {
+		earnButton = earnButton.then {
+			$0.setTitleColor(tag == 0 ? R.Color.white : R.Color.gray400, for: .normal)
+			$0.titleLabel?.font = tag == 0 ? R.Font.body2 : R.Font.prtendard(family: .medium, size: 14)
+			$0.backgroundColor = tag == 0 ? R.Color.orange500 : R.Color.gray900
+			$0.layer.borderWidth = tag == 0 ? 0 : 1
+			$0.layer.borderColor = tag == 0 ? .none : R.Color.gray500.cgColor
+		}
+		
+		payButton = payButton.then {
+			$0.setTitleColor(tag == 1 ? R.Color.white : R.Color.gray400, for: .normal)
+			$0.titleLabel?.font = tag == 1 ? R.Font.body2 : R.Font.prtendard(family: .medium, size: 14)
+			$0.backgroundColor = tag == 1 ? R.Color.yellow500 : R.Color.gray900
+			$0.layer.borderWidth = tag == 1 ? 0 : 1
+			$0.layer.borderColor = tag == 1 ? .none : R.Color.gray500.cgColor
+		}
+		
+		isEarn = tag == 0 ? true : false
 	}
 }
 //MARK: - Style & Layouts
@@ -103,6 +129,14 @@ private extension AddViewController {
 		
 		dateButton.tapPublisher
 			.sinkOnMainThread(receiveValue: didTapDateButton)
+			.store(in: &cancellable)
+		
+		earnButton.tapPublisherByTag
+			.sinkOnMainThread(receiveValue: didTogglePriceTypeButton)
+			.store(in: &cancellable)
+
+		payButton.tapPublisherByTag
+			.sinkOnMainThread(receiveValue: didTogglePriceTypeButton)
 			.store(in: &cancellable)
 		
 		//MARK: output
@@ -132,6 +166,31 @@ private extension AddViewController {
 			$0.textColor = R.Color.gray200
 			$0.textAlignment = .left
 			$0.addImageViewOnRight(image: R.Icon.checkOrange24)
+		}
+		
+		earnButton = earnButton.then {
+			$0.setTitle("지출", for: .normal)
+			$0.setTitleColor(R.Color.white, for: .normal)
+			$0.titleLabel?.font = R.Font.body2
+			$0.backgroundColor = R.Color.orange500
+			$0.layer.cornerRadius = 4
+			$0.tag = 0
+		}
+		
+		payButton = payButton.then {
+			$0.setTitle("수입", for: .normal)
+			$0.setTitleColor(R.Color.gray400, for: .normal)
+			$0.titleLabel?.font = R.Font.prtendard(family: .medium, size: 14)
+			$0.backgroundColor = R.Color.gray900
+			$0.layer.borderWidth = 1
+			$0.layer.borderColor = R.Color.gray500.cgColor
+			$0.layer.cornerRadius = 4
+			$0.tag = 1
+		}
+		
+		buttonStackView = buttonStackView.then {
+			$0.spacing = 9
+			$0.distribution = .fillEqually
 		}
 		
 		dateLabel = dateLabel.then {
@@ -194,7 +253,8 @@ private extension AddViewController {
 	private func setLayout() {
 		view.addSubviews(scrollView, nextButton)
 		scrollView.addSubview(contentView)
-		contentView.addSubviews(typeLabel, dateLabel, dateButton, priceLabel, priceTextField, warningLabel)
+		contentView.addSubviews(typeLabel, buttonStackView, dateLabel, dateButton, priceLabel, priceTextField, warningLabel)
+		buttonStackView.addArrangedSubviews(earnButton, payButton)
 		
 		scrollView.snp.makeConstraints {
 			$0.top.equalTo(view.safeAreaLayoutGuide)
@@ -211,6 +271,12 @@ private extension AddViewController {
 		typeLabel.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(40)
 			$0.leading.trailing.lessThanOrEqualToSuperview()
+		}
+		
+		buttonStackView.snp.makeConstraints {
+			$0.top.equalTo(typeLabel.snp.bottom).offset(15)
+			$0.leading.trailing.equalToSuperview()
+			$0.height.equalTo(36)
 		}
 
 		dateLabel.snp.makeConstraints {

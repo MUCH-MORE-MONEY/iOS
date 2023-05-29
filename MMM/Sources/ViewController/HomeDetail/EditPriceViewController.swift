@@ -14,7 +14,7 @@ final class EditPriceViewController: UIViewController {
 	// MARK: - Properties
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 	private let viewModel = HomeHighlightViewModel()
-	private let homeViewModel: HomeViewModel
+	private let editViewModel: EditActivityViewModel
 	private var isEarn: Bool = true
 	weak var delegate: BottomSheetChild?
 	
@@ -28,8 +28,8 @@ final class EditPriceViewController: UIViewController {
 	private lazy var earnButton = UIButton()
 	private lazy var payButton = UIButton()
 
-	init(homeViewModel: HomeViewModel) {
-		self.homeViewModel = homeViewModel
+	init(editViewModel: EditActivityViewModel) {
+		self.editViewModel = editViewModel
 		super.init(nibName: nil, bundle: nil)
 	}
 	
@@ -61,11 +61,9 @@ extension EditPriceViewController {
 	// 확인 후 닫힐때
 	private func willDismiss() {
 		guard let value = Int(viewModel.priceInput) else { return }
-		if isEarn { // 수입
-			homeViewModel.earnStandard = value * 10_000 // 만 단위
-		} else { // 지출
-			homeViewModel.payStandard = value * 10_000
-		}
+		
+		editViewModel.type = isEarn ? "01" : "02" // 수입/지출
+		editViewModel.amount = value
 		delegate?.willDismiss()
 	}
 	
@@ -131,7 +129,7 @@ private extension EditPriceViewController {
 			.store(in: &cancellable)
 		
 		//MARK: output
-		viewModel.isVaild
+		viewModel.isVaildByWon
 			.sinkOnMainThread(receiveValue: setValid)
 			.store(in: &cancellable)
 	}
@@ -206,6 +204,8 @@ private extension EditPriceViewController {
 			$0.layer.cornerRadius = 4
 			$0.tag = 1
 		}
+		
+		didTogglePriceTypeButton(editViewModel.type == "01" ? 0 : 1)
 	}
 	
 	private func setLayout() {

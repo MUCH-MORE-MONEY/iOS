@@ -10,17 +10,12 @@ import Combine
 import Then
 import SnapKit
 
-//protocol EditViewProtocol: AnyObject {
-//    func willPickerDismiss(_ date: Date)
-//}
-
-class EditActivityViewController: BaseAddActivityViewController {
+class EditActivityViewController: BaseAddActivityViewController, UINavigationControllerDelegate {
     // MARK: - UI Components
     private lazy var editIconImage = UIImageView()
     private lazy var titleStackView = UIStackView()
     private lazy var titleIcon = UIImageView()
     private lazy var titleText = UILabel()
-    private var imagePickerVC = UIImagePickerController()
 
     // MARK: - Properties
     private var cancellable = Set<AnyCancellable>()
@@ -84,7 +79,7 @@ extension EditActivityViewController {
     private func bind() {
         editViewModel.title = detailViewModel.detailActivity?.title ?? ""
         editViewModel.memo = detailViewModel.detailActivity?.memo ?? ""
-        editViewModel.amount = Int(detailViewModel.detailActivity?.amount ?? "0")!
+        editViewModel.amount = detailViewModel.detailActivity?.amount ?? 0
         editViewModel.createAt = detailViewModel.detailActivity?.createAt ?? ""
         editViewModel.star = detailViewModel.detailActivity?.star ?? 0
         editViewModel.type = detailViewModel.detailActivity?.type ?? ""
@@ -194,21 +189,28 @@ extension EditActivityViewController {
     }
     
     func didTapAlbumButton() {
-        imagePickerVC.sourceType = .photoLibrary
-        imagePickerVC.allowsEditing = true
-        present(imagePickerVC, animated: true)
+        let picker = UIImagePickerController()
+        
+        picker.sourceType = .photoLibrary
+        picker.allowsEditing = true
+        
+        picker.delegate = self
+        
+        present(picker, animated: true)
     }
     
     func didTapImageView() {
         
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
-        //블로그 방문하기 버튼 - 스타일(default)
-        actionSheet.addAction(UIAlertAction(title: "앨범선택", style: .default, handler: {(ACTION:UIAlertAction) in
+        //앨범 선택 - 스타일(default)
+        actionSheet.addAction(UIAlertAction(title: "앨범선택", style: .default, handler: { [weak self] (ACTION:UIAlertAction) in
+            guard let self = self else { return }
+            self.didTapAlbumButton()
             print("앨범선택")
         }))
         
-        //이웃 끊기 버튼 - 스타일(destructive)
+        //사진삭제 - 스타일(destructive)
         actionSheet.addAction(UIAlertAction(title: "사진삭제", style: .destructive, handler: { [weak self] (ACTION:UIAlertAction) in
             guard let self = self else { return }
             self.mainImageView.image = nil
@@ -263,12 +265,12 @@ extension EditActivityViewController {
 
         memoTextView.text = detailViewModel.detailActivity?.memo
         titleTextFeild.text = detailViewModel.detailActivity?.title
-        totalPrice.text = detailViewModel.detailActivity?.amount
+        
         for i in 0..<(detailViewModel.detailActivity?.star ?? 0) {
-            starList[i].image = R.Icon.iconStarBlack24
+            starList[i].image = R.Icon.iconStarBlack16
         }
         
-        if let amount = Int(detailViewModel.detailActivity?.amount ?? "0") {
+        if let amount = detailViewModel.detailActivity?.amount {
             self.totalPrice.text = "\(amount.withCommas())원"
         }
         if let image = detailViewModel.mainImage {
@@ -294,6 +296,7 @@ extension EditActivityViewController: CustomAlertDelegate {
     func didAlertCacelButton() { }
 }
 
+// MARK: - Date Picker의 확인을 눌렀을 때
 extension EditActivityViewController: HomeViewProtocol {
     func willPickerDismiss(_ date: Date) {
         self.date = date
@@ -301,5 +304,20 @@ extension EditActivityViewController: HomeViewProtocol {
             guard let self = self else { return }
             self.titleText.text = self.navigationTitle
         }
+    }
+}
+
+extension EditActivityViewController {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: false) { [weak self] in
+            guard let self = self else { return }
+            let img = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
+            self.mainImageView.image = img
+            remakeConstraintsByMainImageView()
+        }
+        print("이미지 변경")
+    }
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        print("이미지를 선택하지 않고 취소")
     }
 }

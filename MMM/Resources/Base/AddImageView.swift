@@ -18,7 +18,7 @@ class AddImageView: UIView {
     
     private lazy var cancellable = Set<AnyCancellable>()
     
-    var viewModel: AddActivityViewModel?
+    var viewModel: EditActivityViewModel?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -94,7 +94,7 @@ extension AddImageView {
             .store(in: &cancellable)
     }
     
-    func setData(viewModel: AddActivityViewModel) {
+    func setData(viewModel: EditActivityViewModel) {
         self.viewModel = viewModel
     }
 }

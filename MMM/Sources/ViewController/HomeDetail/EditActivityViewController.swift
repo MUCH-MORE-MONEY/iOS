@@ -10,20 +10,28 @@ import Combine
 import Then
 import SnapKit
 
+//protocol EditViewProtocol: AnyObject {
+//    func willPickerDismiss(_ date: Date)
+//}
+
 class EditActivityViewController: BaseAddActivityViewController {
     // MARK: - UI Components
     private lazy var editIconImage = UIImageView()
     private lazy var titleStackView = UIStackView()
     private lazy var titleIcon = UIImageView()
     private lazy var titleText = UILabel()
-    
+    private var imagePickerVC = UIImagePickerController()
+
     // MARK: - Properties
+    private var cancellable = Set<AnyCancellable>()
     private var detailViewModel: HomeDetailViewModel
+    private var editViewModel = EditActivityViewModel()
     private var date: Date
     private var navigationTitle: String {
         return date.getFormattedDate(format: "yyyy.MM.dd")
     }
-    
+    private let alertTitle = "편집을 그만두시겠어요?"
+    private let alertContentText = "편집한 내용이 사라지니 유의해주세요!"
     
     init(viewModel: HomeDetailViewModel, date: Date) {
         self.detailViewModel = viewModel
@@ -39,6 +47,12 @@ class EditActivityViewController: BaseAddActivityViewController {
         super.viewDidLoad()
         setup()
     }
+    
+    override func didTapBackButton() {
+        super.didTapBackButton()
+        //FIXME: - showAlert에서 super.didTapBackButton()호출하면 문제생김
+//        showAlert(alertType: .canCancel, titleText: alertTitle, contentText: alertContentText, cancelButtonText: "닫기", confirmButtonText: "그만두기")
+    }
 }
 
 extension EditActivityViewController {
@@ -51,7 +65,7 @@ extension EditActivityViewController {
         
     private func setAttribute() {
         setCustomTitle()
-        view.addSubviews(editIconImage)
+        containerStackView.addArrangedSubview(editIconImage)
         
         editIconImage = editIconImage.then {
             $0.image = R.Icon.iconEditGray24
@@ -64,18 +78,160 @@ extension EditActivityViewController {
 
     }
     
-    private func setLayout() {
-        editIconImage.snp.makeConstraints {
-            $0.left.equalTo(activityType.snp.right).offset(15)
-            $0.centerY.equalTo(activityType)
-        }
-    }
+    private func setLayout() {  }
     
+    // MARK: - Bind
     private func bind() {
-        addViewModel.titleText = detailViewModel.detailActivity?.title ?? ""
-        addViewModel.memoText = detailViewModel.detailActivity?.memo ?? ""
+        editViewModel.title = detailViewModel.detailActivity?.title ?? ""
+        editViewModel.memo = detailViewModel.detailActivity?.memo ?? ""
+        editViewModel.amount = Int(detailViewModel.detailActivity?.amount ?? "0")!
+        editViewModel.createAt = detailViewModel.detailActivity?.createAt ?? ""
+        editViewModel.star = detailViewModel.detailActivity?.star ?? 0
+        editViewModel.type = detailViewModel.detailActivity?.type ?? ""
+        
+        editViewModel.isVaild
+            .sinkOnMainThread(receiveValue: {
+                if !$0 {
+                    self.titleTextFeild.text?.removeLast()
+                }
+            }).store(in: &cancellable)
+        
+        titleTextFeild.textPublisher
+            .receive(on: RunLoop.main)
+            .assign(to: \.title, on: editViewModel)
+            .store(in: &cancellable)
+        
+        memoTextView.textPublisher
+            .sink(receiveValue: { text in
+                self.editViewModel.memo = text
+            })
+            .store(in: &cancellable)
+        
+        cameraImageView.setData(viewModel: editViewModel)
+        editViewModel.$didTapAddButton
+            .sinkOnMainThread(receiveValue: { [weak self] in
+                guard let self = self else { return }
+                if $0 {
+                    editViewModel.requestPHPhotoLibraryAuthorization {
+                        DispatchQueue.main.async {
+                            self.didTapAlbumButton()
+                        }
+                    }
+                }
+            })
+            .store(in: &cancellable)
+        
+        titleStackView.gesturePublisher()
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+                self.didTapDateTitle()
+            }.store(in: &cancellable)
+        
+        containerStackView.gesturePublisher()
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+                self.didTapMoneyLabel()
+            }.store(in: &cancellable)
+        
+        starStackView.gesturePublisher()
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+                self.didTapStarLabel()
+            }.store(in: &cancellable)
+        
+        satisfyingLabel.gesturePublisher()
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+                self.didTapStarLabel()
+            }.store(in: &cancellable)
+        
+        mainImageView.gesturePublisher()
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+                self.didTapImageView()
+            }.store(in: &cancellable)
+        
+        saveButton.tapPublisher
+            .sinkOnMainThread(receiveValue: didTapSaveButton)
+            .store(in: &cancellable)
     }
 }
+
+// MARK: - Action
+extension EditActivityViewController {
+    func didTapDateTitle() {
+        let picker = DatePickerViewController()
+        let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
+        picker.delegate = bottomSheetVC
+        picker.homeDelegate = self
+        bottomSheetVC.modalPresentationStyle = .overFullScreen
+        bottomSheetVC.setSetting(height: 375)
+        self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
+    }
+    
+    func didTapMoneyLabel() {
+        let picker = DatePickerViewController()
+        let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
+        picker.delegate = bottomSheetVC
+        bottomSheetVC.modalPresentationStyle = .overFullScreen
+        bottomSheetVC.setSetting(height: 375)
+        self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
+    }
+    
+    func didTapStarLabel() {
+        let picker = StarPickerViewController()
+        let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
+        picker.delegate = bottomSheetVC
+        bottomSheetVC.modalPresentationStyle = .overFullScreen
+        bottomSheetVC.setSetting(height: 288)
+        self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
+    }
+    
+    func didTapSaveButton() {
+        detailViewModel.isShowToastMessage = true
+        self.navigationController?.popViewController(animated: true)
+        editViewModel.insertDetailActivity()
+    }
+    
+    func didTapAlbumButton() {
+        imagePickerVC.sourceType = .photoLibrary
+        imagePickerVC.allowsEditing = true
+        present(imagePickerVC, animated: true)
+    }
+    
+    func didTapImageView() {
+        
+        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        //블로그 방문하기 버튼 - 스타일(default)
+        actionSheet.addAction(UIAlertAction(title: "앨범선택", style: .default, handler: {(ACTION:UIAlertAction) in
+            print("앨범선택")
+        }))
+        
+        //이웃 끊기 버튼 - 스타일(destructive)
+        actionSheet.addAction(UIAlertAction(title: "사진삭제", style: .destructive, handler: { [weak self] (ACTION:UIAlertAction) in
+            guard let self = self else { return }
+            self.mainImageView.image = nil
+            print("사진삭제")
+            self.remakeConstraintsByCameraImageView()
+        }))
+        
+        //취소 버튼 - 스타일(cancel)
+        actionSheet.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        
+        self.present(actionSheet, animated: true, completion: nil)
+    }
+    
+    private func limitTextLength(_ text: String, maxLength: Int) -> String {
+        let length = text.count
+        if length > maxLength {
+            let endIndex = text.index(text.startIndex, offsetBy: maxLength)
+            return String(text[..<endIndex])
+        }
+        return text
+    }
+}
+
 
 // MARK: - UI Funcitons
 extension EditActivityViewController {
@@ -126,7 +282,24 @@ extension EditActivityViewController {
         } else {
             remakeConstraintsByCameraImageView()
         }
-        print("editView : \(mainImageView.frame.height)")
     }
 
+}
+
+extension EditActivityViewController: CustomAlertDelegate {
+    func didAlertCofirmButton() {
+        super.didTapBackButton()
+    }
+    
+    func didAlertCacelButton() { }
+}
+
+extension EditActivityViewController: HomeViewProtocol {
+    func willPickerDismiss(_ date: Date) {
+        self.date = date
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.titleText.text = self.navigationTitle
+        }
+    }
 }

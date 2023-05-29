@@ -63,7 +63,7 @@ extension BasePaddingLabel {
         case 5:
             self.text = "완전 만족해요"
         default:
-            break
+            self.text = "별점이 비어있어요"
         }
     }
 }

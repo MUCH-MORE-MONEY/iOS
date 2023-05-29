@@ -167,7 +167,7 @@ extension EditActivityViewController {
 // MARK: - Action
 extension EditActivityViewController {
     func didTapDateTitle() {
-        let picker = DatePickerViewController()
+        let picker = DatePickerViewController(date: date)
         let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
         picker.delegate = bottomSheetVC
         picker.homeDelegate = self

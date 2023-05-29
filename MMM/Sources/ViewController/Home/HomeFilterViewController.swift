@@ -77,7 +77,7 @@ private extension HomeFilterViewController {
 	
 	// Push Color BottomSheet
 	private func didTapColorButton(_ isEarn: Bool) {
-		let picker = DatePickerViewController()
+		let picker = DatePickerViewController(date: Date())
 		let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
 		picker.delegate = bottomSheetVC
 		bottomSheetVC.modalPresentationStyle = .overFullScreen

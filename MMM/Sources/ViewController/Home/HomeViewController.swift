@@ -86,7 +86,7 @@ extension HomeViewController {
 	// MARK: - Private
 	/// 달력 Picker Bottom Sheet
 	private func didTapMonthButton() {
-		let picker = DatePickerViewController()
+		let picker = DatePickerViewController(date: Date())
 		let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
 		picker.delegate = bottomSheetVC
 		picker.homeDelegate = self

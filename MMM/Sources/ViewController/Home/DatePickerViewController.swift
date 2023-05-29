@@ -14,6 +14,7 @@ final class DatePickerViewController: UIViewController {
 	// MARK: - Properties
 	private lazy var cancellables: Set<AnyCancellable> = .init()
 	private var isDark: Bool = false
+	private var date: Date
 	weak var delegate: BottomSheetChild?
 	weak var homeDelegate: HomeViewProtocol?
 
@@ -22,6 +23,17 @@ final class DatePickerViewController: UIViewController {
 	private lazy var titleLabel = UILabel()
 	private lazy var checkButton = UIButton()
 	private lazy var datePicker = UIDatePicker()
+	
+	init(date: Date) {
+		self.date = date
+		super.init(nibName: nil, bundle: nil)
+	}
+	
+	// Compile time에 error를 발생시키는 코드
+	@available(*, unavailable)
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -85,6 +97,7 @@ private extension DatePickerViewController {
 		}
 		
 		datePicker = datePicker.then {
+			$0.date = date
 			$0.preferredDatePickerStyle = .wheels
 			$0.datePickerMode = .date
 			$0.setValue(isDark ? R.Color.gray200 : R.Color.black, forKeyPath: "textColor")

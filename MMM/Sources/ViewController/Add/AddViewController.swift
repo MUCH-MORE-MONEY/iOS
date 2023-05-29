@@ -15,9 +15,12 @@ final class AddViewController: BaseViewController {
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 
 	// MARK: - UI Components
+	private lazy var scrollView = UIScrollView()
+	private lazy var contentView = UIView()
 	private lazy var typeLabel = UILabel()
 	private lazy var dateLabel = UILabel()
 	private lazy var priceLabel = UILabel()
+	private lazy var nextButton = UIButton()
 
 	public init() {
 		super.init(nibName: nil, bundle: nil)
@@ -57,6 +60,10 @@ private extension AddViewController {
 		view.backgroundColor = R.Color.gray900
 		title = "경제활동 추가"
 
+		scrollView = scrollView.then {
+			$0.showsVerticalScrollIndicator = false
+		}
+		
 		typeLabel = typeLabel.then {
 			$0.text = "이 경제활동의 성격은"
 			$0.font = R.Font.title3
@@ -80,24 +87,51 @@ private extension AddViewController {
 			$0.textAlignment = .left
 			$0.addImageViewOnRight(image: R.Icon.checkOrange24)
 		}
+		
+		nextButton = nextButton.then {
+			$0.setTitle("다음", for: .normal)
+			$0.setTitleColor(R.Color.gray100, for: .normal)
+			$0.setTitleColor(R.Color.gray100.withAlphaComponent(0.7), for: .highlighted)
+			$0.setBackgroundColor(R.Color.orange500, for: .normal)
+			$0.titleLabel?.font = R.Font.title1
+			$0.setButtonLayer()
+		}
 	}
 	
 	private func setLayout() {
-		view.addSubviews(typeLabel, dateLabel, priceLabel)
+		view.addSubviews(scrollView, nextButton)
+		scrollView.addSubview(contentView)
+		contentView.addSubviews(typeLabel, dateLabel, priceLabel)
+		
+		scrollView.snp.makeConstraints {
+			$0.top.equalTo(view.safeAreaLayoutGuide)
+			$0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(24)
+			$0.bottom.equalTo(nextButton.snp.top).offset(-16)
+		}
+		
+		contentView.snp.makeConstraints {
+			$0.edges.equalTo(view.safeAreaLayoutGuide)
+		}
 		
 		typeLabel.snp.makeConstraints {
-			$0.top.equalTo(view.safeAreaLayoutGuide).inset(40)
-			$0.leading.trailing.lessThanOrEqualTo(view.safeAreaLayoutGuide).inset(24)
+			$0.top.equalToSuperview().inset(40)
+			$0.leading.trailing.lessThanOrEqualToSuperview().inset(24)
 		}
 		
 		dateLabel.snp.makeConstraints {
-			$0.top.equalTo(view.safeAreaLayoutGuide).inset(155)
-			$0.leading.trailing.lessThanOrEqualTo(view.safeAreaLayoutGuide).inset(24)
+			$0.top.equalToSuperview().inset(155)
+			$0.leading.trailing.lessThanOrEqualToSuperview().inset(24)
 		}
 		
 		priceLabel.snp.makeConstraints {
-			$0.top.equalTo(view.safeAreaLayoutGuide).inset(277)
-			$0.leading.trailing.lessThanOrEqualTo(view.safeAreaLayoutGuide).inset(24)
+			$0.top.equalToSuperview().inset(277)
+			$0.leading.trailing.lessThanOrEqualToSuperview().inset(24)
+		}
+		
+		nextButton.snp.makeConstraints {
+			$0.leading.trailing.equalToSuperview().inset(24)
+			$0.bottom.equalTo(view.safeAreaLayoutGuide).inset(40)
+			$0.height.equalTo(56)
 		}
 	}
 }

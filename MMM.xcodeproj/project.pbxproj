@@ -571,10 +571,10 @@
 		C41193EF29D3A7BA003DBC15 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				6A04FA082A1C7EE80034C114 /* EditActivityViewModel.swift */,
 				C44807E229E649A300D4B090 /* HomeViewModel.swift */,
 				6A626BC42A0C87E800BDD5C0 /* HomeDetailViewModel.swift */,
 				C4C0CAF42A1C88DC00C41FF4 /* HomeHighlightViewModel.swift */,
-				6A04FA082A1C7EE80034C114 /* EditActivityViewModel.swift */,
 				6A1BAD4429E6550100818086 /* OnboardingViewModel.swift */,
 			);
 			path = ViewModels;

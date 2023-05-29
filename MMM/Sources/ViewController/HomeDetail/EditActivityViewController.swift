@@ -10,7 +10,11 @@ import Combine
 import Then
 import SnapKit
 
-class EditActivityViewController: BaseAddActivityViewController, UINavigationControllerDelegate {
+protocol StarPickerViewProtocol: AnyObject {
+    func willPickerDismiss(_ rate: Double)
+}
+
+final class EditActivityViewController: BaseAddActivityViewController, UINavigationControllerDelegate {
     // MARK: - UI Components
     private lazy var editIconImage = UIImageView()
     private lazy var titleStackView = UIStackView()
@@ -101,6 +105,15 @@ extension EditActivityViewController {
         editViewModel.createAt = detailViewModel.detailActivity?.createAt ?? ""
         editViewModel.star = detailViewModel.detailActivity?.star ?? 0
         editViewModel.type = detailViewModel.detailActivity?.type ?? ""
+        
+        editViewModel.$star
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] value in
+                guard let self = self else { return }
+                self.satisfyingLabel.setSatisfyingLabelEdit(by: value)
+                self.setStarImage(Int(value))
+            }.store(in: &cancellable)
+        
         
 		editViewModel.$type
 			.receive(on: DispatchQueue.main)
@@ -212,6 +225,7 @@ extension EditActivityViewController {
         let picker = StarPickerViewController()
         let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
         picker.delegate = bottomSheetVC
+        picker.starDelegate = self
         bottomSheetVC.modalPresentationStyle = .overFullScreen
         bottomSheetVC.setSetting(height: 288)
         self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
@@ -312,7 +326,6 @@ extension EditActivityViewController {
             mainImageView.image = image
         }
         hasImage = detailViewModel.hasImage
-        print("hasImage \(hasImage)")
 
         if hasImage {
             remakeConstraintsByMainImageView()
@@ -321,6 +334,15 @@ extension EditActivityViewController {
         }
     }
 
+    private func setStarImage(_ rate: Int) {
+        self.editViewModel.star = rate
+        for star in starList {
+            star.image = R.Icon.iconStarGray16
+        }
+        for i in 0..<rate {
+            self.starList[i].image = R.Icon.iconStarBlack16
+        }
+    }
 }
 
 extension EditActivityViewController: CustomAlertDelegate {
@@ -340,6 +362,17 @@ extension EditActivityViewController: HomeViewProtocol {
             let createdAt = date.getFormattedDate(format: "yyyyMMdd")
             self.editViewModel.createAt = createdAt
             self.titleText.text = self.navigationTitle
+        }
+    }
+}
+
+// MARK: - Star Picker의 확인을 눌렀을 때
+extension EditActivityViewController: StarPickerViewProtocol {
+    func willPickerDismiss(_ rate: Double) {
+        let rate = Int(rate)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            setStarImage(rate)
         }
     }
 }

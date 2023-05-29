@@ -221,9 +221,7 @@ extension DetailViewController {
                     viewModel.hasImage = false
                 }
                 
-                if let amount = Int(value.amount) {
-                    self.totalPrice.text = "\(amount.withCommas())원"
-                }
+                self.totalPrice.text = "\(value.amount.withCommas())원"
                 self.memoLabel.text = value.memo
                 self.satisfactionLabel.setSatisfyingLabel(by: value.star)
             }.store(in: &cancellable)

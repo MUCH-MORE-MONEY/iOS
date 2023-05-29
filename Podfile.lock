@@ -1,13 +1,13 @@
 PODS:
-  - Alamofire (5.6.4)
+  - Cosmos (23.0.0)
   - FSCalendar (2.8.4)
-  - Kingfisher (7.6.1)
+  - Kingfisher (7.7.0)
   - SnapKit (5.6.0)
   - SwiftKeychainWrapper (4.0.1)
   - Then (3.0.0)
 
 DEPENDENCIES:
-  - Alamofire
+  - Cosmos (~> 23.0)
   - FSCalendar
   - Kingfisher (~> 7.0)
   - SnapKit (~> 5.6.0)
@@ -16,7 +16,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - Alamofire
+    - Cosmos
     - FSCalendar
     - Kingfisher
     - SnapKit
@@ -24,13 +24,13 @@ SPEC REPOS:
     - Then
 
 SPEC CHECKSUMS:
-  Alamofire: 4e95d97098eacb88856099c4fc79b526a299e48c
+  Cosmos: b5c6a9a637e28a061b54c8f8b1d8529d7d4db73f
   FSCalendar: 2d1d0d9398f12d439f55c1fe0f01525b151b8260
-  Kingfisher: 93a3c6d0d551658a31e19f21747e1d15cb39d525
+  Kingfisher: f043ac666dfc96c1f37604f93effb45a7ee3a3e1
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
   SwiftKeychainWrapper: 807ba1d63c33a7d0613288512399cd1eda1e470c
   Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
 
-PODFILE CHECKSUM: de32e97d49de31e3afb340828c186b994451cc85
+PODFILE CHECKSUM: 1cd9704289859dbc5752c72b84ac1ae798f5cc6c
 
 COCOAPODS: 1.11.3

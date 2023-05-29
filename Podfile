@@ -10,9 +10,8 @@ target 'MMM' do
   pod 'Then'
   pod 'SwiftKeychainWrapper'
   pod 'FSCalendar'
-  pod 'Alamofire'
   pod 'Kingfisher', '~> 7.0'
-
+  pod 'Cosmos', '~> 23.0'
 
   target 'MMMTests' do
     inherit! :search_paths

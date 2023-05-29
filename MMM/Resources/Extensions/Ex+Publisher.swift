@@ -35,6 +35,13 @@ extension UIButton {
 			.map { _ in }
 			.eraseToAnyPublisher()
 	}
+	
+	/// Tag 값으로 분류
+	var tapPublisherByTag: AnyPublisher<Int, Never> {
+		controlPublisher(for: .touchUpInside)
+			.map { $0.tag }
+			.eraseToAnyPublisher()
+	}
 }
 
 extension UISwitch {

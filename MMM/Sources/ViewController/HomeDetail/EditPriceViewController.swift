@@ -1,8 +1,8 @@
 //
-//  HighlightViewController.swift
+//  EditPriceViewController.swift
 //  MMM
 //
-//  Created by geonhyeong on 2023/05/19.
+//  Created by geonhyeong on 2023/05/28.
 //
 
 import UIKit
@@ -10,11 +10,11 @@ import Combine
 import Then
 import SnapKit
 
-final class HighlightViewController: UIViewController {
+final class EditPriceViewController: UIViewController {
 	// MARK: - Properties
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 	private let viewModel = HomeHighlightViewModel()
-	private let homeViewModel: HomeViewModel
+	private let editViewModel: EditActivityViewModel
 	private var isEarn: Bool = true
 	weak var delegate: BottomSheetChild?
 	
@@ -24,9 +24,12 @@ final class HighlightViewController: UIViewController {
 	private lazy var warningLabel = UILabel()
 	private lazy var checkButton = UIButton()
 	private lazy var priceTextField = UITextField()
-	
-	init(homeViewModel: HomeViewModel) {
-		self.homeViewModel = homeViewModel
+	private lazy var buttonStackView = UIStackView()
+	private lazy var earnButton = UIButton()
+	private lazy var payButton = UIButton()
+
+	init(editViewModel: EditActivityViewModel) {
+		self.editViewModel = editViewModel
 		super.init(nibName: nil, bundle: nil)
 	}
 	
@@ -37,10 +40,10 @@ final class HighlightViewController: UIViewController {
 	}
 	
 	// MARK: - UI Components
-    override func viewDidLoad() {
-        super.viewDidLoad()
+	override func viewDidLoad() {
+		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
-    }
+	}
 	
 	override func viewDidLayoutSubviews() {
 		// Underline 호출
@@ -48,24 +51,19 @@ final class HighlightViewController: UIViewController {
 	}
 }
 //MARK: - Action
-extension HighlightViewController {
+extension EditPriceViewController {
 	// 외부에서 설정
 	func setData(isEarn: Bool) {
 		self.isEarn = isEarn
-		DispatchQueue.main.async {
-			self.titleLabel.text = isEarn ? "수입 하이라이트 금액" : "지출 하이라이트 금액"
-		}
 	}
 	
 	// MARK: - Private
 	// 확인 후 닫힐때
 	private func willDismiss() {
 		guard let value = Int(viewModel.priceInput) else { return }
-		if isEarn { // 수입
-			homeViewModel.earnStandard = value * 10_000 // 만 단위
-		} else { // 지출
-			homeViewModel.payStandard = value * 10_000
-		}
+		
+		editViewModel.type = isEarn ? "01" : "02" // 수입/지출
+		editViewModel.amount = value
 		delegate?.willDismiss()
 	}
 	
@@ -80,9 +78,30 @@ extension HighlightViewController {
 			priceTextField.shake()
 		}
 	}
+	
+	// 수입/지출 button
+	private func didTogglePriceTypeButton(_ tag: Int) {
+		earnButton = earnButton.then {
+			$0.setTitleColor(tag == 0 ? R.Color.white : R.Color.gray400, for: .normal)
+			$0.titleLabel?.font = tag == 0 ? R.Font.body2 : R.Font.prtendard(family: .medium, size: 14)
+			$0.backgroundColor = tag == 0 ? R.Color.orange500 : R.Color.white
+			$0.layer.borderWidth = tag == 0 ? 0 : 1
+			$0.layer.borderColor = tag == 0 ? .none : R.Color.gray500.cgColor
+		}
+		
+		payButton = payButton.then {
+			$0.setTitleColor(tag == 1 ? R.Color.white : R.Color.gray400, for: .normal)
+			$0.titleLabel?.font = tag == 1 ? R.Font.body2 : R.Font.prtendard(family: .medium, size: 14)
+			$0.backgroundColor = tag == 1 ? R.Color.yellow500 : R.Color.white
+			$0.layer.borderWidth = tag == 1 ? 0 : 1
+			$0.layer.borderColor = tag == 1 ? .none : R.Color.gray500.cgColor
+		}
+		
+		isEarn = tag == 0 ? true : false
+	}
 }
 //MARK: - Style & Layouts
-private extension HighlightViewController {
+private extension EditPriceViewController {
 	// 초기 셋업할 코드들
 	func setup() {
 		bind()
@@ -101,8 +120,16 @@ private extension HighlightViewController {
 			.assignOnMainThread(to: \.priceInput, on: viewModel)
 			.store(in: &cancellable)
 		
+		earnButton.tapPublisherByTag
+			.sinkOnMainThread(receiveValue: didTogglePriceTypeButton)
+			.store(in: &cancellable)
+
+		payButton.tapPublisherByTag
+			.sinkOnMainThread(receiveValue: didTogglePriceTypeButton)
+			.store(in: &cancellable)
+		
 		//MARK: output
-		viewModel.isVaild
+		viewModel.isVaildByWon
 			.sinkOnMainThread(receiveValue: setValid)
 			.store(in: &cancellable)
 	}
@@ -118,7 +145,7 @@ private extension HighlightViewController {
 		}
 		
 		titleLabel = titleLabel.then {
-			$0.text = "수입 하이라이트 금액"
+			$0.text = "금액 수정"
 			$0.font = R.Font.h5
 			$0.textColor = R.Color.black
 			$0.textAlignment = .left
@@ -140,7 +167,7 @@ private extension HighlightViewController {
 			$0.textColor = R.Color.gray900
 			$0.keyboardType = .numberPad 	// 숫자 키보드
 			$0.tintColor = R.Color.gray400 	// cursor color
-			$0.setNumberMode(unit: "만원") 	// 단위 설정
+			$0.setNumberMode(unit: " 원") 	// 단위 설정
 			$0.setClearButton(with: R.Icon.cancel, mode: .whileEditing) // clear 버튼
 			$0.becomeFirstResponder()
 		}
@@ -152,12 +179,40 @@ private extension HighlightViewController {
 			$0.textAlignment = .left
 			$0.isHidden = true
 		}
+		
+		buttonStackView = buttonStackView.then {
+			$0.spacing = 24
+			$0.distribution = .fillEqually
+		}
+		
+		earnButton = earnButton.then {
+			$0.setTitle("지출", for: .normal)
+			$0.setTitleColor(R.Color.white, for: .normal)
+			$0.titleLabel?.font = R.Font.body2
+			$0.backgroundColor = R.Color.orange500
+			$0.layer.cornerRadius = 4
+			$0.tag = 0
+		}
+		
+		payButton = payButton.then {
+			$0.setTitle("수입", for: .normal)
+			$0.setTitleColor(R.Color.gray400, for: .normal)
+			$0.titleLabel?.font = R.Font.prtendard(family: .medium, size: 14)
+			$0.backgroundColor = R.Color.white
+			$0.layer.borderWidth = 1
+			$0.layer.borderColor = R.Color.gray500.cgColor
+			$0.layer.cornerRadius = 4
+			$0.tag = 1
+		}
+		
+		didTogglePriceTypeButton(editViewModel.type == "01" ? 0 : 1)
 	}
 	
 	private func setLayout() {
-		view.addSubviews(stackView, priceTextField, warningLabel)
+		view.addSubviews(stackView, priceTextField, warningLabel, buttonStackView)
 		stackView.addArrangedSubviews(titleLabel, checkButton)
-
+		buttonStackView.addArrangedSubviews(earnButton, payButton)
+		
 		stackView.snp.makeConstraints {
 			$0.top.equalToSuperview()
 			$0.leading.equalToSuperview().inset(24)
@@ -172,6 +227,12 @@ private extension HighlightViewController {
 		warningLabel.snp.makeConstraints {
 			$0.top.equalTo(priceTextField.snp.bottom).offset(8)
 			$0.leading.trailing.equalToSuperview().inset(24)
+		}
+		
+		buttonStackView.snp.makeConstraints {
+			$0.top.equalTo(priceTextField.snp.bottom).offset(30)
+			$0.leading.trailing.equalToSuperview().inset(24)
+			$0.height.equalTo(36)
 		}
 	}
 }

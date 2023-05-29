@@ -30,7 +30,7 @@ final class HomeHeaderStackView: UIView {
 //MARK: - Action
 extension HomeHeaderStackView {
 	// 외부에서 설정
-	func setUp(isEarn: Bool, money: Int) {
+	func setData(isEarn: Bool, money: Int) {
 		titleLabel.text = isEarn ? "수익" : "지출"
 		titleLabel.textColor = isEarn ?  R.Color.blue500 : R.Color.orange500
 		moneyLabel.text = money.withCommas()

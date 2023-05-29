@@ -17,6 +17,10 @@ final class Constants {
         case token
         case authorization
         case email
+		case isHighlight
+		case isDailySetting
+		case earnStandard // 수입
+		case payStandard // 지출
     }
     
     /**
@@ -29,6 +33,14 @@ final class Constants {
     static func setKeychain(_ value: String, forKey keychainKey: KeychainKey) {
         KeychainWrapper.standard.set(value, forKey: keychainKey.rawValue)
     }
+	
+	static func setKeychain(_ value: Int, forKey keychainKey: KeychainKey) {
+		KeychainWrapper.standard.set(value, forKey: keychainKey.rawValue)
+	}
+	
+	static func setKeychain(_ value: Bool, forKey keychainKey: KeychainKey) {
+		KeychainWrapper.standard.set(value, forKey: keychainKey.rawValue)
+	}
 
     /**
      # getKeychainValue
@@ -39,6 +51,14 @@ final class Constants {
     static func getKeychainValue(forKey keychainKey: KeychainKey) -> String? {
         return KeychainWrapper.standard.string(forKey: keychainKey.rawValue)
     }
+	
+	static func getKeychainValueByInt(forKey keychainKey: KeychainKey) -> Int? {
+		return KeychainWrapper.standard.integer(forKey: keychainKey.rawValue)
+	}
+	
+	static func getKeychainValueByBool(forKey keychainKey: KeychainKey) -> Bool? {
+		return KeychainWrapper.standard.bool(forKey: keychainKey.rawValue)
+	}
     
     /**
      # removeKeychain

@@ -83,7 +83,19 @@ extension EditActivityViewController {
         editViewModel.createAt = detailViewModel.detailActivity?.createAt ?? ""
         editViewModel.star = detailViewModel.detailActivity?.star ?? 0
         editViewModel.type = detailViewModel.detailActivity?.type ?? ""
-        
+		
+		editViewModel.$type
+			.receive(on: DispatchQueue.main)
+			.sink { _ in
+				self.activityType.text = self.editViewModel.type
+			}.store(in: &cancellable)
+		
+		editViewModel.$amount
+			.receive(on: DispatchQueue.main)
+			.sink { _ in
+				self.totalPrice.text = self.editViewModel.amount.withCommas() + "원"
+			}.store(in: &cancellable)
+		
         editViewModel.isVaild
             .sinkOnMainThread(receiveValue: {
                 if !$0 {
@@ -107,7 +119,7 @@ extension EditActivityViewController {
             .sinkOnMainThread(receiveValue: { [weak self] in
                 guard let self = self else { return }
                 if $0 {
-                    editViewModel.requestPHPhotoLibraryAuthorization {
+                    self.editViewModel.requestPHPhotoLibraryAuthorization {
                         DispatchQueue.main.async {
                             self.didTapAlbumButton()
                         }
@@ -165,11 +177,11 @@ extension EditActivityViewController {
     }
     
     func didTapMoneyLabel() {
-        let picker = DatePickerViewController()
+        let picker = EditPriceViewController(editViewModel: editViewModel)
         let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
         picker.delegate = bottomSheetVC
         bottomSheetVC.modalPresentationStyle = .overFullScreen
-        bottomSheetVC.setSetting(height: 375)
+		bottomSheetVC.setSetting(height: 210, isDrag: false)
         self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
     }
     
@@ -313,7 +325,7 @@ extension EditActivityViewController {
             guard let self = self else { return }
             let img = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
             self.mainImageView.image = img
-            remakeConstraintsByMainImageView()
+            self.remakeConstraintsByMainImageView()
         }
         print("이미지 변경")
     }

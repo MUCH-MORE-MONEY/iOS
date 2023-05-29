@@ -36,11 +36,19 @@ final class HighlightViewController: UIViewController {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	// MARK: - UI Components
     override func viewDidLoad() {
         super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
     }
+	
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+		// cursor 위치 변경
+		if let newPosition = priceTextField.position(from: priceTextField.endOfDocument, offset: -2) {
+			let newSelectedRange = priceTextField.textRange(from: newPosition, to: newPosition)
+			priceTextField.selectedTextRange = newSelectedRange
+		}
+	}
 	
 	override func viewDidLayoutSubviews() {
 		// Underline 호출
@@ -135,6 +143,7 @@ private extension HighlightViewController {
 		}
 		
 		priceTextField = priceTextField.then {
+			$0.text = (isEarn ? (homeViewModel.earnStandard / 10_000).withCommas() : (homeViewModel.payStandard / 10_000).withCommas()) + "만원"
 			$0.placeholder = "만원 단위로 입력"
 			$0.font = R.Font.h2
 			$0.textColor = R.Color.gray900

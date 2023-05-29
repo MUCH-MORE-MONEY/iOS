@@ -39,10 +39,18 @@ final class EditPriceViewController: UIViewController {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	// MARK: - UI Components
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
+	}
+	
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+		// cursor 위치 변경
+		if let newPosition = priceTextField.position(from: priceTextField.endOfDocument, offset: -2) {
+			let newSelectedRange = priceTextField.textRange(from: newPosition, to: newPosition)
+			priceTextField.selectedTextRange = newSelectedRange
+		}
 	}
 	
 	override func viewDidLayoutSubviews() {
@@ -162,7 +170,8 @@ private extension EditPriceViewController {
 		}
 		
 		priceTextField = priceTextField.then {
-			$0.placeholder = "만원 단위로 입력"
+			$0.text = (isEarn ? editViewModel.amount.withCommas() : editViewModel.amount.withCommas()) + " 원"
+			$0.placeholder = "원 단위로 입력"
 			$0.font = R.Font.h2
 			$0.textColor = R.Color.gray900
 			$0.keyboardType = .numberPad 	// 숫자 키보드

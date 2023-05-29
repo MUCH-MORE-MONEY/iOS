@@ -16,13 +16,16 @@ final class EditActivityViewModel {
     // MARK: - API Request를 위한 Property Wrapper
     @Published var title = ""
     @Published var memo = ""
+    @Published var activityNumber = ""
     @Published var amount = 20000
     @Published var createAt = ""
     @Published var star = 5
     @Published var type = ""
-    @Published var binaryFileList: [APIParameters.InsertEconomicActivityReqDto.BinaryFileList] = []
+    @Published var fileNo = ""
+    @Published var binaryFileList:  [APIParameters.UpdateReqDto.BinaryFileList] = []
     
     @Published var data: InsertResDto?
+    @Published var editResponse: UpdateResDto?
     // MARK: - Porperties
     private var cancellable: Set<AnyCancellable> = []
     lazy var isVaild: AnyPublisher<Bool, Never> = $title
@@ -73,5 +76,35 @@ final class EditActivityViewModel {
         }.store(in: &cancellable)
     }
     
+    
+//    경제활동 수정 API
+//    파일유지->fileNo req body에 유지,
+//    파일 삭제-> fileNo=''
+//    파일 변경 -> fileNo='' and BinaryFileList 추가
+    func updateDetailActivity() {
+        APIClient.dispatch(APIRouter.UpdateReqDto(
+            headers: APIHeader.Default(token: TempToken.token),
+            body: APIParameters.UpdateReqDto(
+                binaryFileList: binaryFileList,
+                amount: amount,
+                type: type,
+                title: title,
+                memo: memo,
+                activityNumber: activityNumber,
+                createAt: createAt,
+                star: star)))
+        .sink { data in
+            switch data {
+            case .failure(_):
+                break
+            case .finished:
+                break
+            }
+        } receiveValue: { response in
+            self.editResponse = response
+            print(self.editResponse)
+        }.store(in: &cancellable)
+
+    }
 }
 

@@ -105,6 +105,8 @@ extension EditActivityViewController {
         editViewModel.createAt = detailViewModel.detailActivity?.createAt ?? ""
         editViewModel.star = detailViewModel.detailActivity?.star ?? 0
         editViewModel.type = detailViewModel.detailActivity?.type ?? ""
+        editViewModel.fileNo = detailViewModel.detailActivity?.fileNo ?? ""
+        
         
         editViewModel.$star
             .receive(on: DispatchQueue.main)
@@ -263,6 +265,8 @@ extension EditActivityViewController {
         actionSheet.addAction(UIAlertAction(title: "사진삭제", style: .destructive, handler: { [weak self] (ACTION:UIAlertAction) in
             guard let self = self else { return }
             self.mainImageView.image = nil
+            editViewModel.binaryFileList = []
+            editViewModel.fileNo = ""
             print("사진삭제")
             self.remakeConstraintsByCameraImageView()
         }))

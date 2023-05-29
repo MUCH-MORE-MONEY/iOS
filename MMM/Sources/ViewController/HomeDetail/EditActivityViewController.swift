@@ -107,7 +107,7 @@ extension EditActivityViewController {
             .sinkOnMainThread(receiveValue: { [weak self] in
                 guard let self = self else { return }
                 if $0 {
-                    editViewModel.requestPHPhotoLibraryAuthorization {
+                    self.editViewModel.requestPHPhotoLibraryAuthorization {
                         DispatchQueue.main.async {
                             self.didTapAlbumButton()
                         }
@@ -313,7 +313,7 @@ extension EditActivityViewController {
             guard let self = self else { return }
             let img = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
             self.mainImageView.image = img
-            remakeConstraintsByMainImageView()
+            self.remakeConstraintsByMainImageView()
         }
         print("이미지 변경")
     }

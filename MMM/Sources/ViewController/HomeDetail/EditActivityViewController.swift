@@ -16,7 +16,8 @@ class EditActivityViewController: BaseAddActivityViewController, UINavigationCon
     private lazy var titleStackView = UIStackView()
     private lazy var titleIcon = UIImageView()
     private lazy var titleText = UILabel()
-
+    private lazy var deleteActivityButtonItem = UIBarButtonItem()
+    private lazy var deleteButton = UIButton()
     // MARK: - Properties
     private var cancellable = Set<AnyCancellable>()
     private var detailViewModel: HomeDetailViewModel
@@ -25,8 +26,11 @@ class EditActivityViewController: BaseAddActivityViewController, UINavigationCon
     private var navigationTitle: String {
         return date.getFormattedDate(format: "yyyy.MM.dd")
     }
-    private let alertTitle = "편집을 그만두시겠어요?"
-    private let alertContentText = "편집한 내용이 사라지니 유의해주세요!"
+    private let editAlertTitle = "편집을 그만두시겠어요?"
+    private let editAlertContentText = "편집한 내용이 사라지니 유의해주세요!"
+    
+    private let deleteAlertTitle = "경제활동을 삭제하시겠어요?"
+    private let deleteAlertContentText = "활동이 영구적으로 사라지니 유의해주세요!"
     
     init(viewModel: HomeDetailViewModel, date: Date) {
         self.detailViewModel = viewModel
@@ -59,7 +63,17 @@ extension EditActivityViewController {
     }
         
     private func setAttribute() {
+        navigationItem.rightBarButtonItem = deleteActivityButtonItem
+        
         setCustomTitle()
+        deleteActivityButtonItem = deleteActivityButtonItem.then {
+            $0.customView = deleteButton
+        }
+        
+        deleteButton = deleteButton.then {
+            $0.setTitle("삭제", for: .normal)
+        }
+        
         containerStackView.addArrangedSubview(editIconImage)
         
         editIconImage = editIconImage.then {
@@ -77,6 +91,10 @@ extension EditActivityViewController {
     
     // MARK: - Bind
     private func bind() {
+        deleteButton.tapPublisher
+            .sinkOnMainThread(receiveValue: didTapDeleteButton)
+            .store(in: &cancellable)
+        
         editViewModel.title = detailViewModel.detailActivity?.title ?? ""
         editViewModel.memo = detailViewModel.detailActivity?.memo ?? ""
         editViewModel.amount = detailViewModel.detailActivity?.amount ?? 0
@@ -166,6 +184,11 @@ extension EditActivityViewController {
 
 // MARK: - Action
 extension EditActivityViewController {
+    func didTapDeleteButton() {
+        //FIXME: - showAlert에서 super.didTapBackButton()호출하면 문제생김
+        showAlert(alertType: .canCancel, titleText: deleteAlertTitle, contentText: deleteAlertContentText, cancelButtonText: "닫기", confirmButtonText: "그만두기")
+    }
+    
     func didTapDateTitle() {
         let picker = DatePickerViewController()
         let bottomSheetVC = BottomSheetViewController(contentViewController: picker)

@@ -96,6 +96,7 @@
 		C44807E529E7E76800D4B090 /* Ex+UIControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44807E429E7E76800D4B090 /* Ex+UIControl.swift */; };
 		C4C0CAF52A1C88DC00C41FF4 /* HomeHighlightViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0CAF42A1C88DC00C41FF4 /* HomeHighlightViewModel.swift */; };
 		C4C0CB022A23A07000C41FF4 /* EditPriceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0CB012A23A06F00C41FF4 /* EditPriceViewController.swift */; };
+		C4C0CB092A2474F900C41FF4 /* Ex+UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0CB082A2474F900C41FF4 /* Ex+UILabel.swift */; };
 		C4D7FC872A08942E00565291 /* Monthly.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D7FC862A08942E00565291 /* Monthly.swift */; };
 		C4D7FC892A08A61C00565291 /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D7FC882A08A61C00565291 /* CalendarCell.swift */; };
 		C4DBAA2C29DBCB8B00D1BB97 /* Ex+Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBAA2B29DBCB8B00D1BB97 /* Ex+Button.swift */; };
@@ -229,6 +230,7 @@
 		C4C0CAFB2A1F201100C41FF4 /* Ex+UITextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UITextView.swift"; sourceTree = "<group>"; };
 		C4C0CAFD2A1F205100C41FF4 /* Ex+UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UITextField.swift"; sourceTree = "<group>"; };
 		C4C0CB012A23A06F00C41FF4 /* EditPriceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPriceViewController.swift; sourceTree = "<group>"; };
+		C4C0CB082A2474F900C41FF4 /* Ex+UILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UILabel.swift"; sourceTree = "<group>"; };
 		C4D7FC862A08942E00565291 /* Monthly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Monthly.swift; sourceTree = "<group>"; };
 		C4D7FC882A08A61C00565291 /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
 		C4DBAA2B29DBCB8B00D1BB97 /* Ex+Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Button.swift"; sourceTree = "<group>"; };
@@ -535,6 +537,7 @@
 				C44807E429E7E76800D4B090 /* Ex+UIControl.swift */,
 				C41193DF29D287E6003DBC15 /* Ex+UIDevice.swift */,
 				C4199DE02A00F164006E5DA8 /* Ex+UIImageView.swift */,
+				C4C0CB082A2474F900C41FF4 /* Ex+UILabel.swift */,
 				C4EA5B4329FA2810008D1564 /* Ex+UIStackView.swift */,
 				6AB1151229EE6D9E00D3B813 /* Ex+UITabBar.swift */,
 				C41193F629D3D954003DBC15 /* Ex+UITableView.swift */,
@@ -986,6 +989,7 @@
 				C433A07129EE5516008B26DF /* EconomicActivity.swift in Sources */,
 				C41193E429D287E6003DBC15 /* Ex+Font.swift in Sources */,
 				C41193E529D287E6003DBC15 /* Ex+UIDevice.swift in Sources */,
+				C4C0CB092A2474F900C41FF4 /* Ex+UILabel.swift in Sources */,
 				6A1322F12A089B2900CEEC81 /* BasePaddingLabel.swift in Sources */,
 				C4D7FC872A08942E00565291 /* Monthly.swift in Sources */,
 				C411940729D53EA0003DBC15 /* NavigationController.swift in Sources */,

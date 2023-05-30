@@ -21,7 +21,7 @@ final class EditActivityViewModel {
     @Published var star = 5
     @Published var type = ""
     @Published var binaryFileList: [APIParameters.InsertEconomicActivityReqDto.BinaryFileList] = []
-	@Published var date: Date = Date() // date picker
+	@Published var date: Date = Date() // picker
 
     @Published var data: InsertResDto?
     // MARK: - Porperties

@@ -49,7 +49,7 @@ extension UITextField {
 	}
 	
 	@objc func clear(sender: AnyObject) {
-		self.text = ""
+		self.text = tag == 0 ? "원" : ""
 		sendActions(for: .editingChanged)
 	}
 }
@@ -72,9 +72,9 @@ extension UITextField: UITextFieldDelegate {
 		numberFormatter.numberStyle = .decimal // 콤마 생성
 		
 		guard let price = Int(newStringOnlyNumber), let result = numberFormatter.string(from: NSNumber(value: price)) else {
-			self.text = ""
+			self.text = tag == 0 ? "원" : ""
 			sendActions(for: .editingChanged)
-			return true
+			return false
 		}
 		
 		// 단위에 따른 unuit, 색상 변경
@@ -93,8 +93,8 @@ extension UITextField: UITextFieldDelegate {
 		}
 
 		// 단위에 따른 color 변경
-		
 		self.textColor = price > limit ? R.Color.red500 : self.tag == 0 ? R.Color.white : R.Color.gray900
+		
 		if price > limit {
 //			DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
 //				self.text = limit.withCommas() + unit

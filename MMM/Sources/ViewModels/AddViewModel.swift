@@ -10,7 +10,7 @@ import Combine
 
 final class AddViewModel {
 	// MARK: - Property Warraper
-	@Published var date: Date = Date()
+	@Published var date: Date?
 
 	// MARK: - Private properties
 	private var cancellable: Set<AnyCancellable> = .init()

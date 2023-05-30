@@ -218,6 +218,12 @@ private extension AddViewController {
 	
 	private func bind() {
 		//MARK: input
+		view.gesturePublisher()
+			.sinkOnMainThread(receiveValue: { _ in
+				// Keyboard 내리기
+				self.view.endEditing(true)
+			}).store(in: &cancellable)
+		
 		priceTextField.textPublisher
 			.map{String(Array($0).filter{$0.isNumber})} // 숫자만 추출
 			.assignOnMainThread(to: \.priceInput, on: viewModel)

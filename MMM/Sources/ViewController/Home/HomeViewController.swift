@@ -50,6 +50,7 @@ final class HomeViewController: UIViewController {
 
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
+		viewModel.getDailyList(preDate.getFormattedYMD())
 		viewModel.getMonthlyList(calendar.currentPage.getFormattedYM())
 		calendar.reloadData()
 		tableView.reloadData()

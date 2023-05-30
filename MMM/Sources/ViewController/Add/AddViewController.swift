@@ -403,6 +403,7 @@ private extension AddViewController {
 		priceView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(40)
 			$0.leading.trailing.equalToSuperview()
+			$0.bottom.lessThanOrEqualTo(nextFirstButton.snp.top).offset(16)
 			$0.height.equalTo(70)
 		}
 		

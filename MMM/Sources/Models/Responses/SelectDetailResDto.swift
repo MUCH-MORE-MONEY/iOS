@@ -16,6 +16,7 @@ struct SelectDetailResDto: Codable {
     let title: String           // 제목
     let memo: String            // subtitle
     let createAt: String        // 생성일
+    let fileNo: String
     let imageUrl: String        // image url
     let star: Int               // 별 개수
     
@@ -29,6 +30,7 @@ struct SelectDetailResDto: Codable {
         case memo = "economicActivityNm"
         case createAt = "economicActivityYMD"
         case imageUrl = "fileUrl"
+        case fileNo
         case star = "valueScore"
     }
 }

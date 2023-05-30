@@ -32,6 +32,7 @@ struct APIParameters{
         var dateYM: Int?
     }
     
+    /// 새로운 경제활동 등록을 위한 Request
     struct InsertEconomicActivityReqDto: Encodable {
         var binaryFileList: [BinaryFileList]
         var amount: Int
@@ -54,6 +55,44 @@ struct APIParameters{
         struct BinaryFileList: Codable {
             let binaryData: String
             let fileNm: String
+        }
+    }
+    
+    /// 기존 경제활동 수정을 위한 Request
+    struct UpdateReqDto: Encodable {
+        var binaryFileList: [BinaryFileList]
+        var amount: Int
+        var type: String
+        var title: String
+        var memo: String
+        var id: String
+        var createAt: String
+        var fileNo: String
+        var star: Int
+        
+        enum CodingKeys: String, CodingKey {
+            case binaryFileList
+            case type = "economicActivityDvcd"
+            case amount = "economicActivityAmt"
+            case title = "economicActivityMm"
+            case memo = "economicActivityNm"
+            case id = "economicActivityNo"
+            case createAt = "economicActivityYMD"
+            case star = "valueScore"
+        }
+        
+        struct BinaryFileList: Codable {
+            let binaryData: String
+            let fileNm: String
+        }
+    }
+
+    /// 경제활동 삭제를 위한 Request
+    struct DeleteReqDto: Encodable {
+        var id: String
+        
+        enum CodingKeys: String, CodingKey {
+            case id = "economicActivityNo"
         }
     }
 }

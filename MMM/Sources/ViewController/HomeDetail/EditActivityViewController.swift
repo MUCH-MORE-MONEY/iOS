@@ -10,13 +10,18 @@ import Combine
 import Then
 import SnapKit
 
-class EditActivityViewController: BaseAddActivityViewController, UINavigationControllerDelegate {
+protocol StarPickerViewProtocol: AnyObject {
+    func willPickerDismiss(_ rate: Double)
+}
+
+final class EditActivityViewController: BaseAddActivityViewController, UINavigationControllerDelegate {
     // MARK: - UI Components
     private lazy var editIconImage = UIImageView()
     private lazy var titleStackView = UIStackView()
     private lazy var titleIcon = UIImageView()
     private lazy var titleText = UILabel()
-
+    private lazy var deleteActivityButtonItem = UIBarButtonItem()
+    private lazy var deleteButton = UIButton()
     // MARK: - Properties
     private var cancellable = Set<AnyCancellable>()
     private var detailViewModel: HomeDetailViewModel
@@ -25,8 +30,11 @@ class EditActivityViewController: BaseAddActivityViewController, UINavigationCon
     private var navigationTitle: String {
         return date.getFormattedDate(format: "yyyy.MM.dd")
     }
-    private let alertTitle = "편집을 그만두시겠어요?"
-    private let alertContentText = "편집한 내용이 사라지니 유의해주세요!"
+    private let editAlertTitle = "편집을 그만두시겠어요?"
+    private let editAlertContentText = "편집한 내용이 사라지니 유의해주세요!"
+    
+    private let deleteAlertTitle = "경제활동을 삭제하시겠어요?"
+    private let deleteAlertContentText = "활동이 영구적으로 사라지니 유의해주세요!"
     
     init(viewModel: HomeDetailViewModel, date: Date) {
         self.detailViewModel = viewModel
@@ -59,7 +67,17 @@ extension EditActivityViewController {
     }
         
     private func setAttribute() {
+        navigationItem.rightBarButtonItem = deleteActivityButtonItem
+        
         setCustomTitle()
+        deleteActivityButtonItem = deleteActivityButtonItem.then {
+            $0.customView = deleteButton
+        }
+        
+        deleteButton = deleteButton.then {
+            $0.setTitle("삭제", for: .normal)
+        }
+        
         containerStackView.addArrangedSubview(editIconImage)
         
         editIconImage = editIconImage.then {
@@ -77,17 +95,31 @@ extension EditActivityViewController {
     
     // MARK: - Bind
     private func bind() {
+        // MARK: - detailVM -> editVM 데이터 주입
         editViewModel.title = detailViewModel.detailActivity?.title ?? ""
         editViewModel.memo = detailViewModel.detailActivity?.memo ?? ""
         editViewModel.amount = detailViewModel.detailActivity?.amount ?? 0
         editViewModel.createAt = detailViewModel.detailActivity?.createAt ?? ""
         editViewModel.star = detailViewModel.detailActivity?.star ?? 0
         editViewModel.type = detailViewModel.detailActivity?.type ?? ""
-		
+        editViewModel.fileNo = detailViewModel.detailActivity?.fileNo ?? ""
+        editViewModel.id = detailViewModel.detailActivity?.id ?? ""
+        
+        print(detailViewModel.detailActivity)
+        
+        // MARK: - UI Bind
+        editViewModel.$star
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] value in
+                guard let self = self else { return }
+                self.satisfyingLabel.setSatisfyingLabelEdit(by: value)
+                self.setStarImage(Int(value))
+            }.store(in: &cancellable)
+        
 		editViewModel.$type
 			.receive(on: DispatchQueue.main)
 			.sink { _ in
-				self.activityType.text = self.editViewModel.type
+                self.activityType.text = self.editViewModel.type == "01" ? "수입" : "지출"
 			}.store(in: &cancellable)
 		
 		editViewModel.$amount
@@ -128,6 +160,7 @@ extension EditActivityViewController {
             })
             .store(in: &cancellable)
         
+        // MARK: - Gesture Publisher
         titleStackView.gesturePublisher()
             .receive(on: DispatchQueue.main)
             .sink { _ in
@@ -158,8 +191,14 @@ extension EditActivityViewController {
                 self.didTapImageView()
             }.store(in: &cancellable)
         
+        
+        // MARK: - CRUD Publisher
         saveButton.tapPublisher
             .sinkOnMainThread(receiveValue: didTapSaveButton)
+            .store(in: &cancellable)
+        
+        deleteButton.tapPublisher
+            .sinkOnMainThread(receiveValue: didTapDeleteButton)
             .store(in: &cancellable)
 		
 		// Date Picker의 값을 받아옴
@@ -195,6 +234,7 @@ extension EditActivityViewController {
         let picker = StarPickerViewController()
         let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
         picker.delegate = bottomSheetVC
+        picker.starDelegate = self
         bottomSheetVC.modalPresentationStyle = .overFullScreen
         bottomSheetVC.setSetting(height: 288)
         self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
@@ -203,7 +243,24 @@ extension EditActivityViewController {
     func didTapSaveButton() {
         detailViewModel.isShowToastMessage = true
         self.navigationController?.popViewController(animated: true)
-        editViewModel.insertDetailActivity()
+//        print(editViewModel.binaryFileList)
+        print(editViewModel.amount)
+        print(editViewModel.type)
+        print(editViewModel.title)
+        print(editViewModel.memo)
+        print(editViewModel.id)
+        print(editViewModel.createAt)
+        print(editViewModel.fileNo)
+        print(editViewModel.star)
+        editViewModel.updateDetailActivity()
+    }
+    
+    func didTapDeleteButton() {
+        //FIXME: - showAlert에서 super.didTapBackButton()호출하면 문제생김
+//        showAlert(alertType: .canCancel, titleText: deleteAlertTitle, contentText: deleteAlertContentText, cancelButtonText: "닫기", confirmButtonText: "그만두기")
+        self.navigationController?.popViewController(animated: true)
+        
+        editViewModel.deleteDetailActivity()
     }
     
     func didTapAlbumButton() {
@@ -232,6 +289,8 @@ extension EditActivityViewController {
         actionSheet.addAction(UIAlertAction(title: "사진삭제", style: .destructive, handler: { [weak self] (ACTION:UIAlertAction) in
             guard let self = self else { return }
             self.mainImageView.image = nil
+            editViewModel.binaryFileList = []
+            editViewModel.fileNo = ""
             print("사진삭제")
             self.remakeConstraintsByCameraImageView()
         }))
@@ -295,7 +354,6 @@ extension EditActivityViewController {
             mainImageView.image = image
         }
         hasImage = detailViewModel.hasImage
-        print("hasImage \(hasImage)")
 
         if hasImage {
             remakeConstraintsByMainImageView()
@@ -304,6 +362,15 @@ extension EditActivityViewController {
         }
     }
 
+    private func setStarImage(_ rate: Int) {
+        self.editViewModel.star = rate
+        for star in starList {
+            star.image = R.Icon.iconStarGray16
+        }
+        for i in 0..<rate {
+            self.starList[i].image = R.Icon.iconStarBlack16
+        }
+    }
 }
 
 extension EditActivityViewController: CustomAlertDelegate {
@@ -314,12 +381,41 @@ extension EditActivityViewController: CustomAlertDelegate {
     func didAlertCacelButton() { }
 }
 
+// MARK: - Date Picker의 확인을 눌렀을 때
+extension EditActivityViewController: HomeViewProtocol {
+    func willPickerDismiss(_ date: Date) {
+        self.date = date
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            let createdAt = date.getFormattedDate(format: "yyyyMMdd")
+            self.editViewModel.createAt = createdAt
+            self.titleText.text = self.navigationTitle
+        }
+    }
+}
+
+// MARK: - Star Picker의 확인을 눌렀을 때
+extension EditActivityViewController: StarPickerViewProtocol {
+    func willPickerDismiss(_ rate: Double) {
+        let rate = Int(rate)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            setStarImage(rate)
+        }
+    }
+}
+
 extension EditActivityViewController {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: false) { [weak self] in
             guard let self = self else { return }
+            editViewModel.binaryFileList = []
             let img = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
             self.mainImageView.image = img
+            self.editViewModel.fileNo = ""
+            guard let data = img?.jpegData(compressionQuality: 1.0) else { return }
+            self.editViewModel.binaryFileList.append(APIParameters.UpdateReqDto.BinaryFileList(binaryData: String(decoding: data, as: UTF8.self), fileNm: "\(img?.pngData()).jpeg"))
+            print(self.editViewModel.binaryFileList.count)
             self.remakeConstraintsByMainImageView()
         }
         print("이미지 변경")

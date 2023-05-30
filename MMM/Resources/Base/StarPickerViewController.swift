@@ -9,28 +9,26 @@ import UIKit
 import Then
 import SnapKit
 import Combine
+import Cosmos
 
-class StarPickerViewController: UIViewController {
+final class StarPickerViewController: UIViewController {
     // MARK: - UI Components
     private lazy var headerStackView = UIStackView()
     private lazy var titleLabel = UILabel()
     private lazy var checkButton = UIButton()
     private lazy var satisfyingLabel = BasePaddingLabel(padding: UIEdgeInsets(top: 4, left: 12, bottom: 4, right: 12))
-    private lazy var starStackView = UIStackView()
-    private lazy var starList: [UIImageView] = [
-        UIImageView(image: R.Icon.iconStarGray48),
-        UIImageView(image: R.Icon.iconStarGray48),
-        UIImageView(image: R.Icon.iconStarGray48),
-        UIImageView(image: R.Icon.iconStarGray48),
-        UIImageView(image: R.Icon.iconStarGray48)
-    ]
+    private lazy var cosmosView = CosmosView()
     // MARK: - Properties
     private var cancellable = Set<AnyCancellable>()
     weak var delegate: BottomSheetChild?
+    weak var starDelegate: StarPickerViewProtocol?
+    // MARK: - Property Wrapper
+    private var rating = 0.0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-
+        
     }
 }
 
@@ -39,17 +37,22 @@ extension StarPickerViewController {
     private func setup() {
         setAttribute()
         setLayout()
+        bind()
     }
     
     private func setAttribute() {
-        view.addSubviews(headerStackView, satisfyingLabel, starStackView)
-        headerStackView.addSubviews(titleLabel, checkButton)
+        view.addSubviews(headerStackView, satisfyingLabel, cosmosView)
         
         headerStackView.addArrangedSubviews(titleLabel, checkButton)
-        
-        starList.forEach {
-            $0.contentMode = .scaleAspectFit
-            starStackView.addArrangedSubview($0)
+
+        cosmosView = cosmosView.then {
+            $0.settings.filledImage = R.Icon.iconStarBlack48
+            $0.settings.emptyImage = R.Icon.iconStarGray48
+            $0.settings.totalStars = 5
+            $0.settings.starSize = 32
+            $0.settings.starMargin = 23.08
+            $0.settings.fillMode = .full
+            $0.rating = rating
         }
         
         headerStackView = headerStackView.then {
@@ -80,12 +83,6 @@ extension StarPickerViewController {
             $0.textColor = R.Color.gray100
             $0.font = R.Font.body4
         }
-        
-        starStackView = starStackView.then {
-            $0.axis = .horizontal
-            $0.spacing = 23
-            $0.distribution = .fillEqually
-        }
     }
     
     private func setLayout() {
@@ -100,15 +97,39 @@ extension StarPickerViewController {
             $0.centerX.equalToSuperview()
         }
         
-        starStackView.snp.makeConstraints {
+        cosmosView.snp.makeConstraints {
             $0.top.equalTo(satisfyingLabel.snp.bottom).offset(12)
-            $0.left.right.equalToSuperview().inset(52)
-            $0.height.equalTo(48)
+            $0.centerX.equalToSuperview()
         }
     }
     
     // MARK: - Bind
     private func bind() {
+        checkButton.tapPublisher
+            .sinkOnMainThread(receiveValue: willDismiss)
+            .store(in: &cancellable)
         
+        cosmosView.didTouchCosmos = { [weak self] in
+            guard let self = self else { return }
+            self.rating = $0
+//            print("Rated: \(self.rating)")
+            DispatchQueue.main.async {
+                if self.rating != 0.0 {
+                    self.checkButton.setTitleColor(R.Color.black, for: .normal)
+                }
+                self.satisfyingLabel.setSatisfyingLabelEdit(by: Int(self.rating))
+            }
+        }
+    }
+}
+
+// MARK: - Action
+extension StarPickerViewController {
+    private func willDismiss() {
+        if self.rating != 0.0 {
+            delegate?.willDismiss()
+            starDelegate?.willPickerDismiss(rating)
+            print(rating)
+        }
     }
 }

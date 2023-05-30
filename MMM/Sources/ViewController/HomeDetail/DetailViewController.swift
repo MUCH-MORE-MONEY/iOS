@@ -47,6 +47,11 @@ class DetailViewController: BaseDetailViewController {
         super.viewDidLoad()
         setup()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.fetchDetailActivity(id: economicActivityId[index])
+    }
 }
 
 extension DetailViewController {

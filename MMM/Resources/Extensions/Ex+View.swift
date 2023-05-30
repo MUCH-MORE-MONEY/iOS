@@ -41,7 +41,7 @@ extension UIView {
         }
     }
     
-    struct GesturePublisher: Publisher {
+    class GesturePublisher: Publisher {
         typealias Output = GestureType
         typealias Failure = Never
         private let view: UIView

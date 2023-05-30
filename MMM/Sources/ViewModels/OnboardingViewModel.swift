@@ -8,7 +8,6 @@
 import Foundation
 import Combine
 import UIKit
-import Alamofire
 import SwiftKeychainWrapper
 
 final class OnboardingViewModel {

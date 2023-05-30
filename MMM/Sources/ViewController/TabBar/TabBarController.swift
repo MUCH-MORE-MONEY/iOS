@@ -31,12 +31,34 @@ final class TabBarController: UITabBarController {
         
         setupTabBar()
     }
+	private lazy var preSelect: Int = 0
+}
+
+extension TabBarController: UITabBarControllerDelegate {
+	func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+		//Tab tapped
+		guard let viewControllers = tabBarController.viewControllers else { return }
+		let tappedIndex = viewControllers.firstIndex(of: viewController)!
+		
+		if tappedIndex == 1 {
+			selectedIndex = preSelect
+			if let vc = self.viewControllers?[preSelect] as? NavigationController {
+				
+				vc.hidesBottomBarWhenPushed = true	// TabBar Above
+
+				vc.viewControllers.first!.navigationController?.pushViewController(AddViewController(), animated: true)
+			}
+		} else {
+			preSelect = selectedIndex
+		}
+	}
 }
 
 // MARK: - Style & Layout
 extension TabBarController {
     
 	private func setupTabBar() {
+		delegate = self
         tabBar.backgroundColor = R.Color.gray100
 		tabBar.tintColor = R.Color.gray900
 		tabBar.isTranslucent = false						// 불투명도

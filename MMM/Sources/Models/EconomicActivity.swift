@@ -9,7 +9,7 @@ import Foundation
 
 struct EconomicActivity: Codable, Identifiable, Equatable {
 	let id: String
-	let type: String		// 수입(01)/지출(02)
+	let type: String		// 지출(01)/수입(02)
 	let groupNo: String		// 속해 있는 그룹
 	let title: String		// 이름
 	let memo: String		// 메모

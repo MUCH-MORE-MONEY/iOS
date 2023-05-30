@@ -97,7 +97,7 @@ extension EditPriceViewController {
 		payButton = payButton.then {
 			$0.setTitleColor(tag == 1 ? R.Color.white : R.Color.gray400, for: .normal)
 			$0.titleLabel?.font = tag == 1 ? R.Font.body2 : R.Font.prtendard(family: .medium, size: 14)
-			$0.backgroundColor = tag == 1 ? R.Color.yellow500 : R.Color.white
+			$0.backgroundColor = tag == 1 ? R.Color.blue500 : R.Color.white
 			$0.layer.borderWidth = tag == 1 ? 0 : 1
 			$0.layer.borderColor = tag == 1 ? .none : R.Color.gray500.cgColor
 		}

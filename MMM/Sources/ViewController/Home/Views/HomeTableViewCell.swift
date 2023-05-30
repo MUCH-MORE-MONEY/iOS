@@ -52,7 +52,7 @@ extension HomeTableViewCell {
 	func setData(data: EconomicActivity) {
 		// 이미지 비동기 처리
 		DispatchQueue.main.async {
-			self.thumbnailImageView.setImage(urlStr: data.imageUrl, defaultImage: data.type == "01" ? R.Icon.coinEarn40 : R.Icon.coinPay40)
+			self.thumbnailImageView.setImage(urlStr: data.imageUrl, defaultImage: data.type == "01" ? R.Icon.coinPay40 : R.Icon.coinEarn40)
 		}
 		
 		// star의 갯수
@@ -62,7 +62,7 @@ extension HomeTableViewCell {
 
 		titleLabel.text = data.title
 		memoLabel.text = data.memo
-		plusMinusImage.image = data.type == "01" ? R.Icon.plus16 : R.Icon.minus16
+		plusMinusImage.image = data.type == "01" ? R.Icon.minus16 : R.Icon.plus16
 		priceLabel.text = data.amount.withCommas()
 	}
 }

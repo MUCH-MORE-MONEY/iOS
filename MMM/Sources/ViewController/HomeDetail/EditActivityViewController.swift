@@ -119,7 +119,8 @@ extension EditActivityViewController {
 		editViewModel.$type
 			.receive(on: DispatchQueue.main)
 			.sink { _ in
-                self.activityType.text = self.editViewModel.type == "01" ? "수입" : "지출"
+                self.activityType.text = self.editViewModel.type == "01" ? "지출" : "수입"
+				self.activityType.backgroundColor = self.editViewModel.type == "01" ? R.Color.orange500 : R.Color.blue500
 			}.store(in: &cancellable)
 		
 		editViewModel.$amount
@@ -289,8 +290,8 @@ extension EditActivityViewController {
         actionSheet.addAction(UIAlertAction(title: "사진삭제", style: .destructive, handler: { [weak self] (ACTION:UIAlertAction) in
             guard let self = self else { return }
             self.mainImageView.image = nil
-            editViewModel.binaryFileList = []
-            editViewModel.fileNo = ""
+			self.editViewModel.binaryFileList = []
+			self.editViewModel.fileNo = ""
             print("사진삭제")
             self.remakeConstraintsByCameraImageView()
         }))
@@ -381,26 +382,13 @@ extension EditActivityViewController: CustomAlertDelegate {
     func didAlertCacelButton() { }
 }
 
-// MARK: - Date Picker의 확인을 눌렀을 때
-extension EditActivityViewController: HomeViewProtocol {
-    func willPickerDismiss(_ date: Date) {
-        self.date = date
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            let createdAt = date.getFormattedDate(format: "yyyyMMdd")
-            self.editViewModel.createAt = createdAt
-            self.titleText.text = self.navigationTitle
-        }
-    }
-}
-
 // MARK: - Star Picker의 확인을 눌렀을 때
 extension EditActivityViewController: StarPickerViewProtocol {
     func willPickerDismiss(_ rate: Double) {
         let rate = Int(rate)
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            setStarImage(rate)
+			self.setStarImage(rate)
         }
     }
 }
@@ -409,7 +397,7 @@ extension EditActivityViewController {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: false) { [weak self] in
             guard let self = self else { return }
-            editViewModel.binaryFileList = []
+			self.editViewModel.binaryFileList = []
             let img = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
             self.mainImageView.image = img
             self.editViewModel.fileNo = ""

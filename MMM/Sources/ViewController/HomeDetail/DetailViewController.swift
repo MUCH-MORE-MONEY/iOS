@@ -204,7 +204,8 @@ extension DetailViewController {
             .sinkOnMainThread { [weak self] value in
                 guard let self = self, let value = value else { return }
                 self.titleLabel.text = value.title
-                
+				self.activityType.text = self.viewModel.detailActivity?.type == "01" ? "지출" : "수입"
+				self.activityType.backgroundColor = self.viewModel.detailActivity?.type == "01" ? R.Color.orange500 : R.Color.blue500
                 self.starList.forEach {
                     $0.image = R.Icon.iconStarGray16
                 }

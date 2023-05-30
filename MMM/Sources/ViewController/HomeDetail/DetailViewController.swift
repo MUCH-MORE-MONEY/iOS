@@ -50,7 +50,9 @@ class DetailViewController: BaseDetailViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel.fetchDetailActivity(id: economicActivityId[index])
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.viewModel.fetchDetailActivity(id: self.economicActivityId[self.index])
+        }
     }
 }
 

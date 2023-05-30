@@ -246,6 +246,8 @@ extension EditActivityViewController {
         self.navigationController?.popViewController(animated: true)
 //        print(editViewModel.binaryFileList)
         print(editViewModel.amount)
+        print("binary count : ",editViewModel.binaryFileList.count)
+        print("binary name : ",editViewModel.binaryFileList.first!.fileNm)
         print(editViewModel.type)
         print(editViewModel.title)
         print(editViewModel.memo)

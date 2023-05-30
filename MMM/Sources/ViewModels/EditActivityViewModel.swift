@@ -132,7 +132,7 @@ final class EditActivityViewModel {
             }
         } receiveValue: { response in
             self.editResponse = response
-            print(self.editResponse)
+            print(response)
         }.store(in: &cancellable)
     }
     

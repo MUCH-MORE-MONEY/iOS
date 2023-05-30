@@ -93,8 +93,8 @@ extension UITextField: UITextFieldDelegate {
 		}
 
 		// 단위에 따른 color 변경
+	
 		self.textColor = price > limit ? R.Color.red500 : self.tag == 0 ? R.Color.white : R.Color.gray900
-		
 		if price > limit {
 //			DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
 //				self.text = limit.withCommas() + unit

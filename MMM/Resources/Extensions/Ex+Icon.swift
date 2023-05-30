@@ -24,6 +24,7 @@ public extension MMMResource {
 		public static let cancel = UIImage(named: "iconCancel", in: .main, compatibleWith: nil)
 		public static let checkActive = UIImage(named: "iconCheckActive", in: .main, compatibleWith: nil)
 		public static let checkInActive = UIImage(named: "iconCheckInActive", in: .main, compatibleWith: nil)
+		public static let checkOrange24 = UIImage(named: "iconCheckOrange24", in: .main, compatibleWith: nil)
 		public static let coinEarn40 = UIImage(named: "iconCoinEarn40", in: .main, compatibleWith: nil)
 		public static let coinPay40 = UIImage(named: "iconCoinPay40", in: .main, compatibleWith: nil)
 		public static let delete24 = UIImage(named: "iconDelete24", in: .main, compatibleWith: nil)
@@ -40,6 +41,7 @@ public extension MMMResource {
 		public static let star48 = UIImage(named: "iconStar48", in: .main, compatibleWith: nil)
         public static let iconEditBlack24 = UIImage(named: "iconEditBlack24", in: .main, compatibleWith: nil)
         public static let iconEditGray24 = UIImage(named: "iconEditGray24", in: .main, compatibleWith: nil)
+		
 		// MARK: - FAB
 		public static let onboarding1 = UIImage(named: "iconOnboarding1", in: .main, compatibleWith: nil)
 		public static let onboarding2 = UIImage(named: "iconOnboarding2", in: .main, compatibleWith: nil)
@@ -52,7 +54,6 @@ public extension MMMResource {
         public static let iconStarGray16 = UIImage(named: "iconStarGray16", in: .main, compatibleWith: nil)
         public static let iconStarBlack48 = UIImage(named: "iconStarBlack48", in: .main, compatibleWith: nil)
         public static let iconStarGray48 = UIImage(named: "iconStarGray48", in: .main, compatibleWith: nil)
-
 		
         // MARK: - TabBar Items
         public static let iconGroupActive = UIImage(named: "iconGroupActive", in: .main, compatibleWith: nil)

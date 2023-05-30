@@ -8,6 +8,15 @@
 import UIKit
 
 extension UIButton {
+	/// 밑줄
+	func setUnderLine(color: UIColor) {
+		let border = CALayer()
+		border.frame = CGRect(x: 0, y: self.frame.size.height + 4, width: self.frame.width, height: 2)
+		border.borderColor = color.cgColor
+		border.borderWidth = 1
+		self.layer.addSublayer(border)
+	}
+	
 	//MARK: state 별로 UIButton의 background color 변경
 	func setBackgroundColor(_ color: UIColor, for state: UIControl.State) {
 		UIGraphicsBeginImageContext(CGSize(width: 1.0, height: 1.0))

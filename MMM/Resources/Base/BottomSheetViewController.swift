@@ -266,7 +266,7 @@ private extension BottomSheetViewController {
 		NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
 		
 		bgView = bgView.then {
-			$0.backgroundColor = R.Color.gray900 // backgroundColor
+			$0.backgroundColor = R.Color.black // backgroundColor
 			$0.alpha = 0.0 // 스르륵 나타나는 애니메이션 효과를 위해 초기값 0.0으로 지정
 			$0.isUserInteractionEnabled = true
 		}

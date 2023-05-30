@@ -62,16 +62,6 @@ extension HomeFilterView {
 		colorButton.backgroundColor = isOn ? isEarn ? R.Color.blue400 : R.Color.orange400 : R.Color.gray400
 		colorButton.isEnabled = isOn
 	}
-	
-	//MARK: - Private
-	// Set Standard 하이라이트
-	@objc private func handleTap(sender: UITapGestureRecognizer) {
-		// viewModel.isHighlight가 Toggle이 유무
-		guard let viewModel = self.viewModel, viewModel.isHighlight else { return }
-		
-		// 수입/지출에 따른 viewModel (수입:true, 지출:false)
-		viewModel.didTapHighlightButton = self.isEarn
-	}
 }
 //MARK: - Style & Layouts
 private extension HomeFilterView {
@@ -84,6 +74,16 @@ private extension HomeFilterView {
 	
 	private func bind() {
 		//MARK: input
+		// Set Standard 하이라이트
+		standardView.gesturePublisher()
+			.sinkOnMainThread(receiveValue: { _ in 
+				// viewModel.isHighlight가 Toggle이 유무
+				guard let viewModel = self.viewModel, viewModel.isHighlight else { return }
+				
+				// 수입/지출에 따른 viewModel (수입:true, 지출:false)
+				viewModel.didTapHighlightButton = self.isEarn
+			}).store(in: &cancellable)
+		
 		// 임시: 다음 버전에서 적용
 //		colorButton.tapPublisher
 //			.sinkOnMainThread(receiveValue: {
@@ -101,11 +101,6 @@ private extension HomeFilterView {
 		titleLabel = titleLabel.then {
 			$0.font = R.Font.title3
 			$0.textColor = R.Color.gray300
-		}
-		
-		standardView = standardView.then {
-			let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.handleTap))
-			$0.addGestureRecognizer(tapGesture)
 		}
 		
 		standardLabel = standardLabel.then {

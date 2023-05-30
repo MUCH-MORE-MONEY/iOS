@@ -161,16 +161,22 @@ extension EditActivityViewController {
         saveButton.tapPublisher
             .sinkOnMainThread(receiveValue: didTapSaveButton)
             .store(in: &cancellable)
+		
+		// Date Picker의 값을 받아옴
+		editViewModel.$date
+			.sinkOnMainThread(receiveValue: { [weak self] date in
+				self?.date = date
+				self?.titleText.text = self?.navigationTitle
+			}).store(in: &cancellable)
     }
 }
 
 // MARK: - Action
 extension EditActivityViewController {
     func didTapDateTitle() {
-        let picker = DatePickerViewController()
+		let picker = DatePickerViewController(viewModel: editViewModel, date: date)
         let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
         picker.delegate = bottomSheetVC
-        picker.homeDelegate = self
         bottomSheetVC.modalPresentationStyle = .overFullScreen
         bottomSheetVC.setSetting(height: 375)
         self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
@@ -306,17 +312,6 @@ extension EditActivityViewController: CustomAlertDelegate {
     }
     
     func didAlertCacelButton() { }
-}
-
-// MARK: - Date Picker의 확인을 눌렀을 때
-extension EditActivityViewController: HomeViewProtocol {
-    func willPickerDismiss(_ date: Date) {
-        self.date = date
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.titleText.text = self.navigationTitle
-        }
-    }
 }
 
 extension EditActivityViewController {

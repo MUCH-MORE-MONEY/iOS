@@ -17,7 +17,6 @@ final class DatePickerViewController: UIViewController {
 	private var date: Date
 	private var viewModel: AnyObject
 	weak var delegate: BottomSheetChild?
-//	weak var homeDelegate: HomeViewProtocol?
 
 	// MARK: - UI Components
 	private lazy var stackView = UIStackView() // 날짜 이동 Label, 확인 Button
@@ -40,6 +39,14 @@ final class DatePickerViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setup()
+	}
+	
+	override func viewWillDisappear(_ animated: Bool) {
+		super.viewWillDisappear(animated)
+		if viewModel is AddViewModel {
+			let vm = viewModel as! AddViewModel
+			vm.date = vm.date ?? Date()
+		}
 	}
 }
 //MARK: - Action

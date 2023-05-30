@@ -148,6 +148,7 @@ extension AddViewController {
 	// 수입/지출 button
 	private func didTogglePriceTypeButton(_ tag: Int) {
 		view.endEditing(true)
+		
 		earnButton = earnButton.then {
 			$0.setTitleColor(tag == 0 ? R.Color.white : R.Color.gray400, for: .normal)
 			$0.titleLabel?.font = tag == 0 ? R.Font.body2 : R.Font.prtendard(family: .medium, size: 14)

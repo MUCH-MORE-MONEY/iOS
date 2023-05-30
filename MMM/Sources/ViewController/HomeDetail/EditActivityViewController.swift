@@ -105,6 +105,8 @@ extension EditActivityViewController {
         editViewModel.fileNo = detailViewModel.detailActivity?.fileNo ?? ""
         editViewModel.id = detailViewModel.detailActivity?.id ?? ""
         
+        print(detailViewModel.detailActivity)
+        
         // MARK: - UI Bind
         editViewModel.$star
             .receive(on: DispatchQueue.main)
@@ -235,6 +237,15 @@ extension EditActivityViewController {
     func didTapSaveButton() {
         detailViewModel.isShowToastMessage = true
         self.navigationController?.popViewController(animated: true)
+//        print(editViewModel.binaryFileList)
+        print(editViewModel.amount)
+        print(editViewModel.type)
+        print(editViewModel.title)
+        print(editViewModel.memo)
+        print(editViewModel.id)
+        print(editViewModel.createAt)
+        print(editViewModel.fileNo)
+        print(editViewModel.star)
         editViewModel.updateDetailActivity()
     }
     
@@ -242,6 +253,7 @@ extension EditActivityViewController {
         //FIXME: - showAlert에서 super.didTapBackButton()호출하면 문제생김
 //        showAlert(alertType: .canCancel, titleText: deleteAlertTitle, contentText: deleteAlertContentText, cancelButtonText: "닫기", confirmButtonText: "그만두기")
         self.navigationController?.popViewController(animated: true)
+        
         editViewModel.deleteDetailActivity()
     }
     
@@ -391,8 +403,13 @@ extension EditActivityViewController {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: false) { [weak self] in
             guard let self = self else { return }
+            editViewModel.binaryFileList = []
             let img = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
             self.mainImageView.image = img
+            self.editViewModel.fileNo = ""
+            guard let data = img?.jpegData(compressionQuality: 1.0) else { return }
+            self.editViewModel.binaryFileList.append(APIParameters.UpdateReqDto.BinaryFileList(binaryData: String(decoding: data, as: UTF8.self), fileNm: "\(img?.pngData()).jpeg"))
+            print(self.editViewModel.binaryFileList.count)
             self.remakeConstraintsByMainImageView()
         }
         print("이미지 변경")

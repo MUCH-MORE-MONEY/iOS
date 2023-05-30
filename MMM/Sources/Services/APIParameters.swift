@@ -67,6 +67,7 @@ struct APIParameters{
         var memo: String
         var id: String
         var createAt: String
+        var fileNo: String
         var star: Int
         
         enum CodingKeys: String, CodingKey {

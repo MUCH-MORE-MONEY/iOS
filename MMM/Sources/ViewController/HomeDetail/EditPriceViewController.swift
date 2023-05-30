@@ -13,9 +13,9 @@ import SnapKit
 final class EditPriceViewController: UIViewController {
 	// MARK: - Properties
 	private lazy var cancellable: Set<AnyCancellable> = .init()
-	private let viewModel = HomeHighlightViewModel()
+	private let viewModel = PriceViewModel()
 	private let editViewModel: EditActivityViewModel
-	private var isEarn: Bool = true
+	private lazy var isEarn: Bool = true
 	weak var delegate: BottomSheetChild?
 	
 	// MARK: - UI Components
@@ -39,15 +39,20 @@ final class EditPriceViewController: UIViewController {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	// MARK: - UI Components
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
 	}
-	
+
 	override func viewDidLayoutSubviews() {
 		// Underline 호출
 		priceTextField.setUnderLine(color: R.Color.orange500)
+		
+		// cursor 위치 변경
+		if let newPosition = priceTextField.position(from: priceTextField.endOfDocument, offset: -2) {
+			let newSelectedRange = priceTextField.textRange(from: newPosition, to: newPosition)
+			priceTextField.selectedTextRange = newSelectedRange
+		}
 	}
 }
 //MARK: - Action
@@ -162,7 +167,10 @@ private extension EditPriceViewController {
 		}
 		
 		priceTextField = priceTextField.then {
-			$0.placeholder = "만원 단위로 입력"
+			let price = editViewModel.amount
+			$0.text = price.withCommas() + " 원"
+			viewModel.priceInput = String(price)
+			$0.placeholder = "원 단위로 입력"
 			$0.font = R.Font.h2
 			$0.textColor = R.Color.gray900
 			$0.keyboardType = .numberPad 	// 숫자 키보드

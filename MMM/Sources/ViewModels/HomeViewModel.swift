@@ -15,6 +15,7 @@ final class HomeViewModel {
 	@Published var monthlyList: [Monthly] = []
 	@Published var didTapHighlightButton: Bool?	// bottom sheet
 	@Published var didTapColorButton: Bool?		// bottom sheet
+	@Published var date: Date = Date()
 	@Published var isHighlight: Bool = Constants.getKeychainValueByBool(forKey: Constants.KeychainKey.isHighlight) ?? true {
 		// 금액 하이라이트 설정
 		didSet {

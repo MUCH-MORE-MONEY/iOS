@@ -23,7 +23,8 @@ final class EditActivityViewModel {
     @Published var type = ""
     @Published var fileNo = ""
     @Published var binaryFileList:  [APIParameters.UpdateReqDto.BinaryFileList] = []
-    
+  	@Published var date: Date = Date() // picker
+
     @Published var data: InsertResDto?
     @Published var editResponse: UpdateResDto?
     @Published var deleteResponse: DeleteResDto?

@@ -13,7 +13,7 @@ import SnapKit
 final class HighlightViewController: UIViewController {
 	// MARK: - Properties
 	private lazy var cancellable: Set<AnyCancellable> = .init()
-	private let viewModel = HomeHighlightViewModel()
+	private let viewModel = PriceViewModel()
 	private let homeViewModel: HomeViewModel
 	private var isEarn: Bool = true
 	weak var delegate: BottomSheetChild?
@@ -36,7 +36,6 @@ final class HighlightViewController: UIViewController {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	// MARK: - UI Components
     override func viewDidLoad() {
         super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
@@ -45,6 +44,12 @@ final class HighlightViewController: UIViewController {
 	override func viewDidLayoutSubviews() {
 		// Underline 호출
 		priceTextField.setUnderLine(color: R.Color.orange500)
+		
+		// cursor 위치 변경
+		if let newPosition = priceTextField.position(from: priceTextField.endOfDocument, offset: -2) {
+			let newSelectedRange = priceTextField.textRange(from: newPosition, to: newPosition)
+			priceTextField.selectedTextRange = newSelectedRange
+		}
 	}
 }
 //MARK: - Action
@@ -135,6 +140,9 @@ private extension HighlightViewController {
 		}
 		
 		priceTextField = priceTextField.then {
+			let price = isEarn ? homeViewModel.earnStandard / 10_000 : homeViewModel.payStandard / 10_000
+			$0.text = price.withCommas() + "만원"
+			viewModel.priceInput = String(price)
 			$0.placeholder = "만원 단위로 입력"
 			$0.font = R.Font.h2
 			$0.textColor = R.Color.gray900

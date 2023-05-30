@@ -74,18 +74,7 @@ private extension HomeFilterViewController {
 		bottomSheetVC.setSetting(height: 174, isDrag: false)
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
 	}
-	
-	// Push Color BottomSheet
-	private func didTapColorButton(_ isEarn: Bool) {
-		let picker = DatePickerViewController()
-		let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
-		picker.delegate = bottomSheetVC
-		bottomSheetVC.modalPresentationStyle = .overFullScreen
-		bottomSheetVC.setSetting(height: 375)
-		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
-	}
 }
-
 //MARK: - Style & Layouts
 private extension HomeFilterViewController {
 	// 초기 셋업할 코드들
@@ -110,12 +99,6 @@ private extension HomeFilterViewController {
 			.sinkOnMainThread(receiveValue: { value in
 				guard let value = value else { return }
 				self.didTapHighlightButton(value)
-			}).store(in: &cancellable)
-		
-		viewModel.$didTapColorButton
-			.sinkOnMainThread(receiveValue: { value in
-				guard let value = value else { return }
-				self.didTapColorButton(value)
 			}).store(in: &cancellable)
 		
 		// 수입

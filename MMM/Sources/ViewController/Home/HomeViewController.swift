@@ -11,10 +11,6 @@ import Then
 import SnapKit
 import FSCalendar
 
-protocol HomeViewProtocol: AnyObject {
-	func willPickerDismiss(_ date: Date)
-}
-
 final class HomeViewController: UIViewController {
 	// MARK: - Properties
 	private lazy var cancellable: Set<AnyCancellable> = .init()
@@ -54,6 +50,8 @@ final class HomeViewController: UIViewController {
 
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
+		viewModel.getDailyList(preDate.getFormattedYMD())
+		viewModel.getMonthlyList(calendar.currentPage.getFormattedYM())
 		calendar.reloadData()
 		tableView.reloadData()
 	}
@@ -86,12 +84,11 @@ extension HomeViewController {
 	// MARK: - Private
 	/// 달력 Picker Bottom Sheet
 	private func didTapMonthButton() {
-		let picker = DatePickerViewController()
+		let picker = DatePickerViewController(viewModel: viewModel, date: Date())
 		let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
 		picker.delegate = bottomSheetVC
-		picker.homeDelegate = self
 		bottomSheetVC.modalPresentationStyle = .overFullScreen
-		bottomSheetVC.setSetting(height: 375)
+		bottomSheetVC.setSetting(height: 360)
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
 	}
 	
@@ -134,12 +131,6 @@ private extension HomeViewController {
 			.throttle(for: .seconds(1), scheduler: DispatchQueue.main, latest: false) // 처음에 구독한 시점에 value를 한번 바로 방출
 			.sinkOnMainThread(receiveValue: didTapFilterButton)
 			.store(in: &cancellable)
-
-		// 예시
-//		UITextField().textPublisher
-//			.receive(on: DispatchQueue.main)
-//			.assign(to: \.passwordInput, on: viewModel)
-//			.store(in: &cancellables)
 		
 		//MARK: output
 		viewModel.$dailyList
@@ -153,6 +144,11 @@ private extension HomeViewController {
 				self?.calendar.reloadData()
 			}).store(in: &cancellable)
 				
+		viewModel.$date
+			.sinkOnMainThread(receiveValue: { [weak self] date in
+				self?.didSelectDate(date)
+			}).store(in: &cancellable)
+
 //		viewModel
 //			.transform(input: viewModel.input.eraseToAnyPublisher())
 //			.sinkOnMainThread(receiveValue: { [weak self] state in
@@ -479,11 +475,5 @@ extension HomeViewController: UITableViewDelegate {
 
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
-	}
-}
-extension HomeViewController: HomeViewProtocol {
-	// 닫힐때
-	func willPickerDismiss(_ date: Date) {
-		self.didSelectDate(date)
 	}
 }

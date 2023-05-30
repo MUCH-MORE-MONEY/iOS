@@ -14,8 +14,9 @@ final class DatePickerViewController: UIViewController {
 	// MARK: - Properties
 	private lazy var cancellables: Set<AnyCancellable> = .init()
 	private var isDark: Bool = false
+	private var date: Date
+	private var viewModel: AnyObject
 	weak var delegate: BottomSheetChild?
-	weak var homeDelegate: HomeViewProtocol?
 
 	// MARK: - UI Components
 	private lazy var stackView = UIStackView() // 날짜 이동 Label, 확인 Button
@@ -23,9 +24,29 @@ final class DatePickerViewController: UIViewController {
 	private lazy var checkButton = UIButton()
 	private lazy var datePicker = UIDatePicker()
 	
+	init(viewModel: AnyObject, date: Date = Date()) {
+		self.date = date
+		self.viewModel = viewModel
+		super.init(nibName: nil, bundle: nil)
+	}
+	
+	// Compile time에 error를 발생시키는 코드
+	@available(*, unavailable)
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setup()
+	}
+	
+	override func viewWillDisappear(_ animated: Bool) {
+		super.viewWillDisappear(animated)
+		if viewModel is AddViewModel {
+			let vm = viewModel as! AddViewModel
+			vm.date = vm.date ?? Date()
+		}
 	}
 }
 //MARK: - Action
@@ -40,8 +61,20 @@ extension DatePickerViewController {
 	// MARK: - Private
 	// 닫힐때
 	private func willDismiss() {
+		switch viewModel {
+		case is HomeViewModel:
+			let viewModel = viewModel as! HomeViewModel
+			viewModel.date = datePicker.date
+		case is EditActivityViewModel:
+			let viewModel = viewModel as! EditActivityViewModel
+			viewModel.date = datePicker.date
+		case is AddViewModel:
+			let viewModel = viewModel as! AddViewModel
+			viewModel.date = datePicker.date
+		default:
+			break
+		}
 		delegate?.willDismiss()
-		homeDelegate?.willPickerDismiss(datePicker.date)
 	}
 }
 //MARK: - Style & Layouts
@@ -85,6 +118,7 @@ private extension DatePickerViewController {
 		}
 		
 		datePicker = datePicker.then {
+			$0.date = date
 			$0.preferredDatePickerStyle = .wheels
 			$0.datePickerMode = .date
 			$0.setValue(isDark ? R.Color.gray200 : R.Color.black, forKeyPath: "textColor")

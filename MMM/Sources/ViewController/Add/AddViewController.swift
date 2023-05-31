@@ -13,8 +13,9 @@ import SnapKit
 final class AddViewController: BaseViewController {
 	// MARK: - Properties
 	private let viewModel = PriceViewModel()
-	private let addViewModel = AddViewModel()
+//	private let addViewModel = AddViewModel()
 	private lazy var cancellable: Set<AnyCancellable> = .init()
+    private var addViewModel = EditActivityViewModel()
 	private var bottomConstraint: Constraint!
 	private var bottomPadding: CGFloat {
 		return UIApplication.shared.windows.first{$0.isKeyWindow}?.safeAreaInsets.bottom ?? 0
@@ -136,7 +137,7 @@ extension AddViewController {
 	private func didTapDateButton() {
 		view.endEditing(true)
 		setLayoutPriceView()
-		let picker = DatePickerViewController(viewModel: addViewModel, date: addViewModel.date ?? Date())
+        let picker = DatePickerViewController(viewModel: addViewModel, date: addViewModel.date ?? Date())
 		let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
 		picker.delegate = bottomSheetVC
 		picker.setData(title: "경제활동 날짜 선택", isDark: true)
@@ -207,6 +208,10 @@ extension AddViewController {
 		
 		animator.startAnimation()
 	}
+    
+    private func didTapNextSecondButton() {
+        navigationController?.pushViewController(AddDetailViewController(viewModel: addViewModel), animated: true)
+    }
 }
 //MARK: - Style & Layouts
 private extension AddViewController {
@@ -246,6 +251,10 @@ private extension AddViewController {
 			.sinkOnMainThread(receiveValue: didTogglePriceTypeButton)
 			.store(in: &cancellable)
 		
+        nextSecondButton.tapPublisher
+            .sinkOnMainThread(receiveValue: didTapNextSecondButton)
+            .store(in: &cancellable)
+        
 		//MARK: output
 		viewModel.isVaildByWon
 			.sinkOnMainThread(receiveValue: setValid)

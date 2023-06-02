@@ -19,15 +19,15 @@ final class EditActivityViewModel {
     @Published var id = ""
     @Published var amount = 20000
     @Published var createAt = ""
-    @Published var star = 5
+    @Published var star = 0
     @Published var type = ""
     @Published var fileNo = ""
     @Published var binaryFileList:  [APIParameters.UpdateReqDto.BinaryFileList] = []
   	@Published var date: Date? // picker
 
-    @Published var data: InsertResDto?
     @Published var editResponse: UpdateResDto?
     @Published var deleteResponse: DeleteResDto?
+    @Published var insertResponse: InsertResDto?
     // MARK: - Porperties
     private var cancellable: Set<AnyCancellable> = []
     lazy var isVaild: AnyPublisher<Bool, Never> = $title
@@ -73,8 +73,8 @@ final class EditActivityViewModel {
                 break
             }
         } receiveValue: { response in
-            self.data = response
-            print(self.data)
+            self.insertResponse = response
+            print(self.insertResponse)
         }.store(in: &cancellable)
     }
     

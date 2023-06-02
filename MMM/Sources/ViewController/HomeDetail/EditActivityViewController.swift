@@ -9,6 +9,7 @@ import UIKit
 import Combine
 import Then
 import SnapKit
+import Photos
 
 protocol StarPickerViewProtocol: AnyObject {
     func willPickerDismiss(_ rate: Double)
@@ -49,12 +50,14 @@ final class EditActivityViewController: BaseAddActivityViewController, UINavigat
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+        self.hideKeyboardWhenTappedAround()
+
     }
     
     override func didTapBackButton() {
         super.didTapBackButton()
         //FIXME: - showAlert에서 super.didTapBackButton()호출하면 문제생김
-//        showAlert(alertType: .canCancel, titleText: alertTitle, contentText: alertContentText, cancelButtonText: "닫기", confirmButtonText: "그만두기")
+        //        showAlert(alertType: .canCancel, titleText: alertTitle, contentText: alertContentText, cancelButtonText: "닫기", confirmButtonText: "그만두기")
     }
 }
 
@@ -65,7 +68,7 @@ extension EditActivityViewController {
         setLayout()
         bind()
     }
-        
+    
     private func setAttribute() {
         navigationItem.rightBarButtonItem = deleteActivityButtonItem
         
@@ -85,10 +88,10 @@ extension EditActivityViewController {
             $0.contentMode = .scaleAspectFit
         }
         
-
+        
         
         setUIByViewModel()
-
+        
     }
     
     private func setLayout() {  }
@@ -116,19 +119,19 @@ extension EditActivityViewController {
                 self.setStarImage(Int(value))
             }.store(in: &cancellable)
         
-		editViewModel.$type
-			.receive(on: DispatchQueue.main)
-			.sink { _ in
+        editViewModel.$type
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
                 self.activityType.text = self.editViewModel.type == "01" ? "지출" : "수입"
-				self.activityType.backgroundColor = self.editViewModel.type == "01" ? R.Color.orange500 : R.Color.blue500
-			}.store(in: &cancellable)
-		
-		editViewModel.$amount
-			.receive(on: DispatchQueue.main)
-			.sink { _ in
-				self.totalPrice.text = self.editViewModel.amount.withCommas() + "원"
-			}.store(in: &cancellable)
-		
+                self.activityType.backgroundColor = self.editViewModel.type == "01" ? R.Color.orange500 : R.Color.blue500
+            }.store(in: &cancellable)
+        
+        editViewModel.$amount
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+                self.totalPrice.text = self.editViewModel.amount.withCommas() + "원"
+            }.store(in: &cancellable)
+        
         editViewModel.isVaild
             .sinkOnMainThread(receiveValue: {
                 if !$0 {
@@ -201,21 +204,21 @@ extension EditActivityViewController {
         deleteButton.tapPublisher
             .sinkOnMainThread(receiveValue: didTapDeleteButton)
             .store(in: &cancellable)
-		
-		// Date Picker의 값을 받아옴
-		editViewModel.$date
-			.sinkOnMainThread(receiveValue: { [weak self] date in
+        
+        // Date Picker의 값을 받아옴
+        editViewModel.$date
+            .sinkOnMainThread(receiveValue: { [weak self] date in
                 guard let date = date else { return }
-				self?.date = date
-				self?.titleText.text = self?.navigationTitle
-			}).store(in: &cancellable)
+                self?.date = date
+                self?.titleText.text = self?.navigationTitle
+            }).store(in: &cancellable)
     }
 }
 
 // MARK: - Action
 extension EditActivityViewController {
     func didTapDateTitle() {
-		let picker = DatePickerViewController(viewModel: editViewModel, date: date)
+        let picker = DatePickerViewController(viewModel: editViewModel, date: date)
         let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
         picker.delegate = bottomSheetVC
         bottomSheetVC.modalPresentationStyle = .overFullScreen
@@ -228,7 +231,7 @@ extension EditActivityViewController {
         let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
         picker.delegate = bottomSheetVC
         bottomSheetVC.modalPresentationStyle = .overFullScreen
-		bottomSheetVC.setSetting(height: 210, isDrag: false)
+        bottomSheetVC.setSetting(height: 210, isDrag: false)
         self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
     }
     
@@ -245,10 +248,9 @@ extension EditActivityViewController {
     func didTapSaveButton() {
         detailViewModel.isShowToastMessage = true
         self.navigationController?.popViewController(animated: true)
-//        print(editViewModel.binaryFileList)
         print(editViewModel.amount)
         print("binary count : ",editViewModel.binaryFileList.count)
-        print("binary name : ",editViewModel.binaryFileList.first!.fileNm)
+        //        print("binary name : ",editViewModel.binaryFileList.first!.fileNm)
         print(editViewModel.type)
         print(editViewModel.title)
         print(editViewModel.memo)
@@ -261,7 +263,7 @@ extension EditActivityViewController {
     
     func didTapDeleteButton() {
         //FIXME: - showAlert에서 super.didTapBackButton()호출하면 문제생김
-//        showAlert(alertType: .canCancel, titleText: deleteAlertTitle, contentText: deleteAlertContentText, cancelButtonText: "닫기", confirmButtonText: "그만두기")
+        //        showAlert(alertType: .canCancel, titleText: deleteAlertTitle, contentText: deleteAlertContentText, cancelButtonText: "닫기", confirmButtonText: "그만두기")
         self.navigationController?.popViewController(animated: true)
         
         editViewModel.deleteDetailActivity()
@@ -293,8 +295,8 @@ extension EditActivityViewController {
         actionSheet.addAction(UIAlertAction(title: "사진삭제", style: .destructive, handler: { [weak self] (ACTION:UIAlertAction) in
             guard let self = self else { return }
             self.mainImageView.image = nil
-			self.editViewModel.binaryFileList = []
-			self.editViewModel.fileNo = ""
+            self.editViewModel.binaryFileList = []
+            self.editViewModel.fileNo = ""
             print("사진삭제")
             self.remakeConstraintsByCameraImageView()
         }))
@@ -341,9 +343,9 @@ extension EditActivityViewController {
     }
     
     private func setUIByViewModel() {
-
+        
         satisfyingLabel.setSatisfyingLabelEdit(by: detailViewModel.detailActivity?.star ?? 0)
-
+        
         memoTextView.text = detailViewModel.detailActivity?.memo
         titleTextFeild.text = detailViewModel.detailActivity?.title
         
@@ -358,14 +360,14 @@ extension EditActivityViewController {
             mainImageView.image = image
         }
         hasImage = detailViewModel.hasImage
-
+        
         if hasImage {
             remakeConstraintsByMainImageView()
         } else {
             remakeConstraintsByCameraImageView()
         }
     }
-
+    
     private func setStarImage(_ rate: Int) {
         self.editViewModel.star = rate
         for star in starList {
@@ -391,7 +393,7 @@ extension EditActivityViewController: StarPickerViewProtocol {
         let rate = Int(rate)
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-			self.setStarImage(rate)
+            self.setStarImage(rate)
         }
     }
 }
@@ -400,13 +402,28 @@ extension EditActivityViewController {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: false) { [weak self] in
             guard let self = self else { return }
-			self.editViewModel.binaryFileList = []
+            self.editViewModel.binaryFileList = []
             let img = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
+            
+            var imageName = ""
             self.mainImageView.image = img
             self.editViewModel.fileNo = ""
-            guard let data = img?.jpegData(compressionQuality: 1.0) else { return }
-            self.editViewModel.binaryFileList.append(APIParameters.UpdateReqDto.BinaryFileList(binaryData: String(decoding: data, as: UTF8.self), fileNm: "\(img?.pngData()).jpeg"))
-            print(self.editViewModel.binaryFileList.count)
+            guard let data = img?.jpegData(compressionQuality: 1.0)?.base64EncodedString() else { return }
+            
+            if let imageUrl = info[UIImagePickerController.InfoKey.referenceURL] as? URL{
+                print("imageURL : ", imageUrl)
+                let assets = PHAsset.fetchAssets(withALAssetURLs: [imageUrl], options: nil)
+                
+                guard let firstObject = assets.firstObject else { return }
+                
+                let fileName = PHAssetResource.assetResources(for: firstObject).first?.originalFilename
+                imageName = fileName ?? "Default Name"
+            }
+            
+            self.editViewModel.binaryFileList.append(
+                APIParameters.UpdateReqDto.BinaryFileList(
+                    binaryData: String(decoding: Data(base64Encoded: data)!, as: UTF8.self),
+                    fileNm: imageName))
             self.remakeConstraintsByMainImageView()
         }
         print("이미지 변경")

@@ -12,6 +12,7 @@ import SnapKit
 // 상속하지 않으려면 final 꼭 붙이기
 final class ProfileViewController: UIViewController {
 	// MARK: - Properties
+	private var userEmail: String = ""
 	private let lableCellList = ["", "계정 관리", "데이터 내보내기", "문의 및 서비스 약관", "앱 버전"]
 	private let topSafeAreaInsets: CGFloat = {
 		let scenes = UIApplication.shared.connectedScenes
@@ -25,7 +26,7 @@ final class ProfileViewController: UIViewController {
 	
 	// MARK: - UI Components
 	private lazy var topArea = UIView()
-	private lazy var profileView = ProfileHeaderView()
+	private lazy var profileHeaderView = ProfileHeaderView()
 	private lazy var profileFooterView = ProfileFooterView()
 	private lazy var tableView = UITableView()
 	
@@ -52,8 +53,14 @@ final class ProfileViewController: UIViewController {
 private extension ProfileViewController {
 	// 초기 셋업할 코드들
 	private func setup() {
+		getUser()
 		setAttribute()
 		setLayout()
+	}
+	
+	private func getUser() {
+		guard let email = Constants.getKeychainValue(forKey: Constants.KeychainKey.email) else { return }
+		userEmail = email
 	}
 	
 	private func setAttribute() {
@@ -64,8 +71,8 @@ private extension ProfileViewController {
 			$0.backgroundColor = R.Color.gray900
 		}
 		
-		profileView = profileView.then {
-			$0.setData(email: "mmm1234@icloud.com")
+		profileHeaderView = profileHeaderView.then {
+			$0.setData(email: userEmail)
 			$0.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: 222)
 		}
 		
@@ -74,7 +81,7 @@ private extension ProfileViewController {
 			$0.dataSource = self
 			$0.showsVerticalScrollIndicator = false
 			$0.backgroundColor = R.Color.gray100
-			$0.tableHeaderView = profileView
+			$0.tableHeaderView = profileHeaderView
 			$0.tableFooterView = profileFooterView
 			$0.bounces = false			// TableView Scroll 방지
 			$0.separatorInset.left = 24
@@ -140,7 +147,7 @@ extension ProfileViewController: UITableViewDelegate {
 		switch indexPath.row {
 		case 1:
 			let vc = ManagementViewController()
-			vc.setData(email: "mmm1234@naver.com")
+			vc.setData(email: userEmail)
 			vc.hidesBottomBarWhenPushed = true	// TabBar Above
 			navigationController?.pushViewController(vc, animated: true)	// 계정관리
         case 2:

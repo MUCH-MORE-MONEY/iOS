@@ -85,13 +85,13 @@ extension UITextField: UITextFieldDelegate {
 		var limit = Int.max
 		var unit = ""
 		switch self.tag {
-		case 1:
+		case 1: // Detail 수정
 			unit = " 원"
 			limit = 100_000_000
-		case 2:
+		case 2: // Home 설정
 			unit = " 만원"
 			limit = 10_000
-		default:
+		default: // Add 추가
 			unit = " 원"
 			limit = 100_000_000
 		}

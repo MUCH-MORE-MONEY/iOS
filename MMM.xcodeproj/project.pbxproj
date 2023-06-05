@@ -101,6 +101,15 @@
 		C4C0CB092A2474F900C41FF4 /* Ex+UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0CB082A2474F900C41FF4 /* Ex+UILabel.swift */; };
 		C4C0CB0D2A249F7000C41FF4 /* AddViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0CB0C2A249F7000C41FF4 /* AddViewModel.swift */; };
 		C4D03ED02A2DD33700011B41 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D03ECF2A2DD33700011B41 /* ProfileViewModel.swift */; };
+		C4D03EF62A2EAB1600011B41 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4D03EF52A2EAB1600011B41 /* WidgetKit.framework */; };
+		C4D03EF82A2EAB1600011B41 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4D03EF72A2EAB1600011B41 /* SwiftUI.framework */; };
+		C4D03EFB2A2EAB1700011B41 /* MMMWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D03EFA2A2EAB1700011B41 /* MMMWidgetBundle.swift */; };
+		C4D03EFD2A2EAB1700011B41 /* MMMWidgetLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D03EFC2A2EAB1700011B41 /* MMMWidgetLiveActivity.swift */; };
+		C4D03EFF2A2EAB1700011B41 /* MMMWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D03EFE2A2EAB1700011B41 /* MMMWidget.swift */; };
+		C4D03F022A2EAB1800011B41 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C4D03F012A2EAB1800011B41 /* Assets.xcassets */; };
+		C4D03F042A2EAB1800011B41 /* MMMWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = C4D03F002A2EAB1700011B41 /* MMMWidget.intentdefinition */; };
+		C4D03F052A2EAB1800011B41 /* MMMWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = C4D03F002A2EAB1700011B41 /* MMMWidget.intentdefinition */; };
+		C4D03F082A2EAB1800011B41 /* MMMWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C4D03EF42A2EAB1600011B41 /* MMMWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		C4D7FC872A08942E00565291 /* Monthly.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D7FC862A08942E00565291 /* Monthly.swift */; };
 		C4D7FC892A08A61C00565291 /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D7FC882A08A61C00565291 /* CalendarCell.swift */; };
 		C4DBAA2C29DBCB8B00D1BB97 /* Ex+Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBAA2B29DBCB8B00D1BB97 /* Ex+Button.swift */; };
@@ -130,7 +139,28 @@
 			remoteGlobalIDString = C411938929D2817C003DBC15;
 			remoteInfo = MMM;
 		};
+		C4D03F062A2EAB1800011B41 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C411938229D2817C003DBC15 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C4D03EF32A2EAB1600011B41;
+			remoteInfo = MMMWidgetExtension;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C4D03F092A2EAB1800011B41 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				C4D03F082A2EAB1800011B41 /* MMMWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0020DFFCCABA708243684054 /* Pods-MMM.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMM.release.xcconfig"; path = "Target Support Files/Pods-MMM/Pods-MMM.release.xcconfig"; sourceTree = "<group>"; };
@@ -239,6 +269,15 @@
 		C4C0CB082A2474F900C41FF4 /* Ex+UILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UILabel.swift"; sourceTree = "<group>"; };
 		C4C0CB0C2A249F7000C41FF4 /* AddViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewModel.swift; sourceTree = "<group>"; };
 		C4D03ECF2A2DD33700011B41 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+		C4D03EF42A2EAB1600011B41 /* MMMWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MMMWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		C4D03EF52A2EAB1600011B41 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		C4D03EF72A2EAB1600011B41 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		C4D03EFA2A2EAB1700011B41 /* MMMWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMMWidgetBundle.swift; sourceTree = "<group>"; };
+		C4D03EFC2A2EAB1700011B41 /* MMMWidgetLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMMWidgetLiveActivity.swift; sourceTree = "<group>"; };
+		C4D03EFE2A2EAB1700011B41 /* MMMWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMMWidget.swift; sourceTree = "<group>"; };
+		C4D03F002A2EAB1700011B41 /* MMMWidget.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = MMMWidget.intentdefinition; sourceTree = "<group>"; };
+		C4D03F012A2EAB1800011B41 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C4D03F032A2EAB1800011B41 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C4D7FC862A08942E00565291 /* Monthly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Monthly.swift; sourceTree = "<group>"; };
 		C4D7FC882A08A61C00565291 /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
 		C4DBAA2B29DBCB8B00D1BB97 /* Ex+Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Button.swift"; sourceTree = "<group>"; };
@@ -278,6 +317,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				FF7FB61A0AC167F25EB6438F /* Pods_MMM_MMMUITests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C4D03EF12A2EAB1600011B41 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C4D03EF82A2EAB1600011B41 /* SwiftUI.framework in Frameworks */,
+				C4D03EF62A2EAB1600011B41 /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -385,6 +433,8 @@
 				A564931308C77DE145181BBF /* Pods_MMM.framework */,
 				738AB5686981CA1A28640207 /* Pods_MMM_MMMUITests.framework */,
 				2BC1A763E0587F6517C3A5E7 /* Pods_MMMTests.framework */,
+				C4D03EF52A2EAB1600011B41 /* WidgetKit.framework */,
+				C4D03EF72A2EAB1600011B41 /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -395,6 +445,7 @@
 				C411938C29D2817C003DBC15 /* MMM */,
 				C41193A329D2817F003DBC15 /* MMMTests */,
 				C41193AD29D2817F003DBC15 /* MMMUITests */,
+				C4D03EF92A2EAB1700011B41 /* MMMWidget */,
 				C411938B29D2817C003DBC15 /* Products */,
 				88255752AA5B9A60F9E5F964 /* Pods */,
 				B3D28157D4159EDFDBFB6E21 /* Frameworks */,
@@ -408,6 +459,7 @@
 				C411938A29D2817C003DBC15 /* MMM.app */,
 				C41193A029D2817F003DBC15 /* MMMTests.xctest */,
 				C41193AA29D2817F003DBC15 /* MMMUITests.xctest */,
+				C4D03EF42A2EAB1600011B41 /* MMMWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -682,6 +734,19 @@
 			name = "Recovered References";
 			sourceTree = "<group>";
 		};
+		C4D03EF92A2EAB1700011B41 /* MMMWidget */ = {
+			isa = PBXGroup;
+			children = (
+				C4D03EFA2A2EAB1700011B41 /* MMMWidgetBundle.swift */,
+				C4D03EFC2A2EAB1700011B41 /* MMMWidgetLiveActivity.swift */,
+				C4D03EFE2A2EAB1700011B41 /* MMMWidget.swift */,
+				C4D03F002A2EAB1700011B41 /* MMMWidget.intentdefinition */,
+				C4D03F012A2EAB1800011B41 /* Assets.xcassets */,
+				C4D03F032A2EAB1800011B41 /* Info.plist */,
+			);
+			path = MMMWidget;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -694,10 +759,12 @@
 				C411938729D2817C003DBC15 /* Frameworks */,
 				C411938829D2817C003DBC15 /* Resources */,
 				D954FA550E758503218A6602 /* [CP] Embed Pods Frameworks */,
+				C4D03F092A2EAB1800011B41 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				C4D03F072A2EAB1800011B41 /* PBXTargetDependency */,
 			);
 			name = MMM;
 			productName = MMM;
@@ -743,6 +810,23 @@
 			productReference = C41193AA29D2817F003DBC15 /* MMMUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		C4D03EF32A2EAB1600011B41 /* MMMWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C4D03F0C2A2EAB1800011B41 /* Build configuration list for PBXNativeTarget "MMMWidgetExtension" */;
+			buildPhases = (
+				C4D03EF02A2EAB1600011B41 /* Sources */,
+				C4D03EF12A2EAB1600011B41 /* Frameworks */,
+				C4D03EF22A2EAB1600011B41 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MMMWidgetExtension;
+			productName = MMMWidgetExtension;
+			productReference = C4D03EF42A2EAB1600011B41 /* MMMWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -764,6 +848,9 @@
 						CreatedOnToolsVersion = 14.2;
 						TestTargetID = C411938929D2817C003DBC15;
 					};
+					C4D03EF32A2EAB1600011B41 = {
+						CreatedOnToolsVersion = 14.2;
+					};
 				};
 			};
 			buildConfigurationList = C411938529D2817C003DBC15 /* Build configuration list for PBXProject "MMM" */;
@@ -783,6 +870,7 @@
 				C411938929D2817C003DBC15 /* MMM */,
 				C411939F29D2817F003DBC15 /* MMMTests */,
 				C41193A929D2817F003DBC15 /* MMMUITests */,
+				C4D03EF32A2EAB1600011B41 /* MMMWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -819,6 +907,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C4D03EF22A2EAB1600011B41 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C4D03F022A2EAB1800011B41 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -986,6 +1082,7 @@
 				6A0F234029DBA8AA0063673B /* DataExportViewController.swift in Sources */,
 				C44807E329E649A300D4B090 /* HomeViewModel.swift in Sources */,
 				6A15B0EC2A15B68D00EADAC5 /* BaseAddActivityViewController.swift in Sources */,
+				C4D03F052A2EAB1800011B41 /* MMMWidget.intentdefinition in Sources */,
 				C411939229D2817C003DBC15 /* ProfileViewController.swift in Sources */,
 				6A8B776529FF93530095ECFC /* APIConstants.swift in Sources */,
 				C433A07329EEE751008B26DF /* Ex+Date.swift in Sources */,
@@ -1039,6 +1136,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C4D03EF02A2EAB1600011B41 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C4D03EFD2A2EAB1700011B41 /* MMMWidgetLiveActivity.swift in Sources */,
+				C4D03EFF2A2EAB1700011B41 /* MMMWidget.swift in Sources */,
+				C4D03F042A2EAB1800011B41 /* MMMWidget.intentdefinition in Sources */,
+				C4D03EFB2A2EAB1700011B41 /* MMMWidgetBundle.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1051,6 +1159,11 @@
 			isa = PBXTargetDependency;
 			target = C411938929D2817C003DBC15 /* MMM */;
 			targetProxy = C41193AB29D2817F003DBC15 /* PBXContainerItemProxy */;
+		};
+		C4D03F072A2EAB1800011B41 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C4D03EF32A2EAB1600011B41 /* MMMWidgetExtension */;
+			targetProxy = C4D03F062A2EAB1800011B41 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1187,6 +1300,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = FC275A78FD9B770379D3387D /* Pods-MMM.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MMM/MMM.entitlements;
@@ -1221,6 +1335,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0020DFFCCABA708243684054 /* Pods-MMM.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MMM/MMM.entitlements;
@@ -1327,6 +1442,60 @@
 			};
 			name = Release;
 		};
+		C4D03F0A2A2EAB1800011B41 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L7X442LA7Q;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MMMWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MMMWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = labM.project.MMM.MMMWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C4D03F0B2A2EAB1800011B41 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L7X442LA7Q;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MMMWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MMMWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = labM.project.MMM.MMMWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1362,6 +1531,15 @@
 			buildConfigurations = (
 				C41193BB29D2817F003DBC15 /* Debug */,
 				C41193BC29D2817F003DBC15 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C4D03F0C2A2EAB1800011B41 /* Build configuration list for PBXNativeTarget "MMMWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C4D03F0A2A2EAB1800011B41 /* Debug */,
+				C4D03F0B2A2EAB1800011B41 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

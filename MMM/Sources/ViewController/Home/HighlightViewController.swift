@@ -46,7 +46,7 @@ final class HighlightViewController: UIViewController {
 		priceTextField.setUnderLine(color: R.Color.orange500)
 		
 		// cursor 위치 변경
-		if let newPosition = priceTextField.position(from: priceTextField.endOfDocument, offset: -2) {
+		if let newPosition = priceTextField.position(from: priceTextField.endOfDocument, offset: -3) {
 			let newSelectedRange = priceTextField.textRange(from: newPosition, to: newPosition)
 			priceTextField.selectedTextRange = newSelectedRange
 		}
@@ -143,7 +143,7 @@ private extension HighlightViewController {
 		
 		priceTextField = priceTextField.then {
 			let price = isEarn ? homeViewModel.earnStandard / 10_000 : homeViewModel.payStandard / 10_000
-			$0.text = price.withCommas() + "만원"
+			$0.text = price.withCommas() + " 만원"
 			viewModel.priceInput = String(price)
 			$0.placeholder = "만원 단위로 입력"
 			$0.font = R.Font.h2
@@ -175,12 +175,12 @@ private extension HighlightViewController {
 		}
 		
 		priceTextField.snp.makeConstraints {
-			$0.top.equalTo(stackView.snp.bottom).offset(16)
+			$0.top.equalTo(stackView.snp.bottom).offset(24)
 			$0.leading.trailing.equalToSuperview().inset(24)
 		}
 		
 		warningLabel.snp.makeConstraints {
-			$0.top.equalTo(priceTextField.snp.bottom).offset(8)
+			$0.top.equalTo(priceTextField.snp.bottom).offset(12)
 			$0.leading.trailing.equalToSuperview().inset(24)
 		}
 	}

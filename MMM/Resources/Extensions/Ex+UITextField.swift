@@ -85,28 +85,18 @@ extension UITextField: UITextFieldDelegate {
 			unit = " 원"
 			limit = 100_000_000
 		case 2:
-			unit = "만원"
+			unit = " 만원"
 			limit = 10_000
 		default:
-			unit = "원"
+			unit = " 원"
 			limit = 100_000_000
 		}
 
 		// 단위에 따른 color 변경
-	
 		self.textColor = price > limit ? R.Color.red500 : self.tag == 0 ? R.Color.white : R.Color.gray900
+		
+		// 범위가 넘어갈 경우
 		if price > limit {
-//			DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-//				self.text = limit.withCommas() + unit
-//				self.textColor = R.Color.gray900
-//				// cursor 위치 변경
-//				if let newPosition = self.position(from: self.endOfDocument, offset: -unit.count) {
-//					let newSelectedRange = textField.textRange(from: newPosition, to: newPosition)
-//					self.selectedTextRange = newSelectedRange
-//				}
-//				self.sendActions(for: .editingChanged)
-//			}
-			
 			if let old = Int(oldString.filter{ $0.isNumber }), old > limit {
 				return false
 			}

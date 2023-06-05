@@ -43,16 +43,6 @@ final class AddViewController: BaseViewController {
 	private lazy var nextFirstButton = UIButton()
 	private lazy var nextSecondButton = UIButton()
 
-	public init() {
-		super.init(nibName: nil, bundle: nil)
-	}
-	
-	// Compile time에 error를 발생시키는 코드
-	@available(*, unavailable)
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
-
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
@@ -90,13 +80,17 @@ extension AddViewController {
 	// MARK: - Private
 	// 유무에 따른 attribute 변경
 	private func setValid(_ isVaild: Bool) {
-		nextFirstButton.isEnabled = isVaild
-		nextSecondButton.isEnabled = isVaild
-		warningLabel.isHidden = viewModel.priceInput.isEmpty != isVaild
+		nextFirstButton.setTitleColor(!viewModel.priceInput.isEmpty && isVaild ? R.Color.white : R.Color.gray400, for: .normal)
+		nextFirstButton.isEnabled = !viewModel.priceInput.isEmpty && isVaild
+		nextSecondButton.isEnabled = !viewModel.priceInput.isEmpty && isVaild
+		warningLabel.isHidden = !viewModel.priceInput.isEmpty && isVaild
 		
 		// shake 에니메이션
 		if !viewModel.priceInput.isEmpty && !isVaild {
 			priceTextField.shake()
+			warningLabel.isHidden = false
+		} else {
+			warningLabel.isHidden = true
 		}
 	}
 	
@@ -222,7 +216,9 @@ private extension AddViewController {
 		view.gesturePublisher()
 			.sinkOnMainThread(receiveValue: { _ in
 				// Keyboard 내리기
-				self.view.endEditing(true)
+				if !self.viewModel.priceInput.isEmpty {
+					self.view.endEditing(true)
+				}
 			}).store(in: &cancellable)
 		
 		priceTextField.textPublisher

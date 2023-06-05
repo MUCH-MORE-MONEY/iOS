@@ -48,11 +48,12 @@ extension UITextField {
 		self.rightView?.isHidden = (self.text?.isEmpty) ?? true
 	}
 	
-	@objc func clear(sender: AnyObject) {
-		self.text = tag == 0 ? "원" : ""
-		
+	@objc func clear(sender: AnyObject) {		
 		if tag == 0 {
+			self.text = "원"
 			self.textColor = R.Color.white
+		} else {
+			self.text = ""
 		}
 		sendActions(for: .editingChanged)
 	}

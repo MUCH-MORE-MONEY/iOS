@@ -50,6 +50,10 @@ extension UITextField {
 	
 	@objc func clear(sender: AnyObject) {
 		self.text = tag == 0 ? "원" : ""
+		
+		if tag == 0 {
+			self.textColor = R.Color.white
+		}
 		sendActions(for: .editingChanged)
 	}
 }

@@ -49,21 +49,26 @@ final class AddViewController: BaseViewController {
 	}
 	
 	override func viewDidLayoutSubviews() {
+		super.viewDidLayoutSubviews()
+		
 		// Underline 호출
 		priceTextField.setUnderLine(color: R.Color.orange500)
 		dateButton.setUnderLine(color: R.Color.orange500)
-		
-		// cursor 위치 변경
-		if let newPosition = priceTextField.position(from: priceTextField.endOfDocument, offset: -1) {
-			let newSelectedRange = priceTextField.textRange(from: newPosition, to: newPosition)
-			priceTextField.selectedTextRange = newSelectedRange
-		}
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		
 		UIApplication.shared.windows.first?.overrideUserInterfaceStyle = .dark
+	}
+	
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+		// cursor 위치 변경
+		if let newPosition = priceTextField.position(from: priceTextField.endOfDocument, offset: -1) {
+			let newSelectedRange = priceTextField.textRange(from: newPosition, to: newPosition)
+			priceTextField.selectedTextRange = newSelectedRange
+		}
 	}
 	
 	override func viewWillDisappear(_ animated: Bool) {
@@ -130,6 +135,7 @@ extension AddViewController {
 	private func didTapDateButton() {
 		view.endEditing(true)
 		setLayoutPriceView()
+		
 		let picker = DatePickerViewController(viewModel: addViewModel, date: addViewModel.date ?? Date())
 		let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
 		picker.delegate = bottomSheetVC
@@ -415,7 +421,7 @@ private extension AddViewController {
 		}
 
 		warningLabel.snp.makeConstraints {
-			$0.top.equalTo(priceTextField.snp.bottom).offset(8)
+			$0.top.equalTo(priceTextField.snp.bottom).offset(12)
 			$0.leading.trailing.equalToSuperview()
 		}
 		

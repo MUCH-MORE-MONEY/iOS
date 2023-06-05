@@ -48,7 +48,7 @@ extension UITextField {
 		self.rightView?.isHidden = (self.text?.isEmpty) ?? true
 	}
 	
-	@objc func clear(sender: AnyObject) {		
+	@objc func clear(sender: AnyObject) {
 		if tag == 0 {
 			self.text = "원"
 			self.textColor = R.Color.white
@@ -114,7 +114,8 @@ extension UITextField: UITextFieldDelegate {
 		let diffComma = abs(result.filter{$0 == ","}.count - newString.filter{$0 == ","}.count) == 1
 		var offset = range.location
 		offset += string.isEmpty ? (diffComma ? -1 : 0) : 1 + (diffComma ? 1 : 0)
-		
+		offset = min(offset, result.count) // 커서가 단위에 있을때
+
 		// cursor 위치 변경
 		if let newPosition = self.position(from: self.beginningOfDocument, offset: offset) {
 			let newSelectedRange = textField.textRange(from: newPosition, to: newPosition)

@@ -15,7 +15,7 @@ final class ProfileTableViewCell: UITableViewCell {
 
 	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
-		setup() // 초기 셋업할 코드들
+		setup()		// 초기 셋업할 코드들
 	}
 	
 	// Compile time에 error를 발생시키는 코드

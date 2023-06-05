@@ -104,7 +104,6 @@ private extension ProfileViewController {
 		}
 	}
 }
-
 // MARK: - UITableView DataSource
 extension ProfileViewController: UITableViewDataSource {
 	

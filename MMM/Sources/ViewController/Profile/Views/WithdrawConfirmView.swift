@@ -17,7 +17,7 @@ final class WithdrawConfirmView: UIView {
 	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
-		setup() // 초기 셋업할 코드들
+		setup()		// 초기 셋업할 코드들
 	}
 	
 	// Compile time에 error를 발생시키는 코드

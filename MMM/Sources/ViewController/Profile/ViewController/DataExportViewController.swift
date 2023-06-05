@@ -6,11 +6,14 @@
 //
 
 import UIKit
+import Combine
 import Then
 import SnapKit
 
 final class DataExportViewController: BaseViewController {
 	// MARK: - Properties
+	private lazy var cancellable: Set<AnyCancellable> = .init()
+
     // MARK: - UI components
     private lazy var mainLabel = UILabel()
     private lazy var subLabel = UILabel()
@@ -23,7 +26,7 @@ final class DataExportViewController: BaseViewController {
 }
 // MARK: - Action
 private extension DataExportViewController {
-    @objc func presentShareSheet() {
+    func presentShareSheet() {
         // 데이터를 넘겨야함 -> sample data
         // 실제 데이터를 넘길경우 비동기 처리를 해줘야함
         let vc = UIActivityViewController(activityItems: ["데이터 넘겨주자!"], applicationActivities: nil)
@@ -34,9 +37,17 @@ private extension DataExportViewController {
 private extension DataExportViewController {
 	// 초기 셋업할 코드들
     private func setup() {
+		bind()
         setAttribute()
         setLayout()
     }
+	
+	private func bind() {
+		//MARK: input
+		exportButton.tapPublisher
+			.sinkOnMainThread(receiveValue: presentShareSheet)
+			.store(in: &cancellable)
+	}
     
     private func setAttribute() {
 		// [view]
@@ -66,7 +77,6 @@ private extension DataExportViewController {
 			$0.titleLabel?.font = R.Font.title1
 			$0.backgroundColor = R.Color.gray900
 			$0.setButtonLayer()
-			$0.addTarget(self, action: #selector(presentShareSheet), for: .touchUpInside)
 		}
     }
     

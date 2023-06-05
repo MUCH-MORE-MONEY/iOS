@@ -6,9 +6,11 @@
 //
 
 import UIKit
+import Combine
 
 final class WithdrawViewController: BaseViewController {
 	// MARK: - Properties
+	private lazy var cancellable: Set<AnyCancellable> = .init()
 	private let viewModel: ProfileViewModel
 	private lazy var economicCount = 0
 	private lazy var moneyCount = 0
@@ -50,7 +52,7 @@ final class WithdrawViewController: BaseViewController {
 //MARK: - Action
 extension WithdrawViewController: CustomAlertDelegate {
 	// toggle
-	@objc func didTapConfirmButton() {
+	func didTapConfirmButton() {
 		if confirmButton.isSelected {
 			confirmButton.setImage(R.Icon.checkInActive, for: .normal)
 			confirmButton.backgroundColor = R.Color.white
@@ -67,7 +69,7 @@ extension WithdrawViewController: CustomAlertDelegate {
 		confirmButton.isSelected = !confirmButton.isSelected
 	}
 	
-	@objc func didTapWithdrawButton() {
+	func didTapWithdrawButton() {
 		self.showAlert(alertType: .canCancel, titleText: "정말 탈퇴하시겠어요?", contentText: "탈퇴하면 소장 중인 데이터가 삭제되며 30일 이후에는 복구가 불가능합니다.", confirmButtonText: "탈퇴하기")
 	}
 	
@@ -88,11 +90,22 @@ extension WithdrawViewController: CustomAlertDelegate {
 
 //MARK: - Style & Layouts
 extension WithdrawViewController {
-	
+	// 초기 셋업할 코드들
 	private func setup() {
-		// 초기 셋업할 코드들
+		bind()
 		setAttribute()
 		setLayout()
+	}
+	
+	private func bind() {
+		//MARK: input
+		confirmButton.tapPublisher
+			.sinkOnMainThread(receiveValue: didTapConfirmButton)
+			.store(in: &cancellable)
+		
+		withdrawButton.tapPublisher
+			.sinkOnMainThread(receiveValue: didTapWithdrawButton)
+			.store(in: &cancellable)
 	}
 	
 	private func setMutiText(isMoney: Bool, first: String, count: Int, second: String) -> NSMutableAttributedString {
@@ -180,7 +193,6 @@ extension WithdrawViewController {
 			$0.setImage(R.Icon.checkInActive, for: .normal)
 			$0.backgroundColor = R.Color.white
 			$0.layer.cornerRadius = 4
-			$0.addTarget(self, action: #selector(didTapConfirmButton), for: .touchUpInside)
 		}
 		
 		confirmLabel = confirmLabel.then {
@@ -199,7 +211,6 @@ extension WithdrawViewController {
 			$0.layer.shadowOpacity = 0.25
 			$0.layer.shadowOffset = CGSize(width: 0, height: 2)
 			$0.layer.shadowRadius = 8
-			$0.addTarget(self, action: #selector(didTapWithdrawButton), for: .touchUpInside)
 		}
 	}
 	

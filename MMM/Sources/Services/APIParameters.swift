@@ -51,11 +51,6 @@ struct APIParameters{
             case createAt = "economicActivityYMD"
             case star = "valueScore"
         }
-        
-        struct BinaryFileList: Codable {
-            let binaryData: String
-            let fileNm: String
-        }
     }
     
     /// 기존 경제활동 수정을 위한 Request
@@ -80,13 +75,13 @@ struct APIParameters{
             case createAt = "economicActivityYMD"
             case star = "valueScore"
         }
-        
-        struct BinaryFileList: Codable {
-            let binaryData: String
-            let fileNm: String
-        }
     }
-
+    /// update와 insert에 사용하는 이미지 binaryfile struct
+    struct BinaryFileList: Codable {
+        let binaryData: String
+        let fileNm: String
+    }
+    
     /// 경제활동 삭제를 위한 Request
     struct DeleteReqDto: Encodable {
         var id: String

@@ -13,6 +13,8 @@ final class EditActivityViewModel {
     // MARK: - Property Wrapper
     @Published var didTapAddButton: Bool = false
     @Published var isTitleEmpty = false
+    @Published var priceInput: String = ""
+
     // MARK: - API Request를 위한 Property Wrapper
     @Published var title = ""
     @Published var memo = ""
@@ -20,9 +22,9 @@ final class EditActivityViewModel {
     @Published var amount = 20000
     @Published var createAt = ""
     @Published var star = 0
-    @Published var type = ""
+    @Published var type = "01"
     @Published var fileNo = ""
-    @Published var binaryFileList:  [APIParameters.UpdateReqDto.BinaryFileList] = []
+    @Published var binaryFileList:  [APIParameters.BinaryFileList] = []
   	@Published var date: Date? // picker
 
     @Published var editResponse: UpdateResDto?
@@ -30,9 +32,21 @@ final class EditActivityViewModel {
     @Published var insertResponse: InsertResDto?
     // MARK: - Porperties
     private var cancellable: Set<AnyCancellable> = []
-    lazy var isVaild: AnyPublisher<Bool, Never> = $title
+    lazy var isTitleVaild: AnyPublisher<Bool, Never> = $title
         .map { $0.count <= 16 } // 16자리 이하
         .eraseToAnyPublisher()
+    
+    
+    // MARK: - Public properties
+    // 들어온 퍼블리셔의 값 일치 여부를 반환하는 퍼블리셔
+    lazy var isPriceVaild: AnyPublisher<Bool, Never> = $priceInput
+        .map {0 <= Int($0) ?? 0 && Int($0) ?? 0 <= 10_000 } // 1억(1,000만원)보다 작을 경우
+        .eraseToAnyPublisher()
+    
+    lazy var isVaildByWon: AnyPublisher<Bool, Never> = $priceInput
+        .map { 0 <= Int($0) ?? 0 && Int($0) ?? 0 <= 100_000_000 } // 1억(1,000만원)보다 작을 경우
+        .eraseToAnyPublisher()
+    
     
     func requestPHPhotoLibraryAuthorization(completion: @escaping () -> Void) {
         if #available(iOS 14, *) {
@@ -59,10 +73,10 @@ final class EditActivityViewModel {
                 headers: APIHeader.Default(token: TempToken.token),
                 body: APIParameters.InsertEconomicActivityReqDto(
                     binaryFileList: [],
-                    amount: amount,
-                    type: type,
+                    amount: Int(priceInput)!,
+                    type: "01",
                     title: title,
-                    memo: memo,
+                    memo: "memo",
                     createAt: createAt,
                     star: star)))
         .sink { data in

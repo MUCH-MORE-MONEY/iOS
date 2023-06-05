@@ -49,7 +49,12 @@ extension UITextField {
 	}
 	
 	@objc func clear(sender: AnyObject) {
-		self.text = tag == 0 ? "원" : ""
+		if tag == 0 {
+			self.text = "원"
+			self.textColor = R.Color.white
+		} else {
+			self.text = ""
+		}
 		sendActions(for: .editingChanged)
 	}
 }
@@ -81,32 +86,22 @@ extension UITextField: UITextFieldDelegate {
 		var limit = Int.max
 		var unit = ""
 		switch self.tag {
-		case 1:
+		case 1: // Detail 수정
 			unit = " 원"
 			limit = 100_000_000
-		case 2:
-			unit = "만원"
+		case 2: // Home 설정
+			unit = " 만원"
 			limit = 10_000
-		default:
-			unit = "원"
+		default: // Add 추가
+			unit = " 원"
 			limit = 100_000_000
 		}
 
 		// 단위에 따른 color 변경
-	
 		self.textColor = price > limit ? R.Color.red500 : self.tag == 0 ? R.Color.white : R.Color.gray900
+		
+		// 범위가 넘어갈 경우
 		if price > limit {
-//			DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-//				self.text = limit.withCommas() + unit
-//				self.textColor = R.Color.gray900
-//				// cursor 위치 변경
-//				if let newPosition = self.position(from: self.endOfDocument, offset: -unit.count) {
-//					let newSelectedRange = textField.textRange(from: newPosition, to: newPosition)
-//					self.selectedTextRange = newSelectedRange
-//				}
-//				self.sendActions(for: .editingChanged)
-//			}
-			
 			if let old = Int(oldString.filter{ $0.isNumber }), old > limit {
 				return false
 			}
@@ -119,7 +114,8 @@ extension UITextField: UITextFieldDelegate {
 		let diffComma = abs(result.filter{$0 == ","}.count - newString.filter{$0 == ","}.count) == 1
 		var offset = range.location
 		offset += string.isEmpty ? (diffComma ? -1 : 0) : 1 + (diffComma ? 1 : 0)
-		
+		offset = min(offset, result.count) // 커서가 단위에 있을때
+
 		// cursor 위치 변경
 		if let newPosition = self.position(from: self.beginningOfDocument, offset: offset) {
 			let newSelectedRange = textField.textRange(from: newPosition, to: newPosition)

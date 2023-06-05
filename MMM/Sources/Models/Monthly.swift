@@ -24,13 +24,13 @@ struct Monthly: Codable, Identifiable, Equatable {
 	
 	static func getDummyList() -> [Self] {
 		return [
-			Monthly(earn: 40000, pay: 10000, total: 10000, createAt: "20230501"),
-			Monthly(earn: 30000, pay: -10000, total: -10000, createAt: "20230502"),
-			Monthly(earn: 40000, pay: 100000, total: 100000, createAt: "20230503"),
-			Monthly(earn: 30000, pay: -100000, total: -100000, createAt: "20230504"),
-			Monthly(earn: 30000, pay: 0, total: 0, createAt: "20230505"),
-			Monthly(earn: 30000, pay: 0, total: 1, createAt: "20230506"),
-			Monthly(earn: 30000, pay: 0, total: 0, createAt: "20230525")
+			Monthly(earn: 40000, pay: 10000, total: 10000, createAt: "20230601"),
+			Monthly(earn: 30000, pay: -10000, total: -10000, createAt: "20230602"),
+			Monthly(earn: 40000, pay: 100000, total: 100000, createAt: "20230603"),
+			Monthly(earn: 30000, pay: -100000, total: -100000, createAt: "20230604"),
+			Monthly(earn: 30000, pay: 0, total: 0, createAt: "20230605"),
+			Monthly(earn: 30000, pay: 0, total: 1, createAt: "20230606"),
+			Monthly(earn: 30000, pay: 0, total: 0, createAt: "20230625")
 		]
 	}
 }

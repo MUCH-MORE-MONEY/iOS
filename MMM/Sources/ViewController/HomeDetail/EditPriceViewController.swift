@@ -230,17 +230,17 @@ private extension EditPriceViewController {
 		}
 		
 		priceTextField.snp.makeConstraints {
-			$0.top.equalTo(stackView.snp.bottom).offset(16)
+			$0.top.equalTo(stackView.snp.bottom).offset(24)
 			$0.leading.trailing.equalToSuperview().inset(24)
 		}
 		
 		warningLabel.snp.makeConstraints {
-			$0.top.equalTo(priceTextField.snp.bottom).offset(8)
+			$0.top.equalTo(priceTextField.snp.bottom).offset(12)
 			$0.leading.trailing.equalToSuperview().inset(24)
 		}
 		
 		buttonStackView.snp.makeConstraints {
-			$0.top.equalTo(priceTextField.snp.bottom).offset(30)
+			$0.top.equalTo(priceTextField.snp.bottom).offset(46)
 			$0.leading.trailing.equalToSuperview().inset(24)
 			$0.height.equalTo(36)
 		}

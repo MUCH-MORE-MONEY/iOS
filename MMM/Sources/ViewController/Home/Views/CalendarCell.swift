@@ -56,6 +56,9 @@ final class CalendarCell: FSCalendarCell {
 		if self.dateIsToday {
 			// 오늘날짜에 대한 Attribute
 			self.titleLabel.font = R.Font.body4
+		}
+		
+		if let sub = self.subtitle, sub == "+0" {
 			self.todayLayer.isHidden = false
 		}
 		
@@ -70,7 +73,6 @@ extension CalendarCell {
 		self.selectionLayer.fillColor = color.cgColor
 	}
 }
-
 //MARK: - Style & Layouts
 private extension CalendarCell {
 	// 초기 셋업할 코드들

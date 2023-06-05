@@ -132,7 +132,7 @@ extension EditActivityViewController {
                 self.totalPrice.text = self.editViewModel.amount.withCommas() + "원"
             }.store(in: &cancellable)
         
-        editViewModel.isVaild
+        editViewModel.isTitleVaild
             .sinkOnMainThread(receiveValue: {
                 if !$0 {
                     self.titleTextFeild.text?.removeLast()
@@ -264,8 +264,13 @@ extension EditActivityViewController {
     func didTapDeleteButton() {
         //FIXME: - showAlert에서 super.didTapBackButton()호출하면 문제생김
         //        showAlert(alertType: .canCancel, titleText: deleteAlertTitle, contentText: deleteAlertContentText, cancelButtonText: "닫기", confirmButtonText: "그만두기")
-        self.navigationController?.popViewController(animated: true)
-        
+//        self.navigationController?.popViewController(animated: true)
+        if let navigationController = self.navigationController {
+            if let rootViewController = navigationController.viewControllers.first {
+                navigationController.setViewControllers([rootViewController], animated: true)
+            }
+        }
+
         editViewModel.deleteDetailActivity()
     }
     
@@ -421,7 +426,7 @@ extension EditActivityViewController {
             }
             
             self.editViewModel.binaryFileList.append(
-                APIParameters.UpdateReqDto.BinaryFileList(
+                APIParameters.BinaryFileList(
                     binaryData: String(decoding: Data(base64Encoded: data)!, as: UTF8.self),
                     fileNm: imageName))
             self.remakeConstraintsByMainImageView()

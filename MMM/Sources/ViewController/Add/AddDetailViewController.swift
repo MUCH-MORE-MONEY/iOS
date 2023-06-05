@@ -115,16 +115,14 @@ extension AddDetailViewController {
     func didTapSaveButton() {
         //        viewModel.isShowToastMessage = true
         self.navigationController?.popViewController(animated: true)
-        print(viewModel.amount)
+        print("amount : ",viewModel.amount)
         print("binary count : ",viewModel.binaryFileList.count)
 //        print("binary name : ",viewModel.binaryFileList.first!.fileNm)
-        print(viewModel.type)
-        print(viewModel.title)
-        print(viewModel.memo)
-        print(viewModel.id)
-        print(viewModel.createAt)
-        print(viewModel.fileNo)
-        print(viewModel.star)
+        print("type : ",viewModel.type)
+        print("title : ",viewModel.title)
+        print("memo : ",viewModel.memo)
+        print("createAt : ",viewModel.createAt)
+        print("star : ",viewModel.star)
         viewModel.insertDetailActivity()
         
     }
@@ -197,7 +195,7 @@ extension AddDetailViewController: UINavigationControllerDelegate {
             self.mainImageView.image = img
             self.viewModel.fileNo = ""
             guard let data = img?.jpegData(compressionQuality: 1.0) else { return }
-            self.viewModel.binaryFileList.append(APIParameters.UpdateReqDto.BinaryFileList(binaryData: String(decoding: data, as: UTF8.self), fileNm: "\(img?.pngData()).jpeg"))
+            self.viewModel.binaryFileList.append(APIParameters.BinaryFileList(binaryData: String(decoding: data, as: UTF8.self), fileNm: "\(img?.pngData()).jpeg"))
 
             self.remakeConstraintsByMainImageView()
         }

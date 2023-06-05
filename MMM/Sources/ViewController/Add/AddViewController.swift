@@ -12,10 +12,8 @@ import SnapKit
 
 final class AddViewController: BaseViewController {
 	// MARK: - Properties
-	private let viewModel = PriceViewModel()
-//	private let addViewModel = AddViewModel()
 	private lazy var cancellable: Set<AnyCancellable> = .init()
-    private var addViewModel = EditActivityViewModel()
+    private var viewModel = EditActivityViewModel()
 	private var bottomConstraint: Constraint!
 	private var bottomPadding: CGFloat {
 		return UIApplication.shared.windows.first{$0.isKeyWindow}?.safeAreaInsets.bottom ?? 0
@@ -137,12 +135,15 @@ extension AddViewController {
 	private func didTapDateButton() {
 		view.endEditing(true)
 		setLayoutPriceView()
-        let picker = DatePickerViewController(viewModel: addViewModel, date: addViewModel.date ?? Date())
+        let picker = DatePickerViewController(viewModel: viewModel, date: viewModel.date ?? Date())
 		let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
 		picker.delegate = bottomSheetVC
 		picker.setData(title: "경제활동 날짜 선택", isDark: true)
 		bottomSheetVC.modalPresentationStyle = .overFullScreen
 		bottomSheetVC.setSetting(height: 375, isDark: true)
+        
+        viewModel.createAt = viewModel.date?.getFormattedDate(format: "yyyyMMdd") ?? ""
+        
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
 	}
 	
@@ -167,6 +168,7 @@ extension AddViewController {
 		}
 		
 		isEarn = tag == 0 ? true : false
+        viewModel.type = tag == 0 ? "01" : "02"
 	}
 	
 	@objc private func keyboardWillShow(_ notification: NSNotification) {
@@ -210,7 +212,8 @@ extension AddViewController {
 	}
     
     private func didTapNextSecondButton() {
-        navigationController?.pushViewController(AddDetailViewController(viewModel: addViewModel), animated: true)
+        viewModel.amount = Int(viewModel.priceInput)!
+        navigationController?.pushViewController(AddDetailViewController(viewModel: viewModel), animated: true)
     }
 }
 //MARK: - Style & Layouts
@@ -261,11 +264,12 @@ private extension AddViewController {
 			.store(in: &cancellable)
 		
 		// Date Picker
-		addViewModel.$date
+		viewModel.$date
 			.sinkOnMainThread(receiveValue: { [weak self] date in
 				guard let date = date else { return }
 				self?.setTitle(date)
 				self?.setLayoutDateView()
+                self?.viewModel.createAt = date.getFormattedDate(format: "yyyyMMdd")
 			}).store(in: &cancellable)
 	}
 	

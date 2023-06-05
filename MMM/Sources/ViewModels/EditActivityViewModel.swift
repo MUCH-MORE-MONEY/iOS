@@ -74,9 +74,9 @@ final class EditActivityViewModel {
                 body: APIParameters.InsertEconomicActivityReqDto(
                     binaryFileList: [],
                     amount: Int(priceInput)!,
-                    type: "01",
+                    type: type,
                     title: title,
-                    memo: "memo",
+                    memo: memo,
                     createAt: createAt,
                     star: star)))
         .sink { data in

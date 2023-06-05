@@ -46,8 +46,8 @@ struct APIParameters{
             case binaryFileList
             case type = "economicActivityDvcd"
             case amount = "economicActivityAmt"
-            case title = "economicActivityMm"
-            case memo = "economicActivityNm"
+            case title = "economicActivityNm"
+            case memo = "economicActivityMm"
             case createAt = "economicActivityYMD"
             case star = "valueScore"
         }
@@ -69,8 +69,8 @@ struct APIParameters{
             case binaryFileList
             case type = "economicActivityDvcd"
             case amount = "economicActivityAmt"
-            case title = "economicActivityMm"
-            case memo = "economicActivityNm"
+            case title = "economicActivityNm"
+            case memo = "economicActivityMm"
             case id = "economicActivityNo"
             case createAt = "economicActivityYMD"
             case star = "valueScore"

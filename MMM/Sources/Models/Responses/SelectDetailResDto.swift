@@ -26,8 +26,8 @@ struct SelectDetailResDto: Codable {
         case type = "economicActivityDvcd"
 //        case groupName = "economicActivityGroupNm"
 //        case groupNo = "economicActivityGroupNo"
-        case title = "economicActivityMm"
-        case memo = "economicActivityNm"
+        case title = "economicActivityNm"
+        case memo = "economicActivityMm"
         case createAt = "economicActivityYMD"
         case imageUrl = "fileUrl"
         case fileNo

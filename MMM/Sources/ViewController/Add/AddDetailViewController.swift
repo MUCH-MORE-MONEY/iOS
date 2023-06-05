@@ -9,6 +9,7 @@ import UIKit
 import Combine
 import SnapKit
 import Then
+import Photos
 
 class AddDetailViewController: BaseAddActivityViewController {
     // MARK: - UI Components
@@ -44,6 +45,7 @@ extension AddDetailViewController {
     
     private func setAttribute() {
         title = viewModel.date?.getFormattedDate(format: "MM월 dd일 경제활동")
+        totalPrice.text = viewModel.amount.withCommas() + "원"
     }
     
     private func setLayout() {
@@ -193,9 +195,18 @@ extension AddDetailViewController: UINavigationControllerDelegate {
             self.viewModel.binaryFileList = []
             let img = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
             self.mainImageView.image = img
-            self.viewModel.fileNo = ""
-            guard let data = img?.jpegData(compressionQuality: 1.0) else { return }
-            self.viewModel.binaryFileList.append(APIParameters.BinaryFileList(binaryData: String(decoding: data, as: UTF8.self), fileNm: "\(img?.pngData()).jpeg"))
+            guard let data = img?.jpegData(compressionQuality: 1.0)?.base64EncodedData() else { return }
+            var imageName = ""
+            if let imageUrl = info[UIImagePickerController.InfoKey.referenceURL] as? URL {
+                let assets = PHAsset.fetchAssets(withALAssetURLs: [imageUrl], options: nil)
+                
+                guard let firstObject = assets.firstObject else { return }
+                imageName = PHAssetResource.assetResources(for: firstObject).first?.originalFilename ?? "DefualtName"
+            }
+            
+
+            
+            self.viewModel.binaryFileList.append(APIParameters.BinaryFileList(binaryData: String(decoding: data, as: UTF8.self), fileNm: imageName))
 
             self.remakeConstraintsByMainImageView()
         }

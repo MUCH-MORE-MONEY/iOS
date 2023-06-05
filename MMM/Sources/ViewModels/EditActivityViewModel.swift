@@ -72,8 +72,8 @@ final class EditActivityViewModel {
             APIRouter.InsertReqDto(
                 headers: APIHeader.Default(token: TempToken.token),
                 body: APIParameters.InsertEconomicActivityReqDto(
-                    binaryFileList: [],
-                    amount: Int(priceInput)!,
+                    binaryFileList: binaryFileList,
+                    amount: amount,
                     type: type,
                     title: title,
                     memo: memo,

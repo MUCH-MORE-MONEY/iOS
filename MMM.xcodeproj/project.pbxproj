@@ -72,7 +72,7 @@
 		C41193E729D287E6003DBC15 /* Ex+Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193E129D287E6003DBC15 /* Ex+Icon.swift */; };
 		C41193E829D287E6003DBC15 /* Ex+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193E229D287E6003DBC15 /* Ex+View.swift */; };
 		C41193EA29D2D7FE003DBC15 /* MMMResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193E929D2D7FE003DBC15 /* MMMResource.swift */; };
-		C41193F329D3AED5003DBC15 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193F229D3AED5003DBC15 /* ProfileView.swift */; };
+		C41193F329D3AED5003DBC15 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193F229D3AED5003DBC15 /* ProfileHeaderView.swift */; };
 		C41193F529D3D7FB003DBC15 /* Ex+NSObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193F429D3D7FB003DBC15 /* Ex+NSObject.swift */; };
 		C41193F729D3D954003DBC15 /* Ex+UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193F629D3D954003DBC15 /* Ex+UITableView.swift */; };
 		C41193F929D3DD9A003DBC15 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193F829D3DD9A003DBC15 /* ProfileTableViewCell.swift */; };
@@ -206,7 +206,7 @@
 		C41193E129D287E6003DBC15 /* Ex+Icon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+Icon.swift"; sourceTree = "<group>"; };
 		C41193E229D287E6003DBC15 /* Ex+View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+View.swift"; sourceTree = "<group>"; };
 		C41193E929D2D7FE003DBC15 /* MMMResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMMResource.swift; sourceTree = "<group>"; };
-		C41193F229D3AED5003DBC15 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		C41193F229D3AED5003DBC15 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		C41193F429D3D7FB003DBC15 /* Ex+NSObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+NSObject.swift"; sourceTree = "<group>"; };
 		C41193F629D3D954003DBC15 /* Ex+UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UITableView.swift"; sourceTree = "<group>"; };
 		C41193F829D3DD9A003DBC15 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTableViewCell.swift; sourceTree = "<group>"; };
@@ -604,11 +604,11 @@
 		C41193F129D3AEBB003DBC15 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				C41193F229D3AED5003DBC15 /* ProfileView.swift */,
+				C4DBAA3829DEAE0200D1BB97 /* CountAnimationStackView.swift */,
 				C41193FC29D42BD9003DBC15 /* ProfileFooterView.swift */,
+				C41193F229D3AED5003DBC15 /* ProfileHeaderView.swift */,
 				C41193F829D3DD9A003DBC15 /* ProfileTableViewCell.swift */,
 				C4DBAA2F29DD459100D1BB97 /* WithdrawConfirmView.swift */,
-				C4DBAA3829DEAE0200D1BB97 /* CountAnimationStackView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1006,7 +1006,7 @@
 				C4D7FC872A08942E00565291 /* Monthly.swift in Sources */,
 				C411940729D53EA0003DBC15 /* NavigationController.swift in Sources */,
 				C4199DDF2A00B3FE006E5DA8 /* HomeEmptyView.swift in Sources */,
-				C41193F329D3AED5003DBC15 /* ProfileView.swift in Sources */,
+				C41193F329D3AED5003DBC15 /* ProfileHeaderView.swift in Sources */,
 				C4C0CB022A23A07000C41FF4 /* EditPriceViewController.swift in Sources */,
 				6A0D108529D3D209009D6DCA /* OnboardingView.swift in Sources */,
 				6A626BC12A0C7EE700BDD5C0 /* SelectDetailResDto.swift in Sources */,

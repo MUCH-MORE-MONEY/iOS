@@ -11,17 +11,8 @@ import SnapKit
 
 // 상속하지 않으려면 final 꼭 붙이기
 final class ProfileViewController: UIViewController {
-		
-	private lazy var topArea = UIView()
-		
-	private lazy var profileView = ProfileHeaderView()
-	
-	private lazy var profileFooterView = ProfileFooterView()
-	
-	private lazy var tableView = UITableView()
-	
-	private lazy var lableCellList = ["", "계정 관리", "데이터 내보내기", "문의 및 서비스 약관", "앱 버전"]
-	
+	// MARK: - Properties
+	private let lableCellList = ["", "계정 관리", "데이터 내보내기", "문의 및 서비스 약관", "앱 버전"]
 	private let topSafeAreaInsets: CGFloat = {
 		let scenes = UIApplication.shared.connectedScenes
 		let windowScene = scenes.first as? UIWindowScene
@@ -31,7 +22,13 @@ final class ProfileViewController: UIViewController {
 			return 0.0
 		}
 	}()
-
+	
+	// MARK: - UI Components
+	private lazy var topArea = UIView()
+	private lazy var profileView = ProfileHeaderView()
+	private lazy var profileFooterView = ProfileFooterView()
+	private lazy var tableView = UITableView()
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
@@ -39,12 +36,11 @@ final class ProfileViewController: UIViewController {
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-		navigationController?.setNavigationBarHidden(true, animated: animated)	// navigation bar 숨김
+		self.navigationController?.setNavigationBarHidden(true, animated: animated)	// navigation bar 숨김
 	}
 	
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
-
 		self.navigationController?.setNavigationBarHidden(false, animated: animated) // navigation bar 노출
 	}
 	
@@ -52,12 +48,10 @@ final class ProfileViewController: UIViewController {
 		return .lightContent // status text color 변경
 	}
 }
-
 //MARK: - Style & Layouts
 private extension ProfileViewController {
-	
+	// 초기 셋업할 코드들
 	private func setup() {
-		// 초기 셋업할 코드들
 		setAttribute()
 		setLayout()
 	}
@@ -71,7 +65,7 @@ private extension ProfileViewController {
 		}
 		
 		profileView = profileView.then {
-			$0.setUp(email: "mmm1234@icloud.com")
+			$0.setData(email: "mmm1234@icloud.com")
 			$0.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: 222)
 		}
 		
@@ -87,12 +81,11 @@ private extension ProfileViewController {
 			$0.separatorInset.right = 24
 			$0.register(ProfileTableViewCell.self)
 		}
-				
-		view.addSubviews(topArea, tableView)
 	}
 	
 	private func setLayout() {
-		// [view]
+		view.addSubviews(topArea, tableView)
+
 		topArea.snp.makeConstraints {
 			$0.top.left.right.equalToSuperview()
 			$0.height.equalTo(topSafeAreaInsets)
@@ -127,9 +120,9 @@ extension ProfileViewController: UITableViewDataSource {
 			DispatchQueue.main.async {
 				cell.addAboveTheBottomBorderWithColor(color: R.Color.gray100)
 			}
-			cell.isHidden()
+			cell.isNavigationHidden()
 		} else {
-			cell.setUp(text: lableCellList[indexPath.row])
+			cell.setData(text: lableCellList[indexPath.row])
 		}
 		
 		cell.backgroundColor = R.Color.gray100

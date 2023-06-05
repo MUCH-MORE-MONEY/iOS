@@ -7,36 +7,23 @@
 
 import UIKit
 
-final class WithdrawViewController: UIViewController {
+final class WithdrawViewController: BaseViewController {
+	// MARK: - Properties
+	private lazy var economicCount = 0
+	private lazy var moneyCount = 0
 
-	private lazy var backButton = UIBarButtonItem()
-
+	// MARK: - UI Components
 	private lazy var reconfirmLabel = UILabel()
-
 	private lazy var economicLabel = UILabel()
-	
-	private lazy var economicCount = 1234
-	
 	private lazy var moneyLabel = CountAnimationStackView()
-	
-	private lazy var moneyCount = 28_345_569
-
 	private lazy var containView = UIView()
-	
 	private lazy var containerStackView = UIStackView()
-	
 	private lazy var checkLabel = UILabel()
-	
 	private lazy var firstComfirm = WithdrawConfirmView()
-
 	private lazy var secondComfirm = WithdrawConfirmView()
-	
 	private lazy var confirmStackView = UIStackView()
-	
 	private lazy var confirmButton = UIButton()
-	
 	private lazy var confirmLabel = UILabel()
-	
 	private lazy var withdrawButton = UIButton()
 	
 	override func viewDidLoad() {
@@ -48,13 +35,9 @@ final class WithdrawViewController: UIViewController {
 		navigationController?.setNavigationBarHidden(false, animated: animated)	// navigation bar 노출
 	}
 }
-
 //MARK: - Action
 extension WithdrawViewController: CustomAlertDelegate {
-	@objc func didTapBackButton(_ sender: UITapGestureRecognizer) {
-		navigationController?.popViewController(animated: true)
-	}
-	
+	// toggle
 	@objc func didTapConfirmButton() {
 		if confirmButton.isSelected {
 			confirmButton.setImage(R.Icon.checkInActive, for: .normal)
@@ -99,7 +82,7 @@ extension WithdrawViewController {
 		setLayout()
 	}
 	
-	private func setMutiTest(isMoney: Bool, first: String, count: Int, second: String) -> NSMutableAttributedString {
+	private func setMutiText(isMoney: Bool, first: String, count: Int, second: String) -> NSMutableAttributedString {
 		let attributedText1 = NSMutableAttributedString(string: first)
 		
 		var attributedText2: NSMutableAttributedString
@@ -132,15 +115,7 @@ extension WithdrawViewController {
 	private func setAttribute() {
 		// [view]
 		view.backgroundColor = R.Color.gray100
-		navigationItem.leftBarButtonItem = backButton
 		navigationItem.title = "회원탈퇴"
-		
-		backButton = backButton.then {
-			$0.image = R.Icon.arrowBack24
-			$0.style = .plain
-			$0.target = self
-			$0.action = #selector(didTapBackButton)
-		}
 		
 		reconfirmLabel = reconfirmLabel.then {
 			$0.text = "정말 탈퇴하시겠어요?"
@@ -149,11 +124,11 @@ extension WithdrawViewController {
 		}
 		
 		economicLabel = economicLabel.then {
-			$0.attributedText = setMutiTest(isMoney: false, first: "이대로 가면 작성했던 ", count: economicCount, second: "의 경재활동,")
+			$0.attributedText = setMutiText(isMoney: false, first: "이대로 가면 작성했던 ", count: economicCount, second: "의 경재활동,")
 		}
 		
 		moneyLabel = moneyLabel.then {
-			$0.setUp(first: "그리고 모았던 ", second: "이 사라져요.", money: moneyCount, unitText: "원", duration: 0.1)
+			$0.setData(first: "그리고 모았던 ", second: "이 사라져요.", money: moneyCount, unitText: "원", duration: 0.1)
 		}
 		
 		containView = containView.then {
@@ -175,11 +150,11 @@ extension WithdrawViewController {
 		}
 		
 		firstComfirm = firstComfirm.then {
-			$0.setUp(number: "1", title: "30일동안은 기록이 유지돼요.", content: "회원님의 탈퇴는 30일 이후에 처리가 되며 30일 이전 재가입할 시 복구가 가능해요.")
+			$0.setData(number: "1", title: "30일동안은 기록이 유지돼요.", content: "회원님의 탈퇴는 30일 이후에 처리가 되며 30일 이전 재가입할 시 복구가 가능해요.")
 		}
 		
 		secondComfirm = secondComfirm.then {
-			$0.setUp(number: "2", title: "30일 이후에는 모든 기록이 사라져요.", content: "30일 뒤에 모든 데이터는 회원님의 소중한 정보를 지키기 위해 개인정보 처리 방침에 따라 복구가 불가능해요.")
+			$0.setData(number: "2", title: "30일 이후에는 모든 기록이 사라져요.", content: "30일 뒤에 모든 데이터는 회원님의 소중한 정보를 지키기 위해 개인정보 처리 방침에 따라 복구가 불가능해요.")
 		}
 		
 		confirmStackView = confirmStackView.then {
@@ -213,20 +188,14 @@ extension WithdrawViewController {
 			$0.layer.shadowRadius = 8
 			$0.addTarget(self, action: #selector(didTapWithdrawButton), for: .touchUpInside)
 		}
-		
-		view.addSubviews(reconfirmLabel, economicLabel, moneyLabel, containView, confirmStackView, withdrawButton)
-		containView.addSubviews(containerStackView)
-		[checkLabel, firstComfirm, secondComfirm].forEach {
-			containerStackView.addArrangedSubview($0)
-		}
-		
-		[confirmButton, confirmLabel].forEach {
-			confirmStackView.addArrangedSubview($0)
-		}
 	}
 	
 	private func setLayout() {
-
+		view.addSubviews(reconfirmLabel, economicLabel, moneyLabel, containView, confirmStackView, withdrawButton)
+		containView.addSubviews(containerStackView)
+		containerStackView.addArrangedSubviews(checkLabel, firstComfirm, secondComfirm)
+		confirmStackView.addArrangedSubviews(confirmButton, confirmLabel)
+		
 		reconfirmLabel.snp.makeConstraints {
 			$0.top.equalTo(view.safeAreaLayoutGuide).inset(32)
 			$0.left.equalTo(view.safeAreaLayoutGuide).inset(24)

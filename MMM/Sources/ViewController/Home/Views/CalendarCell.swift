@@ -55,10 +55,11 @@ final class CalendarCell: FSCalendarCell {
 		
 		if self.dateIsToday {
 			// 오늘날짜에 대한 Attribute
-			if let sub = self.subtitle, sub == "+0" {
-				self.todayLayer.isHidden = false
-			}
 			self.titleLabel.font = R.Font.body4
+		}
+		
+		if let sub = self.subtitle, sub == "+0" {
+			self.todayLayer.isHidden = false
 		}
 		
 		// 선택한 date의 border 보임/이전 Border 숨김

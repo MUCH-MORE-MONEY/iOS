@@ -145,7 +145,7 @@ extension ProfileViewController: UITableViewDelegate {
 		
 		switch indexPath.row {
 		case 1:
-			let vc = ManagementViewController()
+			let vc = ManagementViewController(viewModel: ProfileViewModel())
 			vc.setData(email: userEmail)
 			vc.hidesBottomBarWhenPushed = true	// TabBar Above
 			navigationController?.pushViewController(vc, animated: true)	// 계정관리

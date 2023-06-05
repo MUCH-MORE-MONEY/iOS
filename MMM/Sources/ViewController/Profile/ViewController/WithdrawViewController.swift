@@ -9,6 +9,7 @@ import UIKit
 
 final class WithdrawViewController: BaseViewController {
 	// MARK: - Properties
+	private let viewModel: ProfileViewModel
 	private lazy var economicCount = 0
 	private lazy var moneyCount = 0
 
@@ -25,6 +26,17 @@ final class WithdrawViewController: BaseViewController {
 	private lazy var confirmButton = UIButton()
 	private lazy var confirmLabel = UILabel()
 	private lazy var withdrawButton = UIButton()
+	
+	init(viewModel: ProfileViewModel) {
+		self.viewModel = viewModel
+		super.init(nibName: nil, bundle: nil)
+	}
+
+	// Compile time에 error를 발생시키는 코드
+	@available(*, unavailable)
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -62,6 +74,7 @@ extension WithdrawViewController: CustomAlertDelegate {
 	// 확인 버튼 이벤트 처리
 	func didAlertCofirmButton() {
 		if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+			viewModel.withdraw() // 탈퇴
 			sceneDelegate.window?.rootViewController = sceneDelegate.onboarding
 			DispatchQueue.main.asyncAfter(deadline: .now()) {
 				sceneDelegate.onboarding.showAlert(alertType: .onlyConfirm, titleText: "탈퇴를 완료하였습니다", contentText: "언제든 다시 MMM을 찾아와주세요!", confirmButtonText: "확인하기")

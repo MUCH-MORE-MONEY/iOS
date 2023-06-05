@@ -11,6 +11,8 @@ import SnapKit
 
 final class ManagementViewController: BaseViewController {
 	// MARK: - Properties
+	private let viewModel: ProfileViewModel
+	
 	// MARK: - UI components
 	private lazy var baseView = UIView()
 	private lazy var userInfoLabel = UILabel()
@@ -18,6 +20,17 @@ final class ManagementViewController: BaseViewController {
 	private lazy var userEmailLabel = UILabel()
 	private lazy var userLoginLabel = UILabel()
 	private lazy var tableView = UITableView()
+	
+	init(viewModel: ProfileViewModel) {
+		self.viewModel = viewModel
+		super.init(nibName: nil, bundle: nil)
+	}
+
+	// Compile time에 error를 발생시키는 코드
+	@available(*, unavailable)
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
 	
 	override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +51,7 @@ extension ManagementViewController: CustomAlertDelegate {
 	// 확인 버튼 이벤트 처리
 	func didAlertCofirmButton() {
 		if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+			viewModel.logout() // 로그아웃
 			sceneDelegate.window?.rootViewController = sceneDelegate.onboarding
 		}
 	}
@@ -162,7 +176,7 @@ extension ManagementViewController: UITableViewDelegate {
 		case 0:
 			showAlert(alertType: .canCancel, titleText: "로그아웃 하시겠어요?", contentText: "로그아웃해도 해당 계정의 데이터는 \n 계속 저장되어 있습니다.", cancelButtonText: "취소하기", confirmButtonText: "로그아웃")
 		case 1:
-			let vs = WithdrawViewController()
+			let vs = WithdrawViewController(viewModel: viewModel)
 			navigationController?.pushViewController(vs, animated: true)		// 계정관리
 		default:
 			break

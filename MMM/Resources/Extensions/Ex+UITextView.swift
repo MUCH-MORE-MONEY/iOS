@@ -13,8 +13,8 @@ extension UITextView {
         static var textPublisher = "textPublisher"
     }
     
-    var textPublisher: AnyPublisher<String, Never> {
-        if let publisher = objc_getAssociatedObject(self, &AssociatedKeys.textPublisher) as? AnyPublisher<String, Never> {
+    var textPublisher: AnyPublisher<(String, Int), Never> {
+        if let publisher = objc_getAssociatedObject(self, &AssociatedKeys.textPublisher) as? AnyPublisher<(String, Int), Never> {
             return publisher
         }
         
@@ -25,7 +25,7 @@ extension UITextView {
 }
 
 class TextViewPublisher: NSObject, UITextViewDelegate, Publisher {
-    typealias Output = String
+    typealias Output = (String, Int)
     typealias Failure = Never
     
     private let textView: UITextView
@@ -43,6 +43,14 @@ class TextViewPublisher: NSObject, UITextViewDelegate, Publisher {
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        _ = subscriber?.receive(textView.text)
+        _ = subscriber?.receive((textView.text, 0))
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        _ = subscriber?.receive((textView.text, 1))
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        _ = subscriber?.receive((textView.text, 2))
     }
 }

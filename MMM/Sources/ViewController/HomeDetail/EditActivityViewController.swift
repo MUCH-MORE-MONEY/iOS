@@ -272,13 +272,12 @@ extension EditActivityViewController {
     }
     
     func didTapAlbumButton() {
-        let picker = UIImagePickerController()
-        
-        picker.sourceType = .photoLibrary
-        picker.allowsEditing = true
-        
-        picker.delegate = self
-        
+        let picker = UIImagePickerController().then {
+            $0.sourceType = .photoLibrary
+            $0.allowsEditing = true
+            $0.delegate = self
+        }
+    
         present(picker, animated: true)
     }
     
@@ -409,7 +408,7 @@ extension EditActivityViewController: StarPickerViewProtocol {
 }
 
 // MARK: - ImagePicker Delegate
-extension EditActivityViewController {
+extension EditActivityViewController: UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: false) { [weak self] in
             guard let self = self else { return }

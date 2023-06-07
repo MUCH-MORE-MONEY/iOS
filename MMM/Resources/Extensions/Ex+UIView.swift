@@ -110,4 +110,13 @@ extension UIView {
 		animation.isAdditive = true // 현재 주어진 텍스트 필드의 위치에 해당 x값이 추가되는 구조
 		layer.add(animation, forKey: nil)
 	}
+	
+	/// 밑줄
+	func setUnderLine(color: UIColor) {
+		let border = CALayer()
+		border.frame = CGRect(x: 0, y: self.frame.size.height + 4, width: self.frame.width, height: 2)
+		border.borderColor = color.cgColor
+		border.borderWidth = 1
+		self.layer.addSublayer(border)
+	}
 }

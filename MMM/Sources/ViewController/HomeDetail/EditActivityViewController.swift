@@ -107,9 +107,7 @@ extension EditActivityViewController {
         editViewModel.type = detailViewModel.detailActivity?.type ?? ""
         editViewModel.fileNo = detailViewModel.detailActivity?.fileNo ?? ""
         editViewModel.id = detailViewModel.detailActivity?.id ?? ""
-        
-        print(detailViewModel.detailActivity)
-        
+                
         // MARK: - UI Bind
         editViewModel.$star
             .receive(on: DispatchQueue.main)
@@ -248,15 +246,6 @@ extension EditActivityViewController {
     func didTapSaveButton() {
         detailViewModel.isShowToastMessage = true
         self.navigationController?.popViewController(animated: true)
-        print(editViewModel.amount)
-        print("binary count : ",editViewModel.binaryFileList.count)
-        print(editViewModel.type)
-        print(editViewModel.title)
-        print(editViewModel.memo)
-        print(editViewModel.id)
-        print(editViewModel.createAt)
-        print(editViewModel.fileNo)
-        print(editViewModel.star)
         editViewModel.updateDetailActivity()
     }
     
@@ -423,6 +412,6 @@ extension EditActivityViewController {
         print("이미지 변경")
     }
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        print("이미지를 선택하지 않고 취소")
+        dismiss(animated: true, completion: nil)
     }
 }

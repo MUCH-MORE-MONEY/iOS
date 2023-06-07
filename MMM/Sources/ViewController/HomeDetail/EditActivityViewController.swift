@@ -37,6 +37,8 @@ final class EditActivityViewController: BaseAddActivityViewController, UINavigat
     private let deleteAlertTitle = "경제활동을 삭제하시겠어요?"
     private let deleteAlertContentText = "활동이 영구적으로 사라지니 유의해주세요!"
     
+    private var isDeleteButton = false
+    
     init(viewModel: HomeDetailViewModel, date: Date) {
         self.detailViewModel = viewModel
         self.date = date
@@ -54,9 +56,9 @@ final class EditActivityViewController: BaseAddActivityViewController, UINavigat
     }
     
     override func didTapBackButton() {
-        super.didTapBackButton()
         //FIXME: - showAlert에서 super.didTapBackButton()호출하면 문제생김
-        //        showAlert(alertType: .canCancel, titleText: alertTitle, contentText: alertContentText, cancelButtonText: "닫기", confirmButtonText: "그만두기")
+        isDeleteButton = false
+        showAlert(alertType: .canCancel, titleText: editAlertTitle, contentText: editAlertContentText, cancelButtonText: "닫기", confirmButtonText: "그만두기")
     }
 }
 
@@ -251,15 +253,8 @@ extension EditActivityViewController {
     }
     
     func didTapDeleteButton() {
-        //FIXME: - showAlert에서 super.didTapBackButton()호출하면 문제생김
-        //        showAlert(alertType: .canCancel, titleText: deleteAlertTitle, contentText: deleteAlertContentText, cancelButtonText: "닫기", confirmButtonText: "그만두기")
-        if let navigationController = self.navigationController {
-            if let rootViewController = navigationController.viewControllers.first {
-                navigationController.setViewControllers([rootViewController], animated: true)
-            }
-        }
-        
-        editViewModel.deleteDetailActivity()
+        isDeleteButton = true
+        showAlert(alertType: .canCancel, titleText: deleteAlertTitle, contentText: deleteAlertContentText, cancelButtonText: "닫기", confirmButtonText: "그만두기")
     }
     
     func didTapAlbumButton() {
@@ -373,7 +368,16 @@ extension EditActivityViewController {
 
 extension EditActivityViewController: CustomAlertDelegate {
     func didAlertCofirmButton() {
-        super.didTapBackButton()
+        if isDeleteButton {
+            editViewModel.deleteDetailActivity()
+            if let navigationController = self.navigationController {
+                if let rootViewController = navigationController.viewControllers.first {
+                    navigationController.setViewControllers([rootViewController], animated: true)
+                }
+            }
+        } else {
+            super.didTapBackButton()
+        }
     }
     
     func didAlertCacelButton() { }

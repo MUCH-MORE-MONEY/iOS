@@ -231,7 +231,7 @@ extension DetailViewController {
                 
                 self.totalPrice.text = "\(value.amount.withCommas())원"
                 self.memoLabel.text = value.memo
-                self.satisfactionLabel.setSatisfyingLabel(by: value.star)
+                self.satisfactionLabel .setSatisfyingLabelEdit(by: value.star)
             }.store(in: &cancellable)
         
         bottomPageControlView.setViewModel(viewModel, index, economicActivityId)

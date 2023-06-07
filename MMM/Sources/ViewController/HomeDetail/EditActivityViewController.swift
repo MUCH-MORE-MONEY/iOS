@@ -51,7 +51,6 @@ final class EditActivityViewController: BaseAddActivityViewController, UINavigat
         super.viewDidLoad()
         setup()
         self.hideKeyboardWhenTappedAround()
-
     }
     
     override func didTapBackButton() {
@@ -71,6 +70,7 @@ extension EditActivityViewController {
     
     private func setAttribute() {
         navigationItem.rightBarButtonItem = deleteActivityButtonItem
+        memoTextView.delegate = self
         
         setCustomTitle()
         deleteActivityButtonItem = deleteActivityButtonItem.then {
@@ -107,7 +107,7 @@ extension EditActivityViewController {
         editViewModel.type = detailViewModel.detailActivity?.type ?? ""
         editViewModel.fileNo = detailViewModel.detailActivity?.fileNo ?? ""
         editViewModel.id = detailViewModel.detailActivity?.id ?? ""
-                
+        
         // MARK: - UI Bind
         editViewModel.$star
             .receive(on: DispatchQueue.main)
@@ -144,6 +144,7 @@ extension EditActivityViewController {
         
         memoTextView.textPublisher
             .sink(receiveValue: { text in
+                
                 self.editViewModel.memo = text
             })
             .store(in: &cancellable)
@@ -252,13 +253,12 @@ extension EditActivityViewController {
     func didTapDeleteButton() {
         //FIXME: - showAlert에서 super.didTapBackButton()호출하면 문제생김
         //        showAlert(alertType: .canCancel, titleText: deleteAlertTitle, contentText: deleteAlertContentText, cancelButtonText: "닫기", confirmButtonText: "그만두기")
-//        self.navigationController?.popViewController(animated: true)
         if let navigationController = self.navigationController {
             if let rootViewController = navigationController.viewControllers.first {
                 navigationController.setViewControllers([rootViewController], animated: true)
             }
         }
-
+        
         editViewModel.deleteDetailActivity()
     }
     
@@ -390,6 +390,7 @@ extension EditActivityViewController: StarPickerViewProtocol {
     }
 }
 
+// MARK: - ImagePicker Delegate
 extension EditActivityViewController {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: false) { [weak self] in
@@ -413,5 +414,33 @@ extension EditActivityViewController {
     }
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: nil)
+    }
+}
+
+// MARK: - TextView delegate
+extension EditActivityViewController: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == textViewPlaceholder {
+            textView.text = nil
+            textView.textColor = R.Color.black
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            textView.text = textViewPlaceholder
+            textView.textColor = R.Color.gray400
+        }
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        let inputString = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let oldString = textView.text, let newRange = Range(range, in: oldString) else { return true }
+        let newString = oldString.replacingCharacters(in: newRange, with: inputString).trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        let characterCount = newString.count
+        guard characterCount <= 300 else { return false }
+        
+        return true
     }
 }

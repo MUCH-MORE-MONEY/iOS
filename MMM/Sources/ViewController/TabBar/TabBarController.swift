@@ -30,16 +30,6 @@ final class TabBarController: UITabBarController {
 //        setup()
         
         setupTabBar()
-//        view.addSubview(customTabBar)
-//        customTabBar.translatesAutoresizingMaskIntoConstraints = false
-//
-//        NSLayoutConstraint.activate([
-//            customTabBar.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
-//            customTabBar.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
-//            customTabBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-//            customTabBar.heightAnchor.constraint(equalToConstant: 56),
-//            customTabBar.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
-//        ])
     }
 	private lazy var preSelect: Int = 0
 }

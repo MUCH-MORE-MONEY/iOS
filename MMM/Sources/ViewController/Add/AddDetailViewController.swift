@@ -77,9 +77,9 @@ extension AddDetailViewController {
             $0.setBackgroundColor(R.Color.gray400, for: .disabled)
         }
         
-        memoTextView = memoTextView.then {
-            $0.delegate = self
-        }
+        //        memoTextView = memoTextView.then {
+        ////            $0.delegate = self
+        //        }
     }
     
     private func setLayout() {
@@ -94,9 +94,21 @@ extension AddDetailViewController {
             .store(in: &cancellable)
         
         memoTextView.textPublisher
-            .sink { text in
-                self.viewModel.memo = text
-                print(text)
+            .sink { [weak self] ouput in
+                guard let self = self else { return }
+                // 0 : textViewDidChange
+                // 1 : textViewDidBeginEditing
+                // 2 : textViewDidEndEditing
+                switch ouput.1 {
+                case 0:
+                    self.textViewDidChange(text: ouput.0)
+                case 1:
+                    self.textViewDidBeginEditing()
+                case 2:
+                    self.textViewDidEndEditing()
+                default:
+                    print("unknown error")
+                }
             }.store(in: &cancellable)
         
         cameraImageView.setData(viewModel: viewModel)
@@ -280,36 +292,37 @@ extension AddDetailViewController {
     }
 }
 
-// MARK: - TextView Delegate
-extension AddDetailViewController: UITextViewDelegate {
-    func textViewDidBeginEditing(_ textView: UITextView) {
+// MARK: - TextView Func
+extension AddDetailViewController {
+    func textViewDidChange(text: String) {
+        viewModel.memo = text
+    }
+    
+    func textViewDidBeginEditing() {
         let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
         scrollView.contentInset = contentInsets
         scrollView.scrollIndicatorInsets = contentInsets
         
         var rect = scrollView.frame
         rect.size.height -= keyboardHeight
-        if !rect.contains(textView.frame.origin) {
-            scrollView.scrollRectToVisible(textView.frame, animated: true)
+        if !rect.contains(memoTextView.frame.origin) {
+            scrollView.scrollRectToVisible(memoTextView.frame, animated: true)
         }
         
-        print("keyboard height", keyboardHeight)
-        
-        
-        if textView.text == textViewPlaceholder {
-            textView.text = nil
-            textView.textColor = R.Color.black
+        if memoTextView.text == textViewPlaceholder {
+            memoTextView.text = nil
+            memoTextView.textColor = R.Color.black
         }
     }
     
-    func textViewDidEndEditing(_ textView: UITextView) {
+    func textViewDidEndEditing() {
         let contentInsets = UIEdgeInsets.zero
         scrollView.contentInset = contentInsets
         scrollView.scrollIndicatorInsets = contentInsets
         
-        if textView.text.isEmpty {
-            textView.text = textViewPlaceholder
-            textView.textColor = R.Color.gray400
+        if memoTextView.text.isEmpty {
+            memoTextView.text = textViewPlaceholder
+            memoTextView.textColor = R.Color.gray400
         }
     }
 }

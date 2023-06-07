@@ -230,7 +230,10 @@ extension DetailViewController {
                 }
                 
                 self.totalPrice.text = "\(value.amount.withCommas())원"
-                self.memoLabel.text = value.memo
+                if !value.memo.isEmpty {
+                    self.memoLabel.text = value.memo
+                }
+                
                 self.satisfactionLabel .setSatisfyingLabelEdit(by: value.star)
             }.store(in: &cancellable)
         

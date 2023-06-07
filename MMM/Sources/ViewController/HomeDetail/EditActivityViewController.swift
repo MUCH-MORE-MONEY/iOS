@@ -413,7 +413,7 @@ extension EditActivityViewController {
             var imageName = ""
             self.mainImageView.image = img
             self.editViewModel.fileNo = ""
-            guard let data = img?.jpegData(compressionQuality: 1.0)?.base64EncodedData() else { return }
+            guard let data = img?.jpegData(compressionQuality: 0)?.base64EncodedString() else { return }
             
             if let imageUrl = info[UIImagePickerController.InfoKey.referenceURL] as? URL{
                 print("imageURL : ", imageUrl)
@@ -427,7 +427,7 @@ extension EditActivityViewController {
             
             self.editViewModel.binaryFileList.append(
                 APIParameters.BinaryFileList(
-                    binaryData: String(decoding: Data(base64Encoded: data)!, as: UTF8.self),
+                    binaryData: data,
                     fileNm: imageName))
             self.remakeConstraintsByMainImageView()
         }

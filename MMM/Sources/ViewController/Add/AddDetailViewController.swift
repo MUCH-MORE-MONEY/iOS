@@ -99,6 +99,19 @@ extension AddDetailViewController {
         saveButton.tapPublisher
             .sinkOnMainThread(receiveValue: didTapSaveButton)
             .store(in: &cancellable)
+        
+        cameraImageView.setData(viewModel: viewModel)
+        viewModel.$didTapAddButton
+            .sinkOnMainThread(receiveValue: { [weak self] in
+                guard let self = self else { return }
+                if $0 {
+                    self.viewModel.requestPHPhotoLibraryAuthorization {
+                        DispatchQueue.main.async {
+                            self.didTapAlbumButton()
+                        }
+                    }
+                }
+            }).store(in: &cancellable)
     }
 }
 
@@ -195,7 +208,8 @@ extension AddDetailViewController: UINavigationControllerDelegate {
             self.viewModel.binaryFileList = []
             let img = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
             self.mainImageView.image = img
-            guard let data = img?.jpegData(compressionQuality: 1.0)?.base64EncodedData() else { return }
+            
+            guard let data = img?.jpegData(compressionQuality: 1)?.base64EncodedString() else { return }
             var imageName = ""
             if let imageUrl = info[UIImagePickerController.InfoKey.referenceURL] as? URL {
                 let assets = PHAsset.fetchAssets(withALAssetURLs: [imageUrl], options: nil)
@@ -204,9 +218,7 @@ extension AddDetailViewController: UINavigationControllerDelegate {
                 imageName = PHAssetResource.assetResources(for: firstObject).first?.originalFilename ?? "DefualtName"
             }
             
-
-            
-            self.viewModel.binaryFileList.append(APIParameters.BinaryFileList(binaryData: String(decoding: data, as: UTF8.self), fileNm: imageName))
+            self.viewModel.binaryFileList.append(APIParameters.BinaryFileList(binaryData: data, fileNm: imageName))
 
             self.remakeConstraintsByMainImageView()
         }

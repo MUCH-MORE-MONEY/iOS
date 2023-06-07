@@ -31,6 +31,7 @@ class BaseAddActivityViewController: BaseDetailViewController {
         UIImageView(image: R.Icon.iconStarDisabled16),
         UIImageView(image: R.Icon.iconStarDisabled16)
     ]
+    var textViewPlaceholder = "어떤 경제활동이었나요?\n남기고 싶은 내용이나 감정을 기록해보세요."
     var hasImage = false
     private var cancellable = Set<AnyCancellable>()
     
@@ -95,7 +96,7 @@ extension BaseAddActivityViewController {
         memoTextView = memoTextView.then {
             $0.font = R.Font.body3
             $0.textColor = R.Color.gray400
-            $0.text = "어떤 경제활동이었나요?\n남기고 싶은 내용이나 감정을 기록해보세요."
+            $0.text = textViewPlaceholder
             $0.translatesAutoresizingMaskIntoConstraints = true
             $0.sizeToFit()
             $0.isScrollEnabled = false

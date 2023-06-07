@@ -13,26 +13,40 @@ final class EditActivityViewModel {
     // MARK: - Property Wrapper
     @Published var didTapAddButton: Bool = false
     @Published var isTitleEmpty = false
+    @Published var priceInput: String = ""
+
     // MARK: - API Request를 위한 Property Wrapper
     @Published var title = ""
     @Published var memo = ""
     @Published var id = ""
     @Published var amount = 20000
     @Published var createAt = ""
-    @Published var star = 5
-    @Published var type = ""
+    @Published var star = 0
+    @Published var type = "01"
     @Published var fileNo = ""
-    @Published var binaryFileList:  [APIParameters.UpdateReqDto.BinaryFileList] = []
-  	@Published var date: Date = Date() // picker
+    @Published var binaryFileList:  [APIParameters.BinaryFileList] = []
+  	@Published var date: Date? // picker
 
-    @Published var data: InsertResDto?
     @Published var editResponse: UpdateResDto?
     @Published var deleteResponse: DeleteResDto?
+    @Published var insertResponse: InsertResDto?
     // MARK: - Porperties
     private var cancellable: Set<AnyCancellable> = []
-    lazy var isVaild: AnyPublisher<Bool, Never> = $title
+    lazy var isTitleVaild: AnyPublisher<Bool, Never> = $title
         .map { $0.count <= 16 } // 16자리 이하
         .eraseToAnyPublisher()
+    
+    
+    // MARK: - Public properties
+    // 들어온 퍼블리셔의 값 일치 여부를 반환하는 퍼블리셔
+    lazy var isPriceVaild: AnyPublisher<Bool, Never> = $priceInput
+        .map {0 <= Int($0) ?? 0 && Int($0) ?? 0 <= 10_000 } // 1억(1,000만원)보다 작을 경우
+        .eraseToAnyPublisher()
+    
+    lazy var isVaildByWon: AnyPublisher<Bool, Never> = $priceInput
+        .map { 0 <= Int($0) ?? 0 && Int($0) ?? 0 <= 100_000_000 } // 1억(1,000만원)보다 작을 경우
+        .eraseToAnyPublisher()
+    
     
     func requestPHPhotoLibraryAuthorization(completion: @escaping () -> Void) {
         if #available(iOS 14, *) {
@@ -58,7 +72,7 @@ final class EditActivityViewModel {
             APIRouter.InsertReqDto(
                 headers: APIHeader.Default(token: TempToken.token),
                 body: APIParameters.InsertEconomicActivityReqDto(
-                    binaryFileList: [],
+                    binaryFileList: binaryFileList,
                     amount: amount,
                     type: type,
                     title: title,
@@ -73,8 +87,8 @@ final class EditActivityViewModel {
                 break
             }
         } receiveValue: { response in
-            self.data = response
-            print(self.data)
+            self.insertResponse = response
+            print(self.insertResponse)
         }.store(in: &cancellable)
     }
     
@@ -100,32 +114,7 @@ final class EditActivityViewModel {
         .sink { data in
             switch data {
             case .failure(let error):
-                switch error {
-                case .error4xx(let code):
-                    print("\(code) error")
-                case .invalidRequest:
-                    print("invalidRequest")
-                case .badRequest:
-                    print("BadRequest")
-                case .unauthorized:
-                    print("unauthorized Error")
-                case .forbidden:
-                    print("forbidden Error")
-                case .notFound:
-                    print("notFOund Error")
-                case .serverError:
-                    print("Server Error")
-                case .error5xx(let code):
-                    print("\(code) error")
-                case .decodingError(let code):
-                    print("decoding Error : \(code)")
-                case .urlSessionFailed(let error):
-                    print("urlsession error : \(error.localizedDescription)")
-                case .timeOut:
-                    print("timeOut")
-                case .unknownError:
-                    print("Unknown")
-                }
+                print(error)
                 break
             case .finished:
                 break
@@ -145,32 +134,6 @@ final class EditActivityViewModel {
         .sink { data in
             switch data {
             case .failure(let error):
-                switch error {
-                case .error4xx(let code):
-                    print("\(code) error")
-                case .invalidRequest:
-                    print("invalidRequest")
-                case .badRequest:
-                    print("BadRequest")
-                case .unauthorized:
-                    print("unauthorized Error")
-                case .forbidden:
-                    print("forbidden Error")
-                case .notFound:
-                    print("notFOund Error")
-                case .serverError:
-                    print("Server Error")
-                case .error5xx(let code):
-                    print("\(code) error")
-                case .decodingError(let code):
-                    print("decoding Error : \(code)")
-                case .urlSessionFailed(let error):
-                    print("urlsession error : \(error.localizedDescription)")
-                case .timeOut:
-                    print("timeOut")
-                case .unknownError:
-                    print("Unknown")
-                }
                 break
             case .finished:
                 break

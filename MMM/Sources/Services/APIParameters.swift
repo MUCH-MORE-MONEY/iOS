@@ -46,15 +46,10 @@ struct APIParameters{
             case binaryFileList
             case type = "economicActivityDvcd"
             case amount = "economicActivityAmt"
-            case title = "economicActivityMm"
-            case memo = "economicActivityNm"
+            case title = "economicActivityNm"
+            case memo = "economicActivityMm"
             case createAt = "economicActivityYMD"
             case star = "valueScore"
-        }
-        
-        struct BinaryFileList: Codable {
-            let binaryData: String
-            let fileNm: String
         }
     }
     
@@ -72,21 +67,22 @@ struct APIParameters{
         
         enum CodingKeys: String, CodingKey {
             case binaryFileList
+            case fileNo
             case type = "economicActivityDvcd"
             case amount = "economicActivityAmt"
-            case title = "economicActivityMm"
-            case memo = "economicActivityNm"
+            case title = "economicActivityNm"
+            case memo = "economicActivityMm"
             case id = "economicActivityNo"
             case createAt = "economicActivityYMD"
             case star = "valueScore"
         }
-        
-        struct BinaryFileList: Codable {
-            let binaryData: String
-            let fileNm: String
-        }
     }
-
+    /// update와 insert에 사용하는 이미지 binaryfile struct
+    struct BinaryFileList: Codable {
+        let binaryData: String
+        let fileNm: String
+    }
+    
     /// 경제활동 삭제를 위한 Request
     struct DeleteReqDto: Encodable {
         var id: String

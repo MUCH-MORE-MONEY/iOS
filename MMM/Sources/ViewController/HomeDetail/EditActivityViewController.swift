@@ -36,7 +36,7 @@ final class EditActivityViewController: BaseAddActivityViewController, UINavigat
     
     private let deleteAlertTitle = "경제활동을 삭제하시겠어요?"
     private let deleteAlertContentText = "활동이 영구적으로 사라지니 유의해주세요!"
-    
+    private var keyboardHeight: CGFloat = 0
     private var isDeleteButton = false
     
     init(viewModel: HomeDetailViewModel, date: Date) {
@@ -60,19 +60,47 @@ final class EditActivityViewController: BaseAddActivityViewController, UINavigat
         isDeleteButton = false
         showAlert(alertType: .canCancel, titleText: editAlertTitle, contentText: editAlertContentText, cancelButtonText: "닫기", confirmButtonText: "그만두기")
     }
+    
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            keyboardHeight = keyboardSize.height
+            let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+            scrollView.contentInset = contentInsets
+            scrollView.scrollIndicatorInsets = contentInsets
+            
+            var rect = scrollView.frame
+            rect.size.height -= keyboardHeight
+            if !rect.contains(scrollView.frame.origin) {
+                scrollView.scrollRectToVisible(scrollView.frame, animated: true)
+            }
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        keyboardHeight = 0
+    }
+    
 }
 
 extension EditActivityViewController {
     // MARK: - Style & Layout
     private func setup() {
+        bind()
         setAttribute()
         setLayout()
-        bind()
     }
     
     private func setAttribute() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        
         navigationItem.rightBarButtonItem = deleteActivityButtonItem
-        memoTextView.delegate = self
+        
+        memoTextView = memoTextView.then {
+            $0.delegate = self
+        }
         
         setCustomTitle()
         deleteActivityButtonItem = deleteActivityButtonItem.then {
@@ -82,21 +110,18 @@ extension EditActivityViewController {
         deleteButton = deleteButton.then {
             $0.setTitle("삭제", for: .normal)
         }
-        
-        containerStackView.addArrangedSubview(editIconImage)
-        
+                
         editIconImage = editIconImage.then {
             $0.image = R.Icon.iconEditGray24
             $0.contentMode = .scaleAspectFit
         }
         
-        
-        
         setUIByViewModel()
-        
     }
     
-    private func setLayout() {  }
+    private func setLayout() {
+        containerStackView.addArrangedSubview(editIconImage)
+    }
     
     // MARK: - Bind
     private func bind() {
@@ -437,6 +462,16 @@ extension EditActivityViewController: UIImagePickerControllerDelegate {
 // MARK: - TextView delegate
 extension EditActivityViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
+        let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+        scrollView.contentInset = contentInsets
+        scrollView.scrollIndicatorInsets = contentInsets
+        
+        var rect = scrollView.frame
+        rect.size.height -= keyboardHeight
+        if !rect.contains(textView.frame.origin) {
+            scrollView.scrollRectToVisible(textView.frame, animated: true)
+        }
+        
         if textView.text == textViewPlaceholder {
             textView.text = nil
             textView.textColor = R.Color.black
@@ -444,20 +479,13 @@ extension EditActivityViewController: UITextViewDelegate {
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
+        let contentInsets = UIEdgeInsets.zero
+        scrollView.contentInset = contentInsets
+        scrollView.scrollIndicatorInsets = contentInsets
+        
         if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             textView.text = textViewPlaceholder
             textView.textColor = R.Color.gray400
         }
-    }
-    
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        let inputString = text.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard let oldString = textView.text, let newRange = Range(range, in: oldString) else { return true }
-        let newString = oldString.replacingCharacters(in: newRange, with: inputString).trimmingCharacters(in: .whitespacesAndNewlines)
-        
-        let characterCount = newString.count
-        guard characterCount <= 300 else { return false }
-        
-        return true
     }
 }

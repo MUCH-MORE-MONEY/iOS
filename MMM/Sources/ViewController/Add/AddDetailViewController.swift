@@ -11,12 +11,12 @@ import SnapKit
 import Then
 import Photos
 
-class AddDetailViewController: BaseAddActivityViewController {
+final class AddDetailViewController: BaseAddActivityViewController, UINavigationControllerDelegate {
     // MARK: - UI Components
     
     // MARK: - Properties
     private var viewModel: EditActivityViewModel
-
+    var keyboardHeight: CGFloat = 0
     private var cancellable = Set<AnyCancellable>()
     
     init(viewModel: EditActivityViewModel) {
@@ -32,27 +32,58 @@ class AddDetailViewController: BaseAddActivityViewController {
         super.viewDidLoad()
         setup()
     }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            keyboardHeight = keyboardSize.height
+            let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+            scrollView.contentInset = contentInsets
+            scrollView.scrollIndicatorInsets = contentInsets
+            
+            var rect = scrollView.frame
+            rect.size.height -= keyboardHeight
+            if !rect.contains(scrollView.frame.origin) {
+                scrollView.scrollRectToVisible(scrollView.frame, animated: true)
+            }
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        keyboardHeight = 0
+    }
 }
 
 // MARK: - Style & Layout & Bind
 extension AddDetailViewController {
     private func setup() {
+        bind()
         setAttribute()
         setLayout()
-        bind()
-        self.hideKeyboardWhenTappedAround()
     }
     
     private func setAttribute() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        self.hideKeyboardWhenTappedAround()
         title = viewModel.date?.getFormattedDate(format: "MM월 dd일 경제활동")
-        totalPrice.text = viewModel.amount.withCommas() + "원"
-        saveButton.isEnabled = false
-        saveButton.setBackgroundColor(R.Color.gray400, for: .disabled)
+        
+        totalPrice = totalPrice.then {
+            $0.text = viewModel.amount.withCommas() + "원"
+        }
+        
+        saveButton = saveButton.then {
+            $0.isEnabled = false
+            $0.setBackgroundColor(R.Color.gray400, for: .disabled)
+        }
+        
+        memoTextView = memoTextView.then {
+            $0.delegate = self
+        }
     }
     
     private func setLayout() {
         remakeConstraintsByCameraImageView()
-        if viewModel.star == 0 { }
     }
     
     // MARK: - bind
@@ -65,6 +96,7 @@ extension AddDetailViewController {
         memoTextView.textPublisher
             .sink { text in
                 self.viewModel.memo = text
+                print(text)
             }.store(in: &cancellable)
         
         cameraImageView.setData(viewModel: viewModel)
@@ -151,12 +183,11 @@ extension AddDetailViewController {
     }
     
     func didTapAlbumButton() {
-        let picker = UIImagePickerController()
-        
-        picker.sourceType = .photoLibrary
-        picker.allowsEditing = true
-        
-        picker.delegate = self
+        let picker = UIImagePickerController().then {
+            $0.sourceType = .photoLibrary
+            $0.allowsEditing = true
+            $0.delegate = self
+        }
         
         present(picker, animated: true)
     }
@@ -209,7 +240,7 @@ extension AddDetailViewController: StarPickerViewProtocol {
     }
 }
 
-extension AddDetailViewController: UINavigationControllerDelegate {
+extension AddDetailViewController: UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: false) { [weak self] in
             guard let self = self else { return }
@@ -245,6 +276,40 @@ extension AddDetailViewController {
         }
         for i in 0..<rate {
             self.starList[i].image = R.Icon.iconStarBlack16
+        }
+    }
+}
+
+// MARK: - TextView Delegate
+extension AddDetailViewController: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+        scrollView.contentInset = contentInsets
+        scrollView.scrollIndicatorInsets = contentInsets
+        
+        var rect = scrollView.frame
+        rect.size.height -= keyboardHeight
+        if !rect.contains(textView.frame.origin) {
+            scrollView.scrollRectToVisible(textView.frame, animated: true)
+        }
+        
+        print("keyboard height", keyboardHeight)
+        
+        
+        if textView.text == textViewPlaceholder {
+            textView.text = nil
+            textView.textColor = R.Color.black
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        let contentInsets = UIEdgeInsets.zero
+        scrollView.contentInset = contentInsets
+        scrollView.scrollIndicatorInsets = contentInsets
+        
+        if textView.text.isEmpty {
+            textView.text = textViewPlaceholder
+            textView.textColor = R.Color.gray400
         }
     }
 }

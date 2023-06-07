@@ -32,16 +32,6 @@ final class HomeViewController: UIViewController {
 	private lazy var headerView = UIView()
 	private lazy var dayLabel = UILabel()
 	private lazy var scopeGesture = UIPanGestureRecognizer()
-		
-	public init() {
-		super.init(nibName: nil, bundle: nil)
-	}
-	
-	// Compile time에 error를 발생시키는 코드
-	@available(*, unavailable)
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -405,6 +395,11 @@ extension HomeViewController: FSCalendarDelegateAppearance {
 		} else {
 			return R.Color.gray300
 		}
+	}
+	
+	// 기본 subtitle 색상
+	func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, subtitleDefaultColorFor date: Date) -> UIColor? {
+		return R.Color.gray300
 	}
 	
 	// 선택시, subtitle 색상

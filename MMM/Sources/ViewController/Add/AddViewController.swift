@@ -42,37 +42,32 @@ final class AddViewController: BaseViewController {
 	private lazy var nextFirstButton = UIButton()
 	private lazy var nextSecondButton = UIButton()
 
-	public init() {
-		super.init(nibName: nil, bundle: nil)
-	}
-	
-	// Compile time에 error를 발생시키는 코드
-	@available(*, unavailable)
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
-
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
 	}
 	
 	override func viewDidLayoutSubviews() {
+		super.viewDidLayoutSubviews()
+		
 		// Underline 호출
 		priceTextField.setUnderLine(color: R.Color.orange500)
 		dateButton.setUnderLine(color: R.Color.orange500)
-		
-		// cursor 위치 변경
-		if let newPosition = priceTextField.position(from: priceTextField.endOfDocument, offset: -1) {
-			let newSelectedRange = priceTextField.textRange(from: newPosition, to: newPosition)
-			priceTextField.selectedTextRange = newSelectedRange
-		}
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		
 		UIApplication.shared.windows.first?.overrideUserInterfaceStyle = .dark
+	}
+	
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+		// cursor 위치 변경
+		if let newPosition = priceTextField.position(from: priceTextField.endOfDocument, offset: -1) {
+			let newSelectedRange = priceTextField.textRange(from: newPosition, to: newPosition)
+			priceTextField.selectedTextRange = newSelectedRange
+		}
 	}
 	
 	override func viewWillDisappear(_ animated: Bool) {
@@ -89,13 +84,17 @@ extension AddViewController {
 	// MARK: - Private
 	// 유무에 따른 attribute 변경
 	private func setValid(_ isVaild: Bool) {
-		nextFirstButton.isEnabled = isVaild
-		nextSecondButton.isEnabled = isVaild
-		warningLabel.isHidden = viewModel.priceInput.isEmpty != isVaild
+		nextFirstButton.setTitleColor(!viewModel.priceInput.isEmpty && isVaild ? R.Color.white : R.Color.gray400, for: .normal)
+		nextFirstButton.isEnabled = !viewModel.priceInput.isEmpty && isVaild
+		nextSecondButton.isEnabled = !viewModel.priceInput.isEmpty && isVaild
+		warningLabel.isHidden = !viewModel.priceInput.isEmpty && isVaild
 		
 		// shake 에니메이션
 		if !viewModel.priceInput.isEmpty && !isVaild {
 			priceTextField.shake()
+			warningLabel.isHidden = false
+		} else {
+			warningLabel.isHidden = true
 		}
 	}
 	
@@ -135,7 +134,8 @@ extension AddViewController {
 	private func didTapDateButton() {
 		view.endEditing(true)
 		setLayoutPriceView()
-        let picker = DatePickerViewController(viewModel: viewModel, date: viewModel.date ?? Date())
+    let picker = DatePickerViewController(viewModel: viewModel, date: viewModel.date ?? Date())
+
 		let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
 		picker.delegate = bottomSheetVC
 		picker.setData(title: "경제활동 날짜 선택", isDark: true)
@@ -230,7 +230,9 @@ private extension AddViewController {
 		view.gesturePublisher()
 			.sinkOnMainThread(receiveValue: { _ in
 				// Keyboard 내리기
-				self.view.endEditing(true)
+				if !self.viewModel.priceInput.isEmpty {
+					self.view.endEditing(true)
+				}
 			}).store(in: &cancellable)
 		
 		priceTextField.textPublisher
@@ -432,7 +434,7 @@ private extension AddViewController {
 		}
 
 		warningLabel.snp.makeConstraints {
-			$0.top.equalTo(priceTextField.snp.bottom).offset(8)
+			$0.top.equalTo(priceTextField.snp.bottom).offset(12)
 			$0.leading.trailing.equalToSuperview()
 		}
 		

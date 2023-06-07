@@ -105,11 +105,27 @@
 		C4D03EF82A2EAB1600011B41 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4D03EF72A2EAB1600011B41 /* SwiftUI.framework */; };
 		C4D03EFB2A2EAB1700011B41 /* MMMWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D03EFA2A2EAB1700011B41 /* MMMWidgetBundle.swift */; };
 		C4D03EFD2A2EAB1700011B41 /* MMMWidgetLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D03EFC2A2EAB1700011B41 /* MMMWidgetLiveActivity.swift */; };
-		C4D03EFF2A2EAB1700011B41 /* MMMWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D03EFE2A2EAB1700011B41 /* MMMWidget.swift */; };
+		C4D03EFF2A2EAB1700011B41 /* MMMAddWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D03EFE2A2EAB1700011B41 /* MMMAddWidget.swift */; };
 		C4D03F022A2EAB1800011B41 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C4D03F012A2EAB1800011B41 /* Assets.xcassets */; };
 		C4D03F042A2EAB1800011B41 /* MMMWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = C4D03F002A2EAB1700011B41 /* MMMWidget.intentdefinition */; };
 		C4D03F052A2EAB1800011B41 /* MMMWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = C4D03F002A2EAB1700011B41 /* MMMWidget.intentdefinition */; };
 		C4D03F082A2EAB1800011B41 /* MMMWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C4D03EF42A2EAB1600011B41 /* MMMWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		C4D03F102A2EB0DB00011B41 /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = C41193CF29D2874A003DBC15 /* Pretendard-Bold.otf */; };
+		C4D03F112A2EB0DB00011B41 /* Pretendard-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = C41193D129D2874A003DBC15 /* Pretendard-ExtraLight.otf */; };
+		C4D03F122A2EB0DB00011B41 /* Pretendard-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = C41193CB29D2874A003DBC15 /* Pretendard-Black.otf */; };
+		C4D03F132A2EB0DB00011B41 /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = C41193D229D2874A003DBC15 /* Pretendard-SemiBold.otf */; };
+		C4D03F142A2EB0DB00011B41 /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = C41193CA29D2874A003DBC15 /* Pretendard-Regular.otf */; };
+		C4D03F152A2EB0DB00011B41 /* Pretendard-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = C41193D029D2874A003DBC15 /* Pretendard-Thin.otf */; };
+		C4D03F162A2EB0DB00011B41 /* Pretendard-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = C41193CC29D2874A003DBC15 /* Pretendard-Medium.otf */; };
+		C4D03F172A2EB0DB00011B41 /* Pretendard-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = C41193CD29D2874A003DBC15 /* Pretendard-Light.otf */; };
+		C4D03F182A2EB0DB00011B41 /* Pretendard-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = C41193CE29D2874A003DBC15 /* Pretendard-ExtraBold.otf */; };
+		C4D03F222A2EB2FF00011B41 /* MMMResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D03F1E2A2EB2CE00011B41 /* MMMResource.swift */; };
+		C4D03F232A2EB30300011B41 /* Ex+Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D03F202A2EB2EA00011B41 /* Ex+Font.swift */; };
+		C4D03F262A2EB42000011B41 /* Ex+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193E029D287E6003DBC15 /* Ex+Color.swift */; };
+		C4D03F272A2EB54D00011B41 /* Color.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C41193C529D2838E003DBC15 /* Color.xcassets */; };
+		C4D03F2F2A2EFA8700011B41 /* Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D03F2E2A2EFA8700011B41 /* Screen.swift */; };
+		C4D03F372A2F037200011B41 /* MMMActivityWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D03F362A2F037200011B41 /* MMMActivityWidget.swift */; };
+		C4D03F382A2F056200011B41 /* Monthly.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D7FC862A08942E00565291 /* Monthly.swift */; };
 		C4D7FC872A08942E00565291 /* Monthly.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D7FC862A08942E00565291 /* Monthly.swift */; };
 		C4D7FC892A08A61C00565291 /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D7FC882A08A61C00565291 /* CalendarCell.swift */; };
 		C4DBAA2C29DBCB8B00D1BB97 /* Ex+Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBAA2B29DBCB8B00D1BB97 /* Ex+Button.swift */; };
@@ -274,10 +290,14 @@
 		C4D03EF72A2EAB1600011B41 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		C4D03EFA2A2EAB1700011B41 /* MMMWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMMWidgetBundle.swift; sourceTree = "<group>"; };
 		C4D03EFC2A2EAB1700011B41 /* MMMWidgetLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMMWidgetLiveActivity.swift; sourceTree = "<group>"; };
-		C4D03EFE2A2EAB1700011B41 /* MMMWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMMWidget.swift; sourceTree = "<group>"; };
+		C4D03EFE2A2EAB1700011B41 /* MMMAddWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMMAddWidget.swift; sourceTree = "<group>"; };
 		C4D03F002A2EAB1700011B41 /* MMMWidget.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = MMMWidget.intentdefinition; sourceTree = "<group>"; };
 		C4D03F012A2EAB1800011B41 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C4D03F032A2EAB1800011B41 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C4D03F1E2A2EB2CE00011B41 /* MMMResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMMResource.swift; sourceTree = "<group>"; };
+		C4D03F202A2EB2EA00011B41 /* Ex+Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Ex+Font.swift"; path = "../../../../../../Downloads/Ex+Font.swift"; sourceTree = "<group>"; };
+		C4D03F2E2A2EFA8700011B41 /* Screen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Screen.swift; sourceTree = "<group>"; };
+		C4D03F362A2F037200011B41 /* MMMActivityWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMMActivityWidget.swift; sourceTree = "<group>"; };
 		C4D7FC862A08942E00565291 /* Monthly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Monthly.swift; sourceTree = "<group>"; };
 		C4D7FC882A08A61C00565291 /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
 		C4DBAA2B29DBCB8B00D1BB97 /* Ex+Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Button.swift"; sourceTree = "<group>"; };
@@ -737,14 +757,74 @@
 		C4D03EF92A2EAB1700011B41 /* MMMWidget */ = {
 			isa = PBXGroup;
 			children = (
-				C4D03EFA2A2EAB1700011B41 /* MMMWidgetBundle.swift */,
-				C4D03EFC2A2EAB1700011B41 /* MMMWidgetLiveActivity.swift */,
-				C4D03EFE2A2EAB1700011B41 /* MMMWidget.swift */,
 				C4D03F002A2EAB1700011B41 /* MMMWidget.intentdefinition */,
-				C4D03F012A2EAB1800011B41 /* Assets.xcassets */,
-				C4D03F032A2EAB1800011B41 /* Info.plist */,
+				C4D03F0E2A2EB01C00011B41 /* Resources */,
+				C4D03F302A2EFE9D00011B41 /* Sources */,
 			);
 			path = MMMWidget;
+			sourceTree = "<group>";
+		};
+		C4D03F0E2A2EB01C00011B41 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C4D03F312A2EFEC800011B41 /* Assets */,
+				C4D03F2D2A2EFA7800011B41 /* Constants */,
+				C4D03F1D2A2EB2B800011B41 /* Extensions */,
+				C4D03F322A2EFED500011B41 /* Info */,
+				C4D03F1E2A2EB2CE00011B41 /* MMMResource.swift */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		C4D03F1D2A2EB2B800011B41 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				C4D03F202A2EB2EA00011B41 /* Ex+Font.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		C4D03F2D2A2EFA7800011B41 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				C4D03F2E2A2EFA8700011B41 /* Screen.swift */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
+		C4D03F302A2EFE9D00011B41 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				C4D03EFA2A2EAB1700011B41 /* MMMWidgetBundle.swift */,
+				C4D03EFC2A2EAB1700011B41 /* MMMWidgetLiveActivity.swift */,
+				C4D03F332A2EFF4200011B41 /* Views */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		C4D03F312A2EFEC800011B41 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				C4D03F012A2EAB1800011B41 /* Assets.xcassets */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		C4D03F322A2EFED500011B41 /* Info */ = {
+			isa = PBXGroup;
+			children = (
+				C4D03F032A2EAB1800011B41 /* Info.plist */,
+			);
+			path = Info;
+			sourceTree = "<group>";
+		};
+		C4D03F332A2EFF4200011B41 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C4D03EFE2A2EAB1700011B41 /* MMMAddWidget.swift */,
+				C4D03F362A2F037200011B41 /* MMMActivityWidget.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -914,7 +994,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4D03F112A2EB0DB00011B41 /* Pretendard-ExtraLight.otf in Resources */,
+				C4D03F142A2EB0DB00011B41 /* Pretendard-Regular.otf in Resources */,
+				C4D03F182A2EB0DB00011B41 /* Pretendard-ExtraBold.otf in Resources */,
+				C4D03F152A2EB0DB00011B41 /* Pretendard-Thin.otf in Resources */,
+				C4D03F162A2EB0DB00011B41 /* Pretendard-Medium.otf in Resources */,
+				C4D03F272A2EB54D00011B41 /* Color.xcassets in Resources */,
 				C4D03F022A2EAB1800011B41 /* Assets.xcassets in Resources */,
+				C4D03F132A2EB0DB00011B41 /* Pretendard-SemiBold.otf in Resources */,
+				C4D03F122A2EB0DB00011B41 /* Pretendard-Black.otf in Resources */,
+				C4D03F102A2EB0DB00011B41 /* Pretendard-Bold.otf in Resources */,
+				C4D03F172A2EB0DB00011B41 /* Pretendard-Light.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1141,9 +1231,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				C4D03EFD2A2EAB1700011B41 /* MMMWidgetLiveActivity.swift in Sources */,
-				C4D03EFF2A2EAB1700011B41 /* MMMWidget.swift in Sources */,
+				C4D03F382A2F056200011B41 /* Monthly.swift in Sources */,
+				C4D03EFF2A2EAB1700011B41 /* MMMAddWidget.swift in Sources */,
 				C4D03F042A2EAB1800011B41 /* MMMWidget.intentdefinition in Sources */,
+				C4D03F262A2EB42000011B41 /* Ex+Color.swift in Sources */,
+				C4D03F232A2EB30300011B41 /* Ex+Font.swift in Sources */,
+				C4D03F222A2EB2FF00011B41 /* MMMResource.swift in Sources */,
+				C4D03F372A2F037200011B41 /* MMMActivityWidget.swift in Sources */,
 				C4D03EFB2A2EAB1700011B41 /* MMMWidgetBundle.swift in Sources */,
+				C4D03F2F2A2EFA8700011B41 /* Screen.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1309,7 +1405,6 @@
 				DEVELOPMENT_TEAM = L7X442LA7Q;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MMM/Resources/Info/Info.plist;
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -1344,7 +1439,6 @@
 				DEVELOPMENT_TEAM = L7X442LA7Q;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MMM/Resources/Info/Info.plist;
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -1451,7 +1545,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = L7X442LA7Q;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = MMMWidget/Info.plist;
+				INFOPLIST_FILE = MMMWidget/Resources/Info/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = MMMWidget;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1478,7 +1572,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = L7X442LA7Q;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = MMMWidget/Info.plist;
+				INFOPLIST_FILE = MMMWidget/Resources/Info/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = MMMWidget;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (

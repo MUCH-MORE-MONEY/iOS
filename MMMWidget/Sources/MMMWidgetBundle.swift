@@ -11,7 +11,8 @@ import SwiftUI
 @main
 struct MMMWidgetBundle: WidgetBundle {
     var body: some Widget {
-        MMMWidget()
-        MMMWidgetLiveActivity()
+        MMMAddWidget()
+		MMMActivityWidget()
+//        MMMWidgetLiveActivity()
     }
 }

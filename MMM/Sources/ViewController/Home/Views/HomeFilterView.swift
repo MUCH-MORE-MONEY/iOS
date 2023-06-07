@@ -142,7 +142,7 @@ private extension HomeFilterView {
 	}
 	
 	private func setLayout() {
-		addSubviews(titleLabel, standardTouchView, standardView, separator1, separator2, middleLabel, colorButton, lastLabel)
+		addSubviews(titleLabel, standardView, separator1, standardTouchView, separator2, middleLabel, colorButton, lastLabel)
 		standardView.addSubviews(standardLabel, expandImageView)
 		
 		titleLabel.snp.makeConstraints {

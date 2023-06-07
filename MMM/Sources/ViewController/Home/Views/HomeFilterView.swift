@@ -189,12 +189,13 @@ private extension HomeFilterView {
 			$0.height.equalTo(2)
 		}
 		
-		separator2.snp.makeConstraints {
-			$0.top.equalTo(standardView.snp.bottom).offset(8)
-			$0.bottom.equalToSuperview().inset(14)
-			$0.leading.equalTo(colorButton).offset(-4)
-			$0.trailing.equalTo(colorButton).offset(4)
-			$0.height.equalTo(2)
-		}
+		// 임시: 베포 ver2 기능
+//		separator2.snp.makeConstraints {
+//			$0.top.equalTo(standardView.snp.bottom).offset(8)
+//			$0.bottom.equalToSuperview().inset(14)
+//			$0.leading.equalTo(colorButton).offset(-4)
+//			$0.trailing.equalTo(colorButton).offset(4)
+//			$0.height.equalTo(2)
+//		}
 	}
 }

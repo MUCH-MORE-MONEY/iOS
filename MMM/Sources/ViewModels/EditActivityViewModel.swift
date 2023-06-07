@@ -32,10 +32,10 @@ final class EditActivityViewModel {
     @Published var insertResponse: InsertResDto?
     // MARK: - Porperties
     private var cancellable: Set<AnyCancellable> = []
+	var isAddModel: Bool
     lazy var isTitleVaild: AnyPublisher<Bool, Never> = $title
         .map { $0.count <= 16 } // 16자리 이하
         .eraseToAnyPublisher()
-    
     
     // MARK: - Public properties
     // 들어온 퍼블리셔의 값 일치 여부를 반환하는 퍼블리셔
@@ -46,7 +46,10 @@ final class EditActivityViewModel {
     lazy var isVaildByWon: AnyPublisher<Bool, Never> = $priceInput
         .map { 0 <= Int($0) ?? 0 && Int($0) ?? 0 <= 100_000_000 } // 1억(1,000만원)보다 작을 경우
         .eraseToAnyPublisher()
-    
+	
+	init(isAddModel: Bool) {
+		self.isAddModel = isAddModel
+	}
     
     func requestPHPhotoLibraryAuthorization(completion: @escaping () -> Void) {
         if #available(iOS 14, *) {

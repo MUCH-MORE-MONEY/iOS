@@ -26,7 +26,7 @@ final class EditActivityViewController: BaseAddActivityViewController, UINavigat
     // MARK: - Properties
     private var cancellable = Set<AnyCancellable>()
     private var detailViewModel: HomeDetailViewModel
-    private var editViewModel = EditActivityViewModel()
+	private var editViewModel = EditActivityViewModel(isAddModel: false)
     private var date: Date
     private var navigationTitle: String {
         return date.getFormattedDate(format: "yyyy.MM.dd")

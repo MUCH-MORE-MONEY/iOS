@@ -7,17 +7,7 @@
 
 import UIKit
 
-extension UITextField {
-	/// 밑줄
-	func setUnderLine(color: UIColor) {
-		let border = CALayer()
-		border.frame = CGRect(x: 0, y: self.frame.size.height + 4, width: self.frame.width, height: 2)
-		border.borderColor = color.cgColor
-		border.borderWidth = 1
-		self.borderStyle = .none
-		self.layer.addSublayer(border)
-	}
-	
+extension UITextField {	
 	/// Clear button
 	func setClearButton(with image: UIImage?, mode: UITextField.ViewMode) {
 		let clearButton = UIButton(type: .custom)

@@ -74,7 +74,7 @@
 		C41193E529D287E6003DBC15 /* Ex+UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193DF29D287E6003DBC15 /* Ex+UIDevice.swift */; };
 		C41193E629D287E6003DBC15 /* Ex+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193E029D287E6003DBC15 /* Ex+Color.swift */; };
 		C41193E729D287E6003DBC15 /* Ex+Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193E129D287E6003DBC15 /* Ex+Icon.swift */; };
-		C41193E829D287E6003DBC15 /* Ex+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193E229D287E6003DBC15 /* Ex+View.swift */; };
+		C41193E829D287E6003DBC15 /* Ex+UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193E229D287E6003DBC15 /* Ex+UIView.swift */; };
 		C41193EA29D2D7FE003DBC15 /* MMMResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193E929D2D7FE003DBC15 /* MMMResource.swift */; };
 		C41193F329D3AED5003DBC15 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193F229D3AED5003DBC15 /* ProfileHeaderView.swift */; };
 		C41193F529D3D7FB003DBC15 /* Ex+NSObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193F429D3D7FB003DBC15 /* Ex+NSObject.swift */; };
@@ -103,7 +103,6 @@
 		C4C0CAF52A1C88DC00C41FF4 /* PriceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0CAF42A1C88DC00C41FF4 /* PriceViewModel.swift */; };
 		C4C0CB022A23A07000C41FF4 /* EditPriceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0CB012A23A06F00C41FF4 /* EditPriceViewController.swift */; };
 		C4C0CB092A2474F900C41FF4 /* Ex+UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0CB082A2474F900C41FF4 /* Ex+UILabel.swift */; };
-		C4C0CB0D2A249F7000C41FF4 /* AddViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0CB0C2A249F7000C41FF4 /* AddViewModel.swift */; };
 		C4D03ED02A2DD33700011B41 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D03ECF2A2DD33700011B41 /* ProfileViewModel.swift */; };
 		C4D03EF62A2EAB1600011B41 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4D03EF52A2EAB1600011B41 /* WidgetKit.framework */; };
 		C4D03EF82A2EAB1600011B41 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4D03EF72A2EAB1600011B41 /* SwiftUI.framework */; };
@@ -258,7 +257,7 @@
 		C41193DF29D287E6003DBC15 /* Ex+UIDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UIDevice.swift"; sourceTree = "<group>"; };
 		C41193E029D287E6003DBC15 /* Ex+Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+Color.swift"; sourceTree = "<group>"; };
 		C41193E129D287E6003DBC15 /* Ex+Icon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+Icon.swift"; sourceTree = "<group>"; };
-		C41193E229D287E6003DBC15 /* Ex+View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+View.swift"; sourceTree = "<group>"; };
+		C41193E229D287E6003DBC15 /* Ex+UIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UIView.swift"; sourceTree = "<group>"; };
 		C41193E929D2D7FE003DBC15 /* MMMResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMMResource.swift; sourceTree = "<group>"; };
 		C41193F229D3AED5003DBC15 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		C41193F429D3D7FB003DBC15 /* Ex+NSObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+NSObject.swift"; sourceTree = "<group>"; };
@@ -290,7 +289,6 @@
 		C4C0CAFD2A1F205100C41FF4 /* Ex+UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UITextField.swift"; sourceTree = "<group>"; };
 		C4C0CB012A23A06F00C41FF4 /* EditPriceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPriceViewController.swift; sourceTree = "<group>"; };
 		C4C0CB082A2474F900C41FF4 /* Ex+UILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UILabel.swift"; sourceTree = "<group>"; };
-		C4C0CB0C2A249F7000C41FF4 /* AddViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewModel.swift; sourceTree = "<group>"; };
 		C4D03ECF2A2DD33700011B41 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		C4D03EF42A2EAB1600011B41 /* MMMWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MMMWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4D03EF52A2EAB1600011B41 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -635,7 +633,7 @@
 				6A27E6942A205338001A7F04 /* Ex+UITextField.swift */,
 				6A0379742A2443B9005EE07F /* Ex+UITextView.swift */,
 				6A4F6E952A29ADA500754150 /* Ex+UIViewController.swift */,
-				C41193E229D287E6003DBC15 /* Ex+View.swift */,
+				C41193E229D287E6003DBC15 /* Ex+UIView.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -665,7 +663,6 @@
 		C41193EF29D3A7BA003DBC15 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				C4C0CB0C2A249F7000C41FF4 /* AddViewModel.swift */,
 				6A04FA082A1C7EE80034C114 /* EditActivityViewModel.swift */,
 				C44807E229E649A300D4B090 /* HomeViewModel.swift */,
 				6A626BC42A0C87E800BDD5C0 /* HomeDetailViewModel.swift */,
@@ -1153,13 +1150,12 @@
 				6A08B47829FF5C7E0080719E /* APIParameters.swift in Sources */,
 				C4C0CAF52A1C88DC00C41FF4 /* PriceViewModel.swift in Sources */,
 				6A08B48029FF74B70080719E /* Ex+Encodable.swift in Sources */,
-				C41193E829D287E6003DBC15 /* Ex+View.swift in Sources */,
+				C41193E829D287E6003DBC15 /* Ex+UIView.swift in Sources */,
 				6A0379752A2443B9005EE07F /* Ex+UITextView.swift in Sources */,
 				6A08FFDC2A274A22000AD06B /* AddDetailViewController.swift in Sources */,
 				6A12144729FA0C300076848A /* AppleLoginResDto.swift in Sources */,
 				6A0F234229DBA92D0063673B /* ServiceViewController.swift in Sources */,
 				C4DBAA3729DD7B2600D1BB97 /* CountPushLabel.swift in Sources */,
-				C4C0CB0D2A249F7000C41FF4 /* AddViewModel.swift in Sources */,
 				C41193E729D287E6003DBC15 /* Ex+Icon.swift in Sources */,
 				C4199DD929FE6BE1006E5DA8 /* DatePickerViewController.swift in Sources */,
 				C4EA5B4429FA2810008D1564 /* Ex+UIStackView.swift in Sources */,

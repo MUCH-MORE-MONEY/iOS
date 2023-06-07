@@ -446,10 +446,12 @@ extension HomeViewController: UITableViewDataSource {
 		cell.setData(data: viewModel.dailyList[indexPath.row])
 		cell.backgroundColor = R.Color.gray100
 
-		if indexPath.row == viewModel.dailyList.count - 1 {
-			// 마지막 cell은 bottom border 제거
-			DispatchQueue.main.async {
+		DispatchQueue.main.async {
+			if indexPath.row == self.viewModel.dailyList.count - 1 {
+				// 마지막 cell은 bottom border 제거
 				cell.addAboveTheBottomBorderWithColor(color: R.Color.gray100)
+			} else {
+				cell.addAboveTheBottomBorderWithColor(color: R.Color.gray200)
 			}
 		}
 		

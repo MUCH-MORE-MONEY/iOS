@@ -36,5 +36,7 @@
 			</array>
 		</dict>
 	</dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>&apos;MMM&apos;에서 사진을 가져오기 위해 갤러리에 접근합니다</string>
 </dict>
 </plist>

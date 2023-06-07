@@ -62,7 +62,7 @@ final class EditActivityViewModel {
                     print("Unimplemented")
                 }
             }
-        }
+		}
     }
     
     func insertDetailActivity() {

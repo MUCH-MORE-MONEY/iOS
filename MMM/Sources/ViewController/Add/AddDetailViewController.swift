@@ -130,14 +130,6 @@ extension AddDetailViewController {
     func didTapSaveButton() {
         //        viewModel.isShowToastMessage = true
         self.navigationController?.popViewController(animated: true)
-        print("amount : ",viewModel.amount)
-        print("binary count : ",viewModel.binaryFileList.count)
-//        print("binary name : ",viewModel.binaryFileList.first!.fileNm)
-        print("type : ",viewModel.type)
-        print("title : ",viewModel.title)
-        print("memo : ",viewModel.memo)
-        print("createAt : ",viewModel.createAt)
-        print("star : ",viewModel.star)
         viewModel.insertDetailActivity()
         
     }
@@ -225,7 +217,7 @@ extension AddDetailViewController: UINavigationControllerDelegate {
         print("이미지 변경")
     }
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        print("이미지를 선택하지 않고 취소")
+        dismiss(animated: true, completion: nil)
     }
 }
 

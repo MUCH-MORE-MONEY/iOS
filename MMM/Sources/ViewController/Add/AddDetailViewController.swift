@@ -46,6 +46,8 @@ extension AddDetailViewController {
     private func setAttribute() {
         title = viewModel.date?.getFormattedDate(format: "MM월 dd일 경제활동")
         totalPrice.text = viewModel.amount.withCommas() + "원"
+        saveButton.isEnabled = false
+        saveButton.setBackgroundColor(R.Color.gray400, for: .disabled)
     }
     
     private func setLayout() {
@@ -94,6 +96,20 @@ extension AddDetailViewController {
                 self.satisfyingLabel.setSatisfyingLabelEdit(by: value)
                 self.setStarImage(Int(value))
             }.store(in: &cancellable)
+        
+        // textfield가 없을 때 버튼 비활성화
+        titleTextFeild.textPublisher
+            .sinkOnMainThread { [weak self] text in
+                guard let self = self else { return }
+                if text.isEmpty {
+                    self.saveButton.isEnabled = false
+                    self.saveButton.setBackgroundColor(R.Color.gray400, for: .disabled)
+                } else {
+                    self.saveButton.isEnabled = true
+                    self.saveButton.setBackgroundColor(R.Color.gray800, for: .normal)
+                }
+            }.store(in: &cancellable)
+        
         
         // MARK: - CRUD Publisher
         saveButton.tapPublisher

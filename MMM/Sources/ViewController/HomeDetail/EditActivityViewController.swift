@@ -144,6 +144,20 @@ extension EditActivityViewController {
             .assign(to: \.title, on: editViewModel)
             .store(in: &cancellable)
         
+        
+        // textfield가 없을 때 버튼 비활성화
+        titleTextFeild.textPublisher
+            .sinkOnMainThread { [weak self] text in
+                guard let self = self else { return }
+                if text.isEmpty {
+                    self.saveButton.isEnabled = false
+                    self.saveButton.setBackgroundColor(R.Color.gray400, for: .disabled)
+                } else {
+                    self.saveButton.isEnabled = true
+                    self.saveButton.setBackgroundColor(R.Color.gray800, for: .normal)
+                }
+            }.store(in: &cancellable)
+        
         memoTextView.textPublisher
             .sink(receiveValue: { text in
                 

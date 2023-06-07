@@ -18,6 +18,7 @@ final class HomeFilterView: UIView {
 
 	// MARK: - UI Components
 	private lazy var titleLabel = UILabel()
+	private lazy var standardTouchView = UIView()
 	private lazy var standardView = UIView()
 	private lazy var standardLabel = UILabel()
 	private lazy var expandImageView = UIImageView()
@@ -75,7 +76,7 @@ private extension HomeFilterView {
 	private func bind() {
 		//MARK: input
 		// Set Standard 하이라이트
-		standardView.gesturePublisher()
+		standardTouchView.gesturePublisher()
 			.sinkOnMainThread(receiveValue: { _ in 
 				// viewModel.isHighlight가 Toggle이 유무
 				guard let viewModel = self.viewModel, viewModel.isHighlight else { return }
@@ -141,17 +142,22 @@ private extension HomeFilterView {
 	}
 	
 	private func setLayout() {
-		addSubviews(titleLabel, standardView, separator1, separator2, middleLabel, colorButton, lastLabel)
+		addSubviews(titleLabel, standardTouchView, standardView, separator1, separator2, middleLabel, colorButton, lastLabel)
 		standardView.addSubviews(standardLabel, expandImageView)
 		
 		titleLabel.snp.makeConstraints {
-			$0.top.leading.equalToSuperview().inset(12)
+			$0.top.equalToSuperview().inset(12)
+			$0.leading.equalToSuperview().inset(16)
+		}
+		
+		standardTouchView.snp.makeConstraints {
+			$0.top.leading.trailing.equalTo(standardView)
+			$0.bottom.equalTo(separator1)
 		}
 		
 		standardView.snp.makeConstraints {
-			$0.top.equalTo(titleLabel.snp.bottom).offset(8)
-
-			$0.leading.equalToSuperview().inset(12)
+			$0.top.equalTo(titleLabel.snp.bottom).offset(14) // 임시: 디자인 조절
+			$0.leading.equalToSuperview().inset(16)
 			$0.trailing.equalTo(expandImageView)
 		}
 		
@@ -183,8 +189,8 @@ private extension HomeFilterView {
 		
 		separator1.snp.makeConstraints {
 			$0.top.equalTo(standardView.snp.bottom).offset(8)
-			$0.bottom.equalToSuperview().inset(14)
-			$0.leading.equalToSuperview().inset(12)
+			$0.bottom.lessThanOrEqualToSuperview().inset(14)
+			$0.leading.equalToSuperview().inset(16)
 			$0.trailing.equalTo(expandImageView)
 			$0.height.equalTo(2)
 		}

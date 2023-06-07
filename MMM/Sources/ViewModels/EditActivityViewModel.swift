@@ -114,32 +114,7 @@ final class EditActivityViewModel {
         .sink { data in
             switch data {
             case .failure(let error):
-                switch error {
-                case .error4xx(let code):
-                    print("\(code) error")
-                case .invalidRequest:
-                    print("invalidRequest")
-                case .badRequest:
-                    print("BadRequest")
-                case .unauthorized:
-                    print("unauthorized Error")
-                case .forbidden:
-                    print("forbidden Error")
-                case .notFound:
-                    print("notFOund Error")
-                case .serverError:
-                    print("Server Error")
-                case .error5xx(let code):
-                    print("\(code) error")
-                case .decodingError(let code):
-                    print("decoding Error : \(code)")
-                case .urlSessionFailed(let error):
-                    print("urlsession error : \(error.localizedDescription)")
-                case .timeOut:
-                    print("timeOut")
-                case .unknownError:
-                    print("Unknown")
-                }
+                print(error)
                 break
             case .finished:
                 break
@@ -159,32 +134,6 @@ final class EditActivityViewModel {
         .sink { data in
             switch data {
             case .failure(let error):
-                switch error {
-                case .error4xx(let code):
-                    print("\(code) error")
-                case .invalidRequest:
-                    print("invalidRequest")
-                case .badRequest:
-                    print("BadRequest")
-                case .unauthorized:
-                    print("unauthorized Error")
-                case .forbidden:
-                    print("forbidden Error")
-                case .notFound:
-                    print("notFOund Error")
-                case .serverError:
-                    print("Server Error")
-                case .error5xx(let code):
-                    print("\(code) error")
-                case .decodingError(let code):
-                    print("decoding Error : \(code)")
-                case .urlSessionFailed(let error):
-                    print("urlsession error : \(error.localizedDescription)")
-                case .timeOut:
-                    print("timeOut")
-                case .unknownError:
-                    print("Unknown")
-                }
                 break
             case .finished:
                 break

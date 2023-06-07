@@ -130,7 +130,7 @@ struct NetworkDispatcher {
                     throw httpError(0)
                 }
                 
-                print("[\(response.statusCode)] '\(request.url!)'")
+//                print("[\(response.statusCode)] '\(request.url!)'")
                 
                 if !(200...299).contains(response.statusCode) {
                     throw httpError(response.statusCode)
@@ -191,7 +191,6 @@ struct APIClient {
         
         typealias RequestPublisher = AnyPublisher<R.ReturnType, NetworkRequestError>
         let requestPublisher: RequestPublisher = networkDispatcher.dispatch(request: urlRequest)
-//        print(request)
         return requestPublisher.eraseToAnyPublisher()
     }
 }

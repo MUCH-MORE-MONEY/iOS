@@ -211,7 +211,6 @@ extension AddDetailViewController: UINavigationControllerDelegate {
             }
             
             self.viewModel.binaryFileList.append(APIParameters.BinaryFileList(binaryData: data, fileNm: imageName))
-
             self.remakeConstraintsByMainImageView()
         }
         print("이미지 변경")

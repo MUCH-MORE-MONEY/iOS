@@ -250,7 +250,6 @@ extension EditActivityViewController {
         self.navigationController?.popViewController(animated: true)
         print(editViewModel.amount)
         print("binary count : ",editViewModel.binaryFileList.count)
-        //        print("binary name : ",editViewModel.binaryFileList.first!.fileNm)
         print(editViewModel.type)
         print(editViewModel.title)
         print(editViewModel.memo)
@@ -300,9 +299,8 @@ extension EditActivityViewController {
         actionSheet.addAction(UIAlertAction(title: "사진삭제", style: .destructive, handler: { [weak self] (ACTION:UIAlertAction) in
             guard let self = self else { return }
             self.mainImageView.image = nil
-            self.editViewModel.binaryFileList = []
+            self.editViewModel.binaryFileList.removeAll()
             self.editViewModel.fileNo = ""
-            print("사진삭제")
             self.remakeConstraintsByCameraImageView()
         }))
         
@@ -407,28 +405,19 @@ extension EditActivityViewController {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: false) { [weak self] in
             guard let self = self else { return }
-            self.editViewModel.binaryFileList = []
+            self.editViewModel.binaryFileList.removeAll()
             let img = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
-            
-            var imageName = ""
             self.mainImageView.image = img
             self.editViewModel.fileNo = ""
             guard let data = img?.jpegData(compressionQuality: 0)?.base64EncodedString() else { return }
-            
+            var imageName = ""
             if let imageUrl = info[UIImagePickerController.InfoKey.referenceURL] as? URL{
-                print("imageURL : ", imageUrl)
                 let assets = PHAsset.fetchAssets(withALAssetURLs: [imageUrl], options: nil)
-                
                 guard let firstObject = assets.firstObject else { return }
-                
-                let fileName = PHAssetResource.assetResources(for: firstObject).first?.originalFilename
-                imageName = fileName ?? "Default Name"
+                imageName = PHAssetResource.assetResources(for: firstObject).first?.originalFilename ?? "defaultName"
             }
             
-            self.editViewModel.binaryFileList.append(
-                APIParameters.BinaryFileList(
-                    binaryData: data,
-                    fileNm: imageName))
+            self.editViewModel.binaryFileList.append(APIParameters.BinaryFileList(binaryData: data,fileNm: imageName))
             self.remakeConstraintsByMainImageView()
         }
         print("이미지 변경")

@@ -67,6 +67,7 @@ struct APIParameters{
         
         enum CodingKeys: String, CodingKey {
             case binaryFileList
+            case fileNo
             case type = "economicActivityDvcd"
             case amount = "economicActivityAmt"
             case title = "economicActivityNm"

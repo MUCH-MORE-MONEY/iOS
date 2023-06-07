@@ -13,7 +13,7 @@ import SnapKit
 final class AddViewController: BaseViewController {
 	// MARK: - Properties
 	private lazy var cancellable: Set<AnyCancellable> = .init()
-    private var viewModel = EditActivityViewModel()
+	private var viewModel = EditActivityViewModel(isAddModel: true)
 	private var bottomConstraint: Constraint!
 	private var bottomPadding: CGFloat {
 		return UIApplication.shared.windows.first{$0.isKeyWindow}?.safeAreaInsets.bottom ?? 0

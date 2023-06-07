@@ -43,9 +43,11 @@ final class DatePickerViewController: UIViewController {
 	
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
-		if viewModel is AddViewModel {
-			let vm = viewModel as! AddViewModel
-			vm.date = vm.date ?? Date()
+		if viewModel is EditActivityViewModel {
+			let vm = viewModel as! EditActivityViewModel
+			if vm.isAddModel {
+				vm.date = vm.date ?? Date()
+			}
 		}
 	}
 }
@@ -67,9 +69,6 @@ extension DatePickerViewController {
 			viewModel.date = datePicker.date
 		case is EditActivityViewModel:
 			let viewModel = viewModel as! EditActivityViewModel
-			viewModel.date = datePicker.date
-		case is AddViewModel:
-			let viewModel = viewModel as! AddViewModel
 			viewModel.date = datePicker.date
 		default:
 			break

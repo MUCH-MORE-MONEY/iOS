@@ -92,10 +92,10 @@ extension UIView {
 	}
 	
 	// CALayer를 이용하여 UIView의 하단에 줄을 긋는 함수
-	func addAboveTheBottomBorderWithColor(color: UIColor) {
+	func addAboveTheBottomBorderWithColor(color: UIColor, padding: CGFloat = 20) {
 		let border = CALayer()
 		border.backgroundColor = color.cgColor
-		border.frame = CGRect(x: 0, y: self.frame.size.height - 1, width: self.frame.size.width, height: 1)
+		border.frame = CGRect(x: padding, y: self.frame.size.height - 1, width: self.frame.size.width - padding * 2, height: 1)
 		self.layer.addSublayer(border)
 	}
 	

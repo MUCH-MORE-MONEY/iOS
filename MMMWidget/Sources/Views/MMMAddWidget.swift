@@ -69,6 +69,7 @@ struct MMMAddWidgetEntryView : View {
 							.resizable()
 							.scaledToFit()
 							.frame(width: Screen.maxWidth * 0.22)
+							.widgetURL(URL(string: "MMM://ActivityAdd"))
 					}
 				}
 			}

@@ -17,7 +17,7 @@ class BaseAddActivityViewController: BaseDetailViewController {
     lazy var cameraImageView = AddImageView()
     lazy var mainImageView = UIImageView()
     private lazy var cameraButtonStackView = UIStackView()
-    private lazy var scrollView = UIScrollView()
+    lazy var scrollView = UIScrollView()
     private lazy var contentView = UIView()
     private lazy var addImageButton = UIButton()
     lazy var memoTextView = UITextView()
@@ -46,7 +46,6 @@ extension BaseAddActivityViewController {
     private func setup() {
         setAttribute()
         setLayout()
-        bind()
     }
     
     private func setAttribute() {
@@ -121,7 +120,7 @@ extension BaseAddActivityViewController {
             $0.isUserInteractionEnabled = true
         }
     }
-
+    
     private func setLayout() {
         // FIXME: -title Text의 위치를 대충 잡아버림
         titleTextFeild.snp.makeConstraints {
@@ -198,22 +197,4 @@ extension BaseAddActivityViewController {
             $0.bottom.equalToSuperview()
         }
     }
-    
-    // MARK: - Bind
-    private func bind() {
-        
-//        addViewModel.$isTitleEmpty
-//            .sinkOnMainThread {
-//                self.saveButton.isEnabled = !$0
-//            }
-        
-        
-
-    }
-    
-
-}
-
-extension BaseAddActivityViewController: UIImagePickerControllerDelegate {
-    
 }

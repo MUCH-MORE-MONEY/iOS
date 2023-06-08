@@ -119,11 +119,11 @@ extension DetailViewController {
             $0.image = R.Icon.camera48
             $0.backgroundColor = R.Color.gray100
             $0.contentMode = .scaleToFill
-            $0.isHidden = false
+            $0.isHidden = true
         }
         
         cameraImageView = cameraImageView.then {
-            $0.isHidden = false
+            $0.isHidden = true
             $0.layer.zPosition = 1000
         }
         
@@ -230,7 +230,10 @@ extension DetailViewController {
                 }
                 
                 self.totalPrice.text = "\(value.amount.withCommas())원"
-                self.memoLabel.text = value.memo
+                if !value.memo.isEmpty {
+                    self.memoLabel.text = value.memo
+                }
+                
                 self.satisfactionLabel .setSatisfyingLabelEdit(by: value.star)
             }.store(in: &cancellable)
         

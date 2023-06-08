@@ -213,7 +213,9 @@ extension AddViewController {
     
     private func didTapNextSecondButton() {
         viewModel.amount = Int(viewModel.priceInput)!
-        navigationController?.pushViewController(AddDetailViewController(viewModel: viewModel), animated: true)
+        let vc = AddDetailViewController(viewModel: viewModel)
+        vc.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 //MARK: - Style & Layouts

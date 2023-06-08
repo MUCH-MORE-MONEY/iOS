@@ -23,17 +23,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		onboarding = OnboardingViewController()
 		// 로그인이 되어 있을 경우
         if Constants.getKeychainValue(forKey: Constants.KeychainKey.token) != nil {
-            let mainViewController = TabBarController()
-			if let url = connectionOptions.urlContexts.first?.url {
-				print(url)
-				window?.rootViewController = mainViewController
-			} else {
-				window?.rootViewController = mainViewController
-			}
+            let mainViewController = TabBarController(widgetIndex: 0)
+			      if let url = connectionOptions.urlContexts.first?.url {
+				    
+            window?.rootViewController = mainViewController
+          } else {
+            window?.rootViewController = mainViewController
+          }
         } else {
             let mainViewController = onboarding
             window?.rootViewController = mainViewController
         }
+        
+        // add 위젯으로 들어왔을 경우
+//        let mainViewController = TabBarController(widgetIndex: 1)
         
 		// ViewController 초기화
 		

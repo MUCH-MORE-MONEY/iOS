@@ -25,6 +25,7 @@ final class HomeTableViewCell: UITableViewCell {
 	private lazy var memoLabel = UILabel()
 	private lazy var plusMinusImage = UIImageView()
 	private lazy var priceLabel = UILabel()
+	private lazy var separator = UIView()
 
 	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -44,15 +45,18 @@ final class HomeTableViewCell: UITableViewCell {
 			iv.image = nil
 			iv.image = R.Icon.iconStarDisabled8
 		}
+		self.separator.isHidden = true
 	}
 }
 //MARK: - Action
 extension HomeTableViewCell {
 	// 외부에서 설정
-	func setData(data: EconomicActivity) {
+	func setData(data: EconomicActivity, last: Bool) {
 		// 이미지 비동기 처리
 		DispatchQueue.main.async {
 			self.thumbnailImageView.setImage(urlStr: data.imageUrl, defaultImage: data.type == "01" ? R.Icon.coinPay40 : R.Icon.coinEarn40)
+			
+			self.separator.isHidden = last
 		}
 		
 		// star의 갯수
@@ -138,10 +142,15 @@ private extension HomeTableViewCell {
 			$0.textColor = R.Color.black
 			$0.textAlignment = .left
 		}
+		
+		separator = separator.then {
+			$0.isHidden = true
+			$0.backgroundColor = R.Color.gray200
+		}
 	}
 	
 	private func setLayout() {
-		contentView.addSubviews(thumbnailImageView, containsStackView, contains3StackView)
+		contentView.addSubviews(thumbnailImageView, containsStackView, contains3StackView, separator)
 		startList.forEach { imageView in
 			starStackView.addArrangedSubview(imageView)
 		}
@@ -174,6 +183,12 @@ private extension HomeTableViewCell {
 			$0.leading.greaterThanOrEqualTo(titleLabel.snp.trailing).offset(11)
 			$0.trailing.equalToSuperview().inset(20)
 			$0.centerY.equalTo(titleLabel.snp.centerY)
+		}
+		
+		separator.snp.makeConstraints {
+			$0.leading.trailing.equalToSuperview().inset(20)
+			$0.bottom.equalToSuperview()
+			$0.height.equalTo(1)
 		}
 	}
 }

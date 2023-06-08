@@ -20,13 +20,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		
 		window = UIWindow(windowScene: windowScene)
 		
-		
-		
 		onboarding = OnboardingViewController()
 		// 로그인이 되어 있을 경우
         if Constants.getKeychainValue(forKey: Constants.KeychainKey.token) != nil {
             let mainViewController = TabBarController(widgetIndex: 0)
+			      if let url = connectionOptions.urlContexts.first?.url {
+				    
             window?.rootViewController = mainViewController
+          } else {
+            window?.rootViewController = mainViewController
+          }
         } else {
             let mainViewController = onboarding
             window?.rootViewController = mainViewController
@@ -47,6 +50,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		// 둘중 하나 미설정시 검은화면만 보입니다.
 		
 		window?.makeKeyAndVisible()
+	}
+	
+	func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+		guard let url = URLContexts.first?.url,
+			  let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true) else { return }
+		
+		if "ActivityAdd" == urlComponents.path {
+			let mainViewController = TabBarController()
+			window?.rootViewController = mainViewController
+		}
 	}
 
 	func sceneDidDisconnect(_ scene: UIScene) {

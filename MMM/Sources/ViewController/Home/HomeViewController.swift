@@ -40,8 +40,18 @@ final class HomeViewController: UIViewController {
 
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
+		if calendar.scope == .month {
+			viewModel.getMonthlyList(calendar.currentPage.getFormattedYM())
+		} else {
+			if let dateAfter = Calendar.current.date(byAdding: .day, value: 6, to: calendar.currentPage) { // 해당 주의 마지막 날짜
+				let date = calendar.currentPage.getFormattedYM()
+				if date != dateAfter.getFormattedYM() {
+					viewModel.getWeeklyList(date, dateAfter.getFormattedYM())
+				}
+			}
+		}
 		viewModel.getDailyList(preDate.getFormattedYMD())
-		viewModel.getMonthlyList(calendar.currentPage.getFormattedYM())
+
 		calendar.reloadData()
 		tableView.reloadData()
 	}
@@ -239,8 +249,7 @@ private extension HomeViewController {
 			$0.tableHeaderView = headerView
 			$0.register(HomeTableViewCell.self)
 			$0.panGestureRecognizer.require(toFail: self.scopeGesture)
-			$0.separatorInset.left = 20
-			$0.separatorInset.right = 20
+			$0.separatorStyle = .none
 		}
 		
 		headerView = headerView.then {
@@ -443,18 +452,9 @@ extension HomeViewController: UITableViewDataSource {
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.className, for: indexPath) as! HomeTableViewCell
 		
-		cell.setData(data: viewModel.dailyList[indexPath.row])
+		cell.setData(data: viewModel.dailyList[indexPath.row], last: indexPath.row == self.viewModel.dailyList.count - 1)
 		cell.backgroundColor = R.Color.gray100
 
-		DispatchQueue.main.async {
-			if indexPath.row == self.viewModel.dailyList.count - 1 {
-				// 마지막 cell은 bottom border 제거
-				cell.addAboveTheBottomBorderWithColor(color: R.Color.gray100)
-			} else {
-				cell.addAboveTheBottomBorderWithColor(color: R.Color.gray200)
-			}
-		}
-		
 		return cell
 	}
 }

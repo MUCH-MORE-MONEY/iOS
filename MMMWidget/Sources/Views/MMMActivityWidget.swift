@@ -52,10 +52,11 @@ struct MMMActivityWidgetEntryView : View {
 		ZStack {
 			Color(uiColor: R.Color.gray900)
 			
-			if let earn = userInfo?.string(forKey: "earn"), let pay = userInfo?.string(forKey: "pay") {
+			if let earnStr = userInfo?.string(forKey: "earn"), let payStr = userInfo?.string(forKey: "pay"), let earn = Int(earnStr), let pay = Int(payStr) {
 				VStack {
-					Text("수입 : \(earn)")
-					Text("지출 : \(pay)")
+					
+					Text("수입 : \(earn.withCommas())")
+					Text("지출 : \(pay.withCommas())")
 				}
 				.foregroundColor(Color(uiColor: R.Color.white))
 			}

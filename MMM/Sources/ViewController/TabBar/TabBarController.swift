@@ -16,7 +16,10 @@ final class TabBarController: UITabBarController {
     private lazy var cancellables = Set<AnyCancellable>()
     private lazy var childVCs = [HomeViewController(), AddViewController(), ProfileViewController()]
     
-    init() {
+    private var widgetIndex: Int
+    
+    init(widgetIndex: Int) {
+        self.widgetIndex = widgetIndex
         super.init(nibName: nil, bundle: nil)
 //        setup()
     }
@@ -82,6 +85,7 @@ extension TabBarController {
         tabBar.layer.applyShadow(color: .gray, alpha: 0.3, x: 0, y: 0, blur: 12)
 
 		viewControllers = [homeVC, addVC, profileVC]
+        self.selectedIndex = widgetIndex
 	}
 
     private func setup() {

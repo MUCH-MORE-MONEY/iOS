@@ -30,7 +30,12 @@ class BaseViewController: UIViewController {
     /// BaseViewController를 상속받은 객체는 항상 이 메서드를 구현해야합니다
     /// 뒤로가기에 대한 navigation pop 함수입니다.
     func didTapBackButton() {
-        navigationController?.popViewController(animated: true)
+        if navigationController?.viewControllers.count == 1 {
+            tabBarController?.selectedIndex = 0
+        } else {
+            navigationController?.popViewController(animated: true)
+        }
+
     }
 }
 

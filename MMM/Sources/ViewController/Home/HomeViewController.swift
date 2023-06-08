@@ -249,8 +249,7 @@ private extension HomeViewController {
 			$0.tableHeaderView = headerView
 			$0.register(HomeTableViewCell.self)
 			$0.panGestureRecognizer.require(toFail: self.scopeGesture)
-			$0.separatorInset.left = 20
-			$0.separatorInset.right = 20
+			$0.separatorStyle = .none
 		}
 		
 		headerView = headerView.then {
@@ -453,18 +452,9 @@ extension HomeViewController: UITableViewDataSource {
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.className, for: indexPath) as! HomeTableViewCell
 		
-		cell.setData(data: viewModel.dailyList[indexPath.row])
+		cell.setData(data: viewModel.dailyList[indexPath.row], last: indexPath.row == self.viewModel.dailyList.count - 1)
 		cell.backgroundColor = R.Color.gray100
 
-		DispatchQueue.main.async {
-			if indexPath.row == self.viewModel.dailyList.count - 1 {
-				// 마지막 cell은 bottom border 제거
-				cell.addAboveTheBottomBorderWithColor(color: R.Color.gray100)
-			} else {
-				cell.addAboveTheBottomBorderWithColor(color: R.Color.gray200)
-			}
-		}
-		
 		return cell
 	}
 }

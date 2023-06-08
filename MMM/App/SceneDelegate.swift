@@ -57,7 +57,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 			  let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true) else { return }
 		
 		if "ActivityAdd" == urlComponents.path {
-			let mainViewController = TabBarController()
+			let mainViewController = TabBarController(widgetIndex: 0)
 			window?.rootViewController = mainViewController
 		}
 	}

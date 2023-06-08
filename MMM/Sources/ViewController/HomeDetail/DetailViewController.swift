@@ -119,11 +119,11 @@ extension DetailViewController {
             $0.image = R.Icon.camera48
             $0.backgroundColor = R.Color.gray100
             $0.contentMode = .scaleToFill
-            $0.isHidden = false
+            $0.isHidden = true
         }
         
         cameraImageView = cameraImageView.then {
-            $0.isHidden = false
+            $0.isHidden = true
             $0.layer.zPosition = 1000
         }
         

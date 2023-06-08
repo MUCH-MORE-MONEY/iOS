@@ -25,12 +25,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		onboarding = OnboardingViewController()
 		// 로그인이 되어 있을 경우
         if Constants.getKeychainValue(forKey: Constants.KeychainKey.token) != nil {
-            let mainViewController = TabBarController()
+            let mainViewController = TabBarController(widgetIndex: 0)
             window?.rootViewController = mainViewController
         } else {
             let mainViewController = onboarding
             window?.rootViewController = mainViewController
         }
+        
+        // add 위젯으로 들어왔을 경우
+//        let mainViewController = TabBarController(widgetIndex: 1)
         
 		// ViewController 초기화
 		

@@ -68,7 +68,7 @@ final class OnboardingViewModel {
 
             // 로그인 성공 시 tabbar로 메인 뷰 전환
             if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
-                let tabBarController = TabBarController()
+                let tabBarController = TabBarController(widgetIndex: 0)
                 sceneDelegate.window?.rootViewController = tabBarController
             }
         })

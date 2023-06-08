@@ -89,6 +89,8 @@
 		C4199DDD2A001001006E5DA8 /* EconomicActivityResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4199DDC2A001001006E5DA8 /* EconomicActivityResDto.swift */; };
 		C4199DDF2A00B3FE006E5DA8 /* HomeEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4199DDE2A00B3FE006E5DA8 /* HomeEmptyView.swift */; };
 		C4199DE12A00F164006E5DA8 /* Ex+UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4199DE02A00F164006E5DA8 /* Ex+UIImageView.swift */; };
+		C42226442A30B638000C899B /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A08B47C29FF5D530080719E /* Log.swift */; };
+		C42226472A30C548000C899B /* Ex+UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42226462A30C548000C899B /* Ex+UserDefaults.swift */; };
 		C433A06D29EE53BB008B26DF /* HomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C433A06C29EE53BB008B26DF /* HomeTableViewCell.swift */; };
 		C433A07129EE5516008B26DF /* EconomicActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = C433A07029EE5516008B26DF /* EconomicActivity.swift */; };
 		C433A07329EEE751008B26DF /* Ex+Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = C433A07229EEE751008B26DF /* Ex+Date.swift */; };
@@ -127,7 +129,6 @@
 		C4D03F272A2EB54D00011B41 /* Color.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C41193C529D2838E003DBC15 /* Color.xcassets */; };
 		C4D03F2F2A2EFA8700011B41 /* Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D03F2E2A2EFA8700011B41 /* Screen.swift */; };
 		C4D03F372A2F037200011B41 /* MMMActivityWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D03F362A2F037200011B41 /* MMMActivityWidget.swift */; };
-		C4D03F382A2F056200011B41 /* Monthly.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D7FC862A08942E00565291 /* Monthly.swift */; };
 		C4D7FC872A08942E00565291 /* Monthly.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D7FC862A08942E00565291 /* Monthly.swift */; };
 		C4D7FC892A08A61C00565291 /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D7FC882A08A61C00565291 /* CalendarCell.swift */; };
 		C4DBAA2C29DBCB8B00D1BB97 /* Ex+Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DBAA2B29DBCB8B00D1BB97 /* Ex+Button.swift */; };
@@ -272,6 +273,8 @@
 		C4199DDC2A001001006E5DA8 /* EconomicActivityResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EconomicActivityResDto.swift; sourceTree = "<group>"; };
 		C4199DDE2A00B3FE006E5DA8 /* HomeEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeEmptyView.swift; sourceTree = "<group>"; };
 		C4199DE02A00F164006E5DA8 /* Ex+UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIImageView.swift"; sourceTree = "<group>"; };
+		C42226342A309F38000C899B /* MMMWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MMMWidgetExtension.entitlements; sourceTree = "<group>"; };
+		C42226462A30C548000C899B /* Ex+UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UserDefaults.swift"; sourceTree = "<group>"; };
 		C433A06C29EE53BB008B26DF /* HomeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTableViewCell.swift; sourceTree = "<group>"; };
 		C433A07029EE5516008B26DF /* EconomicActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EconomicActivity.swift; sourceTree = "<group>"; };
 		C433A07229EEE751008B26DF /* Ex+Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Date.swift"; sourceTree = "<group>"; };
@@ -494,6 +497,7 @@
 			isa = PBXGroup;
 			children = (
 				6AF9E85829F0D0BD00DCB330 /* MMM.entitlements */,
+				C42226342A309F38000C899B /* MMMWidgetExtension.entitlements */,
 				C41193BF29D281E6003DBC15 /* App */,
 				C41193BD29D281AB003DBC15 /* Resources */,
 				C41193BE29D281BF003DBC15 /* Sources */,
@@ -634,6 +638,7 @@
 				6A0379742A2443B9005EE07F /* Ex+UITextView.swift */,
 				6A4F6E952A29ADA500754150 /* Ex+UIViewController.swift */,
 				C41193E229D287E6003DBC15 /* Ex+UIView.swift */,
+				C42226462A30C548000C899B /* Ex+UserDefaults.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1190,6 +1195,7 @@
 				C4D03ED02A2DD33700011B41 /* ProfileViewModel.swift in Sources */,
 				6A1BAD4529E6550100818086 /* OnboardingViewModel.swift in Sources */,
 				6A08B47A29FF5CA90080719E /* APIClient.swift in Sources */,
+				C42226472A30C548000C899B /* Ex+UserDefaults.swift in Sources */,
 				C411938E29D2817C003DBC15 /* AppDelegate.swift in Sources */,
 				6A1479632A0DE0690045B8C1 /* CameraImageView.swift in Sources */,
 				C41193E629D287E6003DBC15 /* Ex+Color.swift in Sources */,
@@ -1239,11 +1245,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				C4D03EFD2A2EAB1700011B41 /* MMMWidgetLiveActivity.swift in Sources */,
-				C4D03F382A2F056200011B41 /* Monthly.swift in Sources */,
 				C4D03EFF2A2EAB1700011B41 /* MMMAddWidget.swift in Sources */,
 				C4D03F042A2EAB1800011B41 /* MMMWidget.intentdefinition in Sources */,
 				C4D03F262A2EB42000011B41 /* Ex+Color.swift in Sources */,
 				6A0763362A304A9600721614 /* Ex+Font.swift in Sources */,
+				C42226442A30B638000C899B /* Log.swift in Sources */,
 				C4D03F222A2EB2FF00011B41 /* MMMResource.swift in Sources */,
 				C4D03F372A2F037200011B41 /* MMMActivityWidget.swift in Sources */,
 				C4D03EFB2A2EAB1700011B41 /* MMMWidgetBundle.swift in Sources */,
@@ -1549,6 +1555,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = MMM/MMMWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = L7X442LA7Q;
@@ -1577,6 +1584,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = MMM/MMMWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = L7X442LA7Q;

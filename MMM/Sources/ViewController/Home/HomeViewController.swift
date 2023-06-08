@@ -40,8 +40,18 @@ final class HomeViewController: UIViewController {
 
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
+		if calendar.scope == .month {
+			viewModel.getMonthlyList(calendar.currentPage.getFormattedYM())
+		} else {
+			if let dateAfter = Calendar.current.date(byAdding: .day, value: 6, to: calendar.currentPage) { // 해당 주의 마지막 날짜
+				let date = calendar.currentPage.getFormattedYM()
+				if date != dateAfter.getFormattedYM() {
+					viewModel.getWeeklyList(date, dateAfter.getFormattedYM())
+				}
+			}
+		}
 		viewModel.getDailyList(preDate.getFormattedYMD())
-		viewModel.getMonthlyList(calendar.currentPage.getFormattedYM())
+
 		calendar.reloadData()
 		tableView.reloadData()
 	}

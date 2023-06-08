@@ -47,11 +47,18 @@ struct MMMActivityWidgetEntryView : View {
 	var entry: ActivityProvider.Entry
 
 	var body: some View {
+		let userInfo = UserDefaults(suiteName: "group.labM.project.MMM")
+		
 		ZStack {
 			Color(uiColor: R.Color.gray900)
 			
-			Text("경제활동")
+			if let earn = userInfo?.string(forKey: "earn"), let pay = userInfo?.string(forKey: "pay") {
+				VStack {
+					Text("수입 : \(earn)")
+					Text("지출 : \(pay)")
+				}
 				.foregroundColor(Color(uiColor: R.Color.white))
+			}
 		}
 	}
 }

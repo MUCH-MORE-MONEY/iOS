@@ -7,7 +7,7 @@
 
 import UIKit
 import Combine
-import SwiftKeychainWrapper
+import WidgetKit
 
 final class HomeViewModel {
 	// MARK: - Property Warraper
@@ -90,6 +90,13 @@ extension HomeViewModel {
 				guard let self = self, let monthlyList = reponse.monthly else { return }
 //				print(#file, #function, #line, monthlyList)
 				self.monthlyList = monthlyList
+				
+				// 이번 달만 위젯에 보여줌
+				if dateYM == Date().getFormattedYM() {
+					UserDefaults.shared.set(reponse.earn, forKey: "earn")
+					UserDefaults.shared.set(reponse.pay, forKey: "pay")
+					WidgetCenter.shared.reloadAllTimelines()
+				}
 			}).store(in: &cancellable)
 	}
 	
@@ -126,6 +133,18 @@ extension HomeViewModel {
 						guard let self = self, let monthlyList2 = reponse2.monthly else { return }
 		//				print(#file, #function, #line, monthlyList)
 						self.monthlyList = monthlyList1 + monthlyList2
+						
+						// 이번 달만 위젯에 보여줌
+						if date1YM == Date().getFormattedYM() {
+							UserDefaults.shared.set(reponse1.earn, forKey: "earn")
+							UserDefaults.shared.set(reponse1.pay, forKey: "pay")
+							WidgetCenter.shared.reloadAllTimelines()
+						} else if date2YM == Date().getFormattedYM() {
+							UserDefaults.shared.set(reponse2.earn, forKey: "earn")
+							UserDefaults.shared.set(reponse2.pay, forKey: "pay")
+							WidgetCenter.shared.reloadAllTimelines()
+						}
+						
 					}).store(in: &self.cancellable)
 			}).store(in: &cancellable)
 	}

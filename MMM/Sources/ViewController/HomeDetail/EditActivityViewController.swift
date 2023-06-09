@@ -278,7 +278,7 @@ extension EditActivityViewController {
         let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
         picker.delegate = bottomSheetVC
         bottomSheetVC.modalPresentationStyle = .overFullScreen
-        bottomSheetVC.setSetting(height: 210, isDrag: false)
+        bottomSheetVC.setSetting(height: 230, isDrag: false)
         self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
     }
     

@@ -68,6 +68,7 @@ extension UITextField: UITextFieldDelegate {
 		
 		guard let price = Int(newStringOnlyNumber), let result = numberFormatter.string(from: NSNumber(value: price)) else {
 			self.text = tag == 0 ? "원" : ""
+			self.textColor = tag == 0 ? R.Color.white : R.Color.gray900 // 빈배열로 만든후
 			sendActions(for: .editingChanged)
 			return false
 		}

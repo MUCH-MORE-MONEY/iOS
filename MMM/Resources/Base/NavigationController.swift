@@ -18,6 +18,9 @@ class NavigationController: UINavigationController {
 		navigationBar.backgroundColor = R.Color.gray900
 		navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: R.Font.title3]
 		
+		// swipe 안되는 문제 해결
+		interactivePopGestureRecognizer?.delegate = self
+
 		if #available(iOS 15, *) {
 			let appearance = UINavigationBarAppearance()
 			appearance.configureWithOpaqueBackground()
@@ -31,5 +34,10 @@ class NavigationController: UINavigationController {
 	
 	override var preferredStatusBarStyle: UIStatusBarStyle {
 		return .lightContent // status text color 변경
+	}
+}
+extension NavigationController: UIGestureRecognizerDelegate {
+	public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+		return viewControllers.count > 1
 	}
 }

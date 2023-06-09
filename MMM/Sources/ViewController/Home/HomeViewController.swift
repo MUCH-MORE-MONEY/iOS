@@ -362,7 +362,6 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 		calendar.snp.updateConstraints {
 			$0.height.equalTo(bounds.height) // 높이 변경
 		}
-		
 		// 46 : calendarHeaderView 높이
 		// 300 : calendar 높이
 		// 85 : calendar 주 단위 높이

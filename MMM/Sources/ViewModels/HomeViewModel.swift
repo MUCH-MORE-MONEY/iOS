@@ -54,7 +54,7 @@ extension HomeViewModel {
 	func getDailyList(_ dateYMD: String) {
 		guard let date = Int(dateYMD), let _ = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
 		
-		APIClient.dispatch(APIRouter.SelectListDailyReqDto(headers: APIHeader.Default(token: TempToken.token), body: APIParameters.SelectListDailyReqDto(dateYMD: date)))
+		APIClient.dispatch(APIRouter.SelectListDailyReqDto(headers: APIHeader.Default(token: token), body: APIParameters.SelectListDailyReqDto(dateYMD: date)))
 			.sink(receiveCompletion: { error in
 				switch error {
 				case .failure(let data):
@@ -75,7 +75,7 @@ extension HomeViewModel {
 	func getMonthlyList(_ dateYM: String) {
 		guard let date = Int(dateYM), let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
 		
-		APIClient.dispatch(APIRouter.SelectListMonthlyReqDto(headers: APIHeader.Default(token: TempToken.token), body: APIParameters.SelectListMonthlyReqDto(dateYM: date)))
+		APIClient.dispatch(APIRouter.SelectListMonthlyReqDto(headers: APIHeader.Default(token: token), body: APIParameters.SelectListMonthlyReqDto(dateYM: date)))
 			.sink(receiveCompletion: { error in
 				switch error {
 				case .failure(let data):
@@ -103,7 +103,7 @@ extension HomeViewModel {
 	func getWeeklyList(_ date1YM: String, _ date2YM: String) {
 		guard let date1 = Int(date1YM), let date2 = Int(date2YM), let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
 		
-		APIClient.dispatch(APIRouter.SelectListMonthlyReqDto(headers: APIHeader.Default(token: TempToken.token), body: APIParameters.SelectListMonthlyReqDto(dateYM: date1)))
+		APIClient.dispatch(APIRouter.SelectListMonthlyReqDto(headers: APIHeader.Default(token: token), body: APIParameters.SelectListMonthlyReqDto(dateYM: date1)))
 			.sink(receiveCompletion: { error in
 				switch error {
 				case .failure(let data):
@@ -118,7 +118,7 @@ extension HomeViewModel {
 				guard let self = self, let monthlyList1 = reponse1.monthly else { return }
 //				print(#file, #function, #line, monthlyList)
 				
-				APIClient.dispatch(APIRouter.SelectListMonthlyReqDto(headers: APIHeader.Default(token: TempToken.token), body: APIParameters.SelectListMonthlyReqDto(dateYM: date2)))
+				APIClient.dispatch(APIRouter.SelectListMonthlyReqDto(headers: APIHeader.Default(token: token), body: APIParameters.SelectListMonthlyReqDto(dateYM: date2)))
 					.sink(receiveCompletion: { error in
 						switch error {
 						case .failure(let data):

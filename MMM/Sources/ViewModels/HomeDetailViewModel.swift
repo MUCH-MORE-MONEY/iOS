@@ -19,11 +19,11 @@ final class HomeDetailViewModel {
 
     
     func fetchDetailActivity(id: String) {
-        guard Constants.getKeychainValue(forKey: Constants.KeychainKey.token) != nil else { return }
+        guard let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
         
         APIClient.dispatch(
             APIRouter.SelectDetailReqDto(
-                headers: APIHeader.Default(token: TempToken.token),
+                headers: APIHeader.Default(token: token),
                 body: APIParameters.SelectDetailReqDto(economicActivityNo: id)))
         .sink { error in
             switch error {

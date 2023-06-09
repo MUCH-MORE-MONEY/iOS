@@ -69,11 +69,11 @@ final class EditActivityViewModel {
     }
     
     func insertDetailActivity() {
-        guard Constants.getKeychainValue(forKey: Constants.KeychainKey.token) != nil else { return }
+        guard let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
         
         APIClient.dispatch(
             APIRouter.InsertReqDto(
-                headers: APIHeader.Default(token: TempToken.token),
+                headers: APIHeader.Default(token: token),
                 body: APIParameters.InsertEconomicActivityReqDto(
                     binaryFileList: binaryFileList,
                     amount: amount,
@@ -101,9 +101,11 @@ final class EditActivityViewModel {
     //    파일 삭제-> fileNo=''
     //    파일 변경 -> fileNo='' and BinaryFileList 추가
     func updateDetailActivity() {
+		guard let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
+
         APIClient.dispatch(
             APIRouter.UpdateReqDto(
-                headers: APIHeader.Default(token: TempToken.token),
+                headers: APIHeader.Default(token: token),
                 body: APIParameters.UpdateReqDto(
                     binaryFileList: binaryFileList,
                     amount: amount,
@@ -129,10 +131,12 @@ final class EditActivityViewModel {
     }
     
     func deleteDetailActivity() {
+		guard let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
+
         APIClient.dispatch(
             APIRouter.DeleteReqDto(
                 headers: APIHeader.Default(
-                    token: TempToken.token),
+                    token: token),
                 body: APIParameters.DeleteReqDto(id: id)))
         .sink { data in
             switch data {

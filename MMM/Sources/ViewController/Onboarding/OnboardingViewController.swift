@@ -104,6 +104,8 @@ private extension OnboardingViewController {
     
     private func setAttribute() {
         // [view]
+		view.backgroundColor = R.Color.white
+		
         onboardingItems.forEach {
             onboardingViews.append(UIImageView(image: $0.image))
         }

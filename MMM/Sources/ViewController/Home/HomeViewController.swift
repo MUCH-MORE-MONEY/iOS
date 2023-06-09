@@ -351,7 +351,7 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 		guard viewModel.isDailySetting else { return nil }
 		
 		if let index = viewModel.monthlyList.firstIndex(where: {$0.createAt == date.getFormattedYMD()}) {
-			return viewModel.monthlyList[index].total.withCommasAndPlus()
+			return viewModel.monthlyList[index].total.withCommasAndPlus(maxValue: 10_000_000)
 		}
 		
 		return ""

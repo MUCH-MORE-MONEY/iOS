@@ -19,9 +19,9 @@ final class HomeViewController: UIViewController {
 
 	// MARK: - UI Components
 	private lazy var monthButtonItem = UIBarButtonItem()
-	private lazy var todayButtonItem = UIBarButtonItem()
-	private lazy var filterButtonItem = UIBarButtonItem()
 	private lazy var monthButton = SemanticContentAttributeButton()
+	private lazy var rightBarItem = UIBarButtonItem()
+	private lazy var righthStackView = UIStackView()
 	private lazy var todayButton = UIButton()
 	private lazy var filterButton = UIButton()
 	private lazy var separator = UIView() // Nav separator
@@ -166,8 +166,8 @@ private extension HomeViewController {
 		view.backgroundColor = R.Color.gray100
 		view.addGestureRecognizer(self.scopeGesture)
 		navigationItem.leftBarButtonItem = monthButtonItem
-		navigationItem.rightBarButtonItems = [filterButtonItem, todayButtonItem]
-
+		navigationItem.rightBarButtonItem = rightBarItem
+		
 		monthButton = monthButton.then {
 			$0.frame = .init(origin: .zero, size: .init(width: 150, height: 24))
 			$0.setTitle(Date().getFormattedDate(format: "M월"), for: .normal)
@@ -184,27 +184,30 @@ private extension HomeViewController {
 			$0.customView = monthButton
 		}
 		
+		rightBarItem = rightBarItem.then {
+			$0.customView = righthStackView
+		}
+		
+		righthStackView = righthStackView.then {
+			$0.distribution = .equalSpacing
+			$0.axis = .horizontal
+			$0.alignment = .center
+			$0.spacing = 18.66
+			$0.addArrangedSubviews(todayButton, filterButton)
+		}
+		
 		todayButton = todayButton.then {
-			$0.frame = .init(origin: .zero, size: .init(width: 49, height: 24))
 			$0.setTitle("오늘", for: .normal)
 			$0.setTitleColor(R.Color.gray300, for: .normal)
 			$0.setBackgroundColor(R.Color.gray800, for: .highlighted)
 			$0.titleLabel?.font = R.Font.body3
 			$0.layer.cornerRadius = 12
-			$0.layer.borderWidth = 2
+			$0.layer.borderWidth = 1
 			$0.layer.borderColor = R.Color.gray800.cgColor
-		}
-		
-		todayButtonItem = todayButtonItem.then {
-			$0.customView = todayButton
 		}
 		
 		filterButton = filterButton.then {
 			$0.setImage(R.Icon.setting, for: .normal)
-		}
-		
-		filterButtonItem = filterButtonItem.then {
-			$0.customView = filterButton
 		}
 		
 		separator = separator.then {
@@ -269,6 +272,11 @@ private extension HomeViewController {
 		headerView.addSubview(dayLabel)
 		view.addSubviews(calendarHeaderView, calendar, separator, tableView, emptyView)
 
+		todayButton.snp.makeConstraints {
+			$0.width.equalTo(49)
+			$0.height.equalTo(24)
+		}
+		
 		separator.snp.makeConstraints {
 			$0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(15)
 			$0.top.equalTo(view.safeAreaLayoutGuide)

@@ -93,6 +93,12 @@ extension UITextField: UITextFieldDelegate {
 		// 범위가 넘어갈 경우
 		if price > limit {
 			if let old = Int(oldString.filter{ $0.isNumber }), old > limit {
+				
+				// cursor 위치 변경
+				if let newPosition = self.position(from: self.endOfDocument, offset: -unit.count) {
+					let newSelectedRange = textField.textRange(from: newPosition, to: newPosition)
+					self.selectedTextRange = newSelectedRange
+				}
 				return false
 			}
 		}

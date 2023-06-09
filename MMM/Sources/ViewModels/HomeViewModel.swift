@@ -52,7 +52,7 @@ final class HomeViewModel {
 //MARK: Action
 extension HomeViewModel {
 	func getDailyList(_ dateYMD: String) {
-		guard let date = Int(dateYMD), let _ = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
+		guard let date = Int(dateYMD), let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
 		
 		APIClient.dispatch(APIRouter.SelectListDailyReqDto(headers: APIHeader.Default(token: token), body: APIParameters.SelectListDailyReqDto(dateYMD: date)))
 			.sink(receiveCompletion: { error in

@@ -52,6 +52,7 @@ class DetailViewController: BaseDetailViewController {
         super.viewWillAppear(animated)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.viewModel.fetchDetailActivity(id: self.economicActivityId[self.index])
+			self.viewModel.getMonthlyList(self.date.getFormattedYM())
         }
     }
 }

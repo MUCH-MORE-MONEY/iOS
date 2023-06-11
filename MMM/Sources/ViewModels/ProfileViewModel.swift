@@ -33,9 +33,9 @@ extension ProfileViewModel {
 				case .finished:
 					break
 				}
-			}, receiveValue: { [weak self] reponse in
+			}, receiveValue: { [weak self] response in
 				guard let self = self else { return }
-				self.summary = (reponse.economicActivityTotalCnt, reponse.economicActivitySumAmt)
+				self.summary = (response.economicActivityTotalCnt, response.economicActivitySumAmt)
 				isLoading = false // 로딩 종료
 //				print(#file, #function, #line, dailyList)
 			}).store(in: &cancellable)
@@ -64,7 +64,7 @@ extension ProfileViewModel {
 				case .finished:
 					break
 				}
-			}, receiveValue: { [weak self] reponse in
+			}, receiveValue: { [weak self] response in
 				guard let self = self else { return }
 				
 				// 사용자 모든 정보 제거

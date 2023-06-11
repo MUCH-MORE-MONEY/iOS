@@ -53,4 +53,13 @@ class TextViewPublisher: NSObject, UITextViewDelegate, Publisher {
     func textViewDidEndEditing(_ textView: UITextView) {
         _ = subscriber?.receive((textView.text, 2))
     }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n" {
+            textView.resignFirstResponder() // 키보드 내리기
+            return false
+        }
+        return true
+        _ = subscriber?.receive((textView.text, 3))
+    }
 }

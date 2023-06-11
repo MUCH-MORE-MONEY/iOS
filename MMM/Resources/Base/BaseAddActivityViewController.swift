@@ -39,6 +39,12 @@ class BaseAddActivityViewController: BaseDetailViewController {
         super.viewDidLoad()
         setup()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        titleTextFeild.becomeFirstResponder() // 키보드 보이기 및 포커스 주기
+    }
 }
 
 // MARK: - Style & Layout
@@ -71,7 +77,8 @@ extension BaseAddActivityViewController {
             $0.font = R.Font.body0
             $0.textColor = R.Color.gray200
             $0.attributedPlaceholder = NSAttributedString(string: "경제활동의 제목을 입력해주세요.", attributes: [NSAttributedString.Key.foregroundColor : R.Color.gray400])
-            
+            $0.keyboardType = .webSearch
+            $0.delegate = self
         }
         
         starStackView = starStackView.then {
@@ -100,6 +107,7 @@ extension BaseAddActivityViewController {
             $0.sizeToFit()
             $0.isScrollEnabled = false
             $0.backgroundColor = R.Color.gray100
+            $0.keyboardType = .webSearch
         }
         
         saveButton = saveButton.then {
@@ -152,7 +160,8 @@ extension BaseAddActivityViewController {
         mainImageView.snp.makeConstraints {
             $0.top.equalTo(starStackView.snp.bottom).offset(16)
             $0.width.equalTo(view.safeAreaLayoutGuide).offset(-48)
-            $0.height.equalTo(mainImageView.image!.size.height * view.frame.width / mainImageView.image!.size.width)
+            $0.height.equalTo(mainImageView.snp.width)
+            //            $0.height.equalTo(mainImageView.image!.size.height * view.frame.width / mainImageView.image!.size.width)
             $0.left.right.equalToSuperview()
         }
         
@@ -196,5 +205,13 @@ extension BaseAddActivityViewController {
             $0.left.right.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
+    }
+}
+
+// MARK: - Textfield Delegate
+extension BaseAddActivityViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder() // 키보드 내리기
+        return true
     }
 }

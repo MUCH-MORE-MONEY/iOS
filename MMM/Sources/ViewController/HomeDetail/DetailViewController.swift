@@ -193,6 +193,16 @@ extension DetailViewController {
     private func bind() {
         viewModel.fetchDetailActivity(id: economicActivityId[index])
         
+        // 로딩에 대한 로직 추가 ㄱㄱ
+        viewModel.$isLoading
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                guard let self = self else { return }
+                print("로딩 완료")
+                self.viewModel.isLoading.toggle()
+                
+            }.store(in: &cancellable)
+        
         editButton.tapPublisher
             .sinkOnMainThread(receiveValue: didTapEditButton)
             .store(in: &cancellable)

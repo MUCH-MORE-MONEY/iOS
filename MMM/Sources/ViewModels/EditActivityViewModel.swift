@@ -73,7 +73,7 @@ final class EditActivityViewModel {
     
     func insertDetailActivity() {
         guard let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
-        
+        self.isLoading = true
         APIClient.dispatch(
             APIRouter.InsertReqDto(
                 headers: APIHeader.Default(token: token),
@@ -106,7 +106,7 @@ final class EditActivityViewModel {
     //    파일 변경 -> fileNo='' and BinaryFileList 추가
     func updateDetailActivity() {
 		guard let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
-
+        self.isLoading = true
         APIClient.dispatch(
             APIRouter.UpdateReqDto(
                 headers: APIHeader.Default(token: token),
@@ -137,7 +137,7 @@ final class EditActivityViewModel {
     
     func deleteDetailActivity() {
 		guard let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
-
+        self.isLoading = true
         APIClient.dispatch(
             APIRouter.DeleteReqDto(
                 headers: APIHeader.Default(

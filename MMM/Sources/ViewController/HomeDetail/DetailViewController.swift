@@ -143,6 +143,7 @@ extension DetailViewController {
             $0.play()
             $0.loopMode = .loop
             $0.backgroundColor = R.Color.black.withAlphaComponent(0.3)
+            $0.isHidden = true
         }
     }
     
@@ -217,8 +218,10 @@ extension DetailViewController {
                 guard let self = self else { return }
                 if !$0 {
                     self.loadingLottie.stop()
+                    self.loadingLottie.isHidden = true
                     self.loadingLottie.backgroundColor = R.Color.black.withAlphaComponent(0.0)
                 } else {
+                    self.loadingLottie.isHidden = false
                     self.loadingLottie.play()
                     self.loadingLottie.backgroundColor = R.Color.black.withAlphaComponent(0.3)
                 }

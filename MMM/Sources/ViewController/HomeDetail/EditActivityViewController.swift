@@ -10,6 +10,7 @@ import Combine
 import Then
 import SnapKit
 import Photos
+import Lottie
 
 protocol StarPickerViewProtocol: AnyObject {
     func willPickerDismiss(_ rate: Double)
@@ -39,6 +40,9 @@ final class EditActivityViewController: BaseAddActivityViewController, UINavigat
     private var keyboardHeight: CGFloat = 0
     private var isDeleteButton = false
     
+    // MARK: - Loading
+    private lazy var loadingLottie = LottieAnimationView(name: "loading")
+
     init(viewModel: HomeDetailViewModel, date: Date) {
         self.detailViewModel = viewModel
         self.date = date
@@ -112,11 +116,24 @@ extension EditActivityViewController {
             $0.contentMode = .scaleAspectFit
         }
         
+        loadingLottie = loadingLottie.then {
+            $0.contentMode = .scaleAspectFit
+            $0.loopMode = .loop
+            $0.stop()
+            $0.isHidden = true
+        }
+        
         setUIByViewModel()
     }
     
     private func setLayout() {
         containerStackView.addArrangedSubview(editIconImage)
+        view.addSubview(loadingLottie)
+
+        loadingLottie.snp.makeConstraints {
+            //            $0.center.width.height.equalTo(view.safeAreaLayoutGuide)
+            $0.edges.equalToSuperview().inset(UIEdgeInsets.zero).priority(.required)
+        }
     }
     
     // MARK: - Bind
@@ -136,6 +153,8 @@ extension EditActivityViewController {
             .receive(on: DispatchQueue.main)
             .sink {
                 if !$0 {
+                    self.loadingLottie.stop()
+                    self.loadingLottie.isHidden = true
                     if self.isDeleteButton {
                         if let navigationController = self.navigationController {
                             if let rootVC = navigationController.viewControllers.first {
@@ -143,8 +162,13 @@ extension EditActivityViewController {
                             }
                         }
                     } else {
+                        self.loadingLottie.play()
+                        self.loadingLottie.isHidden = false
+                        self.loadingLottie.backgroundColor = R.Color.black.withAlphaComponent(0.3)
                         super.didTapBackButton()
                     }
+                } else {
+                    
                 }
                 print($0)
             }.store(in: &cancellable)
@@ -436,6 +460,8 @@ extension EditActivityViewController: CustomAlertDelegate {
     func didAlertCofirmButton() {
         if isDeleteButton {
             editViewModel.deleteDetailActivity()
+        } else {
+            super.didTapBackButton()
         }
     }
     

@@ -61,7 +61,7 @@ final class CalendarCell: FSCalendarCell {
 		if let sub = self.subtitle, sub == "+0" {
 			self.todayLayer.isHidden = false
 		}
-		
+				
 		// 선택한 date의 border 보임/이전 Border 숨김
 		self.borderLayer.isHidden = !self.isSelected
 	}

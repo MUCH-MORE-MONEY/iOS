@@ -58,6 +58,7 @@ final class HomeViewController: UIViewController {
 	
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
+		
 		self.navigationController?.setNavigationBarHidden(false, animated: animated) // navigation bar 노출
 	}
 	
@@ -237,7 +238,7 @@ private extension HomeViewController {
 			$0.register(CalendarCell.self, forCellReuseIdentifier: "CalendarCell")
 		}
 		
-		scopeGesture = scopeGesture.then {
+		scopeGesture = scopeGesture.then { 
 			$0.addTarget(self.calendar, action: #selector(self.calendar.handleScopeGesture(_:)))
 			$0.delegate = self
 			$0.minimumNumberOfTouches = 1

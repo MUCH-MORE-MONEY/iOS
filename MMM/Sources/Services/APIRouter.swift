@@ -116,4 +116,18 @@ final class APIRouter {
 			self.body = body.asDictionary
 		}
 	}
+	
+	/// 회원탈퇴
+	struct WithdrawReqDto: Request {
+		typealias ReturnType = WithdrawResDto
+		var path: String = "/login/delete"
+		var method: HTTPMethod = .post
+		var headers: [String : String]?
+		var body: [String : Any]?
+		
+		init(headers: APIHeader.Default, body: APIParameters.WithdrawReqDto) {
+			self.headers = headers.asDictionary as? [String: String]
+			self.body = body.asDictionary
+		}
+	}
 }

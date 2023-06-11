@@ -11,7 +11,9 @@ import Combine
 final class ProfileViewModel {
 	// MARK: - Private properties
 	@Published var summary: (recordCnt: Int?, recordSumAmount: Int?)
-	
+	@Published var isLoading = false
+	@Published var isWithdraw: Bool?
+
 	private var cancellable: Set<AnyCancellable> = .init()
 }
 extension ProfileViewModel {
@@ -19,6 +21,7 @@ extension ProfileViewModel {
 	func getSummary() {
 		guard let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
 		
+		isLoading = true // 로딩 시작
 		APIClient.dispatch(APIRouter.SummaryReqDto(headers: APIHeader.Default(token: token), body: APIParameters.SummaryReqDto()))
 			.sink(receiveCompletion: { error in
 				switch error {
@@ -33,6 +36,7 @@ extension ProfileViewModel {
 			}, receiveValue: { [weak self] reponse in
 				guard let self = self else { return }
 				self.summary = (reponse.economicActivityTotalCnt, reponse.economicActivitySumAmt)
+				isLoading = false // 로딩 종료
 //				print(#file, #function, #line, dailyList)
 			}).store(in: &cancellable)
 	}
@@ -46,7 +50,28 @@ extension ProfileViewModel {
 	
 	/// 탈퇴
 	func withdraw() {
+		guard let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
 		
+		isWithdraw = true // 로딩 시작
+		APIClient.dispatch(APIRouter.WithdrawReqDto(headers: APIHeader.Default(token: token), body: APIParameters.WithdrawReqDto()))
+			.sink(receiveCompletion: { error in
+				switch error {
+				case .failure(let data):
+					switch data {
+					default:
+						break
+					}
+				case .finished:
+					break
+				}
+			}, receiveValue: { [weak self] reponse in
+				guard let self = self else { return }
+				
+				// 사용자 모든 정보 제거
+				Constants.removeAllKeychain()
+				
+				isWithdraw = false // 로딩 종료
+			}).store(in: &cancellable)
 	}
 }
 

@@ -95,6 +95,10 @@ struct APIParameters{
 	/// 경제활동 요약를 위한 Request
 	struct SummaryReqDto: Encodable {
 	}
+	
+	/// 탈퇴를 위한 Request
+	struct WithdrawReqDto: Encodable {
+	}
 }
 
 struct APIHeader {

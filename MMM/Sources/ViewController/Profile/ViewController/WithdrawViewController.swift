@@ -83,8 +83,8 @@ extension WithdrawViewController: CustomAlertDelegate {
 		self.showAlert(alertType: .canCancel, titleText: "정말 탈퇴하시겠어요?", contentText: "탈퇴하면 소장 중인 데이터가 삭제되며 30일 이후에는 복구가 불가능합니다.", confirmButtonText: "탈퇴하기")
 	}
 	
-	// 확인 버튼 이벤트 처리
-	func didAlertCofirmButton() {
+	// 화면전환
+	func processWidrow() {
 		if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
 			viewModel.withdraw() // 탈퇴
 			sceneDelegate.window?.rootViewController = sceneDelegate.onboarding
@@ -92,6 +92,11 @@ extension WithdrawViewController: CustomAlertDelegate {
 				sceneDelegate.onboarding.showAlert(alertType: .onlyConfirm, titleText: "탈퇴를 완료하였습니다", contentText: "언제든 다시 MMM을 찾아와주세요!", confirmButtonText: "확인하기")
 			}
 		}
+	}
+	
+	// 확인 버튼 이벤트 처리
+	func didAlertCofirmButton() {
+		viewModel.withdraw() // 회원 탈퇴
 	}
 	
 	// 취소 버튼 이벤트 처리
@@ -124,6 +129,15 @@ extension WithdrawViewController {
 				guard let recordCnt = summary.recordCnt, let recordSumAmount = summary.recordSumAmount else { return }
 				
 				self?.setSummary(recordCnt, recordSumAmount)
+			}).store(in: &cancellable)
+		
+		viewModel.$isWithdraw
+			.sinkOnMainThread(receiveValue: { [weak self] loading in
+				guard let loading = loading else { return }
+				
+				if !loading { // 로딩이 끝난 후
+					self?.processWidrow()
+				}
 			}).store(in: &cancellable)
 	}
 	

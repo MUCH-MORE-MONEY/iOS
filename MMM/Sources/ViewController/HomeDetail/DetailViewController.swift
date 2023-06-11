@@ -9,6 +9,7 @@ import UIKit
 import Then
 import SnapKit
 import Combine
+import Lottie
 
 class DetailViewController: BaseDetailViewController {
     // MARK: - UI Components
@@ -30,6 +31,9 @@ class DetailViewController: BaseDetailViewController {
         UIImageView(image: R.Icon.iconStarDisabled16),
         UIImageView(image: R.Icon.iconStarDisabled16)
     ]
+    
+    private lazy var loadingLottie = LottieAnimationView(name: "loading")
+    
     // MARK: - Properties
     private var date = Date()
     private var viewModel = HomeDetailViewModel()
@@ -50,9 +54,8 @@ class DetailViewController: BaseDetailViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.viewModel.fetchDetailActivity(id: self.economicActivityId[self.index])
-        }
+        self.viewModel.isLoading = true
+        self.viewModel.fetchDetailActivity(id: self.economicActivityId[self.index])
     }
 }
 
@@ -77,7 +80,8 @@ extension DetailViewController {
         
         navigationItem.rightBarButtonItem = editActivityButtonItem
         
-        view.addSubviews(titleLabel, scrollView, bottomPageControlView)
+        view.addSubviews(titleLabel, scrollView, bottomPageControlView, loadingLottie)
+        
         contentView.addSubviews(starStackView, mainImageView, cameraImageView, memoLabel, satisfactionLabel)
         scrollView.addSubviews(contentView)
         starList.forEach {
@@ -131,6 +135,7 @@ extension DetailViewController {
             $0.text = "이 활동은 어떤 활동이었는지 기록해봐요"
             $0.textColor = R.Color.gray500
             $0.font = R.Font.body3
+
 			$0.numberOfLines = 0
         }
     }
@@ -166,7 +171,8 @@ extension DetailViewController {
         mainImageView.snp.makeConstraints {
             $0.top.equalTo(starStackView.snp.bottom).offset(16)
             $0.width.equalTo(view.safeAreaLayoutGuide).offset(-48)
-            $0.height.equalTo(mainImageView.image!.size.height * view.frame.width / mainImageView.image!.size.width)
+            $0.height.equalTo(mainImageView.snp.width)
+            //            $0.height.equalTo(mainImageView.image!.size.height * view.frame.width / mainImageView.image!.size.width)
             $0.left.right.equalToSuperview()
         }
         
@@ -187,11 +193,33 @@ extension DetailViewController {
             $0.left.right.equalToSuperview().inset(24)
             $0.bottom.equalToSuperview()
         }
+        
+        loadingLottie.snp.makeConstraints {
+            //            $0.center.width.height.equalTo(view.safeAreaLayoutGuide)
+            $0.edges.equalToSuperview().inset(UIEdgeInsets.zero).priority(.required)
+        }
     }
     
     // MARK: - Bind
     private func bind() {
         viewModel.fetchDetailActivity(id: economicActivityId[index])
+        
+        
+        viewModel.$isLoading
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                guard let self = self else { return }
+                if !$0 {
+                    self.loadingLottie.stop()
+                    self.loadingLottie.isHidden = true
+                    self.loadingLottie.backgroundColor = R.Color.black.withAlphaComponent(0.0)
+                } else {
+                    self.loadingLottie.isHidden = false
+                    self.loadingLottie.play()
+                    self.loadingLottie.backgroundColor = R.Color.black.withAlphaComponent(0.3)
+                }
+            }.store(in: &cancellable)
+
         
         editButton.tapPublisher
             .sinkOnMainThread(receiveValue: didTapEditButton)
@@ -207,8 +235,8 @@ extension DetailViewController {
             .sinkOnMainThread { [weak self] value in
                 guard let self = self, let value = value else { return }
                 self.titleLabel.text = value.title
-				self.activityType.text = self.viewModel.detailActivity?.type == "01" ? "지출" : "수입"
-				self.activityType.backgroundColor = self.viewModel.detailActivity?.type == "01" ? R.Color.orange500 : R.Color.blue500
+                self.activityType.text = self.viewModel.detailActivity?.type == "01" ? "지출" : "수입"
+                self.activityType.backgroundColor = self.viewModel.detailActivity?.type == "01" ? R.Color.orange500 : R.Color.blue500
                 self.starList.forEach {
                     $0.image = R.Icon.iconStarGray16
                 }
@@ -268,7 +296,7 @@ private extension DetailViewController {
         } else {
             viewModel.mainImage = nil
         }
-
+        
         let vc = EditActivityViewController(viewModel: viewModel, date: date)
         
         navigationController?.pushViewController(vc, animated: true)
@@ -293,9 +321,9 @@ private extension DetailViewController {
             $0.left.right.equalTo(view.safeAreaLayoutGuide).inset(24)
             $0.bottom.equalTo(bottomPageControlView.snp.top).offset(-16)
         }
-
+        
         UIView.animate(withDuration: 3.0, delay: 0.1, options: .curveEaseOut, animations: {
-             toastLabel.alpha = 0.0
+            toastLabel.alpha = 0.0
         }, completion: {(isCompleted) in
             toastLabel.removeFromSuperview()
         })

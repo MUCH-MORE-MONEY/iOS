@@ -30,6 +30,9 @@ final class EditActivityViewModel {
     @Published var editResponse: UpdateResDto?
     @Published var deleteResponse: DeleteResDto?
     @Published var insertResponse: InsertResDto?
+    
+    // MARK: - Loading
+    @Published var isLoading = true
     // MARK: - Porperties
     private var cancellable: Set<AnyCancellable> = []
 	var isAddModel: Bool
@@ -70,7 +73,7 @@ final class EditActivityViewModel {
     
     func insertDetailActivity() {
         guard let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
-        
+        self.isLoading = true
         APIClient.dispatch(
             APIRouter.InsertReqDto(
                 headers: APIHeader.Default(token: token),
@@ -92,6 +95,7 @@ final class EditActivityViewModel {
         } receiveValue: { response in
             self.insertResponse = response
             print(self.insertResponse)
+            self.isLoading = false
         }.store(in: &cancellable)
     }
     
@@ -102,7 +106,7 @@ final class EditActivityViewModel {
     //    파일 변경 -> fileNo='' and BinaryFileList 추가
     func updateDetailActivity() {
 		guard let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
-
+        self.isLoading = true
         APIClient.dispatch(
             APIRouter.UpdateReqDto(
                 headers: APIHeader.Default(token: token),
@@ -127,12 +131,13 @@ final class EditActivityViewModel {
         } receiveValue: { response in
             self.editResponse = response
             print(response)
+            self.isLoading = false
         }.store(in: &cancellable)
     }
     
     func deleteDetailActivity() {
 		guard let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
-
+        self.isLoading = true
         APIClient.dispatch(
             APIRouter.DeleteReqDto(
                 headers: APIHeader.Default(
@@ -148,6 +153,7 @@ final class EditActivityViewModel {
         } receiveValue: { response in
             self.deleteResponse = response
             print(self.deleteResponse)
+            self.isLoading = false
         }.store(in: &cancellable)
 
     }

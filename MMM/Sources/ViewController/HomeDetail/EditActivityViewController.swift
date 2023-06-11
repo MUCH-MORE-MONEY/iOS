@@ -10,6 +10,7 @@ import Combine
 import Then
 import SnapKit
 import Photos
+import Lottie
 
 protocol StarPickerViewProtocol: AnyObject {
     func willPickerDismiss(_ rate: Double)
@@ -39,6 +40,9 @@ final class EditActivityViewController: BaseAddActivityViewController, UINavigat
     private var keyboardHeight: CGFloat = 0
     private var isDeleteButton = false
     
+    // MARK: - Loading
+    private lazy var loadingLottie = LottieAnimationView(name: "loading")
+
     init(viewModel: HomeDetailViewModel, date: Date) {
         self.detailViewModel = viewModel
         self.date = date
@@ -58,7 +62,7 @@ final class EditActivityViewController: BaseAddActivityViewController, UINavigat
     override func didTapBackButton() {
         //FIXME: - showAlert에서 super.didTapBackButton()호출하면 문제생김
         isDeleteButton = false
-        showAlert(alertType: .canCancel, titleText: editAlertTitle, contentText: editAlertContentText, cancelButtonText: "닫기", confirmButtonText: "그만두기")
+        showAlert(alertType: .canCancel, titleText: editAlertTitle, contentText: editAlertContentText, cancelButtonText: "닫기", confirmButtonText: "편집 취소하기")
     }
     
     
@@ -112,11 +116,24 @@ extension EditActivityViewController {
             $0.contentMode = .scaleAspectFit
         }
         
+        loadingLottie = loadingLottie.then {
+            $0.contentMode = .scaleAspectFit
+            $0.loopMode = .loop
+            $0.stop()
+            $0.isHidden = true
+        }
+        
         setUIByViewModel()
     }
     
     private func setLayout() {
         containerStackView.addArrangedSubview(editIconImage)
+        view.addSubview(loadingLottie)
+
+        loadingLottie.snp.makeConstraints {
+            //            $0.center.width.height.equalTo(view.safeAreaLayoutGuide)
+            $0.edges.equalToSuperview().inset(UIEdgeInsets.zero).priority(.required)
+        }
     }
     
     // MARK: - Bind
@@ -130,6 +147,32 @@ extension EditActivityViewController {
         editViewModel.type = detailViewModel.detailActivity?.type ?? ""
         editViewModel.fileNo = detailViewModel.detailActivity?.fileNo ?? ""
         editViewModel.id = detailViewModel.detailActivity?.id ?? ""
+        
+        // MARK: - Loading에 대한 처리
+        editViewModel.$isLoading
+            .receive(on: DispatchQueue.main)
+            .sink {
+                if !$0 {
+                    self.loadingLottie.stop()
+                    self.loadingLottie.isHidden = true
+                    if self.isDeleteButton {
+                        if let navigationController = self.navigationController {
+                            if let rootVC = navigationController.viewControllers.first {
+                                navigationController.setViewControllers([rootVC], animated: true)
+                            }
+                        }
+                    } else {
+                        self.loadingLottie.play()
+                        self.loadingLottie.isHidden = false
+                        self.loadingLottie.backgroundColor = R.Color.black.withAlphaComponent(0.3)
+                        super.didTapBackButton()
+                    }
+                } else {
+                    
+                }
+                print($0)
+            }.store(in: &cancellable)
+        
         
         // MARK: - UI Bind
         editViewModel.$star
@@ -294,13 +337,15 @@ extension EditActivityViewController {
     
     func didTapSaveButton() {
         detailViewModel.isShowToastMessage = true
-        self.navigationController?.popViewController(animated: true)
         editViewModel.updateDetailActivity()
+        if !self.editViewModel.isLoading {
+            self.navigationController?.popViewController(animated: true)
+        }
     }
     
     func didTapDeleteButton() {
         isDeleteButton = true
-        showAlert(alertType: .canCancel, titleText: deleteAlertTitle, contentText: deleteAlertContentText, cancelButtonText: "닫기", confirmButtonText: "그만두기")
+        showAlert(alertType: .canCancel, titleText: deleteAlertTitle, contentText: deleteAlertContentText, cancelButtonText: "닫기", confirmButtonText: "삭제하기")
     }
     
     func didTapAlbumButton() {
@@ -415,11 +460,6 @@ extension EditActivityViewController: CustomAlertDelegate {
     func didAlertCofirmButton() {
         if isDeleteButton {
             editViewModel.deleteDetailActivity()
-            if let navigationController = self.navigationController {
-                if let rootViewController = navigationController.viewControllers.first {
-                    navigationController.setViewControllers([rootViewController], animated: true)
-                }
-            }
         } else {
             super.didTapBackButton()
         }

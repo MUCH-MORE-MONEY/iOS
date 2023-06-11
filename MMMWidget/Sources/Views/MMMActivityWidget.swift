@@ -65,20 +65,21 @@ struct MMMActivityWidgetEntryView : View {
                     
                     VStack(spacing: 6) {
                         HStack {
-                            Text("수입")
-                                .modifier(TypeModifier())
-                            Spacer()
-                            Text("\(earn.withCommas())원")
-                                .foregroundColor(Color(uiColor: R.Color.orange500))
-                        }
-                        
-                        HStack {
                             Text("지출")
                                 .modifier(TypeModifier())
                             Spacer()
                             Text("\(pay.withCommas())원")
-                                .foregroundColor(Color(uiColor: R.Color.blue400))
+                                .foregroundColor(Color(uiColor: R.Color.orange500))
                         }
+						
+						HStack {
+							Text("수입")
+								.modifier(TypeModifier())
+							Spacer()
+							Text("\(earn.withCommas())원")
+								.foregroundColor(Color(uiColor: R.Color.blue400))
+						}
+
                     }.padding(EdgeInsets(top: 0, leading: 16, bottom: 16, trailing: 16))
                     
                     

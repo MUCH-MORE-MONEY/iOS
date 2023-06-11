@@ -14,7 +14,7 @@ final class HomeDetailViewModel {
     @Published var hasImage = false
     @Published var mainImage: UIImage?
     @Published var isShowToastMessage = false
-    @Published var isLoading = false
+    @Published var isLoading = true
     // MARK: - Porperties
     private var cancellable: Set<AnyCancellable> = []
 
@@ -57,7 +57,7 @@ final class HomeDetailViewModel {
         } receiveValue: { [weak self] response in
             guard let self = self else { return }
             self.detailActivity = response
-            self.isLoading = true
+            self.isLoading = false
         }.store(in: &cancellable)
     }
 }

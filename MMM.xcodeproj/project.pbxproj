@@ -50,6 +50,7 @@
 		6AB1150F29EE372F00D3B813 /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB1150E29EE372F00D3B813 /* CustomTabBar.swift */; };
 		6AB1151329EE6D9E00D3B813 /* Ex+UITabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB1151229EE6D9E00D3B813 /* Ex+UITabBar.swift */; };
 		6ADC27E02A2AEEF400C56777 /* Ex+UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ADC27DF2A2AEEF400C56777 /* Ex+UIImage.swift */; };
+		6AF1A8402A35906100135961 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = 6AF1A83F2A35906100135961 /* loading.json */; };
 		C411938E29D2817C003DBC15 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411938D29D2817C003DBC15 /* AppDelegate.swift */; };
 		C411939029D2817C003DBC15 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411938F29D2817C003DBC15 /* SceneDelegate.swift */; };
 		C411939229D2817C003DBC15 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411939129D2817C003DBC15 /* ProfileViewController.swift */; };
@@ -228,6 +229,7 @@
 		6AB1150E29EE372F00D3B813 /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
 		6AB1151229EE6D9E00D3B813 /* Ex+UITabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UITabBar.swift"; sourceTree = "<group>"; };
 		6ADC27DF2A2AEEF400C56777 /* Ex+UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIImage.swift"; sourceTree = "<group>"; };
+		6AF1A83F2A35906100135961 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		6AF9E85829F0D0BD00DCB330 /* MMM.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MMM.entitlements; sourceTree = "<group>"; };
 		738AB5686981CA1A28640207 /* Pods_MMM_MMMUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MMM_MMMUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A564931308C77DE145181BBF /* Pods_MMM.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MMM.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -586,6 +588,7 @@
 				C41193C529D2838E003DBC15 /* Color.xcassets */,
 				C41193C429D2838D003DBC15 /* Icon.xcassets */,
 				C411939629D2817E003DBC15 /* Assets.xcassets */,
+				6AF1A83F2A35906100135961 /* loading.json */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -976,6 +979,7 @@
 				C41193D829D2874A003DBC15 /* Pretendard-Bold.otf in Resources */,
 				C41193D629D2874A003DBC15 /* Pretendard-Light.otf in Resources */,
 				C41193DB29D2874A003DBC15 /* Pretendard-SemiBold.otf in Resources */,
+				6AF1A8402A35906100135961 /* loading.json in Resources */,
 				C41193D729D2874A003DBC15 /* Pretendard-ExtraBold.otf in Resources */,
 				C41193C629D2838E003DBC15 /* Icon.xcassets in Resources */,
 				C41193C729D2838E003DBC15 /* Color.xcassets in Resources */,

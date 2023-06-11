@@ -2,6 +2,7 @@ PODS:
   - Cosmos (23.0.0)
   - FSCalendar (2.8.4)
   - Kingfisher (7.7.0)
+  - lottie-ios (4.2.0)
   - SnapKit (5.6.0)
   - SwiftKeychainWrapper (4.0.1)
   - Then (3.0.0)
@@ -10,6 +11,7 @@ DEPENDENCIES:
   - Cosmos (~> 23.0)
   - FSCalendar
   - Kingfisher (~> 7.0)
+  - lottie-ios
   - SnapKit (~> 5.6.0)
   - SwiftKeychainWrapper
   - Then
@@ -19,6 +21,7 @@ SPEC REPOS:
     - Cosmos
     - FSCalendar
     - Kingfisher
+    - lottie-ios
     - SnapKit
     - SwiftKeychainWrapper
     - Then
@@ -27,10 +30,11 @@ SPEC CHECKSUMS:
   Cosmos: b5c6a9a637e28a061b54c8f8b1d8529d7d4db73f
   FSCalendar: 2d1d0d9398f12d439f55c1fe0f01525b151b8260
   Kingfisher: f043ac666dfc96c1f37604f93effb45a7ee3a3e1
+  lottie-ios: 809ecf2d460ed650a6aed7aa88b2ec45fab4779c
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
   SwiftKeychainWrapper: 807ba1d63c33a7d0613288512399cd1eda1e470c
   Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
 
-PODFILE CHECKSUM: 1cd9704289859dbc5752c72b84ac1ae798f5cc6c
+PODFILE CHECKSUM: 75aa4dadf07255b8e125c323188b58984d97f0ce
 
 COCOAPODS: 1.11.3

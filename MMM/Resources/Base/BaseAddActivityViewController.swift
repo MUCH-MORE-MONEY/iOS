@@ -39,6 +39,12 @@ class BaseAddActivityViewController: BaseDetailViewController {
         super.viewDidLoad()
         setup()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        titleTextFeild.becomeFirstResponder() // 키보드 보이기 및 포커스 주기
+    }
 }
 
 // MARK: - Style & Layout
@@ -155,7 +161,7 @@ extension BaseAddActivityViewController {
             $0.top.equalTo(starStackView.snp.bottom).offset(16)
             $0.width.equalTo(view.safeAreaLayoutGuide).offset(-48)
             $0.height.equalTo(mainImageView.snp.width)
-//            $0.height.equalTo(mainImageView.image!.size.height * view.frame.width / mainImageView.image!.size.width)
+            //            $0.height.equalTo(mainImageView.image!.size.height * view.frame.width / mainImageView.image!.size.width)
             $0.left.right.equalToSuperview()
         }
         
@@ -205,7 +211,7 @@ extension BaseAddActivityViewController {
 // MARK: - Textfield Delegate
 extension BaseAddActivityViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            textField.resignFirstResponder() // 키보드 내리기
-            return true
-        }
+        textField.resignFirstResponder() // 키보드 내리기
+        return true
+    }
 }

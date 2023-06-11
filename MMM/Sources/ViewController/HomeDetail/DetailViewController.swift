@@ -54,8 +54,10 @@ class DetailViewController: BaseDetailViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
         self.viewModel.isLoading = true
         self.viewModel.fetchDetailActivity(id: self.economicActivityId[self.index])
+        self.viewModel.getMonthlyList(self.date.getFormattedYM())
     }
 }
 

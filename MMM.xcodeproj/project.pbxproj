@@ -107,6 +107,8 @@
 		C4C0CAF52A1C88DC00C41FF4 /* PriceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0CAF42A1C88DC00C41FF4 /* PriceViewModel.swift */; };
 		C4C0CB022A23A07000C41FF4 /* EditPriceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0CB012A23A06F00C41FF4 /* EditPriceViewController.swift */; };
 		C4C0CB092A2474F900C41FF4 /* Ex+UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0CB082A2474F900C41FF4 /* Ex+UILabel.swift */; };
+		C4C792A62A358517007FD6AA /* SummaryResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C792A52A358517007FD6AA /* SummaryResDto.swift */; };
+		C4C792A82A35916D007FD6AA /* WithdrawResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C792A72A35916D007FD6AA /* WithdrawResDto.swift */; };
 		C4D03ED02A2DD33700011B41 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D03ECF2A2DD33700011B41 /* ProfileViewModel.swift */; };
 		C4D03EF62A2EAB1600011B41 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4D03EF52A2EAB1600011B41 /* WidgetKit.framework */; };
 		C4D03EF82A2EAB1600011B41 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4D03EF72A2EAB1600011B41 /* SwiftUI.framework */; };
@@ -295,6 +297,8 @@
 		C4C0CAFD2A1F205100C41FF4 /* Ex+UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UITextField.swift"; sourceTree = "<group>"; };
 		C4C0CB012A23A06F00C41FF4 /* EditPriceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPriceViewController.swift; sourceTree = "<group>"; };
 		C4C0CB082A2474F900C41FF4 /* Ex+UILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UILabel.swift"; sourceTree = "<group>"; };
+		C4C792A52A358517007FD6AA /* SummaryResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryResDto.swift; sourceTree = "<group>"; };
+		C4C792A72A35916D007FD6AA /* WithdrawResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawResDto.swift; sourceTree = "<group>"; };
 		C4D03ECF2A2DD33700011B41 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		C4D03EF42A2EAB1600011B41 /* MMMWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MMMWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4D03EF52A2EAB1600011B41 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -378,7 +382,9 @@
 				C4199DDC2A001001006E5DA8 /* EconomicActivityResDto.swift */,
 				6A0531212A22183D0065DB54 /* InsertResDto.swift */,
 				6A626BC02A0C7EE700BDD5C0 /* SelectDetailResDto.swift */,
+				C4C792A52A358517007FD6AA /* SummaryResDto.swift */,
 				6A8605B52A24C83D00DF68BD /* UpdateResDto.swift */,
+				C4C792A72A35916D007FD6AA /* WithdrawResDto.swift */,
 			);
 			path = Responses;
 			sourceTree = "<group>";
@@ -1179,6 +1185,7 @@
 				6A04FA092A1C7EE80034C114 /* EditActivityViewModel.swift in Sources */,
 				C4EA5B4229FA26E0008D1564 /* HomeHeaderStackView.swift in Sources */,
 				6A4313E22A13046E00095041 /* BottomPageControlView.swift in Sources */,
+				C4C792A62A358517007FD6AA /* SummaryResDto.swift in Sources */,
 				C4351B4C2A1601D3005F95BE /* HomeFilterView.swift in Sources */,
 				C4DBAA3229DD763D00D1BB97 /* Ex+Int.swift in Sources */,
 				6A0531242A22220D0065DB54 /* StarPickerViewController.swift in Sources */,
@@ -1200,6 +1207,7 @@
 				C4D03ED02A2DD33700011B41 /* ProfileViewModel.swift in Sources */,
 				6A1BAD4529E6550100818086 /* OnboardingViewModel.swift in Sources */,
 				6A08B47A29FF5CA90080719E /* APIClient.swift in Sources */,
+				C4C792A82A35916D007FD6AA /* WithdrawResDto.swift in Sources */,
 				C42226472A30C548000C899B /* Ex+UserDefaults.swift in Sources */,
 				C411938E29D2817C003DBC15 /* AppDelegate.swift in Sources */,
 				6A1479632A0DE0690045B8C1 /* CameraImageView.swift in Sources */,

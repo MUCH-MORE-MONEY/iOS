@@ -12,6 +12,7 @@ class CountAnimationStackView: UIView {
 	// MARK: - UI Components
 	private lazy var containerStackView = UIStackView()
 	private lazy var firstLabel = UILabel()
+	private lazy var signLabel = UILabel()
 	private lazy var middleLabel = CountScrollLabel()
 	private lazy var unitLabel = UILabel()
 	private lazy var secondLabel = UILabel()
@@ -35,7 +36,8 @@ extension CountAnimationStackView {
 		self.secondLabel.text = second
 		self.unitLabel.text = unitText
 		
-		let width = middleLabel.config(num: "\(money)", duration: duration, isMoney: unitText == "원")
+		let width = middleLabel.config(num: "\(abs(money))", duration: duration, isMoney: unitText == "원")
+		signLabel.text = money >= 0 ? "" : "-"
 		middleLabel.animate(ascending: false)
 		
 		middleLabel.snp.makeConstraints {
@@ -64,6 +66,12 @@ private extension CountAnimationStackView {
 			$0.textAlignment = .left
 		}
 		
+		signLabel = signLabel.then {
+			$0.font = R.Font.prtendard(family: .medium, size: 16)
+			$0.textColor = R.Color.orange500
+			$0.textAlignment = .right
+		}
+		
 		unitLabel = unitLabel.then {
 			$0.font = R.Font.prtendard(family: .medium, size: 16)
 			$0.textColor = R.Color.orange500
@@ -79,7 +87,7 @@ private extension CountAnimationStackView {
 	
 	private func setLayout() {
 		addSubview(containerStackView)
-		containerStackView.addArrangedSubviews(firstLabel, middleLabel, unitLabel, secondLabel)
+		containerStackView.addArrangedSubviews(firstLabel, signLabel, middleLabel, unitLabel, secondLabel)
 		
 		containerStackView.snp.makeConstraints {
 			$0.edges.equalToSuperview()

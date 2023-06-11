@@ -12,8 +12,6 @@ final class WithdrawViewController: BaseViewController {
 	// MARK: - Properties
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 	private let viewModel: ProfileViewModel
-	private lazy var economicCount = 0
-	private lazy var moneyCount = 0
 
 	// MARK: - UI Components
 	private lazy var reconfirmLabel = UILabel()
@@ -69,6 +67,18 @@ extension WithdrawViewController: CustomAlertDelegate {
 		confirmButton.isSelected = !confirmButton.isSelected
 	}
 	
+	// 경제 활동 요약
+	func setSummary(_ recordCnt: Int, _ recordSumAmount: Int) {
+		
+		economicLabel = economicLabel.then {
+			$0.attributedText = setMutiText(isMoney: false, first: "이대로 가면 작성했던 ", count: recordCnt, second: "의 경재활동,")
+		}
+		
+		moneyLabel = moneyLabel.then {
+			$0.setData(first: "그리고 모았던 ", second: "이 사라져요.", money: recordSumAmount, unitText: "원", duration: 0.1)
+		}
+	}
+	
 	func didTapWithdrawButton() {
 		self.showAlert(alertType: .canCancel, titleText: "정말 탈퇴하시겠어요?", contentText: "탈퇴하면 소장 중인 데이터가 삭제되며 30일 이후에는 복구가 불가능합니다.", confirmButtonText: "탈퇴하기")
 	}
@@ -93,6 +103,7 @@ extension WithdrawViewController {
 	// 초기 셋업할 코드들
 	private func setup() {
 		bind()
+		fetch()
 		setAttribute()
 		setLayout()
 	}
@@ -106,6 +117,18 @@ extension WithdrawViewController {
 		withdrawButton.tapPublisher
 			.sinkOnMainThread(receiveValue: didTapWithdrawButton)
 			.store(in: &cancellable)
+		
+		//MARK: output
+		viewModel.$summary
+			.sinkOnMainThread(receiveValue: { [weak self] summary in
+				guard let recordCnt = summary.recordCnt, let recordSumAmount = summary.recordSumAmount else { return }
+				
+				self?.setSummary(recordCnt, recordSumAmount)
+			}).store(in: &cancellable)
+	}
+	
+	private func fetch() {
+		viewModel.getSummary() // 경제활동 요약
 	}
 	
 	private func setMutiText(isMoney: Bool, first: String, count: Int, second: String) -> NSMutableAttributedString {
@@ -147,14 +170,6 @@ extension WithdrawViewController {
 			$0.text = "정말 탈퇴하시겠어요?"
 			$0.font = R.Font.h2
 			$0.textColor = R.Color.gray900
-		}
-		
-		economicLabel = economicLabel.then {
-			$0.attributedText = setMutiText(isMoney: false, first: "이대로 가면 작성했던 ", count: economicCount, second: "의 경재활동,")
-		}
-		
-		moneyLabel = moneyLabel.then {
-			$0.setData(first: "그리고 모았던 ", second: "이 사라져요.", money: moneyCount, unitText: "원", duration: 0.1)
 		}
 		
 		containView = containView.then {

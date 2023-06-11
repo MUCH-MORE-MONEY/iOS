@@ -102,4 +102,18 @@ final class APIRouter {
             self.body = body.asDictionary
         }
     }
+	
+	/// 경제활동 삭제를 위한 Router
+	struct SummaryReqDto: Request {
+		typealias ReturnType = SummaryResDto
+		var path: String = "/economic_activity/summary/select"
+		var method: HTTPMethod = .post
+		var headers: [String : String]?
+		var body: [String : Any]?
+		
+		init(headers: APIHeader.Default, body: APIParameters.SummaryReqDto) {
+			self.headers = headers.asDictionary as? [String: String]
+			self.body = body.asDictionary
+		}
+	}
 }

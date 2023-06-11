@@ -58,7 +58,7 @@ final class EditActivityViewController: BaseAddActivityViewController, UINavigat
     override func didTapBackButton() {
         //FIXME: - showAlert에서 super.didTapBackButton()호출하면 문제생김
         isDeleteButton = false
-        showAlert(alertType: .canCancel, titleText: editAlertTitle, contentText: editAlertContentText, cancelButtonText: "닫기", confirmButtonText: "그만두기")
+        showAlert(alertType: .canCancel, titleText: editAlertTitle, contentText: editAlertContentText, cancelButtonText: "닫기", confirmButtonText: "편집 취소하기")
     }
     
     
@@ -130,6 +130,25 @@ extension EditActivityViewController {
         editViewModel.type = detailViewModel.detailActivity?.type ?? ""
         editViewModel.fileNo = detailViewModel.detailActivity?.fileNo ?? ""
         editViewModel.id = detailViewModel.detailActivity?.id ?? ""
+        
+        // MARK: - Loading에 대한 처리
+        editViewModel.$isLoading
+            .receive(on: DispatchQueue.main)
+            .sink {
+                if !$0 {
+                    if self.isDeleteButton {
+                        if let navigationController = self.navigationController {
+                            if let rootVC = navigationController.viewControllers.first {
+                                navigationController.setViewControllers([rootVC], animated: true)
+                            }
+                        }
+                    } else {
+                        super.didTapBackButton()
+                    }
+                }
+                print($0)
+            }.store(in: &cancellable)
+        
         
         // MARK: - UI Bind
         editViewModel.$star
@@ -294,13 +313,15 @@ extension EditActivityViewController {
     
     func didTapSaveButton() {
         detailViewModel.isShowToastMessage = true
-        self.navigationController?.popViewController(animated: true)
         editViewModel.updateDetailActivity()
+        if !self.editViewModel.isLoading {
+            self.navigationController?.popViewController(animated: true)
+        }
     }
     
     func didTapDeleteButton() {
         isDeleteButton = true
-        showAlert(alertType: .canCancel, titleText: deleteAlertTitle, contentText: deleteAlertContentText, cancelButtonText: "닫기", confirmButtonText: "그만두기")
+        showAlert(alertType: .canCancel, titleText: deleteAlertTitle, contentText: deleteAlertContentText, cancelButtonText: "닫기", confirmButtonText: "삭제하기")
     }
     
     func didTapAlbumButton() {
@@ -415,13 +436,6 @@ extension EditActivityViewController: CustomAlertDelegate {
     func didAlertCofirmButton() {
         if isDeleteButton {
             editViewModel.deleteDetailActivity()
-            if let navigationController = self.navigationController {
-                if let rootViewController = navigationController.viewControllers.first {
-                    navigationController.setViewControllers([rootViewController], animated: true)
-                }
-            }
-        } else {
-            super.didTapBackButton()
         }
     }
     

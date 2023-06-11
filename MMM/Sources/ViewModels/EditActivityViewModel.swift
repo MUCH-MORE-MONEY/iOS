@@ -30,6 +30,9 @@ final class EditActivityViewModel {
     @Published var editResponse: UpdateResDto?
     @Published var deleteResponse: DeleteResDto?
     @Published var insertResponse: InsertResDto?
+    
+    // MARK: - Loading
+    @Published var isLoading = true
     // MARK: - Porperties
     private var cancellable: Set<AnyCancellable> = []
 	var isAddModel: Bool
@@ -92,6 +95,7 @@ final class EditActivityViewModel {
         } receiveValue: { response in
             self.insertResponse = response
             print(self.insertResponse)
+            self.isLoading = false
         }.store(in: &cancellable)
     }
     
@@ -127,6 +131,7 @@ final class EditActivityViewModel {
         } receiveValue: { response in
             self.editResponse = response
             print(response)
+            self.isLoading = false
         }.store(in: &cancellable)
     }
     
@@ -148,6 +153,7 @@ final class EditActivityViewModel {
         } receiveValue: { response in
             self.deleteResponse = response
             print(self.deleteResponse)
+            self.isLoading = false
         }.store(in: &cancellable)
 
     }

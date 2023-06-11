@@ -221,9 +221,7 @@ extension DetailViewController {
                 } else {
                     self.loadingLottie.play()
                     self.loadingLottie.backgroundColor = R.Color.black.withAlphaComponent(0.3)
-
                 }
-                print($0)
             }.store(in: &cancellable)
 
         

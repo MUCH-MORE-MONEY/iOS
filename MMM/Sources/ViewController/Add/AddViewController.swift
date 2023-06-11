@@ -289,6 +289,10 @@ private extension AddViewController {
 			$0.showsVerticalScrollIndicator = false
 		}
 		
+		contentView = contentView.then {
+			$0.backgroundColor = R.Color.gray900
+		}
+		
 		priceLabel = priceLabel.then {
 			$0.text = "이 경제활동에 사용된 금액은"
 			$0.font = R.Font.title3
@@ -337,7 +341,7 @@ private extension AddViewController {
 			$0.backgroundColor = R.Color.gray900
 			$0.titleLabel?.font = R.Font.h2
 			$0.contentHorizontalAlignment = .left // 왼쪽 정렬
-			$0.setButtonLayer()
+			$0.layer.cornerRadius = 4
 		}
 		
 		typeView = typeView.then {

@@ -27,21 +27,21 @@ final class AddViewController: BaseViewController {
 	private lazy var priceLabel = UILabel()
 	private lazy var priceTextField = UITextField()
 	private lazy var warningLabel = UILabel()
-
+	
 	private lazy var dateView = UIView()
 	private lazy var dateLabel = UILabel()
 	private lazy var dateButton = UIButton()
-
+	
 	private lazy var typeView = UIView()
 	private lazy var isEarn: Bool = true
 	private lazy var typeLabel = UILabel()
 	private lazy var buttonStackView = UIStackView()
 	private lazy var earnButton = UIButton()
 	private lazy var payButton = UIButton()
-
+	
 	private lazy var nextFirstButton = UIButton()
 	private lazy var nextSecondButton = UIButton()
-
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
@@ -133,17 +133,20 @@ extension AddViewController {
 	// Push Date BottomSheet
 	private func didTapDateButton() {
 		view.endEditing(true)
+		
+		guard dateView.isHidden else { return }
+		
 		setLayoutPriceView()
-    let picker = DatePickerViewController(viewModel: viewModel, date: viewModel.date ?? Date())
-
+		let picker = DatePickerViewController(viewModel: viewModel, date: viewModel.date ?? Date())
+		
 		let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
 		picker.delegate = bottomSheetVC
 		picker.setData(title: "경제활동 날짜 선택", isDark: true)
 		bottomSheetVC.modalPresentationStyle = .overFullScreen
 		bottomSheetVC.setSetting(height: 375, isDark: true)
-        
-        viewModel.createAt = viewModel.date?.getFormattedDate(format: "yyyyMMdd") ?? ""
-        
+		
+		viewModel.createAt = viewModel.date?.getFormattedDate(format: "yyyyMMdd") ?? ""
+		
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
 	}
 	
@@ -168,7 +171,7 @@ extension AddViewController {
 		}
 		
 		isEarn = tag == 0 ? true : false
-        viewModel.type = tag == 0 ? "01" : "02"
+		viewModel.type = tag == 0 ? "01" : "02"
 	}
 	
 	@objc private func keyboardWillShow(_ notification: NSNotification) {
@@ -189,7 +192,7 @@ extension AddViewController {
 		
 		// Keyboard's animation curve
 		let keyboardCurve = UIView.AnimationCurve(rawValue: notification.userInfo![UIResponder.keyboardAnimationCurveUserInfoKey] as! Int)!
-
+		
 		if keyboardWillShow {
 			if let tabBarHeight = self.tabBarController?.tabBar.frame.height {
 				bottomConstraint.update(inset: keyboardHeight - tabBarHeight)
@@ -210,13 +213,13 @@ extension AddViewController {
 		
 		animator.startAnimation()
 	}
-    
-    private func didTapNextSecondButton() {
-        viewModel.amount = Int(viewModel.priceInput)!
-        let vc = AddDetailViewController(viewModel: viewModel)
-        vc.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(vc, animated: true)
-    }
+	
+	private func didTapNextSecondButton() {
+		viewModel.amount = Int(viewModel.priceInput)!
+		let vc = AddDetailViewController(viewModel: viewModel)
+		vc.hidesBottomBarWhenPushed = true
+		navigationController?.pushViewController(vc, animated: true)
+	}
 }
 //MARK: - Style & Layouts
 private extension AddViewController {
@@ -241,7 +244,7 @@ private extension AddViewController {
 			.map{String(Array($0).filter{$0.isNumber})} // 숫자만 추출
 			.assignOnMainThread(to: \.priceInput, on: viewModel)
 			.store(in: &cancellable)
-
+		
 		nextFirstButton.tapPublisher
 			.sinkOnMainThread(receiveValue: didTapDateButton)
 			.store(in: &cancellable)
@@ -253,15 +256,15 @@ private extension AddViewController {
 		earnButton.tapPublisherByTag
 			.sinkOnMainThread(receiveValue: didTogglePriceTypeButton)
 			.store(in: &cancellable)
-
+		
 		payButton.tapPublisherByTag
 			.sinkOnMainThread(receiveValue: didTogglePriceTypeButton)
 			.store(in: &cancellable)
 		
-        nextSecondButton.tapPublisher
-            .sinkOnMainThread(receiveValue: didTapNextSecondButton)
-            .store(in: &cancellable)
-        
+		nextSecondButton.tapPublisher
+			.sinkOnMainThread(receiveValue: didTapNextSecondButton)
+			.store(in: &cancellable)
+		
 		//MARK: output
 		viewModel.isVaildByWon
 			.sinkOnMainThread(receiveValue: setValid)
@@ -273,7 +276,7 @@ private extension AddViewController {
 				guard let date = date else { return }
 				self?.setTitle(date)
 				self?.setLayoutDateView()
-                self?.viewModel.createAt = date.getFormattedDate(format: "yyyyMMdd")
+				self?.viewModel.createAt = date.getFormattedDate(format: "yyyyMMdd")
 			}).store(in: &cancellable)
 	}
 	
@@ -434,12 +437,12 @@ private extension AddViewController {
 			$0.top.equalToSuperview()
 			$0.leading.trailing.lessThanOrEqualToSuperview()
 		}
-
+		
 		priceTextField.snp.makeConstraints {
 			$0.top.equalTo(priceLabel.snp.bottom).offset(20)
 			$0.leading.trailing.equalToSuperview()
 		}
-
+		
 		warningLabel.snp.makeConstraints {
 			$0.top.equalTo(priceTextField.snp.bottom).offset(12)
 			$0.leading.trailing.equalToSuperview()
@@ -455,7 +458,7 @@ private extension AddViewController {
 			$0.top.equalToSuperview()
 			$0.leading.trailing.lessThanOrEqualToSuperview()
 		}
-
+		
 		dateButton.snp.makeConstraints {
 			$0.top.equalTo(dateLabel.snp.bottom).offset(20)
 			$0.leading.trailing.equalToSuperview()
@@ -471,13 +474,13 @@ private extension AddViewController {
 			$0.top.equalToSuperview()
 			$0.leading.trailing.lessThanOrEqualToSuperview()
 		}
-
+		
 		buttonStackView.snp.makeConstraints {
 			$0.top.equalTo(typeLabel.snp.bottom).offset(15)
 			$0.leading.trailing.equalToSuperview()
 			$0.height.equalTo(36)
 		}
-
+		
 		nextFirstButton.snp.makeConstraints {
 			$0.leading.trailing.equalToSuperview()
 			bottomConstraint = $0.bottom.equalToSuperview().inset(6).constraint

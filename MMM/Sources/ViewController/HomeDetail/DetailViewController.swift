@@ -166,7 +166,8 @@ extension DetailViewController {
         mainImageView.snp.makeConstraints {
             $0.top.equalTo(starStackView.snp.bottom).offset(16)
             $0.width.equalTo(view.safeAreaLayoutGuide).offset(-48)
-            $0.height.equalTo(mainImageView.image!.size.height * view.frame.width / mainImageView.image!.size.width)
+            $0.height.equalTo(mainImageView.snp.width)
+//            $0.height.equalTo(mainImageView.image!.size.height * view.frame.width / mainImageView.image!.size.width)
             $0.left.right.equalToSuperview()
         }
         
@@ -194,14 +195,14 @@ extension DetailViewController {
         viewModel.fetchDetailActivity(id: economicActivityId[index])
         
         // 로딩에 대한 로직 추가 ㄱㄱ
-        viewModel.$isLoading
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] in
-                guard let self = self else { return }
-                print("로딩 완료")
-                self.viewModel.isLoading.toggle()
-                
-            }.store(in: &cancellable)
+//        viewModel.$isLoading
+//            .receive(on: DispatchQueue.main)
+//            .sink { [weak self] in
+//                guard let self = self else { return }
+//                print("로딩 완료")
+//                self.viewModel.isLoading.toggle()
+//
+//            }.store(in: &cancellable)
         
         editButton.tapPublisher
             .sinkOnMainThread(receiveValue: didTapEditButton)

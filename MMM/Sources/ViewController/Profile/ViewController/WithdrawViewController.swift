@@ -46,6 +46,11 @@ final class WithdrawViewController: BaseViewController {
 	override func viewWillAppear(_ animated: Bool) {
 		navigationController?.setNavigationBarHidden(false, animated: animated)	// navigation bar 노출
 	}
+	
+	override func viewWillDisappear(_ animated: Bool) {
+		super.viewWillDisappear(animated)
+		viewModel.summary = nil
+	}
 }
 //MARK: - Action
 extension WithdrawViewController: CustomAlertDelegate {
@@ -69,7 +74,6 @@ extension WithdrawViewController: CustomAlertDelegate {
 	
 	// 경제 활동 요약
 	func setSummary(_ recordCnt: Int, _ recordSumAmount: Int) {
-		
 		economicLabel = economicLabel.then {
 			$0.attributedText = setMutiText(isMoney: false, first: "이대로 가면 작성했던 ", count: recordCnt, second: "의 경재활동,")
 		}
@@ -126,7 +130,7 @@ extension WithdrawViewController {
 		//MARK: output
 		viewModel.$summary
 			.sinkOnMainThread(receiveValue: { [weak self] summary in
-				guard let recordCnt = summary.recordCnt, let recordSumAmount = summary.recordSumAmount else { return }
+				guard let summary = summary, let recordCnt = summary.recordCnt, let recordSumAmount = summary.recordSumAmount else { return }
 				
 				self?.setSummary(recordCnt, recordSumAmount)
 			}).store(in: &cancellable)

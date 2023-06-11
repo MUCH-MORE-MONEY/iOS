@@ -318,6 +318,7 @@ private extension AddViewController {
 		}
 		
 		dateView = dateView.then {
+			$0.backgroundColor = R.Color.gray900
 			$0.isHidden = true
 		}
 		

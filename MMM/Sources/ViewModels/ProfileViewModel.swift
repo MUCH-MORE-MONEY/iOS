@@ -10,7 +10,7 @@ import Combine
 
 final class ProfileViewModel {
 	// MARK: - Private properties
-	@Published var summary: (recordCnt: Int?, recordSumAmount: Int?)
+	@Published var summary: (recordCnt: Int?, recordSumAmount: Int?)?
 	@Published var isLoading = false
 	@Published var isWithdraw: Bool?
 

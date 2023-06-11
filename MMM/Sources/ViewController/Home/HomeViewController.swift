@@ -19,9 +19,9 @@ final class HomeViewController: UIViewController {
 
 	// MARK: - UI Components
 	private lazy var monthButtonItem = UIBarButtonItem()
-	private lazy var todayButtonItem = UIBarButtonItem()
-	private lazy var filterButtonItem = UIBarButtonItem()
 	private lazy var monthButton = SemanticContentAttributeButton()
+	private lazy var rightBarItem = UIBarButtonItem()
+	private lazy var righthStackView = UIStackView()
 	private lazy var todayButton = UIButton()
 	private lazy var filterButton = UIButton()
 	private lazy var separator = UIView() // Nav separator
@@ -58,6 +58,7 @@ final class HomeViewController: UIViewController {
 	
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
+		
 		self.navigationController?.setNavigationBarHidden(false, animated: animated) // navigation bar 노출
 	}
 	
@@ -166,8 +167,8 @@ private extension HomeViewController {
 		view.backgroundColor = R.Color.gray100
 		view.addGestureRecognizer(self.scopeGesture)
 		navigationItem.leftBarButtonItem = monthButtonItem
-		navigationItem.rightBarButtonItems = [filterButtonItem, todayButtonItem]
-
+		navigationItem.rightBarButtonItem = rightBarItem
+		
 		monthButton = monthButton.then {
 			$0.frame = .init(origin: .zero, size: .init(width: 150, height: 24))
 			$0.setTitle(Date().getFormattedDate(format: "M월"), for: .normal)
@@ -184,27 +185,30 @@ private extension HomeViewController {
 			$0.customView = monthButton
 		}
 		
+		rightBarItem = rightBarItem.then {
+			$0.customView = righthStackView
+		}
+		
+		righthStackView = righthStackView.then {
+			$0.distribution = .equalSpacing
+			$0.axis = .horizontal
+			$0.alignment = .center
+			$0.spacing = 18.66
+			$0.addArrangedSubviews(todayButton, filterButton)
+		}
+		
 		todayButton = todayButton.then {
-			$0.frame = .init(origin: .zero, size: .init(width: 49, height: 24))
 			$0.setTitle("오늘", for: .normal)
 			$0.setTitleColor(R.Color.gray300, for: .normal)
 			$0.setBackgroundColor(R.Color.gray800, for: .highlighted)
 			$0.titleLabel?.font = R.Font.body3
 			$0.layer.cornerRadius = 12
-			$0.layer.borderWidth = 2
+			$0.layer.borderWidth = 1
 			$0.layer.borderColor = R.Color.gray800.cgColor
-		}
-		
-		todayButtonItem = todayButtonItem.then {
-			$0.customView = todayButton
 		}
 		
 		filterButton = filterButton.then {
 			$0.setImage(R.Icon.setting, for: .normal)
-		}
-		
-		filterButtonItem = filterButtonItem.then {
-			$0.customView = filterButton
 		}
 		
 		separator = separator.then {
@@ -234,7 +238,7 @@ private extension HomeViewController {
 			$0.register(CalendarCell.self, forCellReuseIdentifier: "CalendarCell")
 		}
 		
-		scopeGesture = scopeGesture.then {
+		scopeGesture = scopeGesture.then { 
 			$0.addTarget(self.calendar, action: #selector(self.calendar.handleScopeGesture(_:)))
 			$0.delegate = self
 			$0.minimumNumberOfTouches = 1
@@ -269,6 +273,11 @@ private extension HomeViewController {
 		headerView.addSubview(dayLabel)
 		view.addSubviews(calendarHeaderView, calendar, separator, tableView, emptyView)
 
+		todayButton.snp.makeConstraints {
+			$0.width.equalTo(49)
+			$0.height.equalTo(24)
+		}
+		
 		separator.snp.makeConstraints {
 			$0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(15)
 			$0.top.equalTo(view.safeAreaLayoutGuide)
@@ -343,7 +352,7 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 		guard viewModel.isDailySetting else { return nil }
 		
 		if let index = viewModel.monthlyList.firstIndex(where: {$0.createAt == date.getFormattedYMD()}) {
-			return viewModel.monthlyList[index].total.withCommasAndPlus()
+			return viewModel.monthlyList[index].total.withCommasAndPlus(maxValue: 10_000_000)
 		}
 		
 		return ""
@@ -354,7 +363,6 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 		calendar.snp.updateConstraints {
 			$0.height.equalTo(bounds.height) // 높이 변경
 		}
-		
 		// 46 : calendarHeaderView 높이
 		// 300 : calendar 높이
 		// 85 : calendar 주 단위 높이

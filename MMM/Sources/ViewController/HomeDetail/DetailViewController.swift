@@ -135,15 +135,8 @@ extension DetailViewController {
             $0.text = "이 활동은 어떤 활동이었는지 기록해봐요"
             $0.textColor = R.Color.gray500
             $0.font = R.Font.body3
-            $0.numberOfLines = 0
-        }
-        
-        loadingLottie = loadingLottie.then {
-            $0.contentMode = .scaleAspectFit
-            $0.play()
-            $0.loopMode = .loop
-            $0.backgroundColor = R.Color.black.withAlphaComponent(0.3)
-            $0.isHidden = true
+
+			$0.numberOfLines = 0
         }
     }
     

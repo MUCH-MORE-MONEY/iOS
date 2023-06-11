@@ -281,7 +281,7 @@ private extension AddViewController {
 		// [view]
 		view.backgroundColor = R.Color.gray900
 		navigationItem.title = "경제활동 추가"
-
+		
 		NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
 		

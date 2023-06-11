@@ -16,10 +16,11 @@ extension Int {
 	}
 	
 	// 100단위마다 "+", ","를 찍어주는 기능
-	func withCommasAndPlus() -> String {
+	func withCommasAndPlus(maxValue: Int) -> String {
 		let numberFormatter = NumberFormatter()
 		numberFormatter.numberStyle = .decimal
 		numberFormatter.positivePrefix = "+"
-		return numberFormatter.string(from: NSNumber(value:self))!
+		
+		return numberFormatter.string(from: NSNumber(value:self))! + (abs(self) < maxValue ? "" : "......")
 	}
 }

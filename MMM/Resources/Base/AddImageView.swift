@@ -68,7 +68,7 @@ extension AddImageView {
             $0.setTitleColor(R.Color.gray500, for: .normal)
             $0.layer.cornerRadius = 4
             $0.backgroundColor = R.Color.gray200
-            $0.layer.borderColor = R.Color.gray500.cgColor
+            $0.layer.borderColor = R.Color.gray300.cgColor
             $0.layer.borderWidth = 1
         }
     }

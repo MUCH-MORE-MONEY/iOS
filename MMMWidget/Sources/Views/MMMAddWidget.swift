@@ -86,7 +86,7 @@ struct MMMAddWidget: Widget {
 			MMMAddWidgetEntryView(entry: entry)
         }
 		.configurationDisplayName("경제 활동 추가") // 표시되는 이름
-        .description("This is an example widget.") // 표시되는 설명
+        .description("오늘 소비하거나 지출한 이력을 빠르게 작성할 수 있어요") // 표시되는 설명
 		.supportedFamilies([.systemSmall]) // 가장 작은 사이즈 하나로만 설정
 	}
 }

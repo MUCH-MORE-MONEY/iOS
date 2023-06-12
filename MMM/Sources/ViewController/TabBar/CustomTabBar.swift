@@ -9,11 +9,12 @@ import UIKit
 import Then
 import SnapKit
 import Combine
+import SwiftUI
 
 class CustomTabBar: UIView {
     
     // MARK: - UI Components
-    private let stackView = UIStackView().then {
+    private let tabBarStackView = UIStackView().then {
         $0.axis = .horizontal
         $0.distribution = .fillEqually
         $0.alignment = .center
@@ -23,17 +24,13 @@ class CustomTabBar: UIView {
     let tabItems: [TabItem]
     public var tabButtons = [UIButton]()
     
-    @Published var currentIndex = 0
+    @Published var selectedIndex = 0
     private var cancellable = Set<AnyCancellable>()
-    private var selectedIndex = 0 {
-        didSet { updateUI() }
-    }
     
     init(tabItems: [TabItem]) {
         self.tabItems = tabItems
         super.init(frame: .zero)
-        //        setup()
-        setUp()
+        setup()
     }
     
     required init?(coder: NSCoder) {
@@ -46,83 +43,43 @@ class CustomTabBar: UIView {
         bind()
     }
     
-    private func updateUI() {
+    private func setAttribute() {
+        
         tabItems
             .enumerated()
             .forEach { i, item in
-                let isButtonSelected = selectedIndex == i
-                let image = isButtonSelected ? item.selectedImage : item.image
-                let selectedButton = tabButtons[i]
-                
-                selectedButton.setImage(image, for: .normal)
-                selectedButton.setImage(image?.alpha(0.5), for: .highlighted)
-            }
-    }
-    
-    private func setAttribute() {
-        tabItems
-            .enumerated()
-            .forEach{ i, item in
-                let button = UIButton()
-                
-                button.setImage(item.image, for: .normal)
-                button.setImage(item.selectedImage, for: .highlighted)
-                button.setTitle(item.rawValue, for: .normal)
-                button.setTitleColor(R.Color.gray900, for: .normal)
-                button.semanticContentAttribute = .forceRightToLeft
-                
-                //                button.addAction { [weak self] in
-                //                    self?.selectedIndex = i
-                //                }
-                
-                tabButtons.append(button)
-                stackView.addArrangedSubview(button)
+                var button = UIButton().then {
+                    $0.setImage(item.image, for: .normal)
+                    $0.setImage(item.selectedImage, for: .highlighted)
+                    $0.setTitleColor(R.Color.gray900, for: .normal)
+//                    $0.setBackgroundColor(R.Color.blue300, for: .normal)
+                }
                 
                 if item == .add {
-                    stackView.addArrangedSubview(UIButton())
-                    stackView.removeArrangedSubview(button)
-                    stackView.addSubviews(button)
+                    
+                } else {
+                    button = button.then {
+                        $0.setTitle(item.rawValue, for: .normal)
+                        $0.setTitleColor(R.Color.gray500, for: .normal)
+                        $0.titleLabel?.font = R.Font.body5
+                        $0.alignTextBelow(spacing: 4)
+                    }
                 }
-            }
-        addSubviews(stackView)
-    }
-    
-    private func setUp() {
-        defer { updateUI() }
-        
-        tabItems
-            .enumerated()
-            .forEach { i, item in
-                let button = UIButton()
-                button.setImage(item.image, for: .normal)
-                button.setImage(item.image?.alpha(0.5), for: .highlighted)
-                button.addAction { [weak self] in
-                    self?.selectedIndex = i
-                }
+                
                 tabButtons.append(button)
-                stackView.addArrangedSubview(button)
+                tabBarStackView.addArrangedSubview(button)
             }
-        
-        backgroundColor = .systemGray.withAlphaComponent(0.2)
-        
-        addSubview(stackView)
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            stackView.leftAnchor.constraint(equalTo: leftAnchor),
-            stackView.rightAnchor.constraint(equalTo: rightAnchor),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            stackView.topAnchor.constraint(equalTo: topAnchor),
-        ])
+        addSubviews(tabBarStackView)
     }
     
     private func setLayout() {
-        stackView.snp.makeConstraints {
+        tabBarStackView.snp.makeConstraints {
             $0.top.left.right.bottom.equalToSuperview()
         }
+        
         tabButtons[1].snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.top.equalToSuperview().inset(-16)
+            $0.top.equalToSuperview().inset(-26)
         }
     }
     
@@ -133,16 +90,46 @@ class CustomTabBar: UIView {
                 item.tapPublisher
                     .sinkOnMainThread { [weak self] in
                         guard let self = self else { return }
-                        self.currentIndex = i
-                        print(self.currentIndex)
-                        
-                        let isButtonSelected = self.currentIndex == i
-                        let image = isButtonSelected ? self.tabItems[i].selectedImage : self.tabItems[i].image
-                        let selectedButton = self.tabButtons[i]
-                        
-                        selectedButton.setImage(image, for: .normal)
+                        self.selectedIndex = i
+                        print(self.selectedIndex)
                     }
                     .store(in: &cancellable)
             }
+        
+        $selectedIndex
+            .receive(on: DispatchQueue.main)
+            .sinkOnMainThread { [weak self] index in
+                guard let self = self else { return }
+                tabItems
+                    .enumerated()
+                    .forEach { i, item in
+                        let isButtonSelected = index == i
+                        let image = isButtonSelected ? item.selectedImage : item.image
+                        let titleColor = isButtonSelected ? R.Color.gray900 : R.Color.gray500
+                        let font = isButtonSelected ? R.Font.body4 : R.Font.body5
+                        let selectedButton = self.tabButtons[i]
+
+                        selectedButton.setImage(image, for: .normal)
+                        selectedButton.setTitleColor(titleColor, for: .normal)
+                        selectedButton.titleLabel?.font = font
+                    }
+            }.store(in: &cancellable)
+    }
+}
+
+struct ViewControllerRepresentable: UIViewControllerRepresentable {
+    typealias UIviewControllerType = TabBarController
+    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+        
+    }
+    
+    func makeUIViewController(context: Context) -> some UIViewController {
+        TabBarController(widgetIndex: 0)
+    }
+}
+
+struct ViewController_Previews: PreviewProvider {
+    static var previews: some View {
+        ViewControllerRepresentable()
     }
 }

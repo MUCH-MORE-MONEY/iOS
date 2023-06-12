@@ -12,8 +12,6 @@ final class WithdrawViewController: BaseViewController {
 	// MARK: - Properties
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 	private let viewModel: ProfileViewModel
-	private lazy var economicCount = 0
-	private lazy var moneyCount = 0
 
 	// MARK: - UI Components
 	private lazy var reconfirmLabel = UILabel()
@@ -48,6 +46,11 @@ final class WithdrawViewController: BaseViewController {
 	override func viewWillAppear(_ animated: Bool) {
 		navigationController?.setNavigationBarHidden(false, animated: animated)	// navigation bar 노출
 	}
+	
+	override func viewWillDisappear(_ animated: Bool) {
+		super.viewWillDisappear(animated)
+		viewModel.summary = nil
+	}
 }
 //MARK: - Action
 extension WithdrawViewController: CustomAlertDelegate {
@@ -69,12 +72,23 @@ extension WithdrawViewController: CustomAlertDelegate {
 		confirmButton.isSelected = !confirmButton.isSelected
 	}
 	
+	// 경제 활동 요약
+	func setSummary(_ recordCnt: Int, _ recordSumAmount: Int) {
+		economicLabel = economicLabel.then {
+			$0.attributedText = setMutiText(isMoney: false, first: "이대로 가면 작성했던 ", count: recordCnt, second: "의 경재활동,")
+		}
+		
+		moneyLabel = moneyLabel.then {
+			$0.setData(first: "그리고 모았던 ", second: "이 사라져요.", money: recordSumAmount, unitText: "원", duration: 0.1)
+		}
+	}
+	
 	func didTapWithdrawButton() {
 		self.showAlert(alertType: .canCancel, titleText: "정말 탈퇴하시겠어요?", contentText: "탈퇴하면 소장 중인 데이터가 삭제되며 30일 이후에는 복구가 불가능합니다.", confirmButtonText: "탈퇴하기")
 	}
 	
-	// 확인 버튼 이벤트 처리
-	func didAlertCofirmButton() {
+	// 화면전환
+	func processWidrow() {
 		if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
 			viewModel.withdraw() // 탈퇴
 			sceneDelegate.window?.rootViewController = sceneDelegate.onboarding
@@ -82,6 +96,11 @@ extension WithdrawViewController: CustomAlertDelegate {
 				sceneDelegate.onboarding.showAlert(alertType: .onlyConfirm, titleText: "탈퇴를 완료하였습니다", contentText: "언제든 다시 MMM을 찾아와주세요!", confirmButtonText: "확인하기")
 			}
 		}
+	}
+	
+	// 확인 버튼 이벤트 처리
+	func didAlertCofirmButton() {
+		viewModel.withdraw() // 회원 탈퇴
 	}
 	
 	// 취소 버튼 이벤트 처리
@@ -93,6 +112,7 @@ extension WithdrawViewController {
 	// 초기 셋업할 코드들
 	private func setup() {
 		bind()
+		fetch()
 		setAttribute()
 		setLayout()
 	}
@@ -106,6 +126,27 @@ extension WithdrawViewController {
 		withdrawButton.tapPublisher
 			.sinkOnMainThread(receiveValue: didTapWithdrawButton)
 			.store(in: &cancellable)
+		
+		//MARK: output
+		viewModel.$summary
+			.sinkOnMainThread(receiveValue: { [weak self] summary in
+				guard let summary = summary, let recordCnt = summary.recordCnt, let recordSumAmount = summary.recordSumAmount else { return }
+				
+				self?.setSummary(recordCnt, recordSumAmount)
+			}).store(in: &cancellable)
+		
+		viewModel.$isWithdraw
+			.sinkOnMainThread(receiveValue: { [weak self] loading in
+				guard let loading = loading else { return }
+				
+				if !loading { // 로딩이 끝난 후
+					self?.processWidrow()
+				}
+			}).store(in: &cancellable)
+	}
+	
+	private func fetch() {
+		viewModel.getSummary() // 경제활동 요약
 	}
 	
 	private func setMutiText(isMoney: Bool, first: String, count: Int, second: String) -> NSMutableAttributedString {
@@ -147,14 +188,6 @@ extension WithdrawViewController {
 			$0.text = "정말 탈퇴하시겠어요?"
 			$0.font = R.Font.h2
 			$0.textColor = R.Color.gray900
-		}
-		
-		economicLabel = economicLabel.then {
-			$0.attributedText = setMutiText(isMoney: false, first: "이대로 가면 작성했던 ", count: economicCount, second: "의 경재활동,")
-		}
-		
-		moneyLabel = moneyLabel.then {
-			$0.setData(first: "그리고 모았던 ", second: "이 사라져요.", money: moneyCount, unitText: "원", duration: 0.1)
 		}
 		
 		containView = containView.then {

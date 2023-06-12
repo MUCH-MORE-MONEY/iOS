@@ -69,4 +69,15 @@ final class Constants {
     static func removeKeychain(forKey keychainKey: KeychainKey) {
         KeychainWrapper.standard.removeObject(forKey: keychainKey.rawValue)
     }
+	
+	/// 사용자의 모든 정보를 제거
+	static func removeAllKeychain() {
+		Constants.removeKeychain(forKey: Constants.KeychainKey.token)
+		Constants.removeKeychain(forKey: Constants.KeychainKey.authorization)
+		Constants.removeKeychain(forKey: Constants.KeychainKey.email)
+		Constants.removeKeychain(forKey: Constants.KeychainKey.isHighlight)
+		Constants.removeKeychain(forKey: Constants.KeychainKey.isDailySetting)
+		Constants.removeKeychain(forKey: Constants.KeychainKey.earnStandard)
+		Constants.removeKeychain(forKey: Constants.KeychainKey.payStandard)
+	}
 }

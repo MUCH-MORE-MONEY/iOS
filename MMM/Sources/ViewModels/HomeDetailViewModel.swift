@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import WidgetKit
 
 final class HomeDetailViewModel {
     // MARK: - Property Wrapper
@@ -19,7 +20,7 @@ final class HomeDetailViewModel {
     private var cancellable: Set<AnyCancellable> = []
 
     
-    func fetchDetailActivity(id: String) {
+	func fetchDetailActivity(id: String) {
         guard let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
         
         APIClient.dispatch(
@@ -60,4 +61,31 @@ final class HomeDetailViewModel {
             self.isLoading = false
         }.store(in: &cancellable)
     }
+	
+	func getMonthlyList(_ dateYM: String) {
+		guard let date = Int(dateYM), let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
+		
+		APIClient.dispatch(APIRouter.SelectListMonthlyReqDto(headers: APIHeader.Default(token: token), body: APIParameters.SelectListMonthlyReqDto(dateYM: date)))
+			.sink(receiveCompletion: { error in
+				switch error {
+				case .failure(let data):
+					switch data {
+					default:
+						break
+					}
+				case .finished:
+					break
+				}
+			}, receiveValue: { [weak self] response in
+				guard let self = self else { return }
+				print(dateYM)
+				// 이번 달만 위젯에 보여줌
+				if dateYM == Date().getFormattedYM() {
+					UserDefaults.shared.set(response.earn, forKey: "earn")
+					UserDefaults.shared.set(response.pay, forKey: "pay")
+					WidgetCenter.shared.reloadAllTimelines()
+				}
+			}).store(in: &cancellable)
+	}
+
 }

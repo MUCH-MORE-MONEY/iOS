@@ -65,8 +65,8 @@ extension HomeViewModel {
 				case .finished:
 					break
 				}
-			}, receiveValue: { [weak self] reponse in
-				guard let self = self, let dailyList = reponse.selectListDailyOutputDto else { return }
+			}, receiveValue: { [weak self] response in
+				guard let self = self, let dailyList = response.selectListDailyOutputDto else { return }
 //				print(#file, #function, #line, dailyList)
 				self.dailyList = dailyList
 			}).store(in: &cancellable)
@@ -86,15 +86,15 @@ extension HomeViewModel {
 				case .finished:
 					break
 				}
-			}, receiveValue: { [weak self] reponse in
-				guard let self = self, let monthlyList = reponse.monthly else { return }
+			}, receiveValue: { [weak self] response in
+				guard let self = self, let monthlyList = response.monthly else { return }
 //				print(#file, #function, #line, monthlyList)
 				self.monthlyList = monthlyList
 				
 				// 이번 달만 위젯에 보여줌
 				if dateYM == Date().getFormattedYM() {
-					UserDefaults.shared.set(reponse.earn, forKey: "earn")
-					UserDefaults.shared.set(reponse.pay, forKey: "pay")
+					UserDefaults.shared.set(response.earn, forKey: "earn")
+					UserDefaults.shared.set(response.pay, forKey: "pay")
 					WidgetCenter.shared.reloadAllTimelines()
 				}
 			}).store(in: &cancellable)
@@ -114,8 +114,8 @@ extension HomeViewModel {
 				case .finished:
 					break
 				}
-			}, receiveValue: { [weak self] reponse1 in
-				guard let self = self, let monthlyList1 = reponse1.monthly else { return }
+			}, receiveValue: { [weak self] response1 in
+				guard let self = self, let monthlyList1 = response1.monthly else { return }
 //				print(#file, #function, #line, monthlyList)
 				
 				APIClient.dispatch(APIRouter.SelectListMonthlyReqDto(headers: APIHeader.Default(token: token), body: APIParameters.SelectListMonthlyReqDto(dateYM: date2)))
@@ -129,19 +129,19 @@ extension HomeViewModel {
 						case .finished:
 							break
 						}
-					}, receiveValue: { [weak self] reponse2 in
-						guard let self = self, let monthlyList2 = reponse2.monthly else { return }
+					}, receiveValue: { [weak self] response2 in
+						guard let self = self, let monthlyList2 = response2.monthly else { return }
 		//				print(#file, #function, #line, monthlyList)
 						self.monthlyList = monthlyList1 + monthlyList2
 						
 						// 이번 달만 위젯에 보여줌
 						if date1YM == Date().getFormattedYM() {
-							UserDefaults.shared.set(reponse1.earn, forKey: "earn")
-							UserDefaults.shared.set(reponse1.pay, forKey: "pay")
+							UserDefaults.shared.set(response1.earn, forKey: "earn")
+							UserDefaults.shared.set(response1.pay, forKey: "pay")
 							WidgetCenter.shared.reloadAllTimelines()
 						} else if date2YM == Date().getFormattedYM() {
-							UserDefaults.shared.set(reponse2.earn, forKey: "earn")
-							UserDefaults.shared.set(reponse2.pay, forKey: "pay")
+							UserDefaults.shared.set(response2.earn, forKey: "earn")
+							UserDefaults.shared.set(response2.pay, forKey: "pay")
 							WidgetCenter.shared.reloadAllTimelines()
 						}
 						

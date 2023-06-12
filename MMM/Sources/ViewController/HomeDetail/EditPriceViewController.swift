@@ -183,7 +183,7 @@ private extension EditPriceViewController {
 		}
 		
 		warningLabel = warningLabel.then {
-			$0.text = "최대 작성 단위을 넘어선 금액이에요"
+			$0.text = "최대 작성 단위을 넘어선 금액이에요. (최대 1억)"
 			$0.font = R.Font.body3
 			$0.textColor = R.Color.red500
 			$0.textAlignment = .left

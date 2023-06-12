@@ -267,8 +267,11 @@ extension WithdrawViewController {
 		}
 		
 		loadingLottie = loadingLottie.then {
+			$0.stop()
+			$0.contentMode = .scaleAspectFit
 			$0.loopMode = .loop // 애니메이션을 무한으로 실행
 			$0.backgroundColor = R.Color.black.withAlphaComponent(0.3)
+			$0.isHidden = true
 		}
 	}
 	

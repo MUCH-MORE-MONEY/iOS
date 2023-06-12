@@ -153,10 +153,14 @@ extension WithdrawViewController {
 		
 		viewModel.$isWithdraw
 			.sinkOnMainThread(receiveValue: { [weak self] loading in
-				guard let loading = loading else { return }
+				guard let self = self, let loading = loading else { return }
 				
 				if !loading { // 로딩이 끝난 후
-					self?.processWidrow()
+					self.loadingLottie.stop()
+					self.processWidrow()
+				} else {
+					self.loadingLottie.play()
+					self.loadingLottie.isHidden = false
 				}
 			}).store(in: &cancellable)
 	}

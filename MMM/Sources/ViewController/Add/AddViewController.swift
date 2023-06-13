@@ -245,8 +245,8 @@ private extension AddViewController {
 		
 		nextFirstButton.tapPublisher
 			.sinkOnMainThread(receiveValue: {
-				guard self.dateView.isHidden else {
-					self.view.endEditing(true)
+				guard self.dateView.isHidden else { // 애니메이션이 다 끝났을 경우
+					self.view.endEditing(true) // 키보드 내리기
 					return
 				}
 

@@ -153,7 +153,13 @@ extension AddDetailViewController {
                     self.saveButton.setBackgroundColor(R.Color.gray800, for: .normal)
                 }
             }.store(in: &cancellable)
-        
+        // 제목 글자수 16자 제한
+        viewModel.isTitleVaild
+            .sinkOnMainThread(receiveValue: {
+                if !$0 {
+                    self.titleTextFeild.text?.removeLast()
+                }
+            }).store(in: &cancellable)
         
         // MARK: - CRUD Publisher
         saveButton.tapPublisher

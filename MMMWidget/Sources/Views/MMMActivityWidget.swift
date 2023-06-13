@@ -53,7 +53,10 @@ struct MMMActivityWidgetEntryView : View {
             Color(uiColor: R.Color.gray900)
             
             if let earnStr = userInfo?.string(forKey: "earn"), let payStr = userInfo?.string(forKey: "pay"), let earn = Int(earnStr), let pay = Int(payStr) {
-				let bool = (earn >= 10_000_000 || pay > 10_000_000)
+				let bounds = UIScreen.main.bounds
+				let height = bounds.size.height
+				let isSmall = height <= 667.0 // 4.7 inch
+				let bool = (earn >= 10_000_000 || pay > 10_000_000 || isSmall)
 				
                 VStack(alignment: .leading) {
                     VStack(alignment: .leading, spacing: 4) {

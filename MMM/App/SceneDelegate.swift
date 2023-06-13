@@ -21,43 +21,41 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		window = UIWindow(windowScene: windowScene)
 		
 		onboarding = OnboardingViewController()
+		var mainViewController: UIViewController
+
 		// 로그인이 되어 있을 경우
 		if Constants.getKeychainValue(forKey: Constants.KeychainKey.token) != nil {
-			let mainViewController = TabBarController(widgetIndex: 0)
-			if let url = connectionOptions.urlContexts.first?.url {
-				
-				window?.rootViewController = mainViewController
-			} else {
-				window?.rootViewController = mainViewController
+			if let url = connectionOptions.urlContexts.first?.url { // 위젯
+				switch url.absoluteString {
+				case "myApp://Add": // 추가 위젯
+					mainViewController = TabBarController(widgetIndex: 1)
+				default: // widgetURL을 설정한 다른 위젯
+					mainViewController = TabBarController(widgetIndex: 0)
+				}
+			} else { // 일반 진입
+				mainViewController = TabBarController(widgetIndex: 0)
 			}
 		} else {
-			let mainViewController = onboarding
-			window?.rootViewController = mainViewController
+			mainViewController = onboarding
 		}
 		
-		// add 위젯으로 들어왔을 경우
-		//        let mainViewController = TabBarController(widgetIndex: 1)
-		
-		// ViewController 초기화
-		
-		// MARK: Window 구성
-		
 		// 화면에 띄울 Root 뷰 컨트롤러 지정
-		
-		window?.backgroundColor = .systemBackground
+		window?.rootViewController = mainViewController
+
 		// Window의 Background Color설정.
 		// window 또는 ViewController의 backgroundColor중 하나는 설정되어야합니다.
 		// 둘중 하나 미설정시 검은화면만 보입니다.
-		
+		window?.backgroundColor = .systemBackground
+
 		window?.makeKeyAndVisible()
 	}
 	
+	// background 에서 foreground 로 진입
 	func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-		guard let url = URLContexts.first?.url,
-			  let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true) else { return }
+		guard let url = URLContexts.first?.url else { return }
 		
-		if "ActivityAdd" == urlComponents.path {
-			let mainViewController = TabBarController(widgetIndex: 0)
+		if "myApp://Add" == url.absoluteString {
+			let mainViewController = TabBarController(widgetIndex: 1)
 			window?.rootViewController = mainViewController
 		}
 	}
@@ -89,7 +87,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		// Use this method to save data, release shared resources, and store enough scene-specific state information
 		// to restore the scene back to its current state.
 	}
-	
-	
 }
 

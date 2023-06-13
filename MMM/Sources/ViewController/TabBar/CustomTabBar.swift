@@ -11,7 +11,7 @@ import SnapKit
 import Combine
 import SwiftUI
 
-class CustomTabBar: UIView {
+final class CustomTabBar: UIView {
     
     // MARK: - UI Components
     private let tabBarStackView = UIStackView().then {
@@ -52,7 +52,7 @@ class CustomTabBar: UIView {
                     $0.setImage(item.image, for: .normal)
                     $0.setImage(item.selectedImage, for: .highlighted)
                     $0.setTitleColor(R.Color.gray900, for: .normal)
-//                    $0.setBackgroundColor(R.Color.blue300, for: .normal)
+                    $0.setBackgroundColor(R.Color.blue300, for: .normal)
                 }
                 
                 if item == .add {
@@ -62,6 +62,7 @@ class CustomTabBar: UIView {
                         $0.setTitle(item.rawValue, for: .normal)
                         $0.setTitleColor(R.Color.gray500, for: .normal)
                         $0.titleLabel?.font = R.Font.body5
+                        $0.contentMode = .scaleAspectFit
                         $0.alignTextBelow(spacing: 4)
                     }
                 }
@@ -79,11 +80,12 @@ class CustomTabBar: UIView {
         
         tabButtons[1].snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.top.equalToSuperview().inset(-26)
+//            $0.top.equalToSuperview().inset(-26)
         }
     }
     
     private func bind() {
+        // 탭 버튼이 클릭되었을 때 selectedIndex 변경
         tabButtons
             .enumerated()
             .forEach { i, item in
@@ -91,11 +93,10 @@ class CustomTabBar: UIView {
                     .sinkOnMainThread { [weak self] in
                         guard let self = self else { return }
                         self.selectedIndex = i
-                        print(self.selectedIndex)
                     }
                     .store(in: &cancellable)
             }
-        
+        // selectedIndex에 따른 탭바 버튼 포커싱 UI를 변경
         $selectedIndex
             .receive(on: DispatchQueue.main)
             .sinkOnMainThread { [weak self] index in
@@ -117,19 +118,19 @@ class CustomTabBar: UIView {
     }
 }
 
-struct ViewControllerRepresentable: UIViewControllerRepresentable {
-    typealias UIviewControllerType = TabBarController
-    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-        
-    }
-    
-    func makeUIViewController(context: Context) -> some UIViewController {
-        TabBarController(widgetIndex: 0)
-    }
-}
-
-struct ViewController_Previews: PreviewProvider {
-    static var previews: some View {
-        ViewControllerRepresentable()
-    }
-}
+//struct ViewControllerRepresentable: UIViewControllerRepresentable {
+//    typealias UIviewControllerType = TabBarController
+//    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+//
+//    }
+//
+//    func makeUIViewController(context: Context) -> some UIViewController {
+//        TabBarController(widgetIndex: 0)
+//    }
+//}
+//
+//struct ViewController_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ViewControllerRepresentable()
+//    }
+//}

@@ -53,39 +53,52 @@ struct MMMActivityWidgetEntryView : View {
             Color(uiColor: R.Color.gray900)
             
             if let earnStr = userInfo?.string(forKey: "earn"), let payStr = userInfo?.string(forKey: "pay"), let earn = Int(earnStr), let pay = Int(payStr) {
+				let bool = (earn >= 10_000_000 || pay > 10_000_000)
+				
                 VStack(alignment: .leading) {
-                    
                     VStack(alignment: .leading, spacing: 4) {
                         Text("이번 달")
                         Text("경제활동")
-                    }.padding(EdgeInsets(top: 20, leading: 16, bottom: 0, trailing: 16))
-
+                    }
+					.font(R.Fonts.title1)
                     
-                    Spacer()
+                    Spacer(minLength: 20)
                     
-                    VStack(spacing: 6) {
-                        HStack {
+                    VStack(spacing: 10) {
+                        HStack(spacing: 0) {
                             Text("지출")
                                 .modifier(TypeModifier())
-                            Spacer()
-                            Text("\(pay.withCommas())원")
-                                .foregroundColor(Color(uiColor: R.Color.orange500))
+
+							Spacer(minLength: bool ? 4 : 8)
+
+							HStack(spacing: 0) {
+								Text("\(pay.withCommas())")
+									.lineLimit(1)
+								Text("원")
+							}
+							.foregroundColor(Color(uiColor: R.Color.orange500))
+							.font(bool ? R.Fonts.body2 : R.Fonts.title3)
                         }
 						
-						HStack {
+						HStack(spacing: 0) {
 							Text("수입")
 								.modifier(TypeModifier())
-							Spacer()
-							Text("\(earn.withCommas())원")
-								.foregroundColor(Color(uiColor: R.Color.blue400))
-						}
+							
+							Spacer(minLength: bool ? 4 : 8)
 
-                    }.padding(EdgeInsets(top: 0, leading: 16, bottom: 16, trailing: 16))
-                    
-                    
+							HStack(spacing: 0) {
+								Text("\(earn.withCommas())")
+									.lineLimit(1)
+								Text("원")
+							}
+							.foregroundColor(Color(uiColor: R.Color.blue400))
+							.font(bool ? R.Fonts.body2 : R.Fonts.title3)
+						}
+                    }
+					Spacer()
                 }
                 .foregroundColor(Color(uiColor: R.Color.white))
-                .font(R.Fonts.title1)
+				.padding(EdgeInsets(top: 20, leading: 16, bottom: 0, trailing: 16))
             }
         }
     }
@@ -98,7 +111,6 @@ struct TypeModifier: ViewModifier {
             .foregroundColor(Color(uiColor: R.Color.gray300))
             .font(R.Fonts.body3)
     }
-    
 }
 
 struct MMMActivityWidget: Widget {

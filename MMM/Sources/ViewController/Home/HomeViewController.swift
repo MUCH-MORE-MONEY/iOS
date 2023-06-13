@@ -51,9 +51,6 @@ final class HomeViewController: UIViewController {
 			}
 		}
 		viewModel.getDailyList(preDate.getFormattedYMD())
-
-		calendar.reloadData()
-		tableView.reloadData()
 	}
 	
 	override func viewWillDisappear(_ animated: Bool) {
@@ -355,7 +352,7 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 			return viewModel.monthlyList[index].total.withCommasAndPlus(maxValue: 10_000_000)
 		}
 		
-		return ""
+		return nil
 	}
 		
 	// 스크롤시, calendar 높이 조절

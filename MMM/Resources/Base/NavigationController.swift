@@ -26,6 +26,7 @@ class NavigationController: UINavigationController {
 			appearance.configureWithOpaqueBackground()
 			appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: R.Font.title3]
 			appearance.backgroundColor = R.Color.gray900
+			appearance.shadowColor = .clear // separator 제거
 
 			UINavigationBar.appearance().standardAppearance = appearance
 			UINavigationBar.appearance().scrollEdgeAppearance = appearance

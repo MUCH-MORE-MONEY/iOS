@@ -289,7 +289,7 @@ private extension HomeViewController {
 		calendar.snp.makeConstraints {
 			$0.top.equalTo(calendarHeaderView.snp.bottom)
 			$0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
-			$0.height.equalTo(300)
+			$0.height.equalTo(300) // 기기 대응 - UIScreen.height * 0.37
 		}
 
 		dayLabel.snp.makeConstraints {
@@ -349,10 +349,10 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 		guard viewModel.isDailySetting else { return nil }
 		
 		if let index = viewModel.monthlyList.firstIndex(where: {$0.createAt == date.getFormattedYMD()}) {
-			return viewModel.monthlyList[index].total.withCommasAndPlus(maxValue: 10_000_000)
+			return viewModel.monthlyList[index].total.withCommasAndPlus(maxValue: 10_000_000) // 1000만원 이하로 제한
 		}
 		
-		return nil
+		return ""
 	}
 		
 	// 스크롤시, calendar 높이 조절
@@ -361,7 +361,7 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 			$0.height.equalTo(bounds.height) // 높이 변경
 		}
 		// 46 : calendarHeaderView 높이
-		// 300 : calendar 높이
+		// UIScreen.height * 0.37 : calendar 높이
 		// 85 : calendar 주 단위 높이
 		calendarHeaderView.snp.updateConstraints {
 			$0.height.equalTo(46 * (bounds.height - 85) / (300 - 85)) // calendar 전체 높이에 따른 높이 변경

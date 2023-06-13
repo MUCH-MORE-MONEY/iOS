@@ -134,8 +134,6 @@ extension AddViewController {
 	private func didTapDateButton() {
 		view.endEditing(true)
 		
-		guard dateView.isHidden else { return }
-		
 		setLayoutPriceView()
 		let picker = DatePickerViewController(viewModel: viewModel, date: viewModel.date ?? Date())
 		
@@ -246,7 +244,14 @@ private extension AddViewController {
 			.store(in: &cancellable)
 		
 		nextFirstButton.tapPublisher
-			.sinkOnMainThread(receiveValue: didTapDateButton)
+			.sinkOnMainThread(receiveValue: {
+				guard self.dateView.isHidden else {
+					self.view.endEditing(true)
+					return
+				}
+
+				self.didTapDateButton()
+			})
 			.store(in: &cancellable)
 		
 		dateButton.tapPublisher

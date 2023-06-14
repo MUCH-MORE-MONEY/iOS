@@ -102,7 +102,7 @@ struct MMMActivityWidgetEntryView : View {
 				}
 				.foregroundColor(Color(uiColor: R.Color.white))
 				.padding(EdgeInsets(top: 20, leading: 16, bottom: 0, trailing: 16))
-				.widgetURL(URL(string: "myApp://Add"))
+				.widgetURL(URL(string: "myApp://Home"))
 			}
 		}
 	}

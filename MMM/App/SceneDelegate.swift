@@ -53,8 +53,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	// background 에서 foreground 로 진입
 	func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
 		guard let url = URLContexts.first?.url else { return }
-		
-		if "myApp://Add" == url.absoluteString {
+
+		if "myApp://Home" == url.absoluteString {
+			let mainViewController = TabBarController(widgetIndex: 0)
+			window?.rootViewController = mainViewController
+		} else if "myApp://Add" == url.absoluteString {
 			let mainViewController = TabBarController(widgetIndex: 1)
 			window?.rootViewController = mainViewController
 		}

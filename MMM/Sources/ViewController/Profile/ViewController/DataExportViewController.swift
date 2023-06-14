@@ -45,22 +45,12 @@ private extension DataExportViewController {
         // 실제 데이터를 넘길경우 비동기 처리를 해줘야함
 		do {
 			let fileManager = FileManager.default
-			let downloadUrl = try fileManager.url(for: .downloadsDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-			let fileUrl = downloadUrl.appendingPathComponent("\(fileName).csv")
+			let downloadUrl = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+			let fileUrl = downloadUrl.appendingPathComponent("\(fileName)")
 			try data.write(to: fileUrl, options: .atomic)
 			
 			let vc = UIActivityViewController(activityItems: [fileUrl], applicationActivities: nil)
 			
-			vc.excludedActivityTypes = [
-				UIActivity.ActivityType.assignToContact,
-				UIActivity.ActivityType.saveToCameraRoll,
-				UIActivity.ActivityType.postToFlickr,
-				UIActivity.ActivityType.postToVimeo,
-				UIActivity.ActivityType.postToTencentWeibo,
-				UIActivity.ActivityType.postToTwitter,
-				UIActivity.ActivityType.postToFacebook,
-				UIActivity.ActivityType.openInIBooks
-			]
 			viewModel.isLoading = false // 로딩 종료
 			present(vc, animated: true)
 		} catch {

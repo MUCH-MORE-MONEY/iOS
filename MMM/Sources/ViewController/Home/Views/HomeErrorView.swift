@@ -36,6 +36,8 @@ private extension HomeErrorView {
 	}
 	
 	private func setAttribute() {
+		backgroundColor = R.Color.gray100
+		
 		stackView = stackView.then {
 			$0.axis = .vertical
 			$0.alignment = .center

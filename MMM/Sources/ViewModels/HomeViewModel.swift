@@ -57,7 +57,7 @@ extension HomeViewModel {
 		guard let date = Int(dateYMD), let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
 		
 		isLoading = true // 로딩 시작
-		errorDaily = true // 에러 이미지 제거
+		errorDaily = false // 에러 이미지 제거
 		
 		APIClient.dispatch(APIRouter.SelectListDailyReqDto(headers: APIHeader.Default(token: token), body: APIParameters.SelectListDailyReqDto(dateYMD: date)))
 			.sink(receiveCompletion: { [weak self] error in
@@ -67,13 +67,12 @@ extension HomeViewModel {
 				case .failure(let data):
 					switch data {
 					default:
-						break
+						errorDaily = true // 에러 표시
 					}
 				case .finished:
 					break
 				}
 				isLoading = false // 로딩 종료
-				errorDaily = true // 에러 표시
 			}, receiveValue: { [weak self] response in
 				guard let self = self, let dailyList = response.selectListDailyOutputDto else { return }
 //				print(#file, #function, #line, dailyList)

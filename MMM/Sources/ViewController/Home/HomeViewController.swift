@@ -167,7 +167,7 @@ private extension HomeViewController {
 			.sinkOnMainThread(receiveValue: { [weak self] error in
 				guard let self = self else { return }
 				
-				errorView.isHidden = error
+				errorView.isHidden = !error
 			}).store(in: &cancellable)
 		
 //		viewModel
@@ -349,6 +349,7 @@ private extension HomeViewController {
 		errorView.snp.makeConstraints {
 			$0.centerX.equalTo(tableView.snp.centerX)
 			$0.centerY.equalTo(tableView.snp.centerY)
+			$0.width.equalTo(tableView)
 		}
 		
 		loadingLottie.snp.makeConstraints {

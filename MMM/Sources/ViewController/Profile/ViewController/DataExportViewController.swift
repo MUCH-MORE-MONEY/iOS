@@ -44,6 +44,7 @@ private extension DataExportViewController {
         // 데이터를 넘겨야함 -> sample data
         // 실제 데이터를 넘길경우 비동기 처리를 해줘야함
 		do {
+			print(fileName )
 			let fileManager = FileManager.default
 			let downloadUrl = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
 			let fileUrl = downloadUrl.appendingPathComponent("\(fileName)")

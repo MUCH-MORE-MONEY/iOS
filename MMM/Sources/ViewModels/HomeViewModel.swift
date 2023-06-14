@@ -40,6 +40,8 @@ final class HomeViewModel {
 			Constants.setKeychain(payStandard, forKey: Constants.KeychainKey.payStandard)
 		}
 	}
+	@Published var isLoading = false
+	@Published var errorDaily = false
 
 	// MARK: - Private properties
 	private var cancellable: Set<AnyCancellable> = .init()
@@ -54,8 +56,13 @@ extension HomeViewModel {
 	func getDailyList(_ dateYMD: String) {
 		guard let date = Int(dateYMD), let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
 		
+		isLoading = true // 로딩 시작
+		errorDaily = true // 에러 이미지 제거
+		
 		APIClient.dispatch(APIRouter.SelectListDailyReqDto(headers: APIHeader.Default(token: token), body: APIParameters.SelectListDailyReqDto(dateYMD: date)))
-			.sink(receiveCompletion: { error in
+			.sink(receiveCompletion: { [weak self] error in
+				guard let self = self else { return }
+
 				switch error {
 				case .failure(let data):
 					switch data {
@@ -65,10 +72,13 @@ extension HomeViewModel {
 				case .finished:
 					break
 				}
+				isLoading = false // 로딩 종료
+				errorDaily = true // 에러 표시
 			}, receiveValue: { [weak self] response in
 				guard let self = self, let dailyList = response.selectListDailyOutputDto else { return }
 //				print(#file, #function, #line, dailyList)
 				self.dailyList = dailyList
+				isLoading = false // 로딩 종료
 			}).store(in: &cancellable)
 	}
 	

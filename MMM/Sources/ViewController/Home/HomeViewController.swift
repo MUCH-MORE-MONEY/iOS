@@ -10,6 +10,7 @@ import Combine
 import Then
 import SnapKit
 import FSCalendar
+import Lottie
 
 final class HomeViewController: UIViewController {
 	// MARK: - Properties
@@ -28,11 +29,13 @@ final class HomeViewController: UIViewController {
 	private lazy var calendar = FSCalendar()
 	private lazy var calendarHeaderView = HomeHeaderView()
 	private lazy var emptyView = HomeEmptyView()
+	private lazy var errorView = HomeErrorView()
 	private lazy var tableView = UITableView()
 	private lazy var headerView = UIView()
 	private lazy var dayLabel = UILabel()
 	private lazy var scopeGesture = UIPanGestureRecognizer()
-	
+	private lazy var loadingLottie: LottieAnimationView = LottieAnimationView(name: "loading")
+
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
@@ -147,6 +150,26 @@ private extension HomeViewController {
 				self?.didSelectDate(date)
 			}).store(in: &cancellable)
 
+		viewModel.$isLoading
+			.sinkOnMainThread(receiveValue: { [weak self] loading in
+				guard let self = self else { return }
+				
+				if loading {
+					self.loadingLottie.play()
+					self.loadingLottie.isHidden = false
+				} else {
+					self.loadingLottie.stop()
+					self.loadingLottie.isHidden = true
+				}
+			}).store(in: &cancellable)
+		
+		viewModel.$errorDaily
+			.sinkOnMainThread(receiveValue: { [weak self] error in
+				guard let self = self else { return }
+				
+				errorView.isHidden = error
+			}).store(in: &cancellable)
+		
 //		viewModel
 //			.transform(input: viewModel.input.eraseToAnyPublisher())
 //			.sinkOnMainThread(receiveValue: { [weak self] state in
@@ -264,11 +287,27 @@ private extension HomeViewController {
 			$0.textColor = R.Color.gray900
 			$0.textAlignment = .left
 		}
+		
+		emptyView = emptyView.then {
+			$0.isHidden = true
+		}
+		
+		errorView = errorView.then {
+			$0.isHidden = true
+		}
+		
+		loadingLottie = loadingLottie.then {
+			$0.stop()
+			$0.contentMode = .scaleAspectFit
+			$0.loopMode = .loop // 애니메이션을 무한으로 실행
+			$0.backgroundColor = R.Color.black.withAlphaComponent(0.3)
+			$0.isHidden = true
+		}
 	}
 	
 	private func setLayout() {
 		headerView.addSubview(dayLabel)
-		view.addSubviews(calendarHeaderView, calendar, separator, tableView, emptyView)
+		view.addSubviews(calendarHeaderView, calendar, separator, tableView, emptyView, errorView, loadingLottie)
 
 		todayButton.snp.makeConstraints {
 			$0.width.equalTo(49)
@@ -305,6 +344,15 @@ private extension HomeViewController {
 		emptyView.snp.makeConstraints {
 			$0.centerX.equalTo(tableView.snp.centerX)
 			$0.centerY.equalTo(tableView.snp.centerY)
+		}
+		
+		errorView.snp.makeConstraints {
+			$0.centerX.equalTo(tableView.snp.centerX)
+			$0.centerY.equalTo(tableView.snp.centerY)
+		}
+		
+		loadingLottie.snp.makeConstraints {
+			$0.edges.equalToSuperview()
 		}
 	}
 }

@@ -13,6 +13,7 @@ final class ProfileViewModel {
 	@Published var summary: (recordCnt: Int?, recordSumAmount: Int?)?
 	@Published var isLoading = false
 	@Published var isWithdraw: Bool?
+	@Published var file: (fileName: String, data: Data)?
 
 	private var cancellable: Set<AnyCancellable> = .init()
 }
@@ -23,7 +24,9 @@ extension ProfileViewModel {
 		
 		isLoading = true // 로딩 시작
 		APIClient.dispatch(APIRouter.SummaryReqDto(headers: APIHeader.Default(token: token), body: APIParameters.SummaryReqDto()))
-			.sink(receiveCompletion: { error in
+			.sink(receiveCompletion: { [weak self] error in
+				guard let self = self else { return }
+				
 				switch error {
 				case .failure(let data):
 					switch data {
@@ -33,11 +36,39 @@ extension ProfileViewModel {
 				case .finished:
 					break
 				}
+				isLoading = false // 로딩 종료
+
 			}, receiveValue: { [weak self] response in
 				guard let self = self else { return }
 				self.summary = (response.economicActivityTotalCnt, response.economicActivitySumAmt)
 				isLoading = false // 로딩 종료
 //				print(#file, #function, #line, dailyList)
+			}).store(in: &cancellable)
+	}
+	
+	/// 데이터 내보내기
+	func exportToExcel() {
+		guard let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
+		
+		isLoading = true // 로딩 시작
+		APIClient.dispatch(APIRouter.ExportReqDto(headers: APIHeader.Default(token: token), body: APIParameters.ExportReqDto()))
+			.sink(receiveCompletion: { [weak self] error in
+				guard let self = self else { return }
+				
+				switch error {
+				case .failure(let data):
+					switch data {
+					default:
+						break
+					}
+				case .finished:
+					break
+				}
+				isLoading = false // 로딩 종료
+			}, receiveValue: { [weak self] response in
+				guard let self = self, let data = Data(base64Encoded: response.binaryData) else { return }
+				file = (response.fileNm, data)
+//				print(#file, #function, #line, response)
 			}).store(in: &cancellable)
 	}
 	
@@ -54,7 +85,9 @@ extension ProfileViewModel {
 		
 		isWithdraw = true // 로딩 시작
 		APIClient.dispatch(APIRouter.WithdrawReqDto(headers: APIHeader.Default(token: token), body: APIParameters.WithdrawReqDto()))
-			.sink(receiveCompletion: { error in
+			.sink(receiveCompletion: {[weak self] error in
+				guard let self = self else { return }
+				
 				switch error {
 				case .failure(let data):
 					switch data {
@@ -64,6 +97,7 @@ extension ProfileViewModel {
 				case .finished:
 					break
 				}
+				isWithdraw = false // 로딩 종료
 			}, receiveValue: { [weak self] response in
 				guard let self = self else { return }
 				
@@ -74,4 +108,3 @@ extension ProfileViewModel {
 			}).store(in: &cancellable)
 	}
 }
-

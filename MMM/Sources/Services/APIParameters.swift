@@ -92,6 +92,10 @@ struct APIParameters{
         }
     }
 	
+	/// 경제활동 Excel 데이터 전환을 위한 Request
+	struct ExportReqDto: Encodable {
+	}
+	
 	/// 경제활동 요약를 위한 Request
 	struct SummaryReqDto: Encodable {
 	}

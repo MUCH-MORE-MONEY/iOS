@@ -64,7 +64,7 @@ private extension DataExportViewController {
 			viewModel.isLoading = false // 로딩 종료
 			present(vc, animated: true)
 		} catch {
-			print(error)
+			viewModel.isLoading = false // 로딩 종료
 		}
     }
 }

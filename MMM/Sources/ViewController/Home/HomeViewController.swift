@@ -180,14 +180,14 @@ private extension HomeViewController {
 		navigationItem.rightBarButtonItem = rightBarItem
 		
         // tabbar
-        tabBarViewModel.$plusButtonTappedByHome
+        tabBarViewModel.$isPlusButtonTappedInHome
             .receive(on: DispatchQueue.main)
             .sink {
-                print("감지")
+                print("감지1")
                 if $0 {
                     let vc = AddViewController()
                     self.navigationController?.pushViewController(vc, animated: true)
-                    self.tabBarViewModel.plusButtonTappedByHome.toggle()
+                    self.tabBarViewModel.isPlusButtonTappedInHome = false
                 }
             }.store(in: &cancellable)
         

@@ -57,6 +57,8 @@ final class CustomTabBar: UIView {
                     $0.setImage(item.selectedImage, for: .highlighted)
                     $0.setTitleColor(R.Color.gray900, for: .normal)
                     $0.layer.shadowRadius = 0
+                    $0.setBackgroundColor(R.Color.blue300, for: .normal)
+                    $0.contentVerticalAlignment = .top
                 }
                 
                 if item == .add {
@@ -66,8 +68,8 @@ final class CustomTabBar: UIView {
                         $0.setTitle(item.rawValue, for: .normal)
                         $0.setTitleColor(R.Color.gray500, for: .normal)
                         $0.titleLabel?.font = R.Font.body5
-                        $0.contentMode = .scaleAspectFit
-                        $0.alignTextBelow(spacing: 4)
+//                        $0.contentMode = .scaleAspectFit
+//                        $0.alignTextBelow(spacing: 4)
                     }
                 }
                 
@@ -105,36 +107,42 @@ final class CustomTabBar: UIView {
             .receive(on: DispatchQueue.main)
             .sinkOnMainThread { [weak self] index in
                 guard let self = self else { return }
-                tabItems
-                    .enumerated()
-                    .forEach { i, item in
-                        let isButtonSelected = index == i
-                        let image = isButtonSelected ? item.selectedImage : item.image
-                        let titleColor = isButtonSelected ? R.Color.gray900 : R.Color.gray500
-                        let font = isButtonSelected ? R.Font.body4 : R.Font.body5
-                        let selectedButton = self.tabButtons[i]
+                if index == 1 {
+                    
+                } else {
+                    tabItems
+                        .enumerated()
+                        .forEach { i, item in
+                            let isButtonSelected = index == i
+                            let image = isButtonSelected ? item.selectedImage : item.image
+                            let titleColor = isButtonSelected ? R.Color.gray900 : R.Color.gray500
+                            let font = isButtonSelected ? R.Font.body4 : R.Font.body5
+                            let selectedButton = self.tabButtons[i]
 
-                        selectedButton.setImage(image, for: .normal)
-                        selectedButton.setTitleColor(titleColor, for: .normal)
-                        selectedButton.titleLabel?.font = font
-                    }
+                            selectedButton.setImage(image, for: .normal)
+                            selectedButton.setTitleColor(titleColor, for: .normal)
+                            selectedButton.titleLabel?.font = font
+                        }
+                }
             }.store(in: &cancellable)
     }
 }
 
-struct ViewControllerRepresentable: UIViewControllerRepresentable {
-    typealias UIviewControllerType = TabBarController
-    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-
-    }
-
-    func makeUIViewController(context: Context) -> some UIViewController {
-        TabBarController(widgetIndex: 0)
-    }
-}
-
-struct ViewController_Previews: PreviewProvider {
-    static var previews: some View {
-        ViewControllerRepresentable()
-    }
-}
+//struct ViewControllerRepresentable: UIViewControllerRepresentable {
+//    typealias UIviewControllerType = TabBarController
+//    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+//
+//    }
+//
+//    func makeUIViewController(context: Context) -> some UIViewController {
+//        TabBarController(widgetIndex: 0)
+//    }
+//}
+//
+//struct ViewController_Previews: PreviewProvider {
+//    static var previews: some View {
+//        NavigationView {
+//            ViewControllerRepresentable()
+//        }
+//    }
+//}

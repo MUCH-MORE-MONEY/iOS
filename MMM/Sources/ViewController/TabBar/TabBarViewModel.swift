@@ -8,7 +8,6 @@
 import Foundation
 
 final class TabBarViewModel {
-    @Published var plusButtonTappedByHome = false
-    @Published var plusButtonTappedByProfile = false
-    @Published var isTabbarHidden = false
+    @Published var isPlusButtonTappedInHome = false
+    @Published var isPlusButtonTappedInProfile = false
 }

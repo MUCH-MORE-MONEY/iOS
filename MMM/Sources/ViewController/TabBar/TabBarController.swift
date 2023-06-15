@@ -16,7 +16,7 @@ final class TabBarController: UIViewController {
     
     private lazy var customTabBar = CustomTabBar(tabItems: [.home, .add, .profile])
     private var cancellables = Set<AnyCancellable>()
-    private var tabVCs: [UINavigationController] = []
+    private var tabVCs: [UIViewController] = []
     
     private var viewModel = TabBarViewModel()
     private var widgetIndex: Int
@@ -55,12 +55,6 @@ extension TabBarController {
                 guard let self = self else { return }
                 self.bindCurrentIndex()
             }.store(in: &cancellables)
-        
-        viewModel.$isTabbarHidden
-            .receive(on: DispatchQueue.main)
-            .sink {
-                self.customTabBar.isHidden = $0 ? true : false
-            }.store(in: &cancellables)
     }
     
     private func setAttribute() {
@@ -82,7 +76,8 @@ extension TabBarController {
                     var index = i
                     if i > 0 { index -= 1 }
                     
-                    let vc = NavigationController(rootViewController: rootVC)
+//                    let vc = NavigationController(rootViewController: rootVC)
+                    let vc = rootVC
                     addChild(vc)
                     view.addSubview(vc.view)
                     vc.didMove(toParent: self)
@@ -115,8 +110,8 @@ extension TabBarController {
         var index = customTabBar.selectedIndex
         // add 버튼이 눌렸을 경우
         if index == 1 {
-            if preSelected == 0 { viewModel.plusButtonTappedByHome = true }
-            if preSelected == 1 { viewModel.plusButtonTappedByProfile = true }
+            if preSelected == 0 { viewModel.isPlusButtonTappedInHome = true }
+            if preSelected == 1 { viewModel.isPlusButtonTappedInProfile = true }
         } else {
             if customTabBar.selectedIndex > 0 {
                 index -= 1

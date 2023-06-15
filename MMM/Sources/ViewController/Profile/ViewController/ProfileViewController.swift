@@ -73,15 +73,14 @@ private extension ProfileViewController {
     private func bind() {
         guard let email = Constants.getKeychainValue(forKey: Constants.KeychainKey.email) else { return }
         userEmail = email
-        tabBarViewModel.$plusButtonTappedByProfile
+        tabBarViewModel.$isPlusButtonTappedInProfile
             .receive(on: DispatchQueue.main)
             .sink {
-                print("감지")
+                print("감지2")
                 if $0 {
                     let vc = AddViewController()
                     self.navigationController?.pushViewController(vc, animated: true)
-                    self.tabBarViewModel.isTabbarHidden = true
-                    self.tabBarViewModel.plusButtonTappedByProfile.toggle()
+                    self.tabBarViewModel.isPlusButtonTappedInProfile = false
                 }
             }.store(in: &cancellable)
     }

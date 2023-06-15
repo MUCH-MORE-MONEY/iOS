@@ -254,7 +254,7 @@ private extension HomeViewController {
             .sink {
                 print("감지1")
                 if $0 {
-                    let vc = AddViewController()
+					let vc = AddViewController(parentVC: self)
                     self.navigationController?.pushViewController(vc, animated: true)
                     self.tabBarViewModel.isPlusButtonTappedInHome = false
                 }

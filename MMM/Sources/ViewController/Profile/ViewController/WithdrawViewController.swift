@@ -13,7 +13,7 @@ final class WithdrawViewController: BaseViewController {
 	// MARK: - Properties
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 	private let viewModel: ProfileViewModel
-
+	
 	// MARK: - UI Components
 	private lazy var reconfirmLabel = UILabel()
 	private lazy var economicLabel = UILabel()
@@ -46,6 +46,12 @@ final class WithdrawViewController: BaseViewController {
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		navigationController?.setNavigationBarHidden(false, animated: animated)	// navigation bar 노출
+	}
+	
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
 		navigationController?.setNavigationBarHidden(false, animated: animated)	// navigation bar 노출
 	}
 	

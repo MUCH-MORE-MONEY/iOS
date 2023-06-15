@@ -47,16 +47,6 @@ final class ProfileViewController: UIViewController {
 		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
 	}
-	
-	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
-
-		if let navigationController = self.navigationController {
-			if let rootVC = navigationController.viewControllers.first {
-				rootVC.navigationController?.setNavigationBarHidden(true, animated: animated)	// navigation bar 숨김
-			}
-		}
-	}
 }
 //MARK: - Style & Layouts
 private extension ProfileViewController {
@@ -75,7 +65,7 @@ private extension ProfileViewController {
             .sink {
                 print("감지2")
                 if $0 {
-                    let vc = AddViewController()
+					let vc = AddViewController(parentVC: self)
                     self.navigationController?.pushViewController(vc, animated: true)
                     self.tabBarViewModel.isPlusButtonTappedInProfile = false
                 }

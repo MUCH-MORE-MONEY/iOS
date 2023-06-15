@@ -16,4 +16,8 @@ extension UIDevice { // SE VS 그 외 디바이스 구분
 		let bottom = window?.safeAreaInsets.bottom ?? 0
 		return bottom > 0
 	}
+	
+	static func vibrate() {
+		UINotificationFeedbackGenerator().notificationOccurred(.error)
+	}
 }

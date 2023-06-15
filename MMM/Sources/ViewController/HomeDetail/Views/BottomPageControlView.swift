@@ -21,6 +21,7 @@ final class BottomPageControlView: UIView {
     }
     
     private lazy var indexLabel = UILabel().then {
+		$0.textColor = R.Color.black
         $0.font = R.Font.body1
         $0.text = "1 / 5"
     }

@@ -42,6 +42,12 @@ extension UITextField {
 		if tag == 0 {
 			self.text = "원"
 			self.textColor = R.Color.white
+			
+			// cursor 위치 변경
+			if let newPosition = self.position(from: self.beginningOfDocument, offset: 0) {
+				let newSelectedRange = self.textRange(from: newPosition, to: newPosition)
+				self.selectedTextRange = newSelectedRange
+			}
 		} else {
 			self.text = ""
 		}
@@ -50,6 +56,42 @@ extension UITextField {
 }
 // MARK: - UITextField Delegate
 extension UITextField: UITextFieldDelegate {
+
+	public func textFieldDidChangeSelection(_ textField: UITextField) {
+		guard let text = textField.text, let range = textField.selectedTextRange else {
+			return
+		}
+
+		var start = textField.offset(from: textField.beginningOfDocument, to: range.start)
+		var end = textField.offset(from: range.start, to: range.end)
+		let len = text.count
+		var unit = 0
+		
+		switch textField.tag {
+		case 1: // Detail 수정
+			unit = 2 // " 원"의 길이
+		case 2: // Home 설정
+			unit = 3 // " 만원"의 길이
+		default: // Add 추가
+			unit = 2 // " 원"의 길이
+		}
+
+		if start > len - unit { // 범위 시작이 단위 넘어가지 않도록
+			start = text == "원" ? 0 : abs(len - unit)
+			end = 0
+		} else if start == len - unit { // 범위 시작이 범위의 끝일때
+			end = 0 // 드래그 막기
+		} else if start + end > len - unit { // 범위 끝이 단위를 넘어가지 않도록
+			end = len - unit - start
+		}
+		
+		// cursor 위치 변경
+		if let newStartPosition = self.position(from: self.beginningOfDocument, offset: start), let newEndPosition = self.position(from: newStartPosition, offset: end) {
+			let newSelectedRange = textField.textRange(from: newStartPosition, to: newEndPosition)
+			self.selectedTextRange = newSelectedRange
+		}
+	}
+	
 	// text가 변경할지에 대한 delegate요청 메소드
 	public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
 		// oldString: 기존에 입력되었던 text

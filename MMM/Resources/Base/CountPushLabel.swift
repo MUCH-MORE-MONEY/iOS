@@ -107,6 +107,5 @@ final class CountScrollLabel: UILabel {
 			
 			offset += 0.4
 		}
-		print()
 	}
 }

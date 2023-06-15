@@ -52,6 +52,8 @@
 		6AB1151329EE6D9E00D3B813 /* Ex+UITabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB1151229EE6D9E00D3B813 /* Ex+UITabBar.swift */; };
 		6ADC27E02A2AEEF400C56777 /* Ex+UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ADC27DF2A2AEEF400C56777 /* Ex+UIImage.swift */; };
 		6AF1A8402A35906100135961 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = 6AF1A83F2A35906100135961 /* loading.json */; };
+		C40E522A2A39629B00775455 /* ExportResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40E52292A39629B00775455 /* ExportResDto.swift */; };
+		C40E522C2A39A09900775455 /* HomeErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40E522B2A39A09900775455 /* HomeErrorView.swift */; };
 		C411938E29D2817C003DBC15 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411938D29D2817C003DBC15 /* AppDelegate.swift */; };
 		C411939029D2817C003DBC15 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411938F29D2817C003DBC15 /* SceneDelegate.swift */; };
 		C411939229D2817C003DBC15 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411939129D2817C003DBC15 /* ProfileViewController.swift */; };
@@ -110,6 +112,8 @@
 		C4C0CB092A2474F900C41FF4 /* Ex+UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0CB082A2474F900C41FF4 /* Ex+UILabel.swift */; };
 		C4C792A62A358517007FD6AA /* SummaryResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C792A52A358517007FD6AA /* SummaryResDto.swift */; };
 		C4C792A82A35916D007FD6AA /* WithdrawResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C792A72A35916D007FD6AA /* WithdrawResDto.swift */; };
+		C4C792AD2A388486007FD6AA /* Ex+UIScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C792AC2A388486007FD6AA /* Ex+UIScreen.swift */; };
+		C4C8B68D2A3ACDC700FAF931 /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C8B68C2A3ACDC700FAF931 /* LoadingViewController.swift */; };
 		C4D03ED02A2DD33700011B41 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D03ECF2A2DD33700011B41 /* ProfileViewModel.swift */; };
 		C4D03EF62A2EAB1600011B41 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4D03EF52A2EAB1600011B41 /* WidgetKit.framework */; };
 		C4D03EF82A2EAB1600011B41 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4D03EF72A2EAB1600011B41 /* SwiftUI.framework */; };
@@ -237,6 +241,8 @@
 		6AF9E85829F0D0BD00DCB330 /* MMM.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MMM.entitlements; sourceTree = "<group>"; };
 		738AB5686981CA1A28640207 /* Pods_MMM_MMMUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MMM_MMMUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A564931308C77DE145181BBF /* Pods_MMM.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MMM.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C40E52292A39629B00775455 /* ExportResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportResDto.swift; sourceTree = "<group>"; };
+		C40E522B2A39A09900775455 /* HomeErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeErrorView.swift; sourceTree = "<group>"; };
 		C411938A29D2817C003DBC15 /* MMM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MMM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C411938D29D2817C003DBC15 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C411938F29D2817C003DBC15 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -301,6 +307,8 @@
 		C4C0CB082A2474F900C41FF4 /* Ex+UILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UILabel.swift"; sourceTree = "<group>"; };
 		C4C792A52A358517007FD6AA /* SummaryResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryResDto.swift; sourceTree = "<group>"; };
 		C4C792A72A35916D007FD6AA /* WithdrawResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawResDto.swift; sourceTree = "<group>"; };
+		C4C792AC2A388486007FD6AA /* Ex+UIScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIScreen.swift"; sourceTree = "<group>"; };
+		C4C8B68C2A3ACDC700FAF931 /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 		C4D03ECF2A2DD33700011B41 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		C4D03EF42A2EAB1600011B41 /* MMMWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MMMWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4D03EF52A2EAB1600011B41 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -382,6 +390,7 @@
 				6A12144629FA0C300076848A /* AppleLoginResDto.swift */,
 				6A8605B72A24D0B000DF68BD /* DeleteResDto.swift */,
 				C4199DDC2A001001006E5DA8 /* EconomicActivityResDto.swift */,
+				C40E52292A39629B00775455 /* ExportResDto.swift */,
 				6A0531212A22183D0065DB54 /* InsertResDto.swift */,
 				6A626BC02A0C7EE700BDD5C0 /* SelectDetailResDto.swift */,
 				C4C792A52A358517007FD6AA /* SummaryResDto.swift */,
@@ -644,6 +653,7 @@
 				6ADC27DF2A2AEEF400C56777 /* Ex+UIImage.swift */,
 				C4199DE02A00F164006E5DA8 /* Ex+UIImageView.swift */,
 				C4C0CB082A2474F900C41FF4 /* Ex+UILabel.swift */,
+				C4C792AC2A388486007FD6AA /* Ex+UIScreen.swift */,
 				C4EA5B4329FA2810008D1564 /* Ex+UIStackView.swift */,
 				6AB1151229EE6D9E00D3B813 /* Ex+UITabBar.swift */,
 				C41193F629D3D954003DBC15 /* Ex+UITableView.swift */,
@@ -747,6 +757,7 @@
 			isa = PBXGroup;
 			children = (
 				C4199DDE2A00B3FE006E5DA8 /* HomeEmptyView.swift */,
+				C40E522B2A39A09900775455 /* HomeErrorView.swift */,
 				C4351B4B2A1601D3005F95BE /* HomeFilterView.swift */,
 				C4EA5B3F29FA1A40008D1564 /* HomeHeaderView.swift */,
 				C4EA5B4129FA26E0008D1564 /* HomeHeaderStackView.swift */,
@@ -764,6 +775,7 @@
 				C4351B492A15C935005F95BE /* HomeFilterViewController.swift */,
 				C4351B4F2A1691FB005F95BE /* HighlightViewController.swift */,
 				C4199DD829FE6BE1006E5DA8 /* DatePickerViewController.swift */,
+				C4C8B68C2A3ACDC700FAF931 /* LoadingViewController.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -1147,6 +1159,7 @@
 				C41193F529D3D7FB003DBC15 /* Ex+NSObject.swift in Sources */,
 				6A08B47D29FF5D530080719E /* Log.swift in Sources */,
 				6AB1150F29EE372F00D3B813 /* CustomTabBar.swift in Sources */,
+				C4C792AD2A388486007FD6AA /* Ex+UIScreen.swift in Sources */,
 				C411940B29DAEDF9003DBC15 /* CustomAlertViewController.swift in Sources */,
 				C4DBAA3029DD459100D1BB97 /* WithdrawConfirmView.swift in Sources */,
 				C41193FD29D42BD9003DBC15 /* ProfileFooterView.swift in Sources */,
@@ -1170,6 +1183,8 @@
 				C4C0CAF52A1C88DC00C41FF4 /* PriceViewModel.swift in Sources */,
 				6A08B48029FF74B70080719E /* Ex+Encodable.swift in Sources */,
 				C41193E829D287E6003DBC15 /* Ex+UIView.swift in Sources */,
+				C40E522C2A39A09900775455 /* HomeErrorView.swift in Sources */,
+				C40E522A2A39629B00775455 /* ExportResDto.swift in Sources */,
 				6A0379752A2443B9005EE07F /* Ex+UITextView.swift in Sources */,
 				6A08FFDC2A274A22000AD06B /* AddDetailViewController.swift in Sources */,
 				6A12144729FA0C300076848A /* AppleLoginResDto.swift in Sources */,
@@ -1200,6 +1215,7 @@
 				6A0F234029DBA8AA0063673B /* DataExportViewController.swift in Sources */,
 				C44807E329E649A300D4B090 /* HomeViewModel.swift in Sources */,
 				6A15B0EC2A15B68D00EADAC5 /* BaseAddActivityViewController.swift in Sources */,
+				C4C8B68D2A3ACDC700FAF931 /* LoadingViewController.swift in Sources */,
 				C4D03F052A2EAB1800011B41 /* MMMWidget.intentdefinition in Sources */,
 				C411939229D2817C003DBC15 /* ProfileViewController.swift in Sources */,
 				6A8B776529FF93530095ECFC /* APIConstants.swift in Sources */,
@@ -1446,7 +1462,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = labM.project.MMM;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1480,7 +1496,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = labM.project.MMM;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

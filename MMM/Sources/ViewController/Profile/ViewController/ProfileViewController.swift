@@ -13,6 +13,7 @@ import Combine
 // 상속하지 않으려면 final 꼭 붙이기
 final class ProfileViewController: UIViewController {
 	// MARK: - Properties
+	private var viewModel: ProfileViewModel = ProfileViewModel()
 	private var userEmail: String = ""
 	private let lableCellList = ["", "계정 관리", "데이터 내보내기", "문의 및 서비스 약관", "앱 버전"]
 	private let topSafeAreaInsets: CGFloat = {
@@ -158,7 +159,6 @@ extension ProfileViewController: UITableViewDataSource {
 		return cell
 	}
 }
-
 // MARK: - UITableView Delegate
 extension ProfileViewController: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -167,12 +167,12 @@ extension ProfileViewController: UITableViewDelegate {
 		
 		switch indexPath.row {
 		case 1:
-			let vc = ManagementViewController(viewModel: ProfileViewModel())
+			let vc = ManagementViewController(viewModel: viewModel)
 			vc.setData(email: userEmail)
 			vc.hidesBottomBarWhenPushed = true	// TabBar Above
 			navigationController?.pushViewController(vc, animated: true)	// 계정관리
         case 2:
-            let vc = DataExportViewController()
+			let vc = DataExportViewController(viewModel: viewModel)
 			vc.hidesBottomBarWhenPushed = true	// TabBar Above
             navigationController?.pushViewController(vc, animated: true)
         case 3:

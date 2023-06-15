@@ -135,8 +135,6 @@ extension AddViewController {
 	private func didTapDateButton() {
 		view.endEditing(true)
 		
-		guard dateView.isHidden else { return }
-		
 		setLayoutPriceView()
 		let picker = DatePickerViewController(viewModel: viewModel, date: viewModel.date ?? Date())
 		
@@ -247,7 +245,14 @@ private extension AddViewController {
 			.store(in: &cancellable)
 		
 		nextFirstButton.tapPublisher
-			.sinkOnMainThread(receiveValue: didTapDateButton)
+			.sinkOnMainThread(receiveValue: {
+				guard self.dateView.isHidden else { // 애니메이션이 다 끝났을 경우
+					self.view.endEditing(true) // 키보드 내리기
+					return
+				}
+
+				self.didTapDateButton()
+			})
 			.store(in: &cancellable)
 		
 		dateButton.tapPublisher
@@ -318,7 +323,7 @@ private extension AddViewController {
 		}
 		
 		warningLabel = warningLabel.then {
-			$0.text = "최대 작성 단위을 넘어선 금액이에요"
+			$0.text = "최대 작성 단위을 넘어선 금액이에요. (최대 1억)"
 			$0.font = R.Font.body3
 			$0.textColor = R.Color.red500
 			$0.textAlignment = .left

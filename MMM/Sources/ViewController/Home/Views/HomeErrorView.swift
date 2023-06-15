@@ -1,15 +1,15 @@
 //
-//  HomeEmptyView.swift
+//  HomeErrorView.swift
 //  MMM
 //
-//  Created by geonhyeong on 2023/05/02.
+//  Created by geonhyeong on 2023/06/14.
 //
 
 import UIKit
 import Then
 import SnapKit
 
-final class HomeEmptyView: UIView {
+final class HomeErrorView: UIView {
 	// MARK: - Properties
 	// MARK: - UI Components
 	private lazy var stackView = UIStackView() // imageView, label
@@ -28,7 +28,7 @@ final class HomeEmptyView: UIView {
 	}
 }
 //MARK: - Style & Layouts
-private extension HomeEmptyView {
+private extension HomeErrorView {
 	// 초기 셋업할 코드들
 	private func setup() {
 		setAttribute()
@@ -36,6 +36,8 @@ private extension HomeEmptyView {
 	}
 	
 	private func setAttribute() {
+		backgroundColor = R.Color.gray100
+		
 		stackView = stackView.then {
 			$0.axis = .vertical
 			$0.alignment = .center
@@ -44,12 +46,12 @@ private extension HomeEmptyView {
 		}
 		
 		ivEmpty = ivEmpty.then {
-			$0.image = R.Icon.empty144
+			$0.image = R.Icon.error
 			$0.contentMode = .scaleAspectFill
 		}
 		
 		titleLabel = titleLabel.then {
-			let attrString = NSMutableAttributedString(string: "아직 아무것도 없어요\n시작하면 통장에 돈이 쌓일지도?")
+			let attrString = NSMutableAttributedString(string: "일시적인 오류입니다.\n잠시 후에 다시 시도해주세요.")
 			let paragraphStyle = NSMutableParagraphStyle()
 			paragraphStyle.lineSpacing = 2
 			attrString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, attrString.length))
@@ -70,7 +72,7 @@ private extension HomeEmptyView {
 		}
 		
 		stackView.snp.makeConstraints {
-			$0.centerX.centerY.equalToSuperview()
+			$0.edges.equalToSuperview()
 		}
 	}
 }

@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import Lottie
 
 final class WithdrawViewController: BaseViewController {
 	// MARK: - Properties
@@ -26,6 +27,7 @@ final class WithdrawViewController: BaseViewController {
 	private lazy var confirmButton = UIButton()
 	private lazy var confirmLabel = UILabel()
 	private lazy var withdrawButton = UIButton()
+	private lazy var loadingLottie: LottieAnimationView = LottieAnimationView(name: "loading")
 	
 	init(viewModel: ProfileViewModel) {
 		self.viewModel = viewModel
@@ -49,7 +51,7 @@ final class WithdrawViewController: BaseViewController {
 	
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
-		viewModel.summary = nil
+		viewModel.summary = nil // Text가 남아있는 문제 해결
 	}
 }
 //MARK: - Action
@@ -79,10 +81,11 @@ extension WithdrawViewController: CustomAlertDelegate {
 		}
 		
 		moneyLabel = moneyLabel.then {
-			$0.setData(first: "그리고 모았던 ", second: "이 사라져요.", money: recordSumAmount, unitText: "원", duration: 0.1)
+			$0.setData(first: "그리고 기록했던 ", second: "이 사라져요.", money: recordSumAmount, unitText: "원", duration: 0.1)
 		}
 	}
 	
+	// Alert 탈퇴하기
 	func didTapWithdrawButton() {
 		self.showAlert(alertType: .canCancel, titleText: "정말 탈퇴하시겠어요?", contentText: "탈퇴하면 소장 중인 데이터가 삭제되며 30일 이후에는 복구가 불가능합니다.", confirmButtonText: "탈퇴하기")
 	}
@@ -135,12 +138,29 @@ extension WithdrawViewController {
 				self?.setSummary(recordCnt, recordSumAmount)
 			}).store(in: &cancellable)
 		
+		viewModel.$isLoading
+			.sinkOnMainThread(receiveValue: { [weak self] loading in
+				guard let self = self else { return }
+				
+				if loading {
+					self.loadingLottie.play()
+					self.loadingLottie.isHidden = false
+				} else {
+					self.loadingLottie.stop()
+					self.loadingLottie.isHidden = true
+				}
+			}).store(in: &cancellable)
+		
 		viewModel.$isWithdraw
 			.sinkOnMainThread(receiveValue: { [weak self] loading in
-				guard let loading = loading else { return }
+				guard let self = self, let loading = loading else { return }
 				
 				if !loading { // 로딩이 끝난 후
-					self?.processWidrow()
+					self.loadingLottie.stop()
+					self.processWidrow()
+				} else {
+					self.loadingLottie.play()
+					self.loadingLottie.isHidden = false
 				}
 			}).store(in: &cancellable)
 	}
@@ -245,10 +265,18 @@ extension WithdrawViewController {
 			$0.layer.shadowOffset = CGSize(width: 0, height: 2)
 			$0.layer.shadowRadius = 8
 		}
+		
+		loadingLottie = loadingLottie.then {
+			$0.stop()
+			$0.contentMode = .scaleAspectFit
+			$0.loopMode = .loop // 애니메이션을 무한으로 실행
+			$0.backgroundColor = R.Color.black.withAlphaComponent(0.3)
+			$0.isHidden = true
+		}
 	}
 	
 	private func setLayout() {
-		view.addSubviews(reconfirmLabel, economicLabel, moneyLabel, containView, confirmStackView, withdrawButton)
+		view.addSubviews(reconfirmLabel, economicLabel, moneyLabel, containView, confirmStackView, withdrawButton, loadingLottie)
 		containView.addSubviews(containerStackView)
 		containerStackView.addArrangedSubviews(checkLabel, firstComfirm, secondComfirm)
 		confirmStackView.addArrangedSubviews(confirmButton, confirmLabel)
@@ -298,6 +326,10 @@ extension WithdrawViewController {
 			$0.left.right.equalToSuperview().inset(24)
 			$0.bottom.equalToSuperview().inset(58)
 			$0.height.equalTo(56)
+		}
+		
+		loadingLottie.snp.makeConstraints {
+			$0.edges.equalToSuperview()
 		}
 	}
 }

@@ -179,12 +179,12 @@ private extension HomeFilterView {
 			$0.top.bottom.equalTo(standardView)
 			$0.leading.equalTo(middleLabel.snp.trailing).offset(8)
 			$0.width.height.equalTo(16)
-			$0.trailing.equalTo(lastLabel.snp.leading).offset(-8)
 		}
 		
 		lastLabel.snp.makeConstraints {
 			$0.top.bottom.equalTo(standardView)
-			$0.trailing.equalToSuperview().inset(35)
+			$0.leading.equalTo(colorButton.snp.trailing).offset(8)
+			$0.trailing.greaterThanOrEqualToSuperview().inset(35)
 		}
 		
 		separator1.snp.makeConstraints {

@@ -193,7 +193,6 @@ private extension HomeViewController {
 		viewModel.$errorMonthly
 			.sinkOnMainThread(receiveValue: { [weak self] isError in
 				guard let self = self, let isError = isError else { return }
-				print("isError", isError)
 
 				if isError {
 					if !errorBgView.isHidden { return } // [중복 처리] 이미 에러 표시할 경우

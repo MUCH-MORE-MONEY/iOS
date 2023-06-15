@@ -133,6 +133,12 @@ extension AddDetailViewController {
         
         
         // MARK: - UI Bind
+        viewModel.$type
+            .receive(on: DispatchQueue.main)
+            .sink {
+                self.activityType.backgroundColor = $0 == "01" ? R.Color.orange500 : R.Color.blue500
+            }.store(in: &cancellable)
+        
         viewModel.$star
             .receive(on: DispatchQueue.main)
             .sink { [weak self] value in
@@ -153,7 +159,13 @@ extension AddDetailViewController {
                     self.saveButton.setBackgroundColor(R.Color.gray800, for: .normal)
                 }
             }.store(in: &cancellable)
-        
+        // 제목 글자수 16자 제한
+        viewModel.isTitleVaild
+            .sinkOnMainThread(receiveValue: {
+                if !$0 {
+                    self.titleTextFeild.text?.removeLast()
+                }
+            }).store(in: &cancellable)
         
         // MARK: - CRUD Publisher
         saveButton.tapPublisher
@@ -189,7 +201,13 @@ extension AddDetailViewController {
     
     func didTapSaveButton() {
         //        viewModel.isShowToastMessage = true
-        self.navigationController?.popViewController(animated: true)
+        
+        if let navigationController = self.navigationController {
+            if let rootVC = navigationController.viewControllers.first {
+                navigationController.setViewControllers([rootVC], animated: true)
+            }
+        }
+        
         viewModel.insertDetailActivity()
         
     }

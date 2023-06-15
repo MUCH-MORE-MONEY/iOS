@@ -32,3 +32,10 @@ extension UITabBar {
         UITabBar.appearance().backgroundColor = UIColor.white
     }
 }
+
+extension UIView {
+    func setTabShadow() {
+        self.layer.masksToBounds = false
+        self.layer.applyShadow()
+    }
+}

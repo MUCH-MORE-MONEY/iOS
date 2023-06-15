@@ -8,6 +8,7 @@
 import UIKit
 import Then
 import SnapKit
+import Combine
 
 // 상속하지 않으려면 final 꼭 붙이기
 final class ProfileViewController: UIViewController {
@@ -23,13 +24,24 @@ final class ProfileViewController: UIViewController {
 			return 0.0
 		}
 	}()
-	
+    private var tabBarViewModel: TabBarViewModel
+    private var cancellable = Set<AnyCancellable>()
+    
 	// MARK: - UI Components
 	private lazy var topArea = UIView()
 	private lazy var profileHeaderView = ProfileHeaderView()
 	private lazy var profileFooterView = ProfileFooterView()
 	private lazy var tableView = UITableView()
 	
+    init(tabBarViewModel: TabBarViewModel) {
+        self.tabBarViewModel = tabBarViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
@@ -53,16 +65,26 @@ final class ProfileViewController: UIViewController {
 private extension ProfileViewController {
 	// 초기 셋업할 코드들
 	private func setup() {
-		getUser()
+        bind()
 		setAttribute()
 		setLayout()
 	}
 	
-	private func getUser() {
-		guard let email = Constants.getKeychainValue(forKey: Constants.KeychainKey.email) else { return }
-		userEmail = email
-	}
-	
+    private func bind() {
+        guard let email = Constants.getKeychainValue(forKey: Constants.KeychainKey.email) else { return }
+        userEmail = email
+        tabBarViewModel.$isPlusButtonTappedInProfile
+            .receive(on: DispatchQueue.main)
+            .sink {
+                print("감지2")
+                if $0 {
+                    let vc = AddViewController()
+                    self.navigationController?.pushViewController(vc, animated: true)
+                    self.tabBarViewModel.isPlusButtonTappedInProfile = false
+                }
+            }.store(in: &cancellable)
+    }
+    
 	private func setAttribute() {
 		// [view]
 		view.backgroundColor = R.Color.gray100

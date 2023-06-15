@@ -33,7 +33,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 					mainViewController = NavigationController(rootViewController: TabBarController(widgetIndex: 0))
 				}
 			} else { // 일반 진입
-				mainViewController = TabBarController(widgetIndex: 0)
+				mainViewController = NavigationController(rootViewController: TabBarController(widgetIndex: 0))
 			}
 		} else {
 			mainViewController = onboarding

@@ -34,10 +34,11 @@ final class TabBarController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
-//        hideKeyboardWhenTappedAround()
-        //        setupTabBar()
     }
+	
+	override var preferredStatusBarStyle: UIStatusBarStyle {
+		return .lightContent // status text color 변경
+	}
 }
 
 // MARK: - Style & Layout
@@ -111,12 +112,21 @@ extension TabBarController {
         // add 버튼이 눌렸을 경우
         if index == 1 {
             if preSelected == 0 { viewModel.isPlusButtonTappedInHome = true }
-            if preSelected == 1 { viewModel.isPlusButtonTappedInProfile = true }
+            if preSelected == 1 {
+				viewModel.isPlusButtonTappedInProfile = true
+			}
         } else {
             if customTabBar.selectedIndex > 0 {
                 index -= 1
             }
             preSelected = index
+			
+			if let navigationController = self.navigationController {
+				if let rootVC = navigationController.viewControllers.first {
+					rootVC.navigationController?.setNavigationBarHidden(index == 0 ? false : index == 1 ? true : false, animated: false)
+				}
+			}
+			
             guard let shouldFrontView = tabVCs[index].view else { return }
             view.bringSubviewToFront(shouldFrontView)
             view.bringSubviewToFront(customTabBar)

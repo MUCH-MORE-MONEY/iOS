@@ -63,12 +63,6 @@ final class HomeViewController: UIViewController {
 	
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
-		
-		self.navigationController?.setNavigationBarHidden(false, animated: animated) // navigation bar 노출
-	}
-	
-	override var preferredStatusBarStyle: UIStatusBarStyle {
-		return .lightContent // status text color 변경
 	}
 }
 //MARK: - Action
@@ -246,8 +240,13 @@ private extension HomeViewController {
 		// [view]
 		view.backgroundColor = R.Color.gray100
 		view.addGestureRecognizer(self.scopeGesture)
-		navigationItem.leftBarButtonItem = monthButtonItem
-		navigationItem.rightBarButtonItem = rightBarItem
+		
+		if let navigationController = self.navigationController {
+			if let rootVC = navigationController.viewControllers.first {
+				rootVC.navigationItem.leftBarButtonItem = monthButtonItem
+				rootVC.navigationItem.rightBarButtonItem = rightBarItem
+			}
+		}
 		
         // tabbar
         tabBarViewModel.$isPlusButtonTappedInHome

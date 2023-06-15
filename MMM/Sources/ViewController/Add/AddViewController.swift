@@ -65,13 +65,19 @@ final class AddViewController: BaseViewController {
 		}
 		
 		UIApplication.shared.windows.first?.overrideUserInterfaceStyle = .dark
-
+		
 		NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
+		isFirst = false
+		
+		if isFirst { // 처음 들어올 경우만,
+			self.priceTextField.becomeFirstResponder()
+		}
+		
 		// cursor 위치 변경
 		if let newPosition = priceTextField.position(from: priceTextField.endOfDocument, offset: -1) {
 			let newSelectedRange = priceTextField.textRange(from: newPosition, to: newPosition)
@@ -211,22 +217,18 @@ extension AddViewController {
 			nextFirstButton.isHidden = true
 		}
 		
-		if isFirst {
-			isFirst = false
-		} else {
-			// 키보드 애니메이션과 동일한 방식으로 보기 애니메이션 적용하기
-			let animator = UIViewPropertyAnimator(duration: keyboardDuration, curve: keyboardCurve) { [weak self] in
-				// Update Constraints
-				self?.view.layoutIfNeeded()
-			}
-			
-			animator.startAnimation()
+		// 키보드 애니메이션과 동일한 방식으로 보기 애니메이션 적용하기
+		let animator = UIViewPropertyAnimator(duration: keyboardDuration, curve: keyboardCurve) { [weak self] in
+			// Update Constraints
+			self?.view.layoutIfNeeded()
 		}
+		
+		animator.startAnimation()
 	}
 	
 	private func didTapNextSecondButton() {
-		viewModel.amount = Int(viewModel.priceInput)!        
-        viewModel.type = isEarn ? "01" : "02"
+		viewModel.amount = Int(viewModel.priceInput)!
+		viewModel.type = isEarn ? "01" : "02"
 		let vc = AddDetailViewController(viewModel: viewModel)
 		vc.hidesBottomBarWhenPushed = true
 		navigationController?.pushViewController(vc, animated: true)
@@ -262,7 +264,7 @@ private extension AddViewController {
 					self.view.endEditing(true) // 키보드 내리기
 					return
 				}
-
+				
 				self.didTapDateButton()
 			})
 			.store(in: &cancellable)
@@ -302,7 +304,7 @@ private extension AddViewController {
 		// [view]
 		view.backgroundColor = R.Color.gray900
 		navigationItem.title = "경제활동 추가"
-				
+		
 		scrollView = scrollView.then {
 			$0.showsVerticalScrollIndicator = false
 		}
@@ -328,7 +330,7 @@ private extension AddViewController {
 			$0.tintColor = R.Color.gray400 	// cursor color
 			$0.setNumberMode(unit: "원") 	// 단위 설정
 			$0.setClearButton(with: R.Icon.cancel, mode: .whileEditing) // clear 버튼
-			$0.becomeFirstResponder()
+//			$0.becomeFirstResponder()
 		}
 		
 		warningLabel = warningLabel.then {

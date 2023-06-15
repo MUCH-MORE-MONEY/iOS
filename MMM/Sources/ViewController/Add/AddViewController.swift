@@ -172,7 +172,6 @@ extension AddViewController {
 		}
 		
 		isEarn = tag == 0 ? true : false
-		viewModel.type = tag == 0 ? "01" : "02"
 	}
 	
 	@objc private func keyboardWillShow(_ notification: NSNotification) {
@@ -216,7 +215,8 @@ extension AddViewController {
 	}
 	
 	private func didTapNextSecondButton() {
-		viewModel.amount = Int(viewModel.priceInput)!
+		viewModel.amount = Int(viewModel.priceInput)!        
+        viewModel.type = isEarn ? "01" : "02"
 		let vc = AddDetailViewController(viewModel: viewModel)
 		vc.hidesBottomBarWhenPushed = true
 		navigationController?.pushViewController(vc, animated: true)

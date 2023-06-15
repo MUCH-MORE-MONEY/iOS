@@ -133,6 +133,12 @@ extension AddDetailViewController {
         
         
         // MARK: - UI Bind
+        viewModel.$type
+            .receive(on: DispatchQueue.main)
+            .sink {
+                self.activityType.backgroundColor = $0 == "01" ? R.Color.orange500 : R.Color.blue500
+            }.store(in: &cancellable)
+        
         viewModel.$star
             .receive(on: DispatchQueue.main)
             .sink { [weak self] value in

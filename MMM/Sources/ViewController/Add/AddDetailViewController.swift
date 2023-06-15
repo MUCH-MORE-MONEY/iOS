@@ -265,6 +265,7 @@ extension AddDetailViewController: StarPickerViewProtocol {
         let rate = Int(rate)
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
+            self.viewModel.star = rate
             self.setStarImage(rate)
         }
     }
@@ -300,7 +301,6 @@ extension AddDetailViewController: UIImagePickerControllerDelegate {
 // MARK: - UI Action
 extension AddDetailViewController {
     private func setStarImage(_ rate: Int) {
-        self.viewModel.star = rate
         for star in starList {
             star.image = R.Icon.iconStarGray16
         }

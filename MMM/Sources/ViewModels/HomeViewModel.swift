@@ -42,8 +42,8 @@ final class HomeViewModel {
 	}
 	@Published var isDailyLoading = false
 	@Published var isMonthlyLoading = false
-	@Published var errorDaily = false	// 에러 이미지 노출 여부
-	@Published var errorMonthly = false // 에러 이미지 노출 여부
+	@Published var errorDaily: Bool?	// 에러 이미지 노출 여부
+	@Published var errorMonthly: Bool?	// 에러 이미지 노출 여부
 
 	// MARK: - Private properties
 	private var cancellable: Set<AnyCancellable> = .init()
@@ -64,7 +64,6 @@ extension HomeViewModel {
 		guard let date = Int(dateYMD), let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
 		
 		isDailyLoading = true // 로딩 시작
-		errorDaily = false // 에러 이미지 제거
 
 		APIClient.dispatch(APIRouter.SelectListDailyReqDto(headers: APIHeader.Default(token: token), body: APIParameters.SelectListDailyReqDto(dateYMD: date)))
 			.sink(receiveCompletion: { [weak self] error in
@@ -85,6 +84,7 @@ extension HomeViewModel {
 //				print(#file, #function, #line, dailyList)
 				self.dailyList = dailyList
 				isDailyLoading = false // 로딩 종료
+				errorDaily = false // 에러 이미지 제거
 			}).store(in: &cancellable)
 	}
 	
@@ -92,7 +92,6 @@ extension HomeViewModel {
 		guard let date = Int(dateYM), let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
 		
 		isMonthlyLoading = true // 로딩 시작
-		errorMonthly = false // 에러 이미지 제거
 
 		APIClient.dispatch(APIRouter.SelectListMonthlyReqDto(headers: APIHeader.Default(token: token), body: APIParameters.SelectListMonthlyReqDto(dateYM: date)))
 			.sink(receiveCompletion: { [weak self] error in
@@ -120,6 +119,7 @@ extension HomeViewModel {
 					WidgetCenter.shared.reloadAllTimelines()
 				}
 				isMonthlyLoading = false // 로딩 종료
+				errorMonthly = false // 에러 이미지 제거
 			}).store(in: &cancellable)
 	}
 	
@@ -174,6 +174,7 @@ extension HomeViewModel {
 							WidgetCenter.shared.reloadAllTimelines()
 						}
 						isMonthlyLoading = false // 로딩 종료
+						errorMonthly = false // 에러 이미지 제거
 					}).store(in: &self.cancellable)
 			}).store(in: &cancellable)
 	}

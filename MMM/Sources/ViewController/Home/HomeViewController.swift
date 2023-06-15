@@ -192,16 +192,18 @@ private extension HomeViewController {
 		// 월별 에러 표시
 		viewModel.$errorMonthly
 			.sinkOnMainThread(receiveValue: { [weak self] isError in
-				guard let self = self else { return }
+				guard let self = self, let isError = isError else { return }
+				print("isError", isError)
+
 				if isError {
 					if !errorBgView.isHidden { return } // [중복 처리] 이미 에러 표시할 경우
-					navigationItem.leftBarButtonItem = nil
-					navigationItem.rightBarButtonItem = nil
+					monthButton.isHidden = true			// Nav 왼쪽 노출
+					righthStackView.isHidden = true		// Nav 오른쪽 노출
 					
 					errorBgView.isHidden = false
 				} else {
-					navigationItem.leftBarButtonItem = monthButtonItem
-					navigationItem.rightBarButtonItem = rightBarItem
+					monthButton.isHidden = false		// Nav 왼쪽 숨김
+					righthStackView.isHidden = false	// Nav 오른쪽 숨김
 					
 					errorBgView.isHidden = true
 				}
@@ -210,8 +212,8 @@ private extension HomeViewController {
 		// 일별 에러 표시
 		viewModel.$errorDaily
 			.sinkOnMainThread(receiveValue: { [weak self] isError in
-				guard let self = self else { return }
-				
+				guard let self = self, let isError = isError else { return }
+
 				dailyErrorView.isHidden = !isError
 			}).store(in: &cancellable)
 		

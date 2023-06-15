@@ -15,6 +15,7 @@ final class AddViewController: BaseViewController {
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 	private var viewModel = EditActivityViewModel(isAddModel: true)
 	private var bottomConstraint: Constraint!
+	private var isFirst: Bool = true
 	private var bottomPadding: CGFloat {
 		return UIApplication.shared.windows.first{$0.isKeyWindow}?.safeAreaInsets.bottom ?? 0
 	}
@@ -64,6 +65,9 @@ final class AddViewController: BaseViewController {
 		}
 		
 		UIApplication.shared.windows.first?.overrideUserInterfaceStyle = .dark
+
+		NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
@@ -82,16 +86,6 @@ final class AddViewController: BaseViewController {
 		
 		NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
 		NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-	}
-	
-	override func viewDidDisappear(_ animated: Bool) {
-		super.viewDidDisappear(animated)
-		
-		if let navigationController = self.navigationController {
-			if let rootVC = navigationController.viewControllers.first {
-				rootVC.navigationController?.setNavigationBarHidden(true, animated: false)	// navigation bar 숨김
-			}
-		}
 	}
 }
 //MARK: - Action
@@ -209,7 +203,7 @@ extension AddViewController {
 			if let tabBarHeight = self.tabBarController?.tabBar.frame.height {
 				bottomConstraint.update(inset: keyboardHeight - tabBarHeight)
 			} else {
-				bottomConstraint.update(inset: keyboardHeight - bottomPadding)
+				bottomConstraint.update(inset: keyboardHeight)
 			}
 			nextFirstButton.isHidden = false
 		} else {
@@ -217,13 +211,17 @@ extension AddViewController {
 			nextFirstButton.isHidden = true
 		}
 		
-		// 키보드 애니메이션과 동일한 방식으로 보기 애니메이션 적용하기
-		let animator = UIViewPropertyAnimator(duration: keyboardDuration, curve: keyboardCurve) { [weak self] in
-			// Update Constraints
-			self?.view.layoutIfNeeded()
+		if isFirst {
+			isFirst = false
+		} else {
+			// 키보드 애니메이션과 동일한 방식으로 보기 애니메이션 적용하기
+			let animator = UIViewPropertyAnimator(duration: keyboardDuration, curve: keyboardCurve) { [weak self] in
+				// Update Constraints
+				self?.view.layoutIfNeeded()
+			}
+			
+			animator.startAnimation()
 		}
-		
-		animator.startAnimation()
 	}
 	
 	private func didTapNextSecondButton() {
@@ -304,10 +302,7 @@ private extension AddViewController {
 		// [view]
 		view.backgroundColor = R.Color.gray900
 		navigationItem.title = "경제활동 추가"
-		
-		NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-		
+				
 		scrollView = scrollView.then {
 			$0.showsVerticalScrollIndicator = false
 		}

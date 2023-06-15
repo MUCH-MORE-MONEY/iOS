@@ -40,8 +40,10 @@ final class HomeViewModel {
 			Constants.setKeychain(payStandard, forKey: Constants.KeychainKey.payStandard)
 		}
 	}
-	@Published var isLoading = false
-	@Published var errorDaily = false
+	@Published var isDailyLoading = false
+	@Published var isMonthlyLoading = false
+	@Published var errorDaily = false	// 에러 이미지 노출 여부
+	@Published var errorMonthly = false // 에러 이미지 노출 여부
 
 	// MARK: - Private properties
 	private var cancellable: Set<AnyCancellable> = .init()
@@ -50,15 +52,20 @@ final class HomeViewModel {
 		self.getDailyList(Date().getFormattedYMD())
 		self.getMonthlyList(Date().getFormattedYM())
 	}
+	
+	// 월별, 일별 데이터 가져오기
+	lazy var isLoading: AnyPublisher<Bool, Never> = Publishers.CombineLatest($isDailyLoading, $isMonthlyLoading)
+		.map { $0 || $1 } // 둘중 하나라도 Loading 중이면
+		.eraseToAnyPublisher()
 }
 //MARK: Action
 extension HomeViewModel {
 	func getDailyList(_ dateYMD: String) {
 		guard let date = Int(dateYMD), let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
 		
-		isLoading = true // 로딩 시작
+		isDailyLoading = true // 로딩 시작
 		errorDaily = false // 에러 이미지 제거
-		
+
 		APIClient.dispatch(APIRouter.SelectListDailyReqDto(headers: APIHeader.Default(token: token), body: APIParameters.SelectListDailyReqDto(dateYMD: date)))
 			.sink(receiveCompletion: { [weak self] error in
 				guard let self = self else { return }
@@ -72,29 +79,35 @@ extension HomeViewModel {
 				case .finished:
 					break
 				}
-				isLoading = false // 로딩 종료
+				isDailyLoading = false // 로딩 종료
 			}, receiveValue: { [weak self] response in
 				guard let self = self, let dailyList = response.selectListDailyOutputDto else { return }
 //				print(#file, #function, #line, dailyList)
 				self.dailyList = dailyList
-				isLoading = false // 로딩 종료
+				isDailyLoading = false // 로딩 종료
 			}).store(in: &cancellable)
 	}
 	
 	func getMonthlyList(_ dateYM: String) {
 		guard let date = Int(dateYM), let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
 		
+		isMonthlyLoading = true // 로딩 시작
+		errorMonthly = false // 에러 이미지 제거
+
 		APIClient.dispatch(APIRouter.SelectListMonthlyReqDto(headers: APIHeader.Default(token: token), body: APIParameters.SelectListMonthlyReqDto(dateYM: date)))
-			.sink(receiveCompletion: { error in
+			.sink(receiveCompletion: { [weak self] error in
+				guard let self = self else { return }
+				
 				switch error {
 				case .failure(let data):
 					switch data {
 					default:
-						break
+						errorMonthly = true // 에러 표시
 					}
 				case .finished:
 					break
 				}
+				isMonthlyLoading = false // 로딩 종료
 			}, receiveValue: { [weak self] response in
 				guard let self = self, let monthlyList = response.monthly else { return }
 //				print(#file, #function, #line, monthlyList)
@@ -106,38 +119,45 @@ extension HomeViewModel {
 					UserDefaults.shared.set(response.pay, forKey: "pay")
 					WidgetCenter.shared.reloadAllTimelines()
 				}
+				isMonthlyLoading = false // 로딩 종료
 			}).store(in: &cancellable)
 	}
 	
 	func getWeeklyList(_ date1YM: String, _ date2YM: String) {
 		guard let date1 = Int(date1YM), let date2 = Int(date2YM), let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
 		
+		isMonthlyLoading = true // 로딩 시작
+
 		APIClient.dispatch(APIRouter.SelectListMonthlyReqDto(headers: APIHeader.Default(token: token), body: APIParameters.SelectListMonthlyReqDto(dateYM: date1)))
-			.sink(receiveCompletion: { error in
+			.sink(receiveCompletion: { [weak self] error in
+				guard let self = self else { return }
 				switch error {
 				case .failure(let data):
 					switch data {
 					default:
-						break
+						errorMonthly = true // 에러 표시
 					}
 				case .finished:
 					break
 				}
+				isMonthlyLoading = false // 로딩 종료
 			}, receiveValue: { [weak self] response1 in
 				guard let self = self, let monthlyList1 = response1.monthly else { return }
 //				print(#file, #function, #line, monthlyList)
 				
 				APIClient.dispatch(APIRouter.SelectListMonthlyReqDto(headers: APIHeader.Default(token: token), body: APIParameters.SelectListMonthlyReqDto(dateYM: date2)))
-					.sink(receiveCompletion: { error in
+					.sink(receiveCompletion: { [weak self] error in
+						guard let self = self else { return }
 						switch error {
 						case .failure(let data):
 							switch data {
 							default:
-								break
+								errorMonthly = true // 에러 표시
 							}
 						case .finished:
 							break
 						}
+						isMonthlyLoading = false // 로딩 종료
 					}, receiveValue: { [weak self] response2 in
 						guard let self = self, let monthlyList2 = response2.monthly else { return }
 		//				print(#file, #function, #line, monthlyList)
@@ -153,7 +173,7 @@ extension HomeViewModel {
 							UserDefaults.shared.set(response2.pay, forKey: "pay")
 							WidgetCenter.shared.reloadAllTimelines()
 						}
-						
+						isMonthlyLoading = false // 로딩 종료
 					}).store(in: &self.cancellable)
 			}).store(in: &cancellable)
 	}

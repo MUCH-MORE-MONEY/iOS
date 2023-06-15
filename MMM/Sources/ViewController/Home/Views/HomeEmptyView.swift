@@ -70,7 +70,7 @@ private extension HomeEmptyView {
 		}
 		
 		stackView.snp.makeConstraints {
-			$0.edges.equalToSuperview()
+			$0.centerX.centerY.equalToSuperview()
 		}
 	}
 }

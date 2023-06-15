@@ -28,14 +28,19 @@ final class HomeViewController: UIViewController {
 	private lazy var separator = UIView() // Nav separator
 	private lazy var calendar = FSCalendar()
 	private lazy var calendarHeaderView = HomeHeaderView()
-	private lazy var emptyView = HomeEmptyView()
-	private lazy var errorView = HomeErrorView()
 	private lazy var tableView = UITableView()
 	private lazy var headerView = UIView()
 	private lazy var dayLabel = UILabel()
 	private lazy var scopeGesture = UIPanGestureRecognizer()
 	private lazy var loadingLottie: LottieAnimationView = LottieAnimationView(name: "loading")
 
+	// Empty & Error UI
+	private lazy var emptyView = HomeEmptyView()
+	private lazy var errorBgView = UIView()
+	private lazy var monthlyErrorView = HomeErrorView()
+	private lazy var dailyErrorView = HomeErrorView()
+	private lazy var retryButton = UIButton()
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
@@ -43,17 +48,7 @@ final class HomeViewController: UIViewController {
 
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-		if calendar.scope == .month {
-			viewModel.getMonthlyList(calendar.currentPage.getFormattedYM())
-		} else {
-			if let dateAfter = Calendar.current.date(byAdding: .day, value: 6, to: calendar.currentPage) { // 해당 주의 마지막 날짜
-				let date = calendar.currentPage.getFormattedYM()
-				if date != dateAfter.getFormattedYM() {
-					viewModel.getWeeklyList(date, dateAfter.getFormattedYM())
-				}
-			}
-		}
-		viewModel.getDailyList(preDate.getFormattedYMD())
+		fetchData()
 	}
 	
 	override func viewWillDisappear(_ animated: Bool) {
@@ -83,6 +78,21 @@ extension HomeViewController {
 	}
 	
 	// MARK: - Private
+	/// 데이터 얻기
+	private func fetchData() {
+		if calendar.scope == .month { // 월 단위
+			viewModel.getMonthlyList(calendar.currentPage.getFormattedYM())
+		} else { // 주 단위
+			if let dateAfter = Calendar.current.date(byAdding: .day, value: 6, to: calendar.currentPage) { // 해당 주의 마지막 날짜
+				let date = calendar.currentPage.getFormattedYM()
+				if date != dateAfter.getFormattedYM() {
+					viewModel.getWeeklyList(date, dateAfter.getFormattedYM())
+				}
+			}
+		}
+		viewModel.getDailyList(preDate.getFormattedYMD())
+	}
+	
 	/// 달력 Picker Bottom Sheet
 	private func didTapMonthButton() {
 		let picker = DatePickerViewController(viewModel: viewModel, date: preDate)
@@ -119,7 +129,7 @@ private extension HomeViewController {
 	}
 	
 	private func bind() {
-		//MARK: input
+		// MARK: input
 		todayButton.tapPublisher
 			.sinkOnMainThread(receiveValue: didTapTodayButton)
 			.store(in: &cancellable)
@@ -133,24 +143,40 @@ private extension HomeViewController {
 			.sinkOnMainThread(receiveValue: didTapFilterButton)
 			.store(in: &cancellable)
 		
-		//MARK: output
-		viewModel.$dailyList
-			.sinkOnMainThread(receiveValue: { [weak self] daily in
-				self?.tableView.reloadData()
-			}).store(in: &cancellable)
+		// Fetch 재시도
+		retryButton.tapPublisher
+			.throttle(for: .seconds(2), scheduler: DispatchQueue.main, latest: false) // 처음에 구독한 시점에 value를 한번 바로 방출
+			.sinkOnMainThread(receiveValue: {
+				self.loadingLottie.play()
+				self.loadingLottie.isHidden = false
+				DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+					self.fetchData()
+				}
+			})
+			.store(in: &cancellable)
 		
+		// MARK: output
+		// 월별 데이터 표시
 		viewModel.$monthlyList
 			.sinkOnMainThread(receiveValue: { [weak self] monthly in
 				self?.calendarHeaderView.setData(pay: monthly.reduce(0){$0 + $1.pay}, earn: monthly.reduce(0){$0 + $1.earn})
 				self?.calendar.reloadData()
 			}).store(in: &cancellable)
+
+		// 일별 데이터 표시
+		viewModel.$dailyList
+			.sinkOnMainThread(receiveValue: { [weak self] daily in
+				self?.tableView.reloadData()
+			}).store(in: &cancellable)
 				
+		// Picker 날짜 표시
 		viewModel.$date
 			.sinkOnMainThread(receiveValue: { [weak self] date in
 				self?.didSelectDate(date)
 			}).store(in: &cancellable)
 
-		viewModel.$isLoading
+		// 월별과 일별을 합쳐 Loading 표시
+		viewModel.isLoading
 			.sinkOnMainThread(receiveValue: { [weak self] loading in
 				guard let self = self else { return }
 				
@@ -163,11 +189,30 @@ private extension HomeViewController {
 				}
 			}).store(in: &cancellable)
 		
+		// 월별 에러 표시
+		viewModel.$errorMonthly
+			.sinkOnMainThread(receiveValue: { [weak self] isError in
+				guard let self = self else { return }
+				if isError {
+					if !errorBgView.isHidden { return } // [중복 처리] 이미 에러 표시할 경우
+					navigationItem.leftBarButtonItem = nil
+					navigationItem.rightBarButtonItem = nil
+					
+					errorBgView.isHidden = false
+				} else {
+					navigationItem.leftBarButtonItem = monthButtonItem
+					navigationItem.rightBarButtonItem = rightBarItem
+					
+					errorBgView.isHidden = true
+				}
+			}).store(in: &cancellable)
+		
+		// 일별 에러 표시
 		viewModel.$errorDaily
-			.sinkOnMainThread(receiveValue: { [weak self] error in
+			.sinkOnMainThread(receiveValue: { [weak self] isError in
 				guard let self = self else { return }
 				
-				errorView.isHidden = !error
+				dailyErrorView.isHidden = !isError
 			}).store(in: &cancellable)
 		
 //		viewModel
@@ -292,7 +337,23 @@ private extension HomeViewController {
 			$0.isHidden = true
 		}
 		
-		errorView = errorView.then {
+		errorBgView = errorBgView.then {
+			$0.backgroundColor = R.Color.gray100
+			$0.isHidden = true
+		}
+		
+		retryButton = retryButton.then {
+			$0.setTitle("재시도하기", for: .normal)
+			$0.titleLabel?.font = R.Font.prtendard(family: .medium, size: 18)
+			$0.setBackgroundColor(R.Color.gray800, for: .normal)
+			$0.layer.cornerRadius = 4
+			$0.layer.shadowColor = UIColor.black.cgColor
+			$0.layer.shadowOpacity = 0.25
+			$0.layer.shadowOffset = CGSize(width: 0, height: 2)
+			$0.layer.shadowRadius = 8
+		}
+		
+		dailyErrorView = dailyErrorView.then {
 			$0.isHidden = true
 		}
 		
@@ -307,7 +368,8 @@ private extension HomeViewController {
 	
 	private func setLayout() {
 		headerView.addSubview(dayLabel)
-		view.addSubviews(calendarHeaderView, calendar, separator, tableView, emptyView, errorView, loadingLottie)
+		errorBgView.addSubviews(monthlyErrorView, retryButton)
+		view.addSubviews(calendarHeaderView, calendar, separator, tableView, emptyView, dailyErrorView, errorBgView, loadingLottie)
 
 		todayButton.snp.makeConstraints {
 			$0.width.equalTo(49)
@@ -346,7 +408,22 @@ private extension HomeViewController {
 			$0.centerY.equalTo(tableView.snp.centerY)
 		}
 		
-		errorView.snp.makeConstraints {
+		errorBgView.snp.makeConstraints {
+			$0.edges.equalToSuperview()
+		}
+		
+		monthlyErrorView.snp.makeConstraints {
+			$0.centerX.equalToSuperview()
+			$0.centerY.equalToSuperview().offset(-40) // 재시도 버튼과의 거리
+		}
+		
+		retryButton.snp.makeConstraints {
+			$0.top.equalTo(monthlyErrorView.snp.bottom).offset(40)
+			$0.left.right.equalToSuperview().inset(56)
+			$0.height.equalTo(56)
+		}
+		
+		dailyErrorView.snp.makeConstraints {
 			$0.centerX.equalTo(tableView.snp.centerX)
 			$0.centerY.equalTo(tableView.snp.centerY)
 			$0.width.equalTo(tableView)

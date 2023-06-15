@@ -67,6 +67,7 @@ extension ProfileViewModel {
 			}, receiveValue: { [weak self] response in
 				guard let self = self, let data = Data(base64Encoded: response.binaryData) else { return }
 				file = (response.fileNm, data)
+				isLoading = false // 로딩 종료
 //				print(#file, #function, #line, response)
 			}).store(in: &cancellable)
 	}

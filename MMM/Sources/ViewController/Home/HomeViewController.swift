@@ -32,7 +32,7 @@ final class HomeViewController: UIViewController {
 	private lazy var headerView = UIView()
 	private lazy var dayLabel = UILabel()
 	private lazy var scopeGesture = UIPanGestureRecognizer()
-	private lazy var loadingLottie: LottieAnimationView = LottieAnimationView(name: "loading")
+	private lazy var loadView = LoadingViewController()
 
 	// Empty & Error UI
 	private lazy var emptyView = HomeEmptyView()
@@ -147,8 +147,11 @@ private extension HomeViewController {
 		retryButton.tapPublisher
 			.throttle(for: .seconds(2), scheduler: DispatchQueue.main, latest: false) // 처음에 구독한 시점에 value를 한번 바로 방출
 			.sinkOnMainThread(receiveValue: {
-				self.loadingLottie.play()
-				self.loadingLottie.isHidden = false
+				self.loadView.play()
+				self.loadView.isPresent = true
+				self.loadView.modalPresentationStyle = .overFullScreen
+				self.present(self.loadView, animated: false)
+				
 				DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
 					self.fetchData()
 				}
@@ -180,12 +183,13 @@ private extension HomeViewController {
 			.sinkOnMainThread(receiveValue: { [weak self] loading in
 				guard let self = self else { return }
 				
-				if loading {
-					self.loadingLottie.play()
-					self.loadingLottie.isHidden = false
+				if loading && !self.loadView.isPresent {
+					self.loadView.play()
+					self.loadView.isPresent = true
+					self.loadView.modalPresentationStyle = .overFullScreen
+					self.present(self.loadView, animated: false)
 				} else {
-					self.loadingLottie.stop()
-					self.loadingLottie.isHidden = true
+					self.loadView.dismiss(animated: false)
 				}
 			}).store(in: &cancellable)
 		
@@ -357,20 +361,12 @@ private extension HomeViewController {
 		dailyErrorView = dailyErrorView.then {
 			$0.isHidden = true
 		}
-		
-		loadingLottie = loadingLottie.then {
-			$0.stop()
-			$0.contentMode = .scaleAspectFit
-			$0.loopMode = .loop // 애니메이션을 무한으로 실행
-			$0.backgroundColor = R.Color.black.withAlphaComponent(0.3)
-			$0.isHidden = true
-		}
 	}
 	
 	private func setLayout() {
 		headerView.addSubview(dayLabel)
 		errorBgView.addSubviews(monthlyErrorView, retryButton)
-		view.addSubviews(calendarHeaderView, calendar, separator, tableView, emptyView, dailyErrorView, errorBgView, loadingLottie)
+		view.addSubviews(calendarHeaderView, calendar, separator, tableView, emptyView, dailyErrorView, errorBgView)
 
 		todayButton.snp.makeConstraints {
 			$0.width.equalTo(49)
@@ -428,10 +424,6 @@ private extension HomeViewController {
 			$0.centerX.equalTo(tableView.snp.centerX)
 			$0.centerY.equalTo(tableView.snp.centerY)
 			$0.width.equalTo(tableView)
-		}
-		
-		loadingLottie.snp.makeConstraints {
-			$0.edges.equalToSuperview()
 		}
 	}
 }

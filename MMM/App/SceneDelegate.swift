@@ -28,9 +28,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 			if let url = connectionOptions.urlContexts.first?.url { // 위젯
 				switch url.absoluteString {
 				case "myApp://Add": // 추가 위젯
-					mainViewController = TabBarController(widgetIndex: 1)
+					mainViewController = NavigationController(rootViewController: TabBarController(widgetIndex: 1))
 				default: // widgetURL을 설정한 다른 위젯
-					mainViewController = TabBarController(widgetIndex: 0)
+					mainViewController = NavigationController(rootViewController: TabBarController(widgetIndex: 0))
 				}
 			} else { // 일반 진입
 				mainViewController = TabBarController(widgetIndex: 0)
@@ -55,10 +55,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		guard let url = URLContexts.first?.url else { return }
 
 		if "myApp://Home" == url.absoluteString {
-			let mainViewController = TabBarController(widgetIndex: 0)
+			let mainViewController = NavigationController(rootViewController: TabBarController(widgetIndex: 0))
 			window?.rootViewController = mainViewController
 		} else if "myApp://Add" == url.absoluteString {
-			let mainViewController = TabBarController(widgetIndex: 1)
+			let mainViewController = NavigationController(rootViewController: TabBarController(widgetIndex: 1))
 			window?.rootViewController = mainViewController
 		}
 	}

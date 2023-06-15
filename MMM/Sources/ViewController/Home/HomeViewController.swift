@@ -17,6 +17,7 @@ final class HomeViewController: UIViewController {
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 	private let viewModel = HomeViewModel()
 	private lazy var preDate = Date() // yyyyMMdd
+    private var tabBarViewModel: TabBarViewModel
 
 	// MARK: - UI Components
 	private lazy var monthButtonItem = UIBarButtonItem()
@@ -41,6 +42,15 @@ final class HomeViewController: UIViewController {
 	private lazy var dailyErrorView = HomeErrorView()
 	private lazy var retryButton = UIButton()
 	
+    init(tabBarViewModel: TabBarViewModel) {
+        self.tabBarViewModel = tabBarViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
@@ -239,6 +249,18 @@ private extension HomeViewController {
 		navigationItem.leftBarButtonItem = monthButtonItem
 		navigationItem.rightBarButtonItem = rightBarItem
 		
+        // tabbar
+        tabBarViewModel.$isPlusButtonTappedInHome
+            .receive(on: DispatchQueue.main)
+            .sink {
+                print("감지1")
+                if $0 {
+                    let vc = AddViewController()
+                    self.navigationController?.pushViewController(vc, animated: true)
+                    self.tabBarViewModel.isPlusButtonTappedInHome = false
+                }
+            }.store(in: &cancellable)
+        
 		monthButton = monthButton.then {
 			$0.frame = .init(origin: .zero, size: .init(width: 150, height: 24))
 			$0.setTitle(Date().getFormattedDate(format: "M월"), for: .normal)

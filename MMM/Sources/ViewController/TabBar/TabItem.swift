@@ -8,9 +8,9 @@
 import UIKit
 
 enum TabItem: String {
-    case home
+    case home = "소비"
     case add
-    case profile
+    case profile = "마이페이지"
     
     var image: UIImage? {
         switch self {

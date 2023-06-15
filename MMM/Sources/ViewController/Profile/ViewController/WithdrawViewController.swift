@@ -81,7 +81,7 @@ extension WithdrawViewController: CustomAlertDelegate {
 		}
 		
 		moneyLabel = moneyLabel.then {
-			$0.setData(first: "그리고 모았던 ", second: "이 사라져요.", money: recordSumAmount, unitText: "원", duration: 0.1)
+			$0.setData(first: "그리고 기록했던 ", second: "이 사라져요.", money: recordSumAmount, unitText: "원", duration: 0.1)
 		}
 	}
 	

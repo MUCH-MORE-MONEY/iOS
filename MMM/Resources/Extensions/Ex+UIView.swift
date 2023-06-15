@@ -101,6 +101,7 @@ extension UIView {
 	
 	// 특정 텍스트 필드의 x축 값을 변경하는 애니메이션 함수
 	func shake() {
+		UIDevice.vibrate()
 		let animation = CAKeyframeAnimation(keyPath: "position.x")
 		animation.values = [0, 10, -10, 10, 0] // x축 상수 값이 원점, 왼쪽, 오른쪽, 왼쪽, 원점으로 이어짐
 		animation.keyTimes = [0, 0.08, 0.24, 0.415, 0.5]

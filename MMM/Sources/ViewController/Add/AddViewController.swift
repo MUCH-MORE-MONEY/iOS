@@ -57,12 +57,13 @@ final class AddViewController: BaseViewController {
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-		
+//        self.navigationController?.setNavigationBarHidden(false, animated: animated)    // navigation bar 노출
 		UIApplication.shared.windows.first?.overrideUserInterfaceStyle = .dark
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
+//        self.navigationController?.setNavigationBarHidden(true, animated: animated) // navigation bar 숨김
 		// cursor 위치 변경
 		if let newPosition = priceTextField.position(from: priceTextField.endOfDocument, offset: -1) {
 			let newSelectedRange = priceTextField.textRange(from: newPosition, to: newPosition)

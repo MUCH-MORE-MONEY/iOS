@@ -195,7 +195,13 @@ extension AddDetailViewController {
     
     func didTapSaveButton() {
         //        viewModel.isShowToastMessage = true
-        self.navigationController?.popViewController(animated: true)
+        
+        if let navigationController = self.navigationController {
+            if let rootVC = navigationController.viewControllers.first {
+                navigationController.setViewControllers([rootVC], animated: true)
+            }
+        }
+        
         viewModel.insertDetailActivity()
         
     }

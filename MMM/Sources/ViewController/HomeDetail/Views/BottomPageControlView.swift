@@ -81,6 +81,10 @@ extension BottomPageControlView {
             $0.top.equalToSuperview().inset(16)
             $0.left.right.bottom.equalToSuperview()
         }
+        
+        indexLabel.snp.makeConstraints {
+            $0.centerY.equalTo(nextButton.snp.centerY)
+        }
     }
 }
 

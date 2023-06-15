@@ -17,8 +17,12 @@ final class CustomTabBar: UIView {
     private let tabBarStackView = UIStackView().then {
         $0.axis = .horizontal
         $0.distribution = .fillEqually
-        $0.alignment = .center
+        $0.alignment = .fill
         $0.backgroundColor = R.Color.gray100
+        $0.layer.shadowOpacity = 0.7
+        $0.layer.shadowOffset = CGSize(width: 0, height: 1)
+        $0.layer.shadowRadius = 1
+        $0.layer.masksToBounds = false
     }
     
     let tabItems: [TabItem]
@@ -52,7 +56,7 @@ final class CustomTabBar: UIView {
                     $0.setImage(item.image, for: .normal)
                     $0.setImage(item.selectedImage, for: .highlighted)
                     $0.setTitleColor(R.Color.gray900, for: .normal)
-                    $0.setBackgroundColor(R.Color.blue300, for: .normal)
+                    $0.layer.shadowRadius = 0
                 }
                 
                 if item == .add {
@@ -78,10 +82,10 @@ final class CustomTabBar: UIView {
             $0.top.left.right.bottom.equalToSuperview()
         }
         
-        tabButtons[1].snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-//            $0.top.equalToSuperview().inset(-26)
-        }
+//        tabButtons[1].snp.makeConstraints {
+//            $0.centerX.equalToSuperview()
+//            $0.top.equalToSuperview().inset(-36)
+//        }
     }
     
     private func bind() {
@@ -118,19 +122,19 @@ final class CustomTabBar: UIView {
     }
 }
 
-//struct ViewControllerRepresentable: UIViewControllerRepresentable {
-//    typealias UIviewControllerType = TabBarController
-//    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-//
-//    }
-//
-//    func makeUIViewController(context: Context) -> some UIViewController {
-//        TabBarController(widgetIndex: 0)
-//    }
-//}
-//
-//struct ViewController_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ViewControllerRepresentable()
-//    }
-//}
+struct ViewControllerRepresentable: UIViewControllerRepresentable {
+    typealias UIviewControllerType = TabBarController
+    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+
+    }
+
+    func makeUIViewController(context: Context) -> some UIViewController {
+        TabBarController(widgetIndex: 0)
+    }
+}
+
+struct ViewController_Previews: PreviewProvider {
+    static var previews: some View {
+        ViewControllerRepresentable()
+    }
+}

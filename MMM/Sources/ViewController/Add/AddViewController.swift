@@ -72,10 +72,10 @@ final class AddViewController: BaseViewController {
 	
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
-		isFirst = false
 		
 		if isFirst { // 처음 들어올 경우만,
 			self.priceTextField.becomeFirstResponder()
+			isFirst = false
 		}
 		
 		// cursor 위치 변경
@@ -329,8 +329,7 @@ private extension AddViewController {
 			$0.keyboardType = .numberPad 	// 숫자 키보드
 			$0.tintColor = R.Color.gray400 	// cursor color
 			$0.setNumberMode(unit: "원") 	// 단위 설정
-			$0.setClearButton(with: R.Icon.cancel, mode: .whileEditing) // clear 버튼
-//			$0.becomeFirstResponder()
+			$0.setClearButton(with: R.Icon.cancel, mode: .always) // clear 버튼
 		}
 		
 		warningLabel = warningLabel.then {

@@ -20,7 +20,7 @@ final class DataExportViewController: BaseViewController {
     private lazy var mainLabel = UILabel()
     private lazy var subLabel = UILabel()
     private lazy var exportButton = UIButton()
-	private lazy var loadingLottie: LottieAnimationView = LottieAnimationView(name: "loading")
+	private lazy var loadView = LoadingViewController()
 
 	init(viewModel: ProfileViewModel) {
 		self.viewModel = viewModel
@@ -62,11 +62,10 @@ private extension DataExportViewController {
 			try data.write(to: fileUrl, options: .atomic)
 			
 			let vc = UIActivityViewController(activityItems: [fileUrl], applicationActivities: nil)
-			
-			viewModel.isLoading = false // 로딩 종료
+			loadView.dismiss(animated: false)
 			present(vc, animated: true)
 		} catch {
-			viewModel.isLoading = false // 로딩 종료
+			loadView.dismiss(animated: false)
 		}
     }
 }
@@ -92,12 +91,13 @@ private extension DataExportViewController {
 			.sinkOnMainThread(receiveValue: { [weak self] loading in
 				guard let self = self else { return }
 				
-				if loading {
-					self.loadingLottie.play()
-					self.loadingLottie.isHidden = false
+				if loading && !self.loadView.isPresent {
+					self.loadView.play()
+					self.loadView.isPresent = true
+					self.loadView.modalPresentationStyle = .overFullScreen
+					self.present(self.loadView, animated: false)
 				} else {
-					self.loadingLottie.stop()
-					self.loadingLottie.isHidden = true
+					self.loadView.dismiss(animated: false)
 				}
 			}).store(in: &cancellable)
 
@@ -137,18 +137,10 @@ private extension DataExportViewController {
 			$0.backgroundColor = R.Color.gray900
 			$0.setButtonLayer()
 		}
-		
-		loadingLottie = loadingLottie.then {
-			$0.stop()
-			$0.contentMode = .scaleAspectFit
-			$0.loopMode = .loop // 애니메이션을 무한으로 실행
-			$0.backgroundColor = R.Color.black.withAlphaComponent(0.3)
-			$0.isHidden = true
-		}
     }
     
     private func setLayout() {
-		view.addSubviews(mainLabel, subLabel, exportButton, loadingLottie)
+		view.addSubviews(mainLabel, subLabel, exportButton)
 
         mainLabel.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(32)
@@ -165,9 +157,5 @@ private extension DataExportViewController {
             $0.bottom.equalToSuperview().inset(58)
             $0.height.equalTo(56)
         }
-		
-		loadingLottie.snp.makeConstraints {
-			$0.edges.equalToSuperview()
-		}
     }
 }

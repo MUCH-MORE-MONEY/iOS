@@ -28,8 +28,8 @@ final class WithdrawViewController: BaseViewController {
 	private lazy var confirmButton = UIButton()
 	private lazy var confirmLabel = UILabel()
 	private lazy var withdrawButton = UIButton()
-	private lazy var loadingLottie: LottieAnimationView = LottieAnimationView(name: "loading")
-	
+	private lazy var loadView = LoadingViewController()
+
 	init(viewModel: ProfileViewModel) {
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)
@@ -150,12 +150,13 @@ extension WithdrawViewController {
 			.sinkOnMainThread(receiveValue: { [weak self] loading in
 				guard let self = self else { return }
 				
-				if loading {
-					self.loadingLottie.play()
-					self.loadingLottie.isHidden = false
+				if loading && !self.loadView.isPresent {
+					self.loadView.play()
+					self.loadView.isPresent = true
+					self.loadView.modalPresentationStyle = .overFullScreen
+					self.present(self.loadView, animated: false)
 				} else {
-					self.loadingLottie.stop()
-					self.loadingLottie.isHidden = true
+					self.loadView.dismiss(animated: false)
 				}
 			}).store(in: &cancellable)
 		
@@ -163,12 +164,13 @@ extension WithdrawViewController {
 			.sinkOnMainThread(receiveValue: { [weak self] loading in
 				guard let self = self, let loading = loading else { return }
 				
-				if !loading { // 로딩이 끝난 후
-					self.loadingLottie.stop()
-					self.processWidrow()
+				if loading && !self.loadView.isPresent {
+					self.loadView.play()
+					self.loadView.isPresent = true
+					self.loadView.modalPresentationStyle = .overFullScreen
+					self.present(self.loadView, animated: false)
 				} else {
-					self.loadingLottie.play()
-					self.loadingLottie.isHidden = false
+					self.loadView.dismiss(animated: false)
 				}
 			}).store(in: &cancellable)
 	}
@@ -279,18 +281,10 @@ extension WithdrawViewController {
 			$0.layer.shadowOffset = CGSize(width: 0, height: 2)
 			$0.layer.shadowRadius = 8
 		}
-		
-		loadingLottie = loadingLottie.then {
-			$0.stop()
-			$0.contentMode = .scaleAspectFit
-			$0.loopMode = .loop // 애니메이션을 무한으로 실행
-			$0.backgroundColor = R.Color.black.withAlphaComponent(0.3)
-			$0.isHidden = true
-		}
 	}
 	
 	private func setLayout() {
-		view.addSubviews(reconfirmLabel, defaultLabel, economicLabel, moneyLabel, containView, confirmStackView, withdrawButton, loadingLottie)
+		view.addSubviews(reconfirmLabel, defaultLabel, economicLabel, moneyLabel, containView, confirmStackView, withdrawButton)
 		containView.addSubviews(containerStackView)
 		containerStackView.addArrangedSubviews(checkLabel, firstComfirm, secondComfirm)
 		confirmStackView.addArrangedSubviews(confirmButton, confirmLabel)
@@ -345,10 +339,6 @@ extension WithdrawViewController {
 			$0.left.right.equalToSuperview().inset(24)
 			$0.bottom.equalToSuperview().inset(58)
 			$0.height.equalTo(56)
-		}
-		
-		loadingLottie.snp.makeConstraints {
-			$0.edges.equalToSuperview()
 		}
 	}
 }

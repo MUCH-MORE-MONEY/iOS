@@ -208,6 +208,7 @@ private extension HomeViewController {
 					if !errorBgView.isHidden { return } // [중복 처리] 이미 에러 표시할 경우
 					monthButton.isHidden = true			// Nav 왼쪽 노출
 					righthStackView.isHidden = true		// Nav 오른쪽 노출
+					calendar.scope = .month				// 월별
 					
 					errorBgView.isHidden = false
 				} else {

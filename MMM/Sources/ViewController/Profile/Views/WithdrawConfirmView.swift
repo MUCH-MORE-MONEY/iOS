@@ -35,7 +35,7 @@ extension WithdrawConfirmView {
 		let attributedString = NSMutableAttributedString(string: content)
 		let paragraphStyle = NSMutableParagraphStyle()
 		paragraphStyle.lineBreakStrategy = .hangulWordPriority
-		paragraphStyle.lineSpacing = 2
+		paragraphStyle.lineSpacing = 3
 		paragraphStyle.alignment = .left
 		
 		let textAttributes: [NSAttributedString.Key : Any] = [
@@ -99,7 +99,7 @@ private extension WithdrawConfirmView {
 		containerStackView.snp.makeConstraints {
 			$0.left.equalTo(numberLabel.snp.right).offset(8)
 			$0.top.equalToSuperview()
-			$0.right.equalToSuperview().inset(19)
+			$0.right.equalToSuperview()
 		}
 	}
 }

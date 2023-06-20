@@ -243,11 +243,11 @@ extension WithdrawViewController {
 		}
 		
 		firstComfirm = firstComfirm.then {
-			$0.setData(number: "1", title: "30일동안은 기록이 유지돼요.", content: "회원님의 탈퇴는 30일 이후에 처리가 되며 30일 이전 재가입할 시 복구가 가능해요.")
+			$0.setData(number: "1", title: "30일동안은 기록이 유지돼요.", content: "회원님의 탈퇴는 30일 이후에 처리가 되며\n30일 이전 재가입할 시 복구가 가능해요.")
 		}
 		
 		secondComfirm = secondComfirm.then {
-			$0.setData(number: "2", title: "30일 이후에는 모든 기록이 사라져요.", content: "30일 뒤에 모든 데이터는 회원님의 소중한 정보를 지키기 위해 개인정보 처리 방침에 따라 복구가 불가능해요.")
+			$0.setData(number: "2", title: "30일 이후에는 모든 기록이 사라져요.", content: "30일 뒤에 모든 데이터는 회원님의 소중한\n정보를 지키기 위해 개인정보 처리 방침에 따라\n복구가 불가능해요.")
 		}
 		
 		confirmStackView = confirmStackView.then {

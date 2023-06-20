@@ -16,6 +16,7 @@ final class WithdrawViewController: BaseViewController {
 	
 	// MARK: - UI Components
 	private lazy var reconfirmLabel = UILabel()
+	private lazy var defaultLabel = UILabel() // 이대로 가면 작성했던
 	private lazy var economicLabel = UILabel()
 	private lazy var moneyLabel = CountAnimationStackView()
 	private lazy var containView = UIView()
@@ -83,11 +84,12 @@ extension WithdrawViewController: CustomAlertDelegate {
 	// 경제 활동 요약
 	func setSummary(_ recordCnt: Int, _ recordSumAmount: Int) {
 		economicLabel = economicLabel.then {
-			$0.attributedText = setMutiText(isMoney: false, first: "이대로 가면 작성했던 ", count: recordCnt, second: "의 경재활동,")
+			$0.attributedText = setMutiText(isMoney: false, first: "", count: recordCnt, second: "의 경재활동과")
+			$0.numberOfLines = 0
 		}
 		
 		moneyLabel = moneyLabel.then {
-			$0.setData(first: "그리고 기록했던 ", second: "이 사라져요.", money: recordSumAmount, unitText: "원", duration: 0.1)
+			$0.setData(first: "", second: "이 사라져요.", money: recordSumAmount, unitText: "원", duration: 0.1)
 		}
 	}
 	
@@ -193,7 +195,7 @@ extension WithdrawViewController {
 		]
 		
 		attributedText1.addAttributes(textAttributes, range: NSMakeRange(0, attributedText1.length))
-		
+				
 		let textAttributes2: [NSAttributedString.Key : Any] = [
 			NSAttributedString.Key.font: R.Font.prtendard(family: .medium, size: 16),
 			NSAttributedString.Key.foregroundColor: R.Color.orange500
@@ -226,6 +228,12 @@ extension WithdrawViewController {
 			$0.spacing = 16
 			$0.alignment = .leading
 			$0.distribution = .fill
+		}
+		
+		defaultLabel = defaultLabel.then {
+			$0.text = "이대로 가면 작성했던"
+			$0.font = R.Font.prtendard(family: .medium, size: 16)
+			$0.textColor = R.Color.gray800
 		}
 		
 		checkLabel = checkLabel.then {
@@ -282,7 +290,7 @@ extension WithdrawViewController {
 	}
 	
 	private func setLayout() {
-		view.addSubviews(reconfirmLabel, economicLabel, moneyLabel, containView, confirmStackView, withdrawButton, loadingLottie)
+		view.addSubviews(reconfirmLabel, defaultLabel, economicLabel, moneyLabel, containView, confirmStackView, withdrawButton, loadingLottie)
 		containView.addSubviews(containerStackView)
 		containerStackView.addArrangedSubviews(checkLabel, firstComfirm, secondComfirm)
 		confirmStackView.addArrangedSubviews(confirmButton, confirmLabel)
@@ -292,8 +300,13 @@ extension WithdrawViewController {
 			$0.left.equalTo(view.safeAreaLayoutGuide).inset(24)
 		}
 		
-		economicLabel.snp.makeConstraints {
+		defaultLabel.snp.makeConstraints {
 			$0.top.equalTo(reconfirmLabel.snp.bottom).offset(12)
+			$0.left.equalTo(view.safeAreaLayoutGuide).inset(24)
+		}
+		
+		economicLabel.snp.makeConstraints {
+			$0.top.equalTo(defaultLabel.snp.bottom).offset(8)
 			$0.left.equalTo(view.safeAreaLayoutGuide).inset(24)
 		}
 		
@@ -303,7 +316,7 @@ extension WithdrawViewController {
 		}
 		
 		containView.snp.makeConstraints {
-			$0.top.greaterThanOrEqualTo(moneyLabel.snp.bottom).offset(48)
+			$0.top.greaterThanOrEqualTo(moneyLabel.snp.bottom).offset(24)
 			$0.left.right.equalToSuperview().inset(24)
 		}
 		

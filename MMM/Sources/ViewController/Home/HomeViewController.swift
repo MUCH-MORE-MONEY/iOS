@@ -95,6 +95,8 @@ extension HomeViewController {
 			}
 		}
 		viewModel.getDailyList(preDate.getFormattedYMD())
+		calendar.reloadData()
+		tableView.reloadData()
 	}
 	
 	/// 달력 Picker Bottom Sheet

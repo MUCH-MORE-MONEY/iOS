@@ -165,8 +165,8 @@ extension ManagementViewController: UITableViewDataSource {
 		let cell = tableView.dequeueReusableCell(withIdentifier: ProfileTableViewCell.className, for: indexPath) as! ProfileTableViewCell
 		
 		switch indexPath.row {
-		case 0: 	cell.setData(text: "로그아웃")
-		default: 	cell.setData(text: "탈퇴하기")
+		case 0: 	cell.setData(text: "로그아웃", last: true)
+		default: 	cell.setData(text: "탈퇴하기", last: true)
 		}
 		
 		cell.backgroundColor = R.Color.gray100

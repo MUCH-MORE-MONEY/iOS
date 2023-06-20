@@ -50,8 +50,7 @@ private extension ServiceViewController {
 			$0.showsVerticalScrollIndicator = false
 			$0.backgroundColor = R.Color.gray100
 	        $0.bounces = false            // TableView Scroll 방지
-			$0.separatorInset.left = 24
-			$0.separatorInset.right = 24
+			$0.separatorStyle = .none
 			$0.register(ProfileTableViewCell.self)
 		}
 		
@@ -88,13 +87,8 @@ extension ServiceViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ProfileTableViewCell.className, for: indexPath) as! ProfileTableViewCell
         
-        if indexPath.row == 1 {
-            DispatchQueue.main.async {
-                cell.addAboveTheBottomBorderWithColor(color: R.Color.gray100)
-            }
-        }
-        
-        cell.setData(text: labelCellList[indexPath.row])
+		print(labelCellList[indexPath.row], indexPath.row, labelCellList.count)
+        cell.setData(text: labelCellList[indexPath.row], last: indexPath.row == labelCellList.count - 1)
         cell.backgroundColor = R.Color.gray100
 
 		return cell

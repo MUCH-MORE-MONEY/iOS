@@ -93,8 +93,7 @@ private extension ProfileViewController {
 			$0.tableHeaderView = profileHeaderView
 			$0.tableFooterView = profileFooterView
 			$0.bounces = false			// TableView Scroll 방지
-			$0.separatorInset.left = 24
-			$0.separatorInset.right = 24
+			$0.separatorStyle = .none
 			$0.register(ProfileTableViewCell.self)
 		}
 	}
@@ -132,12 +131,10 @@ extension ProfileViewController: UITableViewDataSource {
 
 		if indexPath.row == 0 {
 			cell.isUserInteractionEnabled = false // click disable
-			DispatchQueue.main.async {
-				cell.addAboveTheBottomBorderWithColor(color: R.Color.gray100)
-			}
+			cell.setData(text: "", last: true)
 			cell.isNavigationHidden()
 		} else {
-			cell.setData(text: lableCellList[indexPath.row])
+			cell.setData(text: lableCellList[indexPath.row], last: indexPath.row == lableCellList.count - 1)
 		}
 		
 		cell.backgroundColor = R.Color.gray100

@@ -12,6 +12,7 @@ final class ProfileTableViewCell: UITableViewCell {
 	// MARK: - UI Components
 	private lazy var contentLabel = UILabel()
 	private lazy var navImage = UIImageView()
+	private lazy var separator = UIView()
 
 	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -27,8 +28,12 @@ final class ProfileTableViewCell: UITableViewCell {
 //MARK: - Action
 extension ProfileTableViewCell {
 	// 외부에서 설정
-	func setData(text: String) {
+	func setData(text: String, last: Bool) {
 		contentLabel.text = text
+		
+		DispatchQueue.main.async {
+			self.separator.isHidden = last
+		}
 	}
 	
 	func isNavigationHidden() {
@@ -55,10 +60,15 @@ private extension ProfileTableViewCell {
 			$0.image = R.Icon.arrowNext16
 			$0.contentMode = .scaleAspectFit
 		}
+		
+		separator = separator.then {
+			$0.isHidden = true
+			$0.backgroundColor = R.Color.gray200
+		}
 	}
 	
 	private func setLayout() {
-		addSubviews(contentLabel, navImage)
+		addSubviews(contentLabel, navImage, separator)
 		
 		contentLabel.snp.makeConstraints {
 			$0.leading.equalToSuperview().inset(28)
@@ -69,6 +79,12 @@ private extension ProfileTableViewCell {
 		navImage.snp.makeConstraints {
 			$0.trailing.equalToSuperview().inset(28)
 			$0.centerY.equalToSuperview()
+		}
+		
+		separator.snp.makeConstraints {
+			$0.leading.trailing.equalToSuperview().inset(20)
+			$0.bottom.equalToSuperview()
+			$0.height.equalTo(1)
 		}
 	}
 }

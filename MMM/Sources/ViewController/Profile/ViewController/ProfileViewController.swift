@@ -158,7 +158,7 @@ extension ProfileViewController: UITableViewDelegate {
 			vc.hidesBottomBarWhenPushed = true	// TabBar Above
 			navigationController?.pushViewController(vc, animated: true)	// 계정관리
         case 2:
-			let vc = DataExportViewController(viewModel: viewModel)
+			let vc = DataExportViewController()
 			vc.hidesBottomBarWhenPushed = true	// TabBar Above
             navigationController?.pushViewController(vc, animated: true)
         case 3:

@@ -13,7 +13,7 @@ import Lottie
 
 final class DataExportViewController: BaseViewController {
 	// MARK: - Properties
-	private let viewModel: ProfileViewModel
+	private let viewModel = ProfileViewModel()
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 
     // MARK: - UI components
@@ -21,17 +21,6 @@ final class DataExportViewController: BaseViewController {
     private lazy var subLabel = UILabel()
     private lazy var exportButton = UIButton()
 	private lazy var loadView = LoadingViewController()
-
-	init(viewModel: ProfileViewModel) {
-		self.viewModel = viewModel
-		super.init(nibName: nil, bundle: nil)
-	}
-
-	// Compile time에 error를 발생시키는 코드
-	@available(*, unavailable)
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()

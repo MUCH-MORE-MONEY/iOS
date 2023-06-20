@@ -139,6 +139,10 @@ extension ProfileViewController: UITableViewDataSource {
 		
 		cell.backgroundColor = R.Color.gray100
 		
+		let backgroundView = UIView()
+		backgroundView.backgroundColor = R.Color.gray400.withAlphaComponent(0.3)
+		cell.selectedBackgroundView = backgroundView
+		
 		return cell
 	}
 }

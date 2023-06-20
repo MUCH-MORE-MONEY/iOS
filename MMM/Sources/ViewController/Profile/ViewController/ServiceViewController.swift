@@ -74,7 +74,6 @@ private extension ServiceViewController {
             $0.top.equalTo(mainLabel.snp.bottom).offset(28)
             $0.left.right.bottom.equalToSuperview()
         }
-        
     }
 }
 // MARK: - UITableView DataSource
@@ -90,6 +89,10 @@ extension ServiceViewController: UITableViewDataSource {
 		print(labelCellList[indexPath.row], indexPath.row, labelCellList.count)
         cell.setData(text: labelCellList[indexPath.row], last: indexPath.row == labelCellList.count - 1)
         cell.backgroundColor = R.Color.gray100
+		
+		let backgroundView = UIView()
+		backgroundView.backgroundColor = R.Color.gray400.withAlphaComponent(0.3)
+		cell.selectedBackgroundView = backgroundView
 
 		return cell
     }

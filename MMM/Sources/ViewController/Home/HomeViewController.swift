@@ -601,6 +601,10 @@ extension HomeViewController: UITableViewDataSource {
 		
 		cell.setData(data: viewModel.dailyList[indexPath.row], last: indexPath.row == self.viewModel.dailyList.count - 1)
 		cell.backgroundColor = R.Color.gray100
+		
+		let backgroundView = UIView()
+		backgroundView.backgroundColor = R.Color.gray400.withAlphaComponent(0.3)
+		cell.selectedBackgroundView = backgroundView
 
 		return cell
 	}

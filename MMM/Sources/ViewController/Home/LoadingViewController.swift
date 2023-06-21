@@ -23,7 +23,7 @@ final class LoadingViewController: UIViewController {
     }
 	
 	override func viewWillDisappear(_ animated: Bool) {
-		self.isPresent = true
+		self.isPresent = false
 	}
 }
 //MARK: - Action

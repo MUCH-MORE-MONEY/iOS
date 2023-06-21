@@ -95,6 +95,8 @@ extension HomeViewController {
 			}
 		}
 		viewModel.getDailyList(preDate.getFormattedYMD())
+		calendar.reloadData()
+		tableView.reloadData()
 	}
 	
 	/// 달력 Picker Bottom Sheet
@@ -206,6 +208,7 @@ private extension HomeViewController {
 					if !errorBgView.isHidden { return } // [중복 처리] 이미 에러 표시할 경우
 					monthButton.isHidden = true			// Nav 왼쪽 노출
 					righthStackView.isHidden = true		// Nav 오른쪽 노출
+					calendar.scope = .month				// 월별
 					
 					errorBgView.isHidden = false
 				} else {
@@ -599,6 +602,10 @@ extension HomeViewController: UITableViewDataSource {
 		
 		cell.setData(data: viewModel.dailyList[indexPath.row], last: indexPath.row == self.viewModel.dailyList.count - 1)
 		cell.backgroundColor = R.Color.gray100
+		
+		let backgroundView = UIView()
+		backgroundView.backgroundColor = R.Color.gray400.withAlphaComponent(0.3)
+		cell.selectedBackgroundView = backgroundView
 
 		return cell
 	}

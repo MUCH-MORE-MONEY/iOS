@@ -13,25 +13,14 @@ import Lottie
 
 final class DataExportViewController: BaseViewController {
 	// MARK: - Properties
-	private let viewModel: ProfileViewModel
+	private let viewModel = ProfileViewModel()
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 
     // MARK: - UI components
     private lazy var mainLabel = UILabel()
     private lazy var subLabel = UILabel()
     private lazy var exportButton = UIButton()
-	private lazy var loadingLottie: LottieAnimationView = LottieAnimationView(name: "loading")
-
-	init(viewModel: ProfileViewModel) {
-		self.viewModel = viewModel
-		super.init(nibName: nil, bundle: nil)
-	}
-
-	// Compile time에 error를 발생시키는 코드
-	@available(*, unavailable)
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
+	private lazy var loadView = LoadingViewController()
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -55,18 +44,16 @@ private extension DataExportViewController {
         // 데이터를 넘겨야함 -> sample data
         // 실제 데이터를 넘길경우 비동기 처리를 해줘야함
 		do {
-			print(fileName )
 			let fileManager = FileManager.default
 			let downloadUrl = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
 			let fileUrl = downloadUrl.appendingPathComponent("\(fileName)")
 			try data.write(to: fileUrl, options: .atomic)
 			
 			let vc = UIActivityViewController(activityItems: [fileUrl], applicationActivities: nil)
-			
-			viewModel.isLoading = false // 로딩 종료
+			loadView.dismiss(animated: false)
 			present(vc, animated: true)
 		} catch {
-			viewModel.isLoading = false // 로딩 종료
+			loadView.dismiss(animated: false)
 		}
     }
 }
@@ -92,12 +79,13 @@ private extension DataExportViewController {
 			.sinkOnMainThread(receiveValue: { [weak self] loading in
 				guard let self = self else { return }
 				
-				if loading {
-					self.loadingLottie.play()
-					self.loadingLottie.isHidden = false
+				if loading && !self.loadView.isPresent {
+					self.loadView.play()
+					self.loadView.isPresent = true
+					self.loadView.modalPresentationStyle = .overFullScreen
+					self.present(self.loadView, animated: false)
 				} else {
-					self.loadingLottie.stop()
-					self.loadingLottie.isHidden = true
+					self.loadView.dismiss(animated: false)
 				}
 			}).store(in: &cancellable)
 
@@ -137,18 +125,10 @@ private extension DataExportViewController {
 			$0.backgroundColor = R.Color.gray900
 			$0.setButtonLayer()
 		}
-		
-		loadingLottie = loadingLottie.then {
-			$0.stop()
-			$0.contentMode = .scaleAspectFit
-			$0.loopMode = .loop // 애니메이션을 무한으로 실행
-			$0.backgroundColor = R.Color.black.withAlphaComponent(0.3)
-			$0.isHidden = true
-		}
     }
     
     private func setLayout() {
-		view.addSubviews(mainLabel, subLabel, exportButton, loadingLottie)
+		view.addSubviews(mainLabel, subLabel, exportButton)
 
         mainLabel.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(32)
@@ -165,9 +145,5 @@ private extension DataExportViewController {
             $0.bottom.equalToSuperview().inset(58)
             $0.height.equalTo(56)
         }
-		
-		loadingLottie.snp.makeConstraints {
-			$0.edges.equalToSuperview()
-		}
     }
 }

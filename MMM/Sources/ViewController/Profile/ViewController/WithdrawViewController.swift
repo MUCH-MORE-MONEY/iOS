@@ -16,6 +16,7 @@ final class WithdrawViewController: BaseViewController {
 	
 	// MARK: - UI Components
 	private lazy var reconfirmLabel = UILabel()
+	private lazy var defaultLabel = UILabel() // 이대로 가면 작성했던
 	private lazy var economicLabel = UILabel()
 	private lazy var moneyLabel = CountAnimationStackView()
 	private lazy var containView = UIView()
@@ -27,8 +28,8 @@ final class WithdrawViewController: BaseViewController {
 	private lazy var confirmButton = UIButton()
 	private lazy var confirmLabel = UILabel()
 	private lazy var withdrawButton = UIButton()
-	private lazy var loadingLottie: LottieAnimationView = LottieAnimationView(name: "loading")
-	
+	private lazy var loadView = LoadingViewController()
+
 	init(viewModel: ProfileViewModel) {
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)
@@ -83,11 +84,12 @@ extension WithdrawViewController: CustomAlertDelegate {
 	// 경제 활동 요약
 	func setSummary(_ recordCnt: Int, _ recordSumAmount: Int) {
 		economicLabel = economicLabel.then {
-			$0.attributedText = setMutiText(isMoney: false, first: "이대로 가면 작성했던 ", count: recordCnt, second: "의 경재활동,")
+			$0.attributedText = setMutiText(isMoney: false, first: "", count: recordCnt, second: "의 경재활동과")
+			$0.numberOfLines = 0
 		}
 		
 		moneyLabel = moneyLabel.then {
-			$0.setData(first: "그리고 기록했던 ", second: "이 사라져요.", money: recordSumAmount, unitText: "원", duration: 0.1)
+			$0.setData(first: "", second: "이 사라져요.", money: recordSumAmount, unitText: "원", duration: 0.1)
 		}
 	}
 	
@@ -148,12 +150,13 @@ extension WithdrawViewController {
 			.sinkOnMainThread(receiveValue: { [weak self] loading in
 				guard let self = self else { return }
 				
-				if loading {
-					self.loadingLottie.play()
-					self.loadingLottie.isHidden = false
+				if loading && !self.loadView.isPresent {
+					self.loadView.play()
+					self.loadView.isPresent = true
+					self.loadView.modalPresentationStyle = .overFullScreen
+					self.present(self.loadView, animated: false)
 				} else {
-					self.loadingLottie.stop()
-					self.loadingLottie.isHidden = true
+					self.loadView.dismiss(animated: false)
 				}
 			}).store(in: &cancellable)
 		
@@ -161,12 +164,13 @@ extension WithdrawViewController {
 			.sinkOnMainThread(receiveValue: { [weak self] loading in
 				guard let self = self, let loading = loading else { return }
 				
-				if !loading { // 로딩이 끝난 후
-					self.loadingLottie.stop()
-					self.processWidrow()
+				if loading && !self.loadView.isPresent {
+					self.loadView.play()
+					self.loadView.isPresent = true
+					self.loadView.modalPresentationStyle = .overFullScreen
+					self.present(self.loadView, animated: false)
 				} else {
-					self.loadingLottie.play()
-					self.loadingLottie.isHidden = false
+					self.loadView.dismiss(animated: false)
 				}
 			}).store(in: &cancellable)
 	}
@@ -193,7 +197,7 @@ extension WithdrawViewController {
 		]
 		
 		attributedText1.addAttributes(textAttributes, range: NSMakeRange(0, attributedText1.length))
-		
+				
 		let textAttributes2: [NSAttributedString.Key : Any] = [
 			NSAttributedString.Key.font: R.Font.prtendard(family: .medium, size: 16),
 			NSAttributedString.Key.foregroundColor: R.Color.orange500
@@ -228,6 +232,12 @@ extension WithdrawViewController {
 			$0.distribution = .fill
 		}
 		
+		defaultLabel = defaultLabel.then {
+			$0.text = "이대로 가면 작성했던"
+			$0.font = R.Font.prtendard(family: .medium, size: 16)
+			$0.textColor = R.Color.gray800
+		}
+		
 		checkLabel = checkLabel.then {
 			$0.text = "탈퇴하기 전 확인해주세요"
 			$0.font = R.Font.title1
@@ -235,11 +245,11 @@ extension WithdrawViewController {
 		}
 		
 		firstComfirm = firstComfirm.then {
-			$0.setData(number: "1", title: "30일동안은 기록이 유지돼요.", content: "회원님의 탈퇴는 30일 이후에 처리가 되며 30일 이전 재가입할 시 복구가 가능해요.")
+			$0.setData(number: "1", title: "30일동안은 기록이 유지돼요.", content: "회원님의 탈퇴는 30일 이후에 처리가 되며\n30일 이전 재가입할 시 복구가 가능해요.")
 		}
 		
 		secondComfirm = secondComfirm.then {
-			$0.setData(number: "2", title: "30일 이후에는 모든 기록이 사라져요.", content: "30일 뒤에 모든 데이터는 회원님의 소중한 정보를 지키기 위해 개인정보 처리 방침에 따라 복구가 불가능해요.")
+			$0.setData(number: "2", title: "30일 이후에는 모든 기록이 사라져요.", content: "30일 뒤에 모든 데이터는 회원님의 소중한\n정보를 지키기 위해 개인정보 처리 방침에 따라\n복구가 불가능해요.")
 		}
 		
 		confirmStackView = confirmStackView.then {
@@ -271,18 +281,10 @@ extension WithdrawViewController {
 			$0.layer.shadowOffset = CGSize(width: 0, height: 2)
 			$0.layer.shadowRadius = 8
 		}
-		
-		loadingLottie = loadingLottie.then {
-			$0.stop()
-			$0.contentMode = .scaleAspectFit
-			$0.loopMode = .loop // 애니메이션을 무한으로 실행
-			$0.backgroundColor = R.Color.black.withAlphaComponent(0.3)
-			$0.isHidden = true
-		}
 	}
 	
 	private func setLayout() {
-		view.addSubviews(reconfirmLabel, economicLabel, moneyLabel, containView, confirmStackView, withdrawButton, loadingLottie)
+		view.addSubviews(reconfirmLabel, defaultLabel, economicLabel, moneyLabel, containView, confirmStackView, withdrawButton)
 		containView.addSubviews(containerStackView)
 		containerStackView.addArrangedSubviews(checkLabel, firstComfirm, secondComfirm)
 		confirmStackView.addArrangedSubviews(confirmButton, confirmLabel)
@@ -292,8 +294,13 @@ extension WithdrawViewController {
 			$0.left.equalTo(view.safeAreaLayoutGuide).inset(24)
 		}
 		
-		economicLabel.snp.makeConstraints {
+		defaultLabel.snp.makeConstraints {
 			$0.top.equalTo(reconfirmLabel.snp.bottom).offset(12)
+			$0.left.equalTo(view.safeAreaLayoutGuide).inset(24)
+		}
+		
+		economicLabel.snp.makeConstraints {
+			$0.top.equalTo(defaultLabel.snp.bottom).offset(8)
 			$0.left.equalTo(view.safeAreaLayoutGuide).inset(24)
 		}
 		
@@ -303,7 +310,7 @@ extension WithdrawViewController {
 		}
 		
 		containView.snp.makeConstraints {
-			$0.top.greaterThanOrEqualTo(moneyLabel.snp.bottom).offset(48)
+			$0.top.greaterThanOrEqualTo(moneyLabel.snp.bottom).offset(24)
 			$0.left.right.equalToSuperview().inset(24)
 		}
 		
@@ -332,10 +339,6 @@ extension WithdrawViewController {
 			$0.left.right.equalToSuperview().inset(24)
 			$0.bottom.equalToSuperview().inset(58)
 			$0.height.equalTo(56)
-		}
-		
-		loadingLottie.snp.makeConstraints {
-			$0.edges.equalToSuperview()
 		}
 	}
 }

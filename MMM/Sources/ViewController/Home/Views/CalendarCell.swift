@@ -60,12 +60,14 @@ final class CalendarCell: FSCalendarCell {
 			self.titleLabel.font = R.Font.body4
 		}
 		
-		if let sub = self.subtitle, sub == "+0" {
-			self.todayLayer.isHidden = false
-		}
-				
 		// 선택한 date의 border 보임/이전 Border 숨김
 		self.borderLayer.isHidden = !self.isSelected
+		
+		if self.isSelected {
+			self.todayLayer.isHidden = !(selectionLayer.fillColor == R.Color.white.cgColor)
+		} else {
+			self.todayLayer.isHidden = true
+		}
 	}
 }
 //MARK: - Action

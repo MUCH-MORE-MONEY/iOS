@@ -13,6 +13,7 @@ target 'MMM' do
   pod 'Kingfisher', '~> 7.0'
   pod 'Cosmos', '~> 23.0'
   pod 'lottie-ios'
+  pod 'FirebaseAnalytics'
 
   target 'MMMTests' do
     inherit! :search_paths

@@ -101,6 +101,6 @@ xcuserdata/
 
 *.xcuserstate
 
-**/APIConstants.swif
+**/APIConstants.swift
 
 **/GoogleService-Info.plist

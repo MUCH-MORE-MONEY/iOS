@@ -104,6 +104,7 @@
 		C4351B4E2A166DB0005F95BE /* SemanticContentAttributeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4351B4D2A166DB0005F95BE /* SemanticContentAttributeButton.swift */; };
 		C4351B502A1691FB005F95BE /* HighlightViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4351B4F2A1691FB005F95BE /* HighlightViewController.swift */; };
 		C446BF1B2A430B1400DFA788 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C446BF1A2A430B1400DFA788 /* ToastView.swift */; };
+		C446BF1D2A430CA100DFA788 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C446BF1C2A430CA100DFA788 /* GoogleService-Info.plist */; };
 		C44807DE29E4FE8000D4B090 /* Ex+Publisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44807DD29E4FE8000D4B090 /* Ex+Publisher.swift */; };
 		C44807E129E648D300D4B090 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44807E029E648D300D4B090 /* HomeViewController.swift */; };
 		C44807E329E649A300D4B090 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44807E229E649A300D4B090 /* HomeViewModel.swift */; };
@@ -297,6 +298,7 @@
 		C4351B4D2A166DB0005F95BE /* SemanticContentAttributeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemanticContentAttributeButton.swift; sourceTree = "<group>"; };
 		C4351B4F2A1691FB005F95BE /* HighlightViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightViewController.swift; sourceTree = "<group>"; };
 		C446BF1A2A430B1400DFA788 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
+		C446BF1C2A430CA100DFA788 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C44807DD29E4FE8000D4B090 /* Ex+Publisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Publisher.swift"; sourceTree = "<group>"; };
 		C44807E029E648D300D4B090 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		C44807E229E649A300D4B090 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
@@ -598,6 +600,7 @@
 			isa = PBXGroup;
 			children = (
 				C411939B29D2817E003DBC15 /* Info.plist */,
+				C446BF1C2A430CA100DFA788 /* GoogleService-Info.plist */,
 			);
 			path = Info;
 			sourceTree = "<group>";
@@ -1001,6 +1004,7 @@
 			files = (
 				C41193D529D2874A003DBC15 /* Pretendard-Medium.otf in Resources */,
 				C41193D829D2874A003DBC15 /* Pretendard-Bold.otf in Resources */,
+				C446BF1D2A430CA100DFA788 /* GoogleService-Info.plist in Resources */,
 				C41193D629D2874A003DBC15 /* Pretendard-Light.otf in Resources */,
 				C41193DB29D2874A003DBC15 /* Pretendard-SemiBold.otf in Resources */,
 				6AF1A8402A35906100135961 /* loading.json in Resources */,

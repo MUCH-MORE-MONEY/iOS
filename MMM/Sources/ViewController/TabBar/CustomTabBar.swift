@@ -48,11 +48,18 @@ final class CustomTabBar: UIView {
 		bind()
 	}
 	
+    // 뷰 바깥의 영역도 터치가 가능하도록 하는 코드
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        let convertedButtonPoint = plusButton.convert(point, from: self)
+        let convertedstackViewPoint = tabBarStackView.convert(point, to: self)
+        return plusButton.point(inside: convertedButtonPoint, with: event) || tabBarStackView.point(inside: convertedstackViewPoint, with: event)
+    }
+
 	private func setAttribute() {
 		plusButton = plusButton.then {
 			$0.setImage(R.Icon.iconPlus, for: .normal)
 		}
-		
+        
 		tabItems
 			.enumerated()
 			.forEach { i, item in
@@ -64,16 +71,20 @@ final class CustomTabBar: UIView {
 					button = button.then {
 						$0.setTitleColor(R.Color.gray900, for: .normal)
 						$0.layer.shadowRadius = 0
-//                        $0.setBackgroundColor(R.Color.blue300, for: .normal)
 						$0.contentVerticalAlignment = .top
 						$0.setImage(item.image, for: .normal)
 						$0.setImage(item.selectedImage, for: .highlighted)
+                        $0.contentMode = .scaleAspectFit
+                        
 						$0.setTitle(item.rawValue, for: .normal)
 						$0.setTitleColor(R.Color.gray500, for: .normal)
 						$0.titleLabel?.font = R.Font.body5
-						$0.contentMode = .scaleAspectFit
-						$0.alignTextBelow(spacing: 6) // image & text spacing
-						$0.contentEdgeInsets = UIEdgeInsets(top: 30, left: 0, bottom: 0, right: 0)
+
+						$0.alignTextBelow(spacing: 7) // image & text spacing
+						$0.contentEdgeInsets = UIEdgeInsets(top: 27, left: 0, bottom: 0, right: 0)
+                        // icon 크기 : 24
+                        // text 크기 : 12
+                        // padding : 7
 					}
 				}
 				
@@ -92,10 +103,6 @@ final class CustomTabBar: UIView {
 			$0.centerX.equalToSuperview()
 			$0.top.equalTo(tabBarStackView.snp.top).offset(-16)
 		}
-		//        tabButtons[1].snp.makeConstraints {
-		//            $0.centerX.equalToSuperview()
-		//            $0.top.equalToSuperview().inset(-36)
-		//        }
 	}
 	
 	private func bind() {
@@ -113,6 +120,7 @@ final class CustomTabBar: UIView {
 		plusButton.tapPublisher
 			.sinkOnMainThread { [weak self] in
 				guard let self = self else { return }
+                print("add button")
 				self.selectedIndex = 1
 			}.store(in: &cancellable)
 		// selectedIndex에 따른 탭바 버튼 포커싱 UI를 변경

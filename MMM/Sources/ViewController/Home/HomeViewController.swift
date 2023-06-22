@@ -255,7 +255,6 @@ private extension HomeViewController {
         tabBarViewModel.$isPlusButtonTappedInHome
             .receive(on: DispatchQueue.main)
             .sink {
-                print("감지1")
                 if $0 {
 					let vc = AddViewController(parentVC: self)
                     self.navigationController?.pushViewController(vc, animated: true)

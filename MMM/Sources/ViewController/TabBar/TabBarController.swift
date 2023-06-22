@@ -60,14 +60,12 @@ extension TabBarController {
 				guard let self = self else { return }
 				self.bindCurrentIndex()
 			}.store(in: &cancellables)
-//        customTabBar.plusButton.tapPublisher
-//            .sinkOnMainThread(receiveValue: bindCurrentIndex)
-//            .store(in: &cancellables)
 	}
 	
 	private func setAttribute() {
 		view.addSubview(customTabBar)
-		
+        
+        self.view.bringSubviewToFront(self.customTabBar.plusButton)
 		customTabBar.tabItems
 			.enumerated()
 			.forEach { i, item in

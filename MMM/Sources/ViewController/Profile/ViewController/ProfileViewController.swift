@@ -63,7 +63,6 @@ private extension ProfileViewController {
         tabBarViewModel.$isPlusButtonTappedInProfile
             .receive(on: DispatchQueue.main)
             .sink {
-                print("감지2")
                 if $0 {
 					let vc = AddViewController(parentVC: self)
                     self.navigationController?.pushViewController(vc, animated: true)

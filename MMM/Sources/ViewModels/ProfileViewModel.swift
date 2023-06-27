@@ -57,7 +57,9 @@ extension ProfileViewModel {
 				case .failure(let data):
 					switch data {
 					default:
-						break
+						DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+							self.isLoading = false // 에러일 경우 로딩 끝
+						}
 					}
 				case .finished:
 					break

@@ -54,9 +54,10 @@ final class HomeViewModel {
 		self.getMonthlyList(Date().getFormattedYM())
 	}
 	
+	// ViewWillAppear일 때만, Loading 화면 보여주기
 	// 월별, 일별 데이터 가져오기
 	lazy var isLoading: AnyPublisher<Bool, Never> = Publishers.CombineLatest3($isWillAppear, $isDailyLoading, $isMonthlyLoading)
-		.map { $0 && ($1 || $2) } // 둘중 하나라도 Loading 중이면
+		.map { $0 && ($1 || $2) }
 		.eraseToAnyPublisher()
 }
 //MARK: Action

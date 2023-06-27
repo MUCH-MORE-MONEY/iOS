@@ -84,7 +84,6 @@ extension HomeViewController {
 	// MARK: - Private
 	/// 데이터 얻기
 	private func fetchData() {
-		print("viewWillAppear")
 		viewModel.isWillAppear = true
 		if calendar.scope == .month { // 월 단위
 			viewModel.getMonthlyList(calendar.currentPage.getFormattedYM())

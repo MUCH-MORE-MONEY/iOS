@@ -40,7 +40,6 @@ extension ProfileViewModel {
 			}, receiveValue: { [weak self] response in
 				guard let self = self else { return }
 				self.summary = (response.economicActivityTotalCnt, response.economicActivitySumAmt)
-				isLoading = false // 로딩 종료
 //				print(#file, #function, #line, dailyList)
 			}).store(in: &cancellable)
 	}

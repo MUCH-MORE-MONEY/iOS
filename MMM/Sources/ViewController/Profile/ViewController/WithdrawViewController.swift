@@ -146,19 +146,19 @@ extension WithdrawViewController {
 				self?.setSummary(recordCnt, recordSumAmount)
 			}).store(in: &cancellable)
 		
-		viewModel.$isLoading
-			.sinkOnMainThread(receiveValue: { [weak self] loading in
-				guard let self = self else { return }
-				
-				if loading && !self.loadView.isPresent {
-					self.loadView.play()
-					self.loadView.isPresent = true
-					self.loadView.modalPresentationStyle = .overFullScreen
-					self.present(self.loadView, animated: false)
-				} else {
-					self.loadView.dismiss(animated: false)
-				}
-			}).store(in: &cancellable)
+//		viewModel.$isLoading
+//			.sinkOnMainThread(receiveValue: { [weak self] loading in
+//				guard let self = self else { return }
+//
+//				if loading && !self.loadView.isPresent {
+//					self.loadView.play()
+//					self.loadView.isPresent = true
+//					self.loadView.modalPresentationStyle = .overFullScreen
+//					self.present(self.loadView, animated: false)
+//				} else {
+//					self.loadView.dismiss(animated: false)
+//				}
+//			}).store(in: &cancellable)
 		
 		viewModel.$isWithdraw
 			.sinkOnMainThread(receiveValue: { [weak self] loading in

@@ -40,6 +40,7 @@ final class HomeViewModel {
 			Constants.setKeychain(payStandard, forKey: Constants.KeychainKey.payStandard)
 		}
 	}
+	@Published var isWillAppear = false
 	@Published var isDailyLoading = false
 	@Published var isMonthlyLoading = false
 	@Published var errorDaily: Bool?	// 에러 이미지 노출 여부
@@ -54,8 +55,8 @@ final class HomeViewModel {
 	}
 	
 	// 월별, 일별 데이터 가져오기
-	lazy var isLoading: AnyPublisher<Bool, Never> = Publishers.CombineLatest($isDailyLoading, $isMonthlyLoading)
-		.map { $0 || $1 } // 둘중 하나라도 Loading 중이면
+	lazy var isLoading: AnyPublisher<Bool, Never> = Publishers.CombineLatest3($isWillAppear, $isDailyLoading, $isMonthlyLoading)
+		.map { $0 && ($1 || $2) } // 둘중 하나라도 Loading 중이면
 		.eraseToAnyPublisher()
 }
 //MARK: Action
@@ -83,7 +84,6 @@ extension HomeViewModel {
 				guard let self = self, let dailyList = response.selectListDailyOutputDto else { return }
 //				print(#file, #function, #line, dailyList)
 				self.dailyList = dailyList
-				isDailyLoading = false // 로딩 종료
 				errorDaily = false // 에러 이미지 제거
 			}).store(in: &cancellable)
 	}
@@ -118,7 +118,6 @@ extension HomeViewModel {
 					UserDefaults.shared.set(response.pay, forKey: "pay")
 					WidgetCenter.shared.reloadAllTimelines()
 				}
-				isMonthlyLoading = false // 로딩 종료
 				errorMonthly = false // 에러 이미지 제거
 			}).store(in: &cancellable)
 	}
@@ -173,7 +172,6 @@ extension HomeViewModel {
 							UserDefaults.shared.set(response2.pay, forKey: "pay")
 							WidgetCenter.shared.reloadAllTimelines()
 						}
-						isMonthlyLoading = false // 로딩 종료
 						errorMonthly = false // 에러 이미지 제거
 					}).store(in: &self.cancellable)
 			}).store(in: &cancellable)

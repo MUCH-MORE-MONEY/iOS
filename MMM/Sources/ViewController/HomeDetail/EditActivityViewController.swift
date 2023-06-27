@@ -281,9 +281,11 @@ extension EditActivityViewController {
 		// Date Picker의 값을 받아옴
 		editViewModel.$date
 			.sinkOnMainThread(receiveValue: { [weak self] date in
+                guard let self = self else { return }
 				guard let date = date else { return }
-				self?.date = date
-				self?.titleText.text = self?.navigationTitle
+				self.date = date
+				self.titleText.text = self.navigationTitle
+                self.editViewModel.createAt = date.getFormattedDate(format: "yyyyMMdd")
 			}).store(in: &cancellable)
 	}
 }

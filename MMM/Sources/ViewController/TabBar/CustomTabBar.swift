@@ -10,6 +10,7 @@ import Then
 import SnapKit
 import Combine
 import SwiftUI
+import FirebaseAnalytics
 
 final class CustomTabBar: UIView {
 	
@@ -122,6 +123,8 @@ final class CustomTabBar: UIView {
 				guard let self = self else { return }
                 print("add button")
 				self.selectedIndex = 1
+                Analytics.logEvent("add button", parameters: nil)
+                
 			}.store(in: &cancellable)
 		// selectedIndex에 따른 탭바 버튼 포커싱 UI를 변경
 		$selectedIndex

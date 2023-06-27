@@ -1461,6 +1461,7 @@
 				DEVELOPMENT_TEAM = L7X442LA7Q;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MMM/Resources/Info/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "'MMM'에서 사진을 가져오기 위해 갤러리에 접근합니다";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -1495,6 +1496,7 @@
 				DEVELOPMENT_TEAM = L7X442LA7Q;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MMM/Resources/Info/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "'MMM'에서 사진을 가져오기 위해 갤러리에 접근합니다";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;

@@ -11,6 +11,7 @@ import Then
 import SnapKit
 import FSCalendar
 import Lottie
+import FirebaseAnalytics
 
 final class HomeViewController: UIViewController {
 	// MARK: - Properties
@@ -64,6 +65,14 @@ final class HomeViewController: UIViewController {
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
 	}
+    
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        Analytics.setUserID("userID = \(1234)")
+        Analytics.logEvent(AnalyticsEventScreenView, parameters: nil)
+        Analytics.logEvent("메인화면", parameters: nil)
+    }
 }
 //MARK: - Action
 extension HomeViewController {

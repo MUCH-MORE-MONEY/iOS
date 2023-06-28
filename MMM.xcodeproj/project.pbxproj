@@ -24,6 +24,7 @@
 		6A0D108229D3CF1B009D6DCA /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0D108129D3CF1B009D6DCA /* OnboardingViewController.swift */; };
 		6A0D108529D3D209009D6DCA /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0D108429D3D209009D6DCA /* OnboardingView.swift */; };
 		6A0D5B972A4BF20600958E72 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0D5B962A4BF20600958E72 /* SplashViewController.swift */; };
+		6A0D5B992A4C0E3300958E72 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0D5B982A4C0E3300958E72 /* ToastView.swift */; };
 		6A0F234029DBA8AA0063673B /* DataExportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0F233F29DBA8AA0063673B /* DataExportViewController.swift */; };
 		6A0F234229DBA92D0063673B /* ServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0F234129DBA92D0063673B /* ServiceViewController.swift */; };
 		6A0F234429DBC0C30063673B /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0F234329DBC0C30063673B /* BaseViewController.swift */; };
@@ -105,7 +106,7 @@
 		C4351B4C2A1601D3005F95BE /* HomeFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4351B4B2A1601D3005F95BE /* HomeFilterView.swift */; };
 		C4351B4E2A166DB0005F95BE /* SemanticContentAttributeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4351B4D2A166DB0005F95BE /* SemanticContentAttributeButton.swift */; };
 		C4351B502A1691FB005F95BE /* HighlightViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4351B4F2A1691FB005F95BE /* HighlightViewController.swift */; };
-		C446BF1B2A430B1400DFA788 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C446BF1A2A430B1400DFA788 /* ToastView.swift */; };
+		C446BF1B2A430B1400DFA788 /* SnackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C446BF1A2A430B1400DFA788 /* SnackView.swift */; };
 		C44807DE29E4FE8000D4B090 /* Ex+Publisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44807DD29E4FE8000D4B090 /* Ex+Publisher.swift */; };
 		C44807E129E648D300D4B090 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44807E029E648D300D4B090 /* HomeViewController.swift */; };
 		C44807E329E649A300D4B090 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44807E229E649A300D4B090 /* HomeViewModel.swift */; };
@@ -213,6 +214,7 @@
 		6A0D108129D3CF1B009D6DCA /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		6A0D108429D3D209009D6DCA /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		6A0D5B962A4BF20600958E72 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		6A0D5B982A4C0E3300958E72 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		6A0F233F29DBA8AA0063673B /* DataExportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExportViewController.swift; sourceTree = "<group>"; };
 		6A0F234129DBA92D0063673B /* ServiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceViewController.swift; sourceTree = "<group>"; };
 		6A0F234329DBC0C30063673B /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
@@ -300,7 +302,7 @@
 		C4351B4B2A1601D3005F95BE /* HomeFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFilterView.swift; sourceTree = "<group>"; };
 		C4351B4D2A166DB0005F95BE /* SemanticContentAttributeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemanticContentAttributeButton.swift; sourceTree = "<group>"; };
 		C4351B4F2A1691FB005F95BE /* HighlightViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightViewController.swift; sourceTree = "<group>"; };
-		C446BF1A2A430B1400DFA788 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
+		C446BF1A2A430B1400DFA788 /* SnackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnackView.swift; sourceTree = "<group>"; };
 		C44807DD29E4FE8000D4B090 /* Ex+Publisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Publisher.swift"; sourceTree = "<group>"; };
 		C44807E029E648D300D4B090 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		C44807E229E649A300D4B090 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
@@ -764,8 +766,9 @@
 				C411940A29DAEDF9003DBC15 /* CustomAlertViewController.swift */,
 				C411940629D53EA0003DBC15 /* NavigationController.swift */,
 				C4351B4D2A166DB0005F95BE /* SemanticContentAttributeButton.swift */,
+				C446BF1A2A430B1400DFA788 /* SnackView.swift */,
 				6A0531232A22220D0065DB54 /* StarPickerViewController.swift */,
-				C446BF1A2A430B1400DFA788 /* ToastView.swift */,
+				6A0D5B982A4C0E3300958E72 /* ToastView.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -1191,6 +1194,7 @@
 				6A0F234429DBC0C30063673B /* BaseViewController.swift in Sources */,
 				C41193F929D3DD9A003DBC15 /* ProfileTableViewCell.swift in Sources */,
 				6A08B47629FF5B150080719E /* APIRouter.swift in Sources */,
+				6A0D5B992A4C0E3300958E72 /* ToastView.swift in Sources */,
 				C4351B4A2A15C935005F95BE /* HomeFilterViewController.swift in Sources */,
 				6A1322E92A088DD700CEEC81 /* BaseDetailViewController.swift in Sources */,
 				C41193E329D287E6003DBC15 /* Ex+KeychainWrapper.swift in Sources */,
@@ -1235,7 +1239,7 @@
 				6A0D5B972A4BF20600958E72 /* SplashViewController.swift in Sources */,
 				6A15B0EC2A15B68D00EADAC5 /* BaseAddActivityViewController.swift in Sources */,
 				C4C8B68D2A3ACDC700FAF931 /* LoadingViewController.swift in Sources */,
-				C446BF1B2A430B1400DFA788 /* ToastView.swift in Sources */,
+				C446BF1B2A430B1400DFA788 /* SnackView.swift in Sources */,
 				C4D03F052A2EAB1800011B41 /* MMMWidget.intentdefinition in Sources */,
 				C411939229D2817C003DBC15 /* ProfileViewController.swift in Sources */,
 				6A8B776529FF93530095ECFC /* APIConstants.swift in Sources */,

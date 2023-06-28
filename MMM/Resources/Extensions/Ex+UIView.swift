@@ -120,4 +120,12 @@ extension UIView {
 		border.borderWidth = 1
 		self.layer.addSublayer(border)
 	}
+    
+    func toastAnimation(duration: Double, delay: Double, option: UIView.AnimationOptions) {
+        Self.animate(withDuration: duration, delay: delay, options: option) {
+            self.alpha = 0.0
+        } completion: { _ in
+            self.removeFromSuperview()
+        }
+    }
 }

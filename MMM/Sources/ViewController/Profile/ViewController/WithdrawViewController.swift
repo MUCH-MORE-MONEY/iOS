@@ -84,7 +84,7 @@ extension WithdrawViewController: CustomAlertDelegate {
 	// 경제 활동 요약
 	func setSummary(_ recordCnt: Int, _ recordSumAmount: Int) {
 		economicLabel = economicLabel.then {
-			$0.attributedText = setMutiText(isMoney: false, first: "", count: recordCnt, second: "의 경재활동과")
+			$0.attributedText = setMutiText(isMoney: false, first: "", count: recordCnt, second: "의 경제활동과")
 			$0.numberOfLines = 0
 		}
 		

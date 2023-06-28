@@ -27,7 +27,7 @@ final class EditActivityViewController: BaseAddActivityViewController, UINavigat
 	// MARK: - Properties
 	private var cancellable = Set<AnyCancellable>()
 	private var detailViewModel: HomeDetailViewModel
-	private var editViewModel = EditActivityViewModel(isAddModel: false)
+    private var editViewModel: EditActivityViewModel
 	private var date: Date
 	private var navigationTitle: String {
 		return date.getFormattedDate(format: "yyyy.MM.dd")
@@ -43,8 +43,9 @@ final class EditActivityViewController: BaseAddActivityViewController, UINavigat
 	// MARK: - Loading
 	private lazy var loadView = LoadingViewController()
 
-	init(viewModel: HomeDetailViewModel, date: Date) {
-		self.detailViewModel = viewModel
+    init(detailViewModel: HomeDetailViewModel, editViewModel: EditActivityViewModel, date: Date) {
+		self.detailViewModel = detailViewModel
+        self.editViewModel = editViewModel
 		self.date = date
 		super.init(nibName: nil, bundle: nil)
 	}
@@ -324,7 +325,6 @@ extension EditActivityViewController {
 	}
 	
 	func didTapSaveButton() {
-		detailViewModel.isShowToastMessage = true
 		editViewModel.updateDetailActivity()
 		
 		self.loadView.play()
@@ -436,7 +436,6 @@ extension EditActivityViewController {
 	}
 	
 	private func setStarImage(_ rate: Int) {
-		self.editViewModel.star = rate
 		for star in starList {
 			star.image = R.Icon.iconStarGray16
 		}
@@ -469,6 +468,7 @@ extension EditActivityViewController: StarPickerViewProtocol {
 		DispatchQueue.main.async { [weak self] in
 			guard let self = self else { return }
 			self.setStarImage(rate)
+            self.editViewModel.star = rate
 		}
 	}
 }
@@ -493,7 +493,6 @@ extension EditActivityViewController: UIImagePickerControllerDelegate {
 			self.editViewModel.binaryFileList.append(APIParameters.BinaryFileList(binaryData: data,fileNm: imageName))
 			self.remakeConstraintsByMainImageView()
 		}
-		print("이미지 변경")
 	}
 	func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
 		dismiss(animated: true, completion: nil)

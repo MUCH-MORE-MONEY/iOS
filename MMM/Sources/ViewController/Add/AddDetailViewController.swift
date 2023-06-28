@@ -203,6 +203,7 @@ extension AddDetailViewController {
 		viewModel.$didTapAddButton
 			.sinkOnMainThread(receiveValue: { [weak self] in
 				guard let self = self else { return }
+                print($0)
 				if $0 {
 					self.viewModel.requestPHPhotoLibraryAuthorization {
 						DispatchQueue.main.async {
@@ -294,11 +295,12 @@ extension AddDetailViewController: StarPickerViewProtocol {
 	}
 }
 
+// MARK: - ImagePicker Delegate
 extension AddDetailViewController: UIImagePickerControllerDelegate {
 	func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
 		picker.dismiss(animated: false) { [weak self] in
 			guard let self = self else { return }
-			self.viewModel.binaryFileList = []
+            self.viewModel.binaryFileList.removeAll()
 			let img = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
 			self.mainImageView.image = img
 			
@@ -314,9 +316,10 @@ extension AddDetailViewController: UIImagePickerControllerDelegate {
 			self.viewModel.binaryFileList.append(APIParameters.BinaryFileList(binaryData: data, fileNm: imageName))
 			self.remakeConstraintsByMainImageView()
 		}
-		print("이미지 변경")
+        self.viewModel.didTapAddButton = false
 	}
 	func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.viewModel.didTapAddButton = false
 		dismiss(animated: true, completion: nil)
 	}
 }

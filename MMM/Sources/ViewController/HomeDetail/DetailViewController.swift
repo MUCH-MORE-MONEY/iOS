@@ -37,7 +37,8 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
 	
 	// MARK: - Properties
 	private var date = Date()
-	private var viewModel = HomeDetailViewModel()
+	private var homeDetailViewModel = HomeDetailViewModel()
+    private var editViewModel = EditActivityViewModel(isAddModel: false)
 	/// cell에 보여지게 되는 id의 배열
 	private var economicActivityId: [String] = []
 	/// 현재 보여지고 있는 indexPath.row
@@ -56,17 +57,25 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
         // 날짜가 변경되었을 경우 다른 dailyList를 보여줘야함
-        showToast()
-        if viewModel.isDateChanged {
-            self.date = viewModel.changedDate
+//        showToast()
+        if editViewModel.isShowToastMessage {
+            showToast()
+            editViewModel.isShowToastMessage = false
+        }
+        // editVM을 공유하고 있기 때문에 Loading 값을 초기화
+        editViewModel.isLoading = true
+
+        
+        if homeDetailViewModel.isDateChanged {
+            self.date = homeDetailViewModel.changedDate
             title = date.getFormattedDate(format: "M월 dd일 경제활동")
-            self.viewModel.fetchDailyList(self.date.getFormattedYMD())
-            self.viewModel.fetchDetailActivity(id: self.economicActivityId.last!)
-            self.index = self.viewModel.dailyEconomicActivityId.count
+            self.homeDetailViewModel.fetchDailyList(self.date.getFormattedYMD())
+            self.homeDetailViewModel.fetchDetailActivity(id: self.economicActivityId.last!)
+            self.index = self.homeDetailViewModel.dailyEconomicActivityId.count
 
         } else {
-            self.viewModel.fetchDetailActivity(id: self.economicActivityId[self.index])
-            self.viewModel.getMonthlyList(self.date.getFormattedYM())
+            self.homeDetailViewModel.fetchDetailActivity(id: self.economicActivityId[self.index])
+            self.homeDetailViewModel.getMonthlyList(self.date.getFormattedYM())
         }
 	}
 }
@@ -86,15 +95,14 @@ extension DetailViewController {
 	
     // MARK: - Bind
     private func bind() {
-        viewModel.fetchDetailActivity(id: economicActivityId[index])
+        homeDetailViewModel.fetchDetailActivity(id: economicActivityId[index])
         
         
-        viewModel.$isLoading
+        homeDetailViewModel.$isLoading
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in
                 guard let self = self else { return }
                 if !$0 {
-                    print("로딩")
                     self.loadView.dismiss(animated: false)
                 } else {
 
@@ -106,23 +114,14 @@ extension DetailViewController {
             .sinkOnMainThread(receiveValue: didTapEditButton)
             .store(in: &cancellable)
         
-        viewModel.$isShowToastMessage
-            .receive(on: DispatchQueue.main)
-            .sink {
-                if $0 {
-                    self.showToast()
-                    print("toast")
-                }
-            }.store(in: &cancellable)
-        
-        viewModel.$detailActivity
+        homeDetailViewModel.$detailActivity
             .sinkOnMainThread { [weak self] value in
                 guard let self = self, let value = value else { return }
                 showLoadingView()
                 
                 self.titleLabel.text = value.title
-                self.activityType.text = self.viewModel.detailActivity?.type == "01" ? "지출" : "수입"
-                self.activityType.backgroundColor = self.viewModel.detailActivity?.type == "01" ? R.Color.orange500 : R.Color.blue500
+                self.activityType.text = self.homeDetailViewModel.detailActivity?.type == "01" ? "지출" : "수입"
+                self.activityType.backgroundColor = self.homeDetailViewModel.detailActivity?.type == "01" ? R.Color.orange500 : R.Color.blue500
                 self.starList.forEach {
                     $0.image = R.Icon.iconStarGray16
                 }
@@ -136,12 +135,12 @@ extension DetailViewController {
                     self.cameraImageView.isHidden = true
                     self.mainImageView.setImage(urlStr: value.imageUrl, defaultImage: R.Icon.camera48)
                     self.remakeConstraintsByMainImageView()
-                    self.viewModel.hasImage = true
+                    self.homeDetailViewModel.hasImage = true
                 } else {
                     self.mainImageView.isHidden = true
                     self.cameraImageView.isHidden = false
                     self.remakeConstraintsByCameraImageView()
-                    self.viewModel.hasImage = false
+                    self.homeDetailViewModel.hasImage = false
                 }
                 
                 self.totalPrice.text = "\(value.amount.withCommas())원"
@@ -152,7 +151,7 @@ extension DetailViewController {
                 self.satisfactionLabel .setSatisfyingLabelEdit(by: value.star)
             }.store(in: &cancellable)
         
-        bottomPageControlView.setViewModel(viewModel, index, economicActivityId)
+        bottomPageControlView.setViewModel(homeDetailViewModel, index, economicActivityId)
     }
     
 	private func setAttribute() {
@@ -301,12 +300,12 @@ private extension DetailViewController {
 	func didTapEditButton() {
 		if cameraImageView.isHidden {
 			let mainImage = mainImageView.image
-			viewModel.mainImage = mainImage
+			homeDetailViewModel.mainImage = mainImage
 		} else {
-			viewModel.mainImage = nil
+			homeDetailViewModel.mainImage = nil
 		}
 		
-		let vc = EditActivityViewController(viewModel: viewModel, date: date)
+		let vc = EditActivityViewController(detailViewModel: homeDetailViewModel, editViewModel: editViewModel, date: date)
 		
 		navigationController?.pushViewController(vc, animated: true)
 	}
@@ -324,7 +323,6 @@ extension DetailViewController {
         }
 
         toastView.toastAnimation(duration: 1.0, delay: 3.0, option: .curveEaseOut)
-        self.viewModel.isShowToastMessage = false
 
 //        var snackView = SnackView()
 //        snackView = snackView.then {

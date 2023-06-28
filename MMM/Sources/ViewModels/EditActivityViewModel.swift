@@ -33,6 +33,7 @@ final class EditActivityViewModel {
     
     // MARK: - Loading
     @Published var isLoading = true
+    @Published var isShowToastMessage = false
     // MARK: - Porperties
     private var cancellable: Set<AnyCancellable> = []
 	var isAddModel: Bool
@@ -107,6 +108,7 @@ final class EditActivityViewModel {
     func updateDetailActivity() {
 		guard let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
         self.isLoading = true
+        self.isShowToastMessage = false
         APIClient.dispatch(
             APIRouter.UpdateReqDto(
                 headers: APIHeader.Default(token: token),
@@ -132,6 +134,7 @@ final class EditActivityViewModel {
             self.editResponse = response
             print(response)
             self.isLoading = false
+            self.isShowToastMessage = true
         }.store(in: &cancellable)
     }
     

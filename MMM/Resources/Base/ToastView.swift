@@ -35,7 +35,7 @@ extension ToastView {
         
         toastLabel = toastLabel.then {
             $0.text = "경제활동 편집 내용을 저장했습니다."
-            $0.backgroundColor = R.Color.black.withAlphaComponent(0.9)
+            $0.backgroundColor = R.Color.black.withAlphaComponent(0.8)
             $0.font = R.Font.body1
             $0.textColor = R.Color.white
             $0.alpha = 1.0

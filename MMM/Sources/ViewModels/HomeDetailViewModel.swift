@@ -14,7 +14,7 @@ final class HomeDetailViewModel {
 	@Published var detailActivity: SelectDetailResDto?
 	@Published var hasImage = false
 	@Published var mainImage: UIImage?
-	@Published var isShowToastMessage = false
+//	@Published var isShowToastMessage = false
 	@Published var isLoading = true
     @Published var dailyEconomicActivityId: [String] = []
 	// MARK: - Porperties

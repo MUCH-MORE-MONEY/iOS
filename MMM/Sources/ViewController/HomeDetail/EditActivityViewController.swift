@@ -283,6 +283,9 @@ extension EditActivityViewController {
 			.sinkOnMainThread(receiveValue: { [weak self] date in
                 guard let self = self else { return }
 				guard let date = date else { return }
+                // 날짜 변경 감지 및 변경된 날짜 캡처
+                self.detailViewModel.isDateChanged = true
+                self.detailViewModel.changedDate = date
 				self.date = date
 				self.titleText.text = self.navigationTitle
                 self.editViewModel.createAt = date.getFormattedDate(format: "yyyyMMdd")

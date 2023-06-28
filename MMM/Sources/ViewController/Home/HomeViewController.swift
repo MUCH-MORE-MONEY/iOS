@@ -69,9 +69,9 @@ final class HomeViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        Analytics.setUserID("userID = \(1234)")
-        Analytics.logEvent(AnalyticsEventScreenView, parameters: nil)
-        Analytics.logEvent("메인화면", parameters: nil)
+//        Analytics.setUserID("userID = \(1234)")
+//        Analytics.logEvent(AnalyticsEventScreenView, parameters: nil)
+//        Analytics.logEvent("메인화면", parameters: nil)
     }
 }
 //MARK: - Action

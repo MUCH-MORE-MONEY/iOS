@@ -16,10 +16,41 @@ final class HomeDetailViewModel {
 	@Published var mainImage: UIImage?
 	@Published var isShowToastMessage = false
 	@Published var isLoading = true
+    @Published var dailyEconomicActivityId: [String] = []
 	// MARK: - Porperties
 	private var cancellable: Set<AnyCancellable> = []
+    // 날짜가 바뀌었을 경우를 판단하는 변수
+    var isDateChanged = false
+	var changedDate = Date()
+    func fetchDailyList(_ dateYMD: String) {
+        guard let date = Int(dateYMD), let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
+        self.isLoading = true
+        APIClient.dispatch(APIRouter.SelectListDailyReqDto(headers: APIHeader.Default(token: token), body: APIParameters.SelectListDailyReqDto(dateYMD: date)))
+            .sink(receiveCompletion: { [weak self] error in
+                guard let self = self else { return }
 
-	
+                switch error {
+                case .failure(let data):
+                    switch data {
+                    default:
+                        break
+//                        errorDaily = true // 에러 표시
+                    }
+                case .finished:
+                    break
+                }
+//                isDailyLoading = false // 로딩 종료
+            }, receiveValue: { [weak self] response in
+                guard let self = self, let dailyList = response.selectListDailyOutputDto else { return }
+//                print(#file, #function, #line, dailyList)
+                self.dailyEconomicActivityId = dailyList.map{ $0.id }
+//                isDailyLoading = false // 로딩 종료
+//                errorDaily = false // 에러 이미지 제거
+                print(self.dailyEconomicActivityId)
+                self.isLoading = true
+            }).store(in: &cancellable)
+    }
+    
 	func fetchDetailActivity(id: String) {
 		guard let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
 		self.isLoading = true

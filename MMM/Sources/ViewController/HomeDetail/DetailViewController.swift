@@ -55,8 +55,18 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-		self.viewModel.fetchDetailActivity(id: self.economicActivityId[self.index])
-		self.viewModel.getMonthlyList(self.date.getFormattedYM())
+        // 날짜가 변경되었을 경우 다른 dailyList를 보여줘야함
+        if viewModel.isDateChanged {
+            self.date = viewModel.changedDate
+            title = date.getFormattedDate(format: "M월 dd일 경제활동")
+            self.viewModel.fetchDailyList(self.date.getFormattedYMD())
+            self.viewModel.fetchDetailActivity(id: self.economicActivityId.last!)
+            self.index = self.viewModel.dailyEconomicActivityId.count
+
+        } else {
+            self.viewModel.fetchDetailActivity(id: self.economicActivityId[self.index])
+            self.viewModel.getMonthlyList(self.date.getFormattedYM())
+        }
 	}
 }
 
@@ -68,11 +78,79 @@ extension DetailViewController {
 	}
 	
 	private func setup() {
+        bind()
 		setAttribute()
 		setLayout()
-		bind()
 	}
 	
+    // MARK: - Bind
+    private func bind() {
+        viewModel.fetchDetailActivity(id: economicActivityId[index])
+        
+        
+        viewModel.$isLoading
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                guard let self = self else { return }
+                if !$0 {
+                    print("로딩")
+                    self.loadView.dismiss(animated: false)
+                } else {
+
+                }
+            }.store(in: &cancellable)
+
+        
+        editButton.tapPublisher
+            .sinkOnMainThread(receiveValue: didTapEditButton)
+            .store(in: &cancellable)
+        
+        viewModel.$isShowToastMessage
+            .receive(on: DispatchQueue.main)
+            .sink {
+                if $0 { self.showToast() }
+            }.store(in: &cancellable)
+        
+        viewModel.$detailActivity
+            .sinkOnMainThread { [weak self] value in
+                guard let self = self, let value = value else { return }
+                showLoadingView()
+                
+                self.titleLabel.text = value.title
+                self.activityType.text = self.viewModel.detailActivity?.type == "01" ? "지출" : "수입"
+                self.activityType.backgroundColor = self.viewModel.detailActivity?.type == "01" ? R.Color.orange500 : R.Color.blue500
+                self.starList.forEach {
+                    $0.image = R.Icon.iconStarGray16
+                }
+                
+                for i in 0..<value.star {
+                    self.starList[i].image = R.Icon.iconStarBlack16
+                }
+                
+                if URL(string: value.imageUrl) != nil {
+                    self.mainImageView.isHidden = false
+                    self.cameraImageView.isHidden = true
+                    self.mainImageView.setImage(urlStr: value.imageUrl, defaultImage: R.Icon.camera48)
+                    self.remakeConstraintsByMainImageView()
+                    self.viewModel.hasImage = true
+                } else {
+                    self.mainImageView.isHidden = true
+                    self.cameraImageView.isHidden = false
+                    self.remakeConstraintsByCameraImageView()
+                    self.viewModel.hasImage = false
+                }
+                
+                self.totalPrice.text = "\(value.amount.withCommas())원"
+                if !value.memo.isEmpty {
+                    self.memoLabel.text = value.memo
+                }
+                
+                self.satisfactionLabel .setSatisfyingLabelEdit(by: value.star)
+            }.store(in: &cancellable)
+        
+        bottomPageControlView.setViewModel(viewModel, index, economicActivityId)
+    }
+    
 	private func setAttribute() {
 		title = navigationTitle
 		editActivityButtonItem = editActivityButtonItem.then {
@@ -194,74 +272,6 @@ extension DetailViewController {
 			$0.left.right.equalToSuperview().inset(24)
 			$0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
 		}
-	}
-	
-	// MARK: - Bind
-	private func bind() {
-		viewModel.fetchDetailActivity(id: economicActivityId[index])
-		
-		
-		viewModel.$isLoading
-			.receive(on: DispatchQueue.main)
-			.sink { [weak self] in
-				guard let self = self else { return }
-				if !$0 {
-					print("로딩")
-					self.loadView.dismiss(animated: false)
-				} else {
-
-				}
-			}.store(in: &cancellable)
-
-		
-		editButton.tapPublisher
-			.sinkOnMainThread(receiveValue: didTapEditButton)
-			.store(in: &cancellable)
-		
-		viewModel.$isShowToastMessage
-			.receive(on: DispatchQueue.main)
-			.sink {
-				if $0 { self.showToast() }
-			}.store(in: &cancellable)
-		
-		viewModel.$detailActivity
-			.sinkOnMainThread { [weak self] value in
-				guard let self = self, let value = value else { return }
-				showLoadingView()
-				
-				self.titleLabel.text = value.title
-				self.activityType.text = self.viewModel.detailActivity?.type == "01" ? "지출" : "수입"
-				self.activityType.backgroundColor = self.viewModel.detailActivity?.type == "01" ? R.Color.orange500 : R.Color.blue500
-				self.starList.forEach {
-					$0.image = R.Icon.iconStarGray16
-				}
-				
-				for i in 0..<value.star {
-					self.starList[i].image = R.Icon.iconStarBlack16
-				}
-				
-				if URL(string: value.imageUrl) != nil {
-					self.mainImageView.isHidden = false
-					self.cameraImageView.isHidden = true
-					self.mainImageView.setImage(urlStr: value.imageUrl, defaultImage: R.Icon.camera48)
-					self.remakeConstraintsByMainImageView()
-					self.viewModel.hasImage = true
-				} else {
-					self.mainImageView.isHidden = true
-					self.cameraImageView.isHidden = false
-					self.remakeConstraintsByCameraImageView()
-					self.viewModel.hasImage = false
-				}
-				
-				self.totalPrice.text = "\(value.amount.withCommas())원"
-				if !value.memo.isEmpty {
-					self.memoLabel.text = value.memo
-				}
-				
-				self.satisfactionLabel .setSatisfyingLabelEdit(by: value.star)
-			}.store(in: &cancellable)
-		
-		bottomPageControlView.setViewModel(viewModel, index, economicActivityId)
 	}
 	
 	/// mainImageView 기준으로 memoLabel의 뷰를 다시 배치하는 메서드

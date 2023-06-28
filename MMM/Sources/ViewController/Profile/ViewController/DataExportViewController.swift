@@ -45,7 +45,11 @@ private extension DataExportViewController {
         // 실제 데이터를 넘길경우 비동기 처리를 해줘야함
 		do {
 			let fileManager = FileManager.default
+			
+			// 앱 경로
 			let downloadUrl = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+			
+			// 파일 경로 생성
 			let fileUrl = downloadUrl.appendingPathComponent("\(fileName)")
 			try data.write(to: fileUrl, options: .atomic)
 			

@@ -40,6 +40,7 @@ final class ManagementViewController: BaseViewController {
     
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
+		showWithdraw = false
 		navigationController?.setNavigationBarHidden(false, animated: animated)	// navigation bar 노출
 	}
 	

@@ -47,22 +47,23 @@ extension SnackView {
 		stackView.addArrangedSubviews(textLabel, retryButton)
 		
 		stackView = stackView.then {
-			$0.backgroundColor = R.Color.gray900
 			$0.axis = .horizontal
 			$0.spacing = 16
-			$0.alignment = .center
+			$0.alignment = .fill
+            $0.distribution = .equalSpacing
 		}
 		
 		textLabel = textLabel.then {
 			$0.text = "일시적인 오류가 발생했습니다."
 			$0.numberOfLines = 2
 			$0.textColor = R.Color.white
-			$0.font = R.Font.title3
+			$0.font = R.Font.body1
 		}
 		
 		retryButton = retryButton.then {
 			$0.setTitle("재시도", for: .normal)
 			$0.setTitleColor(R.Color.orange500, for: .normal)
+            $0.titleLabel?.font = R.Font.title3
 		}
 	}
 	
@@ -70,5 +71,14 @@ extension SnackView {
 		stackView.snp.makeConstraints {
 			$0.top.bottom.left.right.equalToSuperview()
 		}
+        
+        textLabel.snp.makeConstraints {
+            $0.left.equalToSuperview().offset(16)
+        }
+        
+        // FIXME: - padding 수정 필요
+         retryButton.snp.makeConstraints {
+            $0.right.equalToSuperview().offset(16)
+        }
 	}
 }

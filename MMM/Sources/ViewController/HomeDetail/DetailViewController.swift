@@ -316,23 +316,28 @@ private extension DetailViewController {
 extension DetailViewController {
     func showToast() {
         let toastView = ToastView()
-        
         self.view.addSubview(toastView)
-        
+
         toastView.snp.makeConstraints {
             $0.left.right.equalTo(view.safeAreaLayoutGuide).inset(24)
             $0.bottom.equalTo(bottomPageControlView.snp.top).offset(-16)
         }
 
-//        UIView.animate(withDuration: 2.0, delay: 3.0, options: .curveEaseOut, animations: {
-//            toastView.alpha = 0.0
-//        }, completion: {(isCompleted) in
-//            toastView.removeFromSuperview()
-//        })
-//        toastView.toastAnimation()
         toastView.toastAnimation(duration: 1.0, delay: 3.0, option: .curveEaseOut)
         self.viewModel.isShowToastMessage = false
 
+//        var snackView = SnackView()
+//        snackView = snackView.then {
+//            $0.backgroundColor = R.Color.black.withAlphaComponent(0.9)
+//            $0.layer.cornerRadius = 8
+//            $0.clipsToBounds = true
+//        }
+//        self.view.addSubview(snackView)
+//        snackView.snp.makeConstraints {
+//            $0.left.right.equalTo(view.safeAreaLayoutGuide).inset(24)
+//            $0.bottom.equalTo(bottomPageControlView.snp.top).offset(-16)
+//            $0.height.equalTo(40)
+//        }
     }
     
 	func showLoadingView() {

@@ -88,10 +88,9 @@ extension AddImageView {
         addButton.tapPublisher
             .sinkOnMainThread {
                 if let viewModel = self.viewModel {
-                    viewModel.didTapAddButton.toggle()
+                    viewModel.didTapAddButton = true
                 }
-            }
-            .store(in: &cancellable)
+            }.store(in: &cancellable)
     }
     
     func setData(viewModel: EditActivityViewModel) {

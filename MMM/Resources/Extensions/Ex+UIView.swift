@@ -8,6 +8,7 @@
 
 import UIKit
 import Combine
+import SnapKit
 
 extension UIView {
     /// UIView를 상속받는 클래스의 tap Gesture Publisher
@@ -120,4 +121,20 @@ extension UIView {
 		border.borderWidth = 1
 		self.layer.addSublayer(border)
 	}
+    
+    // 토스트 & 스낵 에니메이션
+    func toastAnimation(duration: Double, delay: Double, option: UIView.AnimationOptions) {
+        Self.animate(withDuration: duration, delay: delay, options: option) {
+            self.alpha = 0.0
+        } completion: { _ in
+            self.removeFromSuperview()
+        }
+    }
+
+    // 스낵 attribute
+    func setSnackAttribute() {
+        self.backgroundColor = R.Color.black.withAlphaComponent(0.8)
+        self.layer.cornerRadius = 8
+        self.clipsToBounds = true
+    }
 }

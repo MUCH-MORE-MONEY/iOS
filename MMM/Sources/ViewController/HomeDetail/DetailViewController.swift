@@ -37,7 +37,8 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
 	
 	// MARK: - Properties
 	private var date = Date()
-	private var viewModel = HomeDetailViewModel()
+	private var homeDetailViewModel = HomeDetailViewModel()
+    private var editViewModel = EditActivityViewModel(isAddModel: false)
 	/// cell에 보여지게 되는 id의 배열
 	private var economicActivityId: [String] = []
 	/// 현재 보여지고 있는 indexPath.row
@@ -55,8 +56,36 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-		self.viewModel.fetchDetailActivity(id: self.economicActivityId[self.index])
-		self.viewModel.getMonthlyList(self.date.getFormattedYM())
+        if editViewModel.isShowToastMessage {
+            showToast()
+            editViewModel.isShowToastMessage = false
+        }
+        
+        // editVM을 공유하고 있기 때문에 Loading 값을 초기화
+        editViewModel.isLoading = true
+
+        // 날짜가 변경되었을 경우 다른 dailyList를 보여줘야함
+        if homeDetailViewModel.isDateChanged {
+            self.date = homeDetailViewModel.changedDate
+            title = date.getFormattedDate(format: "M월 dd일 경제활동")
+            
+            homeDetailViewModel.fetchDailyList(date.getFormattedYMD()) { [weak self] in
+                guard let self = self else { return }
+                let list = self.homeDetailViewModel.dailyEconomicActivityId
+                let changedID = self.homeDetailViewModel.changedId
+                
+                list.enumerated().forEach { i, id in
+                    if changedID == id { self.index = i }
+                }
+                
+                self.homeDetailViewModel.fetchDetailActivity(id: list[index]) {
+                    self.bottomPageControlView.setViewModel(self.homeDetailViewModel, self.index, list)
+                }
+            }
+        } else {
+            self.homeDetailViewModel.fetchDetailActivity(id: self.economicActivityId[self.index])
+            self.homeDetailViewModel.getMonthlyList(self.date.getFormattedYM())
+        }
 	}
 }
 
@@ -68,11 +97,79 @@ extension DetailViewController {
 	}
 	
 	private func setup() {
+        bind()
 		setAttribute()
 		setLayout()
-		bind()
 	}
 	
+    // MARK: - Bind
+    private func bind() {
+        homeDetailViewModel.fetchDetailActivity(id: economicActivityId[index])
+        
+        // MARK: - Loading
+        homeDetailViewModel.$isLoading
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                guard let self = self else { return }
+                if !$0 {
+                    self.loadView.dismiss(animated: false)
+                } else {
+
+                }
+            }.store(in: &cancellable)
+
+        homeDetailViewModel.$isError
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                guard let self = self else { return }
+                if $0 {
+                    showSnack()
+                }
+            }.store(in: &cancellable)
+        
+        editButton.tapPublisher
+            .sinkOnMainThread(receiveValue: didTapEditButton)
+            .store(in: &cancellable)
+        
+        homeDetailViewModel.$detailActivity
+            .sinkOnMainThread { [weak self] value in
+                guard let self = self, let value = value else { return }
+                showLoadingView()
+                self.titleLabel.text = value.title
+                self.activityType.text = self.homeDetailViewModel.detailActivity?.type == "01" ? "지출" : "수입"
+                self.activityType.backgroundColor = self.homeDetailViewModel.detailActivity?.type == "01" ? R.Color.orange500 : R.Color.blue500
+                self.starList.forEach {
+                    $0.image = R.Icon.iconStarGray16
+                }
+                
+                for i in 0..<value.star {
+                    self.starList[i].image = R.Icon.iconStarBlack16
+                }
+                
+                if URL(string: value.imageUrl) != nil {
+                    self.mainImageView.isHidden = false
+                    self.cameraImageView.isHidden = true
+                    self.mainImageView.setImage(urlStr: value.imageUrl, defaultImage: R.Icon.camera48)
+                    self.remakeConstraintsByMainImageView()
+                    self.homeDetailViewModel.hasImage = true
+                } else {
+                    self.mainImageView.isHidden = true
+                    self.cameraImageView.isHidden = false
+                    self.remakeConstraintsByCameraImageView()
+                    self.homeDetailViewModel.hasImage = false
+                }
+                
+                self.totalPrice.text = "\(value.amount.withCommas())원"
+                if !value.memo.isEmpty {
+                    self.memoLabel.text = value.memo
+                }
+                
+                self.satisfactionLabel .setSatisfyingLabelEdit(by: value.star)
+            }.store(in: &cancellable)
+        
+        bottomPageControlView.setViewModel(homeDetailViewModel, index, economicActivityId)
+    }
+    
 	private func setAttribute() {
 		title = navigationTitle
 		editActivityButtonItem = editActivityButtonItem.then {
@@ -196,74 +293,6 @@ extension DetailViewController {
 		}
 	}
 	
-	// MARK: - Bind
-	private func bind() {
-		viewModel.fetchDetailActivity(id: economicActivityId[index])
-		
-		
-		viewModel.$isLoading
-			.receive(on: DispatchQueue.main)
-			.sink { [weak self] in
-				guard let self = self else { return }
-				if !$0 {
-					print("로딩")
-					self.loadView.dismiss(animated: false)
-				} else {
-
-				}
-			}.store(in: &cancellable)
-
-		
-		editButton.tapPublisher
-			.sinkOnMainThread(receiveValue: didTapEditButton)
-			.store(in: &cancellable)
-		
-		viewModel.$isShowToastMessage
-			.receive(on: DispatchQueue.main)
-			.sink {
-				if $0 { self.showToast() }
-			}.store(in: &cancellable)
-		
-		viewModel.$detailActivity
-			.sinkOnMainThread { [weak self] value in
-				guard let self = self, let value = value else { return }
-				showLoadingView()
-				
-				self.titleLabel.text = value.title
-				self.activityType.text = self.viewModel.detailActivity?.type == "01" ? "지출" : "수입"
-				self.activityType.backgroundColor = self.viewModel.detailActivity?.type == "01" ? R.Color.orange500 : R.Color.blue500
-				self.starList.forEach {
-					$0.image = R.Icon.iconStarGray16
-				}
-				
-				for i in 0..<value.star {
-					self.starList[i].image = R.Icon.iconStarBlack16
-				}
-				
-				if URL(string: value.imageUrl) != nil {
-					self.mainImageView.isHidden = false
-					self.cameraImageView.isHidden = true
-					self.mainImageView.setImage(urlStr: value.imageUrl, defaultImage: R.Icon.camera48)
-					self.remakeConstraintsByMainImageView()
-					self.viewModel.hasImage = true
-				} else {
-					self.mainImageView.isHidden = true
-					self.cameraImageView.isHidden = false
-					self.remakeConstraintsByCameraImageView()
-					self.viewModel.hasImage = false
-				}
-				
-				self.totalPrice.text = "\(value.amount.withCommas())원"
-				if !value.memo.isEmpty {
-					self.memoLabel.text = value.memo
-				}
-				
-				self.satisfactionLabel .setSatisfyingLabelEdit(by: value.star)
-			}.store(in: &cancellable)
-		
-		bottomPageControlView.setViewModel(viewModel, index, economicActivityId)
-	}
-	
 	/// mainImageView 기준으로 memoLabel의 뷰를 다시 배치하는 메서드
 	private func remakeConstraintsByMainImageView() {
 		memoLabel.snp.remakeConstraints {
@@ -287,46 +316,45 @@ private extension DetailViewController {
 	func didTapEditButton() {
 		if cameraImageView.isHidden {
 			let mainImage = mainImageView.image
-			viewModel.mainImage = mainImage
+			homeDetailViewModel.mainImage = mainImage
 		} else {
-			viewModel.mainImage = nil
+			homeDetailViewModel.mainImage = nil
 		}
 		
-		let vc = EditActivityViewController(viewModel: viewModel, date: date)
+		let vc = EditActivityViewController(detailViewModel: homeDetailViewModel, editViewModel: editViewModel, date: date)
 		
 		navigationController?.pushViewController(vc, animated: true)
-	}
-	
-	func showToast() {
-		var toastLabel = BasePaddingLabel(padding: UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16))
-		
-		self.view.addSubview(toastLabel)
-		
-		toastLabel = toastLabel.then {
-			$0.text = "경제활동 편집 내용을 저장했습니다."
-			$0.backgroundColor = R.Color.black.withAlphaComponent(0.9)
-			$0.font = R.Font.body1
-			$0.textColor = R.Color.white
-			$0.alpha = 1.0
-			$0.layer.cornerRadius = 8
-			$0.clipsToBounds = true
-		}
-		
-		toastLabel.snp.makeConstraints {
-			$0.left.right.equalTo(view.safeAreaLayoutGuide).inset(24)
-			$0.bottom.equalTo(bottomPageControlView.snp.top).offset(-16)
-		}
-		
-		UIView.animate(withDuration: 3.0, delay: 0.1, options: .curveEaseOut, animations: {
-			toastLabel.alpha = 0.0
-		}, completion: {(isCompleted) in
-			toastLabel.removeFromSuperview()
-		})
 	}
 }
 
 // MARK: - Loading Func
 extension DetailViewController {
+    func showToast() {
+        let message = "경제활동 편집 내용을 저장했습니다."
+        let toastView = ToastView(toastMessage: message)
+        self.view.addSubview(toastView)
+
+        toastView.snp.makeConstraints {
+            $0.left.right.equalTo(view.safeAreaLayoutGuide).inset(24)
+            $0.bottom.equalTo(bottomPageControlView.snp.top).offset(-16)
+        }
+
+        toastView.toastAnimation(duration: 1.0, delay: 3.0, option: .curveEaseOut)
+    }
+    
+    func showSnack() {
+        let snackView = SnackView(viewModel: homeDetailViewModel, idList: economicActivityId, index: index)
+        snackView.setSnackAttribute()
+        self.view.addSubview(snackView)
+        snackView.snp.makeConstraints {
+            $0.left.right.equalTo(view.safeAreaLayoutGuide).inset(24)
+            $0.bottom.equalTo(bottomPageControlView.snp.top).offset(-16)
+            $0.height.equalTo(40)
+        }
+        
+        snackView.toastAnimation(duration: 1.0, delay: 3.0, option: .curveEaseOut)
+    }
+    
 	func showLoadingView() {
 		self.loadView.play()
 		self.loadView.isPresent = true

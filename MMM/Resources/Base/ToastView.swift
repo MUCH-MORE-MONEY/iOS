@@ -12,8 +12,12 @@ class ToastView: UIView {
     // MARK: - UI Components
     private lazy var toastLabel = BasePaddingLabel(padding: UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16))
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    // MARK: - Properties
+    private var toastMessage: String
+    
+    init(toastMessage: String) {
+        self.toastMessage = toastMessage
+        super.init(frame: .zero)
         setup()
     }
     required init?(coder: NSCoder) {
@@ -34,7 +38,7 @@ extension ToastView {
         addSubviews(toastLabel)
         
         toastLabel = toastLabel.then {
-            $0.text = "경제활동 편집 내용을 저장했습니다."
+            $0.text = toastMessage
             $0.backgroundColor = R.Color.black.withAlphaComponent(0.8)
             $0.font = R.Font.body1
             $0.textColor = R.Color.white

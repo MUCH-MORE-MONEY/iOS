@@ -62,6 +62,7 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
             showToast()
             editViewModel.isShowToastMessage = false
         }
+        
         // editVM을 공유하고 있기 때문에 Loading 값을 초기화
         editViewModel.isLoading = true
 
@@ -69,10 +70,20 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
         if homeDetailViewModel.isDateChanged {
             self.date = homeDetailViewModel.changedDate
             title = date.getFormattedDate(format: "M월 dd일 경제활동")
-            self.homeDetailViewModel.fetchDailyList(self.date.getFormattedYMD())
-            self.homeDetailViewModel.fetchDetailActivity(id: self.economicActivityId.last!)
-            self.index = self.homeDetailViewModel.dailyEconomicActivityId.count
-
+            
+            homeDetailViewModel.fetchDailyList(date.getFormattedYMD()) { [weak self] in
+                guard let self = self else { return }
+                let list = self.homeDetailViewModel.dailyEconomicActivityId
+                let changedID = self.homeDetailViewModel.changedId
+                
+                list.enumerated().forEach { i, id in
+                    if changedID == id { self.index = i }
+                }
+                
+                self.homeDetailViewModel.fetchDetailActivity(id: list[index]) {
+                    self.bottomPageControlView.setViewModel(self.homeDetailViewModel, self.index, list)
+                }
+            }
         } else {
             self.homeDetailViewModel.fetchDetailActivity(id: self.economicActivityId[self.index])
             self.homeDetailViewModel.getMonthlyList(self.date.getFormattedYM())
@@ -118,7 +129,6 @@ extension DetailViewController {
             .sinkOnMainThread { [weak self] value in
                 guard let self = self, let value = value else { return }
                 showLoadingView()
-                
                 self.titleLabel.text = value.title
                 self.activityType.text = self.homeDetailViewModel.detailActivity?.type == "01" ? "지출" : "수입"
                 self.activityType.backgroundColor = self.homeDetailViewModel.detailActivity?.type == "01" ? R.Color.orange500 : R.Color.blue500

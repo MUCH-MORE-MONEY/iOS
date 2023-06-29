@@ -325,7 +325,9 @@ extension EditActivityViewController {
 	}
 	
 	func didTapSaveButton() {
-		editViewModel.updateDetailActivity()
+        editViewModel.updateDetailActivity {
+            self.detailViewModel.changedId = self.editViewModel.changedId
+        }
 		
 		self.loadView.play()
 		self.loadView.isPresent = true

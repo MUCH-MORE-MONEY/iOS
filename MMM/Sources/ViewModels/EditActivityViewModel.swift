@@ -41,6 +41,9 @@ final class EditActivityViewModel {
         .map { $0.count <= 16 } // 16자리 이하
         .eraseToAnyPublisher()
     
+    // 날짜가 변경된 데이터의 id
+    var changedId = ""
+    
     // MARK: - Public properties
     // 들어온 퍼블리셔의 값 일치 여부를 반환하는 퍼블리셔
     lazy var isPriceVaild: AnyPublisher<Bool, Never> = $priceInput
@@ -88,14 +91,14 @@ final class EditActivityViewModel {
                     star: star)))
         .sink { data in
             switch data {
-            case .failure(let error):
+            case .failure(_):
                 break
             case .finished:
                 break
             }
         } receiveValue: { response in
             self.insertResponse = response
-            print(self.insertResponse)
+            print(response)
             self.isLoading = false
         }.store(in: &cancellable)
     }
@@ -138,6 +141,41 @@ final class EditActivityViewModel {
         }.store(in: &cancellable)
     }
     
+    func updateDetailActivity(completion: @escaping () -> Void) {
+        guard let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
+        self.isLoading = true
+        self.isShowToastMessage = false
+        APIClient.dispatch(
+            APIRouter.UpdateReqDto(
+                headers: APIHeader.Default(token: token),
+                body: APIParameters.UpdateReqDto(
+                    binaryFileList: binaryFileList,
+                    amount: amount,
+                    type: type,
+                    title: title,
+                    memo: memo,
+                    id: id,
+                    createAt: createAt,
+                    fileNo: fileNo,
+                    star: star)))
+        .sink { data in
+            switch data {
+            case .failure(let error):
+                print(error)
+                break
+            case .finished:
+                break
+            }
+        } receiveValue: { response in
+            self.editResponse = response
+            print(response)
+            self.isLoading = false
+            self.isShowToastMessage = true
+            self.changedId = response.economicActivityNo
+            completion()
+        }.store(in: &cancellable)
+    }
+    
     func deleteDetailActivity() {
 		guard let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
         self.isLoading = true
@@ -148,14 +186,14 @@ final class EditActivityViewModel {
                 body: APIParameters.DeleteReqDto(id: id)))
         .sink { data in
             switch data {
-            case .failure(let error):
+            case .failure(_):
                 break
             case .finished:
                 break
             }
         } receiveValue: { response in
             self.deleteResponse = response
-            print(self.deleteResponse)
+            print(response)
             self.isLoading = false
         }.store(in: &cancellable)
 

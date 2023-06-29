@@ -56,7 +56,6 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-        showSnack()
         if editViewModel.isShowToastMessage {
             showToast()
             editViewModel.isShowToastMessage = false
@@ -107,7 +106,7 @@ extension DetailViewController {
     private func bind() {
         homeDetailViewModel.fetchDetailActivity(id: economicActivityId[index])
         
-        
+        // MARK: - Loading
         homeDetailViewModel.$isLoading
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in
@@ -119,6 +118,14 @@ extension DetailViewController {
                 }
             }.store(in: &cancellable)
 
+        homeDetailViewModel.$isError
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                guard let self = self else { return }
+                if $0 {
+                    showSnack()
+                }
+            }.store(in: &cancellable)
         
         editButton.tapPublisher
             .sinkOnMainThread(receiveValue: didTapEditButton)
@@ -345,7 +352,7 @@ extension DetailViewController {
             $0.height.equalTo(40)
         }
         
-//        snackView.toastAnimation(duration: 1.0, delay: 3.0, option: .curveEaseOut)
+        snackView.toastAnimation(duration: 1.0, delay: 3.0, option: .curveEaseOut)
     }
     
 	func showLoadingView() {

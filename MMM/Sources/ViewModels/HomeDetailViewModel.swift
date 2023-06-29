@@ -16,6 +16,7 @@ final class HomeDetailViewModel {
 	@Published var mainImage: UIImage?
 //	@Published var isShowToastMessage = false
 	@Published var isLoading = true
+    @Published var isError = false
     @Published var dailyEconomicActivityId: [String] = []
 	// MARK: - Porperties
 	private var cancellable: Set<AnyCancellable> = []
@@ -35,6 +36,7 @@ final class HomeDetailViewModel {
                 case .failure(let data):
                     switch data {
                     default:
+
                         break
 //                        errorDaily = true // 에러 표시
                     }
@@ -44,7 +46,7 @@ final class HomeDetailViewModel {
 //                isDailyLoading = false // 로딩 종료
             }, receiveValue: { [weak self] response in
                 guard let self = self, let dailyList = response.selectListDailyOutputDto else { return }
-//                print(#file, #function, #line, dailyList)
+                isError = false
                 self.dailyEconomicActivityId = dailyList.map{ $0.id }
 //                isDailyLoading = false // 로딩 종료
 //                errorDaily = false // 에러 이미지 제거
@@ -75,6 +77,7 @@ final class HomeDetailViewModel {
 					break
 				case .urlSessionFailed(_):
 					print("url 세션 에러")
+                    self.isError = true
 					break
 				case .timeOut:
 					print("시간 초과")
@@ -88,10 +91,11 @@ final class HomeDetailViewModel {
 			case .finished:
 				break
 			}
+            self.isLoading = false
 		} receiveValue: { [weak self] response in
 			guard let self = self else { return }
+            isError = false
 			self.detailActivity = response
-			self.isLoading = false
 		}.store(in: &cancellable)
 	}
 	

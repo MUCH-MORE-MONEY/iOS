@@ -96,10 +96,10 @@ final class EditActivityViewModel {
             case .finished:
                 break
             }
+            self.isLoading = false
         } receiveValue: { response in
             self.insertResponse = response
             print(response)
-            self.isLoading = false
         }.store(in: &cancellable)
     }
     
@@ -133,10 +133,10 @@ final class EditActivityViewModel {
             case .finished:
                 break
             }
+            self.isLoading = false
         } receiveValue: { response in
             self.editResponse = response
             print(response)
-            self.isLoading = false
             self.isShowToastMessage = true
         }.store(in: &cancellable)
     }
@@ -166,10 +166,10 @@ final class EditActivityViewModel {
             case .finished:
                 break
             }
+            self.isLoading = false
         } receiveValue: { response in
             self.editResponse = response
             print(response)
-            self.isLoading = false
             self.isShowToastMessage = true
             self.changedId = response.economicActivityNo
             completion()
@@ -191,10 +191,10 @@ final class EditActivityViewModel {
             case .finished:
                 break
             }
+            self.isLoading = false
         } receiveValue: { response in
             self.deleteResponse = response
             print(response)
-            self.isLoading = false
         }.store(in: &cancellable)
 
     }

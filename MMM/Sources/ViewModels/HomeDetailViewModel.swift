@@ -64,30 +64,8 @@ final class HomeDetailViewModel {
 				body: APIParameters.SelectDetailReqDto(economicActivityNo: id)))
 		.sink { error in
 			switch error {
-			case .failure(let data):
-				switch data {
-				case .error4xx(_):
-					print("400")
-					break
-				case .error5xx(_):
-					print("500")
-					break
-				case .decodingError(_):
-					print("디코딩에러")
-					break
-				case .urlSessionFailed(_):
-					print("url 세션 에러")
-                    self.isError = true
-					break
-				case .timeOut:
-					print("시간 초과")
-					break
-				case .unknownError:
-					print("unknownError")
-					break
-				default:
-					break
-				}
+			case .failure:
+                self.isError = true
 			case .finished:
 				break
 			}

@@ -56,8 +56,7 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-        // 날짜가 변경되었을 경우 다른 dailyList를 보여줘야함
-//        showToast()
+        showSnack()
         if editViewModel.isShowToastMessage {
             showToast()
             editViewModel.isShowToastMessage = false
@@ -66,7 +65,7 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
         // editVM을 공유하고 있기 때문에 Loading 값을 초기화
         editViewModel.isLoading = true
 
-        
+        // 날짜가 변경되었을 경우 다른 dailyList를 보여줘야함
         if homeDetailViewModel.isDateChanged {
             self.date = homeDetailViewModel.changedDate
             title = date.getFormattedDate(format: "M월 dd일 경제활동")
@@ -324,7 +323,8 @@ private extension DetailViewController {
 // MARK: - Loading Func
 extension DetailViewController {
     func showToast() {
-        let toastView = ToastView()
+        let message = "경제활동 편집 내용을 저장했습니다."
+        let toastView = ToastView(toastMessage: message)
         self.view.addSubview(toastView)
 
         toastView.snp.makeConstraints {
@@ -333,19 +333,19 @@ extension DetailViewController {
         }
 
         toastView.toastAnimation(duration: 1.0, delay: 3.0, option: .curveEaseOut)
-
-//        var snackView = SnackView()
-//        snackView = snackView.then {
-//            $0.backgroundColor = R.Color.black.withAlphaComponent(0.9)
-//            $0.layer.cornerRadius = 8
-//            $0.clipsToBounds = true
-//        }
-//        self.view.addSubview(snackView)
-//        snackView.snp.makeConstraints {
-//            $0.left.right.equalTo(view.safeAreaLayoutGuide).inset(24)
-//            $0.bottom.equalTo(bottomPageControlView.snp.top).offset(-16)
-//            $0.height.equalTo(40)
-//        }
+    }
+    
+    func showSnack() {
+        let snackView = SnackView(viewModel: homeDetailViewModel, idList: economicActivityId, index: index)
+        snackView.setSnackAttribute()
+        self.view.addSubview(snackView)
+        snackView.snp.makeConstraints {
+            $0.left.right.equalTo(view.safeAreaLayoutGuide).inset(24)
+            $0.bottom.equalTo(bottomPageControlView.snp.top).offset(-16)
+            $0.height.equalTo(40)
+        }
+        
+//        snackView.toastAnimation(duration: 1.0, delay: 3.0, option: .curveEaseOut)
     }
     
 	func showLoadingView() {

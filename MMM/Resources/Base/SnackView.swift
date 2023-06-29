@@ -17,12 +17,24 @@ final class SnackView: UIView {
 	private lazy var stackView = UIStackView()
 	// MARK: - Properties
 	private var cancellable = Set<AnyCancellable>()
-
-	override init(frame: CGRect) {
-		super.init(frame: frame)
+    
+    private var viewModel: AnyObject
+    private var idList: [String]?
+    private var index: Int?
+    
+    init(viewModel: AnyObject) {
+        self.viewModel = viewModel
+        super.init(frame: .zero)
 		setup()
 	}
 	
+    
+    convenience init(viewModel: AnyObject, idList: [String], index: Int) {
+        self.init(viewModel: viewModel)
+        self.idList = idList
+        self.index = index
+    }
+    
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
@@ -37,8 +49,19 @@ extension SnackView {
 	
 	private func bind() {
 		retryButton.tapPublisher
-			.sinkOnMainThread { _ in
-				print("retry")
+			.sinkOnMainThread { [weak self] in
+                guard let self = self else { return }
+                
+                switch viewModel {
+                case let vm as HomeDetailViewModel:
+                    guard let list = self.idList else { return }
+                    guard let i = self.index else { return }
+                    vm.fetchDetailActivity(id: list[i])
+                    
+                default:
+                    print("error type")
+                }
+
 			}.store(in: &cancellable)
 	}
 	
@@ -64,6 +87,7 @@ extension SnackView {
 			$0.setTitle("재시도", for: .normal)
 			$0.setTitleColor(R.Color.orange500, for: .normal)
             $0.titleLabel?.font = R.Font.title3
+            $0.setTitleColor(R.Color.gray500, for: .highlighted)
 		}
 	}
 	

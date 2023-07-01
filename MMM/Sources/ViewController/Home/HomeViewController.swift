@@ -88,6 +88,7 @@ extension HomeViewController {
 		self.preDate = date
 		self.viewModel.getDailyList(date.getFormattedYMD())
 		self.setMonth(date)
+		self.viewModel.preDate = date
 	}
 	
 	// MARK: - Private

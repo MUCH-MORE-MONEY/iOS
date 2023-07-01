@@ -15,7 +15,7 @@ final class HomeViewModel {
 	@Published var monthlyList: [Monthly] = []
 	@Published var didTapHighlightButton: Bool?	// bottom sheet
 	@Published var didTapColorButton: Bool?		// bottom sheet
-	@Published var date: Date = Date()
+	@Published var date: Date = Date() // picker
 	@Published var isHighlight: Bool = Constants.getKeychainValueByBool(forKey: Constants.KeychainKey.isHighlight) ?? true {
 		// 금액 하이라이트 설정
 		didSet {
@@ -45,6 +45,7 @@ final class HomeViewModel {
 	@Published var isMonthlyLoading = false
 	@Published var errorDaily: Bool?	// 에러 이미지 노출 여부
 	@Published var errorMonthly: Bool?	// 에러 이미지 노출 여부
+	var preDate = Date() // 선택한 날짜
 
 	// MARK: - Private properties
 	private var cancellable: Set<AnyCancellable> = .init()

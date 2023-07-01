@@ -35,7 +35,6 @@ final class DataExportViewController: BaseViewController {
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
 		navigationController?.setNavigationBarHidden(true, animated: animated)	// navigation bar 숨김
-
 	}
 }
 // MARK: - Action

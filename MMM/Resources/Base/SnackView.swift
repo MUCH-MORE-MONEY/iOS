@@ -53,11 +53,15 @@ extension SnackView {
                 guard let self = self else { return }
                 
                 switch viewModel {
+				case let vm as HomeViewModel:
+					vm.getMonthlyList(vm.date.getFormattedYM()) // 월별
+					vm.getDailyList(vm.date.getFormattedYMD()) // 일별
                 case let vm as HomeDetailViewModel:
                     guard let list = self.idList else { return }
                     guard let i = self.index else { return }
                     vm.fetchDetailActivity(id: list[i])
-                    
+				case let vm as ProfileViewModel:
+					vm.exportToExcel()
                 default:
                     print("error type")
                 }

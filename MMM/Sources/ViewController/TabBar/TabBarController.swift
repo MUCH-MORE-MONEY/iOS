@@ -11,7 +11,6 @@ import Then
 import SnapKit
 
 final class TabBarController: UIViewController {
-	
 	private var tabBarVC = UITabBarController()
 	
 	private lazy var customTabBar = CustomTabBar(tabItems: [.home, .add, .profile])

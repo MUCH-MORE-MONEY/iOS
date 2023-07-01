@@ -14,6 +14,7 @@ final class ProfileViewModel {
 	@Published var isLoading = false
 	@Published var isWithdraw: Bool?
 	@Published var file: (fileName: String, data: Data)?
+	@Published var isError: Bool?
 
 	private var cancellable: Set<AnyCancellable> = .init()
 }
@@ -59,10 +60,11 @@ extension ProfileViewModel {
 					default:
 						DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
 							self.isLoading = false // 에러일 경우 로딩 끝
+							self.isError = true
 						}
 					}
 				case .finished:
-					break
+					self.isError = false
 				}
 			}, receiveValue: { [weak self] response in
 				guard let self = self, let data = Data(base64Encoded: response.binaryData) else { return }

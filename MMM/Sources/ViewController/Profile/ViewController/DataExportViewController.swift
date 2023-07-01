@@ -60,6 +60,22 @@ private extension DataExportViewController {
 			loadView.dismiss(animated: false)
 		}
     }
+	
+	/// 네트워크 오류시 스낵바 노출
+	func showSnack() {
+		let snackView = SnackView(viewModel: viewModel)
+		snackView.setSnackAttribute()
+		
+		self.view.addSubview(snackView)
+		
+		snackView.snp.makeConstraints {
+			$0.left.right.equalTo(view.safeAreaLayoutGuide).inset(24)
+			$0.bottom.equalTo(exportButton.snp.top).offset(-16)
+			$0.height.equalTo(40)
+		}
+		
+		snackView.toastAnimation(duration: 1.0, delay: 3.0, option: .curveEaseOut)
+	}
 }
 // MARK: - Style & Layouts
 private extension DataExportViewController {
@@ -98,6 +114,12 @@ private extension DataExportViewController {
 			.sinkOnMainThread(receiveValue: { [weak self] file in
 				guard let self = self, let file = file else { return }
 				presentShareSheet(file.fileName, file.data)
+			}).store(in: &cancellable)
+		
+		viewModel.$isError
+			.sinkOnMainThread(receiveValue: { [weak self] isError in
+				guard let self = self, let isError = isError else { return }
+				if isError { showSnack() } // 네트워크 에러 발생
 			}).store(in: &cancellable)
 	}
     

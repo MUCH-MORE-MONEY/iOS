@@ -135,6 +135,22 @@ extension HomeViewController {
 		vc.hidesBottomBarWhenPushed = true	// TabBar Above
 		navigationController?.pushViewController(vc, animated: true)
 	}
+	
+	/// 네트워크 오류시 스낵바 노출
+	func showSnack() {
+		let snackView = SnackView(viewModel: viewModel)
+		snackView.setSnackAttribute()
+		
+		self.view.addSubview(snackView)
+		
+		snackView.snp.makeConstraints {
+			$0.left.right.equalTo(view.safeAreaLayoutGuide).inset(24)
+			$0.bottom.equalTo(view.snp.bottom).offset(-16 + (-82-16)) // Tab의 높이 82, 16 plus 높이
+			$0.height.equalTo(40)
+		}
+		
+		snackView.toastAnimation(duration: 1.0, delay: 3.0, option: .curveEaseOut)
+	}
 }
 //MARK: - Style & Layouts
 private extension HomeViewController {
@@ -236,6 +252,12 @@ private extension HomeViewController {
 				guard let self = self, let isError = isError else { return }
 
 				dailyErrorView.isHidden = !isError
+			}).store(in: &cancellable)
+		
+		viewModel.isError
+			.sinkOnMainThread(receiveValue: { [weak self] isError in
+				guard let self = self else { return }
+				if isError { showSnack() } // 네트워크 에러 발생
 			}).store(in: &cancellable)
 		
 //		viewModel

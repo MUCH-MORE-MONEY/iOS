@@ -59,6 +59,10 @@ final class HomeViewModel {
 	lazy var isLoading: AnyPublisher<Bool, Never> = Publishers.CombineLatest3($isWillAppear, $isDailyLoading, $isMonthlyLoading)
 		.map { $0 && ($1 || $2) }
 		.eraseToAnyPublisher()
+	
+	lazy var isError: AnyPublisher<Bool, Never> = Publishers.CombineLatest($errorMonthly, $errorDaily)
+		.compactMap { $0 ?? false || $1 ?? false }
+		.eraseToAnyPublisher()
 }
 //MARK: Action
 extension HomeViewModel {
@@ -78,14 +82,13 @@ extension HomeViewModel {
 						errorDaily = true // 에러 표시
 					}
 				case .finished:
-					break
+					errorDaily = false // 에러 이미지 제거
 				}
 				isDailyLoading = false // 로딩 종료
 			}, receiveValue: { [weak self] response in
 				guard let self = self, let dailyList = response.selectListDailyOutputDto else { return }
 //				print(#file, #function, #line, dailyList)
 				self.dailyList = dailyList
-				errorDaily = false // 에러 이미지 제거
 			}).store(in: &cancellable)
 	}
 	
@@ -105,12 +108,11 @@ extension HomeViewModel {
 						errorMonthly = true // 에러 표시
 					}
 				case .finished:
-					break
+					errorMonthly = false // 에러 이미지 제거
 				}
 				isMonthlyLoading = false // 로딩 종료
 			}, receiveValue: { [weak self] response in
 				guard let self = self, let monthlyList = response.monthly else { return }
-//				print(#file, #function, #line, monthlyList)
 				self.monthlyList = monthlyList
 				
 				// 이번 달만 위젯에 보여줌
@@ -119,7 +121,6 @@ extension HomeViewModel {
 					UserDefaults.shared.set(response.pay, forKey: "pay")
 					WidgetCenter.shared.reloadAllTimelines()
 				}
-				errorMonthly = false // 에러 이미지 제거
 			}).store(in: &cancellable)
 	}
 	

@@ -45,6 +45,7 @@ final class HomeViewModel {
 	@Published var isMonthlyLoading = false
 	@Published var errorDaily: Bool?	// 에러 이미지 노출 여부
 	@Published var errorMonthly: Bool?	// 에러 이미지 노출 여부
+	var preDate = Date()
 
 	// MARK: - Private properties
 	private var cancellable: Set<AnyCancellable> = .init()
@@ -60,8 +61,9 @@ final class HomeViewModel {
 		.map { $0 && ($1 || $2) }
 		.eraseToAnyPublisher()
 	
+	// 월별 데이터는 정상동작, 일별 데이터가 비정상 동작할 경우
 	lazy var isError: AnyPublisher<Bool, Never> = Publishers.CombineLatest($errorMonthly, $errorDaily)
-		.compactMap { $0 ?? false || $1 ?? false }
+		.compactMap { $0 == false || $1 ?? false }
 		.eraseToAnyPublisher()
 }
 //MARK: Action

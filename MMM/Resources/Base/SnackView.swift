@@ -53,6 +53,9 @@ extension SnackView {
                 guard let self = self else { return }
                 
                 switch viewModel {
+				case let vm as HomeViewModel:
+					vm.getMonthlyList(vm.preDate.getFormattedYM()) // 월별
+					vm.getDailyList(vm.preDate.getFormattedYMD()) // 일별
                 case let vm as HomeDetailViewModel:
                     guard let list = self.idList else { return }
                     guard let i = self.index else { return }
@@ -62,7 +65,6 @@ extension SnackView {
                 default:
                     print("error type")
                 }
-                
             }.store(in: &cancellable)
     }
     

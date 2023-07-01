@@ -88,6 +88,7 @@ extension HomeViewController {
 		self.preDate = date
 		self.viewModel.getDailyList(date.getFormattedYMD())
 		self.setMonth(date)
+		self.viewModel.preDate = date
 	}
 	
 	// MARK: - Private
@@ -134,6 +135,22 @@ extension HomeViewController {
 		let vc = HomeFilterViewController(viewModel: viewModel)
 		vc.hidesBottomBarWhenPushed = true	// TabBar Above
 		navigationController?.pushViewController(vc, animated: true)
+	}
+	
+	/// 네트워크 오류시 스낵바 노출
+	func showSnack() {
+		let snackView = SnackView(viewModel: viewModel)
+		snackView.setSnackAttribute()
+		
+		self.view.addSubview(snackView)
+		
+		snackView.snp.makeConstraints {
+			$0.left.right.equalTo(view.safeAreaLayoutGuide).inset(24)
+			$0.bottom.equalTo(view.snp.bottom).offset(-16 - (82+16)) // tabBar 높이 + Plus 버튼 윗부분
+			$0.height.equalTo(40)
+		}
+		
+		snackView.toastAnimation(duration: 1.0, delay: 3.0, option: .curveEaseOut)
 	}
 }
 //MARK: - Style & Layouts
@@ -210,10 +227,10 @@ private extension HomeViewController {
 				}
 			}).store(in: &cancellable)
 		
-		// 월/일별 에러 표시
-		viewModel.isError
+		// 월별 에러 표시
+		viewModel.$errorMonthly
 			.sinkOnMainThread(receiveValue: { [weak self] isError in
-				guard let self = self else { return }
+				guard let self = self, let isError = isError else { return }
 
 				if isError {
 					if !errorBgView.isHidden { return } // [중복 처리] 이미 에러 표시할 경우
@@ -238,6 +255,13 @@ private extension HomeViewController {
 				dailyErrorView.isHidden = !isError
 			}).store(in: &cancellable)
 		
+		viewModel.isError
+			.sinkOnMainThread(receiveValue: { [weak self] isError in
+				guard let self = self else { return }
+				
+				if isError { showSnack() } // 네트워크 오류
+			}).store(in: &cancellable)
+
 //		viewModel
 //			.transform(input: viewModel.input.eraseToAnyPublisher())
 //			.sinkOnMainThread(receiveValue: { [weak self] state in

@@ -650,7 +650,7 @@ extension HomeViewController: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		// 셀 터치시 회색 표시 없애기
 		tableView.deselectRow(at: indexPath, animated: true)
-        let vc = DetailViewController()
+		let vc = DetailViewController(homeViewModel: viewModel)
         let economicActivityId = viewModel.dailyList.map{ $0.id }
         let index = indexPath.row
         let date = preDate

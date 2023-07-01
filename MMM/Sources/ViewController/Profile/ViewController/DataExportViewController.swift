@@ -85,6 +85,7 @@ private extension DataExportViewController {
 				
 				if loading && !self.loadView.isPresent {
 					self.loadView.play()
+					self.loadView.setLabel(label: "데이터 내보내는 중...")
 					self.loadView.isPresent = true
 					self.loadView.modalPresentationStyle = .overFullScreen
 					self.present(self.loadView, animated: false)

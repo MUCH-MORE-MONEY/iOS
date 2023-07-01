@@ -45,7 +45,6 @@ final class HomeViewModel {
 	@Published var isMonthlyLoading = false
 	@Published var errorDaily: Bool?	// 에러 이미지 노출 여부
 	@Published var errorMonthly: Bool?	// 에러 이미지 노출 여부
-	var preDate = Date() // 선택한 날짜
 
 	// MARK: - Private properties
 	private var cancellable: Set<AnyCancellable> = .init()

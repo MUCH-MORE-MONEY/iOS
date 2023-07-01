@@ -39,6 +39,11 @@ final class TabBarController: UIViewController {
 			shouldFrontView.navigationController?.pushViewController(AddViewController(parentVC: shouldFrontView), animated: false)
 		}
 	}
+	
+	// Profile View에 dark Content로 나타나는 문제 해결
+	override var preferredStatusBarStyle: UIStatusBarStyle {
+		return .lightContent // status text color 변경
+	}
 }
 // MARK: - Style & Layout
 extension TabBarController {

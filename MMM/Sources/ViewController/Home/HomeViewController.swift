@@ -94,13 +94,13 @@ extension HomeViewController {
 	// MARK: - Private
 	/// 데이터 얻기
 	private func fetchData() {
-		viewModel.isWillAppear = true
+		viewModel.isWillAppear = true // viewWillAppear 일 경우에만 Loading 표시
 		if calendar.scope == .month { // 월 단위
 			viewModel.getMonthlyList(calendar.currentPage.getFormattedYM())
 		} else { // 주 단위
 			if let dateAfter = Calendar.current.date(byAdding: .day, value: 6, to: calendar.currentPage) { // 해당 주의 마지막 날짜
 				let date = calendar.currentPage.getFormattedYM()
-				if date != dateAfter.getFormattedYM() {
+				if date != dateAfter.getFormattedYM() { // 마지막 날짜 비교
 					viewModel.getWeeklyList(date, dateAfter.getFormattedYM())
 				}
 			}

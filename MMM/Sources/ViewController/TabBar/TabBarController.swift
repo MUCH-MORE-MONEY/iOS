@@ -39,10 +39,6 @@ final class TabBarController: UIViewController {
 			shouldFrontView.navigationController?.pushViewController(AddViewController(parentVC: shouldFrontView), animated: false)
 		}
 	}
-	
-	override var preferredStatusBarStyle: UIStatusBarStyle {
-		return .lightContent // status text color 변경
-	}
 }
 // MARK: - Style & Layout
 extension TabBarController {

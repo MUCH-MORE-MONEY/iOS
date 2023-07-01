@@ -63,7 +63,7 @@ final class HomeViewModel {
 	
 	// 월별 데이터는 정상동작, 일별 데이터가 비정상 동작할 경우
 	lazy var isError: AnyPublisher<Bool, Never> = Publishers.CombineLatest($errorMonthly, $errorDaily)
-		.compactMap { $0 == false || $1 ?? false }
+		.compactMap { $0 == false && $1 ?? false }
 		.eraseToAnyPublisher()
 }
 //MARK: Action

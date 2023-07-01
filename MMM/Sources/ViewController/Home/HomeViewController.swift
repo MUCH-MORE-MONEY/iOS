@@ -17,7 +17,6 @@ final class HomeViewController: UIViewController {
 	// MARK: - Properties
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 	private let viewModel = HomeViewModel()
-	private lazy var preDate = Date() // yyyyMMdd
     private var tabBarViewModel: TabBarViewModel
 
 	// MARK: - UI Components
@@ -66,7 +65,6 @@ final class HomeViewController: UIViewController {
 		super.viewWillDisappear(animated)
 	}
     
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 //        Analytics.setUserID("userID = \(1234)")
@@ -85,7 +83,6 @@ extension HomeViewController {
 	func didSelectDate(_ date: Date) {
 		self.calendar.select(date)
 		self.dayLabel.text = date.getFormattedDate(format: "dd일 (EEEEE)") // 선택된 날짜
-		self.preDate = date
 		self.viewModel.getDailyList(date.getFormattedYMD())
 		self.setMonth(date)
 		self.viewModel.preDate = date
@@ -105,7 +102,7 @@ extension HomeViewController {
 				}
 			}
 		}
-		viewModel.getDailyList(preDate.getFormattedYMD())
+		viewModel.getDailyList(viewModel.preDate.getFormattedYMD())
 		calendar.reloadData()
 		tableView.reloadData()
 		viewModel.isWillAppear = false
@@ -113,7 +110,7 @@ extension HomeViewController {
 	
 	/// 달력 Picker Bottom Sheet
 	private func didTapMonthButton() {
-		let picker = DatePickerViewController(viewModel: viewModel, date: preDate)
+		let picker = DatePickerViewController(viewModel: viewModel, date: viewModel.preDate)
 		let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
 		picker.delegate = bottomSheetVC
 		bottomSheetVC.modalPresentationStyle = .overFullScreen
@@ -516,7 +513,7 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 	
 	// 캘린더 선택
 	func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-		guard preDate.getFormattedYMD() != date.getFormattedYMD() else { return } // 같은 날짜를 선택할 경우
+		guard viewModel.preDate.getFormattedYMD() != date.getFormattedYMD() else { return } // 같은 날짜를 선택할 경우
 		
 		self.didSelectDate(date)
 	}
@@ -653,7 +650,7 @@ extension HomeViewController: UITableViewDelegate {
 		let vc = DetailViewController(homeViewModel: viewModel)
         let economicActivityId = viewModel.dailyList.map{ $0.id }
         let index = indexPath.row
-        let date = preDate
+		let date = viewModel.preDate
         vc.setData(economicActivityId: economicActivityId, index: index, date: date)
 
         vc.hidesBottomBarWhenPushed = true

@@ -102,7 +102,6 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
 	
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
-		print(homeViewModel.date, date)
 		homeViewModel.date = date // 날짜가 변경되었을 경우
 	}
 }

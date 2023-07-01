@@ -146,7 +146,7 @@ extension HomeViewController {
 		
 		snackView.snp.makeConstraints {
 			$0.left.right.equalTo(view.safeAreaLayoutGuide).inset(24)
-			$0.bottom.equalTo(view.snp.bottom).offset(-16 - (82+16)) // tabBar 높이 + Plus 버튼 윗부분
+			$0.bottom.equalTo(view.snp.bottom).offset(-16 - (82+24)) // tabBar 높이 + Plus 버튼 윗부분
 			$0.height.equalTo(40)
 		}
 		

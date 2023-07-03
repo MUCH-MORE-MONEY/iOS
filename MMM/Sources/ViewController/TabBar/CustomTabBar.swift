@@ -121,9 +121,7 @@ final class CustomTabBar: UIView {
 		plusButton.tapPublisher
 			.sinkOnMainThread { [weak self] in
 				guard let self = self else { return }
-                print("add button")
 				self.selectedIndex = 1
-                Analytics.logEvent("add button", parameters: nil)
                 
 			}.store(in: &cancellable)
 		// selectedIndex에 따른 탭바 버튼 포커싱 UI를 변경
@@ -154,22 +152,3 @@ final class CustomTabBar: UIView {
 			}.store(in: &cancellable)
 	}
 }
-
-//struct ViewControllerRepresentable: UIViewControllerRepresentable {
-//    typealias UIviewControllerType = TabBarController
-//    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-//
-//    }
-//
-//    func makeUIViewController(context: Context) -> some UIViewController {
-//        TabBarController(widgetIndex: 0)
-//    }
-//}
-//
-//struct ViewController_Previews: PreviewProvider {
-//    static var previews: some View {
-//        NavigationView {
-//            ViewControllerRepresentable()
-//        }
-//    }
-//}

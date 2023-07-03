@@ -33,9 +33,9 @@ enum Tracking {
                                parameters: nil)
         }
         /// 금액 작성을 완료할 시 발생하는 로그 이벤트
-        static func inputAmountLogEvent() {
+        static func inputAmountLogEvent(_ amount: Int) {
             Analytics.logEvent(Tracking.FinActAddPage.inputAmount,
-                               parameters: nil)
+                               parameters: ["Amount": amount])
         }
         /// 금액 작성 완료 후 활성화되는 ‘다음’ 버튼을 클릭 시 발생하는 로그 이벤트
         static func nextBtnAmountLogEvent() {
@@ -48,9 +48,9 @@ enum Tracking {
                                parameters: ["date": date])
         }
         /// 날짜 설정 완료 후 활성화되는 ‘확인’ 버튼을 클릭 시 발생하는 로그 이벤트
-        static func nextBtnDateLogEvent(_ date: String) {
+        static func nextBtnDateLogEvent() {
             Analytics.logEvent(Tracking.FinActAddPage.nextBtnDate,
-                               parameters: ["date": date])
+                               parameters: nil)
         }
         /// 경제활동 성격 선택 시 발생하는 로그 이벤트
         static func inputCategoryLogEvent(_ type: String) {
@@ -59,10 +59,9 @@ enum Tracking {
                                parameters: ["type": typeStr])
         }
         /// 경제활동 성격 선택 완료 후 활성화되는 ‘다음’ 버튼을 클릭 시 발생하는 로그 이벤트
-        static func nextBtnCategoryLogEvent(_ type: String) {
-            let typeStr = type == "01" ? "지출" : "수입"
+        static func nextBtnCategoryLogEvent() {
             Analytics.logEvent(Tracking.FinActAddPage.nextBtnCategory,
-                               parameters: ["type": typeStr])
+                               parameters: nil)
         }
         /// 필수 경제활동 입력 페이지 이후 상세 입력 페이지 오픈 시 발생하는 로그 이벤트
         static func viewDetailLogEvent() {
@@ -85,20 +84,17 @@ enum Tracking {
                                parameters: ["star": star])
         }
         /// 사진 첨부 시 발생하는 로그 이벤트
-        static func inputPhotoLogEvent(_ type: String) {
-            let typeStr = type == "01" ? "지출" : "수입"
+        static func inputPhotoLogEvent() {
             Analytics.logEvent(Tracking.FinActAddPage.inputPhoto,
                                parameters: nil)
         }
-        /// 사진 첨부 시 발생하는 로그 이벤트
-        static func inputMemoLogEvent(_ type: String) {
-            let typeStr = type == "01" ? "지출" : "수입"
+        /// 경제활동 메모 입력을 완료할 시 발생하는 로그 이벤트
+        static func inputMemoLogEvent() {
             Analytics.logEvent(Tracking.FinActAddPage.inputMemo,
                                parameters: nil)
         }
-        /// 사진 첨부 시 발생하는 로그 이벤트
-        static func completeLogEvent(_ type: String) {
-            let typeStr = type == "01" ? "지출" : "수입"
+        /// 활동 저장하기 버튼 클릭 시 시 발생하는 로그 이벤트
+        static func completeLogEvent() {
             Analytics.logEvent(Tracking.FinActAddPage.complete,
                                parameters: nil)
         }

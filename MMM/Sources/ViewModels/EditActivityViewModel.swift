@@ -20,7 +20,7 @@ final class EditActivityViewModel {
     @Published var title = ""
     @Published var memo = ""
     @Published var id = ""
-    @Published var amount = 20000
+    @Published var amount = 0
     @Published var createAt = ""
     @Published var star = 0
     @Published var type = "01"
@@ -100,8 +100,6 @@ final class EditActivityViewModel {
             self.isLoading = false
         } receiveValue: { response in
             self.insertResponse = response
-            print(response)
-            Analytics.logEvent(Tracking.Event.insertActivity, parameters: nil)
         }.store(in: &cancellable)
     }
     
@@ -138,7 +136,6 @@ final class EditActivityViewModel {
             self.isLoading = false
         } receiveValue: { response in
             self.editResponse = response
-            print(response)
             self.isShowToastMessage = true
         }.store(in: &cancellable)
     }
@@ -171,7 +168,6 @@ final class EditActivityViewModel {
             self.isLoading = false
         } receiveValue: { response in
             self.editResponse = response
-            print(response)
             self.isShowToastMessage = true
             self.changedId = response.economicActivityNo
             completion()
@@ -196,9 +192,6 @@ final class EditActivityViewModel {
             self.isLoading = false
         } receiveValue: { response in
             self.deleteResponse = response
-            print(response)
-            Analytics.logEvent(Tracking.Event.deleteActivity, parameters: nil)
-            
         }.store(in: &cancellable)
 
     }

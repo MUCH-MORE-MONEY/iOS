@@ -60,4 +60,10 @@ extension UITextField {
 			.map { $0.text! }
 			.eraseToAnyPublisher()
 	}
+    var endEditPublisher: AnyPublisher<String, Never> {
+        controlPublisher(for: .editingDidEnd)
+            .compactMap{ $0 as? UITextField }
+            .map{ $0.text! }
+            .eraseToAnyPublisher()
+    }
 }

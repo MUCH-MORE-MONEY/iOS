@@ -129,6 +129,8 @@ extension TabBarController {
 			if preSelected == 1 {
 				viewModel.isPlusButtonTappedInProfile = true
 			}
+            
+            Tracking.FinActAddPage.startLogEvent()
 		} else {
 			if customTabBar.selectedIndex > 0 {
 				index -= 1

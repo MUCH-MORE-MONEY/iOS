@@ -67,8 +67,6 @@ final class HomeViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        setTracking()
-//        print("Home appear")
     }
 }
 //MARK: - Action
@@ -655,16 +653,4 @@ extension HomeViewController: UITableViewDelegate {
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
 	}
-}
-
-// MARK: - ga 트레킹
-extension HomeViewController {
-    private func setTracking() {
-//        Analytics.setUserProperty("User", forName: Constants.KeychainKey.email.rawValue)
-//        Analytics.setUserID("userID = \(1234)")
-//        Analytics.logEvent("홈진입", parameters: nil)
-//        Analytics.logEvent(AnalyticsEventScreenView,
-//                           parameters: [AnalyticsParameterScreenName: Tracking.Screen.home,
-//                                       AnalyticsParameterScreenClass: "homeVC"])
-    }
 }

@@ -17,7 +17,6 @@ final class HomeViewController: UIViewController {
 	// MARK: - Properties
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 	private let viewModel = HomeViewModel()
-	private lazy var preDate = Date() // yyyyMMdd
     private var tabBarViewModel: TabBarViewModel
 
 	// MARK: - UI Components
@@ -66,7 +65,6 @@ final class HomeViewController: UIViewController {
 		super.viewWillDisappear(animated)
 	}
     
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         setTracking()
@@ -84,26 +82,26 @@ extension HomeViewController {
 	func didSelectDate(_ date: Date) {
 		self.calendar.select(date)
 		self.dayLabel.text = date.getFormattedDate(format: "dd일 (EEEEE)") // 선택된 날짜
-		self.preDate = date
 		self.viewModel.getDailyList(date.getFormattedYMD())
 		self.setMonth(date)
+		self.viewModel.preDate = date
 	}
 	
 	// MARK: - Private
 	/// 데이터 얻기
 	private func fetchData() {
-		viewModel.isWillAppear = true
+		viewModel.isWillAppear = true // viewWillAppear 일 경우에만 Loading 표시
 		if calendar.scope == .month { // 월 단위
 			viewModel.getMonthlyList(calendar.currentPage.getFormattedYM())
 		} else { // 주 단위
 			if let dateAfter = Calendar.current.date(byAdding: .day, value: 6, to: calendar.currentPage) { // 해당 주의 마지막 날짜
 				let date = calendar.currentPage.getFormattedYM()
-				if date != dateAfter.getFormattedYM() {
+				if date != dateAfter.getFormattedYM() { // 마지막 날짜 비교
 					viewModel.getWeeklyList(date, dateAfter.getFormattedYM())
 				}
 			}
 		}
-		viewModel.getDailyList(preDate.getFormattedYMD())
+		viewModel.getDailyList(viewModel.preDate.getFormattedYMD())
 		calendar.reloadData()
 		tableView.reloadData()
 		viewModel.isWillAppear = false
@@ -111,7 +109,7 @@ extension HomeViewController {
 	
 	/// 달력 Picker Bottom Sheet
 	private func didTapMonthButton() {
-		let picker = DatePickerViewController(viewModel: viewModel, date: preDate)
+		let picker = DatePickerViewController(viewModel: viewModel, date: viewModel.preDate)
 		let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
 		picker.delegate = bottomSheetVC
 		bottomSheetVC.modalPresentationStyle = .overFullScreen
@@ -133,6 +131,22 @@ extension HomeViewController {
 		let vc = HomeFilterViewController(viewModel: viewModel)
 		vc.hidesBottomBarWhenPushed = true	// TabBar Above
 		navigationController?.pushViewController(vc, animated: true)
+	}
+	
+	/// 네트워크 오류시 스낵바 노출
+	func showSnack() {
+		let snackView = SnackView(viewModel: viewModel)
+		snackView.setSnackAttribute()
+		
+		self.view.addSubview(snackView)
+		
+		snackView.snp.makeConstraints {
+			$0.left.right.equalTo(view.safeAreaLayoutGuide).inset(24)
+			$0.bottom.equalTo(view.snp.bottom).offset(-16 - (82+24)) // tabBar 높이 + Plus 버튼 윗부분
+			$0.height.equalTo(40)
+		}
+		
+		snackView.toastAnimation(duration: 1.0, delay: 3.0, option: .curveEaseOut)
 	}
 }
 //MARK: - Style & Layouts
@@ -237,6 +251,13 @@ private extension HomeViewController {
 				dailyErrorView.isHidden = !isError
 			}).store(in: &cancellable)
 		
+		viewModel.isError
+			.sinkOnMainThread(receiveValue: { [weak self] isError in
+				guard let self = self else { return }
+				
+				if isError { showSnack() } // 네트워크 오류
+			}).store(in: &cancellable)
+
 //		viewModel
 //			.transform(input: viewModel.input.eraseToAnyPublisher())
 //			.sinkOnMainThread(receiveValue: { [weak self] state in
@@ -491,7 +512,7 @@ extension HomeViewController: FSCalendarDataSource, FSCalendarDelegate {
 	
 	// 캘린더 선택
 	func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-		guard preDate.getFormattedYMD() != date.getFormattedYMD() else { return } // 같은 날짜를 선택할 경우
+		guard viewModel.preDate.getFormattedYMD() != date.getFormattedYMD() else { return } // 같은 날짜를 선택할 경우
 		
 		self.didSelectDate(date)
 	}
@@ -625,10 +646,10 @@ extension HomeViewController: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		// 셀 터치시 회색 표시 없애기
 		tableView.deselectRow(at: indexPath, animated: true)
-        let vc = DetailViewController()
+		let vc = DetailViewController(homeViewModel: viewModel)
         let economicActivityId = viewModel.dailyList.map{ $0.id }
         let index = indexPath.row
-        let date = preDate
+		let date = viewModel.preDate
         vc.setData(economicActivityId: economicActivityId, index: index, date: date)
 
         vc.hidesBottomBarWhenPushed = true

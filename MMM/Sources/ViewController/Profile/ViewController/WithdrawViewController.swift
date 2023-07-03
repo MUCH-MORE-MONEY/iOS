@@ -51,11 +51,6 @@ final class WithdrawViewController: BaseViewController {
 		navigationController?.setNavigationBarHidden(false, animated: animated)	// navigation bar 노출
 	}
 	
-	override func viewDidAppear(_ animated: Bool) {
-		super.viewDidAppear(animated)
-		navigationController?.setNavigationBarHidden(false, animated: animated)	// navigation bar 노출
-	}
-	
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
 		viewModel.summary = nil // Text가 남아있는 문제 해결

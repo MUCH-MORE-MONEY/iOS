@@ -15,7 +15,7 @@ final class HomeViewModel {
 	@Published var monthlyList: [Monthly] = []
 	@Published var didTapHighlightButton: Bool?	// bottom sheet
 	@Published var didTapColorButton: Bool?		// bottom sheet
-	@Published var date: Date = Date()
+	@Published var date: Date = Date() // picker
 	@Published var isHighlight: Bool = Constants.getKeychainValueByBool(forKey: Constants.KeychainKey.isHighlight) ?? true {
 		// 금액 하이라이트 설정
 		didSet {
@@ -45,6 +45,7 @@ final class HomeViewModel {
 	@Published var isMonthlyLoading = false
 	@Published var errorDaily: Bool?	// 에러 이미지 노출 여부
 	@Published var errorMonthly: Bool?	// 에러 이미지 노출 여부
+	var preDate = Date()
 
 	// MARK: - Private properties
 	private var cancellable: Set<AnyCancellable> = .init()
@@ -58,6 +59,11 @@ final class HomeViewModel {
 	// 월별, 일별 데이터 가져오기
 	lazy var isLoading: AnyPublisher<Bool, Never> = Publishers.CombineLatest3($isWillAppear, $isDailyLoading, $isMonthlyLoading)
 		.map { $0 && ($1 || $2) }
+		.eraseToAnyPublisher()
+	
+	// 월별 데이터는 정상동작, 일별 데이터가 비정상 동작할 경우
+	lazy var isError: AnyPublisher<Bool, Never> = Publishers.CombineLatest($errorMonthly, $errorDaily)
+		.compactMap { $0 == false && $1 ?? false }
 		.eraseToAnyPublisher()
 }
 //MARK: Action
@@ -78,14 +84,13 @@ extension HomeViewModel {
 						errorDaily = true // 에러 표시
 					}
 				case .finished:
-					break
+					errorDaily = false // 에러 이미지 제거
 				}
 				isDailyLoading = false // 로딩 종료
 			}, receiveValue: { [weak self] response in
 				guard let self = self, let dailyList = response.selectListDailyOutputDto else { return }
 //				print(#file, #function, #line, dailyList)
 				self.dailyList = dailyList
-				errorDaily = false // 에러 이미지 제거
 			}).store(in: &cancellable)
 	}
 	
@@ -105,12 +110,11 @@ extension HomeViewModel {
 						errorMonthly = true // 에러 표시
 					}
 				case .finished:
-					break
+					errorMonthly = false // 에러 이미지 제거
 				}
 				isMonthlyLoading = false // 로딩 종료
 			}, receiveValue: { [weak self] response in
 				guard let self = self, let monthlyList = response.monthly else { return }
-//				print(#file, #function, #line, monthlyList)
 				self.monthlyList = monthlyList
 				
 				// 이번 달만 위젯에 보여줌
@@ -119,7 +123,6 @@ extension HomeViewModel {
 					UserDefaults.shared.set(response.pay, forKey: "pay")
 					WidgetCenter.shared.reloadAllTimelines()
 				}
-				errorMonthly = false // 에러 이미지 제거
 			}).store(in: &cancellable)
 	}
 	

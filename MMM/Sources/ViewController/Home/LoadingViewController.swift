@@ -15,7 +15,9 @@ final class LoadingViewController: UIViewController {
 	lazy var isPresent: Bool = false
 	
 	// MARK: - UI Components
+	private lazy var stackView = UIStackView()
 	private lazy var loadingLottie: LottieAnimationView = LottieAnimationView(name: "loading")
+	private lazy var descriptionLabel = UILabel()
 	
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +30,19 @@ final class LoadingViewController: UIViewController {
 }
 //MARK: - Action
 extension LoadingViewController {
+	// 외부에서 입력
+	func setLabel(label: String) {
+		descriptionLabel = descriptionLabel.then {
+			$0.text = label
+			$0.font = R.Font.title1
+			$0.textColor = R.Color.white
+		}
+		
+		DispatchQueue.main.async {
+			self.stackView.addArrangedSubviews(self.descriptionLabel)
+		}
+	}
+	
 	func play() {
 		DispatchQueue.main.async {
 			self.loadingLottie.play()
@@ -53,22 +68,29 @@ private extension LoadingViewController {
 	}
 	
 	private func setAttribute() {
-		view.backgroundColor = R.Color.black.withAlphaComponent(0.3)
+		view.backgroundColor = R.Color.black.withAlphaComponent(0.6)
+		
+		stackView = stackView.then {
+			$0.axis = .vertical
+			$0.spacing = -16
+			$0.distribution = .fill
+			$0.alignment = .center
+		}
 		
 		loadingLottie = loadingLottie.then {
 			$0.play()
 			$0.contentMode = .scaleAspectFit
 			$0.loopMode = .loop // 애니메이션을 무한으로 실행
-			$0.backgroundColor = R.Color.black.withAlphaComponent(0.3)
 			$0.isHidden = true
 		}
 	}
 	
 	private func setLayout() {
-		view.addSubviews(loadingLottie)
+		view.addSubviews(stackView)
+		stackView.addArrangedSubviews(loadingLottie)
 		
-		loadingLottie.snp.makeConstraints {
-			$0.edges.equalToSuperview()
+		stackView.snp.makeConstraints {
+			$0.centerX.centerY.equalToSuperview()
 		}
 	}
 }

@@ -11,7 +11,6 @@ import Then
 import SnapKit
 
 final class TabBarController: UIViewController {
-	
 	private var tabBarVC = UITabBarController()
 	
 	private lazy var customTabBar = CustomTabBar(tabItems: [.home, .add, .profile])
@@ -41,6 +40,7 @@ final class TabBarController: UIViewController {
 		}
 	}
 	
+	// Profile View에 dark Content로 나타나는 문제 해결
 	override var preferredStatusBarStyle: UIStatusBarStyle {
 		return .lightContent // status text color 변경
 	}

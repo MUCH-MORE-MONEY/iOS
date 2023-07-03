@@ -35,7 +35,6 @@ final class DataExportViewController: BaseViewController {
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
 		navigationController?.setNavigationBarHidden(true, animated: animated)	// navigation bar 숨김
-
 	}
 }
 // MARK: - Action
@@ -60,6 +59,22 @@ private extension DataExportViewController {
 			loadView.dismiss(animated: false)
 		}
     }
+	
+	/// 네트워크 오류시 스낵바 노출
+	func showSnack() {
+		let snackView = SnackView(viewModel: viewModel)
+		snackView.setSnackAttribute()
+		
+		self.view.addSubview(snackView)
+		
+		snackView.snp.makeConstraints {
+			$0.left.right.equalTo(view.safeAreaLayoutGuide).inset(24)
+			$0.bottom.equalTo(exportButton.snp.top).offset(-16)
+			$0.height.equalTo(40)
+		}
+		
+		snackView.toastAnimation(duration: 1.0, delay: 3.0, option: .curveEaseOut)
+	}
 }
 // MARK: - Style & Layouts
 private extension DataExportViewController {
@@ -85,6 +100,7 @@ private extension DataExportViewController {
 				
 				if loading && !self.loadView.isPresent {
 					self.loadView.play()
+					self.loadView.setLabel(label: "데이터 내보내는 중...")
 					self.loadView.isPresent = true
 					self.loadView.modalPresentationStyle = .overFullScreen
 					self.present(self.loadView, animated: false)
@@ -97,6 +113,12 @@ private extension DataExportViewController {
 			.sinkOnMainThread(receiveValue: { [weak self] file in
 				guard let self = self, let file = file else { return }
 				presentShareSheet(file.fileName, file.data)
+			}).store(in: &cancellable)
+		
+		viewModel.$isError
+			.sinkOnMainThread(receiveValue: { [weak self] isError in
+				guard let self = self, let isError = isError else { return }
+				if isError { showSnack() } // 네트워크 에러 발생
 			}).store(in: &cancellable)
 	}
     

@@ -38,6 +38,7 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
 	// MARK: - Properties
 	private var date = Date()
 	private var homeDetailViewModel = HomeDetailViewModel()
+	private var homeViewModel: HomeViewModel
     private var editViewModel = EditActivityViewModel(isAddModel: false)
 	/// cell에 보여지게 되는 id의 배열
 	private var economicActivityId: [String] = []
@@ -47,6 +48,17 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
 	
 	private var navigationTitle: String {
 		return date.getFormattedDate(format: "M월 dd일 경제활동")
+	}
+	
+	init(homeViewModel: HomeViewModel) {
+		self.homeViewModel = homeViewModel
+		super.init(nibName: nil, bundle: nil)
+	}
+	
+	// Compile time에 error를 발생시키는 코드
+	@available(*, unavailable)
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
 	}
 	
 	override func viewDidLoad() {
@@ -86,6 +98,11 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
             self.homeDetailViewModel.fetchDetailActivity(id: self.economicActivityId[self.index])
             self.homeDetailViewModel.getMonthlyList(self.date.getFormattedYM())
         }
+	}
+	
+	override func viewWillDisappear(_ animated: Bool) {
+		super.viewWillDisappear(animated)
+		homeViewModel.date = date // 날짜가 변경되었을 경우
 	}
 }
 

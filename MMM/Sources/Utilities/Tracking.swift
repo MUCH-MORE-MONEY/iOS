@@ -33,7 +33,7 @@ enum Tracking {
                                parameters: nil)
         }
         /// 금액 작성을 완료할 시 발생하는 로그 이벤트
-        static func inputAmountLogEvent(_ amount: Int) {
+        static func inputAmountLogEvent(_ amount: String) {
             Analytics.logEvent(Tracking.FinActAddPage.inputAmount,
                                parameters: ["Amount": amount])
         }
@@ -79,9 +79,9 @@ enum Tracking {
                                parameters: ["star": star])
         }
         /// 별점 입력 후 활성화되는 ‘확인’ 버튼을 클릭 시 로그 이벤트
-        static func nextBtnRatingLogEvent(_ star: Int) {
+        static func nextBtnRatingLogEvent() {
             Analytics.logEvent(Tracking.FinActAddPage.nextBtnRating,
-                               parameters: ["star": star])
+                               parameters: nil)
         }
         /// 사진 첨부 시 발생하는 로그 이벤트
         static func inputPhotoLogEvent() {
@@ -106,28 +106,24 @@ enum Tracking {
         static let expense = "CalSetting_Expense"
 
         /// 금액 하이라이트 설정값 발생하는 로그 이벤트
-        static func toogleHighlightLogEvent(_ type: String) {
-            let typeStr = type == "01" ? "지출" : "수입"
+        static func toggleHighlightLogEvent(_ isOn: Bool) {
             Analytics.logEvent(Tracking.CalSetting.toggleHighlight,
-                               parameters: nil)
+                               parameters: ["isOn": isOn])
         }
         /// 수입 하이라이트 금액 변경 후 ‘확인’ 버튼을 클릭 시 발생하는 로그 이벤트
-        static func incomeLogEvent(_ type: String) {
-            let typeStr = type == "01" ? "지출" : "수입"
+        static func incomeLogEvent(_ value: Int) {
             Analytics.logEvent(Tracking.CalSetting.income,
-                               parameters: nil)
+                               parameters: ["value": value])
         }
         /// 지출 하이라이트 금액 변경 후 ‘확인’ 버튼을 클릭 시 발생하는 로그 이벤트
-        static func expenseLogEvent(_ type: String) {
-            let typeStr = type == "01" ? "지출" : "수입"
+        static func expenseLogEvent(_ value: Int) {
             Analytics.logEvent(Tracking.CalSetting.expense,
-                               parameters: nil)
+                               parameters: ["value": value])
         }
         /// 일별 금액 합계 설정값 발생하는 로그 이벤트
-        static func toggleDaySumLogEvent(_ type: String) {
-            let typeStr = type == "01" ? "지출" : "수입"
+        static func toggleDaySumLogEvent(_ isOn: Bool) {
             Analytics.logEvent(Tracking.CalSetting.toggleDaySum,
-                               parameters: nil)
+                               parameters: ["isOn": isOn])
         }
     }
 }

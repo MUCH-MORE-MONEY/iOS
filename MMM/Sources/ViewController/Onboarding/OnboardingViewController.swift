@@ -59,7 +59,7 @@ extension OnboardingViewController: CustomAlertDelegate {
         }
     }
     
-    @objc func pageControlTapped() {
+    private func pageControlTapped() {
         let current = pageControl.currentPage
         scrollView.setContentOffset(
             CGPoint(x: CGFloat(current)*view.frame.size.width,
@@ -119,6 +119,7 @@ extension OnboardingViewController: UIScrollViewDelegate {
     }
 }
 
+// MARK: - Apple Login Delegate
 extension OnboardingViewController: ASAuthorizationControllerDelegate {
     // 성공 후 동작
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
@@ -166,6 +167,10 @@ private extension OnboardingViewController {
         guideButton.tapPublisher
             .sinkOnMainThread(receiveValue: showWebView)
             .store(in: &cancellable)
+        
+        pageControl.tapPublisher
+            .sinkOnMainThread(receiveValue: pageControlTapped)
+            .store(in: &cancellable)
     }
     
     private func setAttribute() {
@@ -199,7 +204,6 @@ private extension OnboardingViewController {
             $0.pageIndicatorTintColor = R.Color.gray200
             $0.currentPageIndicatorTintColor = R.Color.orange500
             $0.isUserInteractionEnabled = false
-            $0.addTarget(self, action: #selector(pageControlTapped), for: .valueChanged)
         }
         
         mainLabel1 = mainLabel1.then {

@@ -30,6 +30,11 @@ final class StarPickerViewController: UIViewController {
         setup()
         
     }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        Tracking.FinActAddPage.inputRatingLogEvent(Int(rating))
+    }
 }
 
 // MARK: - Style & Layout & Bind

@@ -74,6 +74,7 @@ extension AddDetailViewController {
 	}
 	
 	func didTapAlbumButton() {
+        Tracking.FinActAddPage.inputPhotoLogEvent()
 		let picker = UIImagePickerController().then {
 			$0.sourceType = .photoLibrary
 			$0.allowsEditing = true
@@ -189,8 +190,8 @@ extension AddDetailViewController: StarPickerViewProtocol {
 			guard let self = self else { return }
 			self.viewModel.star = rate
 			self.setStarImage(rate)
-            
 		}
+        Tracking.FinActAddPage.nextBtnRatingLogEvent()
 	}
 }
 

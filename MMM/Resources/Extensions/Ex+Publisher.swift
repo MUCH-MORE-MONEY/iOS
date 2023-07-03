@@ -67,3 +67,11 @@ extension UITextField {
             .eraseToAnyPublisher()
     }
 }
+
+extension UIPageControl {
+    var tapPublisher: AnyPublisher<Void, Never> {
+        controlPublisher(for: .valueChanged)
+            .map{ _ in }
+            .eraseToAnyPublisher()
+    }
+}

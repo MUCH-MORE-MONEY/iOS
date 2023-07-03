@@ -9,6 +9,10 @@ import Foundation
 import FirebaseAnalytics
 
 enum Tracking {
+    static func setUser(_ id: String) {
+        Analytics.setUserID(id)
+    }
+    
     enum FinActAddPage {
         static let start = "FinActAddPage_start"
         static let viewDetail = "FinActAddPage_view_detail"

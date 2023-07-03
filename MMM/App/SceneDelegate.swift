@@ -24,7 +24,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		var mainViewController: UIViewController
 
 		// 로그인이 되어 있을 경우
-		if Constants.getKeychainValue(forKey: Constants.KeychainKey.token) != nil {
+        
+		if let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) {
+            Tracking.setUser(token)
 			if let url = connectionOptions.urlContexts.first?.url { // 위젯
 				switch url.absoluteString {
 				case "myApp://Add": // 추가 위젯

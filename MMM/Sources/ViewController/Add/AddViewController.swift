@@ -38,8 +38,8 @@ final class AddViewController: BaseViewController {
 	private lazy var isEarn: Bool = true
 	private lazy var typeLabel = UILabel()
 	private lazy var buttonStackView = UIStackView()
-	private lazy var earnButton = UIButton()
-	private lazy var payButton = UIButton()
+	private lazy var payButton = UIButton()  // 지출
+	private lazy var earnButton = UIButton() // 수입
 	
 	private lazy var nextFirstButton = UIButton()
 	private lazy var nextSecondButton = UIButton()
@@ -185,7 +185,7 @@ extension AddViewController {
 	private func didTogglePriceTypeButton(_ tag: Int) {
 		view.endEditing(true)
 		
-		earnButton = earnButton.then {
+		payButton = payButton.then {
 			$0.setTitleColor(tag == 0 ? R.Color.white : R.Color.gray400, for: .normal)
 			$0.titleLabel?.font = tag == 0 ? R.Font.body2 : R.Font.prtendard(family: .medium, size: 14)
 			$0.backgroundColor = tag == 0 ? R.Color.orange500 : R.Color.gray900
@@ -193,7 +193,7 @@ extension AddViewController {
 			$0.layer.borderColor = tag == 0 ? .none : R.Color.gray500.cgColor
 		}
 		
-		payButton = payButton.then {
+		earnButton = earnButton.then {
 			$0.setTitleColor(tag == 1 ? R.Color.white : R.Color.gray400, for: .normal)
 			$0.titleLabel?.font = tag == 1 ? R.Font.body2 : R.Font.prtendard(family: .medium, size: 14)
 			$0.backgroundColor = tag == 1 ? R.Color.blue500 : R.Color.gray900
@@ -291,11 +291,11 @@ private extension AddViewController {
 			.sinkOnMainThread(receiveValue: didTapDateButton)
 			.store(in: &cancellable)
 		
-		earnButton.tapPublisherByTag
+		payButton.tapPublisherByTag
 			.sinkOnMainThread(receiveValue: didTogglePriceTypeButton)
 			.store(in: &cancellable)
 		
-		payButton.tapPublisherByTag
+		earnButton.tapPublisherByTag
 			.sinkOnMainThread(receiveValue: didTogglePriceTypeButton)
 			.store(in: &cancellable)
 		
@@ -393,7 +393,7 @@ private extension AddViewController {
 			$0.addImageViewOnRight(image: R.Icon.checkOrange24)
 		}
 		
-		earnButton = earnButton.then {
+		payButton = payButton.then {
 			$0.setTitle("지출", for: .normal)
 			$0.setTitleColor(R.Color.white, for: .normal)
 			$0.titleLabel?.font = R.Font.body2
@@ -402,7 +402,7 @@ private extension AddViewController {
 			$0.tag = 0
 		}
 		
-		payButton = payButton.then {
+		earnButton = earnButton.then {
 			$0.setTitle("수입", for: .normal)
 			$0.setTitleColor(R.Color.gray400, for: .normal)
 			$0.titleLabel?.font = R.Font.prtendard(family: .medium, size: 14)
@@ -443,7 +443,7 @@ private extension AddViewController {
 		view.addSubviews(scrollView, nextFirstButton, nextSecondButton)
 		scrollView.addSubview(contentView)
 		contentView.addSubviews(priceView, dateView, typeView)
-		buttonStackView.addArrangedSubviews(earnButton, payButton)
+		buttonStackView.addArrangedSubviews(payButton, earnButton)
 		priceView.addSubviews(priceLabel, priceTextField, warningLabel)
 		dateView.addSubviews(dateLabel, dateButton)
 		typeView.addSubviews(typeLabel, buttonStackView)

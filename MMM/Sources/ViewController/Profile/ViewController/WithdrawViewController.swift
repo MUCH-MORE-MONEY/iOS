@@ -54,6 +54,7 @@ final class WithdrawViewController: BaseViewController {
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
 		viewModel.summary = nil // Text가 남아있는 문제 해결
+		viewModel.isWidrawError = nil // 값이 변경되어 있는 문제 해결
 	}
 }
 //MARK: - Action
@@ -102,6 +103,22 @@ extension WithdrawViewController: CustomAlertDelegate {
 				sceneDelegate.onboarding.showAlert(alertType: .onlyConfirm, titleText: "탈퇴를 완료하였습니다", contentText: "언제든 다시 MMM을 찾아와주세요!", confirmButtonText: "확인하기")
 			}
 		}
+	}
+	
+	/// 네트워크 오류시 Toast 노출
+	func showToast() {
+		let toastView = ToastView(toastMessage: "일시적인 오류가 발생했습니다.")
+		toastView.setSnackAttribute()
+		
+		self.view.addSubview(toastView)
+		
+		toastView.snp.makeConstraints {
+			$0.left.right.equalTo(view.safeAreaLayoutGuide).inset(24)
+			$0.bottom.equalTo(withdrawButton.snp.top).offset(-16)
+			$0.height.equalTo(40)
+		}
+		
+		toastView.toastAnimation(duration: 1.0, delay: 3.0, option: .curveEaseOut)
 	}
 	
 	// 확인 버튼 이벤트 처리
@@ -167,6 +184,12 @@ extension WithdrawViewController {
 				} else {
 					self.loadView.dismiss(animated: false)
 				}
+			}).store(in: &cancellable)
+		
+		viewModel.$isWidrawError
+			.sinkOnMainThread(receiveValue: { [weak self] isError in
+				guard let self = self, let isError = isError else { return }
+				if isError { showToast() } // 네트워크 에러 발생
 			}).store(in: &cancellable)
 	}
 	

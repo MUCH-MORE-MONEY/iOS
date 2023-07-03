@@ -11,6 +11,7 @@ import Then
 import SnapKit
 import Photos
 import Lottie
+import FirebaseAnalytics
 
 protocol StarPickerViewProtocol: AnyObject {
 	func willPickerDismiss(_ rate: Double)
@@ -325,6 +326,11 @@ extension EditActivityViewController {
 	}
 	
 	func didTapSaveButton() {
+        
+        Analytics.logEvent("경제활동 추가", parameters: nil)
+//        Analytics.setDefaultEventParameters([
+//            "level_name": "Carverns",
+//            "level_diff": 4])
         editViewModel.updateDetailActivity {
             self.detailViewModel.changedId = self.editViewModel.changedId
         }

@@ -18,5 +18,7 @@ enum Tracking {
         static let touchAddView = "추가하기 뷰 클릭"
         static let touchDetailView = "상세뷰 클릭"
         static let touchEditView = "편집하기 클릭"
+        static let deleteActivity = "경제활동 내역 삭제"
+        static let insertActivity = "경제활동 내역 추가"
     }
 }

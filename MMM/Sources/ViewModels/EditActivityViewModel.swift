@@ -8,6 +8,7 @@
 import UIKit
 import Photos
 import Combine
+import FirebaseAnalytics
 
 final class EditActivityViewModel {
     // MARK: - Property Wrapper
@@ -100,6 +101,7 @@ final class EditActivityViewModel {
         } receiveValue: { response in
             self.insertResponse = response
             print(response)
+            Analytics.logEvent(Tracking.Event.insertActivity, parameters: nil)
         }.store(in: &cancellable)
     }
     
@@ -195,6 +197,8 @@ final class EditActivityViewModel {
         } receiveValue: { response in
             self.deleteResponse = response
             print(response)
+            Analytics.logEvent(Tracking.Event.deleteActivity, parameters: nil)
+            
         }.store(in: &cancellable)
 
     }

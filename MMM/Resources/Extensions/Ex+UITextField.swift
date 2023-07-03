@@ -57,6 +57,18 @@ extension UITextField {
 // MARK: - UITextField Delegate
 extension UITextField: UITextFieldDelegate {
 
+    public func textFieldDidEndEditing(_ textField: UITextField) {
+        switch textField.tag {
+        case 1: // Detail 수정
+            break
+        case 2: // Home 설정
+            break
+        default: // Add 추가
+            let text = textField.text?.filter{ $0.isNumber } ?? "0"
+            Tracking.FinActAddPage.inputAmountLogEvent(text)
+        }
+    }
+    
 	public func textFieldDidChangeSelection(_ textField: UITextField) {
 		guard let text = textField.text, let range = textField.selectedTextRange else {
 			return

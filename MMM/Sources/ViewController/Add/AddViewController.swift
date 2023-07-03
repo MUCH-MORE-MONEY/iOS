@@ -9,6 +9,7 @@ import UIKit
 import Combine
 import Then
 import SnapKit
+import FirebaseAnalytics
 
 final class AddViewController: BaseViewController {
 	// MARK: - Properties
@@ -151,6 +152,8 @@ extension AddViewController {
 	
 	// 두번째 버튼에 대한 Animation
 	private func setLayoutDateView() {
+        Tracking.FinActAddPage.inputCategoryLogEvent("01")
+        
 		typeView.isHidden = false
 		nextSecondButton.isHidden = false
 		
@@ -179,6 +182,8 @@ extension AddViewController {
 		viewModel.createAt = viewModel.date?.getFormattedDate(format: "yyyyMMdd") ?? ""
 		
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
+        
+
 	}
 	
 	// 수입/지출 button
@@ -202,6 +207,9 @@ extension AddViewController {
 		}
 		
 		isEarn = tag == 0 ? true : false
+        
+        Tracking.FinActAddPage.inputCategoryLogEvent(tag == 0 ? "01" : "02")
+
 	}
 	
 	@objc private func keyboardWillShow(_ notification: NSNotification) {
@@ -250,8 +258,10 @@ extension AddViewController {
 		let vc = AddDetailViewController(viewModel: viewModel)
 		vc.hidesBottomBarWhenPushed = true
 		navigationController?.pushViewController(vc, animated: true)
+        Tracking.FinActAddPage.nextBtnDateLogEvent()
 	}
 }
+
 //MARK: - Style & Layouts
 private extension AddViewController {
 	// 초기 셋업할 코드들
@@ -282,8 +292,8 @@ private extension AddViewController {
 					self.view.endEditing(true) // 키보드 내리기
 					return
 				}
-				
-				self.didTapDateButton()
+                Tracking.FinActAddPage.nextBtnAmountLogEvent()
+                self.didTapDateButton()
 			})
 			.store(in: &cancellable)
 		

@@ -67,8 +67,10 @@ extension HighlightViewController {
 	private func willDismiss() {
 		guard let value = Int(viewModel.priceInput) else { return }
 		if isEarn { // 수입
+            Tracking.CalSetting.incomeLogEvent(value*10_000)
 			homeViewModel.earnStandard = value * 10_000 // 만 단위
 		} else { // 지출
+            Tracking.CalSetting.expenseLogEvent(value*10_000)
 			homeViewModel.payStandard = value * 10_000
 		}
 		delegate?.willDismiss()

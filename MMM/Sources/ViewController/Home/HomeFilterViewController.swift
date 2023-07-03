@@ -53,6 +53,7 @@ final class HomeFilterViewController: BaseViewController {
 private extension HomeFilterViewController {
 	/// 금액 하이라이트 isEnabled
 	func toggleHighlightSwitch(_ isOn: Bool) {
+        Tracking.CalSetting.toggleHighlightLogEvent(isOn)
 		earnView.toggleEnabled(isOn)
 		payView.toggleEnabled(isOn)
 		viewModel.isHighlight = !viewModel.isHighlight
@@ -60,6 +61,7 @@ private extension HomeFilterViewController {
 	
 	/// 일별 금액 합계 isEnabled
 	func toggleDailyTotalSwitch(_ isOn: Bool) {
+        Tracking.CalSetting.toggleDaySumLogEvent(isOn)
 		viewModel.isDailySetting = !viewModel.isDailySetting
 	}
 	

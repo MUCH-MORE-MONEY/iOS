@@ -47,6 +47,8 @@ final class DatePickerViewController: UIViewController {
 			let vm = viewModel as! EditActivityViewModel
 			if vm.isAddModel {
 				vm.date = vm.date ?? Date()
+                let date = datePicker.date.getFormattedYMD()
+                Tracking.FinActAddPage.inputDateLogEvent(date)
 			}
 		}
 	}
@@ -70,6 +72,7 @@ extension DatePickerViewController {
 		case is EditActivityViewModel:
 			let viewModel = viewModel as! EditActivityViewModel
 			viewModel.date = datePicker.date
+            Tracking.FinActAddPage.nextBtnDateLogEvent()
 		default:
 			break
 		}

@@ -15,6 +15,7 @@ final class ProfileViewModel {
 	@Published var isWithdraw: Bool?
 	@Published var file: (fileName: String, data: Data)?
 	@Published var isError: Bool?
+	@Published var isWidrawError: Bool?
 
 	private var cancellable: Set<AnyCancellable> = .init()
 }
@@ -32,10 +33,10 @@ extension ProfileViewModel {
 				case .failure(let data):
 					switch data {
 					default:
-						break
+						self.isWidrawError = true
 					}
 				case .finished:
-					break
+					self.isWidrawError = false
 				}
 				isLoading = false // 로딩 종료
 			}, receiveValue: { [weak self] response in
@@ -93,10 +94,10 @@ extension ProfileViewModel {
 				case .failure(let data):
 					switch data {
 					default:
-						break
+						self.isWidrawError = true
 					}
 				case .finished:
-					break
+					self.isWidrawError = false
 				}
 				isWithdraw = false // 로딩 종료
 			}, receiveValue: { [weak self] response in

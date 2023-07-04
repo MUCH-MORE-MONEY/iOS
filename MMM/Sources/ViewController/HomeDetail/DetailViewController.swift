@@ -248,7 +248,7 @@ extension DetailViewController {
 		
 		memoLabel = memoLabel.then {
 			$0.text = "이 활동은 어떤 활동이었는지 기록해봐요"
-			$0.textColor = R.Color.gray500
+			$0.textColor = R.Color.black
 			$0.font = R.Font.body3
 
 			$0.numberOfLines = 0

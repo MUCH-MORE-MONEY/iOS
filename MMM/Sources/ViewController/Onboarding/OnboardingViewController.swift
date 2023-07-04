@@ -248,22 +248,26 @@ private extension OnboardingViewController {
             scrollView.addSubview($0)
         }
         
+		let isSmall = UIScreen.main.bounds.size.height <= 667.0 // 4.7 inch
+
         scrollView.snp.makeConstraints {
             $0.top.left.right.equalToSuperview()
-            $0.bottom.equalTo(scrollView.snp.top).offset(464)
+			$0.bottom.equalToSuperview().multipliedBy(isSmall ? 0.51 : 0.57) // 비율로 조절
         }
+		
         // 온보딩 이미지의 크기 변경 사항
         onboardingViews[0].snp.makeConstraints {
             $0.top.left.equalToSuperview()
             $0.width.equalToSuperview()
-            $0.height.equalTo(464)
+			$0.height.equalToSuperview()
         }
+		
         // 온보딩 이미지의 크기 변경 사항
         onboardingViews[1].snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.width.equalToSuperview()
             $0.left.equalTo(onboardingViews[0].snp.right)
-            $0.height.equalTo(464)
+            $0.height.equalToSuperview()
         }
         
         mainLabel1.snp.makeConstraints {
@@ -282,19 +286,19 @@ private extension OnboardingViewController {
         }
         
         pageControl.snp.makeConstraints {
-            $0.top.equalTo(subLabel.snp.bottom).offset(32)
+			$0.top.equalTo(subLabel.snp.bottom).offset(32)
             $0.centerX.equalToSuperview()
         }
         
+		appleButton.snp.makeConstraints {
+			$0.left.right.equalToSuperview().inset(24)
+			$0.bottom.equalTo(guideButton.snp.top).offset(-16)
+			$0.height.equalTo(40)
+		}
+		
         guideButton.snp.makeConstraints {
             $0.left.right.equalToSuperview().inset(100)
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(16)
-        }
-        
-        appleButton.snp.makeConstraints {
-            $0.left.right.equalToSuperview().inset(24)
-            $0.bottom.equalTo(guideButton.snp.top).offset(-16)
-            $0.height.equalTo(40)
         }
     }
 }

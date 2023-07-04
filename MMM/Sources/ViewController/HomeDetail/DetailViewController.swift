@@ -43,15 +43,16 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
 	/// cell에 보여지게 되는 id의 배열
 	private var economicActivityId: [String] = []
 	/// 현재 보여지고 있는 indexPath.row
-	private var index: Int = 0
+	private var index: Int
 	private var cancellable = Set<AnyCancellable>()
 	
 	private var navigationTitle: String {
 		return date.getFormattedDate(format: "M월 dd일 경제활동")
 	}
 	
-	init(homeViewModel: HomeViewModel) {
+    init(homeViewModel: HomeViewModel, index: Int) {
 		self.homeViewModel = homeViewModel
+        self.index = index
 		super.init(nibName: nil, bundle: nil)
 	}
 	
@@ -90,6 +91,8 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
                 }
             }
         } else {
+            print("index : \(index)")
+            
             self.homeDetailViewModel.fetchDetailActivity(id: self.economicActivityId[self.index])
             self.homeDetailViewModel.getMonthlyList(self.date.getFormattedYM())
         }
@@ -174,6 +177,10 @@ extension DetailViewController {
                 self.totalPrice.text = "\(value.amount.withCommas())원"
                 if !value.memo.isEmpty {
                     self.memoLabel.text = value.memo
+                    memoLabel.textColor = R.Color.black
+                } else {
+                    memoLabel.textColor = R.Color.gray400
+                    self.memoLabel.text = "이 활동은 어떤 활동이었는지 기록해봐요"
                 }
                 
                 self.satisfactionLabel .setSatisfyingLabelEdit(by: value.star)
@@ -243,11 +250,12 @@ extension DetailViewController {
 		
 		memoLabel = memoLabel.then {
 			$0.text = "이 활동은 어떤 활동이었는지 기록해봐요"
-			$0.textColor = R.Color.black
+			$0.textColor = R.Color.gray400
 			$0.font = R.Font.body3
 
 			$0.numberOfLines = 0
 		}
+        
 	}
 	
 	private func setLayout() {

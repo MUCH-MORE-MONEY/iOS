@@ -101,7 +101,7 @@ extension BaseAddActivityViewController {
         
         memoTextView = memoTextView.then {
             $0.font = R.Font.body3
-            $0.textColor = R.Color.black
+            $0.textColor = R.Color.gray400
             $0.text = textViewPlaceholder
             $0.translatesAutoresizingMaskIntoConstraints = true
             $0.sizeToFit()

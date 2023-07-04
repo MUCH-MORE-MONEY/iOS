@@ -61,7 +61,6 @@
 		C411938E29D2817C003DBC15 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411938D29D2817C003DBC15 /* AppDelegate.swift */; };
 		C411939029D2817C003DBC15 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411938F29D2817C003DBC15 /* SceneDelegate.swift */; };
 		C411939229D2817C003DBC15 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411939129D2817C003DBC15 /* ProfileViewController.swift */; };
-		C411939729D2817E003DBC15 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C411939629D2817E003DBC15 /* Assets.xcassets */; };
 		C411939A29D2817E003DBC15 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C411939829D2817E003DBC15 /* LaunchScreen.storyboard */; };
 		C41193A529D2817F003DBC15 /* MMMTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193A429D2817F003DBC15 /* MMMTests.swift */; };
 		C41193AF29D2817F003DBC15 /* MMMUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41193AE29D2817F003DBC15 /* MMMUITests.swift */; };
@@ -112,6 +111,7 @@
 		C44807E129E648D300D4B090 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44807E029E648D300D4B090 /* HomeViewController.swift */; };
 		C44807E329E649A300D4B090 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44807E229E649A300D4B090 /* HomeViewModel.swift */; };
 		C44807E529E7E76800D4B090 /* Ex+UIControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44807E429E7E76800D4B090 /* Ex+UIControl.swift */; };
+		C46791542A539E55005FE1F6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C411939629D2817E003DBC15 /* Assets.xcassets */; };
 		C4C0CAF52A1C88DC00C41FF4 /* PriceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0CAF42A1C88DC00C41FF4 /* PriceViewModel.swift */; };
 		C4C0CB022A23A07000C41FF4 /* EditPriceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0CB012A23A06F00C41FF4 /* EditPriceViewController.swift */; };
 		C4C0CB092A2474F900C41FF4 /* Ex+UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0CB082A2474F900C41FF4 /* Ex+UILabel.swift */; };
@@ -1019,6 +1019,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C46791542A539E55005FE1F6 /* Assets.xcassets in Resources */,
 				C41193D529D2874A003DBC15 /* Pretendard-Medium.otf in Resources */,
 				C41193D829D2874A003DBC15 /* Pretendard-Bold.otf in Resources */,
 				6A10495C2A43D50C00470608 /* GoogleService-Info.plist in Resources */,
@@ -1033,7 +1034,6 @@
 				C411939A29D2817E003DBC15 /* LaunchScreen.storyboard in Resources */,
 				C41193D429D2874A003DBC15 /* Pretendard-Black.otf in Resources */,
 				C41193D929D2874A003DBC15 /* Pretendard-Thin.otf in Resources */,
-				C411939729D2817E003DBC15 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

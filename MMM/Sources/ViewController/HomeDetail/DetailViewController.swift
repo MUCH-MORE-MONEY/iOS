@@ -83,17 +83,15 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
                 let changedID = self.homeDetailViewModel.changedId
                 
                 list.enumerated().forEach { i, id in
-                    if changedID == id { self.index = i }
+                    if changedID == id { self.homeDetailViewModel.pageIndex = i }
                 }
                 
-                self.homeDetailViewModel.fetchDetailActivity(id: list[index]) {
-                    self.bottomPageControlView.setViewModel(self.homeDetailViewModel, self.index, list)
+                self.homeDetailViewModel.fetchDetailActivity(id: list[self.homeDetailViewModel.pageIndex]) {
+                    self.bottomPageControlView.setViewModel(self.homeDetailViewModel, list)
                 }
             }
         } else {
-            print("index : \(index)")
-            
-            self.homeDetailViewModel.fetchDetailActivity(id: self.economicActivityId[self.index])
+            self.homeDetailViewModel.fetchDetailActivity(id: self.economicActivityId[homeDetailViewModel.pageIndex])
             self.homeDetailViewModel.getMonthlyList(self.date.getFormattedYM())
         }
 	}
@@ -120,6 +118,8 @@ extension DetailViewController {
     // MARK: - Bind
     private func bind() {
         homeDetailViewModel.fetchDetailActivity(id: economicActivityId[index])
+        
+
         
         // MARK: - Loading
         homeDetailViewModel.$isLoading
@@ -185,8 +185,9 @@ extension DetailViewController {
                 
                 self.satisfactionLabel .setSatisfyingLabelEdit(by: value.star)
             }.store(in: &cancellable)
-        
-        bottomPageControlView.setViewModel(homeDetailViewModel, index, economicActivityId)
+        homeDetailViewModel.pageIndex = index
+        bottomPageControlView.setViewModel(homeDetailViewModel, economicActivityId)
+
     }
     
 	private func setAttribute() {

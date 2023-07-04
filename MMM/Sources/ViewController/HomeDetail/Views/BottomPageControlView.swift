@@ -61,7 +61,7 @@ final class BottomPageControlView: UIView {
 
 extension BottomPageControlView {
 	// MARK: - Style & Layout
-	private func setup() {//
+	private func setup() {
 		setAttribute()
 		setLayout()
 		bind()
@@ -98,6 +98,7 @@ extension BottomPageControlView {
 	func didTapPreviousButton() {
 		if index != 0 {
 			index -= 1
+            viewModel?.pageIndex = index
 			updateView()
 		}
 	}
@@ -105,6 +106,7 @@ extension BottomPageControlView {
 	func didTapNextButton() {
 		if index != economicActivityId.count-1 {
 			index += 1
+            viewModel?.pageIndex = index
 			updateView()
 		}
 	}
@@ -116,10 +118,10 @@ extension BottomPageControlView {
 		viewModel?.fetchDetailActivity(id: id)
 	}
 	
-	func setViewModel(_ viewModel: HomeDetailViewModel, _ index: Int, _ economicActivityId: [String]) {
+	func setViewModel(_ viewModel: HomeDetailViewModel, _ economicActivityId: [String]) {
 		self.viewModel = viewModel
 		self.economicActivityId = economicActivityId
-		self.index = index
+        self.index = viewModel.pageIndex
 		let idSize = economicActivityId.count
 		indexLabel.text = "\(index+1) / \(idSize)"
 	}

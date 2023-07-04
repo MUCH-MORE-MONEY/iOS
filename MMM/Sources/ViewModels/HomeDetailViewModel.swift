@@ -24,6 +24,8 @@ final class HomeDetailViewModel {
     var isDateChanged = false
 	var changedDate = Date()
     var changedId = ""
+    // pageControl의 index
+    @Published var pageIndex: Int = 0
     
     func fetchDailyList(_ dateYMD: String, completion: @escaping () -> Void) {
         guard let date = Int(dateYMD), let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }

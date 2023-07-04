@@ -55,7 +55,9 @@ final class HomeViewController: UIViewController {
 		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
         
-        viewModel.requestPermission()
+        DispatchQueue.main.async {
+            self.viewModel.requestTrackingAuthorization()
+        }
 	}
 
 	override func viewWillAppear(_ animated: Bool) {

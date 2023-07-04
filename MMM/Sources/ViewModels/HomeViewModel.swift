@@ -10,6 +10,7 @@ import Combine
 import WidgetKit
 import AdSupport
 import AppTrackingTransparency
+import FirebaseAnalytics
 
 final class HomeViewModel {
 	// MARK: - Property Warraper
@@ -183,21 +184,43 @@ extension HomeViewModel {
 			}).store(in: &cancellable)
 	}
     
-    func requestPermission() {
-        if #available(iOS 14, *) {
+    func showTrackingPermissionAlert() {
+        let alertController = UIAlertController(
+            title: "앱 추적 허용",
+            message: "앱 추적을 위해 권한을 허용하시겠습니까?",
+            preferredStyle: .alert
+        )
+        
+        let allowAction = UIAlertAction(title: "허용", style: .default) { _ in
+            self.requestTrackingAuthorization()
+        }
+        
+        let declineAction = UIAlertAction(title: "거부", style: .cancel) { _ in
+            // 사용자가 거부한 경우에 대한 처리
+        }
+        
+        alertController.addAction(allowAction)
+        alertController.addAction(declineAction)
+        
+        UIApplication.shared.keyWindow?.rootViewController?.present(alertController, animated: true, completion: nil)
+    }
+    
+    func requestTrackingAuthorization() {
+        
+        if #available(iOS 14.5, *) {
             ATTrackingManager.requestTrackingAuthorization { status in
                 switch status {
                 case .authorized:
                     // Tracking authorization dialog was shown
                     // and we are authorized
                     print("Authorized")
-
-                    // Now that we are authorized we can get the IDFA
-                    print(ASIdentifierManager.shared().advertisingIdentifier)
+                    Analytics.setAnalyticsCollectionEnabled(true)
                 case .denied:
                     // Tracking authorization dialog was
                     // shown and permission is denied
                     print("Denied")
+                    // 추적 금지
+                    Analytics.setAnalyticsCollectionEnabled(false)
                 case .notDetermined:
                     // Tracking authorization dialog has not been shown
                     print("Not Determined")

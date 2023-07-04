@@ -182,8 +182,6 @@ extension AddViewController {
 		viewModel.createAt = viewModel.date?.getFormattedDate(format: "yyyyMMdd") ?? ""
 		
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
-        
-
 	}
 	
 	// 수입/지출 button
@@ -231,6 +229,14 @@ extension AddViewController {
 		// Keyboard's animation curve
 		let keyboardCurve = UIView.AnimationCurve(rawValue: notification.userInfo![UIResponder.keyboardAnimationCurveUserInfoKey] as! Int)!
 		
+		let isSmall = UIScreen.main.bounds.size.height <= 667.0 // 4.7 inch
+
+		if isSmall && !typeView.isHidden {
+			contentView.snp.updateConstraints {
+				$0.top.equalTo(scrollView.contentLayoutGuide).offset(keyboardWillShow ? -50 : 0)
+			}
+		}
+
 		if keyboardWillShow {
 			if let tabBarHeight = self.tabBarController?.tabBar.frame.height {
 				bottomConstraint.update(inset: keyboardHeight - tabBarHeight)

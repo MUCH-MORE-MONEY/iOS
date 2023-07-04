@@ -114,7 +114,7 @@ extension TabBarController {
 	private func setLayout() {
 		customTabBar.snp.makeConstraints {
 			$0.leading.bottom.trailing.equalToSuperview()
-			$0.top.equalTo(view.snp.bottom).offset(-82)
+            $0.top.equalTo(view.snp.bottom).offset(UIDevice.hasNotch ? -82 : -62)
 		}
 	}
 }

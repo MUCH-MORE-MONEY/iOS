@@ -301,7 +301,7 @@ extension DetailViewController {
 		bottomPageControlView.snp.makeConstraints {
 			$0.height.equalTo(55)
 			$0.left.right.equalToSuperview().inset(24)
-			$0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(UIDevice.hasNotch ? 0 : 20)
 		}
 	}
 	

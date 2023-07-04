@@ -55,9 +55,9 @@ final class HomeViewController: UIViewController {
 		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
         
-        DispatchQueue.main.async {
-            self.viewModel.requestTrackingAuthorization()
-        }
+//        viewModel.showTrackingPermissionAlert()
+        
+        
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -71,6 +71,7 @@ final class HomeViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+            self.viewModel.requestTrackingAuthorization()
     }
 }
 //MARK: - Action

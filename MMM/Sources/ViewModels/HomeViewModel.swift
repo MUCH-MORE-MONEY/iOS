@@ -223,6 +223,7 @@ extension HomeViewModel {
                     Analytics.setAnalyticsCollectionEnabled(false)
                 case .notDetermined:
                     // Tracking authorization dialog has not been shown
+                    Analytics.setAnalyticsCollectionEnabled(false)
                     print("Not Determined")
                 case .restricted:
                     print("Restricted")

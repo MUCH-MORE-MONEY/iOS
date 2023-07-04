@@ -106,20 +106,20 @@ extension WithdrawViewController: CustomAlertDelegate {
 	}
 	
 	/// 네트워크 오류시 Toast 노출
-	func showToast() {
-		let toastView = ToastView(toastMessage: "일시적인 오류가 발생했습니다.")
-		toastView.setSnackAttribute()
-		
-		self.view.addSubview(toastView)
-		
-		toastView.snp.makeConstraints {
-			$0.left.right.equalTo(view.safeAreaLayoutGuide).inset(24)
-			$0.bottom.equalTo(withdrawButton.snp.top).offset(-16)
-			$0.height.equalTo(40)
-		}
-		
-		toastView.toastAnimation(duration: 1.0, delay: 3.0, option: .curveEaseOut)
-	}
+//	func showToast() {
+//		let toastView = ToastView(toastMessage: "일시적인 오류가 발생했습니다.")
+//		toastView.setSnackAttribute()
+//
+//		self.view.addSubview(toastView)
+//
+//		toastView.snp.makeConstraints {
+//			$0.left.right.equalTo(view.safeAreaLayoutGuide).inset(24)
+//			$0.bottom.equalTo(withdrawButton.snp.top).offset(-16)
+//			$0.height.equalTo(40)
+//		}
+//
+//		toastView.toastAnimation(duration: 1.0, delay: 3.0, option: .curveEaseOut)
+//	}
 	
 	// 확인 버튼 이벤트 처리
 	func didAlertCofirmButton() {
@@ -189,7 +189,11 @@ extension WithdrawViewController {
 		viewModel.$isWidrawError
 			.sinkOnMainThread(receiveValue: { [weak self] isError in
 				guard let self = self, let isError = isError else { return }
-				if isError { showToast() } // 네트워크 에러 발생
+				if isError {
+                    if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+                        sceneDelegate.window?.showToast(message: "일시적인 오류가 발생했습니다.")
+                    }
+                } // 네트워크 에러 발생
 			}).store(in: &cancellable)
 	}
 	

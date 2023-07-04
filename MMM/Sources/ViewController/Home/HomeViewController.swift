@@ -54,6 +54,8 @@ final class HomeViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
+        
+        viewModel.requestPermission()
 	}
 
 	override func viewWillAppear(_ animated: Bool) {

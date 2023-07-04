@@ -68,11 +68,6 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-        if editViewModel.isShowToastMessage {
-            showToast()
-            editViewModel.isShowToastMessage = false
-        }
-        
         // editVM을 공유하고 있기 때문에 Loading 값을 초기화
         editViewModel.isLoading = true
 
@@ -306,7 +301,7 @@ extension DetailViewController {
 		bottomPageControlView.snp.makeConstraints {
 			$0.height.equalTo(55)
 			$0.left.right.equalToSuperview().inset(24)
-			$0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(UIDevice.hasNotch ? 0 : 20)
 		}
 	}
 	
@@ -346,19 +341,6 @@ private extension DetailViewController {
 
 // MARK: - Loading Func
 extension DetailViewController {
-    func showToast() {
-        let message = "경제활동 편집 내용을 저장했습니다."
-        let toastView = ToastView(toastMessage: message)
-        self.view.addSubview(toastView)
-
-        toastView.snp.makeConstraints {
-            $0.left.right.equalTo(view.safeAreaLayoutGuide).inset(24)
-            $0.bottom.equalTo(bottomPageControlView.snp.top).offset(-16)
-        }
-
-        toastView.toastAnimation(duration: 1.0, delay: 3.0, option: .curveEaseOut)
-    }
-    
     func showSnack() {
         let snackView = SnackView(viewModel: homeDetailViewModel, idList: economicActivityId, index: index)
         snackView.setSnackAttribute()

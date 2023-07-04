@@ -100,6 +100,9 @@ final class EditActivityViewModel {
             self.isLoading = false
         } receiveValue: { response in
             self.insertResponse = response
+            if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+                sceneDelegate.window?.showToast(message: "작성한 경제활동을 저장했습니다.")
+            }
         }.store(in: &cancellable)
     }
     
@@ -137,6 +140,9 @@ final class EditActivityViewModel {
         } receiveValue: { response in
             self.editResponse = response
             self.isShowToastMessage = true
+            if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+                sceneDelegate.window?.showToast(message: "경제활동 편집 내용을 저장했습니다.")
+            }
         }.store(in: &cancellable)
     }
     
@@ -170,6 +176,9 @@ final class EditActivityViewModel {
             self.editResponse = response
             self.isShowToastMessage = true
             self.changedId = response.economicActivityNo
+            if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+                sceneDelegate.window?.showToast(message: "경제활동 편집 내용을 저장했습니다.")
+            }
             completion()
         }.store(in: &cancellable)
     }
@@ -192,6 +201,9 @@ final class EditActivityViewModel {
             self.isLoading = false
         } receiveValue: { response in
             self.deleteResponse = response
+            if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+                sceneDelegate.window?.showToast(message: "작성한 경제활동을 삭제했습니다.")
+            }
         }.store(in: &cancellable)
 
     }

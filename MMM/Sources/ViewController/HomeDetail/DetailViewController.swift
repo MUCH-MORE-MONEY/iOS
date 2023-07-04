@@ -69,7 +69,10 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
         if editViewModel.isShowToastMessage {
-            showToast()
+            if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+                sceneDelegate.window?.showToast()
+            }
+
             editViewModel.isShowToastMessage = false
         }
         
@@ -346,19 +349,6 @@ private extension DetailViewController {
 
 // MARK: - Loading Func
 extension DetailViewController {
-    func showToast() {
-        let message = "경제활동 편집 내용을 저장했습니다."
-        let toastView = ToastView(toastMessage: message)
-        self.view.addSubview(toastView)
-
-        toastView.snp.makeConstraints {
-            $0.left.right.equalTo(view.safeAreaLayoutGuide).inset(24)
-            $0.bottom.equalTo(bottomPageControlView.snp.top).offset(-16)
-        }
-
-        toastView.toastAnimation(duration: 1.0, delay: 3.0, option: .curveEaseOut)
-    }
-    
     func showSnack() {
         let snackView = SnackView(viewModel: homeDetailViewModel, idList: economicActivityId, index: index)
         snackView.setSnackAttribute()

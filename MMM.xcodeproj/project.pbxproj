@@ -55,6 +55,7 @@
 		6AB1150F29EE372F00D3B813 /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB1150E29EE372F00D3B813 /* CustomTabBar.swift */; };
 		6AB1151329EE6D9E00D3B813 /* Ex+UITabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB1151229EE6D9E00D3B813 /* Ex+UITabBar.swift */; };
 		6ADC27E02A2AEEF400C56777 /* Ex+UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ADC27DF2A2AEEF400C56777 /* Ex+UIImage.swift */; };
+		6ADEAFDF2A53B81300299A0E /* Ex+Window.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ADEAFDE2A53B81300299A0E /* Ex+Window.swift */; };
 		6AF1A8402A35906100135961 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = 6AF1A83F2A35906100135961 /* loading.json */; };
 		C40E522A2A39629B00775455 /* ExportResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40E52292A39629B00775455 /* ExportResDto.swift */; };
 		C40E522C2A39A09900775455 /* HomeErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40E522B2A39A09900775455 /* HomeErrorView.swift */; };
@@ -246,6 +247,7 @@
 		6AB1150E29EE372F00D3B813 /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
 		6AB1151229EE6D9E00D3B813 /* Ex+UITabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UITabBar.swift"; sourceTree = "<group>"; };
 		6ADC27DF2A2AEEF400C56777 /* Ex+UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIImage.swift"; sourceTree = "<group>"; };
+		6ADEAFDE2A53B81300299A0E /* Ex+Window.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Window.swift"; sourceTree = "<group>"; };
 		6AF1A83F2A35906100135961 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		6AF9E85829F0D0BD00DCB330 /* MMM.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MMM.entitlements; sourceTree = "<group>"; };
 		738AB5686981CA1A28640207 /* Pods_MMM_MMMUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MMM_MMMUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -683,6 +685,7 @@
 				6A4F6E952A29ADA500754150 /* Ex+UIViewController.swift */,
 				C41193E229D287E6003DBC15 /* Ex+UIView.swift */,
 				C42226462A30C548000C899B /* Ex+UserDefaults.swift */,
+				6ADEAFDE2A53B81300299A0E /* Ex+Window.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1192,6 +1195,7 @@
 				6A4F6E962A29ADA500754150 /* Ex+UIViewController.swift in Sources */,
 				C4DBAA2E29DC16A400D1BB97 /* WithdrawViewController.swift in Sources */,
 				6A1880C929EF85BC00D62F1A /* TabItem.swift in Sources */,
+				6ADEAFDF2A53B81300299A0E /* Ex+Window.swift in Sources */,
 				6A223FFC2A1B3D590058C877 /* EditActivityViewController.swift in Sources */,
 				6A04FA052A1C4BB00034C114 /* AddImageView.swift in Sources */,
 				6A0F234429DBC0C30063673B /* BaseViewController.swift in Sources */,

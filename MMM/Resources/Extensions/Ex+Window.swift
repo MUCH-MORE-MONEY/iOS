@@ -8,8 +8,7 @@
 import UIKit
 
 extension UIWindow {
-    func showToast() {
-        let message = "경제활동 편집 내용을 저장했습니다."
+    func showToast(message: String) {
         let toastView = ToastView(toastMessage: message)
         self.addSubview(toastView)
 

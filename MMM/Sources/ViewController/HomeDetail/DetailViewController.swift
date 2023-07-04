@@ -68,14 +68,6 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-        if editViewModel.isShowToastMessage {
-            if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
-                sceneDelegate.window?.showToast()
-            }
-
-            editViewModel.isShowToastMessage = false
-        }
-        
         // editVM을 공유하고 있기 때문에 Loading 값을 초기화
         editViewModel.isLoading = true
 

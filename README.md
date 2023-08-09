@@ -2,16 +2,97 @@
 ![iOS](https://img.shields.io/badge/iOS-000000?style=for-the-badge&logo=ios&logoColor=white)
 ![Swift](https://img.shields.io/badge/swift-F54A2A?style=for-the-badge&logo=swift&logoColor=white)
 ![Xcode](https://img.shields.io/badge/Xcode-007ACC?style=for-the-badge&logo=Xcode&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-039BE5?style=for-the-badge&logo=Firebase&logoColor=white)
 
 ## 👋 앱 소개
 
-<!-- <p align="center"><img src="https://user-images.githubusercontent.com/48436020/219564198-f7c5214b-712b-47c7-9e4e-a2070007cb81.png" width=30%></p> -->
+<div align="center">
+  <table style="font-weight : bold">
+      <tr>
+          <td align="center">
+              <a href="https://www.notion.so/MMM-WHAT-IS-IT-70bb2a477c0a4b20bcc3e213807158bc?pvs=4">                 
+                  <img alt="Appicon" src="Image/Appicon.png" width="80"/>            
+              </a>
+          </td>
+          <td align="center">
+              <a href="https://www.notion.so/WHO-WE-ARE-cfbf5a97037a47829cb113b13c658232?pvs=4">                 
+                  <img alt="Boost" src="Image/Boost.png" width="80" />            
+              </a>
+          </td>
+      </tr>
+      <tr>
+          <td align="center">앱 아이콘</td>
+          <td align="center">대표 캐릭터</td>
+      </tr>
+  </table>
+</div>
 
 ```
- 수기 작성 가계부 어플
+💡 어떻게 돈을 벌고 있는지
+💡 내가 올바르고 가치있는 곳에 돈을 쓰는지
+💡 확인할 수 있는 수기 가계부 앱
 ```
 
 <br>
+
+## 👨‍👩‍👧‍👦 참여자
+<div align="center">
+  <table style="font-weight : bold">
+      <tr align="center">
+          <td colspan="5"> 팀 목표 : 조급하지 않게! 죽기 전에 하나만 만들어보자!! </td>
+      </tr>
+      <tr align="center">
+          <td align="center">
+              <a href="">                 
+                  <img alt="천주윤" src="Image/Chun.png" width="80" />            
+              </a>
+          </td>
+          <td align="center">
+              <a href="">                 
+                  <img alt="홍서희" src="Image/Hong.png" width="80" />            
+              </a>
+          </td>
+          <td align="center">
+              <a href="">                 
+                  <img alt="이윤영" src="Image/Yoon.png" width="80" />            
+              </a>
+          </td>
+      </tr>
+      <tr>
+          <td align="center">PM / 그로스 마케팅 </td>
+          <td align="center">프로덕트 디자인 / 브랜딩 </td>
+          <td align="center">프로덕트 디자인 / UX기획 </td>
+      </tr>
+      <tr>
+          <td align="center">
+              <a href="https://github.com/GeonHyeongKim">                 
+                  <img alt="김건형" src="https://avatars.githubusercontent.com/GeonHyeongKim" width="80" />            
+              </a>
+          </td>
+          <td align="center">
+              <a href="https://github.com/jwoo820">                 
+                  <img alt="박정우" src="https://avatars.githubusercontent.com/jwoo820" width="80" />            
+              </a>
+          </td>
+          <td align="center">
+              <a href="https://github.com/hyundang">                 
+                  <img alt="이현진" src="https://avatars.githubusercontent.com/hyundang" width="80" />            
+              </a>
+          </td>
+          <td align="center">
+              <a href="https://github.com/ChoiSunPil">                 
+                  <img alt="최선필" src="https://avatars.githubusercontent.com/ChoiSunPil" width="80" />            
+              </a>
+          </td>
+      </tr>
+      <tr>
+          <td align="center">iOS</td>
+          <td align="center">iOS</td>
+          <td align="center">Web</td>
+          <td align="center">BE</td>
+      </tr>
+  </table>
+</div>
 
 ## 📱 스크린샷
 <Blockquote>
@@ -20,18 +101,17 @@
 
 ### MMM
 
-| <img src="./image/login.gif" width="180"/> | <img src="./image/home.gif" width="180"/> | <img src="./image/detail.gif" width="180"/> | <img src="./image/review.gif" width="180"/> | <img src="./image/report.gif" width="180"/> |
+| <img src="./Image/Login.gif" width="180"/> | <img src="./image/home.gif" width="180"/> | <img src="./image/detail.gif" width="180"/> | <img src="./Image/withdraw.gif" width="180"/> | <img src="./Image/export.gif" width="180"/> |
 |:-:|:-:|:-:|:-:|:-:|
-| 로그인 | Home | Detail | 리뷰 | 제보 |
-| <img src="./image/search.gif" width="180"/> | <img src="./image/stt.gif" width="180"/> | <img src="./image/register.gif" width="180"/> | <img src="./image/ocr.gif" width="180"/> | <img src="./image/magazine.gif" width="180"/> |
-| 검색 | STT | 등록 | OCR | 매거진 |
-| <img src="./image/profilEdit.gif" width="180"/> | <img src="./image/setting.gif" width="180"/> ||||
-| 프로필 수정 | 설정 |  |  |  |
+| 스플래쉬/로그인 | 홈 | 추가 | 프로필 | 데이터 내보내기 |
 
 <br>
 
-## 🏃‍ 기능
-
+## 🏃‍ 핵심 기능
+1. 캘린더 기능
+2. 캘린더 사용자 UI 커스텀 기능
+3. 경제활동 추가 및 편집 기능
+4. 경제활동 정보 .xlsx 파일 내보내기 기능
 <br>
 
 ## ⚙️ 개발 환경
@@ -60,7 +140,7 @@
 
 ```
 1. 스프린트 기한 무조건 마치기
-2. ~~~
+2. 격주 수요일에 회의 진행하기
 ```
 
 </div>
@@ -90,9 +170,9 @@
 - feat/이슈번호-큰기능명/세부기능명
 ```
 예시)
-feat/13-tab1/map
-feat/13-tab1/search
-feat/26-tab2/recipe
+feat/13-tab1/home
+feat/13-tab1/step_one
+feat/26-tab2/step_two
 ```
 
 </div>
@@ -105,30 +185,49 @@ feat/26-tab2/recipe
 
 ```
 📦 MMM
+| 
++ 🗂 App                        // AppDelegate, SeneDelegate
 |
-+ 🗂 Derived
++ 🗂 Resources       
+|        
++------🗂 Assets                // AppIcone, Color, Image Assets
 |
-+ 🗂 Targets
-|         
-+------🗂 MMM
-        |
-        +------🗂 Resources             // Resource
-                |
-        +-------+------🗂 Extensions
-        |
-        +------🗂 Sources               // source
-        |
-        +------🗂 Tests                 // test
-
-|
-+------🗂 MMMKit      
++------🗂 Base                  // 상속하는 base codee
 │         
-+------🗂 MMMUI            
++------🗂 Configuration         // KeyChain 저장을 위한 클래스
+|
++------🗂 Extensions            // extension 모음
+│         
++------🗂 Fonts                 // 폰트 모음 : 무료 폰트인 Pretendard 사용
+|
++------🗂 Info                  // 파일 설정 모음
+│         
++ 🗂 Sources
+|
++------🗂 Models                // Json을 받기 위한 Hashable, Codable, Identifiable 프로토콜을 체택한 struct 관리
+│         
++------🗂 Services              // Network를 위한 Constants, Client, Parmeters, Router
+|
++------🗂 Utilities             // ObservableObject을 체택하여 네트워크 관리
+|
++------🗂 ViewController                 // Log, Traking Enum
+        |
+        +------🗂 Add           // Tab 2
+        │         
+        +------🗂 Home          // Tab 1
+        |
+        +------🗂 HomeDetail    
+        |
+        +------🗂 Onboarding    
+        │         
+        +------🗂 Profile       // Tab 3
+        |
+        +------🗂 TabBar      
+           
 ```
 </div>
 </details>
 <br>
-
 
 <!-- ## 라이센스
 Machacha is available under the MIT license. See the [LICENSE](https://github.com/APPSCHOOL1-REPO/finalproject-machacha/blob/main/LICENSE) file for more info.

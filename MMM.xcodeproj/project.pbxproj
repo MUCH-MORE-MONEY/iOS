@@ -43,6 +43,7 @@
 		6A223FFC2A1B3D590058C877 /* EditActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A223FFB2A1B3D590058C877 /* EditActivityViewController.swift */; };
 		6A27E6952A205338001A7F04 /* Ex+UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A27E6942A205338001A7F04 /* Ex+UITextField.swift */; };
 		6A381E0A29E8F40700E0974F /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A381E0929E8F40700E0974F /* AddViewController.swift */; };
+		6A3EDE8D2A87572F008E8782 /* SampleReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3EDE8C2A87572F008E8782 /* SampleReactor.swift */; };
 		6A4313E22A13046E00095041 /* BottomPageControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4313E12A13046E00095041 /* BottomPageControlView.swift */; };
 		6A4F6E962A29ADA500754150 /* Ex+UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4F6E952A29ADA500754150 /* Ex+UIViewController.swift */; };
 		6A626BC12A0C7EE700BDD5C0 /* SelectDetailResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A626BC02A0C7EE700BDD5C0 /* SelectDetailResDto.swift */; };
@@ -235,6 +236,7 @@
 		6A223FFB2A1B3D590058C877 /* EditActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditActivityViewController.swift; sourceTree = "<group>"; };
 		6A27E6942A205338001A7F04 /* Ex+UITextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UITextField.swift"; sourceTree = "<group>"; };
 		6A381E0929E8F40700E0974F /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
+		6A3EDE8C2A87572F008E8782 /* SampleReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleReactor.swift; sourceTree = "<group>"; };
 		6A4313E12A13046E00095041 /* BottomPageControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomPageControlView.swift; sourceTree = "<group>"; };
 		6A4F6E952A29ADA500754150 /* Ex+UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIViewController.swift"; sourceTree = "<group>"; };
 		6A626BC02A0C7EE700BDD5C0 /* SelectDetailResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectDetailResDto.swift; sourceTree = "<group>"; };
@@ -477,6 +479,14 @@
 			path = Add;
 			sourceTree = "<group>";
 		};
+		6A3EDE8B2A8756FA008E8782 /* Reactor */ = {
+			isa = PBXGroup;
+			children = (
+				6A3EDE8C2A87572F008E8782 /* SampleReactor.swift */,
+			);
+			path = Reactor;
+			sourceTree = "<group>";
+		};
 		6A7DE6B829F771F8009354EF /* Configuration */ = {
 			isa = PBXGroup;
 			children = (
@@ -586,6 +596,7 @@
 				C41193EE29D3A7B6003DBC15 /* Services */,
 				6A08B47B29FF5D3D0080719E /* Utilities */,
 				C41193C029D281F2003DBC15 /* ViewController */,
+				6A3EDE8B2A8756FA008E8782 /* Reactor */,
 				C41193EF29D3A7BA003DBC15 /* ViewModels */,
 			);
 			path = Sources;
@@ -1254,6 +1265,7 @@
 				C433A07329EEE751008B26DF /* Ex+Date.swift in Sources */,
 				C4EA5B4029FA1A40008D1564 /* HomeHeaderView.swift in Sources */,
 				6A8B776329FF92CC0095ECFC /* Constants.swift in Sources */,
+				6A3EDE8D2A87572F008E8782 /* SampleReactor.swift in Sources */,
 				C4DBAA3929DEAE0200D1BB97 /* CountAnimationStackView.swift in Sources */,
 				C4D03ED02A2DD33700011B41 /* ProfileViewModel.swift in Sources */,
 				6A1BAD4529E6550100818086 /* OnboardingViewModel.swift in Sources */,

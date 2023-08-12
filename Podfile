@@ -14,7 +14,7 @@ target 'MMM' do
   pod 'Cosmos', '~> 23.0'
   pod 'lottie-ios'
   pod 'FirebaseAnalytics'
-
+  pod 'ReactorKit'
   target 'MMMTests' do
     inherit! :search_paths
     # Pods for testing

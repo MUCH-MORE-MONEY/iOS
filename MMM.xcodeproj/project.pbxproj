@@ -93,6 +93,7 @@
 		C411940429D53DDF003DBC15 /* ManagementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411940329D53DDF003DBC15 /* ManagementViewController.swift */; };
 		C411940729D53EA0003DBC15 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411940629D53EA0003DBC15 /* NavigationController.swift */; };
 		C411940B29DAEDF9003DBC15 /* CustomAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411940A29DAEDF9003DBC15 /* CustomAlertViewController.swift */; };
+		C4170B4E2A89FCA800CE0A65 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B4D2A89FCA800CE0A65 /* StatisticsViewController.swift */; };
 		C4199DD329FE3051006E5DA8 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4199DD229FE3051006E5DA8 /* BottomSheetViewController.swift */; };
 		C4199DD929FE6BE1006E5DA8 /* DatePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4199DD829FE6BE1006E5DA8 /* DatePickerViewController.swift */; };
 		C4199DDD2A001001006E5DA8 /* EconomicActivityResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4199DDC2A001001006E5DA8 /* EconomicActivityResDto.swift */; };
@@ -294,6 +295,7 @@
 		C411940329D53DDF003DBC15 /* ManagementViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagementViewController.swift; sourceTree = "<group>"; };
 		C411940629D53EA0003DBC15 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		C411940A29DAEDF9003DBC15 /* CustomAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertViewController.swift; sourceTree = "<group>"; };
+		C4170B4D2A89FCA800CE0A65 /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		C4199DD229FE3051006E5DA8 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
 		C4199DD829FE6BE1006E5DA8 /* DatePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerViewController.swift; sourceTree = "<group>"; };
 		C4199DDC2A001001006E5DA8 /* EconomicActivityResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EconomicActivityResDto.swift; sourceTree = "<group>"; };
@@ -620,6 +622,7 @@
 				6A0D108029D3CEF6009D6DCA /* Onboarding */,
 				C41193F029D3A867003DBC15 /* Profile */,
 				6A0D5B952A4BF1EF00958E72 /* Splash */,
+				C4170B4C2A89FC1500CE0A65 /* Statistics */,
 				6A0F234529DC0D750063673B /* TabBar */,
 			);
 			path = ViewController;
@@ -788,6 +791,14 @@
 				6A0D5B982A4C0E3300958E72 /* ToastView.swift */,
 			);
 			path = Base;
+			sourceTree = "<group>";
+		};
+		C4170B4C2A89FC1500CE0A65 /* Statistics */ = {
+			isa = PBXGroup;
+			children = (
+				C4170B4D2A89FCA800CE0A65 /* StatisticsViewController.swift */,
+			);
+			path = Statistics;
 			sourceTree = "<group>";
 		};
 		C433A06B29EE537D008B26DF /* Views */ = {
@@ -1199,6 +1210,7 @@
 				6AB1150F29EE372F00D3B813 /* CustomTabBar.swift in Sources */,
 				C4C792AD2A388486007FD6AA /* Ex+UIScreen.swift in Sources */,
 				C411940B29DAEDF9003DBC15 /* CustomAlertViewController.swift in Sources */,
+				C4170B4E2A89FCA800CE0A65 /* StatisticsViewController.swift in Sources */,
 				C4DBAA3029DD459100D1BB97 /* WithdrawConfirmView.swift in Sources */,
 				C41193FD29D42BD9003DBC15 /* ProfileFooterView.swift in Sources */,
 				C44807E129E648D300D4B090 /* HomeViewController.swift in Sources */,

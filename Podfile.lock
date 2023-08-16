@@ -80,6 +80,11 @@ PODS:
   - ReactorKit (3.2.0):
     - RxSwift (~> 6.0)
     - WeakMapTable (~> 1.1)
+  - RxCocoa (6.5.0):
+    - RxRelay (= 6.5.0)
+    - RxSwift (= 6.5.0)
+  - RxRelay (6.5.0):
+    - RxSwift (= 6.5.0)
   - RxSwift (6.5.0)
   - SnapKit (5.6.0)
   - SwiftKeychainWrapper (4.0.1)
@@ -93,6 +98,7 @@ DEPENDENCIES:
   - Kingfisher (~> 7.0)
   - lottie-ios
   - ReactorKit
+  - RxCocoa (= 6.5.0)
   - SnapKit (~> 5.6.0)
   - SwiftKeychainWrapper
   - Then
@@ -112,6 +118,8 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - ReactorKit
+    - RxCocoa
+    - RxRelay
     - RxSwift
     - SnapKit
     - SwiftKeychainWrapper
@@ -132,12 +140,14 @@ SPEC CHECKSUMS:
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
   ReactorKit: e8b11d6b9c415405f381669b095c154a05b59eca
+  RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
+  RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
   RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
   SwiftKeychainWrapper: 807ba1d63c33a7d0613288512399cd1eda1e470c
   Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
   WeakMapTable: 05c694ce8439a7a9ebabb56187287a63c57673d6
 
-PODFILE CHECKSUM: 27a8fa29b2c9649312e2cae31ced2b62be1c17a8
+PODFILE CHECKSUM: 6d1c28133ce5456431d728200639996dcb5c2d01
 
 COCOAPODS: 1.11.3

@@ -82,10 +82,15 @@ private extension StatisticsHeaderView {
 			$0.attributedText = setSubTextBold()
 			$0.numberOfLines = 2
 		}
+		
+		imageView = imageView.then {
+			$0.image = R.Icon.characterHappy
+			$0.contentMode = .scaleAspectFit
+		}
 	}
 	
 	private func setLayout() {
-		addSubviews(rangeLabel, titleLabel)
+		addSubviews(rangeLabel, titleLabel, imageView)
 
 		rangeLabel.snp.makeConstraints {
 			$0.top.leading.equalToSuperview()
@@ -94,6 +99,11 @@ private extension StatisticsHeaderView {
 		titleLabel.snp.makeConstraints {
 			$0.top.equalTo(rangeLabel.snp.bottom).offset(4)
 			$0.leading.equalToSuperview()
+		}
+		
+		imageView.snp.makeConstraints {
+			$0.leading.greaterThanOrEqualTo(titleLabel.snp.trailing)
+			$0.top.trailing.bottom.equalToSuperview()
 		}
 	}
 }

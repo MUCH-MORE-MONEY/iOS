@@ -84,7 +84,7 @@ extension StatisticsViewController {
 		}
 		
 		monthButton = monthButton.then {
-			$0.frame = .init(origin: .zero, size: .init(width: 150, height: 24))
+			$0.frame = .init(origin: .init(x: 0, y: 0), size: .init(width: 150, height: 24))
 			$0.setTitle(Date().getFormattedDate(format: "M월"), for: .normal)
 			$0.setImage(R.Icon.arrowExpandMore16, for: .normal)
 			$0.setTitleColor(R.Color.white, for: .normal)
@@ -105,7 +105,7 @@ extension StatisticsViewController {
 		
 		headerView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(32)
-			$0.leading.equalToSuperview().inset(24)
+			$0.leading.trailing.equalToSuperview().inset(24)
 		}
 	}
 }

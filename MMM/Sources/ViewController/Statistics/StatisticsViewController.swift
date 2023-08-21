@@ -104,7 +104,7 @@ extension StatisticsViewController {
 		view.addSubviews(headerView)
 		
 		headerView.snp.makeConstraints {
-			$0.top.equalToSuperview().inset(56)
+			$0.top.equalToSuperview().inset(32)
 			$0.leading.equalToSuperview().inset(24)
 		}
 	}

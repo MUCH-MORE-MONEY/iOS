@@ -28,7 +28,9 @@ final class StatisticsHeaderView: UIView {
 //MARK: - Action
 extension StatisticsHeaderView {
 	// 외부에서 설정
-	func 
+	func setData() {
+		
+	}
 	
 	// Text 부분적으로 Bold 처리
 	private func setSubTextBold() -> NSMutableAttributedString {
@@ -70,6 +72,12 @@ private extension StatisticsHeaderView {
 	
 	private func setAttribute() {
 		
+		rangeLabel = rangeLabel.then {
+			$0.text = "08.01 ~ 08.17"
+			$0.font = R.Font.prtendard(family: .medium, size: 12)
+			$0.textColor = R.Color.gray500
+		}
+		
 		titleLabel = titleLabel.then {
 			$0.attributedText = setSubTextBold()
 			$0.numberOfLines = 2
@@ -77,10 +85,15 @@ private extension StatisticsHeaderView {
 	}
 	
 	private func setLayout() {
-		addSubviews(titleLabel)
+		addSubviews(rangeLabel, titleLabel)
 
-		titleLabel.snp.makeConstraints {
+		rangeLabel.snp.makeConstraints {
 			$0.top.leading.equalToSuperview()
+		}
+		
+		titleLabel.snp.makeConstraints {
+			$0.top.equalTo(rangeLabel.snp.bottom).offset(4)
+			$0.leading.equalToSuperview()
 		}
 	}
 }

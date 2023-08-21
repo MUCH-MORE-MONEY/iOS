@@ -9,7 +9,7 @@ import Foundation
 import ReactorKit
 
 final class StatisticsReactor: Reactor {
-	// 상호작용
+	// 사용자의 액션
 	enum Action {
 		case increase
 		case decrease
@@ -30,7 +30,8 @@ final class StatisticsReactor: Reactor {
 	
 	// MARK: Properties
 	let initialState: State
-	
+	let errorRelay = PublishSubject<Error>()
+
 	init() { initialState = State() }
 }
 //MARK: - Mutate, Reduce 함수

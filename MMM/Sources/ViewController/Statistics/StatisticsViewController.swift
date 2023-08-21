@@ -8,13 +8,13 @@
 import Then
 import SnapKit
 import RxSwift
+import RxCocoa
 import ReactorKit
 
 final class StatisticsViewController: UIViewController, View {
 	// MARK: - Properties
 	private var tabBarViewModel: TabBarViewModel
 	var disposeBag: DisposeBag = DisposeBag()
-	var reactor: StatisticsReactor? = StatisticsReactor()
 
 	// MARK: - UI Components
 	private lazy var monthButtonItem = UIBarButtonItem()
@@ -46,28 +46,29 @@ final class StatisticsViewController: UIViewController, View {
 		bindAction(reactor)
 	}
 }
+//MARK: - Action
+extension StatisticsViewController {
+	// Bottom Sheet 설정
+	private func showBottomSheet() {
+		// 달력 Picker
+		
+	}
+}
+
 //MARK: - Bind
 extension StatisticsViewController {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
-	private func bindAction(_ reacotr: StatisticsReactor) {
+	private func bindAction(_ reactor: StatisticsReactor) {
+		monthButton.rx.tap
+			.subscribe(onNext: { [weak self] _ in
+				guard let self = self else { return }
+				self.showBottomSheet() // '월' 변경 버튼
+			}).disposed(by: self.disposeBag)
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: StatisticsReactor) {
-//		reactor.state
-//			.map { $0.isLoading }
-//			.distinctUntilChanged()
-//			.subscribe { isLoading in
-//				print("loading ui ")
-//			}
-//			.disposed(by: disposeBag)
-//
-//		reactor.state
-//			.map { $0.list }
-//			.subscribe { list in
-//				print("list binding ")
-//			}
-//			.disposed(by: disposeBag)
+
 	}
 }
 //MARK: - Style & Layouts

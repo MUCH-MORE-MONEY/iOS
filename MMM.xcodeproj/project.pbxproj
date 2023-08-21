@@ -96,6 +96,7 @@
 		C4170B4E2A89FCA800CE0A65 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B4D2A89FCA800CE0A65 /* StatisticsViewController.swift */; };
 		C4170B502A89FD1100CE0A65 /* StatisticsReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B4F2A89FD1100CE0A65 /* StatisticsReactor.swift */; };
 		C4170B532A937AAC00CE0A65 /* StatisticsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B522A937AAC00CE0A65 /* StatisticsHeaderView.swift */; };
+		C4170B552A93982F00CE0A65 /* StatisticsSatisfactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B542A93982F00CE0A65 /* StatisticsSatisfactionView.swift */; };
 		C4199DD329FE3051006E5DA8 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4199DD229FE3051006E5DA8 /* BottomSheetViewController.swift */; };
 		C4199DD929FE6BE1006E5DA8 /* DatePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4199DD829FE6BE1006E5DA8 /* DatePickerViewController.swift */; };
 		C4199DDD2A001001006E5DA8 /* EconomicActivityResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4199DDC2A001001006E5DA8 /* EconomicActivityResDto.swift */; };
@@ -300,6 +301,7 @@
 		C4170B4D2A89FCA800CE0A65 /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		C4170B4F2A89FD1100CE0A65 /* StatisticsReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsReactor.swift; sourceTree = "<group>"; };
 		C4170B522A937AAC00CE0A65 /* StatisticsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsHeaderView.swift; sourceTree = "<group>"; };
+		C4170B542A93982F00CE0A65 /* StatisticsSatisfactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsSatisfactionView.swift; sourceTree = "<group>"; };
 		C4199DD229FE3051006E5DA8 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
 		C4199DD829FE6BE1006E5DA8 /* DatePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerViewController.swift; sourceTree = "<group>"; };
 		C4199DDC2A001001006E5DA8 /* EconomicActivityResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EconomicActivityResDto.swift; sourceTree = "<group>"; };
@@ -811,6 +813,7 @@
 			isa = PBXGroup;
 			children = (
 				C4170B522A937AAC00CE0A65 /* StatisticsHeaderView.swift */,
+				C4170B542A93982F00CE0A65 /* StatisticsSatisfactionView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1276,6 +1279,7 @@
 				C4DBAA3229DD763D00D1BB97 /* Ex+Int.swift in Sources */,
 				6A0531242A22220D0065DB54 /* StarPickerViewController.swift in Sources */,
 				C4351B4E2A166DB0005F95BE /* SemanticContentAttributeButton.swift in Sources */,
+				C4170B552A93982F00CE0A65 /* StatisticsSatisfactionView.swift in Sources */,
 				6A626BC52A0C87E800BDD5C0 /* HomeDetailViewModel.swift in Sources */,
 				C41193EA29D2D7FE003DBC15 /* MMMResource.swift in Sources */,
 				6ADC27E02A2AEEF400C56777 /* Ex+UIImage.swift in Sources */,

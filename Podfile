@@ -15,6 +15,8 @@ target 'MMM' do
   pod 'lottie-ios'
   pod 'FirebaseAnalytics'
   pod 'ReactorKit'
+  pod 'RxCocoa'
+
   target 'MMMTests' do
     inherit! :search_paths
     # Pods for testing

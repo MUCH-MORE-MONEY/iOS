@@ -28,6 +28,7 @@ final class StatisticsReactor: Reactor {
 		var isLoading = false // 로딩
 	}
 	
+	// MARK: Properties
 	let initialState: State
 	
 	init() { initialState = State() }

@@ -56,6 +56,7 @@ public extension MMMResource {
         public static let iconStarGray16 = UIImage(named: "iconStarGray16", in: .main, compatibleWith: nil)
         public static let iconStarBlack48 = UIImage(named: "iconStarBlack48", in: .main, compatibleWith: nil)
         public static let iconStarGray48 = UIImage(named: "iconStarGray48", in: .main, compatibleWith: nil)
+		public static let iconStarYellow24 = UIImage(named: "iconStarYellow24", in: .main, compatibleWith: nil)
 		
         // MARK: - TabBar Items
         public static let iconGroupActive = UIImage(named: "iconGroupActive", in: .main, compatibleWith: nil)

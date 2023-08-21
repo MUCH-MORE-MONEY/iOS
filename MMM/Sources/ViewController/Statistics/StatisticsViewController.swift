@@ -5,15 +5,20 @@
 //  Created by geonhyeong on 2023/08/14.
 //
 
-import UIKit
 import Then
 import SnapKit
+import RxSwift
+import ReactorKit
 
-final class StatisticsViewController: UIViewController {
+final class StatisticsViewController: UIViewController, View {
 	// MARK: - Properties
 	private var tabBarViewModel: TabBarViewModel
-	
+	var disposeBag: DisposeBag = DisposeBag()
+	var reactor: StatisticsReactor? = StatisticsReactor()
+
 	// MARK: - UI Components
+	private lazy var monthButtonItem = UIBarButtonItem()
+	private lazy var monthButton = SemanticContentAttributeButton()
 
 	init(tabBarViewModel: TabBarViewModel) {
 		self.tabBarViewModel = tabBarViewModel
@@ -30,22 +35,42 @@ final class StatisticsViewController: UIViewController {
 		setup()		// 초기 셋업할 코드들
     }
 }
-//MARK: - Action
-extension StatisticsViewController {
-}
 //MARK: - Style & Layouts
 extension StatisticsViewController {
 	// 초기 셋업할 코드들
 	private func setup() {
-		bind()
 		setAttribute()
 		setLayout()
 	}
 	
-	private func bind() {
-		// MARK: input
+	func bind(reactor: StatisticsReactor) {
+		bindState(reactor)
+		bindAction(reactor)
 	}
 	
+	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
+	private func bindAction(_ reacotr: StatisticsReactor) {
+	
+	}
+	
+	// MARK: 데이터 바인딩 처리 (Reactor -> View)
+	private func bindState(_ reactor: StatisticsReactor) {
+//		reactor.state
+//			.map { $0.isLoading }
+//			.distinctUntilChanged()
+//			.subscribe { isLoading in
+//				print("loading ui ")
+//			}
+//			.disposed(by: disposeBag)
+//
+//		reactor.state
+//			.map { $0.list }
+//			.subscribe { list in
+//				print("list binding ")
+//			}
+//			.disposed(by: disposeBag)
+	}
+		
 	private func setAttribute() {
 	}
 	

@@ -28,8 +28,8 @@ final class StatisticsHeaderView: UIView {
 //MARK: - Action
 extension StatisticsHeaderView {
 	// 외부에서 설정
-	func setData() {
-		
+	func setData(startDate: String, endDate: String) {
+		rangeLabel.text = startDate + " ~ " + endDate
 	}
 	
 	// Text 부분적으로 Bold 처리

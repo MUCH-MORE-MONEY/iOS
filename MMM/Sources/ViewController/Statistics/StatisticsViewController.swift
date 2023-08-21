@@ -20,6 +20,7 @@ final class StatisticsViewController: UIViewController, View {
 	private lazy var monthButtonItem = UIBarButtonItem()
 	private lazy var monthButton: SemanticContentAttributeButton = SemanticContentAttributeButton()
 	private lazy var headerView: StatisticsHeaderView = StatisticsHeaderView()
+	private lazy var satisfactionView: StatisticsSatisfactionView = StatisticsSatisfactionView()
 
 	init(tabBarViewModel: TabBarViewModel) {
 		self.tabBarViewModel = tabBarViewModel
@@ -100,11 +101,17 @@ extension StatisticsViewController {
 	}
 	
 	private func setLayout() {
-		view.addSubviews(headerView)
+		view.addSubviews(headerView, satisfactionView)
 		
 		headerView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(32)
-			$0.leading.trailing.equalToSuperview().inset(24)
+			$0.leading.trailing.equalToSuperview().inset(20)
+		}
+		
+		satisfactionView.snp.makeConstraints {
+			$0.top.equalTo(headerView.snp.bottom)
+			$0.leading.trailing.equalToSuperview().inset(20)
+			$0.height.equalTo(64)
 		}
 	}
 }

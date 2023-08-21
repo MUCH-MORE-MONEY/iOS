@@ -10,6 +10,9 @@ import SnapKit
 
 final class StatisticsSatisfactionView: UIView {
 	// MARK: - UI Components
+	private lazy var titleLabel = UILabel() // 이번 달 경제활동 만족도
+	private lazy var satisfactionLabel = UILabel()
+	private lazy var starImageView = UIImageView() // ⭐️
 
 	override init(frame: CGRect) {
 		super.init(frame: frame)
@@ -31,8 +34,43 @@ private extension StatisticsSatisfactionView {
 	}
 	
 	private func setAttribute() {
+		backgroundColor = R.Color.black
+		layer.cornerRadius = 10
+		
+		titleLabel = titleLabel.then {
+			$0.text = "이번 달 경제활동 만족도"
+			$0.font = R.Font.prtendard(family: .medium, size: 20)
+			$0.textColor = R.Color.white
+		}
+		
+		satisfactionLabel = satisfactionLabel.then {
+			$0.text = "0.0"
+			$0.font = R.Font.prtendard(family: .bold, size: 36)
+			$0.textColor = R.Color.orange500
+		}
+		
+		starImageView = starImageView.then {
+			$0.image = R.Icon.iconStarYellow24
+			$0.contentMode = .scaleAspectFit
+		}
 	}
 	
 	private func setLayout() {
+		addSubviews(titleLabel, satisfactionLabel, starImageView)
+
+		titleLabel.snp.makeConstraints {
+			$0.centerY.equalToSuperview()
+			$0.leading.equalToSuperview().inset(20)
+		}
+		
+		satisfactionLabel.snp.makeConstraints {
+			$0.centerY.equalToSuperview()
+		}
+		
+		starImageView.snp.makeConstraints {
+			$0.centerY.equalToSuperview()
+			$0.leading.equalTo(satisfactionLabel.snp.trailing).offset(8)
+			$0.trailing.equalToSuperview().inset(20)
+		}
 	}
 }

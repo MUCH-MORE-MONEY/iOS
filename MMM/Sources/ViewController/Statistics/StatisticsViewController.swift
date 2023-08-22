@@ -21,6 +21,7 @@ final class StatisticsViewController: UIViewController, View {
 	private lazy var monthButton = SemanticContentAttributeButton()
 	private lazy var scrollView = UIScrollView()
 	private lazy var contentView = UIView()
+	private lazy var refreshView = UIView()
 	private lazy var headerView = StatisticsHeaderView()
 	private lazy var satisfactionView = StatisticsSatisfactionView()
 	private lazy var categoryView = StatisticsCategoryView()
@@ -80,7 +81,7 @@ extension StatisticsViewController {
 //MARK: - Style & Layouts
 extension StatisticsViewController {
 	private func setAttribute() {
-		view.backgroundColor = R.Color.gray900
+		view.backgroundColor = R.Color.gray100
 		
 		// Root View인 NavigationView에 item 수정하기
 		if let navigationController = self.navigationController {
@@ -94,6 +95,10 @@ extension StatisticsViewController {
 			$0.delaysContentTouches = false // highlight 효과가 작동
 			$0.canCancelContentTouches = true
 		}
+		
+		refreshView.backgroundColor = R.Color.gray900
+		
+		contentView.backgroundColor = R.Color.gray900
 			
 		let view = UIView(frame: .init(origin: .zero, size: .init(width: 80, height: 30)))
 		monthButton = monthButton.then {
@@ -115,8 +120,8 @@ extension StatisticsViewController {
 	}
 	
 	private func setLayout() {
-		view.addSubview(scrollView)
-		scrollView.addSubview(contentView)
+		view.addSubviews(scrollView)
+		scrollView.addSubviews(refreshView, contentView)
 		contentView.addSubviews(headerView, satisfactionView, categoryView, activityView, selectAreaView)
 		
 		scrollView.snp.makeConstraints {
@@ -124,8 +129,13 @@ extension StatisticsViewController {
 			$0.bottom.equalTo(view).inset(82) // TabBar Height
 		}
 		
+		refreshView.snp.makeConstraints {
+			$0.top.leading.trailing.equalTo(view)
+			$0.bottom.greaterThanOrEqualTo(contentView.snp.top)
+		}
+		
 		contentView.snp.makeConstraints {
-			$0.edges.equalTo(scrollView)
+			$0.top.bottom.equalTo(scrollView)
 			$0.leading.trailing.equalTo(view)
 		}
 		

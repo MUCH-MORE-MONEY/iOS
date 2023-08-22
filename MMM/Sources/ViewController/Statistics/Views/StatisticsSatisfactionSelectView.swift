@@ -7,8 +7,13 @@
 
 import Then
 import SnapKit
+import ReactorKit
+import RxGesture
 
-final class StatisticsSatisfactionSelectView: UIView {
+final class StatisticsSatisfactionSelectView: UIView, View {
+	// MARK: - Properties
+	var disposeBag: DisposeBag = DisposeBag()
+	
 	// MARK: - UI Components
 	private lazy var touchAreaView = UIView()
 	private lazy var titleLabel = UILabel()
@@ -30,7 +35,26 @@ final class StatisticsSatisfactionSelectView: UIView {
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
+	
+	func bind(reactor: StatisticsReactor) {
+		bindState(reactor)
+		bindAction(reactor)
+	}
 }
+//MARK: - Bind
+extension StatisticsSatisfactionSelectView {
+	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
+	private func bindAction(_ reactor: StatisticsReactor) {
+		touchAreaView.rx.tapGesture()
+			.subscribe(onNext: { _ in
+				print("tab")
+			}).disposed(by: self.disposeBag)
+	}
+	
+	// MARK: 데이터 바인딩 처리 (Reactor -> View)
+	private func bindState(_ reactor: StatisticsReactor) {}
+}
+
 //MARK: - Style & Layouts
 private extension StatisticsSatisfactionSelectView {
 	// 초기 셋업할 코드들

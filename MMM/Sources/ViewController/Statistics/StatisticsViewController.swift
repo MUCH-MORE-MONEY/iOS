@@ -97,7 +97,6 @@ extension StatisticsViewController {
 		}
 		
 		refreshView.backgroundColor = R.Color.gray900
-		
 		contentView.backgroundColor = R.Color.gray900
 			
 		let view = UIView(frame: .init(origin: .zero, size: .init(width: 80, height: 30)))
@@ -117,6 +116,9 @@ extension StatisticsViewController {
 		monthButtonItem = monthButtonItem.then {
 			$0.customView = view
 		}
+		
+		// reactor 주입
+		selectAreaView.reactor = self.reactor
 	}
 	
 	private func setLayout() {

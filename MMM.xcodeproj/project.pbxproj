@@ -99,6 +99,7 @@
 		C4170B552A93982F00CE0A65 /* StatisticsSatisfactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B542A93982F00CE0A65 /* StatisticsSatisfactionView.swift */; };
 		C4170B572A93A58A00CE0A65 /* StatisticsCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B562A93A58A00CE0A65 /* StatisticsCategoryView.swift */; };
 		C4170B592A94853400CE0A65 /* StatisticsActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B582A94853400CE0A65 /* StatisticsActivityView.swift */; };
+		C4170B5D2A94BA9000CE0A65 /* StatisticsSatisfactionSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B5C2A94BA9000CE0A65 /* StatisticsSatisfactionSelectView.swift */; };
 		C4199DD329FE3051006E5DA8 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4199DD229FE3051006E5DA8 /* BottomSheetViewController.swift */; };
 		C4199DD929FE6BE1006E5DA8 /* DatePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4199DD829FE6BE1006E5DA8 /* DatePickerViewController.swift */; };
 		C4199DDD2A001001006E5DA8 /* EconomicActivityResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4199DDC2A001001006E5DA8 /* EconomicActivityResDto.swift */; };
@@ -306,6 +307,7 @@
 		C4170B542A93982F00CE0A65 /* StatisticsSatisfactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsSatisfactionView.swift; sourceTree = "<group>"; };
 		C4170B562A93A58A00CE0A65 /* StatisticsCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsCategoryView.swift; sourceTree = "<group>"; };
 		C4170B582A94853400CE0A65 /* StatisticsActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsActivityView.swift; sourceTree = "<group>"; };
+		C4170B5C2A94BA9000CE0A65 /* StatisticsSatisfactionSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsSatisfactionSelectView.swift; sourceTree = "<group>"; };
 		C4199DD229FE3051006E5DA8 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
 		C4199DD829FE6BE1006E5DA8 /* DatePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerViewController.swift; sourceTree = "<group>"; };
 		C4199DDC2A001001006E5DA8 /* EconomicActivityResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EconomicActivityResDto.swift; sourceTree = "<group>"; };
@@ -820,6 +822,7 @@
 				C4170B562A93A58A00CE0A65 /* StatisticsCategoryView.swift */,
 				C4170B522A937AAC00CE0A65 /* StatisticsHeaderView.swift */,
 				C4170B542A93982F00CE0A65 /* StatisticsSatisfactionView.swift */,
+				C4170B5C2A94BA9000CE0A65 /* StatisticsSatisfactionSelectView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1252,6 +1255,7 @@
 				6A0D5B992A4C0E3300958E72 /* ToastView.swift in Sources */,
 				C4351B4A2A15C935005F95BE /* HomeFilterViewController.swift in Sources */,
 				6A1322E92A088DD700CEEC81 /* BaseDetailViewController.swift in Sources */,
+				C4170B5D2A94BA9000CE0A65 /* StatisticsSatisfactionSelectView.swift in Sources */,
 				C4170B532A937AAC00CE0A65 /* StatisticsHeaderView.swift in Sources */,
 				C41193E329D287E6003DBC15 /* Ex+KeychainWrapper.swift in Sources */,
 				C4199DD329FE3051006E5DA8 /* BottomSheetViewController.swift in Sources */,

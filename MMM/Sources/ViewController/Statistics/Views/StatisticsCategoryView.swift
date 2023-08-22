@@ -14,7 +14,6 @@ final class StatisticsCategoryView: UIView {
 	private lazy var moreButton = UIButton() 		 // 더보기
 	private lazy var payLabel = UILabel() 			 // 지출
 	private lazy var payRankLabel = UILabel() 	 	 // 지출 랭킹
-	private lazy var payBarImageView = UIImageView() // 지출바
 	private lazy var earnLabel = UILabel() 			 // 수입
 	private lazy var earnRankLabel = UILabel() 	 	 // 수입 랭킹
 
@@ -80,7 +79,7 @@ private extension StatisticsCategoryView {
 	}
 	
 	private func setLayout() {
-		addSubviews(titleLabel, moreButton, payLabel, payRankLabel, payBarImageView, earnLabel, earnRankLabel)
+		addSubviews(titleLabel, moreButton, payLabel, payRankLabel, earnLabel, earnRankLabel)
 		
 		titleLabel.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(12)

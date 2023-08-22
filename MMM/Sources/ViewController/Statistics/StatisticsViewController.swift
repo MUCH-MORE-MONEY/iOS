@@ -18,13 +18,14 @@ final class StatisticsViewController: UIViewController, View {
 
 	// MARK: - UI Components
 	private lazy var monthButtonItem = UIBarButtonItem()
-	private lazy var monthButton: SemanticContentAttributeButton = SemanticContentAttributeButton()
+	private lazy var monthButton = SemanticContentAttributeButton()
 	private lazy var scrollView = UIScrollView()
 	private lazy var contentView = UIView()
-	private lazy var headerView: StatisticsHeaderView = StatisticsHeaderView()
-	private lazy var satisfactionView: StatisticsSatisfactionView = StatisticsSatisfactionView()
-	private lazy var categoryView: StatisticsCategoryView = StatisticsCategoryView()
-	private lazy var activityView: StatisticsActivityView = StatisticsActivityView()
+	private lazy var headerView = StatisticsHeaderView()
+	private lazy var satisfactionView = StatisticsSatisfactionView()
+	private lazy var categoryView = StatisticsCategoryView()
+	private lazy var activityView = StatisticsActivityView()
+	private lazy var selectAreaView = StatisticsSatisfactionSelectView()
 
 	init(tabBarViewModel: TabBarViewModel) {
 		self.tabBarViewModel = tabBarViewModel
@@ -116,7 +117,7 @@ extension StatisticsViewController {
 	private func setLayout() {
 		view.addSubview(scrollView)
 		scrollView.addSubview(contentView)
-		contentView.addSubviews(headerView, satisfactionView, categoryView, activityView)
+		contentView.addSubviews(headerView, satisfactionView, categoryView, activityView, selectAreaView)
 		
 		scrollView.snp.makeConstraints {
 			$0.top.leading.trailing.equalToSuperview()
@@ -125,32 +126,38 @@ extension StatisticsViewController {
 		
 		contentView.snp.makeConstraints {
 			$0.top.bottom.equalTo(scrollView)
-			$0.leading.trailing.equalTo(view).inset(20)
+			$0.leading.trailing.equalTo(view)
 			$0.height.equalTo(view)
 		}
 		
 		headerView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(32)
-			$0.leading.equalToSuperview().inset(4)
-			$0.trailing.equalToSuperview()
+			$0.leading.equalToSuperview().inset(24)
+			$0.trailing.equalToSuperview().inset(20)
 		}
 		
 		satisfactionView.snp.makeConstraints {
 			$0.top.equalTo(headerView.snp.bottom)
-			$0.leading.trailing.equalToSuperview()
+			$0.leading.trailing.equalToSuperview().inset(20)
 			$0.height.equalTo(64)
 		}
 		
 		categoryView.snp.makeConstraints {
 			$0.top.equalTo(satisfactionView.snp.bottom).offset(16)
-			$0.leading.trailing.equalToSuperview()
+			$0.leading.trailing.equalToSuperview().inset(20)
 			$0.height.equalTo(113)
 		}
 		
 		activityView.snp.makeConstraints {
 			$0.top.equalTo(categoryView.snp.bottom).offset(16)
-			$0.leading.trailing.equalToSuperview()
+			$0.leading.trailing.equalToSuperview().inset(20)
 			$0.height.equalTo(100)
+		}
+		
+		selectAreaView.snp.makeConstraints {
+			$0.top.equalTo(activityView.snp.bottom).offset(58)
+			$0.leading.trailing.equalToSuperview()
+			$0.height.equalTo(300)
 		}
 	}
 }

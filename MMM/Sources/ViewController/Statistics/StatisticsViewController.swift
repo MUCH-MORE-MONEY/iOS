@@ -120,14 +120,13 @@ extension StatisticsViewController {
 		contentView.addSubviews(headerView, satisfactionView, categoryView, activityView, selectAreaView)
 		
 		scrollView.snp.makeConstraints {
-			$0.top.leading.trailing.equalToSuperview()
-			$0.bottom.equalTo(view.safeAreaLayoutGuide)
+			$0.top.leading.trailing.equalTo(view)
+			$0.bottom.equalTo(view).inset(82) // TabBar Height
 		}
 		
 		contentView.snp.makeConstraints {
-			$0.top.bottom.equalTo(scrollView)
+			$0.edges.equalTo(scrollView)
 			$0.leading.trailing.equalTo(view)
-			$0.height.equalTo(view)
 		}
 		
 		headerView.snp.makeConstraints {
@@ -157,6 +156,7 @@ extension StatisticsViewController {
 		selectAreaView.snp.makeConstraints {
 			$0.top.equalTo(activityView.snp.bottom).offset(58)
 			$0.leading.trailing.equalToSuperview()
+			$0.bottom.equalTo(contentView)
 			$0.height.equalTo(300)
 		}
 	}

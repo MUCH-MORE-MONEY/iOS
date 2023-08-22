@@ -16,6 +16,7 @@ target 'MMM' do
   pod 'FirebaseAnalytics'
   pod 'ReactorKit'
   pod 'RxCocoa'
+  pod 'RxGesture'
 
   target 'MMMTests' do
     inherit! :search_paths

@@ -127,7 +127,8 @@ extension StatisticsViewController {
 		
 		headerView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(32)
-			$0.leading.trailing.equalToSuperview().inset(4)
+			$0.leading.equalToSuperview().inset(4)
+			$0.trailing.equalToSuperview()
 		}
 		
 		satisfactionView.snp.makeConstraints {

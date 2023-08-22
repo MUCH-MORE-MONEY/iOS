@@ -66,11 +66,6 @@ private extension StatisticsCategoryView {
 			$0.textColor = R.Color.gray500
 		}
 		
-		payBarImageView = payBarImageView.then {
-			$0.image = R.Icon.payBar
-			$0.contentMode = .scaleAspectFit
-		}
-		
 		earnLabel = earnLabel.then {
 			$0.text = "수입"
 			$0.font = R.Font.body4

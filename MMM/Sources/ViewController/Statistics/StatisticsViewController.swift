@@ -22,6 +22,7 @@ final class StatisticsViewController: UIViewController, View {
 	private lazy var headerView: StatisticsHeaderView = StatisticsHeaderView()
 	private lazy var satisfactionView: StatisticsSatisfactionView = StatisticsSatisfactionView()
 	private lazy var categoryView: StatisticsCategoryView = StatisticsCategoryView()
+	private lazy var activityView: StatisticsActivityView = StatisticsActivityView()
 
 	init(tabBarViewModel: TabBarViewModel) {
 		self.tabBarViewModel = tabBarViewModel
@@ -103,7 +104,7 @@ extension StatisticsViewController {
 	}
 	
 	private func setLayout() {
-		view.addSubviews(headerView, satisfactionView, categoryView)
+		view.addSubviews(headerView, satisfactionView, categoryView, activityView)
 		
 		headerView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(32)
@@ -120,6 +121,12 @@ extension StatisticsViewController {
 			$0.top.equalTo(satisfactionView.snp.bottom).offset(16)
 			$0.leading.trailing.equalToSuperview().inset(20)
 			$0.height.equalTo(113)
+		}
+		
+		activityView.snp.makeConstraints {
+			$0.top.equalTo(categoryView.snp.bottom).offset(16)
+			$0.leading.trailing.equalToSuperview().inset(20)
+			$0.height.equalTo(100)
 		}
 	}
 }

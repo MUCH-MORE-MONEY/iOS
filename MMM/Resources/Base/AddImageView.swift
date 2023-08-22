@@ -47,7 +47,6 @@ extension AddImageView {
         backgroundView = backgroundView.then {
             $0.backgroundColor = R.Color.gray200
             $0.layer.cornerRadius = 4
-
         }
         
         stackView = stackView.then {

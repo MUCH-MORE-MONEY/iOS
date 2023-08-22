@@ -40,7 +40,7 @@ extension StatisticsHeaderView {
 		
 		// 일반 Text 속성
 		let paragraphStyle = NSMutableParagraphStyle()
-		paragraphStyle.lineSpacing = 2
+		paragraphStyle.lineSpacing = 4
 		let textAttributes1: [NSAttributedString.Key : Any] = [
 			.font: R.Font.body1,
 			.foregroundColor: R.Color.white,
@@ -96,7 +96,7 @@ private extension StatisticsHeaderView {
 		}
 		
 		titleLabel.snp.makeConstraints {
-			$0.top.equalTo(rangeLabel.snp.bottom).offset(4)
+			$0.top.equalTo(rangeLabel.snp.bottom).offset(6)
 			$0.leading.equalToSuperview()
 		}
 		

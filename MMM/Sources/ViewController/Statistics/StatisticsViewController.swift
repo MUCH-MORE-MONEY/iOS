@@ -91,9 +91,10 @@ extension StatisticsViewController {
 		scrollView = scrollView.then {
 			$0.showsVerticalScrollIndicator = false // bar 숨기기
 		}
-		
+			
+		let view = UIView(frame: .init(origin: .zero, size: .init(width: 80, height: 30)))
 		monthButton = monthButton.then {
-			$0.frame = .init(origin: .init(x: 0, y: 0), size: .init(width: 150, height: 24))
+			$0.frame = .init(origin: .init(x: 8, y: 0), size: .init(width: 80, height: 30))
 			$0.setTitle(Date().getFormattedDate(format: "M월"), for: .normal)
 			$0.setImage(R.Icon.arrowExpandMore16, for: .normal)
 			$0.setTitleColor(R.Color.white, for: .normal)
@@ -101,11 +102,12 @@ extension StatisticsViewController {
 			$0.imageView?.contentMode = .scaleAspectFit
 			$0.titleLabel?.font = R.Font.h5
 			$0.contentHorizontalAlignment = .left
-			$0.imageEdgeInsets = .init(top: 0, left: 11, bottom: 0, right: 0) // 이미지 여백
+			$0.imageEdgeInsets = .init(top: 0, left: 8, bottom: 0, right: 0) // 이미지 여백
 		}
-		
+		view.addSubview(monthButton)
+
 		monthButtonItem = monthButtonItem.then {
-			$0.customView = monthButton
+			$0.customView = view
 		}
 	}
 	

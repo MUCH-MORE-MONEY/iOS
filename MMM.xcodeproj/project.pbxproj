@@ -98,6 +98,7 @@
 		C4170B532A937AAC00CE0A65 /* StatisticsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B522A937AAC00CE0A65 /* StatisticsHeaderView.swift */; };
 		C4170B552A93982F00CE0A65 /* StatisticsSatisfactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B542A93982F00CE0A65 /* StatisticsSatisfactionView.swift */; };
 		C4170B572A93A58A00CE0A65 /* StatisticsCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B562A93A58A00CE0A65 /* StatisticsCategoryView.swift */; };
+		C4170B592A94853400CE0A65 /* StatisticsActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B582A94853400CE0A65 /* StatisticsActivityView.swift */; };
 		C4199DD329FE3051006E5DA8 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4199DD229FE3051006E5DA8 /* BottomSheetViewController.swift */; };
 		C4199DD929FE6BE1006E5DA8 /* DatePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4199DD829FE6BE1006E5DA8 /* DatePickerViewController.swift */; };
 		C4199DDD2A001001006E5DA8 /* EconomicActivityResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4199DDC2A001001006E5DA8 /* EconomicActivityResDto.swift */; };
@@ -304,6 +305,7 @@
 		C4170B522A937AAC00CE0A65 /* StatisticsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsHeaderView.swift; sourceTree = "<group>"; };
 		C4170B542A93982F00CE0A65 /* StatisticsSatisfactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsSatisfactionView.swift; sourceTree = "<group>"; };
 		C4170B562A93A58A00CE0A65 /* StatisticsCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsCategoryView.swift; sourceTree = "<group>"; };
+		C4170B582A94853400CE0A65 /* StatisticsActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsActivityView.swift; sourceTree = "<group>"; };
 		C4199DD229FE3051006E5DA8 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
 		C4199DD829FE6BE1006E5DA8 /* DatePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerViewController.swift; sourceTree = "<group>"; };
 		C4199DDC2A001001006E5DA8 /* EconomicActivityResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EconomicActivityResDto.swift; sourceTree = "<group>"; };
@@ -814,6 +816,7 @@
 		C4170B512A937A8400CE0A65 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C4170B582A94853400CE0A65 /* StatisticsActivityView.swift */,
 				C4170B562A93A58A00CE0A65 /* StatisticsCategoryView.swift */,
 				C4170B522A937AAC00CE0A65 /* StatisticsHeaderView.swift */,
 				C4170B542A93982F00CE0A65 /* StatisticsSatisfactionView.swift */,
@@ -1276,6 +1279,7 @@
 				6AB1151329EE6D9E00D3B813 /* Ex+UITabBar.swift in Sources */,
 				C4351B502A1691FB005F95BE /* HighlightViewController.swift in Sources */,
 				6A04FA092A1C7EE80034C114 /* EditActivityViewModel.swift in Sources */,
+				C4170B592A94853400CE0A65 /* StatisticsActivityView.swift in Sources */,
 				C4EA5B4229FA26E0008D1564 /* HomeHeaderStackView.swift in Sources */,
 				6A4313E22A13046E00095041 /* BottomPageControlView.swift in Sources */,
 				C4C792A62A358517007FD6AA /* SummaryResDto.swift in Sources */,

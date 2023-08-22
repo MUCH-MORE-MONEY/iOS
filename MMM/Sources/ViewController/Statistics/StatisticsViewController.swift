@@ -21,6 +21,7 @@ final class StatisticsViewController: UIViewController, View {
 	private lazy var monthButton: SemanticContentAttributeButton = SemanticContentAttributeButton()
 	private lazy var headerView: StatisticsHeaderView = StatisticsHeaderView()
 	private lazy var satisfactionView: StatisticsSatisfactionView = StatisticsSatisfactionView()
+	private lazy var categoryView: StatisticsCategoryView = StatisticsCategoryView()
 
 	init(tabBarViewModel: TabBarViewModel) {
 		self.tabBarViewModel = tabBarViewModel
@@ -53,6 +54,7 @@ extension StatisticsViewController {
 	// Bottom Sheet 설정
 	private func showBottomSheet() {
 		// 달력 Picker
+		
 	}
 }
 //MARK: - Bind
@@ -101,7 +103,7 @@ extension StatisticsViewController {
 	}
 	
 	private func setLayout() {
-		view.addSubviews(headerView, satisfactionView)
+		view.addSubviews(headerView, satisfactionView, categoryView)
 		
 		headerView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(32)
@@ -112,6 +114,12 @@ extension StatisticsViewController {
 			$0.top.equalTo(headerView.snp.bottom)
 			$0.leading.trailing.equalToSuperview().inset(20)
 			$0.height.equalTo(64)
+		}
+		
+		categoryView.snp.makeConstraints {
+			$0.top.equalTo(satisfactionView.snp.bottom).offset(16)
+			$0.leading.trailing.equalToSuperview().inset(20)
+			$0.height.equalTo(113)
 		}
 	}
 }

@@ -90,6 +90,8 @@ extension StatisticsViewController {
 		
 		scrollView = scrollView.then {
 			$0.showsVerticalScrollIndicator = false // bar 숨기기
+			$0.delaysContentTouches = false // highlight 효과가 작동
+			$0.canCancelContentTouches = true
 		}
 			
 		let view = UIView(frame: .init(origin: .zero, size: .init(width: 80, height: 30)))

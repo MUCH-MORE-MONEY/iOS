@@ -19,6 +19,8 @@ final class StatisticsViewController: UIViewController, View {
 	// MARK: - UI Components
 	private lazy var monthButtonItem = UIBarButtonItem()
 	private lazy var monthButton: SemanticContentAttributeButton = SemanticContentAttributeButton()
+	private lazy var scrollView = UIScrollView()
+	private lazy var contentView = UIView()
 	private lazy var headerView: StatisticsHeaderView = StatisticsHeaderView()
 	private lazy var satisfactionView: StatisticsSatisfactionView = StatisticsSatisfactionView()
 	private lazy var categoryView: StatisticsCategoryView = StatisticsCategoryView()
@@ -104,28 +106,41 @@ extension StatisticsViewController {
 	}
 	
 	private func setLayout() {
-		view.addSubviews(headerView, satisfactionView, categoryView, activityView)
+		view.addSubview(scrollView)
+		scrollView.addSubview(contentView)
+		contentView.addSubviews(headerView, satisfactionView, categoryView, activityView)
+		
+		scrollView.snp.makeConstraints {
+			$0.top.leading.trailing.equalToSuperview()
+			$0.bottom.equalTo(view.safeAreaLayoutGuide)
+		}
+		
+		contentView.snp.makeConstraints {
+			$0.top.bottom.equalTo(scrollView)
+			$0.leading.trailing.equalTo(view).inset(20)
+			$0.height.equalTo(view)
+		}
 		
 		headerView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(32)
-			$0.leading.trailing.equalToSuperview().inset(20)
+			$0.leading.trailing.equalToSuperview().inset(4)
 		}
 		
 		satisfactionView.snp.makeConstraints {
 			$0.top.equalTo(headerView.snp.bottom)
-			$0.leading.trailing.equalToSuperview().inset(20)
+			$0.leading.trailing.equalToSuperview()
 			$0.height.equalTo(64)
 		}
 		
 		categoryView.snp.makeConstraints {
 			$0.top.equalTo(satisfactionView.snp.bottom).offset(16)
-			$0.leading.trailing.equalToSuperview().inset(20)
+			$0.leading.trailing.equalToSuperview()
 			$0.height.equalTo(113)
 		}
 		
 		activityView.snp.makeConstraints {
 			$0.top.equalTo(categoryView.snp.bottom).offset(16)
-			$0.leading.trailing.equalToSuperview().inset(20)
+			$0.leading.trailing.equalToSuperview()
 			$0.height.equalTo(100)
 		}
 	}

@@ -88,6 +88,10 @@ extension StatisticsViewController {
 			}
 		}
 		
+		scrollView = scrollView.then {
+			$0.showsVerticalScrollIndicator = false // bar 숨기기
+		}
+		
 		monthButton = monthButton.then {
 			$0.frame = .init(origin: .init(x: 0, y: 0), size: .init(width: 150, height: 24))
 			$0.setTitle(Date().getFormattedDate(format: "M월"), for: .normal)

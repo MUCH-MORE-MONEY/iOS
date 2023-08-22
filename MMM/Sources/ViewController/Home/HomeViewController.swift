@@ -271,7 +271,7 @@ private extension HomeViewController {
 	
 	private func setAttribute() {
 		// [view]
-		view.backgroundColor = R.Color.gray100
+		view.backgroundColor = R.Color.gray900
 		view.addGestureRecognizer(self.scopeGesture)
 		
 		if let navigationController = self.navigationController {
@@ -310,16 +310,16 @@ private extension HomeViewController {
 			$0.customView = view
 		}
 		
-		rightBarItem = rightBarItem.then {
-			$0.customView = righthStackView
-		}
-		
+		let rightView = UIView(frame: .init(origin: .zero, size: .init(width: 92, height: 30)))
 		righthStackView = righthStackView.then {
-			$0.distribution = .equalSpacing
 			$0.axis = .horizontal
-			$0.alignment = .center
-			$0.spacing = 18.66
+			$0.spacing = 16
 			$0.addArrangedSubviews(todayButton, filterButton)
+		}
+		rightView.addSubview(righthStackView)
+		
+		rightBarItem = rightBarItem.then {
+			$0.customView = rightView
 		}
 		
 		todayButton = todayButton.then {
@@ -428,6 +428,10 @@ private extension HomeViewController {
 			$0.height.equalTo(24)
 		}
 		
+		righthStackView.snp.makeConstraints {
+			$0.width.equalTo(90)
+		}
+		
 		separator.snp.makeConstraints {
 			$0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(15)
 			$0.top.equalTo(view.safeAreaLayoutGuide)
@@ -435,23 +439,25 @@ private extension HomeViewController {
 		}
 		
 		calendarHeaderView.snp.makeConstraints {
-			$0.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+			$0.top.equalTo(view.safeAreaLayoutGuide)
+			$0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(8)
 			$0.height.equalTo(46)
 		}
 				
 		calendar.snp.makeConstraints {
 			$0.top.equalTo(calendarHeaderView.snp.bottom)
-			$0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+			$0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(8)
 			$0.height.equalTo(300) // 기기 대응 - UIScreen.height * 0.37
 		}
 
 		dayLabel.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(16)
-			$0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(20)
+			$0.leading.equalToSuperview().inset(24)
 		}
 		
 		tableView.snp.makeConstraints {
-			$0.bottom.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+			$0.leading.trailing.equalToSuperview()
+			$0.bottom.equalTo(view.safeAreaLayoutGuide)
 			$0.top.equalTo(calendar.snp.bottom)
 		}
 		

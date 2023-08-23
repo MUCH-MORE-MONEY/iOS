@@ -1,32 +1,37 @@
 //
-//  DatePicker2ViewController.swift
+//  StatisticsSatisfactionSelectViewController.swift
 //  MMM
 //
-//  Created by geonhyeong on 2023/08/22.
+//  Created by geonhyeong on 2023/08/23.
 //
 
-import UIKit
 import Combine
 import Then
 import SnapKit
 import ReactorKit
 
-final class DatePicker2ViewController: UIViewController, View {
+final class StatisticsSatisfactionSelectViewController: UIViewController, View {
+	typealias Reactor = BottomSheetReactor
+
+	enum Satisfaction: Int {
+		case low	// 1~2점
+		case middle	// 3점
+		case hight	// 4~5점
+	}
+	
 	// MARK: - Properties
 	private var isDark: Bool = false
-	private var date: Date
+	private var satisfaction: Satisfaction
 	weak var delegate: BottomSheetChild?
 	var disposeBag: DisposeBag = DisposeBag()
 
 	// MARK: - UI Components
-	private lazy var stackView = UIStackView() // 날짜 이동 Label, 확인 Button
+	private lazy var stackView = UIStackView() // Title Label, 확인 Button
 	private lazy var titleLabel = UILabel()
 	private lazy var checkButton = UIButton()
-	private lazy var datePicker = UIDatePicker()
-	private lazy var monthPicker = UIPickerView()
 	
-	init(date: Date = Date()) {
-		self.date = date
+	init(satisfaction: Satisfaction) {
+		self.satisfaction = satisfaction
 		super.init(nibName: nil, bundle: nil)
 	}
 	
@@ -53,7 +58,7 @@ final class DatePicker2ViewController: UIViewController, View {
 	}
 }
 //MARK: - Action
-extension DatePicker2ViewController {
+extension StatisticsSatisfactionSelectViewController {
 	// 외부에서 설정
 	func setData(title: String, isDark: Bool = false) {
 		DispatchQueue.main.async {
@@ -63,12 +68,12 @@ extension DatePicker2ViewController {
 	}
 }
 //MARK: - Bind
-extension DatePicker2ViewController {
+extension StatisticsSatisfactionSelectViewController {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
 	private func bindAction(_ reactor: BottomSheetReactor) {
 		// 확인 버튼
 		checkButton.rx.tap
-			.map { .didTapDateCheckButton(date: self.datePicker.date) }
+			.map { .didTapSatisfactionCheckButton(type: self.satisfaction.rawValue) }
 			.bind(to: reactor.action)
 			.disposed(by: disposeBag)
 	}
@@ -76,8 +81,8 @@ extension DatePicker2ViewController {
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: BottomSheetReactor) {
 		reactor.state
-			.map { $0.success }
-			.subscribe { [weak self] date in
+			.map { $0.successBySatisfaction }
+			.subscribe { [weak self] satisfaction in
 				guard let self = self else { return }
 				self.delegate?.willDismiss()
 			}
@@ -85,7 +90,7 @@ extension DatePicker2ViewController {
 	}
 }
 //MARK: - Style & Layouts
-private extension DatePicker2ViewController {
+private extension StatisticsSatisfactionSelectViewController {
 	private func setAttribute() {
 		self.view.backgroundColor = isDark ? R.Color.gray900 : .white
 		
@@ -110,33 +115,16 @@ private extension DatePicker2ViewController {
 			$0.titleLabel?.font = R.Font.title3
 			$0.contentEdgeInsets = .init(top: 10, left: 10, bottom: 10, right: 10) // touch 영역 늘리기
 		}
-		
-		datePicker = datePicker.then {
-			$0.date = date
-			$0.preferredDatePickerStyle = .wheels
-			$0.datePickerMode = .date
-			$0.setValue(isDark ? R.Color.gray200 : R.Color.black, forKeyPath: "textColor")
-		}
-		
-//		monthPicker = monthPicker.then {
-//			$0.delegate = self
-//			$0.dataSource = self
-//		}
 	}
 	
 	private func setLayout() {
+		view.addSubviews(stackView)
 		stackView.addArrangedSubviews(titleLabel, checkButton)
-		view.addSubviews(stackView, datePicker)
 		
 		stackView.snp.makeConstraints {
 			$0.top.equalToSuperview()
 			$0.leading.equalToSuperview().inset(24)
 			$0.trailing.equalToSuperview().inset(28)
-		}
-		
-		datePicker.snp.makeConstraints {
-			$0.top.equalTo(stackView.snp.bottom).offset(16)
-			$0.leading.trailing.equalToSuperview().inset(38.5)
 		}
 	}
 }

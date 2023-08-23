@@ -54,7 +54,7 @@ final class StatisticsViewController: UIViewController, View {
 //MARK: - Action
 extension StatisticsViewController {
 	// Bottom Sheet 설정
-	private func showBottomSheet() {
+	private func presentBottomSheet() {
 		// 달력 Picker
 		let vc = DatePicker2ViewController()
 		let bottomSheetVC = BottomSheetViewController(contentViewController: vc)
@@ -67,9 +67,22 @@ extension StatisticsViewController {
 	}
 	
 	// 카테고리 더보기
-	private func presentCategoryViewController(_ isPresent: Bool) {
+	private func pushCategoryViewController(_ isPresent: Bool) {
 		let vc = CategoryViewController()
 		navigationController?.pushViewController(vc, animated: true)
+	}
+	
+	// 만족도 보기
+	private func presentStisfactionViewController(_ isPresent: Bool) {
+		// 달력 Picker
+		let vc = StatisticsSatisfactionSelectViewController(satisfaction: .low)
+		let bottomSheetVC = BottomSheetViewController(contentViewController: vc)
+		vc.reactor = bottomSheetReactor
+		vc.setData(title: "만족도 모아보기")
+		vc.delegate = bottomSheetVC
+		bottomSheetVC.modalPresentationStyle = .overFullScreen
+		bottomSheetVC.setSetting(height: 276)
+		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
 	}
 	
 	/// '월'  변경
@@ -88,7 +101,7 @@ extension StatisticsViewController {
 		monthButton.rx.tap
 			.subscribe(onNext: { [weak self] _ in
 				guard let self = self else { return }
-				self.showBottomSheet() // '월' 변경 버튼
+				self.presentBottomSheet() // '월' 변경 버튼
 			}).disposed(by: disposeBag)
 	}
 	
@@ -102,10 +115,18 @@ extension StatisticsViewController {
 
 		// 카테고리 더보기 클릭시, 화면전환
 		reactor.state
-			.map { $0.isPresentMoreCartegory }
+			.map { $0.isPushMoreCartegory }
 			.distinctUntilChanged() // 중복값 무시
 			.filter { $0 } // true일때만 화면 전환
-			.bind(onNext: presentCategoryViewController)
+			.bind(onNext: pushCategoryViewController)
+			.disposed(by: disposeBag)
+		
+		// 만족도 선택시, present
+		reactor.state
+			.map { $0.isPresentSatisfaction }
+			.distinctUntilChanged() // 중복값 무시
+			.filter { $0 } // true일때만 화면 전환
+			.bind(onNext: presentStisfactionViewController)
 			.disposed(by: disposeBag)
 	}
 }

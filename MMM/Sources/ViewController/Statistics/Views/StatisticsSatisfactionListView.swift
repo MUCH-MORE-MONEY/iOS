@@ -46,9 +46,10 @@ extension StatisticsSatisfactionListView {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
 	private func bindAction(_ reactor: StatisticsReactor) {
 		touchAreaView.rx.tapGesture()
-			.subscribe(onNext: { _ in
-				print("tab") // 오류: 처음 시작할때 실행된다.
-			}).disposed(by: disposeBag)
+			.when(.recognized) // 바인딩 할때 event emit 방지
+			.map { _ in .didTapSatisfactionButton }
+			.bind(to: reactor.action)
+			.disposed(by: disposeBag)
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)

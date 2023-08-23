@@ -11,17 +11,20 @@ import ReactorKit
 final class BottomSheetReactor: Reactor {
 	// 사용자의 액션
 	enum Action {
-		case didTapCheckButton(date: Date)
+		case didTapDateCheckButton(date: Date) // 월
+		case didTapSatisfactionCheckButton(type: Int) // 만족도
 	}
 	
 	// 처리 단위
 	enum Mutation {
 		case updateData(Date)
+		case updateDataBySatisfaction(Int)
 	}
 	
 	// 현재 상태를 기록
 	struct State {
 		var success: Date = Date()
+		var successBySatisfaction = 0
 		var error = false
 	}
 	
@@ -35,8 +38,10 @@ extension BottomSheetReactor {
 	/// Action이 들어온 경우, 어떤 처리를 할건지 분기
 	func mutate(action: Action) -> Observable<Mutation> {
 		switch action {
-		case .didTapCheckButton(let date):
+		case .didTapDateCheckButton(let date):
 			return .just(.updateData(date))
+		case .didTapSatisfactionCheckButton(let satisfaction):
+			return .just(.updateDataBySatisfaction(satisfaction))
 		}
 	}
 	
@@ -47,6 +52,8 @@ extension BottomSheetReactor {
 		switch mutation {
 		case .updateData(let date):
 			newState.success = date
+		case .updateDataBySatisfaction(let satisfaction):
+			newState.successBySatisfaction = satisfaction
 		}
 		
 		return newState

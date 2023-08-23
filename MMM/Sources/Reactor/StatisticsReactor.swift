@@ -14,6 +14,7 @@ final class StatisticsReactor: Reactor {
 		case increase
 		case decrease
 		case didTapMoreButton // 카테고리 더보기
+		case didTapSatisfactionButton // 만족도 선택
 	}
 	
 	// 처리 단위
@@ -21,14 +22,16 @@ final class StatisticsReactor: Reactor {
 		case increaseValue
 		case decreaseValue
 		case setLoading(Bool)
-		case setPresentMoreCartegory(Bool)
+		case setPushMoreCartegory(Bool)
+		case setPresentSatisfaction(Bool)
 	}
 	
 	// 현재 상태를 기록
 	struct State {
 		var value = 0
 		var isLoading = false // 로딩
-		var isPresentMoreCartegory = false
+		var isPushMoreCartegory = false
+		var isPresentSatisfaction = false
 	}
 	
 	// MARK: Properties
@@ -55,8 +58,13 @@ extension StatisticsReactor {
 			])
 		case .didTapMoreButton:
 			return  Observable.concat([
-				.just(.setPresentMoreCartegory(true)),
-				.just(.setPresentMoreCartegory(false))
+				.just(.setPushMoreCartegory(true)),
+				.just(.setPushMoreCartegory(false))
+			])
+		case .didTapSatisfactionButton:
+			return  Observable.concat([
+				.just(.setPresentSatisfaction(true)),
+				.just(.setPresentSatisfaction(false))
 			])
 		}
 	}
@@ -72,8 +80,10 @@ extension StatisticsReactor {
 			newState.value -= 1
 		case .setLoading(let isLoading):
 			newState.isLoading = isLoading
-		case .setPresentMoreCartegory(let isPresent):
-			newState.isPresentMoreCartegory = isPresent
+		case .setPushMoreCartegory(let isPresent):
+			newState.isPushMoreCartegory = isPresent
+		case .setPresentSatisfaction(let isPresent):
+			newState.isPresentSatisfaction = isPresent
 		}
 		
 		return newState

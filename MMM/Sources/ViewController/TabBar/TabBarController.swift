@@ -208,7 +208,8 @@ extension TabBarController {
         let homeVC = HomeViewController(tabBarViewModel: viewModel)
         homeVC.tabBarItem = UITabBarItem(title: "소비", image: R.Icon.iconMoneyInActive, selectedImage: R.Icon.iconMoneyActive)
         
-        let budgetVC = UIViewController()
+        let budgetVC = StatisticsViewController(tabBarViewModel: viewModel)
+        budgetVC.reactor = StatisticsReactor()
         budgetVC.tabBarItem = UITabBarItem(title: "예산", image: R.Icon.iconMoneyInActive, selectedImage: R.Icon.iconMoneyActive)
 
         let plusVC = UIViewController()

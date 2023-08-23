@@ -47,6 +47,11 @@ final class ProfileViewController: UIViewController {
 		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
 	}
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+    }
 }
 //MARK: - Style & Layouts
 private extension ProfileViewController {

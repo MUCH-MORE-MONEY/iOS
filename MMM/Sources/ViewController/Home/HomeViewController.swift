@@ -62,6 +62,7 @@ final class HomeViewController: UIViewController {
 
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: false)
 		fetchData()
 	}
 	
@@ -277,12 +278,18 @@ private extension HomeViewController {
 		// [view]
 		view.backgroundColor = R.Color.gray100
 		view.addGestureRecognizer(self.scopeGesture)
-		
+	
+        navigationController?.navigationItem.leftBarButtonItem = monthButtonItem
+        navigationController?.navigationItem.rightBarButtonItem = rightBarItem
+        
 		if let navigationController = self.navigationController {
-			if let rootVC = navigationController.viewControllers.first {
-				rootVC.navigationItem.leftBarButtonItem = monthButtonItem
-				rootVC.navigationItem.rightBarButtonItem = rightBarItem
-			}
+            navigationController.navigationItem.leftBarButtonItem = monthButtonItem
+            
+            navigationController.navigationItem.rightBarButtonItem = rightBarItem
+//			if let rootVC = navigationController.viewControllers.first {
+//				rootVC.navigationItem.leftBarButtonItem = monthButtonItem
+//				rootVC.navigationItem.rightBarButtonItem = rightBarItem
+//			}
 		}
 		
         // tabbar

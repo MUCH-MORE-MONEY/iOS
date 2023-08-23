@@ -66,10 +66,6 @@ final class HomeViewController: UIViewController {
 		fetchData()
 	}
 	
-	override func viewWillDisappear(_ animated: Bool) {
-		super.viewWillDisappear(animated)
-	}
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
             self.viewModel.requestTrackingAuthorization()
@@ -276,7 +272,7 @@ private extension HomeViewController {
 	
 	private func setAttribute() {
 		// [view]
-		view.backgroundColor = R.Color.gray100
+		view.backgroundColor = R.Color.gray900
 		view.addGestureRecognizer(self.scopeGesture)
         
         // FIXME: - 네비게이션 아이템 노출 우류
@@ -298,8 +294,9 @@ private extension HomeViewController {
                 }
             }.store(in: &cancellable)
         
+		let view = UIView(frame: .init(origin: .zero, size: .init(width: 80, height: 30)))
 		monthButton = monthButton.then {
-			$0.frame = .init(origin: .zero, size: .init(width: 150, height: 24))
+			$0.frame = .init(origin: .init(x: 8, y: 0), size: .init(width: 80, height: 30))
 			$0.setTitle(Date().getFormattedDate(format: "M월"), for: .normal)
 			$0.setImage(R.Icon.arrowExpandMore16, for: .normal)
 			$0.setTitleColor(R.Color.white, for: .normal)
@@ -307,23 +304,24 @@ private extension HomeViewController {
 			$0.imageView?.contentMode = .scaleAspectFit
 			$0.titleLabel?.font = R.Font.h5
 			$0.contentHorizontalAlignment = .left
-			$0.imageEdgeInsets = .init(top: 0, left: 11, bottom: 0, right: 0) // 이미지 여백
+			$0.imageEdgeInsets = .init(top: 0, left: 8, bottom: 0, right: 0) // 이미지 여백
+		}
+		view.addSubview(monthButton)
+
+		monthButtonItem = monthButtonItem.then {
+			$0.customView = view
 		}
 		
-		monthButtonItem = monthButtonItem.then {
-			$0.customView = monthButton
+		let rightView = UIView(frame: .init(origin: .zero, size: .init(width: 92, height: 30)))
+		righthStackView = righthStackView.then {
+			$0.axis = .horizontal
+			$0.spacing = 16
+			$0.addArrangedSubviews(todayButton, filterButton)
 		}
+		rightView.addSubview(righthStackView)
 		
 		rightBarItem = rightBarItem.then {
-			$0.customView = righthStackView
-		}
-		
-		righthStackView = righthStackView.then {
-			$0.distribution = .equalSpacing
-			$0.axis = .horizontal
-			$0.alignment = .center
-			$0.spacing = 18.66
-			$0.addArrangedSubviews(todayButton, filterButton)
+			$0.customView = rightView
 		}
 		
 		todayButton = todayButton.then {
@@ -432,6 +430,10 @@ private extension HomeViewController {
 			$0.height.equalTo(24)
 		}
 		
+		righthStackView.snp.makeConstraints {
+			$0.width.equalTo(90)
+		}
+		
 		separator.snp.makeConstraints {
 			$0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(15)
 			$0.top.equalTo(view.safeAreaLayoutGuide)
@@ -439,23 +441,25 @@ private extension HomeViewController {
 		}
 		
 		calendarHeaderView.snp.makeConstraints {
-			$0.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+			$0.top.equalTo(view.safeAreaLayoutGuide)
+			$0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(8)
 			$0.height.equalTo(46)
 		}
 				
 		calendar.snp.makeConstraints {
 			$0.top.equalTo(calendarHeaderView.snp.bottom)
-			$0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+			$0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(8)
 			$0.height.equalTo(300) // 기기 대응 - UIScreen.height * 0.37
 		}
 
 		dayLabel.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(16)
-			$0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(20)
+			$0.leading.equalToSuperview().inset(24)
 		}
 		
 		tableView.snp.makeConstraints {
-			$0.bottom.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+			$0.leading.trailing.equalToSuperview()
+			$0.bottom.equalTo(view.safeAreaLayoutGuide)
 			$0.top.equalTo(calendar.snp.bottom)
 		}
 		

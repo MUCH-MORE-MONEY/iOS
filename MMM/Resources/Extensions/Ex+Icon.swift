@@ -22,6 +22,7 @@ public extension MMMResource {
 		public static let arrowUp32 = UIImage(named: "iconArrowUp32", in: .main, compatibleWith: nil)
 		public static let camera48 = UIImage(named: "iconCamera48", in: .main, compatibleWith: nil)
 		public static let cancel = UIImage(named: "iconCancel", in: .main, compatibleWith: nil)
+		public static let characterHappy = UIImage(named: "iconCharacterHappy", in: .main, compatibleWith: nil)
 		public static let checkActive = UIImage(named: "iconCheckActive", in: .main, compatibleWith: nil)
 		public static let checkInActive = UIImage(named: "iconCheckInActive", in: .main, compatibleWith: nil)
 		public static let checkOrange24 = UIImage(named: "iconCheckOrange24", in: .main, compatibleWith: nil)
@@ -34,8 +35,10 @@ public extension MMMResource {
 		public static let minus16 = UIImage(named: "iconMinus16", in: .main, compatibleWith: nil)
 		public static let photoBlank64 = UIImage(named: "iconPhotoBlank64", in: .main, compatibleWith: nil)
 		public static let plus16 = UIImage(named: "iconPlus16", in: .main, compatibleWith: nil)
+		public static let rain = UIImage(named: "iconRain", in: .main, compatibleWith: nil)
 		public static let report16 = UIImage(named: "iconReport16", in: .main, compatibleWith: nil)
 		public static let setting = UIImage(named: "iconSetting", in: .main, compatibleWith: nil)
+		public static let star = UIImage(named: "iconStar", in: .main, compatibleWith: nil)
 		public static let star16 = UIImage(named: "iconStar16", in: .main, compatibleWith: nil)
 		public static let star24 = UIImage(named: "iconStar24", in: .main, compatibleWith: nil)
 		public static let star36 = UIImage(named: "iconStar36", in: .main, compatibleWith: nil)
@@ -55,6 +58,9 @@ public extension MMMResource {
         public static let iconStarGray16 = UIImage(named: "iconStarGray16", in: .main, compatibleWith: nil)
         public static let iconStarBlack48 = UIImage(named: "iconStarBlack48", in: .main, compatibleWith: nil)
         public static let iconStarGray48 = UIImage(named: "iconStarGray48", in: .main, compatibleWith: nil)
+		public static let iconStarOrange36 = UIImage(named: "iconStarOrange36", in: .main, compatibleWith: nil)
+		public static let iconStarOrange48 = UIImage(named: "iconStarOrange48", in: .main, compatibleWith: nil)
+		public static let iconStarYellow24 = UIImage(named: "iconStarYellow24", in: .main, compatibleWith: nil)
 		
         // MARK: - TabBar Items
         public static let iconGroupActive = UIImage(named: "iconGroupActive", in: .main, compatibleWith: nil)

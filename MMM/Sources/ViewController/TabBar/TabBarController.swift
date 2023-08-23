@@ -9,10 +9,15 @@ import UIKit
 import Combine
 import Then
 import SnapKit
+import RxSwift
+import RxCocoa
 
-final class TabBarController: UIViewController {
+final class TabBarController: UITabBarController {
 	private var tabBarVC = UITabBarController()
-	
+    private lazy var middleButton = UIButton(type: .custom)
+    
+    private let disposeBag = DisposeBag()
+    
 	private lazy var customTabBar = CustomTabBar(tabItems: [.home, .add, .profile])
 	private var cancellables = Set<AnyCancellable>()
 	private var tabVCs: [UIViewController] = []
@@ -32,11 +37,14 @@ final class TabBarController: UIViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		setup()
-		
+//		setup()
+		setTabBar()
 		if widgetIndex == 1 {
-			let shouldFrontView = tabVCs[0]
-			shouldFrontView.navigationController?.pushViewController(AddViewController(parentVC: shouldFrontView), animated: false)
+//			let shouldFrontView = tabVCs[0]
+//			shouldFrontView.navigationController?.pushViewController(AddViewController(parentVC: shouldFrontView), animated: false)
+            // FIXME: - 딥링크 오류 해결
+            let vc = AddViewController(parentVC: UIViewController())
+            navigationController?.pushViewController(vc, animated: true)
 		}
 	}
 	
@@ -44,6 +52,10 @@ final class TabBarController: UIViewController {
 	override var preferredStatusBarStyle: UIStatusBarStyle {
 		return .lightContent // status text color 변경
 	}
+    
+    // UIResponder의 hitTest(_:with:) 메서드 재정의
+    
+    
 }
 // MARK: - Style & Layout
 extension TabBarController {
@@ -60,6 +72,9 @@ extension TabBarController {
 				guard let self = self else { return }
 				self.bindCurrentIndex()
 			}.store(in: &cancellables)
+        
+        
+        
 	}
 	
 	private func setAttribute() {
@@ -160,4 +175,68 @@ extension TabBarController {
 			}
 		}
 	}
+}
+
+extension TabBarController {
+    
+    func setTabBar() {
+        
+        // 기존 탭 바 아이템을 숨김 처리
+        for item in self.tabBar.items ?? [] {
+            item.isEnabled = false
+            item.title = ""
+            item.image = nil
+            item.selectedImage = nil
+        }
+        
+
+        // 탭 바에 커스텀 아이템 추가
+        self.tabBar.addSubviews(middleButton)
+        
+        // 가운데 원형 디자인을 갖는 커스텀 탭 바 아이템 생성
+        middleButton = middleButton.then {
+            $0.frame = CGRect(x: 0, y: 0, width: 64, height: 64)
+            $0.center = CGPoint(x: tabBar.center.x, y: tabBar.bounds.height - 32)
+            $0.setImage(R.Icon.iconPlus, for: .normal) // 아이콘 이미지
+        }
+        
+
+        self.tabBar.tintColor = R.Color.gray900
+        self.tabBar.setTabShadow()
+        self.delegate = self
+        
+        let homeVC = HomeViewController(tabBarViewModel: viewModel)
+        homeVC.tabBarItem = UITabBarItem(title: "소비", image: R.Icon.iconMoneyInActive, selectedImage: R.Icon.iconMoneyActive)
+        
+        let budgetVC = UIViewController()
+        budgetVC.tabBarItem = UITabBarItem(title: "예산", image: R.Icon.iconMoneyInActive, selectedImage: R.Icon.iconMoneyActive)
+
+        let plusVC = UIViewController()
+        plusVC.tabBarItem = UITabBarItem()
+        
+        let challengeVC = UIViewController()
+        challengeVC.tabBarItem = UITabBarItem(title: "챌린지", image: R.Icon.iconMoneyInActive, selectedImage: R.Icon.iconMoneyActive)
+
+        let profileVC = ProfileViewController(tabBarViewModel: viewModel)
+        profileVC.tabBarItem = UITabBarItem(title: "마이페이지", image: R.Icon.iconMypageInActive, selectedImage: R.Icon.iconMypageActive)
+        
+        setViewControllers([homeVC, budgetVC, plusVC, challengeVC, profileVC], animated: false)
+    }
+}
+
+extension TabBarController: UITabBarControllerDelegate {
+    // UITabBarControllerDelegate 메서드 구현
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        if let index = tabBarController.viewControllers?.firstIndex(of: viewController), index == (tabBarController.viewControllers?.count ?? 0) / 2 {
+            // 가운데 탭을 선택하려면 커스텀 아이템을 터치한 것으로 처리
+            print("가운데 버튼 tapped")
+            
+            let vc = AddViewController(parentVC: UIViewController())
+            
+            navigationController?.pushViewController(vc, animated: true)
+            
+            return false
+        }
+        return true
+    }
 }

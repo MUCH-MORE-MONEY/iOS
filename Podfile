@@ -14,6 +14,7 @@ target 'MMM' do
   pod 'Cosmos', '~> 23.0'
   pod 'lottie-ios'
   pod 'FirebaseAnalytics'
+  pod 'Firebase/Messaging' 
   pod 'ReactorKit'
   pod 'RxCocoa'
   pod 'RxGesture'

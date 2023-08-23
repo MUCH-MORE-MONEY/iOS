@@ -7,13 +7,38 @@
 
 import UIKit
 import FirebaseCore
+import FirebaseMessaging
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-		FirebaseApp.configure()
 		
+        // Firebase 초기화 세팅.
+        FirebaseApp.configure()
+
+        // 메시지 대리자 설정
+        Messaging.messaging().delegate = self
+
+        // FCM 다시 사용 설정
+        Messaging.messaging().isAutoInitEnabled = true
+
+        // 푸시 알림 권한 설정 및 푸시 알림에 앱 등록
+        UNUserNotificationCenter.current().delegate = self
+        let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+        UNUserNotificationCenter.current().requestAuthorization(options: authOptions, completionHandler: { _, _ in })
+
+        // device token 요청.
+        application.registerForRemoteNotifications()
+        
+        Messaging.messaging().token { token, error in
+            if let error = error {
+                print("Error fetching FCM registration token: \(error)")
+              } else if let token = token {
+                print("FCM registration token: \(token)")
+              }
+        }
+        
 		return true
 	}
 
@@ -32,3 +57,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 }
 
+extension AppDelegate: MessagingDelegate {
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+        
+        // TODO: - 디바이스 토큰을 보내는 서버통신 구현
+        
+    }
+}

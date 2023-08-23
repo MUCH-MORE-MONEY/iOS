@@ -23,7 +23,6 @@
 		6A08FFDC2A274A22000AD06B /* AddDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A08FFDB2A274A22000AD06B /* AddDetailViewController.swift */; };
 		6A0D108229D3CF1B009D6DCA /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0D108129D3CF1B009D6DCA /* OnboardingViewController.swift */; };
 		6A0D108529D3D209009D6DCA /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0D108429D3D209009D6DCA /* OnboardingView.swift */; };
-		6A0D5B972A4BF20600958E72 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0D5B962A4BF20600958E72 /* SplashViewController.swift */; };
 		6A0D5B992A4C0E3300958E72 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0D5B982A4C0E3300958E72 /* ToastView.swift */; };
 		6A0F234029DBA8AA0063673B /* DataExportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0F233F29DBA8AA0063673B /* DataExportViewController.swift */; };
 		6A0F234229DBA92D0063673B /* ServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0F234129DBA92D0063673B /* ServiceViewController.swift */; };
@@ -227,7 +226,6 @@
 		6A08FFDB2A274A22000AD06B /* AddDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDetailViewController.swift; sourceTree = "<group>"; };
 		6A0D108129D3CF1B009D6DCA /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		6A0D108429D3D209009D6DCA /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
-		6A0D5B962A4BF20600958E72 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		6A0D5B982A4C0E3300958E72 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		6A0F233F29DBA8AA0063673B /* DataExportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExportViewController.swift; sourceTree = "<group>"; };
 		6A0F234129DBA92D0063673B /* ServiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceViewController.swift; sourceTree = "<group>"; };
@@ -454,14 +452,6 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		6A0D5B952A4BF1EF00958E72 /* Splash */ = {
-			isa = PBXGroup;
-			children = (
-				6A0D5B962A4BF20600958E72 /* SplashViewController.swift */,
-			);
-			path = Splash;
-			sourceTree = "<group>";
-		};
 		6A0F234529DC0D750063673B /* TabBar */ = {
 			isa = PBXGroup;
 			children = (
@@ -645,7 +635,6 @@
 				6A1322EA2A088F5400CEEC81 /* HomeDetail */,
 				6A0D108029D3CEF6009D6DCA /* Onboarding */,
 				C41193F029D3A867003DBC15 /* Profile */,
-				6A0D5B952A4BF1EF00958E72 /* Splash */,
 				C4170B4C2A89FC1500CE0A65 /* Statistics */,
 				6A0F234529DC0D750063673B /* TabBar */,
 			);
@@ -1321,7 +1310,6 @@
 				6A0F234029DBA8AA0063673B /* DataExportViewController.swift in Sources */,
 				C4170B612A94FC2300CE0A65 /* BottomSheetReactor.swift in Sources */,
 				C44807E329E649A300D4B090 /* HomeViewModel.swift in Sources */,
-				6A0D5B972A4BF20600958E72 /* SplashViewController.swift in Sources */,
 				6A15B0EC2A15B68D00EADAC5 /* BaseAddActivityViewController.swift in Sources */,
 				C4C8B68D2A3ACDC700FAF931 /* LoadingViewController.swift in Sources */,
 				C446BF1B2A430B1400DFA788 /* SnackView.swift in Sources */,

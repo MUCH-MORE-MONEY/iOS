@@ -46,6 +46,19 @@ final class StatisticsViewController: UIViewController, View {
 		setup()		// 초기 셋업할 코드들
     }
 	
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		navigationController?.setNavigationBarHidden(false, animated: false)
+		
+		// Root View인 NavigationView에 item 수정하기
+		if let navigationController = self.navigationController {
+			if let rootVC = navigationController.viewControllers.first {
+				rootVC.navigationItem.leftBarButtonItem = monthButtonItem
+				rootVC.navigationItem.rightBarButtonItem = nil
+			}
+		}
+	}
+	
 	func bind(reactor: StatisticsReactor) {
 		bindState(reactor)
 		bindAction(reactor)
@@ -141,13 +154,6 @@ extension StatisticsViewController {
 	
 	private func setAttribute() {
 		view.backgroundColor = R.Color.gray100
-		
-		// Root View인 NavigationView에 item 수정하기
-		if let navigationController = self.navigationController {
-			if let rootVC = navigationController.viewControllers.first {
-				rootVC.navigationItem.leftBarButtonItem = monthButtonItem
-			}
-		}
 		
 		scrollView = scrollView.then {
 			$0.showsVerticalScrollIndicator = false // bar 숨기기

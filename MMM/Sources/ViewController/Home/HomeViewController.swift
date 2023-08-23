@@ -63,6 +63,15 @@ final class HomeViewController: UIViewController {
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: false)
+		
+		// FIXME: - 네비게이션 아이템 노출 우류
+		if let navigationController = self.navigationController {
+			if let rootVC = navigationController.viewControllers.first {
+				rootVC.navigationItem.leftBarButtonItem = monthButtonItem
+				rootVC.navigationItem.rightBarButtonItem = rightBarItem
+			}
+		}
+		
 		fetchData()
 	}
 	
@@ -274,14 +283,6 @@ private extension HomeViewController {
 		// [view]
 		view.backgroundColor = R.Color.gray900
 		view.addGestureRecognizer(self.scopeGesture)
-        
-        // FIXME: - 네비게이션 아이템 노출 우류
-		if let navigationController = self.navigationController {
-			if let rootVC = navigationController.viewControllers.first {
-				rootVC.navigationItem.leftBarButtonItem = monthButtonItem
-				rootVC.navigationItem.rightBarButtonItem = rightBarItem
-			}
-		}
 		
         // tabbar
         tabBarViewModel.$isPlusButtonTappedInHome

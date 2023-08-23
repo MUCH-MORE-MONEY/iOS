@@ -52,6 +52,10 @@ final class ProfileViewController: UIViewController {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
     }
+	
+	override var preferredStatusBarStyle: UIStatusBarStyle {
+		return .lightContent // status text color 변경
+	}
 }
 //MARK: - Style & Layouts
 private extension ProfileViewController {

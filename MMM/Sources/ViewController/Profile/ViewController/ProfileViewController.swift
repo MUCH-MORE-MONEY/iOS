@@ -15,7 +15,7 @@ final class ProfileViewController: UIViewController {
 	// MARK: - Properties
 	private var viewModel: ProfileViewModel = ProfileViewModel()
 	private var userEmail: String = ""
-	private let lableCellList = ["", "계정 관리", "데이터 내보내기", "문의 및 서비스 약관", "앱 버전"]
+	private let lableCellList = ["", "계정 관리", "데이터 내보내기", "알림 설정","문의 및 서비스 약관", "앱 버전"]
 	private let topSafeAreaInsets: CGFloat = {
 		let scenes = UIApplication.shared.connectedScenes
 		let windowScene = scenes.first as? UIWindowScene
@@ -127,7 +127,7 @@ extension ProfileViewController: UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return 4
+		return 5
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -167,6 +167,10 @@ extension ProfileViewController: UITableViewDelegate {
 			vc.hidesBottomBarWhenPushed = true	// TabBar Above
             navigationController?.pushViewController(vc, animated: true)
         case 3:
+            let vc = PushSettingViewController()
+            vc.hidesBottomBarWhenPushed = true    // TabBar Above
+            navigationController?.pushViewController(vc, animated: true)
+        case 4:
             let vc = ServiceViewController()
 			vc.hidesBottomBarWhenPushed = true	// TabBar Above
             navigationController?.pushViewController(vc, animated: true)

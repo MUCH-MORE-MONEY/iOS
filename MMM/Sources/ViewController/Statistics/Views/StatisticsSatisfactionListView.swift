@@ -1,5 +1,5 @@
 //
-//  StatisticsSatisfactionSelectView.swift
+//  StatisticsSatisfactionListView.swift
 //  MMM
 //
 //  Created by geonhyeong on 2023/08/22.
@@ -10,7 +10,7 @@ import SnapKit
 import ReactorKit
 import RxGesture
 
-final class StatisticsSatisfactionSelectView: UIView, View {
+final class StatisticsSatisfactionListView: UIView, View {
 	// MARK: - Properties
 	var disposeBag: DisposeBag = DisposeBag()
 	
@@ -42,7 +42,7 @@ final class StatisticsSatisfactionSelectView: UIView, View {
 	}
 }
 //MARK: - Bind
-extension StatisticsSatisfactionSelectView {
+extension StatisticsSatisfactionListView {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
 	private func bindAction(_ reactor: StatisticsReactor) {
 		touchAreaView.rx.tapGesture()
@@ -56,7 +56,7 @@ extension StatisticsSatisfactionSelectView {
 }
 
 //MARK: - Style & Layouts
-private extension StatisticsSatisfactionSelectView {
+private extension StatisticsSatisfactionListView {
 	// 초기 셋업할 코드들
 	private func setup() {
 		setAttribute()

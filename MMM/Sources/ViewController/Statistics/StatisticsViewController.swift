@@ -29,7 +29,7 @@ final class StatisticsViewController: UIViewController, View {
 	private lazy var satisfactionView = StatisticsSatisfactionView()
 	private lazy var categoryView = StatisticsCategoryView()
 	private lazy var activityView = StatisticsActivityView()
-	private lazy var selectAreaView = StatisticsSatisfactionSelectView()
+	private lazy var selectAreaView = StatisticsSatisfactionListView()
 
 	init(tabBarViewModel: TabBarViewModel) {
 		self.tabBarViewModel = tabBarViewModel

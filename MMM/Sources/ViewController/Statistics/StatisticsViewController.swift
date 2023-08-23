@@ -12,6 +12,8 @@ import RxCocoa
 import ReactorKit
 
 final class StatisticsViewController: UIViewController, View {
+	typealias Reactor = StatisticsReactor
+
 	// MARK: - Properties
 	private var tabBarViewModel: TabBarViewModel
 	var disposeBag: DisposeBag = DisposeBag()
@@ -44,12 +46,6 @@ final class StatisticsViewController: UIViewController, View {
 		setup()		// 초기 셋업할 코드들
     }
 	
-	// 초기 셋업할 코드들
-	private func setup() {
-		setAttribute()
-		setLayout()
-	}
-	
 	func bind(reactor: StatisticsReactor) {
 		bindState(reactor)
 		bindAction(reactor)
@@ -69,6 +65,12 @@ extension StatisticsViewController {
 		bottomSheetVC.setSetting(height: 360)
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
 	}
+	
+	// 카테고리 더보기
+	private func presentCategoryViewController(_ isPresent: Bool) {
+		let vc = CategoryViewController()
+		navigationController?.pushViewController(vc, animated: true)
+	}
 }
 //MARK: - Bind
 extension StatisticsViewController {
@@ -78,7 +80,7 @@ extension StatisticsViewController {
 			.subscribe(onNext: { [weak self] _ in
 				guard let self = self else { return }
 				self.showBottomSheet() // '월' 변경 버튼
-			}).disposed(by: self.disposeBag)
+			}).disposed(by: disposeBag)
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
@@ -90,10 +92,24 @@ extension StatisticsViewController {
 				print(date)
 			}
 			.disposed(by: disposeBag)
+
+		// 카테고리 더보기 클릭시, 화면전환
+		reactor.state
+			.map { $0.isPresentMoreCartegory }
+			.distinctUntilChanged() // 중복값 무시
+			.filter { $0 } // true일때만 화면 전환
+			.bind(onNext: presentCategoryViewController)
+			.disposed(by: disposeBag)
 	}
 }
 //MARK: - Style & Layouts
 extension StatisticsViewController {
+	// 초기 셋업할 코드들
+	private func setup() {
+		setAttribute()
+		setLayout()
+	}
+	
 	private func setAttribute() {
 		view.backgroundColor = R.Color.gray100
 		
@@ -112,7 +128,9 @@ extension StatisticsViewController {
 		
 		refreshView.backgroundColor = R.Color.gray900
 		contentView.backgroundColor = R.Color.gray900
-			
+		categoryView.reactor = self.reactor // reactor 주입
+		selectAreaView.reactor = self.reactor // reactor 주입
+		
 		let view = UIView(frame: .init(origin: .zero, size: .init(width: 80, height: 30)))
 		monthButton = monthButton.then {
 			$0.frame = .init(origin: .init(x: 8, y: 0), size: .init(width: 80, height: 30))
@@ -130,9 +148,6 @@ extension StatisticsViewController {
 		monthButtonItem = monthButtonItem.then {
 			$0.customView = view
 		}
-		
-		// reactor 주입
-		selectAreaView.reactor = self.reactor
 	}
 	
 	private func setLayout() {

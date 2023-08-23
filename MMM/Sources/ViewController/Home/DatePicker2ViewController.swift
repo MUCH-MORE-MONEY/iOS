@@ -23,6 +23,7 @@ final class DatePicker2ViewController: UIViewController, View {
 	private lazy var titleLabel = UILabel()
 	private lazy var checkButton = UIButton()
 	private lazy var datePicker = UIDatePicker()
+	private lazy var monthPicker = UIPickerView()
 	
 	init(date: Date = Date()) {
 		self.date = date
@@ -123,6 +124,11 @@ private extension DatePicker2ViewController {
 			$0.datePickerMode = .date
 			$0.setValue(isDark ? R.Color.gray200 : R.Color.black, forKeyPath: "textColor")
 		}
+		
+//		monthPicker = monthPicker.then {
+//			$0.delegate = self
+//			$0.dataSource = self
+//		}
 	}
 	
 	private func setLayout() {

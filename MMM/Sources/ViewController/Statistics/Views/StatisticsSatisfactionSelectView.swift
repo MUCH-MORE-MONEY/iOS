@@ -48,7 +48,7 @@ extension StatisticsSatisfactionSelectView {
 		touchAreaView.rx.tapGesture()
 			.subscribe(onNext: { _ in
 				print("tab") // 오류: 처음 시작할때 실행된다.
-			}).disposed(by: self.disposeBag)
+			}).disposed(by: disposeBag)
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)

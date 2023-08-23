@@ -13,6 +13,7 @@ final class StatisticsReactor: Reactor {
 	enum Action {
 		case increase
 		case decrease
+		case didTapMoreButton // 카테고리 더보기
 	}
 	
 	// 처리 단위
@@ -20,17 +21,18 @@ final class StatisticsReactor: Reactor {
 		case increaseValue
 		case decreaseValue
 		case setLoading(Bool)
+		case setPresentMoreCartegory(Bool)
 	}
 	
 	// 현재 상태를 기록
 	struct State {
 		var value = 0
 		var isLoading = false // 로딩
+		var isPresentMoreCartegory = false
 	}
 	
 	// MARK: Properties
 	let initialState: State
-	let errorRelay = PublishSubject<Error>()
 
 	init() { initialState = State() }
 }
@@ -51,6 +53,11 @@ extension StatisticsReactor {
 				Observable.just(.decreaseValue).delay(.seconds(1), scheduler: MainScheduler.instance),
 				Observable.just(.setLoading(false))
 			])
+		case .didTapMoreButton:
+			return  Observable.concat([
+				.just(.setPresentMoreCartegory(true)),
+				.just(.setPresentMoreCartegory(false))
+			])
 		}
 	}
 	
@@ -65,6 +72,8 @@ extension StatisticsReactor {
 			newState.value -= 1
 		case .setLoading(let isLoading):
 			newState.isLoading = isLoading
+		case .setPresentMoreCartegory(let isPresent):
+			newState.isPresentMoreCartegory = isPresent
 		}
 		
 		return newState

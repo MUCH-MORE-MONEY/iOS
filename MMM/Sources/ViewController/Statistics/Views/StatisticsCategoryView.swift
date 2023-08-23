@@ -7,8 +7,14 @@
 
 import Then
 import SnapKit
+import ReactorKit
 
-final class StatisticsCategoryView: UIView {
+final class StatisticsCategoryView: UIView, View {
+	typealias Reactor = StatisticsReactor
+	
+	// MARK: - Properties
+	var disposeBag: DisposeBag = DisposeBag()
+
 	// MARK: - UI Components
 	private lazy var titleLabel = UILabel() 		 // 카테고리
 	private lazy var moreButton = UIButton() 		 // 더보기
@@ -27,6 +33,25 @@ final class StatisticsCategoryView: UIView {
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
+	
+	func bind(reactor: StatisticsReactor) {
+		bindState(reactor)
+		bindAction(reactor)
+	}
+}
+//MARK: - Bind
+extension StatisticsCategoryView {
+	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
+	private func bindAction(_ reactor: StatisticsReactor) {
+		// 카테고리 더보기 클릭시, 화면전환
+		moreButton.rx.tap
+			.map { .didTapMoreButton }
+			.bind(to: reactor.action)
+			.disposed(by: disposeBag)
+	}
+	
+	// MARK: 데이터 바인딩 처리 (Reactor -> View)
+	private func bindState(_ reactor: StatisticsReactor) {}
 }
 //MARK: - Style & Layouts
 private extension StatisticsCategoryView {

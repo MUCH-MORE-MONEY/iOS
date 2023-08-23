@@ -87,6 +87,7 @@ extension StatisticsViewController {
 	
 	/// '월'  변경
 	private func setMonth(_ date: Date) {
+		// 올해인지 판별
 		if Date().getFormattedDate(format: "yyyy") != date.getFormattedDate(format: "yyyy") {
 			monthButton.setTitle(date.getFormattedDate(format: "yyyy년 M월"), for: .normal)
 		} else {
@@ -113,7 +114,7 @@ extension StatisticsViewController {
 			.bind(onNext: setMonth) // '월' 변경
 			.disposed(by: disposeBag)
 
-		// 카테고리 더보기 클릭시, 화면전환
+		// 카테고리 더보기 클릭시, push
 		reactor.state
 			.map { $0.isPushMoreCartegory }
 			.distinctUntilChanged() // 중복값 무시

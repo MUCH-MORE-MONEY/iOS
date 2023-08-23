@@ -17,6 +17,22 @@ final class StatisticsSatisfactionSelectViewController: UIViewController, View {
 		case low	// 1~2점
 		case middle	// 3점
 		case hight	// 4~5점
+		
+		var title: String {
+			switch self {
+			case .low: return "아쉬운 활동 줄이기"
+			case .middle: return "평범한 활동 돌아보기"
+			case .hight: return "만족스러운 활동 늘리기"
+			}
+		}
+		
+		var score: String {
+			switch self {
+			case .low: return "1~2점"
+			case .middle: return "3점"
+			case .hight: return "4~5점"
+			}
+		}
 	}
 	
 	// MARK: - Properties
@@ -24,12 +40,13 @@ final class StatisticsSatisfactionSelectViewController: UIViewController, View {
 	private var satisfaction: Satisfaction
 	weak var delegate: BottomSheetChild?
 	var disposeBag: DisposeBag = DisposeBag()
-
+	private let satisfactionList: [Satisfaction] = [.low, .middle, .hight]
+	
 	// MARK: - UI Components
 	private lazy var stackView = UIStackView() // Title Label, 확인 Button
 	private lazy var titleLabel = UILabel()
 	private lazy var checkButton = UIButton()
-	
+
 	init(satisfaction: Satisfaction) {
 		self.satisfaction = satisfaction
 		super.init(nibName: nil, bundle: nil)
@@ -85,8 +102,7 @@ extension StatisticsSatisfactionSelectViewController {
 			.subscribe { [weak self] satisfaction in
 				guard let self = self else { return }
 				self.delegate?.willDismiss()
-			}
-			.disposed(by: disposeBag)
+			}.disposed(by: disposeBag)
 	}
 }
 //MARK: - Style & Layouts

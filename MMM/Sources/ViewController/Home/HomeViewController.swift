@@ -278,18 +278,13 @@ private extension HomeViewController {
 		// [view]
 		view.backgroundColor = R.Color.gray100
 		view.addGestureRecognizer(self.scopeGesture)
-	
-        navigationController?.navigationItem.leftBarButtonItem = monthButtonItem
-        navigationController?.navigationItem.rightBarButtonItem = rightBarItem
         
+        // FIXME: - 네비게이션 아이템 노출 우류
 		if let navigationController = self.navigationController {
-            navigationController.navigationItem.leftBarButtonItem = monthButtonItem
-            
-            navigationController.navigationItem.rightBarButtonItem = rightBarItem
-//			if let rootVC = navigationController.viewControllers.first {
-//				rootVC.navigationItem.leftBarButtonItem = monthButtonItem
-//				rootVC.navigationItem.rightBarButtonItem = rightBarItem
-//			}
+			if let rootVC = navigationController.viewControllers.first {
+				rootVC.navigationItem.leftBarButtonItem = monthButtonItem
+				rootVC.navigationItem.rightBarButtonItem = rightBarItem
+			}
 		}
 		
         // tabbar

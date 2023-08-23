@@ -40,8 +40,11 @@ final class TabBarController: UITabBarController {
 //		setup()
 		setTabBar()
 		if widgetIndex == 1 {
-			let shouldFrontView = tabVCs[0]
-			shouldFrontView.navigationController?.pushViewController(AddViewController(parentVC: shouldFrontView), animated: false)
+//			let shouldFrontView = tabVCs[0]
+//			shouldFrontView.navigationController?.pushViewController(AddViewController(parentVC: shouldFrontView), animated: false)
+            // FIXME: - 딥링크 오류 해결
+            let vc = AddViewController(parentVC: UIViewController())
+            navigationController?.pushViewController(vc, animated: true)
 		}
 	}
 	

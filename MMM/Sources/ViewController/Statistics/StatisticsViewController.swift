@@ -15,6 +15,7 @@ final class StatisticsViewController: UIViewController, View {
 	// MARK: - Properties
 	private var tabBarViewModel: TabBarViewModel
 	var disposeBag: DisposeBag = DisposeBag()
+	var bottomSheetReactor: BottomSheetReactor = BottomSheetReactor()
 
 	// MARK: - UI Components
 	private lazy var monthButtonItem = UIBarButtonItem()
@@ -59,7 +60,14 @@ extension StatisticsViewController {
 	// Bottom Sheet 설정
 	private func showBottomSheet() {
 		// 달력 Picker
-		
+		let vc = DatePicker2ViewController()
+		let bottomSheetVC = BottomSheetViewController(contentViewController: vc)
+		vc.reactor = bottomSheetReactor
+		vc.setData(title: "월 이동")
+		vc.delegate = bottomSheetVC
+		bottomSheetVC.modalPresentationStyle = .overFullScreen
+		bottomSheetVC.setSetting(height: 360)
+		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
 	}
 }
 //MARK: - Bind
@@ -75,7 +83,13 @@ extension StatisticsViewController {
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: StatisticsReactor) {
-
+		bottomSheetReactor.state
+			.map { $0.success }
+			.distinctUntilChanged()
+			.subscribe { date in
+				print(date)
+			}
+			.disposed(by: disposeBag)
 	}
 }
 //MARK: - Style & Layouts

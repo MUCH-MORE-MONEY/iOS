@@ -47,7 +47,7 @@ extension StatisticsSatisfactionSelectView {
 	private func bindAction(_ reactor: StatisticsReactor) {
 		touchAreaView.rx.tapGesture()
 			.subscribe(onNext: { _ in
-				print("tab")
+				print("tab") // 오류: 처음 시작할때 실행된다.
 			}).disposed(by: self.disposeBag)
 	}
 	

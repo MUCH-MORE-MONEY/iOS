@@ -75,7 +75,10 @@ extension TabBarController {
 					var rootVC = UIViewController()
 					
 					if item == .home {
-						rootVC = HomeViewController(tabBarViewModel: viewModel)
+						let vc = StatisticsViewController(tabBarViewModel: viewModel)
+						vc.reactor = StatisticsReactor()
+						rootVC = vc
+						
 					} else if item == .profile {
 						rootVC = ProfileViewController(tabBarViewModel: viewModel)
 					}

@@ -71,6 +71,15 @@ extension StatisticsViewController {
 		let vc = CategoryViewController()
 		navigationController?.pushViewController(vc, animated: true)
 	}
+	
+	/// '월'  변경
+	private func setMonth(_ date: Date) {
+		if Date().getFormattedDate(format: "yyyy") != date.getFormattedDate(format: "yyyy") {
+			monthButton.setTitle(date.getFormattedDate(format: "yyyy년 M월"), for: .normal)
+		} else {
+			monthButton.setTitle(date.getFormattedDate(format: "M월"), for: .normal)
+		}
+	}
 }
 //MARK: - Bind
 extension StatisticsViewController {
@@ -87,10 +96,8 @@ extension StatisticsViewController {
 	private func bindState(_ reactor: StatisticsReactor) {
 		bottomSheetReactor.state
 			.map { $0.success }
-			.distinctUntilChanged()
-			.subscribe { date in
-				print(date)
-			}
+			.distinctUntilChanged() // 중복값 무시
+			.bind(onNext: setMonth) // '월' 변경
 			.disposed(by: disposeBag)
 
 		// 카테고리 더보기 클릭시, 화면전환

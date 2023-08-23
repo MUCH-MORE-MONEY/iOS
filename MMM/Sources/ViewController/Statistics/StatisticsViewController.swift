@@ -192,7 +192,7 @@ extension StatisticsViewController {
 		
 		scrollView.snp.makeConstraints {
 			$0.top.leading.trailing.equalTo(view)
-			$0.bottom.equalTo(view).inset(82) // TabBar Height
+			$0.bottom.equalTo(view.safeAreaLayoutGuide)
 		}
 		
 		refreshView.snp.makeConstraints {

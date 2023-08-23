@@ -13,7 +13,6 @@ final class SatisfactionTableViewCell: UITableViewCell {
 	private lazy var scoreLabel = UILabel()
 	private lazy var titleLabel = UILabel()
 	private lazy var checkImageView = UIImageView()	// ✓
-	private lazy var separator = UIView()
 
 	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -26,19 +25,18 @@ final class SatisfactionTableViewCell: UITableViewCell {
 		super.init(coder: coder)
 		fatalError("init(coder:) has not been implemented")
 	}
-	
-	override func setSelected(_ selected: Bool, animated: Bool) {
-		super.setSelected(selected, animated: animated)
-	}
 }
-
 //MARK: - Action
 extension SatisfactionTableViewCell {
 	// 외부에서 설정
-	func setData(title: String, score: String, last: Bool) {
+	func setData(title: String, score: String) {
 		self.titleLabel.text = title
 		self.scoreLabel.text = score
-		self.separator.isHidden = last // 마지막 separator 숨김
+	}
+	
+	// 외부에서 설정
+	func selectData(_ isSelected: Bool) {
+		checkImageView.image = isSelected ? R.Icon.checkOrange24 : R.Icon.checkInActive
 	}
 }
 //MARK: - Style & Layouts
@@ -80,6 +78,21 @@ private extension SatisfactionTableViewCell {
 		
 		starImageView.snp.makeConstraints {
 			$0.leading.equalToSuperview().inset(20)
+			$0.centerY.equalToSuperview()
+		}
+		
+		scoreLabel.snp.makeConstraints {
+			$0.leading.equalTo(starImageView.snp.trailing).offset(3)
+			$0.centerY.equalToSuperview()
+		}
+		
+		titleLabel.snp.makeConstraints {
+			$0.leading.equalToSuperview().inset(87)
+			$0.centerY.equalToSuperview()
+		}
+		
+		checkImageView.snp.makeConstraints {
+			$0.trailing.equalToSuperview().inset(20)
 			$0.centerY.equalToSuperview()
 		}
 	}

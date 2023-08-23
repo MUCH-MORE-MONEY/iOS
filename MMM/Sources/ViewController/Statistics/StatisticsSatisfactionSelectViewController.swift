@@ -9,6 +9,7 @@ import Combine
 import Then
 import SnapKit
 import ReactorKit
+import RxRelay
 
 final class StatisticsSatisfactionSelectViewController: UIViewController, View {
 	typealias Reactor = BottomSheetReactor
@@ -40,12 +41,13 @@ final class StatisticsSatisfactionSelectViewController: UIViewController, View {
 	private var satisfaction: Satisfaction
 	weak var delegate: BottomSheetChild?
 	var disposeBag: DisposeBag = DisposeBag()
-	private let satisfactionList: [Satisfaction] = [.low, .middle, .hight]
+	private let satisfactionList: BehaviorRelay<[Satisfaction]> = BehaviorRelay(value: [.low, .middle, .hight])
 	
 	// MARK: - UI Components
 	private lazy var stackView = UIStackView() // Title Label, 확인 Button
 	private lazy var titleLabel = UILabel()
 	private lazy var checkButton = UIButton()
+	private lazy var tableView = UITableView(frame: .zero, style: .grouped) // 상위 hearde
 
 	init(satisfaction: Satisfaction) {
 		self.satisfaction = satisfaction
@@ -103,6 +105,21 @@ extension StatisticsSatisfactionSelectViewController {
 				guard let self = self else { return }
 				self.delegate?.willDismiss()
 			}.disposed(by: disposeBag)
+		
+		// TableView cell select
+		tableView.rx.itemSelected
+			.subscribe(onNext: { [weak self] indexPath in
+				guard let self = self else { return }
+
+				// Cell touch시 회색 표시 없애기
+				self.tableView.deselectRow(at: indexPath, animated: true)
+			}).disposed(by: disposeBag)
+
+		satisfactionList.asObservable()
+			.bind(to: tableView.rx.items(cellIdentifier: "SatisfactionTableViewCell", cellType: SatisfactionTableViewCell.self)) { index, element, cell in
+				
+				cell.setData(title: element.title, score: element.score)
+			}.disposed(by: disposeBag)
 	}
 }
 //MARK: - Style & Layouts
@@ -131,16 +148,31 @@ private extension StatisticsSatisfactionSelectViewController {
 			$0.titleLabel?.font = R.Font.title3
 			$0.contentEdgeInsets = .init(top: 10, left: 10, bottom: 10, right: 10) // touch 영역 늘리기
 		}
+		
+		tableView = tableView.then {
+			$0.register(SatisfactionTableViewCell.self)
+			$0.backgroundColor = R.Color.gray100
+			$0.showsVerticalScrollIndicator = false // indicator 제거
+			$0.separatorStyle = .none
+			$0.rowHeight = 52
+			$0.bounces = false			// TableView Scroll 방지
+			$0.isScrollEnabled = false
+		}
 	}
 	
 	private func setLayout() {
-		view.addSubviews(stackView)
+		view.addSubviews(stackView, tableView)
 		stackView.addArrangedSubviews(titleLabel, checkButton)
 		
 		stackView.snp.makeConstraints {
 			$0.top.equalToSuperview()
 			$0.leading.equalToSuperview().inset(24)
 			$0.trailing.equalToSuperview().inset(28)
+		}
+		
+		tableView.snp.makeConstraints {
+			$0.top.equalTo(stackView.snp.bottom)
+			$0.leading.trailing.bottom.equalToSuperview()
 		}
 	}
 }

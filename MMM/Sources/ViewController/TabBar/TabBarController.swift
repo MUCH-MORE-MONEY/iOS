@@ -202,6 +202,8 @@ extension TabBarController {
         
 
         self.tabBar.tintColor = R.Color.gray900
+		self.tabBar.barTintColor = R.Color.gray100
+		self.tabBar.isTranslucent = false
         self.tabBar.setTabShadow()
         self.delegate = self
         

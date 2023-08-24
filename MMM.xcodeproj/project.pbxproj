@@ -41,8 +41,9 @@
 		6A1BAD4529E6550100818086 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1BAD4429E6550100818086 /* OnboardingViewModel.swift */; };
 		6A223FFC2A1B3D590058C877 /* EditActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A223FFB2A1B3D590058C877 /* EditActivityViewController.swift */; };
 		6A27E6952A205338001A7F04 /* Ex+UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A27E6942A205338001A7F04 /* Ex+UITextField.swift */; };
-		6A2B5D572A97215000CCBFBE /* PushSettingDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2B5D562A97215000CCBFBE /* PushSettingDetailViewController.swift */; };
+		6A2B5D572A97215000CCBFBE /* TimeSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2B5D562A97215000CCBFBE /* TimeSettingViewController.swift */; };
 		6A2B5D592A97217F00CCBFBE /* PushSettingReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2B5D582A97217F00CCBFBE /* PushSettingReactor.swift */; };
+		6A2B5D5B2A9735D500CCBFBE /* TimeSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2B5D5A2A9735D500CCBFBE /* TimeSettingView.swift */; };
 		6A381E0A29E8F40700E0974F /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A381E0929E8F40700E0974F /* AddViewController.swift */; };
 		6A3EDE8D2A87572F008E8782 /* SampleReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3EDE8C2A87572F008E8782 /* SampleReactor.swift */; };
 		6A4313E22A13046E00095041 /* BottomPageControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4313E12A13046E00095041 /* BottomPageControlView.swift */; };
@@ -246,8 +247,9 @@
 		6A1BAD4429E6550100818086 /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
 		6A223FFB2A1B3D590058C877 /* EditActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditActivityViewController.swift; sourceTree = "<group>"; };
 		6A27E6942A205338001A7F04 /* Ex+UITextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UITextField.swift"; sourceTree = "<group>"; };
-		6A2B5D562A97215000CCBFBE /* PushSettingDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushSettingDetailViewController.swift; sourceTree = "<group>"; };
+		6A2B5D562A97215000CCBFBE /* TimeSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSettingViewController.swift; sourceTree = "<group>"; };
 		6A2B5D582A97217F00CCBFBE /* PushSettingReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushSettingReactor.swift; sourceTree = "<group>"; };
+		6A2B5D5A2A9735D500CCBFBE /* TimeSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSettingView.swift; sourceTree = "<group>"; };
 		6A381E0929E8F40700E0974F /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 		6A3EDE8C2A87572F008E8782 /* SampleReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleReactor.swift; sourceTree = "<group>"; };
 		6A4313E12A13046E00095041 /* BottomPageControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomPageControlView.swift; sourceTree = "<group>"; };
@@ -771,6 +773,7 @@
 				C41193F229D3AED5003DBC15 /* ProfileHeaderView.swift */,
 				C41193F829D3DD9A003DBC15 /* ProfileTableViewCell.swift */,
 				C4DBAA2F29DD459100D1BB97 /* WithdrawConfirmView.swift */,
+				6A2B5D5A2A9735D500CCBFBE /* TimeSettingView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -784,7 +787,7 @@
 				6A0F234129DBA92D0063673B /* ServiceViewController.swift */,
 				C4DBAA2D29DC16A400D1BB97 /* WithdrawViewController.swift */,
 				6A1108B22A95DFF40070682B /* PushSettingViewController.swift */,
-				6A2B5D562A97215000CCBFBE /* PushSettingDetailViewController.swift */,
+				6A2B5D562A97215000CCBFBE /* TimeSettingViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -1253,7 +1256,7 @@
 				C4C792AD2A388486007FD6AA /* Ex+UIScreen.swift in Sources */,
 				C411940B29DAEDF9003DBC15 /* CustomAlertViewController.swift in Sources */,
 				C4170B4E2A89FCA800CE0A65 /* StatisticsViewController.swift in Sources */,
-				6A2B5D572A97215000CCBFBE /* PushSettingDetailViewController.swift in Sources */,
+				6A2B5D572A97215000CCBFBE /* TimeSettingViewController.swift in Sources */,
 				C4DBAA3029DD459100D1BB97 /* WithdrawConfirmView.swift in Sources */,
 				C41193FD29D42BD9003DBC15 /* ProfileFooterView.swift in Sources */,
 				C44807E129E648D300D4B090 /* HomeViewController.swift in Sources */,
@@ -1325,6 +1328,7 @@
 				C4170B502A89FD1100CE0A65 /* StatisticsReactor.swift in Sources */,
 				C4D03F052A2EAB1800011B41 /* MMMWidget.intentdefinition in Sources */,
 				C411939229D2817C003DBC15 /* ProfileViewController.swift in Sources */,
+				6A2B5D5B2A9735D500CCBFBE /* TimeSettingView.swift in Sources */,
 				6A8B776529FF93530095ECFC /* APIConstants.swift in Sources */,
 				C4170B672A95EBFA00CE0A65 /* CategoryReactor.swift in Sources */,
 				C433A07329EEE751008B26DF /* Ex+Date.swift in Sources */,

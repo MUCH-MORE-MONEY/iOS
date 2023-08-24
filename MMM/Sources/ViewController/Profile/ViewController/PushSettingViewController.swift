@@ -45,7 +45,7 @@ final class PushSettingViewController: BaseViewController, View {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: animated)    // navigation bar 숨김
+        navigationController?.setNavigationBarHidden(false, animated: animated)    // navigation bar 숨김
     }
     
     func bind(reactor: PushSettingReactor) {
@@ -67,7 +67,7 @@ extension PushSettingViewController {
             .filter { $0.isPresentTimeDetail }
             .bind { [weak self] _ in
                 guard let self = self else { return }
-                let vc = PushSettingDetailViewController()
+                let vc = TimeSettingViewController()
                 self.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)

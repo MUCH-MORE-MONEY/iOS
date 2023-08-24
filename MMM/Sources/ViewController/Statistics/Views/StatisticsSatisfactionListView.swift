@@ -97,9 +97,9 @@ private extension StatisticsSatisfactionListView {
 		}
 		
 		tableView = tableView.then {
+			$0.register(HomeTableViewCell.self)
 			$0.backgroundColor = R.Color.gray100
 			$0.showsVerticalScrollIndicator = false
-			$0.register(HomeTableViewCell.self)
 			$0.separatorStyle = .none
 			$0.isHidden = true
 		}

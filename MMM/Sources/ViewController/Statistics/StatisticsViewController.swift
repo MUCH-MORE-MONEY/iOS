@@ -64,6 +64,42 @@ final class StatisticsViewController: UIViewController, View {
 		bindAction(reactor)
 	}
 }
+//MARK: - Bind
+extension StatisticsViewController {
+	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
+	private func bindAction(_ reactor: StatisticsReactor) {
+		monthButton.rx.tap
+			.subscribe(onNext: { [weak self] _ in
+				guard let self = self else { return }
+				self.presentBottomSheet() // '월' 변경 버튼
+			}).disposed(by: disposeBag)
+	}
+	
+	// MARK: 데이터 바인딩 처리 (Reactor -> View)
+	private func bindState(_ reactor: StatisticsReactor) {
+		bottomSheetReactor.state
+			.map { $0.success }
+			.distinctUntilChanged() // 중복값 무시
+			.bind(onNext: setMonth) // '월' 변경
+			.disposed(by: disposeBag)
+
+		// 카테고리 더보기 클릭시, push
+		reactor.state
+			.map { $0.isPushMoreCartegory }
+			.distinctUntilChanged() // 중복값 무시
+			.filter { $0 } // true일때만 화면 전환
+			.bind(onNext: pushCategoryViewController)
+			.disposed(by: disposeBag)
+		
+		// 만족도 선택시, present
+		reactor.state
+			.map { $0.isPresentSatisfaction }
+			.distinctUntilChanged() // 중복값 무시
+			.filter { $0 } // true일때만 화면 전환
+			.bind(onNext: presentStisfactionViewController)
+			.disposed(by: disposeBag)
+	}
+}
 //MARK: - Action
 extension StatisticsViewController {
 	// Bottom Sheet 설정
@@ -106,42 +142,6 @@ extension StatisticsViewController {
 		} else {
 			monthButton.setTitle(date.getFormattedDate(format: "M월"), for: .normal)
 		}
-	}
-}
-//MARK: - Bind
-extension StatisticsViewController {
-	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
-	private func bindAction(_ reactor: StatisticsReactor) {
-		monthButton.rx.tap
-			.subscribe(onNext: { [weak self] _ in
-				guard let self = self else { return }
-				self.presentBottomSheet() // '월' 변경 버튼
-			}).disposed(by: disposeBag)
-	}
-	
-	// MARK: 데이터 바인딩 처리 (Reactor -> View)
-	private func bindState(_ reactor: StatisticsReactor) {
-		bottomSheetReactor.state
-			.map { $0.success }
-			.distinctUntilChanged() // 중복값 무시
-			.bind(onNext: setMonth) // '월' 변경
-			.disposed(by: disposeBag)
-
-		// 카테고리 더보기 클릭시, push
-		reactor.state
-			.map { $0.isPushMoreCartegory }
-			.distinctUntilChanged() // 중복값 무시
-			.filter { $0 } // true일때만 화면 전환
-			.bind(onNext: pushCategoryViewController)
-			.disposed(by: disposeBag)
-		
-		// 만족도 선택시, present
-		reactor.state
-			.map { $0.isPresentSatisfaction }
-			.distinctUntilChanged() // 중복값 무시
-			.filter { $0 } // true일때만 화면 전환
-			.bind(onNext: presentStisfactionViewController)
-			.disposed(by: disposeBag)
 	}
 }
 //MARK: - Style & Layouts

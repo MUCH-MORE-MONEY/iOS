@@ -50,7 +50,7 @@ extension StatisticsReactor {
 		case .loadData:
 			return  Observable.concat([
 				.just(.setLoading(true)),
-				.just(.fetchActivitySatisfactionList(EconomicActivity.getDummyList())),
+				.just(.fetchActivitySatisfactionList(EconomicActivity.getThreeDummyList() + [EconomicActivity.getThreeDummyList().first!])),
 				.just(.setLoading(false))
 			])
 		case .didTapMoreButton:

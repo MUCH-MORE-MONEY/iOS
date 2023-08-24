@@ -14,6 +14,8 @@ final class StatisticsActivityView: UIView, View {
 	
 	// MARK: - Properties
 	var disposeBag: DisposeBag = DisposeBag()
+	private var timer = Timer()
+	private var satisfactionCounter = 0
 
 	// MARK: - UI Components
 	private lazy var stackView = UIStackView()
@@ -75,18 +77,44 @@ extension StatisticsActivityView {
 			}.disposed(by: disposeBag)
 	}
 }
+//MARK: - Action
+extension StatisticsActivityView {
+	@objc private func moveToNextIndex() {
+		let index = IndexPath.init(item: satisfactionCounter, section: 0)
+		self.satisfactionTableView.scrollToRow(at: index, at: .middle, animated: true) // 해당 인덱스로 이동.
+		self.satisfactionCounter += 1 // 인덱스 증가
+		
+		if satisfactionCounter >= 4 {
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+				self.satisfactionTableView.scrollToRow(at: NSIndexPath(item: 0, section: 0) as IndexPath, at: .top, animated: false)
+				self.satisfactionCounter = 0 // 인덱스 초기화
+			}
+		}
+	}
+}
 //MARK: - Style & Layouts
 private extension StatisticsActivityView {
 	// 초기 셋업할 코드들
 	private func setup() {
+		setTimer()
 		setAttribute()
 		setLayout()
+	}
+	
+	private func setTimer() {
+		timer = Timer.scheduledTimer(
+			timeInterval: 1,
+			target: self,
+			selector: #selector(moveToNextIndex),
+			userInfo: nil,
+			repeats: true
+		)
 	}
 	
 	private func setAttribute() {
 		backgroundColor = R.Color.black
 		layer.cornerRadius = 10
-		
+
 		stackView = stackView.then {
 			$0.axis = .horizontal
 			$0.spacing = 12

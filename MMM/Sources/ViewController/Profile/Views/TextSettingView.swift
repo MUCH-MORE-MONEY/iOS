@@ -1,5 +1,5 @@
 //
-//  TimeSettingView.swift
+//  TextSettingView.swift
 //  MMM
 //
 //  Created by Park Jungwoo on 2023/08/24.
@@ -9,7 +9,7 @@ import UIKit
 import Then
 import SnapKit
 
-final class TimeSettingView: UIView {
+final class TextSettingView: UIView {
     // MARK: - UI Components
     private lazy var mainLabel = UILabel()
     private lazy var imageView = UIImageView()
@@ -23,9 +23,11 @@ final class TimeSettingView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
 }
 
-extension TimeSettingView {
+
+extension TextSettingView {
     private func setup() {
         setAttribute()
         setLayout()
@@ -37,7 +39,7 @@ extension TimeSettingView {
         addSubviews(mainLabel, imageView)
         
         mainLabel = mainLabel.then {
-            $0.text = "매일 09:00 PM"
+            $0.text = "오늘의 경제활동을 작성해보세요"
             $0.font = R.Font.body1
             $0.textColor = R.Color.white
         }

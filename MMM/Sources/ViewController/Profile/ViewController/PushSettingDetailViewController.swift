@@ -11,10 +11,10 @@ import Then
 import RxSwift
 import RxCocoa
 
-final class TimeSettingViewController: BaseViewController {
+final class PushSettingDetailViewController: BaseViewController {
     // MARK: - UI Components
     private lazy var mainLabel = UILabel()
-    private lazy var timeSettingView = TimeSettingView()
+    private lazy var timeSettingView = DetailTimeSettingView()
     
     
     override func viewDidLoad() {
@@ -35,7 +35,7 @@ final class TimeSettingViewController: BaseViewController {
 }
 
 
-extension TimeSettingViewController {
+extension PushSettingDetailViewController {
     private func setup() {
         setAttribute()
         setLayout()

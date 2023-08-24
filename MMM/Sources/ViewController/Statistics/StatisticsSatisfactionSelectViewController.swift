@@ -95,6 +95,15 @@ extension StatisticsSatisfactionSelectViewController {
 			.map { .didTapSatisfactionCheckButton(type: self.satisfaction.rawValue) }
 			.bind(to: reactor.action)
 			.disposed(by: disposeBag)
+		
+		// TableView cell select
+		tableView.rx.itemSelected
+			.subscribe(onNext: { [weak self] indexPath in
+				guard let self = self else { return }
+
+				// Cell touch시 회색 표시 없애기
+				self.tableView.deselectRow(at: indexPath, animated: true)
+			}).disposed(by: disposeBag)
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
@@ -106,15 +115,6 @@ extension StatisticsSatisfactionSelectViewController {
 				self.delegate?.willDismiss()
 			}.disposed(by: disposeBag)
 		
-		// TableView cell select
-		tableView.rx.itemSelected
-			.subscribe(onNext: { [weak self] indexPath in
-				guard let self = self else { return }
-
-				// Cell touch시 회색 표시 없애기
-				self.tableView.deselectRow(at: indexPath, animated: true)
-			}).disposed(by: disposeBag)
-
 		satisfactionList.asObservable()
 			.bind(to: tableView.rx.items(cellIdentifier: "SatisfactionTableViewCell", cellType: SatisfactionTableViewCell.self)) { index, element, cell in
 				

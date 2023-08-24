@@ -121,7 +121,7 @@ extension StatisticsActivityView {
 				// 아쉬운 활동
 				self.disappointingTableView.scrollToRow(at: NSIndexPath(item: 3, section: 0) as IndexPath, at: .top, animated: false)
 				
-				self.couter = 0 // 인덱스 초기화
+				self.couter = 1 // 인덱스 초기화
 			}
 		}
 	}

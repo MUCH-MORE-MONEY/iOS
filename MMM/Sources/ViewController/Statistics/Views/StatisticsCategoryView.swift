@@ -16,12 +16,12 @@ final class StatisticsCategoryView: UIView, View {
 	var disposeBag: DisposeBag = DisposeBag()
 
 	// MARK: - UI Components
-	private lazy var titleLabel = UILabel() 		 // 카테고리
-	private lazy var moreButton = UIButton() 		 // 더보기
-	private lazy var payLabel = UILabel() 			 // 지출
-	private lazy var payRankLabel = UILabel() 	 	 // 지출 랭킹
-	private lazy var earnLabel = UILabel() 			 // 수입
-	private lazy var earnRankLabel = UILabel() 	 	 // 수입 랭킹
+	private lazy var titleLabel = UILabel() 	// 카테고리
+	private lazy var moreLabel = UILabel() 		// 더보기
+	private lazy var payLabel = UILabel() 		// 지출
+	private lazy var payRankLabel = UILabel() 	// 지출 랭킹
+	private lazy var earnLabel = UILabel() 		// 수입
+	private lazy var earnRankLabel = UILabel() 	// 수입 랭킹
 
 	override init(frame: CGRect) {
 		super.init(frame: frame)
@@ -43,9 +43,10 @@ final class StatisticsCategoryView: UIView, View {
 extension StatisticsCategoryView {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
 	private func bindAction(_ reactor: StatisticsReactor) {
-		// 카테고리 더보기 클릭시, 화면전환
-		moreButton.rx.tap
-			.map { .didTapMoreButton }
+		// 카테고리 영역 클릭시, 화면전환
+		self.rx.tapGesture()
+			.when(.recognized) // 바인딩 할때 event emit 방지
+			.map { _ in .didTapMoreButton }
 			.bind(to: reactor.action)
 			.disposed(by: disposeBag)
 	}
@@ -71,11 +72,10 @@ private extension StatisticsCategoryView {
 			$0.textColor = R.Color.white
 		}
 		
-		moreButton = moreButton.then {
-			$0.setTitle("더보기", for: .normal)
-			$0.setTitleColor(R.Color.gray500, for: .normal)
-			$0.setTitleColor(R.Color.gray500.withAlphaComponent(0.7), for: .highlighted)
-			$0.titleLabel?.font = R.Font.body4
+		moreLabel = moreLabel.then {
+			$0.text = "더보기"
+			$0.font = R.Font.body4
+			$0.textColor = R.Color.gray500
 		}
 		
 		payLabel = payLabel.then {
@@ -104,14 +104,14 @@ private extension StatisticsCategoryView {
 	}
 	
 	private func setLayout() {
-		addSubviews(titleLabel, moreButton, payLabel, payRankLabel, earnLabel, earnRankLabel)
+		addSubviews(titleLabel, moreLabel, payLabel, payRankLabel, earnLabel, earnRankLabel)
 		
 		titleLabel.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(12)
 			$0.leading.equalToSuperview().inset(20)
 		}
 		
-		moreButton.snp.makeConstraints {
+		moreLabel.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(12)
 			$0.trailing.equalToSuperview().inset(20)
 			$0.height.equalTo(18)

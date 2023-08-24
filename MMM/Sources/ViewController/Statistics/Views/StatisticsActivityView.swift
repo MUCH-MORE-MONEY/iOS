@@ -15,7 +15,7 @@ final class StatisticsActivityView: UIView, View {
 	// MARK: - Properties
 	var disposeBag: DisposeBag = DisposeBag()
 	private var timer = Timer()
-	private var couter = 0
+	private var couter = 1 // 처음 Delay 때문에 0이 아닌 1로 초기화
 
 	// MARK: - UI Components
 	private lazy var stackView = UIStackView()

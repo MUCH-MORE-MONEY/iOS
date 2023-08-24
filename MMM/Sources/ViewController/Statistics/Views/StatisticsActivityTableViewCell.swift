@@ -34,7 +34,10 @@ final class StatisticsActivityTableViewCell: UITableViewCell {
 //MARK: - Action
 extension StatisticsActivityTableViewCell {
 	// 외부에서 설정
-	func setData(data: EconomicActivity, last: Bool) {
+	func setData(data: EconomicActivity) {
+		titleLabel.text = data.title
+		priceLabel.text = data.amount.withCommas() + " 원"
+		typeImageView.image = data.type == "01" ? R.Icon.plus16 : R.Icon.minus16
 	}
 }
 //MARK: - Style & Layouts
@@ -46,6 +49,8 @@ private extension StatisticsActivityTableViewCell {
 	}
 	
 	private func setAttribute() {
+		self.backgroundColor = R.Color.black
+
 		titleLabel = titleLabel.then {
 			$0.font = R.Font.title3
 			$0.textColor = R.Color.white
@@ -69,11 +74,12 @@ private extension StatisticsActivityTableViewCell {
 		contentView.addSubviews(titleLabel, typeImageView, priceLabel)
 		
 		titleLabel.snp.makeConstraints {
-			$0.top.leading.equalToSuperview()
+			$0.top.equalToSuperview().inset(2)
+			$0.leading.equalToSuperview()
 		}
 		
 		typeImageView.snp.makeConstraints {
-			$0.top.equalTo(titleLabel.snp.bottom).offset(4)
+			$0.top.equalTo(titleLabel.snp.bottom).offset(8)
 			$0.leading.equalToSuperview()
 		}
 		

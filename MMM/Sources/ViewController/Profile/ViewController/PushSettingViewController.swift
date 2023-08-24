@@ -8,8 +8,11 @@
 import UIKit
 import SnapKit
 import Then
+import ReactorKit
+import RxSwift
+import RxCocoa
 
-final class PushSettingViewController: BaseViewController {
+final class PushSettingViewController: BaseViewController, View {
     // MARK: - UI Components
     private lazy var eventPushStackView = UIStackView()
     private lazy var infoPushStackView = UIStackView()
@@ -25,9 +28,14 @@ final class PushSettingViewController: BaseViewController {
     private lazy var timeSettingButton = UIButton()
     private lazy var textSettingButton = UIButton()
     
+    // MARK: - Properties
+    var disposeBag: DisposeBag = DisposeBag()
+    var reactor: PushSettingReactor!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+        bind(reactor: reactor)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -39,6 +47,33 @@ final class PushSettingViewController: BaseViewController {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)    // navigation bar 숨김
     }
+    
+    func bind(reactor: PushSettingReactor) {
+        bindState(reactor)
+        bindAction(reactor)
+    }
+}
+
+extension PushSettingViewController {
+    private func bindAction(_ reactor: PushSettingReactor) {
+        timeSettingButton.rx.tap
+            .map { .didTapTimeSettingButton }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+
+    private func bindState(_ reactor: PushSettingReactor) {
+        reactor.state
+            .filter { $0.isPresentTimeDetail }
+            .bind { [weak self] _ in
+                guard let self = self else { return }
+                let vc = PushSettingDetailViewController()
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+            .disposed(by: disposeBag)
+    }
+    
+
 }
 
 private extension PushSettingViewController {
@@ -46,6 +81,7 @@ private extension PushSettingViewController {
         setAttribute()
         setLayout()
     }
+    
     
     private func setAttribute() {
         title = "푸시 알림 설정"

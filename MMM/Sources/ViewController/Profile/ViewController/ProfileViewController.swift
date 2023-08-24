@@ -153,6 +153,7 @@ extension ProfileViewController: UITableViewDelegate {
             navigationController?.pushViewController(vc, animated: true)
         case 3:
             let vc = PushSettingViewController()
+            vc.reactor = PushSettingReactor()
             vc.hidesBottomBarWhenPushed = true    // TabBar Above
             navigationController?.pushViewController(vc, animated: true)
         case 4:

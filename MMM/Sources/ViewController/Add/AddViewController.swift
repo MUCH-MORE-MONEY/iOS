@@ -15,7 +15,6 @@ final class AddViewController: BaseViewController {
 	// MARK: - Properties
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 	private var viewModel = EditActivityViewModel(isAddModel: true)
-	private var parentVC: AnyObject
 	private var bottomConstraint: Constraint!
 	private var isFirst: Bool = true
 	private var bottomPadding: CGFloat {
@@ -44,15 +43,6 @@ final class AddViewController: BaseViewController {
 	
 	private lazy var nextFirstButton = UIButton()
 	private lazy var nextSecondButton = UIButton()
-	
-	init(parentVC: AnyObject) {
-		self.parentVC = parentVC
-		super.init(nibName: nil, bundle: nil)
-	}
-	
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -103,15 +93,16 @@ final class AddViewController: BaseViewController {
 		
 		NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
 		NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-		
-		if parentVC is ProfileViewController {
-			if let navigationController = self.navigationController {
-				if let rootVC = navigationController.viewControllers.first {
-					rootVC.navigationController?.setNavigationBarHidden(true, animated: false)	// navigation bar 노출
-				}
-			}
-		}
+        
+//        navigationController?.setNavigationBarHidden(false, animated: true)
+        
+//        if let navigationController = self.navigationController {
+//            if let rootVC = navigationController.viewControllers.first {
+//                rootVC.navigationController?.setNavigationBarHidden(false, animated: false)    // navigation bar 노출
+//            }
+//        }
 	}
+    
 }
 //MARK: - Action
 extension AddViewController {

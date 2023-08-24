@@ -37,7 +37,6 @@
 		6A1479632A0DE0690045B8C1 /* CameraImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1479622A0DE0690045B8C1 /* CameraImageView.swift */; };
 		6A15B0EC2A15B68D00EADAC5 /* BaseAddActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A15B0EB2A15B68D00EADAC5 /* BaseAddActivityViewController.swift */; };
 		6A15D5372A5138D800B60CC8 /* Tracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A15D5362A5138D800B60CC8 /* Tracking.swift */; };
-		6A1880C929EF85BC00D62F1A /* TabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1880C829EF85BB00D62F1A /* TabItem.swift */; };
 		6A1880CB29EF85EA00D62F1A /* OnboardingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1880CA29EF85EA00D62F1A /* OnboardingItem.swift */; };
 		6A1BAD4529E6550100818086 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1BAD4429E6550100818086 /* OnboardingViewModel.swift */; };
 		6A223FFC2A1B3D590058C877 /* EditActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A223FFB2A1B3D590058C877 /* EditActivityViewController.swift */; };
@@ -48,12 +47,10 @@
 		6A4F6E962A29ADA500754150 /* Ex+UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4F6E952A29ADA500754150 /* Ex+UIViewController.swift */; };
 		6A626BC12A0C7EE700BDD5C0 /* SelectDetailResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A626BC02A0C7EE700BDD5C0 /* SelectDetailResDto.swift */; };
 		6A626BC52A0C87E800BDD5C0 /* HomeDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A626BC42A0C87E800BDD5C0 /* HomeDetailViewModel.swift */; };
-		6A6C4CD52A3AA95600E378C9 /* TabBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6C4CD42A3AA95600E378C9 /* TabBarViewModel.swift */; };
 		6A8605B62A24C83D00DF68BD /* UpdateResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8605B52A24C83D00DF68BD /* UpdateResDto.swift */; };
 		6A8605B82A24D0B000DF68BD /* DeleteResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8605B72A24D0B000DF68BD /* DeleteResDto.swift */; };
 		6A8B776329FF92CC0095ECFC /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8B776229FF92CC0095ECFC /* Constants.swift */; };
 		6A8B776529FF93530095ECFC /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8B776429FF93530095ECFC /* APIConstants.swift */; };
-		6AB1150F29EE372F00D3B813 /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB1150E29EE372F00D3B813 /* CustomTabBar.swift */; };
 		6AB1151329EE6D9E00D3B813 /* Ex+UITabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB1151229EE6D9E00D3B813 /* Ex+UITabBar.swift */; };
 		6ADC27E02A2AEEF400C56777 /* Ex+UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ADC27DF2A2AEEF400C56777 /* Ex+UIImage.swift */; };
 		6ADEAFDF2A53B81300299A0E /* Ex+Window.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ADEAFDE2A53B81300299A0E /* Ex+Window.swift */; };
@@ -243,7 +240,6 @@
 		6A1479622A0DE0690045B8C1 /* CameraImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraImageView.swift; sourceTree = "<group>"; };
 		6A15B0EB2A15B68D00EADAC5 /* BaseAddActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAddActivityViewController.swift; sourceTree = "<group>"; };
 		6A15D5362A5138D800B60CC8 /* Tracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracking.swift; sourceTree = "<group>"; };
-		6A1880C829EF85BB00D62F1A /* TabItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabItem.swift; sourceTree = "<group>"; };
 		6A1880CA29EF85EA00D62F1A /* OnboardingItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingItem.swift; sourceTree = "<group>"; };
 		6A1BAD4429E6550100818086 /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
 		6A223FFB2A1B3D590058C877 /* EditActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditActivityViewController.swift; sourceTree = "<group>"; };
@@ -254,12 +250,10 @@
 		6A4F6E952A29ADA500754150 /* Ex+UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIViewController.swift"; sourceTree = "<group>"; };
 		6A626BC02A0C7EE700BDD5C0 /* SelectDetailResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectDetailResDto.swift; sourceTree = "<group>"; };
 		6A626BC42A0C87E800BDD5C0 /* HomeDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDetailViewModel.swift; sourceTree = "<group>"; };
-		6A6C4CD42A3AA95600E378C9 /* TabBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewModel.swift; sourceTree = "<group>"; };
 		6A8605B52A24C83D00DF68BD /* UpdateResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateResDto.swift; sourceTree = "<group>"; };
 		6A8605B72A24D0B000DF68BD /* DeleteResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteResDto.swift; sourceTree = "<group>"; };
 		6A8B776229FF92CC0095ECFC /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		6A8B776429FF93530095ECFC /* APIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConstants.swift; sourceTree = "<group>"; };
-		6AB1150E29EE372F00D3B813 /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
 		6AB1151229EE6D9E00D3B813 /* Ex+UITabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UITabBar.swift"; sourceTree = "<group>"; };
 		6ADC27DF2A2AEEF400C56777 /* Ex+UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIImage.swift"; sourceTree = "<group>"; };
 		6ADEAFDE2A53B81300299A0E /* Ex+Window.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Window.swift"; sourceTree = "<group>"; };
@@ -461,10 +455,7 @@
 		6A0F234529DC0D750063673B /* TabBar */ = {
 			isa = PBXGroup;
 			children = (
-				6AB1150E29EE372F00D3B813 /* CustomTabBar.swift */,
 				6A0F234629DC0DB20063673B /* TabBarController.swift */,
-				6A1880C829EF85BB00D62F1A /* TabItem.swift */,
-				6A6C4CD42A3AA95600E378C9 /* TabBarViewModel.swift */,
 			);
 			path = TabBar;
 			sourceTree = "<group>";
@@ -1251,7 +1242,6 @@
 				C411940429D53DDF003DBC15 /* ManagementViewController.swift in Sources */,
 				C41193F529D3D7FB003DBC15 /* Ex+NSObject.swift in Sources */,
 				6A08B47D29FF5D530080719E /* Log.swift in Sources */,
-				6AB1150F29EE372F00D3B813 /* CustomTabBar.swift in Sources */,
 				C4170B572A93A58A00CE0A65 /* StatisticsCategoryView.swift in Sources */,
 				C460DBAA2A96056100530351 /* SatisfactionTableViewCell.swift in Sources */,
 				C4C792AD2A388486007FD6AA /* Ex+UIScreen.swift in Sources */,
@@ -1264,7 +1254,6 @@
 				6A1108B32A95DFF40070682B /* PushSettingViewController.swift in Sources */,
 				6A4F6E962A29ADA500754150 /* Ex+UIViewController.swift in Sources */,
 				C4DBAA2E29DC16A400D1BB97 /* WithdrawViewController.swift in Sources */,
-				6A1880C929EF85BC00D62F1A /* TabItem.swift in Sources */,
 				6ADEAFDF2A53B81300299A0E /* Ex+Window.swift in Sources */,
 				6A223FFC2A1B3D590058C877 /* EditActivityViewController.swift in Sources */,
 				6A04FA052A1C4BB00034C114 /* AddImageView.swift in Sources */,
@@ -1363,7 +1352,6 @@
 				C4D7FC892A08A61C00565291 /* CalendarCell.swift in Sources */,
 				C433A06D29EE53BB008B26DF /* HomeTableViewCell.swift in Sources */,
 				C411939029D2817C003DBC15 /* SceneDelegate.swift in Sources */,
-				6A6C4CD52A3AA95600E378C9 /* TabBarViewModel.swift in Sources */,
 				C4199DDD2A001001006E5DA8 /* EconomicActivityResDto.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

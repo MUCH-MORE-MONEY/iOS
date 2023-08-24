@@ -25,7 +25,6 @@ final class ProfileViewController: UIViewController {
 			return 0.0
 		}
 	}()
-    private var tabBarViewModel: TabBarViewModel
     private var cancellable = Set<AnyCancellable>()
     
 	// MARK: - UI Components
@@ -33,15 +32,6 @@ final class ProfileViewController: UIViewController {
 	private lazy var profileHeaderView = ProfileHeaderView()
 	private lazy var profileFooterView = ProfileFooterView()
 	private lazy var tableView = UITableView()
-	
-    init(tabBarViewModel: TabBarViewModel) {
-        self.tabBarViewModel = tabBarViewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
 	override func viewDidLoad() {
 		super.viewDidLoad()

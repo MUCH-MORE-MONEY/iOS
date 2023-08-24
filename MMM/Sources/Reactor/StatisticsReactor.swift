@@ -11,12 +11,14 @@ import ReactorKit
 final class StatisticsReactor: Reactor {
 	// 사용자의 액션
 	enum Action {
+		case loadData
 		case didTapMoreButton // 카테고리 더보기
 		case didTapSatisfactionButton // 만족도 선택
 	}
 	
 	// 처리 단위
 	enum Mutation {
+		case fetchActivitySatisfactionList([EconomicActivity])
 		case setLoading(Bool)
 		case setPushMoreCartegory(Bool)
 		case setPresentSatisfaction(Bool)
@@ -24,6 +26,7 @@ final class StatisticsReactor: Reactor {
 	
 	// 현재 상태를 기록
 	struct State {
+		var activitySatisfactionList: [EconomicActivity] = []
 		var isLoading = false // 로딩
 		var isPushMoreCartegory = false
 		var isPresentSatisfaction = false
@@ -32,13 +35,24 @@ final class StatisticsReactor: Reactor {
 	// MARK: Properties
 	let initialState: State
 
-	init() { initialState = State() }
+	init() {
+		initialState = State()
+		
+		// 뷰가 최초 로드 될 경우
+		action.onNext(.loadData)
+	}
 }
 //MARK: - Mutate, Reduce 함수
 extension StatisticsReactor {
 	/// Action이 들어온 경우, 어떤 처리를 할건지 분기
 	func mutate(action: Action) -> Observable<Mutation> {
 		switch action {
+		case .loadData:
+			return  Observable.concat([
+				.just(.setLoading(true)),
+				.just(.fetchActivitySatisfactionList(EconomicActivity.getDummyList())),
+				.just(.setLoading(false))
+			])
 		case .didTapMoreButton:
 			return  Observable.concat([
 				.just(.setPushMoreCartegory(true)),
@@ -57,6 +71,8 @@ extension StatisticsReactor {
 		var newState = state
 		
 		switch mutation {
+		case .fetchActivitySatisfactionList(let data):
+			newState.activitySatisfactionList = data
 		case .setLoading(let isLoading):
 			newState.isLoading = isLoading
 		case .setPushMoreCartegory(let isPresent):

@@ -164,6 +164,7 @@ extension StatisticsViewController {
 		refreshView.backgroundColor = R.Color.gray900
 		contentView.backgroundColor = R.Color.gray900
 		categoryView.reactor = self.reactor // reactor 주입
+		activityView.reactor = self.reactor // reactor 주입
 		selectAreaView.reactor = self.reactor // reactor 주입
 		
 		let view = UIView(frame: .init(origin: .zero, size: .init(width: 80, height: 30)))

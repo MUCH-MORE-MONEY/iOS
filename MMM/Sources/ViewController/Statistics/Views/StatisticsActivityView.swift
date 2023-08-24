@@ -15,8 +15,7 @@ final class StatisticsActivityView: UIView, View {
 	// MARK: - Properties
 	var disposeBag: DisposeBag = DisposeBag()
 	private var timer = Timer()
-	private var satisfactionCounter = 0
-	private var disappointingCounter = 4 // 눈속임을 위해 전체 3 + 1(처음것)
+	private var couter = 0
 
 	// MARK: - UI Components
 	private lazy var stackView = UIStackView()
@@ -72,19 +71,57 @@ extension StatisticsActivityView {
 				
 				return cell
 			}.disposed(by: disposeBag)
+		
+		// 아쉬운 활동 List
+		reactor.state
+			.map { $0.activityDisappointingList }
+			.bind(to: disappointingTableView.rx.items) { tv, row, data in
+				let index = IndexPath(row: row, section: 0)
+				let cell = tv.dequeueReusableCell(withIdentifier: "StatisticsActivityTableViewCell", for: index) as! StatisticsActivityTableViewCell
+				
+				cell.isUserInteractionEnabled = false // click disable
+
+				// 데이터 설정
+				cell.setData(data: data)
+				
+				return cell
+			}.disposed(by: disposeBag)
+		
+		reactor.state
+			.map { $0.isLoading }
+			.distinctUntilChanged() // 중복값 무시
+			.bind(onNext: { [weak self] isLoading in
+				guard let self = self else { return }
+				
+				if !isLoading { // 로딩 끝
+					// 자연스러운 UI를 위해 미리 초기화
+					self.disappointingTableView.scrollToRow(at: NSIndexPath(item: 3, section: 0) as IndexPath, at: .middle, animated: false) // 해당 인덱스로 이동.
+				}
+			}).disposed(by: disposeBag)
 	}
 }
 //MARK: - Action
 extension StatisticsActivityView {
-	@objc private func moveToNextIndex() {
-		let index = IndexPath.init(item: satisfactionCounter, section: 0)
-		self.satisfactionTableView.scrollToRow(at: index, at: .middle, animated: true) // 해당 인덱스로 이동.
-		self.satisfactionCounter += 1 // 인덱스 증가
+	@objc private func moveToIndex() {
+		// 만족스러운 활동
+		let indexSatisfaction = IndexPath.init(item: couter, section: 0)
+		self.satisfactionTableView.scrollToRow(at: indexSatisfaction, at: .middle, animated: true) // 해당 인덱스로 이동.
 		
-		if satisfactionCounter >= 4 {
+		// 아쉬운 활동
+		let indexDisappointing = IndexPath.init(item: 3 - couter, section: 0)
+		self.disappointingTableView.scrollToRow(at: indexDisappointing, at: .middle, animated: true) // 해당 인덱스로 이동.
+
+		self.couter += 1 // 인덱스 증가
+
+		if couter >= 4 {
 			DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+				// 만족스러운 활동
 				self.satisfactionTableView.scrollToRow(at: NSIndexPath(item: 0, section: 0) as IndexPath, at: .top, animated: false)
-				self.satisfactionCounter = 0 // 인덱스 초기화
+				
+				// 아쉬운 활동
+				self.disappointingTableView.scrollToRow(at: NSIndexPath(item: 3, section: 0) as IndexPath, at: .top, animated: false)
+				
+				self.couter = 0 // 인덱스 초기화
 			}
 		}
 	}
@@ -102,7 +139,7 @@ private extension StatisticsActivityView {
 		timer = Timer.scheduledTimer(
 			timeInterval: 1,
 			target: self,
-			selector: #selector(moveToNextIndex),
+			selector: #selector(moveToIndex),
 			userInfo: nil,
 			repeats: true
 		)
@@ -149,6 +186,15 @@ private extension StatisticsActivityView {
 			$0.rowHeight = 48
 		}
 		
+		disappointingTableView = disappointingTableView.then {
+			$0.register(StatisticsActivityTableViewCell.self)
+			$0.backgroundColor = R.Color.black
+			$0.showsVerticalScrollIndicator = false
+			$0.separatorStyle = .none
+			$0.isScrollEnabled = false
+			$0.rowHeight = 48
+		}
+		
 		satisfactionTitleLabel = satisfactionTitleLabel.then {
 			$0.text = "아직 활동이 없어요"
 			$0.font = R.Font.title3
@@ -178,7 +224,7 @@ private extension StatisticsActivityView {
 		addSubview(stackView)
 		stackView.addArrangedSubviews(satisfactionView, disappointingView)
 		satisfactionView.addSubviews(satisfactionLabel, satisfactionImageView, satisfactionTableView, satisfactionTitleLabel, satisfactionPriceLabel)
-		disappointingView.addSubviews(disappointingLabel, disappointingImageView, disappointingTitleLabel, disappointingPriceLabel)
+		disappointingView.addSubviews(disappointingLabel, disappointingImageView, disappointingTableView, disappointingTitleLabel, disappointingPriceLabel)
 		
 		stackView.snp.makeConstraints {
 			$0.top.bottom.equalToSuperview().inset(12)
@@ -204,26 +250,32 @@ private extension StatisticsActivityView {
 		}
 		
 		satisfactionTableView.snp.makeConstraints {
+			$0.top.equalTo(satisfactionLabel.snp.bottom).offset(8)
+			$0.trailing.leading.bottom.equalToSuperview()
+		}
+		
+		disappointingTableView.snp.makeConstraints {
 			$0.top.equalTo(disappointingLabel.snp.bottom).offset(8)
 			$0.trailing.leading.bottom.equalToSuperview()
 		}
+		
 		
 //		satisfactionTitleLabel.snp.makeConstraints {
 //			$0.bottom.equalTo(disappointingPriceLabel.snp.top).offset(-8)
 //			$0.leading.equalToSuperview()
 //		}
 		
-		disappointingTitleLabel.snp.makeConstraints {
-			$0.bottom.equalTo(disappointingPriceLabel.snp.top).offset(-8)
-			$0.leading.equalToSuperview()
-		}
+//		disappointingTitleLabel.snp.makeConstraints {
+//			$0.bottom.equalTo(disappointingPriceLabel.snp.top).offset(-8)
+//			$0.leading.equalToSuperview()
+//		}
 		
 //		satisfactionPriceLabel.snp.makeConstraints {
 //			$0.leading.bottom.equalToSuperview()
 //		}
 		
-		disappointingPriceLabel.snp.makeConstraints {
-			$0.leading.bottom.equalToSuperview()
-		}
+//		disappointingPriceLabel.snp.makeConstraints {
+//			$0.leading.bottom.equalToSuperview()
+//		}
 	}
 }

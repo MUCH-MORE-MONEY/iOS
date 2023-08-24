@@ -16,6 +16,7 @@ final class StatisticsActivityView: UIView, View {
 	var disposeBag: DisposeBag = DisposeBag()
 	private var timer = Timer()
 	private var satisfactionCounter = 0
+	private var disappointingCounter = 4 // 눈속임을 위해 전체 3 + 1(처음것)
 
 	// MARK: - UI Components
 	private lazy var stackView = UIStackView()
@@ -27,6 +28,7 @@ final class StatisticsActivityView: UIView, View {
 	private lazy var satisfactionPriceLabel = UILabel()
 
 	private lazy var disappointingView = UIView()			// 아쉬운 활동 영역
+	private lazy var disappointingTableView = UITableView()
 	private lazy var disappointingLabel = UILabel()			// 아쉬운 활동
 	private lazy var disappointingImageView = UIImageView() // 💦
 	private lazy var disappointingTitleLabel = UILabel()
@@ -52,13 +54,6 @@ final class StatisticsActivityView: UIView, View {
 extension StatisticsActivityView {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
 	private func bindAction(_ reactor: StatisticsReactor) {
-		// TableView cell select
-		satisfactionTableView.rx.itemSelected
-			.subscribe(onNext: { [weak self] indexPath in
-				guard let self = self else { return }
-				// Cell touch시 회색 표시 없애기
-				self.satisfactionTableView.deselectRow(at: indexPath, animated: true)
-			}).disposed(by: disposeBag)
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
@@ -70,6 +65,8 @@ extension StatisticsActivityView {
 				let index = IndexPath(row: row, section: 0)
 				let cell = tv.dequeueReusableCell(withIdentifier: "StatisticsActivityTableViewCell", for: index) as! StatisticsActivityTableViewCell
 				
+				cell.isUserInteractionEnabled = false // click disable
+
 				// 데이터 설정
 				cell.setData(data: data)
 				
@@ -148,7 +145,7 @@ private extension StatisticsActivityView {
 			$0.backgroundColor = R.Color.black
 			$0.showsVerticalScrollIndicator = false
 			$0.separatorStyle = .none
-//			$0.isScrollEnabled = false
+			$0.isScrollEnabled = false
 			$0.rowHeight = 48
 		}
 		

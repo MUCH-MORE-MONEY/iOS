@@ -96,7 +96,7 @@ extension StatisticsActivityView {
 				
 				if !isLoading { // 로딩 끝
 					// 자연스러운 UI를 위해 미리 초기화
-					self.disappointingTableView.scrollToRow(at: NSIndexPath(item: rankCount, section: 0) as IndexPath, at: .middle, animated: false) // 해당 인덱스로 이동.
+					self.disappointingTableView.scrollToRow(at: NSIndexPath(item: RANK_COUNT, section: 0) as IndexPath, at: .middle, animated: false) // 해당 인덱스로 이동.
 				}
 			}).disposed(by: disposeBag)
 	}
@@ -109,18 +109,18 @@ extension StatisticsActivityView {
 		self.satisfactionTableView.scrollToRow(at: indexSatisfaction, at: .middle, animated: true) // 해당 인덱스로 이동.
 		
 		// 아쉬운 활동
-		let indexDisappointing = IndexPath.init(item: rankCount - couter, section: 0)
+		let indexDisappointing = IndexPath.init(item: RANK_COUNT - couter, section: 0)
 		self.disappointingTableView.scrollToRow(at: indexDisappointing, at: .middle, animated: true) // 해당 인덱스로 이동.
 
 		self.couter += 1 // 인덱스 증가
 
-		if couter >= rankCount + 1 {
+		if couter >= RANK_COUNT + 1 {
 			DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
 				// 만족스러운 활동
 				self.satisfactionTableView.scrollToRow(at: NSIndexPath(item: 0, section: 0) as IndexPath, at: .top, animated: false)
 				
 				// 아쉬운 활동
-				self.disappointingTableView.scrollToRow(at: NSIndexPath(item: self.rankCount, section: 0) as IndexPath, at: .top, animated: false)
+				self.disappointingTableView.scrollToRow(at: NSIndexPath(item: self.RANK_COUNT, section: 0) as IndexPath, at: .top, animated: false)
 				
 				self.couter = 1 // 인덱스 초기화
 			}

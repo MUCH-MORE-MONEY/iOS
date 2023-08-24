@@ -5,10 +5,14 @@
 //  Created by geonhyeong on 2023/08/24.
 //
 
-import UIKit
+import SnapKit
+import Then
 
 final class StatisticsActivityTableViewCell: UITableViewCell {
 	// MARK: - UI Components
+	private lazy var titleLabel = UILabel()
+	private lazy var priceLabel = UILabel()
+	private lazy var typeImageView = UIImageView()	// +, -
 
 	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -24,6 +28,7 @@ final class StatisticsActivityTableViewCell: UITableViewCell {
 	
 	// 재활용 셀 중접오류 해결
 	override func prepareForReuse() {
+		typeImageView.image = nil
 	}
 }
 //MARK: - Action
@@ -41,8 +46,40 @@ private extension StatisticsActivityTableViewCell {
 	}
 	
 	private func setAttribute() {
+		titleLabel = titleLabel.then {
+			$0.font = R.Font.title3
+			$0.textColor = R.Color.white
+			$0.textAlignment = .left
+			$0.numberOfLines = 1
+		}
+		
+		typeImageView = typeImageView.then {
+			$0.contentMode = .scaleAspectFit
+		}
+		
+		priceLabel = priceLabel.then {
+			$0.font = R.Font.body3
+			$0.textColor = R.Color.white
+			$0.textAlignment = .left
+			$0.numberOfLines = 1
+		}
 	}
 	
 	private func setLayout() {
+		contentView.addSubviews(titleLabel, typeImageView, priceLabel)
+		
+		titleLabel.snp.makeConstraints {
+			$0.top.leading.equalToSuperview()
+		}
+		
+		typeImageView.snp.makeConstraints {
+			$0.top.equalTo(titleLabel.snp.bottom).offset(4)
+			$0.leading.equalToSuperview()
+		}
+		
+		priceLabel.snp.makeConstraints {
+			$0.centerY.equalTo(typeImageView)
+			$0.leading.equalTo(typeImageView.snp.trailing).offset(4)
+		}
 	}
 }

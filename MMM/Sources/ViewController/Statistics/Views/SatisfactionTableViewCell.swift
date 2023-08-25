@@ -36,7 +36,6 @@ final class SatisfactionTableViewCell: UITableViewCell {
 	
 	override func setSelected(_ selected: Bool, animated: Bool) {
 		super.setSelected(selected, animated: animated)
-//		print(satisfaction, 111111, selected)
 		checkImageView.image = selected ? R.Icon.checkOrange24 : R.Icon.checkGray24
 	}
 }

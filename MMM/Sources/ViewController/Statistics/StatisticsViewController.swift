@@ -150,7 +150,7 @@ extension StatisticsViewController {
 	
 	/// 만족도  변경
 	private func setSatisfaction(_ satisfaction: Satisfaction) {
-		print(satisfaction)
+		
 	}
 }
 //MARK: - Style & Layouts

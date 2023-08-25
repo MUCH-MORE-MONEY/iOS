@@ -176,6 +176,7 @@ extension WithdrawViewController {
 					self.loadView.isPresent = true
 					self.loadView.modalPresentationStyle = .overFullScreen
 					self.present(self.loadView, animated: false)
+					self.processWidrow() // 화면전환
 				} else {
 					self.loadView.dismiss(animated: false)
 				}

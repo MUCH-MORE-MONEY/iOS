@@ -25,6 +25,7 @@ public extension MMMResource {
 		public static let cancel = UIImage(named: "iconCancel", in: .main, compatibleWith: nil)
 		public static let characterHappy = UIImage(named: "iconCharacterHappy", in: .main, compatibleWith: nil)
 		public static let checkActive = UIImage(named: "iconCheckActive", in: .main, compatibleWith: nil)
+		public static let checkGray24 = UIImage(named: "iconCheckGray24", in: .main, compatibleWith: nil)
 		public static let checkInActive = UIImage(named: "iconCheckInActive", in: .main, compatibleWith: nil)
 		public static let checkOrange24 = UIImage(named: "iconCheckOrange24", in: .main, compatibleWith: nil)
 		public static let coinEarn40 = UIImage(named: "iconCoinEarn40", in: .main, compatibleWith: nil)

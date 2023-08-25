@@ -39,4 +39,12 @@ struct EconomicActivity: Codable, Identifiable, Equatable {
 			EconomicActivity(id: "000004", type: "02", groupNo: "1", title: "소설책소설책소설책소설책소설책소설책소설책소설책소설책소설책소설책소설책소설책소설책소설책", memo: "당근마켓으로 그동안 안 쓰고 있던 미니무드등을 팔았고 당근마켓으로 그동안 안 쓰고 있던 미니무드등을 팔았고 ", amount: 25000, star: 5, imageUrl: "", createAt: "20230512")
 		]
 	}
+	
+	static func getThreeDummyList() -> [Self] {
+		return [
+			EconomicActivity(id: "000001", type: "01", groupNo: "1", title: "당근마켓", memo: "당근마켓으로 그동안 안 쓰고 있던 미니무드등을 팔았고", amount: 50000, star: 4, imageUrl: "", createAt: "20230512"),
+			EconomicActivity(id: "000002", type: "02", groupNo: "1", title: "자취 기념 식물", memo: "", amount: 100000, star: 2, imageUrl: "String", createAt: "20230512"),
+			EconomicActivity(id: "000003", type: "01", groupNo: "1", title: "용돈", memo: "이번달부터 10만원 올랐음", amount: 500000, star: 0, imageUrl: "", createAt: "20230512"),
+		]
+	}
 }

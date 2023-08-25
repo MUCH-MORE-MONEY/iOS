@@ -16,20 +16,11 @@ final class ProfileViewController: UIViewController {
 	private var viewModel: ProfileViewModel = ProfileViewModel()
 	private var userEmail: String = ""
 	private let lableCellList = ["", "계정 관리", "데이터 내보내기", "알림 설정","문의 및 서비스 약관", "앱 버전"]
-	private let topSafeAreaInsets: CGFloat = {
-		let scenes = UIApplication.shared.connectedScenes
-		let windowScene = scenes.first as? UIWindowScene
-		if let hasWindowScene = windowScene {
-			return hasWindowScene.windows.first?.safeAreaInsets.top ?? 0
-		} else {
-			return 0.0
-		}
-	}()
     private var tabBarViewModel: TabBarViewModel
     private var cancellable = Set<AnyCancellable>()
     
 	// MARK: - UI Components
-	private lazy var topArea = UIView()
+	private lazy var navigationLabel = UILabel()
 	private lazy var profileHeaderView = ProfileHeaderView()
 	private lazy var profileFooterView = ProfileFooterView()
 	private lazy var tableView = UITableView()
@@ -47,14 +38,19 @@ final class ProfileViewController: UIViewController {
 		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
 	}
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: false)
-    }
 	
-	override var preferredStatusBarStyle: UIStatusBarStyle {
-		return .lightContent // status text color 변경
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		// Root View인 NavigationView에 item 수정하기
+		if let navigationController = self.navigationController {
+			if let rootVC = navigationController.viewControllers.first {
+				let view = UIView(frame: .init(origin: .zero, size: .init(width: 150, height: 44)))
+				view.addSubview(navigationLabel)
+				
+				rootVC.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: view)
+				rootVC.navigationItem.rightBarButtonItem = nil
+			}
+		}
 	}
 }
 //MARK: - Style & Layouts
@@ -75,13 +71,17 @@ private extension ProfileViewController {
 		// [view]
 		view.backgroundColor = R.Color.gray100
 		
-		topArea = topArea.then {
-			$0.backgroundColor = R.Color.gray900
+		navigationLabel = navigationLabel.then {
+			$0.frame = CGRect(x: 8, y: 0, width: 130, height: 44.0)
+			$0.text = "마이페이지"
+			$0.font = R.Font.h2
+			$0.textColor = R.Color.gray200
+			$0.textAlignment = .left
 		}
-		
+
 		profileHeaderView = profileHeaderView.then {
 			$0.setData(email: userEmail)
-			$0.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: 222)
+			$0.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: 170)
 		}
 		
 		tableView = tableView.then {
@@ -98,16 +98,10 @@ private extension ProfileViewController {
 	}
 	
 	private func setLayout() {
-		view.addSubviews(topArea, tableView)
-
-		topArea.snp.makeConstraints {
-			$0.top.left.right.equalToSuperview()
-			$0.height.equalTo(topSafeAreaInsets)
-		}
+		view.addSubviews(tableView)
 		
 		tableView.snp.makeConstraints {
-			$0.top.equalTo(topArea.snp.bottom)
-			$0.bottom.left.right.equalTo(view.safeAreaLayoutGuide)
+			$0.edges.equalToSuperview()
 		}
 	}
 }

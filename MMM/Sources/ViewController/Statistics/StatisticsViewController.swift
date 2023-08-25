@@ -47,9 +47,7 @@ final class StatisticsViewController: UIViewController, View {
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
-		navigationController?.setNavigationBarHidden(false, animated: false)
-		
+		super.viewWillAppear(animated)		
 		// Root View인 NavigationView에 item 수정하기
 		if let navigationController = self.navigationController {
 			if let rootVC = navigationController.viewControllers.first {
@@ -62,6 +60,48 @@ final class StatisticsViewController: UIViewController, View {
 	func bind(reactor: StatisticsReactor) {
 		bindState(reactor)
 		bindAction(reactor)
+	}
+}
+//MARK: - Bind
+extension StatisticsViewController {
+	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
+	private func bindAction(_ reactor: StatisticsReactor) {
+		monthButton.rx.tap
+			.subscribe(onNext: { [weak self] _ in
+				guard let self = self else { return }
+				self.presentBottomSheet() // '월' 변경 버튼
+			}).disposed(by: disposeBag)
+	}
+	
+	// MARK: 데이터 바인딩 처리 (Reactor -> View)
+	private func bindState(_ reactor: StatisticsReactor) {
+		bottomSheetReactor.state
+			.map { $0.success }
+			.distinctUntilChanged() // 중복값 무시
+			.bind(onNext: setMonth) // '월' 변경
+			.disposed(by: disposeBag)
+		
+		bottomSheetReactor.state
+			.map { $0.successBySatisfaction }
+			.distinctUntilChanged() // 중복값 무시
+			.bind(onNext: setSatisfaction) // 만족도 변경
+			.disposed(by: disposeBag)
+
+		// 카테고리 더보기 클릭시, push
+		reactor.state
+			.map { $0.isPushMoreCartegory }
+			.distinctUntilChanged() // 중복값 무시
+			.filter { $0 } // true일때만 화면 전환
+			.bind(onNext: pushCategoryViewController)
+			.disposed(by: disposeBag)
+		
+		// 만족도 선택시, present
+		reactor.state
+			.map { $0.isPresentSatisfaction }
+			.distinctUntilChanged() // 중복값 무시
+			.filter { $0 } // true일때만 화면 전환
+			.bind(onNext: presentStisfactionViewController)
+			.disposed(by: disposeBag)
 	}
 }
 //MARK: - Action
@@ -88,7 +128,7 @@ extension StatisticsViewController {
 	// 만족도 보기
 	private func presentStisfactionViewController(_ isPresent: Bool) {
 		// 달력 Picker
-		let vc = StatisticsSatisfactionSelectViewController(satisfaction: .low)
+		let vc = StatisticsSatisfactionSelectViewController(satisfaction: .middle)
 		let bottomSheetVC = BottomSheetViewController(contentViewController: vc)
 		vc.reactor = bottomSheetReactor
 		vc.setData(title: "만족도 모아보기")
@@ -107,41 +147,10 @@ extension StatisticsViewController {
 			monthButton.setTitle(date.getFormattedDate(format: "M월"), for: .normal)
 		}
 	}
-}
-//MARK: - Bind
-extension StatisticsViewController {
-	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
-	private func bindAction(_ reactor: StatisticsReactor) {
-		monthButton.rx.tap
-			.subscribe(onNext: { [weak self] _ in
-				guard let self = self else { return }
-				self.presentBottomSheet() // '월' 변경 버튼
-			}).disposed(by: disposeBag)
-	}
 	
-	// MARK: 데이터 바인딩 처리 (Reactor -> View)
-	private func bindState(_ reactor: StatisticsReactor) {
-		bottomSheetReactor.state
-			.map { $0.success }
-			.distinctUntilChanged() // 중복값 무시
-			.bind(onNext: setMonth) // '월' 변경
-			.disposed(by: disposeBag)
-
-		// 카테고리 더보기 클릭시, push
-		reactor.state
-			.map { $0.isPushMoreCartegory }
-			.distinctUntilChanged() // 중복값 무시
-			.filter { $0 } // true일때만 화면 전환
-			.bind(onNext: pushCategoryViewController)
-			.disposed(by: disposeBag)
-		
-		// 만족도 선택시, present
-		reactor.state
-			.map { $0.isPresentSatisfaction }
-			.distinctUntilChanged() // 중복값 무시
-			.filter { $0 } // true일때만 화면 전환
-			.bind(onNext: presentStisfactionViewController)
-			.disposed(by: disposeBag)
+	/// 만족도  변경
+	private func setSatisfaction(_ satisfaction: Satisfaction) {
+		print(satisfaction)
 	}
 }
 //MARK: - Style & Layouts
@@ -164,6 +173,7 @@ extension StatisticsViewController {
 		refreshView.backgroundColor = R.Color.gray900
 		contentView.backgroundColor = R.Color.gray900
 		categoryView.reactor = self.reactor // reactor 주입
+		activityView.reactor = self.reactor // reactor 주입
 		selectAreaView.reactor = self.reactor // reactor 주입
 		
 		let view = UIView(frame: .init(origin: .zero, size: .init(width: 80, height: 30)))
@@ -192,7 +202,7 @@ extension StatisticsViewController {
 		
 		scrollView.snp.makeConstraints {
 			$0.top.leading.trailing.equalTo(view)
-			$0.bottom.equalTo(view).inset(82) // TabBar Height
+			$0.bottom.equalTo(view.safeAreaLayoutGuide)
 		}
 		
 		refreshView.snp.makeConstraints {

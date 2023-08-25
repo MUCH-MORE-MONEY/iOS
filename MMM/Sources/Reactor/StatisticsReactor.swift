@@ -11,16 +11,15 @@ import ReactorKit
 final class StatisticsReactor: Reactor {
 	// 사용자의 액션
 	enum Action {
-		case increase
-		case decrease
+		case loadData
 		case didTapMoreButton // 카테고리 더보기
 		case didTapSatisfactionButton // 만족도 선택
 	}
 	
 	// 처리 단위
 	enum Mutation {
-		case increaseValue
-		case decreaseValue
+		case fetchActivitySatisfactionList([EconomicActivity])
+		case fetchActivityDisappointingList([EconomicActivity])
 		case setLoading(Bool)
 		case setPushMoreCartegory(Bool)
 		case setPresentSatisfaction(Bool)
@@ -28,33 +27,35 @@ final class StatisticsReactor: Reactor {
 	
 	// 현재 상태를 기록
 	struct State {
-		var value = 0
+		var activitySatisfactionList: [EconomicActivity] = []
+		var activityDisappointingList: [EconomicActivity] = []
 		var isLoading = false // 로딩
 		var isPushMoreCartegory = false
 		var isPresentSatisfaction = false
+		var curSatisfaction: Satisfaction = .low
 	}
 	
 	// MARK: Properties
 	let initialState: State
 
-	init() { initialState = State() }
+	init() {
+		initialState = State()
+		
+		// 뷰가 최초 로드 될 경우
+		action.onNext(.loadData)
+	}
 }
 //MARK: - Mutate, Reduce 함수
 extension StatisticsReactor {
 	/// Action이 들어온 경우, 어떤 처리를 할건지 분기
 	func mutate(action: Action) -> Observable<Mutation> {
 		switch action {
-		case .increase:
-			return Observable.concat([
-				Observable.just(.setLoading(true)),
-				Observable.just(.increaseValue).delay(.seconds(1), scheduler: MainScheduler.instance),
-				Observable.just(.setLoading(false))
-			])
-		case .decrease:
-			return Observable.concat([
-				Observable.just(.setLoading(true)),
-				Observable.just(.decreaseValue).delay(.seconds(1), scheduler: MainScheduler.instance),
-				Observable.just(.setLoading(false))
+		case .loadData:
+			return  Observable.concat([
+				.just(.setLoading(true)),
+				.just(.fetchActivitySatisfactionList(EconomicActivity.getThreeDummyList() + [EconomicActivity.getThreeDummyList().first!])),
+				.just(.fetchActivityDisappointingList([EconomicActivity.getThreeDummyList().last!] + EconomicActivity.getThreeDummyList())),
+				.just(.setLoading(false))
 			])
 		case .didTapMoreButton:
 			return  Observable.concat([
@@ -74,10 +75,10 @@ extension StatisticsReactor {
 		var newState = state
 		
 		switch mutation {
-		case .increaseValue:
-			newState.value += 1
-		case .decreaseValue:
-			newState.value -= 1
+		case .fetchActivitySatisfactionList(let list):
+			newState.activitySatisfactionList = list
+		case .fetchActivityDisappointingList(let list):
+			newState.activityDisappointingList = list
 		case .setLoading(let isLoading):
 			newState.isLoading = isLoading
 		case .setPushMoreCartegory(let isPresent):

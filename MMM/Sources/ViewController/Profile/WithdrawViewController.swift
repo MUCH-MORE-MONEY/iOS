@@ -45,11 +45,6 @@ final class WithdrawViewController: BaseViewController {
 		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
 	}
-
-	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
-		navigationController?.setNavigationBarHidden(false, animated: animated)	// navigation bar 노출
-	}
 	
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
@@ -181,14 +176,15 @@ extension WithdrawViewController {
 					self.loadView.isPresent = true
 					self.loadView.modalPresentationStyle = .overFullScreen
 					self.present(self.loadView, animated: false)
+					self.processWidrow() // 화면전환
 				} else {
 					self.loadView.dismiss(animated: false)
 				}
 			}).store(in: &cancellable)
 		
 		viewModel.$isWidrawError
-			.sinkOnMainThread(receiveValue: { [weak self] isError in
-				guard let self = self, let isError = isError else { return }
+			.sinkOnMainThread(receiveValue: { isError in
+				guard let isError = isError else { return }
 				if isError {
                     if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
                         sceneDelegate.window?.showToast(message: "일시적인 오류가 발생했습니다.")

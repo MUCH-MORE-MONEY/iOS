@@ -14,40 +14,18 @@ import RxRelay
 final class StatisticsSatisfactionSelectViewController: UIViewController, View {
 	typealias Reactor = BottomSheetReactor
 
-	enum Satisfaction: Int {
-		case low	// 1~2점
-		case middle	// 3점
-		case hight	// 4~5점
-		
-		var title: String {
-			switch self {
-			case .low: return "아쉬운 활동 줄이기"
-			case .middle: return "평범한 활동 돌아보기"
-			case .hight: return "만족스러운 활동 늘리기"
-			}
-		}
-		
-		var score: String {
-			switch self {
-			case .low: return "1~2점"
-			case .middle: return "3점"
-			case .hight: return "4~5점"
-			}
-		}
-	}
-	
 	// MARK: - Properties
 	private var isDark: Bool = false
 	private var satisfaction: Satisfaction
 	weak var delegate: BottomSheetChild?
 	var disposeBag: DisposeBag = DisposeBag()
-	private let satisfactionList: BehaviorRelay<[Satisfaction]> = BehaviorRelay(value: [.low, .middle, .hight])
+	private let satisfactionList: BehaviorRelay<[Satisfaction]> = BehaviorRelay(value: [.low, .hight, .middle])
 	
 	// MARK: - UI Components
 	private lazy var stackView = UIStackView() // Title Label, 확인 Button
 	private lazy var titleLabel = UILabel()
 	private lazy var checkButton = UIButton()
-	private lazy var tableView = UITableView(frame: .zero, style: .grouped) // 상위 hearde
+	private lazy var tableView = UITableView()
 
 	init(satisfaction: Satisfaction) {
 		self.satisfaction = satisfaction
@@ -92,9 +70,27 @@ extension StatisticsSatisfactionSelectViewController {
 	private func bindAction(_ reactor: BottomSheetReactor) {
 		// 확인 버튼
 		checkButton.rx.tap
-			.map { .didTapSatisfactionCheckButton(type: self.satisfaction.rawValue) }
+			.map { .didTapSatisfactionCheckButton(type: self.satisfaction) }
 			.bind(to: reactor.action)
 			.disposed(by: disposeBag)
+		
+		// TableView cell select
+		tableView.rx.itemSelected
+			.subscribe(onNext: { [weak self] indexPath in
+				guard let self = self else { return }
+				let cell = tableView.cellForRow(at: indexPath) as! SatisfactionTableViewCell
+				self.satisfaction = cell.getSatisfaction()
+			}).disposed(by: disposeBag)
+
+
+		// 이전에 선택한 만족도 표시
+		tableView.rx.willDisplayCell
+			.bind(onNext: { data in
+				let cell = data.cell as! SatisfactionTableViewCell
+				if cell.getSatisfaction() == self.satisfaction {
+					self.tableView.selectRow(at: data.indexPath, animated: true, scrollPosition: .middle)
+				}
+			}).disposed(by: disposeBag)
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
@@ -106,19 +102,14 @@ extension StatisticsSatisfactionSelectViewController {
 				self.delegate?.willDismiss()
 			}.disposed(by: disposeBag)
 		
-		// TableView cell select
-		tableView.rx.itemSelected
-			.subscribe(onNext: { [weak self] indexPath in
-				guard let self = self else { return }
-
-				// Cell touch시 회색 표시 없애기
-				self.tableView.deselectRow(at: indexPath, animated: true)
-			}).disposed(by: disposeBag)
-
 		satisfactionList.asObservable()
-			.bind(to: tableView.rx.items(cellIdentifier: "SatisfactionTableViewCell", cellType: SatisfactionTableViewCell.self)) { index, element, cell in
-				
-				cell.setData(title: element.title, score: element.score)
+			.bind(to: tableView.rx.items) { tv, row, data in
+				let index = IndexPath(row: row, section: 0)
+				let cell = tv.dequeueReusableCell(withIdentifier: "SatisfactionTableViewCell", for: index) as! SatisfactionTableViewCell
+				// Cell data 설정
+				cell.setData(satisfaction: data)
+				cell.selectionStyle = .none // 테이블뷰 선택 색상 제거
+				return cell
 			}.disposed(by: disposeBag)
 	}
 }
@@ -151,7 +142,7 @@ private extension StatisticsSatisfactionSelectViewController {
 		
 		tableView = tableView.then {
 			$0.register(SatisfactionTableViewCell.self)
-			$0.backgroundColor = R.Color.gray100
+			$0.backgroundColor = R.Color.white
 			$0.showsVerticalScrollIndicator = false // indicator 제거
 			$0.separatorStyle = .none
 			$0.rowHeight = 52

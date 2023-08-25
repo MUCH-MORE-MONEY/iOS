@@ -9,7 +9,6 @@ import Then
 import SnapKit
 
 final class ProfileTableViewCell: UITableViewCell {
-	// MARK: - Properties
 	// MARK: - UI Components
 	private lazy var contentLabel = UILabel()
 	private lazy var navImage = UIImageView()

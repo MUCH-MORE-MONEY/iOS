@@ -69,6 +69,12 @@ extension StatisticsViewController {
 			.distinctUntilChanged() // 중복값 무시
 			.bind(onNext: setMonth) // '월' 변경
 			.disposed(by: disposeBag)
+		
+		bottomSheetReactor.state
+			.map { $0.successBySatisfaction }
+			.distinctUntilChanged() // 중복값 무시
+			.bind(onNext: setSatisfaction) // 만족도 변경
+			.disposed(by: disposeBag)
 
 		// 카테고리 더보기 클릭시, push
 		reactor.state
@@ -111,7 +117,7 @@ extension StatisticsViewController {
 	// 만족도 보기
 	private func presentStisfactionViewController(_ isPresent: Bool) {
 		// 달력 Picker
-		let vc = StatisticsSatisfactionSelectViewController(satisfaction: .low)
+		let vc = StatisticsSatisfactionSelectViewController(satisfaction: .middle)
 		let bottomSheetVC = BottomSheetViewController(contentViewController: vc)
 		vc.reactor = bottomSheetReactor
 		vc.setData(title: "만족도 모아보기")
@@ -129,6 +135,11 @@ extension StatisticsViewController {
 		} else {
 			monthButton.setTitle(date.getFormattedDate(format: "M월"), for: .normal)
 		}
+	}
+	
+	/// 만족도  변경
+	private func setSatisfaction(_ satisfaction: Satisfaction) {
+		print(satisfaction)
 	}
 }
 //MARK: - Style & Layouts

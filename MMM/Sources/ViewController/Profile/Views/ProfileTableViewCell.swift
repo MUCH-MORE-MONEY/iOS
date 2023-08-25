@@ -5,7 +5,8 @@
 //  Created by geonhyeong on 2023/03/29.
 //
 
-import UIKit
+import Then
+import SnapKit
 
 final class ProfileTableViewCell: UITableViewCell {
 	// MARK: - Properties
@@ -72,7 +73,7 @@ private extension ProfileTableViewCell {
 		
 		contentLabel.snp.makeConstraints {
 			$0.leading.equalToSuperview().inset(28)
-			$0.trailing.greaterThanOrEqualTo(navImage.snp.leading)
+			$0.trailing.lessThanOrEqualTo(navImage.snp.leading)
 			$0.centerY.equalToSuperview()
 		}
 		

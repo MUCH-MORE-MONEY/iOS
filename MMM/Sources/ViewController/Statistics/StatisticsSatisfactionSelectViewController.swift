@@ -14,6 +14,7 @@ import RxRelay
 final class StatisticsSatisfactionSelectViewController: UIViewController, View {
 	typealias Reactor = BottomSheetReactor
 
+	// MARK: - Properties
 	enum Satisfaction: Int {
 		case low	// 1~2점
 		case middle	// 3점
@@ -36,18 +37,17 @@ final class StatisticsSatisfactionSelectViewController: UIViewController, View {
 		}
 	}
 	
-	// MARK: - Properties
 	private var isDark: Bool = false
 	private var satisfaction: Satisfaction
 	weak var delegate: BottomSheetChild?
 	var disposeBag: DisposeBag = DisposeBag()
-	private let satisfactionList: BehaviorRelay<[Satisfaction]> = BehaviorRelay(value: [.low, .middle, .hight])
+	private let satisfactionList: BehaviorRelay<[Satisfaction]> = BehaviorRelay(value: [.low, .hight, .middle])
 	
 	// MARK: - UI Components
 	private lazy var stackView = UIStackView() // Title Label, 확인 Button
 	private lazy var titleLabel = UILabel()
 	private lazy var checkButton = UIButton()
-	private lazy var tableView = UITableView(frame: .zero, style: .grouped) // 상위 hearde
+	private lazy var tableView = UITableView()
 
 	init(satisfaction: Satisfaction) {
 		self.satisfaction = satisfaction
@@ -151,7 +151,7 @@ private extension StatisticsSatisfactionSelectViewController {
 		
 		tableView = tableView.then {
 			$0.register(SatisfactionTableViewCell.self)
-			$0.backgroundColor = R.Color.gray100
+			$0.backgroundColor = R.Color.white
 			$0.showsVerticalScrollIndicator = false // indicator 제거
 			$0.separatorStyle = .none
 			$0.rowHeight = 52

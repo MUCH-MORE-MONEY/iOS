@@ -29,16 +29,6 @@ final class PushSettingViewController: BaseViewController {
         super.viewDidLoad()
         setup()
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: animated)    // navigation bar 노출
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: animated)    // navigation bar 숨김
-    }
 }
 
 private extension PushSettingViewController {

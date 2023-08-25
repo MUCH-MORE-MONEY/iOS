@@ -47,9 +47,7 @@ final class StatisticsViewController: UIViewController, View {
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
-		navigationController?.setNavigationBarHidden(false, animated: false)
-		
+		super.viewWillAppear(animated)		
 		// Root View인 NavigationView에 item 수정하기
 		if let navigationController = self.navigationController {
 			if let rootVC = navigationController.viewControllers.first {

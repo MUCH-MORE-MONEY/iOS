@@ -34,22 +34,12 @@ final class AddDetailViewController: BaseAddActivityViewController, UINavigation
 		super.viewDidLoad()
 		setup()
 	}
-	
-	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
-		if let navigationController = self.navigationController {
-			if let rootVC = navigationController.viewControllers.first {
-				rootVC.navigationController?.setNavigationBarHidden(false, animated: false)    // navigation bar 노출
-			}
-		}
-	}
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         Tracking.FinActAddPage.viewDetailLogEvent()
     }
 }
-
 // MARK: - Action
 extension AddDetailViewController {
 	func didTapStarLabel() {

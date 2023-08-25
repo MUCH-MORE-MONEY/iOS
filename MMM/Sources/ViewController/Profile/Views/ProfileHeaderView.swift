@@ -13,7 +13,6 @@ final class ProfileHeaderView: UIView {
 	// MARK: - Properties
 	// MARK: - UI Components
 	private lazy var imageView = UIImageView()
-	private lazy var navigationLabel = UILabel()
 	private lazy var phrasesLabel = UILabel()
 	private lazy var emailLabel = UILabel()
 	private lazy var bottomArea = UIView()
@@ -50,16 +49,9 @@ private extension ProfileHeaderView {
 		backgroundColor = R.Color.gray900
 
 		imageView = imageView.then {
-			$0.contentMode = .scaleAspectFill
+			$0.contentMode = .scaleAspectFit
 			$0.layer.masksToBounds = true
 			$0.image = R.Icon.mypageBg
-		}
-		
-		navigationLabel = navigationLabel.then {
-			$0.text = "마이페이지"
-			$0.font = R.Font.h2
-			$0.textColor = R.Color.gray200
-			$0.textAlignment = .center
 		}
 		
 		phrasesLabel = phrasesLabel.then {
@@ -83,17 +75,10 @@ private extension ProfileHeaderView {
 	
 	private func setLayout() {
 		addSubviews(imageView, bottomArea)
-		imageView.addSubviews(navigationLabel, phrasesLabel, emailLabel)
+		imageView.addSubviews(phrasesLabel, emailLabel)
 		
 		imageView.snp.makeConstraints {
-			$0.top.equalToSuperview()
-			$0.left.right.equalToSuperview()
-			$0.height.width.equalToSuperview()
-		}
-		
-		navigationLabel.snp.makeConstraints {
-			$0.top.equalToSuperview().inset(19)
-			$0.left.equalToSuperview().inset(24)
+			$0.leading.bottom.equalToSuperview()
 		}
 		
 		phrasesLabel.snp.makeConstraints {

@@ -59,12 +59,7 @@ final class AddViewController: BaseViewController {
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-		if let navigationController = self.navigationController {
-			if let rootVC = navigationController.viewControllers.first {
-				rootVC.navigationController?.setNavigationBarHidden(false, animated: false)	// navigation bar 노출
-			}
-		}
-		
+
 		UIApplication.shared.windows.first?.overrideUserInterfaceStyle = .dark
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -93,14 +88,6 @@ final class AddViewController: BaseViewController {
 		
 		NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
 		NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-        
-//        navigationController?.setNavigationBarHidden(false, animated: true)
-        
-//        if let navigationController = self.navigationController {
-//            if let rootVC = navigationController.viewControllers.first {
-//                rootVC.navigationController?.setNavigationBarHidden(false, animated: false)    // navigation bar 노출
-//            }
-//        }
 	}
     
 }

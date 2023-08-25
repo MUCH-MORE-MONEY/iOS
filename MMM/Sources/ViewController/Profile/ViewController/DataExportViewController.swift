@@ -26,16 +26,6 @@ final class DataExportViewController: BaseViewController {
 		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
 	}
-	
-	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
-		navigationController?.setNavigationBarHidden(false, animated: animated)	// navigation bar 노출
-	}
-	
-	override func viewWillDisappear(_ animated: Bool) {
-		super.viewWillDisappear(animated)
-		navigationController?.setNavigationBarHidden(true, animated: animated)	// navigation bar 숨김
-	}
 }
 // MARK: - Action
 private extension DataExportViewController {

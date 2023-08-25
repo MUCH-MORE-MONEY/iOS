@@ -44,16 +44,11 @@ final class HomeViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
-        
 //        viewModel.showTrackingPermissionAlert()
-        
-        
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: false)
-		
 		// FIXME: - 네비게이션 아이템 노출 우류
 		if let navigationController = self.navigationController {
 			if let rootVC = navigationController.viewControllers.first {

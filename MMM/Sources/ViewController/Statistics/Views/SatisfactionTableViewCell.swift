@@ -8,10 +8,18 @@
 import UIKit
 
 final class SatisfactionTableViewCell: UITableViewCell {
+	// MARK: - Properties
+	private var satisfaction: Satisfaction = .low
+//	override var isSelected: Bool {
+//		didSet {
+//			checkImageView.image = isSelected ? R.Icon.checkOrange24 : R.Icon.checkGray24
+//		}
+//	}
+	
 	// MARK: - UI Components
 	private lazy var starImageView = UIImageView()	// ⭐️
 	private lazy var scoreLabel = UILabel()
-	private lazy var titleLabel = UILabel()
+	lazy var titleLabel = UILabel()
 	private lazy var checkImageView = UIImageView()	// ✓
 
 	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -25,18 +33,28 @@ final class SatisfactionTableViewCell: UITableViewCell {
 		super.init(coder: coder)
 		fatalError("init(coder:) has not been implemented")
 	}
+	
+	override func setSelected(_ selected: Bool, animated: Bool) {
+		super.setSelected(selected, animated: animated)
+//		print(satisfaction, 111111, selected)
+		checkImageView.image = selected ? R.Icon.checkOrange24 : R.Icon.checkGray24
+	}
 }
 //MARK: - Action
 extension SatisfactionTableViewCell {
 	// 외부에서 설정
-	func setData(title: String, score: String) {
-		self.titleLabel.text = title
-		self.scoreLabel.text = score
+	func setData(satisfaction: Satisfaction) {
+		self.satisfaction = satisfaction
+		self.titleLabel.text = satisfaction.title
+		self.scoreLabel.text = satisfaction.score
 	}
 	
-	// 외부에서 설정
-	func selectData(_ isSelected: Bool) {
-		checkImageView.image = isSelected ? R.Icon.checkOrange24 : R.Icon.checkInActive
+	func setSelect(isSelect: Bool) {
+		self.checkImageView.image = isSelect ? R.Icon.checkOrange24 : R.Icon.checkGray24
+	}
+	
+	func getSatisfaction() -> Satisfaction {
+		return satisfaction
 	}
 }
 //MARK: - Style & Layouts
@@ -68,8 +86,8 @@ private extension SatisfactionTableViewCell {
 		}
 		
 		checkImageView = checkImageView.then {
-			$0.image = R.Icon.checkInActive
-			$0.contentMode = .scaleAspectFill
+			$0.image = R.Icon.checkGray24
+			$0.contentMode = .scaleAspectFit
 		}
 	}
 	

@@ -12,19 +12,19 @@ final class BottomSheetReactor: Reactor {
 	// 사용자의 액션
 	enum Action {
 		case didTapDateCheckButton(date: Date) // 월
-		case didTapSatisfactionCheckButton(type: Int) // 만족도
+		case didTapSatisfactionCheckButton(type: Satisfaction) // 만족도
 	}
 	
 	// 처리 단위
 	enum Mutation {
 		case updateData(Date)
-		case updateDataBySatisfaction(Int)
+		case updateDataBySatisfaction(Satisfaction)
 	}
 	
 	// 현재 상태를 기록
 	struct State {
 		var success: Date = Date()
-		var successBySatisfaction = 0
+		var successBySatisfaction: Satisfaction = .low
 		var error = false
 	}
 	

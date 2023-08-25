@@ -32,6 +32,7 @@ final class StatisticsReactor: Reactor {
 		var isLoading = false // 로딩
 		var isPushMoreCartegory = false
 		var isPresentSatisfaction = false
+		var curSatisfaction: Satisfaction = .low
 	}
 	
 	// MARK: Properties

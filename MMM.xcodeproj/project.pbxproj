@@ -764,7 +764,12 @@
 			isa = PBXGroup;
 			children = (
 				C41193F129D3AEBB003DBC15 /* Views */,
-				C41193FE29D53A69003DBC15 /* ViewController */,
+				C411939129D2817C003DBC15 /* ProfileViewController.swift */,
+				6A0F233F29DBA8AA0063673B /* DataExportViewController.swift */,
+				C411940329D53DDF003DBC15 /* ManagementViewController.swift */,
+				6A0F234129DBA92D0063673B /* ServiceViewController.swift */,
+				C4DBAA2D29DC16A400D1BB97 /* WithdrawViewController.swift */,
+				6A1108B22A95DFF40070682B /* PushSettingViewController.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -779,19 +784,6 @@
 				C4DBAA2F29DD459100D1BB97 /* WithdrawConfirmView.swift */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		C41193FE29D53A69003DBC15 /* ViewController */ = {
-			isa = PBXGroup;
-			children = (
-				C411939129D2817C003DBC15 /* ProfileViewController.swift */,
-				6A0F233F29DBA8AA0063673B /* DataExportViewController.swift */,
-				C411940329D53DDF003DBC15 /* ManagementViewController.swift */,
-				6A0F234129DBA92D0063673B /* ServiceViewController.swift */,
-				C4DBAA2D29DC16A400D1BB97 /* WithdrawViewController.swift */,
-				6A1108B22A95DFF40070682B /* PushSettingViewController.swift */,
-			);
-			path = ViewController;
 			sourceTree = "<group>";
 		};
 		C411940529D53E77003DBC15 /* Base */ = {

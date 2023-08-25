@@ -5,16 +5,12 @@
 //  Created by geonhyeong on 2023/08/23.
 //
 
-import UIKit
+import Then
+import SnapKit
 
 final class SatisfactionTableViewCell: UITableViewCell {
 	// MARK: - Properties
 	private var satisfaction: Satisfaction = .low
-//	override var isSelected: Bool {
-//		didSet {
-//			checkImageView.image = isSelected ? R.Icon.checkOrange24 : R.Icon.checkGray24
-//		}
-//	}
 	
 	// MARK: - UI Components
 	private lazy var starImageView = UIImageView()	// ⭐️
@@ -66,7 +62,7 @@ private extension SatisfactionTableViewCell {
 	
 	private func setAttribute() {
 		starImageView = starImageView.then {
-			$0.image = R.Icon.iconStarOrange48
+			$0.image = R.Icon.iconStarOrange36
 			$0.contentMode = .scaleAspectFill
 		}
 		
@@ -99,7 +95,7 @@ private extension SatisfactionTableViewCell {
 		}
 		
 		scoreLabel.snp.makeConstraints {
-			$0.leading.equalTo(starImageView.snp.trailing).offset(3)
+			$0.leading.equalTo(starImageView.snp.trailing)
 			$0.centerY.equalToSuperview()
 		}
 		
@@ -109,7 +105,7 @@ private extension SatisfactionTableViewCell {
 		}
 		
 		checkImageView.snp.makeConstraints {
-			$0.trailing.equalToSuperview().inset(20)
+			$0.trailing.equalToSuperview().inset(28)
 			$0.centerY.equalToSuperview()
 		}
 	}

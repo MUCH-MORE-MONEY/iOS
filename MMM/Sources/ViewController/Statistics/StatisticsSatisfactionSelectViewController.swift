@@ -82,7 +82,6 @@ extension StatisticsSatisfactionSelectViewController {
 				self.satisfaction = cell.getSatisfaction()
 			}).disposed(by: disposeBag)
 
-
 		// 이전에 선택한 만족도 표시
 		tableView.rx.willDisplayCell
 			.bind(onNext: { data in

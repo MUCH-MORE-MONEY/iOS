@@ -17,7 +17,8 @@ final class StatisticsViewController: UIViewController, View {
 	// MARK: - Properties
 	private var tabBarViewModel: TabBarViewModel
 	var disposeBag: DisposeBag = DisposeBag()
-	var bottomSheetReactor: BottomSheetReactor = BottomSheetReactor()
+	private var bottomSheetReactor: BottomSheetReactor = BottomSheetReactor()
+	private var satisfaction: Satisfaction = .low
 
 	// MARK: - UI Components
 	private lazy var monthButtonItem = UIBarButtonItem()
@@ -127,7 +128,7 @@ extension StatisticsViewController {
 	
 	// 만족도 보기
 	private func presentStisfactionViewController(_ isPresent: Bool) {
-		let vc = StatisticsSatisfactionSelectViewController(satisfaction: .middle)
+		let vc = StatisticsSatisfactionSelectViewController(satisfaction: satisfaction)
 		let bottomSheetVC = BottomSheetViewController(contentViewController: vc)
 		vc.reactor = bottomSheetReactor
 		vc.setData(title: "만족도 모아보기")
@@ -149,7 +150,8 @@ extension StatisticsViewController {
 	
 	/// 만족도  변경
 	private func setSatisfaction(_ satisfaction: Satisfaction) {
-		
+		selectAreaView.setData(title: satisfaction.title, score: satisfaction.score)
+		self.satisfaction = satisfaction
 	}
 }
 //MARK: - Style & Layouts

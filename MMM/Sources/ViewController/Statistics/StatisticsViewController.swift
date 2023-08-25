@@ -127,7 +127,6 @@ extension StatisticsViewController {
 	
 	// 만족도 보기
 	private func presentStisfactionViewController(_ isPresent: Bool) {
-		// 달력 Picker
 		let vc = StatisticsSatisfactionSelectViewController(satisfaction: .middle)
 		let bottomSheetVC = BottomSheetViewController(contentViewController: vc)
 		vc.reactor = bottomSheetReactor

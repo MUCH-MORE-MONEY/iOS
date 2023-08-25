@@ -21,8 +21,6 @@ final class ProfileViewController: UIViewController {
     
 	// MARK: - UI Components
 	private lazy var navigationLabel = UILabel()
-	private lazy var monthButton = UIButton()
-
 	private lazy var profileHeaderView = ProfileHeaderView()
 	private lazy var profileFooterView = ProfileFooterView()
 	private lazy var tableView = UITableView()
@@ -71,19 +69,6 @@ private extension ProfileViewController {
 			$0.textColor = R.Color.gray200
 			$0.textAlignment = .left
 		}
-		
-		monthButton = monthButton.then {
-			$0.frame = .init(origin: .init(x: 8, y: 0), size: .init(width: 80, height: 30))
-			$0.setTitle(Date().getFormattedDate(format: "M월"), for: .normal)
-			$0.setImage(R.Icon.arrowExpandMore16, for: .normal)
-			$0.setTitleColor(R.Color.white, for: .normal)
-			$0.setTitleColor(R.Color.white.withAlphaComponent(0.7), for: .highlighted)
-			$0.imageView?.contentMode = .scaleAspectFit
-			$0.titleLabel?.font = R.Font.h5
-			$0.contentHorizontalAlignment = .left
-			$0.imageEdgeInsets = .init(top: 0, left: 8, bottom: 0, right: 0) // 이미지 여백
-		}
-
 
 		profileHeaderView = profileHeaderView.then {
 			$0.setData(email: userEmail)

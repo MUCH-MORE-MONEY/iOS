@@ -16,7 +16,6 @@ final class ProfileViewController: UIViewController {
 	private var viewModel: ProfileViewModel = ProfileViewModel()
 	private var userEmail: String = ""
 	private let lableCellList = ["", "계정 관리", "데이터 내보내기", "알림 설정","문의 및 서비스 약관", "앱 버전"]
-    private var tabBarViewModel: TabBarViewModel
     private var cancellable = Set<AnyCancellable>()
     
 	// MARK: - UI Components

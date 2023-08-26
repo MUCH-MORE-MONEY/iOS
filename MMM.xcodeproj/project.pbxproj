@@ -31,6 +31,7 @@
 		6A10495C2A43D50C00470608 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6A10495B2A43D50C00470608 /* GoogleService-Info.plist */; };
 		6A1108B32A95DFF40070682B /* PushSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1108B22A95DFF40070682B /* PushSettingViewController.swift */; };
 		6A12144729FA0C300076848A /* AppleLoginResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A12144629FA0C300076848A /* AppleLoginResDto.swift */; };
+		6A1276B52A99C5EE00C0B9D4 /* PushSettingDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1276B42A99C5EE00C0B9D4 /* PushSettingDetailViewController.swift */; };
 		6A1322E92A088DD700CEEC81 /* BaseDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1322E82A088DD700CEEC81 /* BaseDetailViewController.swift */; };
 		6A1322ED2A088F7F00CEEC81 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1322EC2A088F7F00CEEC81 /* DetailViewController.swift */; };
 		6A1322F12A089B2900CEEC81 /* BasePaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1322F02A089B2900CEEC81 /* BasePaddingLabel.swift */; };
@@ -41,7 +42,6 @@
 		6A1BAD4529E6550100818086 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1BAD4429E6550100818086 /* OnboardingViewModel.swift */; };
 		6A223FFC2A1B3D590058C877 /* EditActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A223FFB2A1B3D590058C877 /* EditActivityViewController.swift */; };
 		6A27E6952A205338001A7F04 /* Ex+UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A27E6942A205338001A7F04 /* Ex+UITextField.swift */; };
-		6A2B5D572A97215000CCBFBE /* PushSettingDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2B5D562A97215000CCBFBE /* PushSettingDetailViewController.swift */; };
 		6A2B5D592A97217F00CCBFBE /* PushSettingReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2B5D582A97217F00CCBFBE /* PushSettingReactor.swift */; };
 		6A2B5D5B2A9735D500CCBFBE /* DetailTimeSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2B5D5A2A9735D500CCBFBE /* DetailTimeSettingView.swift */; };
 		6A2B5D5D2A97415000CCBFBE /* TextSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2B5D5C2A97415000CCBFBE /* TextSettingView.swift */; };
@@ -241,6 +241,7 @@
 		6A10495B2A43D50C00470608 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6A1108B22A95DFF40070682B /* PushSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushSettingViewController.swift; sourceTree = "<group>"; };
 		6A12144629FA0C300076848A /* AppleLoginResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginResDto.swift; sourceTree = "<group>"; };
+		6A1276B42A99C5EE00C0B9D4 /* PushSettingDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushSettingDetailViewController.swift; sourceTree = "<group>"; };
 		6A1322E82A088DD700CEEC81 /* BaseDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseDetailViewController.swift; sourceTree = "<group>"; };
 		6A1322EC2A088F7F00CEEC81 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		6A1322F02A089B2900CEEC81 /* BasePaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasePaddingLabel.swift; sourceTree = "<group>"; };
@@ -767,13 +768,14 @@
 		C41193F029D3A867003DBC15 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				C41193F129D3AEBB003DBC15 /* Views */,
-				C411939129D2817C003DBC15 /* ProfileViewController.swift */,
 				6A0F233F29DBA8AA0063673B /* DataExportViewController.swift */,
 				C411940329D53DDF003DBC15 /* ManagementViewController.swift */,
-				6A0F234129DBA92D0063673B /* ServiceViewController.swift */,
-				C4DBAA2D29DC16A400D1BB97 /* WithdrawViewController.swift */,
+				C411939129D2817C003DBC15 /* ProfileViewController.swift */,
 				6A1108B22A95DFF40070682B /* PushSettingViewController.swift */,
+				6A0F234129DBA92D0063673B /* ServiceViewController.swift */,
+				C41193F129D3AEBB003DBC15 /* Views */,
+				C4DBAA2D29DC16A400D1BB97 /* WithdrawViewController.swift */,
+				6A1276B42A99C5EE00C0B9D4 /* PushSettingDetailViewController.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -791,20 +793,6 @@
 				6A2B5D5E2A9744E800CCBFBE /* TimeSettingView.swift */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		C41193FE29D53A69003DBC15 /* ViewController */ = {
-			isa = PBXGroup;
-			children = (
-				C411939129D2817C003DBC15 /* ProfileViewController.swift */,
-				6A0F233F29DBA8AA0063673B /* DataExportViewController.swift */,
-				C411940329D53DDF003DBC15 /* ManagementViewController.swift */,
-				6A0F234129DBA92D0063673B /* ServiceViewController.swift */,
-				C4DBAA2D29DC16A400D1BB97 /* WithdrawViewController.swift */,
-				6A1108B22A95DFF40070682B /* PushSettingViewController.swift */,
-				6A2B5D562A97215000CCBFBE /* PushSettingDetailViewController.swift */,
-			);
-			path = ViewController;
 			sourceTree = "<group>";
 		};
 		C411940529D53E77003DBC15 /* Base */ = {
@@ -903,6 +891,7 @@
 				C4C0CAF62A1C9B3400C41FF4 /* Ex+UITextField.swift */,
 				C4C0CAFD2A1F205100C41FF4 /* Ex+UITextField.swift */,
 				C4C0CAFB2A1F201100C41FF4 /* Ex+UITextView.swift */,
+				6A2B5D562A97215000CCBFBE /* PushSettingDetailViewController.swift */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -1281,7 +1270,6 @@
 				C4C792AD2A388486007FD6AA /* Ex+UIScreen.swift in Sources */,
 				C411940B29DAEDF9003DBC15 /* CustomAlertViewController.swift in Sources */,
 				C4170B4E2A89FCA800CE0A65 /* StatisticsViewController.swift in Sources */,
-				6A2B5D572A97215000CCBFBE /* PushSettingDetailViewController.swift in Sources */,
 				C4DBAA3029DD459100D1BB97 /* WithdrawConfirmView.swift in Sources */,
 				C41193FD29D42BD9003DBC15 /* ProfileFooterView.swift in Sources */,
 				C44807E129E648D300D4B090 /* HomeViewController.swift in Sources */,
@@ -1316,6 +1304,7 @@
 				C40E522A2A39629B00775455 /* ExportResDto.swift in Sources */,
 				6A0379752A2443B9005EE07F /* Ex+UITextView.swift in Sources */,
 				6A08FFDC2A274A22000AD06B /* AddDetailViewController.swift in Sources */,
+				6A1276B52A99C5EE00C0B9D4 /* PushSettingDetailViewController.swift in Sources */,
 				6A12144729FA0C300076848A /* AppleLoginResDto.swift in Sources */,
 				6A0F234229DBA92D0063673B /* ServiceViewController.swift in Sources */,
 				C4DBAA3729DD7B2600D1BB97 /* CountPushLabel.swift in Sources */,

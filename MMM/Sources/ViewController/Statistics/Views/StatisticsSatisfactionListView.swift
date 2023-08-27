@@ -18,7 +18,7 @@ final class StatisticsSatisfactionListView: UIView, View {
 	private lazy var touchAreaView = UIView()
 	private lazy var titleLabel = UILabel()
 	private lazy var starImageView = UIImageView()
-	private lazy var rangeLabel = UILabel()
+	private lazy var scoreLabel = UILabel()
 	private lazy var arrowImageView = UIImageView()
 	private lazy var tableView = UITableView()
 
@@ -55,7 +55,14 @@ extension StatisticsSatisfactionListView {
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: StatisticsReactor) {}
 }
-
+//MARK: - Action
+extension StatisticsSatisfactionListView {
+	// 외부에서 입력
+	func setData(title: String, score: String) {
+		self.titleLabel.text = title
+		self.scoreLabel.text = score
+	}
+}
 //MARK: - Style & Layouts
 private extension StatisticsSatisfactionListView {
 	// 초기 셋업할 코드들
@@ -85,7 +92,7 @@ private extension StatisticsSatisfactionListView {
 			$0.contentMode = .scaleAspectFit
 		}
 		
-		rangeLabel = rangeLabel.then {
+		scoreLabel = scoreLabel.then {
 			$0.text = "1~2점"
 			$0.font = R.Font.body2
 			$0.textColor = R.Color.orange500
@@ -111,7 +118,7 @@ private extension StatisticsSatisfactionListView {
 	
 	private func setLayout() {
 		addSubviews(touchAreaView, tableView, emptyView)
-		touchAreaView.addSubviews(titleLabel, starImageView, rangeLabel, arrowImageView)
+		touchAreaView.addSubviews(titleLabel, starImageView, scoreLabel, arrowImageView)
 		
 		touchAreaView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(12)
@@ -129,7 +136,7 @@ private extension StatisticsSatisfactionListView {
 			$0.leading.equalTo(titleLabel.snp.trailing).offset(11)
 		}
 
-		rangeLabel.snp.makeConstraints {
+		scoreLabel.snp.makeConstraints {
 			$0.centerY.equalToSuperview()
 			$0.leading.equalTo(starImageView.snp.trailing).offset(4)
 		}

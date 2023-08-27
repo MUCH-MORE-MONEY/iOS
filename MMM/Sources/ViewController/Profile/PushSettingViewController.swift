@@ -8,9 +8,6 @@
 import UIKit
 import SnapKit
 import Then
-import ReactorKit
-import RxSwift
-import RxCocoa
 
 final class PushSettingViewController: BaseViewController, View {
     // MARK: - UI Components
@@ -25,7 +22,6 @@ final class PushSettingViewController: BaseViewController, View {
     private lazy var infoSubLabel = UILabel()
     private lazy var timeSettingLabel = UILabel()
     private lazy var textSettingLabel = UILabel()
-    
     private lazy var timeSettingView = TimeSettingView()
     private lazy var textSettingView = TextSettingView()
     
@@ -71,14 +67,12 @@ private extension PushSettingViewController {
         setAttribute()
         setLayout()
     }
-    
-    
+
     private func setAttribute() {
         title = "푸시 알림 설정"
         
         eventPushStackView.addArrangedSubviews(eventMainLabel, eventSwitch)
         infoPushStackView.addArrangedSubviews(infoMainLabel, infoSwitch)
-        
         view.addSubviews(eventPushStackView, eventSubLabel, divider, infoPushStackView, infoSubLabel, timeSettingLabel, textSettingLabel, timeSettingView, textSettingView)
         
         eventPushStackView = eventPushStackView.then {
@@ -203,7 +197,7 @@ private extension PushSettingViewController {
             $0.left.equalToSuperview().offset(24)
             $0.right.equalToSuperview().offset(-24)
         }
-        
+
         textSettingView.snp.makeConstraints {
             $0.top.equalTo(textSettingLabel.snp.bottom).offset(12)
             $0.left.equalToSuperview().offset(24)

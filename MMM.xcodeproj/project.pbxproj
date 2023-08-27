@@ -28,10 +28,8 @@
 		6A0F234229DBA92D0063673B /* ServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0F234129DBA92D0063673B /* ServiceViewController.swift */; };
 		6A0F234429DBC0C30063673B /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0F234329DBC0C30063673B /* BaseViewController.swift */; };
 		6A0F234729DC0DB20063673B /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0F234629DC0DB20063673B /* TabBarController.swift */; };
-		6A10495C2A43D50C00470608 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6A10495B2A43D50C00470608 /* GoogleService-Info.plist */; };
 		6A1108B32A95DFF40070682B /* PushSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1108B22A95DFF40070682B /* PushSettingViewController.swift */; };
 		6A12144729FA0C300076848A /* AppleLoginResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A12144629FA0C300076848A /* AppleLoginResDto.swift */; };
-		6A1276B52A99C5EE00C0B9D4 /* PushSettingDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1276B42A99C5EE00C0B9D4 /* PushSettingDetailViewController.swift */; };
 		6A1322E92A088DD700CEEC81 /* BaseDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1322E82A088DD700CEEC81 /* BaseDetailViewController.swift */; };
 		6A1322ED2A088F7F00CEEC81 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1322EC2A088F7F00CEEC81 /* DetailViewController.swift */; };
 		6A1322F12A089B2900CEEC81 /* BasePaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1322F02A089B2900CEEC81 /* BasePaddingLabel.swift */; };
@@ -55,7 +53,6 @@
 		6A8605B62A24C83D00DF68BD /* UpdateResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8605B52A24C83D00DF68BD /* UpdateResDto.swift */; };
 		6A8605B82A24D0B000DF68BD /* DeleteResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8605B72A24D0B000DF68BD /* DeleteResDto.swift */; };
 		6A8B776329FF92CC0095ECFC /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8B776229FF92CC0095ECFC /* Constants.swift */; };
-		6A8B776529FF93530095ECFC /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8B776429FF93530095ECFC /* APIConstants.swift */; };
 		6AB1151329EE6D9E00D3B813 /* Ex+UITabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB1151229EE6D9E00D3B813 /* Ex+UITabBar.swift */; };
 		6ADC27E02A2AEEF400C56777 /* Ex+UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ADC27DF2A2AEEF400C56777 /* Ex+UIImage.swift */; };
 		6ADEAFDF2A53B81300299A0E /* Ex+Window.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ADEAFDE2A53B81300299A0E /* Ex+Window.swift */; };
@@ -130,6 +127,10 @@
 		C460DBAA2A96056100530351 /* SatisfactionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C460DBA92A96056100530351 /* SatisfactionTableViewCell.swift */; };
 		C46791542A539E55005FE1F6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C411939629D2817E003DBC15 /* Assets.xcassets */; };
 		C494A1FD2A98B6C700980A71 /* Satisfaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C494A1FC2A98B6C700980A71 /* Satisfaction.swift */; };
+		C494A24B2A9B893400980A71 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C494A24A2A9B893300980A71 /* GoogleService-Info.plist */; };
+		C494A24D2A9B894000980A71 /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C494A24C2A9B893F00980A71 /* APIConstants.swift */; };
+		C494A24F2A9B895100980A71 /* PushSettingDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C494A24E2A9B895100980A71 /* PushSettingDetailViewController.swift */; };
+		C494A2512A9B8A0A00980A71 /* TabBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C494A2502A9B8A0A00980A71 /* TabBarViewModel.swift */; };
 		C4C0CAF52A1C88DC00C41FF4 /* PriceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0CAF42A1C88DC00C41FF4 /* PriceViewModel.swift */; };
 		C4C0CB022A23A07000C41FF4 /* EditPriceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0CB012A23A06F00C41FF4 /* EditPriceViewController.swift */; };
 		C4C0CB092A2474F900C41FF4 /* Ex+UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0CB082A2474F900C41FF4 /* Ex+UILabel.swift */; };
@@ -238,7 +239,6 @@
 		6A0F234129DBA92D0063673B /* ServiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceViewController.swift; sourceTree = "<group>"; };
 		6A0F234329DBC0C30063673B /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		6A0F234629DC0DB20063673B /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
-		6A10495B2A43D50C00470608 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6A1108B22A95DFF40070682B /* PushSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushSettingViewController.swift; sourceTree = "<group>"; };
 		6A12144629FA0C300076848A /* AppleLoginResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginResDto.swift; sourceTree = "<group>"; };
 		6A1276B42A99C5EE00C0B9D4 /* PushSettingDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushSettingDetailViewController.swift; sourceTree = "<group>"; };
@@ -266,7 +266,6 @@
 		6A8605B52A24C83D00DF68BD /* UpdateResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateResDto.swift; sourceTree = "<group>"; };
 		6A8605B72A24D0B000DF68BD /* DeleteResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteResDto.swift; sourceTree = "<group>"; };
 		6A8B776229FF92CC0095ECFC /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		6A8B776429FF93530095ECFC /* APIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConstants.swift; sourceTree = "<group>"; };
 		6AB1151229EE6D9E00D3B813 /* Ex+UITabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UITabBar.swift"; sourceTree = "<group>"; };
 		6ADC27DF2A2AEEF400C56777 /* Ex+UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIImage.swift"; sourceTree = "<group>"; };
 		6ADEAFDE2A53B81300299A0E /* Ex+Window.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Window.swift"; sourceTree = "<group>"; };
@@ -347,6 +346,10 @@
 		C44807E429E7E76800D4B090 /* Ex+UIControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIControl.swift"; sourceTree = "<group>"; };
 		C460DBA92A96056100530351 /* SatisfactionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatisfactionTableViewCell.swift; sourceTree = "<group>"; };
 		C494A1FC2A98B6C700980A71 /* Satisfaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Satisfaction.swift; sourceTree = "<group>"; };
+		C494A24A2A9B893300980A71 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C494A24C2A9B893F00980A71 /* APIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIConstants.swift; sourceTree = "<group>"; };
+		C494A24E2A9B895100980A71 /* PushSettingDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushSettingDetailViewController.swift; sourceTree = "<group>"; };
+		C494A2502A9B8A0A00980A71 /* TabBarViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewModel.swift; sourceTree = "<group>"; };
 		C4C0CAF42A1C88DC00C41FF4 /* PriceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceViewModel.swift; sourceTree = "<group>"; };
 		C4C0CAF62A1C9B3400C41FF4 /* Ex+UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UITextField.swift"; sourceTree = "<group>"; };
 		C4C0CAFB2A1F201100C41FF4 /* Ex+UITextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UITextView.swift"; sourceTree = "<group>"; };
@@ -471,6 +474,7 @@
 			isa = PBXGroup;
 			children = (
 				6A0F234629DC0DB20063673B /* TabBarController.swift */,
+				C494A2502A9B8A0A00980A71 /* TabBarViewModel.swift */,
 			);
 			path = TabBar;
 			sourceTree = "<group>";
@@ -657,7 +661,7 @@
 		C41193C229D28318003DBC15 /* Info */ = {
 			isa = PBXGroup;
 			children = (
-				6A10495B2A43D50C00470608 /* GoogleService-Info.plist */,
+				C494A24A2A9B893300980A71 /* GoogleService-Info.plist */,
 				C411939B29D2817E003DBC15 /* Info.plist */,
 			);
 			path = Info;
@@ -744,7 +748,7 @@
 		C41193EE29D3A7B6003DBC15 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				6A8B776429FF93530095ECFC /* APIConstants.swift */,
+				C494A24C2A9B893F00980A71 /* APIConstants.swift */,
 				6A08B47929FF5CA90080719E /* APIClient.swift */,
 				6A08B47729FF5C7E0080719E /* APIParameters.swift */,
 				6A08B47529FF5B150080719E /* APIRouter.swift */,
@@ -768,11 +772,6 @@
 		C41193F029D3A867003DBC15 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				6A0F233F29DBA8AA0063673B /* DataExportViewController.swift */,
-				C411940329D53DDF003DBC15 /* ManagementViewController.swift */,
-				C411939129D2817C003DBC15 /* ProfileViewController.swift */,
-				6A1108B22A95DFF40070682B /* PushSettingViewController.swift */,
-				6A0F234129DBA92D0063673B /* ServiceViewController.swift */,
 				C41193F129D3AEBB003DBC15 /* Views */,
 				C411939129D2817C003DBC15 /* ProfileViewController.swift */,
 				6A0F233F29DBA8AA0063673B /* DataExportViewController.swift */,
@@ -780,6 +779,7 @@
 				6A0F234129DBA92D0063673B /* ServiceViewController.swift */,
 				C4DBAA2D29DC16A400D1BB97 /* WithdrawViewController.swift */,
 				6A1108B22A95DFF40070682B /* PushSettingViewController.swift */,
+				C494A24E2A9B895100980A71 /* PushSettingDetailViewController.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -896,6 +896,7 @@
 				C4C0CAFD2A1F205100C41FF4 /* Ex+UITextField.swift */,
 				C4C0CAFB2A1F201100C41FF4 /* Ex+UITextView.swift */,
 				6A2B5D562A97215000CCBFBE /* PushSettingDetailViewController.swift */,
+				6A1276B42A99C5EE00C0B9D4 /* PushSettingDetailViewController.swift */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -1108,8 +1109,8 @@
 			files = (
 				C46791542A539E55005FE1F6 /* Assets.xcassets in Resources */,
 				C41193D529D2874A003DBC15 /* Pretendard-Medium.otf in Resources */,
+				C494A24B2A9B893400980A71 /* GoogleService-Info.plist in Resources */,
 				C41193D829D2874A003DBC15 /* Pretendard-Bold.otf in Resources */,
-				6A10495C2A43D50C00470608 /* GoogleService-Info.plist in Resources */,
 				C41193D629D2874A003DBC15 /* Pretendard-Light.otf in Resources */,
 				C41193DB29D2874A003DBC15 /* Pretendard-SemiBold.otf in Resources */,
 				6AF1A8402A35906100135961 /* loading.json in Resources */,
@@ -1276,6 +1277,7 @@
 				C4170B4E2A89FCA800CE0A65 /* StatisticsViewController.swift in Sources */,
 				C4DBAA3029DD459100D1BB97 /* WithdrawConfirmView.swift in Sources */,
 				C41193FD29D42BD9003DBC15 /* ProfileFooterView.swift in Sources */,
+				C494A24F2A9B895100980A71 /* PushSettingDetailViewController.swift in Sources */,
 				C44807E129E648D300D4B090 /* HomeViewController.swift in Sources */,
 				6A2B5D5D2A97415000CCBFBE /* TextSettingView.swift in Sources */,
 				C44807DE29E4FE8000D4B090 /* Ex+Publisher.swift in Sources */,
@@ -1297,6 +1299,7 @@
 				C4170B5D2A94BA9000CE0A65 /* StatisticsSatisfactionListView.swift in Sources */,
 				C4170B532A937AAC00CE0A65 /* StatisticsHeaderView.swift in Sources */,
 				C41193E329D287E6003DBC15 /* Ex+KeychainWrapper.swift in Sources */,
+				C494A2512A9B8A0A00980A71 /* TabBarViewModel.swift in Sources */,
 				C4199DD329FE3051006E5DA8 /* BottomSheetViewController.swift in Sources */,
 				6A1880CB29EF85EA00D62F1A /* OnboardingItem.swift in Sources */,
 				C44807E529E7E76800D4B090 /* Ex+UIControl.swift in Sources */,
@@ -1308,7 +1311,6 @@
 				C40E522A2A39629B00775455 /* ExportResDto.swift in Sources */,
 				6A0379752A2443B9005EE07F /* Ex+UITextView.swift in Sources */,
 				6A08FFDC2A274A22000AD06B /* AddDetailViewController.swift in Sources */,
-				6A1276B52A99C5EE00C0B9D4 /* PushSettingDetailViewController.swift in Sources */,
 				6A12144729FA0C300076848A /* AppleLoginResDto.swift in Sources */,
 				6A0F234229DBA92D0063673B /* ServiceViewController.swift in Sources */,
 				C4DBAA3729DD7B2600D1BB97 /* CountPushLabel.swift in Sources */,
@@ -1351,11 +1353,11 @@
 				C4D03F052A2EAB1800011B41 /* MMMWidget.intentdefinition in Sources */,
 				C411939229D2817C003DBC15 /* ProfileViewController.swift in Sources */,
 				6A2B5D5B2A9735D500CCBFBE /* DetailTimeSettingView.swift in Sources */,
-				6A8B776529FF93530095ECFC /* APIConstants.swift in Sources */,
 				C4170B672A95EBFA00CE0A65 /* CategoryReactor.swift in Sources */,
 				C433A07329EEE751008B26DF /* Ex+Date.swift in Sources */,
 				C4EA5B4029FA1A40008D1564 /* HomeHeaderView.swift in Sources */,
 				6A8B776329FF92CC0095ECFC /* Constants.swift in Sources */,
+				C494A24D2A9B894000980A71 /* APIConstants.swift in Sources */,
 				6A3EDE8D2A87572F008E8782 /* SampleReactor.swift in Sources */,
 				C4DBAA3929DEAE0200D1BB97 /* CountAnimationStackView.swift in Sources */,
 				C4D03ED02A2DD33700011B41 /* ProfileViewModel.swift in Sources */,

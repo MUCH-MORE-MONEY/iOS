@@ -16,24 +16,14 @@ final class ProfileViewController: UIViewController {
 	private var viewModel: ProfileViewModel = ProfileViewModel()
 	private var userEmail: String = ""
 	private let lableCellList = ["", "계정 관리", "데이터 내보내기", "알림 설정","문의 및 서비스 약관", "앱 버전"]
-  private var tabBarViewModel: TabBarViewModel
-  private var cancellable = Set<AnyCancellable>()
-    
+	private var cancellable = Set<AnyCancellable>()
+	
 	// MARK: - UI Components
 	private lazy var navigationLabel = UILabel()
 	private lazy var profileHeaderView = ProfileHeaderView()
 	private lazy var profileFooterView = ProfileFooterView()
 	private lazy var tableView = UITableView()
-  
-  init(tabBarViewModel: TabBarViewModel) {
-      self.tabBarViewModel = tabBarViewModel
-      super.init(nibName: nil, bundle: nil)
-  }
-
-  required init?(coder: NSCoder) {
-      fatalError("init(coder:) has not been implemented")
-  }
-    
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
@@ -57,16 +47,16 @@ final class ProfileViewController: UIViewController {
 private extension ProfileViewController {
 	// 초기 셋업할 코드들
 	private func setup() {
-        bind()
+		bind()
 		setAttribute()
 		setLayout()
 	}
 	
-    private func bind() {
-        guard let email = Constants.getKeychainValue(forKey: Constants.KeychainKey.email) else { return }
-        userEmail = email
-    }
-    
+	private func bind() {
+		guard let email = Constants.getKeychainValue(forKey: Constants.KeychainKey.email) else { return }
+		userEmail = email
+	}
+	
 	private func setAttribute() {
 		// [view]
 		view.backgroundColor = R.Color.gray100
@@ -78,7 +68,7 @@ private extension ProfileViewController {
 			$0.textColor = R.Color.gray200
 			$0.textAlignment = .left
 		}
-
+		
 		profileHeaderView = profileHeaderView.then {
 			$0.setData(email: userEmail)
 			$0.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: 170)
@@ -121,7 +111,7 @@ extension ProfileViewController: UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: ProfileTableViewCell.className, for: indexPath) as! ProfileTableViewCell
-
+		
 		if indexPath.row == 0 {
 			cell.isUserInteractionEnabled = false // click disable
 			cell.setData(text: "", last: true)
@@ -151,19 +141,19 @@ extension ProfileViewController: UITableViewDelegate {
 			vc.setData(email: userEmail)
 			vc.hidesBottomBarWhenPushed = true	// TabBar Above
 			navigationController?.pushViewController(vc, animated: true)	// 계정관리
-        case 2:
+		case 2:
 			let vc = DataExportViewController()
 			vc.hidesBottomBarWhenPushed = true	// TabBar Above
-            navigationController?.pushViewController(vc, animated: true)
-        case 3:
-            let vc = PushSettingViewController()
-            vc.reactor = PushSettingReactor()
-            vc.hidesBottomBarWhenPushed = true    // TabBar Above
-            navigationController?.pushViewController(vc, animated: true)
-        case 4:
-            let vc = ServiceViewController()
+			navigationController?.pushViewController(vc, animated: true)
+		case 3:
+			let vc = PushSettingViewController()
+			vc.reactor = PushSettingReactor()
+			vc.hidesBottomBarWhenPushed = true    // TabBar Above
+			navigationController?.pushViewController(vc, animated: true)
+		case 4:
+			let vc = ServiceViewController()
 			vc.hidesBottomBarWhenPushed = true	// TabBar Above
-            navigationController?.pushViewController(vc, animated: true)
+			navigationController?.pushViewController(vc, animated: true)
 		default:
 			break
 		}

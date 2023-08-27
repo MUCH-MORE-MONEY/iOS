@@ -84,7 +84,7 @@ extension TabBarController {
         self.tabBar.setTabShadow()
         self.delegate = self
         
-        let homeVC = HomeViewController()
+		let homeVC = HomeViewController()
         homeVC.tabBarItem = UITabBarItem(title: "소비", image: R.Icon.iconMoneyInActive, selectedImage: R.Icon.iconMoneyActive)
         
         let budgetVC = StatisticsViewController()
@@ -97,7 +97,7 @@ extension TabBarController {
         let challengeVC = UIViewController()
         challengeVC.tabBarItem = UITabBarItem(title: "챌린지", image: R.Icon.iconMoneyInActive, selectedImage: R.Icon.iconMoneyActive)
 
-        let profileVC = ProfileViewController()
+		let profileVC = ProfileViewController()
         profileVC.tabBarItem = UITabBarItem(title: "마이페이지", image: R.Icon.iconMypageInActive, selectedImage: R.Icon.iconMypageActive)
         
         setViewControllers([homeVC, budgetVC, plusVC, challengeVC, profileVC], animated: false)

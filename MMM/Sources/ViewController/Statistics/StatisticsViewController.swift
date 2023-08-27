@@ -15,7 +15,6 @@ final class StatisticsViewController: UIViewController, View {
 	typealias Reactor = StatisticsReactor
 
 	// MARK: - Properties
-	private var tabBarViewModel: TabBarViewModel
 	var disposeBag: DisposeBag = DisposeBag()
 	private var bottomSheetReactor: BottomSheetReactor = BottomSheetReactor()
 	private var satisfaction: Satisfaction = .low
@@ -31,16 +30,6 @@ final class StatisticsViewController: UIViewController, View {
 	private lazy var categoryView = StatisticsCategoryView()
 	private lazy var activityView = StatisticsActivityView()
 	private lazy var selectAreaView = StatisticsSatisfactionListView()
-
-	init(tabBarViewModel: TabBarViewModel) {
-		self.tabBarViewModel = tabBarViewModel
-		super.init(nibName: nil, bundle: nil)
-	}
-	
-	// Compile time에 error를 발생시키는 코드
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
 	
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Then
 
-final class PushSettingViewController: BaseViewController {
+final class PushSettingViewController: BaseViewController, View {
     // MARK: - UI Components
     private lazy var eventPushStackView = UIStackView()
     private lazy var infoPushStackView = UIStackView()
@@ -22,12 +22,43 @@ final class PushSettingViewController: BaseViewController {
     private lazy var infoSubLabel = UILabel()
     private lazy var timeSettingLabel = UILabel()
     private lazy var textSettingLabel = UILabel()
-    private lazy var timeSettingButton = UIButton()
-    private lazy var textSettingButton = UIButton()
+    private lazy var timeSettingView = TimeSettingView()
+    private lazy var textSettingView = TextSettingView()
+    
+    // MARK: - Properties
+    var disposeBag: DisposeBag = DisposeBag()
+    var reactor: PushSettingReactor!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+        bind(reactor: reactor)
+    }
+        
+    func bind(reactor: PushSettingReactor) {
+        bindState(reactor)
+        bindAction(reactor)
+    }
+}
+
+extension PushSettingViewController {
+    private func bindAction(_ reactor: PushSettingReactor) {
+        timeSettingView.rx.tapGesture()
+            .when(.recognized)
+            .map { _ in .didTapTimeSettingButton }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+
+    private func bindState(_ reactor: PushSettingReactor) {
+        reactor.state
+            .filter { $0.isPresentTimeDetail }
+            .bind { [weak self] _ in
+                guard let self = self else { return }
+                let vc = PushSettingDetailViewController()
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+            .disposed(by: disposeBag)
     }
 }
 
@@ -36,14 +67,13 @@ private extension PushSettingViewController {
         setAttribute()
         setLayout()
     }
-    
+
     private func setAttribute() {
         title = "푸시 알림 설정"
         
         eventPushStackView.addArrangedSubviews(eventMainLabel, eventSwitch)
         infoPushStackView.addArrangedSubviews(infoMainLabel, infoSwitch)
-        
-        view.addSubviews(eventPushStackView, eventSubLabel, divider, infoPushStackView, infoSubLabel, timeSettingLabel, textSettingLabel, timeSettingButton, textSettingButton)
+        view.addSubviews(eventPushStackView, eventSubLabel, divider, infoPushStackView, infoSubLabel, timeSettingLabel, textSettingLabel, timeSettingView, textSettingView)
         
         eventPushStackView = eventPushStackView.then {
             $0.axis = .horizontal
@@ -109,19 +139,11 @@ private extension PushSettingViewController {
             $0.textColor = R.Color.gray800
         }
         
-        timeSettingButton = timeSettingButton.then {
-            $0.setTitle("매일 09:00 PM", for: .normal)
-            $0.titleLabel?.font = R.Font.body1
-            $0.setBackgroundColor(R.Color.gray900, for: .normal)
-            $0.setTitleColor(R.Color.white, for: .normal)
+        timeSettingView = timeSettingView.then {
             $0.layer.cornerRadius = 4
         }
         
-        textSettingButton = textSettingButton.then {
-            $0.setTitle("오늘의 가계부를 작성해보세요", for: .normal)
-            $0.titleLabel?.font = R.Font.body1
-            $0.setBackgroundColor(R.Color.gray900, for: .normal)
-            $0.setTitleColor(R.Color.white, for: .normal)
+        textSettingView = textSettingView.then {
             $0.layer.cornerRadius = 4
         }
     }
@@ -164,24 +186,22 @@ private extension PushSettingViewController {
             $0.right.equalToSuperview().offset(-24)
         }
         
-        timeSettingButton.snp.makeConstraints {
+        timeSettingView.snp.makeConstraints {
             $0.top.equalTo(timeSettingLabel.snp.bottom).offset(12)
             $0.left.equalToSuperview().offset(24)
             $0.right.equalToSuperview().offset(-24)
-            $0.height.equalTo(40)
         }
         
         textSettingLabel.snp.makeConstraints {
-            $0.top.equalTo(timeSettingButton.snp.bottom).offset(24)
+            $0.top.equalTo(timeSettingView.snp.bottom).offset(24)
             $0.left.equalToSuperview().offset(24)
             $0.right.equalToSuperview().offset(-24)
         }
-        
-        textSettingButton.snp.makeConstraints {
+
+        textSettingView.snp.makeConstraints {
             $0.top.equalTo(textSettingLabel.snp.bottom).offset(12)
             $0.left.equalToSuperview().offset(24)
             $0.right.equalToSuperview().offset(-24)
-            $0.height.equalTo(40)
         }
     }
 }

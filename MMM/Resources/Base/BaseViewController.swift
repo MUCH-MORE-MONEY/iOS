@@ -37,6 +37,10 @@ class BaseViewController: UIViewController {
         }
 
     }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent // status text color 변경
+    }
 }
 
 //MARK: - Style & Layouts & Bind

@@ -17,7 +17,6 @@ final class HomeViewController: UIViewController {
 	// MARK: - Properties
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 	private let viewModel = HomeViewModel()
-    private var tabBarViewModel: TabBarViewModel
 
 	// MARK: - UI Components
 	private lazy var monthButtonItem = UIBarButtonItem()
@@ -41,15 +40,6 @@ final class HomeViewController: UIViewController {
 	private lazy var monthlyErrorView = HomeErrorView()
 	private lazy var dailyErrorView = HomeErrorView()
 	private lazy var retryButton = UIButton()
-	
-    init(tabBarViewModel: TabBarViewModel) {
-        self.tabBarViewModel = tabBarViewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -278,17 +268,6 @@ private extension HomeViewController {
 		// [view]
 		view.backgroundColor = R.Color.gray900
 		view.addGestureRecognizer(self.scopeGesture)
-		
-        // tabbar
-        tabBarViewModel.$isPlusButtonTappedInHome
-            .receive(on: DispatchQueue.main)
-            .sink {
-                if $0 {
-					let vc = AddViewController(parentVC: self)
-                    self.navigationController?.pushViewController(vc, animated: true)
-                    self.tabBarViewModel.isPlusButtonTappedInHome = false
-                }
-            }.store(in: &cancellable)
         
 		let view = UIView(frame: .init(origin: .zero, size: .init(width: 80, height: 30)))
 		monthButton = monthButton.then {

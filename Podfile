@@ -18,6 +18,7 @@ target 'MMM' do
   pod 'ReactorKit'
   pod 'RxCocoa'
   pod 'RxGesture'
+  pod 'MarqueeLabel'
 
   target 'MMMTests' do
     inherit! :search_paths

@@ -85,7 +85,8 @@ private extension StatisticsActivityTableViewCell {
 		
 		priceLabel.snp.makeConstraints {
 			$0.centerY.equalTo(typeImageView)
-			$0.leading.trailing.equalTo(typeImageView.snp.trailing).offset(4)
+			$0.leading.equalTo(typeImageView.snp.trailing).offset(4)
+			$0.trailing.lessThanOrEqualToSuperview()
 		}
 	}
 }

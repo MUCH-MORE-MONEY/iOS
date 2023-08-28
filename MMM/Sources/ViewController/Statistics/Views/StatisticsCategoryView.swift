@@ -81,8 +81,8 @@ private extension StatisticsCategoryView {
 		
 		payLabel = payLabel.then {
 			$0.text = "지출"
-			$0.font = R.Font.body4
-			$0.textColor = R.Color.gray100
+			$0.font = R.Font.body2
+			$0.textColor = R.Color.white
 		}
 		
 		payRankLabel = payRankLabel.then {
@@ -98,8 +98,8 @@ private extension StatisticsCategoryView {
 		
 		earnLabel = earnLabel.then {
 			$0.text = "수입"
-			$0.font = R.Font.body4
-			$0.textColor = R.Color.gray100
+			$0.font = R.Font.body2
+			$0.textColor = R.Color.white
 		}
 		
 		earnRankLabel = earnRankLabel.then {
@@ -129,23 +129,23 @@ private extension StatisticsCategoryView {
 		}
 		
 		payLabel.snp.makeConstraints {
-			$0.top.equalTo(titleLabel.snp.bottom).offset(14)
+			$0.top.equalToSuperview().inset(48)
 			$0.leading.equalToSuperview().inset(20)
 		}
 		
 		payRankLabel.snp.makeConstraints {
-			$0.centerY.equalTo(payLabel)
+			$0.top.equalToSuperview().inset(44)
 			$0.leading.equalToSuperview().inset(60)
 			$0.trailing.equalToSuperview().inset(20)
 		}
 		
 		earnLabel.snp.makeConstraints {
-			$0.top.equalTo(payLabel.snp.bottom).offset(14)
+			$0.top.equalToSuperview().inset(96)
 			$0.leading.equalToSuperview().inset(20)
 		}
 		
 		earnRankLabel.snp.makeConstraints {
-			$0.centerY.equalTo(earnLabel)
+			$0.top.equalToSuperview().inset(92)
 			$0.leading.equalToSuperview().inset(60)
 			$0.trailing.equalToSuperview().inset(20)
 		}

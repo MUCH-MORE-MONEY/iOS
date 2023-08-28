@@ -17,12 +17,12 @@ final class StatisticsCategoryView: UIView, View {
 	var disposeBag: DisposeBag = DisposeBag()
 
 	// MARK: - UI Components
-	private lazy var titleLabel = UILabel() 	// 카테고리
-	private lazy var moreLabel = UILabel() 		// 더보기
-	private lazy var payLabel = UILabel() 		// 지출
+	private lazy var titleLabel = UILabel() 		// 카테고리
+	private lazy var moreLabel = UILabel() 			// 더보기
+	private lazy var payLabel = UILabel() 			// 지출
 	private lazy var payRankLabel = MarqueeLabel() 	// 지출 랭킹
-	private lazy var earnLabel = UILabel() 		// 수입
-	private lazy var earnRankLabel = MarqueeLabel() 	// 수입 랭킹
+	private lazy var earnLabel = UILabel() 			// 수입
+	private lazy var earnRankLabel = MarqueeLabel() // 수입 랭킹
 
 	override init(frame: CGRect) {
 		super.init(frame: frame)

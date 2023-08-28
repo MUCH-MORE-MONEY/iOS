@@ -220,7 +220,7 @@ extension StatisticsViewController {
 		categoryView.snp.makeConstraints {
 			$0.top.equalTo(satisfactionView.snp.bottom).offset(16)
 			$0.leading.trailing.equalToSuperview().inset(20)
-			$0.height.equalTo(113)
+			$0.height.equalTo(146)
 		}
 		
 		activityView.snp.makeConstraints {

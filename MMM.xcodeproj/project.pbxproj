@@ -48,6 +48,7 @@
 		6A14E7132A9DD0E00071805D /* OnboardingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A14E7122A9DD0E00071805D /* OnboardingItem.swift */; };
 		6A14E7152A9DD4600071805D /* Ex+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A14E7142A9DD4600071805D /* Ex+String.swift */; };
 		6A14E7172A9DDD060071805D /* RxOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A14E7162A9DDD060071805D /* RxOperation.swift */; };
+		6A14E71A2A9E0C140071805D /* MMMAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A14E7192A9E0C140071805D /* MMMAPI.swift */; };
 		6A15B0EC2A15B68D00EADAC5 /* BaseAddActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A15B0EB2A15B68D00EADAC5 /* BaseAddActivityViewController.swift */; };
 		6A15D5372A5138D800B60CC8 /* Tracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A15D5362A5138D800B60CC8 /* Tracking.swift */; };
 		6A1BAD4529E6550100818086 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1BAD4429E6550100818086 /* OnboardingViewModel.swift */; };
@@ -269,6 +270,7 @@
 		6A14E7122A9DD0E00071805D /* OnboardingItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingItem.swift; sourceTree = "<group>"; };
 		6A14E7142A9DD4600071805D /* Ex+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+String.swift"; sourceTree = "<group>"; };
 		6A14E7162A9DDD060071805D /* RxOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxOperation.swift; sourceTree = "<group>"; };
+		6A14E7192A9E0C140071805D /* MMMAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMMAPI.swift; sourceTree = "<group>"; };
 		6A15B0EB2A15B68D00EADAC5 /* BaseAddActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAddActivityViewController.swift; sourceTree = "<group>"; };
 		6A15D5362A5138D800B60CC8 /* Tracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracking.swift; sourceTree = "<group>"; };
 		6A1BAD4429E6550100818086 /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
@@ -547,6 +549,14 @@
 			path = Requests;
 			sourceTree = "<group>";
 		};
+		6A14E7182A9E0BC20071805D /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				6A14E7192A9E0C140071805D /* MMMAPI.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
 		6A381E0829E8F3C100E0974F /* Add */ = {
 			isa = PBXGroup;
 			children = (
@@ -800,6 +810,7 @@
 		C41193EE29D3A7B6003DBC15 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				6A14E7182A9E0BC20071805D /* Network */,
 				6A14E6FB2A9DADDE0071805D /* Networking */,
 				6A8B776429FF93530095ECFC /* APIConstants.swift */,
 				6A08B47929FF5CA90080719E /* APIClient.swift */,
@@ -1351,6 +1362,7 @@
 				C4170B532A937AAC00CE0A65 /* StatisticsHeaderView.swift in Sources */,
 				C41193E329D287E6003DBC15 /* Ex+KeychainWrapper.swift in Sources */,
 				C4199DD329FE3051006E5DA8 /* BottomSheetViewController.swift in Sources */,
+				6A14E71A2A9E0C140071805D /* MMMAPI.swift in Sources */,
 				C44807E529E7E76800D4B090 /* Ex+UIControl.swift in Sources */,
 				6A08B47829FF5C7E0080719E /* APIParameters.swift in Sources */,
 				C4C0CAF52A1C88DC00C41FF4 /* PriceViewModel.swift in Sources */,

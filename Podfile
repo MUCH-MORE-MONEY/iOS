@@ -18,7 +18,7 @@ target 'MMM' do
   pod 'ReactorKit'
   pod 'RxCocoa'
   pod 'RxGesture'
-  pod 'Moya/RxSwift'
+  pod 'Moya/RxSwift', '~> 15.0'
   pod 'Alamofire'
 
   target 'MMMTests' do

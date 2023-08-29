@@ -126,7 +126,7 @@ DEPENDENCIES:
   - FSCalendar
   - Kingfisher (~> 7.0)
   - lottie-ios
-  - Moya/RxSwift
+  - Moya/RxSwift (~> 15.0)
   - ReactorKit
   - RxCocoa
   - RxGesture
@@ -191,6 +191,6 @@ SPEC CHECKSUMS:
   Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
   WeakMapTable: 05c694ce8439a7a9ebabb56187287a63c57673d6
 
-PODFILE CHECKSUM: 402715ccea66af743e77628297bb08de020b1ca0
+PODFILE CHECKSUM: e4d6e5079bef4b8c6031d8d71eaa3444464caccc
 
 COCOAPODS: 1.11.3

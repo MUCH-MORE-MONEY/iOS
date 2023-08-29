@@ -12,7 +12,7 @@ extension MyAPI {
     func getMethod() -> Moya.Method {
         switch self {
         case .push:
-            return .get
+            return .post
         }
     }
 }

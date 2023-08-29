@@ -52,6 +52,12 @@ extension PushSettingViewController {
             .map { _ in .didTapTimeSettingButton }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+        textSettingView.rx.tapGesture()
+            .when(.recognized)
+            .map { _ in .didTapTextSettingButton }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 
     private func bindState(_ reactor: PushSettingReactor) {
@@ -61,6 +67,13 @@ extension PushSettingViewController {
                 guard let self = self else { return }
                 let vc = PushSettingDetailViewController()
                 self.navigationController?.pushViewController(vc, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state
+            .filter { $0.isPresentTextDetail }
+            .bind { [weak self] _ in
+                print("text Tapped")
             }
             .disposed(by: disposeBag)
     }

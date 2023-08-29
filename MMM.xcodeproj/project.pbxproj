@@ -46,6 +46,8 @@
 		6A14E70D2A9DCAD00071805D /* PushResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A14E70C2A9DCAD00071805D /* PushResDto.swift */; };
 		6A14E70F2A9DCB880071805D /* MyAPI+Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A14E70E2A9DCB880071805D /* MyAPI+Request.swift */; };
 		6A14E7132A9DD0E00071805D /* OnboardingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A14E7122A9DD0E00071805D /* OnboardingItem.swift */; };
+		6A14E7152A9DD4600071805D /* Ex+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A14E7142A9DD4600071805D /* Ex+String.swift */; };
+		6A14E7172A9DDD060071805D /* RxOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A14E7162A9DDD060071805D /* RxOperation.swift */; };
 		6A15B0EC2A15B68D00EADAC5 /* BaseAddActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A15B0EB2A15B68D00EADAC5 /* BaseAddActivityViewController.swift */; };
 		6A15D5372A5138D800B60CC8 /* Tracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A15D5362A5138D800B60CC8 /* Tracking.swift */; };
 		6A1BAD4529E6550100818086 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1BAD4429E6550100818086 /* OnboardingViewModel.swift */; };
@@ -265,6 +267,8 @@
 		6A14E70C2A9DCAD00071805D /* PushResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushResDto.swift; sourceTree = "<group>"; };
 		6A14E70E2A9DCB880071805D /* MyAPI+Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MyAPI+Request.swift"; sourceTree = "<group>"; };
 		6A14E7122A9DD0E00071805D /* OnboardingItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingItem.swift; sourceTree = "<group>"; };
+		6A14E7142A9DD4600071805D /* Ex+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+String.swift"; sourceTree = "<group>"; };
+		6A14E7162A9DDD060071805D /* RxOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxOperation.swift; sourceTree = "<group>"; };
 		6A15B0EB2A15B68D00EADAC5 /* BaseAddActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAddActivityViewController.swift; sourceTree = "<group>"; };
 		6A15D5362A5138D800B60CC8 /* Tracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracking.swift; sourceTree = "<group>"; };
 		6A1BAD4429E6550100818086 /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
@@ -448,6 +452,7 @@
 			children = (
 				6A08B47C29FF5D530080719E /* Log.swift */,
 				6A15D5362A5138D800B60CC8 /* Tracking.swift */,
+				6A14E7162A9DDD060071805D /* RxOperation.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -774,6 +779,7 @@
 				C41193E229D287E6003DBC15 /* Ex+UIView.swift */,
 				C42226462A30C548000C899B /* Ex+UserDefaults.swift */,
 				6ADEAFDE2A53B81300299A0E /* Ex+Window.swift */,
+				6A14E7142A9DD4600071805D /* Ex+String.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1356,6 +1362,7 @@
 				6A0379752A2443B9005EE07F /* Ex+UITextView.swift in Sources */,
 				6A08FFDC2A274A22000AD06B /* AddDetailViewController.swift in Sources */,
 				6A1276B52A99C5EE00C0B9D4 /* PushSettingDetailViewController.swift in Sources */,
+				6A14E7172A9DDD060071805D /* RxOperation.swift in Sources */,
 				6A12144729FA0C300076848A /* AppleLoginResDto.swift in Sources */,
 				6A0F234229DBA92D0063673B /* ServiceViewController.swift in Sources */,
 				C4DBAA3729DD7B2600D1BB97 /* CountPushLabel.swift in Sources */,
@@ -1410,6 +1417,7 @@
 				C4DBAA3929DEAE0200D1BB97 /* CountAnimationStackView.swift in Sources */,
 				C4D03ED02A2DD33700011B41 /* ProfileViewModel.swift in Sources */,
 				6A1BAD4529E6550100818086 /* OnboardingViewModel.swift in Sources */,
+				6A14E7152A9DD4600071805D /* Ex+String.swift in Sources */,
 				6A08B47A29FF5CA90080719E /* APIClient.swift in Sources */,
 				C4C792A82A35916D007FD6AA /* WithdrawResDto.swift in Sources */,
 				C42226472A30C548000C899B /* Ex+UserDefaults.swift in Sources */,

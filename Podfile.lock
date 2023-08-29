@@ -1,4 +1,5 @@
 PODS:
+  - Alamofire (5.7.1)
   - Cosmos (23.0.0)
   - Firebase/CoreOnly (10.14.0):
     - FirebaseCore (= 10.14.0)
@@ -89,6 +90,10 @@ PODS:
     - GoogleUtilities/Logger
   - Kingfisher (7.9.0)
   - lottie-ios (4.2.0)
+  - Moya (15.0.0):
+    - Moya/Core (= 15.0.0)
+  - Moya/Core (15.0.0):
+    - Alamofire (~> 5.0)
   - nanopb (2.30909.0):
     - nanopb/decode (= 2.30909.0)
     - nanopb/encode (= 2.30909.0)
@@ -113,12 +118,14 @@ PODS:
   - WeakMapTable (1.2.0)
 
 DEPENDENCIES:
+  - Alamofire
   - Cosmos (~> 23.0)
   - Firebase/Messaging
   - FirebaseAnalytics
   - FSCalendar
   - Kingfisher (~> 7.0)
   - lottie-ios
+  - Moya (~> 15.0)
   - ReactorKit
   - RxCocoa
   - RxGesture
@@ -128,6 +135,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Alamofire
     - Cosmos
     - Firebase
     - FirebaseAnalytics
@@ -141,6 +149,7 @@ SPEC REPOS:
     - GoogleUtilities
     - Kingfisher
     - lottie-ios
+    - Moya
     - nanopb
     - PromisesObjC
     - ReactorKit
@@ -154,6 +163,7 @@ SPEC REPOS:
     - WeakMapTable
 
 SPEC CHECKSUMS:
+  Alamofire: 0123a34370cb170936ae79a8df46cc62b2edeb88
   Cosmos: b5c6a9a637e28a061b54c8f8b1d8529d7d4db73f
   Firebase: 6c1bf3f534bc422d52af2e41fe0d50bf08b6b773
   FirebaseAnalytics: 5c6d58814afa4db82cf7fdbc02b0b0e2fa3d43ff
@@ -167,6 +177,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: 13e2c67ede716b8741c7989e26893d151b2b2084
   Kingfisher: 59f908b6d2f403b0a3e539debb0eec05cb27002c
   lottie-ios: 809ecf2d460ed650a6aed7aa88b2ec45fab4779c
+  Moya: 138f0573e53411fb3dc17016add0b748dfbd78ee
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   ReactorKit: e8b11d6b9c415405f381669b095c154a05b59eca
@@ -179,6 +190,6 @@ SPEC CHECKSUMS:
   Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
   WeakMapTable: 05c694ce8439a7a9ebabb56187287a63c57673d6
 
-PODFILE CHECKSUM: 270899969a2c4fe3ad97169d389e93998d6c99cc
+PODFILE CHECKSUM: e9bca5d9864512d2ecb52e869d6c74feb16160c7
 
 COCOAPODS: 1.11.3

@@ -18,6 +18,8 @@ target 'MMM' do
   pod 'ReactorKit'
   pod 'RxCocoa'
   pod 'RxGesture'
+  pod 'Moya', '~> 15.0'
+  pod 'Alamofire'
 
   target 'MMMTests' do
     inherit! :search_paths

@@ -90,10 +90,11 @@ PODS:
     - GoogleUtilities/Logger
   - Kingfisher (7.9.0)
   - lottie-ios (4.2.0)
-  - Moya (15.0.0):
-    - Moya/Core (= 15.0.0)
   - Moya/Core (15.0.0):
     - Alamofire (~> 5.0)
+  - Moya/RxSwift (15.0.0):
+    - Moya/Core
+    - RxSwift (~> 6.0)
   - nanopb (2.30909.0):
     - nanopb/decode (= 2.30909.0)
     - nanopb/encode (= 2.30909.0)
@@ -125,7 +126,7 @@ DEPENDENCIES:
   - FSCalendar
   - Kingfisher (~> 7.0)
   - lottie-ios
-  - Moya (~> 15.0)
+  - Moya/RxSwift
   - ReactorKit
   - RxCocoa
   - RxGesture
@@ -190,6 +191,6 @@ SPEC CHECKSUMS:
   Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
   WeakMapTable: 05c694ce8439a7a9ebabb56187287a63c57673d6
 
-PODFILE CHECKSUM: e9bca5d9864512d2ecb52e869d6c74feb16160c7
+PODFILE CHECKSUM: 402715ccea66af743e77628297bb08de020b1ca0
 
 COCOAPODS: 1.11.3

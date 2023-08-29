@@ -7,4 +7,8 @@
 
 import Foundation
 
-struct PushRequest: ModelType { }
+/// Push에 들어갈 Request 파라미터
+struct PushRequest: ModelType {
+    var content: String
+    var pushAgreeDvcd: String
+}

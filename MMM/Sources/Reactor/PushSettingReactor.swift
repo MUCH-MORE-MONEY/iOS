@@ -12,23 +12,25 @@ import Moya
 final class PushSettingReactor: Reactor {
     enum Action {
         case didTapTimeSettingButton
-        case didTapTextSettingButton
+        case didTapTextSettingButton(PushReqDto)
     }
     
     enum Mutation {
         case setPresentTimeDetail
-        case setPresentTextDetail(PushResDto)
+        case setPresentTextDetail(PushResDto, Error?)
     }
     
     struct State {
         var isPresentTimeDetail = false
         var isPresentTextDetail = false
-        var pushMessage = ""
+        var pushMessage: PushResDto?
     }
-    
+        
     let initialState: State
     
-    init() { initialState = State() }
+    init() {
+        initialState = State()
+    }
 }
 
 extension PushSettingReactor {
@@ -38,8 +40,8 @@ extension PushSettingReactor {
         case .didTapTimeSettingButton:
             return .just(.setPresentTimeDetail)
             
-        case .didTapTextSettingButton:
-            return push()
+        case .didTapTextSettingButton(let request):
+            return push(request)
             
         }
     }
@@ -49,15 +51,16 @@ extension PushSettingReactor {
         
         newState.isPresentTimeDetail = false
         newState.isPresentTextDetail = false
+        newState.pushMessage = PushResDto(message: "")
         
         switch mutation {
             
         case .setPresentTimeDetail:
             newState.isPresentTimeDetail = true
             
-        case .setPresentTextDetail(let response):
-            newState.isPresentTextDetail = true
-            newState.pushMessage = response.message
+        case .setPresentTextDetail(let response, _):
+//            newState.isPresentTextDetail = true
+            newState.pushMessage = response
             
         }
         
@@ -67,30 +70,10 @@ extension PushSettingReactor {
 
 // MARK: - Actions
 extension PushSettingReactor {
-    
-    private func push() -> Observable<Mutation> {
-        let pushRequest = PushRequest(content: "12", pushAgreeDvcd: "12")
-        
-        return MyAPI
-            .push(pushRequest)
-            .request()
-            .map {
-                let jsonString = try $0.mapString().removedEscapeCharacters
-                guard let value = jsonString.data(using: .utf8) else { return $0 }
-                
-                let newResponse = Response(
-                    statusCode: $0.statusCode,
-                    data: value,
-                    request: $0.request,
-                    response: $0.response)
-                
-                return newResponse
+    func push(_ request: PushReqDto) -> Observable<Mutation>{
+        return MMMAPIService().push(request)
+            .map { (response, error) -> Mutation in
+                return .setPresentTextDetail(response, error)
             }
-            .map(PushResDto.self, using: MyAPI.jsonDecoder)
-            .map { data -> Mutation in
-                return .setPresentTextDetail(data)
-            }
-            .asObservable()
-        
     }
 }

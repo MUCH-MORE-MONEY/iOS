@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct PushResDto: ModelType {
+struct PushResDto: Decodable {
     var message: String
 }

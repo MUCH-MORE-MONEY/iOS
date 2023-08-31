@@ -8,7 +8,7 @@
 import Foundation
 
 /// Push에 들어갈 Request 파라미터
-struct PushRequest: ModelType {
+struct PushReqDto: Encodable {
     var content: String
     var pushAgreeDvcd: String
 }

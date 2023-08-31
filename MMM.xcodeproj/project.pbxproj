@@ -36,21 +36,14 @@
 		6A1322ED2A088F7F00CEEC81 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1322EC2A088F7F00CEEC81 /* DetailViewController.swift */; };
 		6A1322F12A089B2900CEEC81 /* BasePaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1322F02A089B2900CEEC81 /* BasePaddingLabel.swift */; };
 		6A1479632A0DE0690045B8C1 /* CameraImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1479622A0DE0690045B8C1 /* CameraImageView.swift */; };
-		6A14E6FA2A9DACEE0071805D /* Moya+NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A14E6F92A9DACEE0071805D /* Moya+NetworkError.swift */; };
-		6A14E6FF2A9DBC730071805D /* MyAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A14E6FE2A9DBC730071805D /* MyAPI.swift */; };
-		6A14E7022A9DC7F10071805D /* MyAPI+Method.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A14E7012A9DC7F10071805D /* MyAPI+Method.swift */; };
-		6A14E7042A9DC8280071805D /* MyAPI+Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A14E7032A9DC8280071805D /* MyAPI+Path.swift */; };
-		6A14E7062A9DC9870071805D /* MyAPI+Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A14E7052A9DC9870071805D /* MyAPI+Task.swift */; };
-		6A14E7092A9DCA720071805D /* PushRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A14E7082A9DCA720071805D /* PushRequest.swift */; };
+		6A14E7092A9DCA720071805D /* PushReqDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A14E7082A9DCA720071805D /* PushReqDto.swift */; };
 		6A14E70B2A9DCA7F0071805D /* ModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A14E70A2A9DCA7F0071805D /* ModelType.swift */; };
 		6A14E70D2A9DCAD00071805D /* PushResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A14E70C2A9DCAD00071805D /* PushResDto.swift */; };
-		6A14E70F2A9DCB880071805D /* MyAPI+Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A14E70E2A9DCB880071805D /* MyAPI+Request.swift */; };
 		6A14E7132A9DD0E00071805D /* OnboardingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A14E7122A9DD0E00071805D /* OnboardingItem.swift */; };
 		6A14E7152A9DD4600071805D /* Ex+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A14E7142A9DD4600071805D /* Ex+String.swift */; };
 		6A14E7172A9DDD060071805D /* RxOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A14E7162A9DDD060071805D /* RxOperation.swift */; };
-		6A14E71A2A9E0C140071805D /* MMMAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A14E7192A9E0C140071805D /* MMMAPI.swift */; };
-		6A14E71C2A9E119C0071805D /* MMMProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A14E71B2A9E119C0071805D /* MMMProvider.swift */; };
-		6A14E71E2A9E13ED0071805D /* MMMService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A14E71D2A9E13ED0071805D /* MMMService.swift */; };
+		6A14E71A2A9E0C140071805D /* APIType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A14E7192A9E0C140071805D /* APIType.swift */; };
+		6A14E71C2A9E119C0071805D /* MMMAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A14E71B2A9E119C0071805D /* MMMAPIService.swift */; };
 		6A15B0EC2A15B68D00EADAC5 /* BaseAddActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A15B0EB2A15B68D00EADAC5 /* BaseAddActivityViewController.swift */; };
 		6A15D5372A5138D800B60CC8 /* Tracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A15D5362A5138D800B60CC8 /* Tracking.swift */; };
 		6A1BAD4529E6550100818086 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1BAD4429E6550100818086 /* OnboardingViewModel.swift */; };
@@ -66,6 +59,7 @@
 		6A4F6E962A29ADA500754150 /* Ex+UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4F6E952A29ADA500754150 /* Ex+UIViewController.swift */; };
 		6A626BC12A0C7EE700BDD5C0 /* SelectDetailResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A626BC02A0C7EE700BDD5C0 /* SelectDetailResDto.swift */; };
 		6A626BC52A0C87E800BDD5C0 /* HomeDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A626BC42A0C87E800BDD5C0 /* HomeDetailViewModel.swift */; };
+		6A77D6D62AA01F7A00CE30DB /* NetworkProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A77D6D52AA01F7A00CE30DB /* NetworkProtocol.swift */; };
 		6A8605B62A24C83D00DF68BD /* UpdateResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8605B52A24C83D00DF68BD /* UpdateResDto.swift */; };
 		6A8605B82A24D0B000DF68BD /* DeleteResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8605B72A24D0B000DF68BD /* DeleteResDto.swift */; };
 		6A8B776329FF92CC0095ECFC /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8B776229FF92CC0095ECFC /* Constants.swift */; };
@@ -260,21 +254,14 @@
 		6A1322EC2A088F7F00CEEC81 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		6A1322F02A089B2900CEEC81 /* BasePaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasePaddingLabel.swift; sourceTree = "<group>"; };
 		6A1479622A0DE0690045B8C1 /* CameraImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraImageView.swift; sourceTree = "<group>"; };
-		6A14E6F92A9DACEE0071805D /* Moya+NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Moya+NetworkError.swift"; sourceTree = "<group>"; };
-		6A14E6FE2A9DBC730071805D /* MyAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAPI.swift; sourceTree = "<group>"; };
-		6A14E7012A9DC7F10071805D /* MyAPI+Method.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MyAPI+Method.swift"; sourceTree = "<group>"; };
-		6A14E7032A9DC8280071805D /* MyAPI+Path.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MyAPI+Path.swift"; sourceTree = "<group>"; };
-		6A14E7052A9DC9870071805D /* MyAPI+Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MyAPI+Task.swift"; sourceTree = "<group>"; };
-		6A14E7082A9DCA720071805D /* PushRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushRequest.swift; sourceTree = "<group>"; };
+		6A14E7082A9DCA720071805D /* PushReqDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushReqDto.swift; sourceTree = "<group>"; };
 		6A14E70A2A9DCA7F0071805D /* ModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelType.swift; sourceTree = "<group>"; };
 		6A14E70C2A9DCAD00071805D /* PushResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushResDto.swift; sourceTree = "<group>"; };
-		6A14E70E2A9DCB880071805D /* MyAPI+Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MyAPI+Request.swift"; sourceTree = "<group>"; };
 		6A14E7122A9DD0E00071805D /* OnboardingItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingItem.swift; sourceTree = "<group>"; };
 		6A14E7142A9DD4600071805D /* Ex+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+String.swift"; sourceTree = "<group>"; };
 		6A14E7162A9DDD060071805D /* RxOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxOperation.swift; sourceTree = "<group>"; };
-		6A14E7192A9E0C140071805D /* MMMAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMMAPI.swift; sourceTree = "<group>"; };
-		6A14E71B2A9E119C0071805D /* MMMProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMMProvider.swift; sourceTree = "<group>"; };
-		6A14E71D2A9E13ED0071805D /* MMMService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMMService.swift; sourceTree = "<group>"; };
+		6A14E7192A9E0C140071805D /* APIType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIType.swift; sourceTree = "<group>"; };
+		6A14E71B2A9E119C0071805D /* MMMAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMMAPIService.swift; sourceTree = "<group>"; };
 		6A15B0EB2A15B68D00EADAC5 /* BaseAddActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAddActivityViewController.swift; sourceTree = "<group>"; };
 		6A15D5362A5138D800B60CC8 /* Tracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracking.swift; sourceTree = "<group>"; };
 		6A1BAD4429E6550100818086 /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
@@ -291,6 +278,7 @@
 		6A4F6E952A29ADA500754150 /* Ex+UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIViewController.swift"; sourceTree = "<group>"; };
 		6A626BC02A0C7EE700BDD5C0 /* SelectDetailResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectDetailResDto.swift; sourceTree = "<group>"; };
 		6A626BC42A0C87E800BDD5C0 /* HomeDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDetailViewModel.swift; sourceTree = "<group>"; };
+		6A77D6D52AA01F7A00CE30DB /* NetworkProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkProtocol.swift; sourceTree = "<group>"; };
 		6A8605B52A24C83D00DF68BD /* UpdateResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateResDto.swift; sourceTree = "<group>"; };
 		6A8605B72A24D0B000DF68BD /* DeleteResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteResDto.swift; sourceTree = "<group>"; };
 		6A8B776229FF92CC0095ECFC /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -524,31 +512,10 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		6A14E6FB2A9DADDE0071805D /* Networking */ = {
-			isa = PBXGroup;
-			children = (
-				6A14E7002A9DC7220071805D /* Common */,
-				6A14E6FE2A9DBC730071805D /* MyAPI.swift */,
-				6A14E7012A9DC7F10071805D /* MyAPI+Method.swift */,
-				6A14E7032A9DC8280071805D /* MyAPI+Path.swift */,
-				6A14E7052A9DC9870071805D /* MyAPI+Task.swift */,
-				6A14E70E2A9DCB880071805D /* MyAPI+Request.swift */,
-			);
-			path = Networking;
-			sourceTree = "<group>";
-		};
-		6A14E7002A9DC7220071805D /* Common */ = {
-			isa = PBXGroup;
-			children = (
-				6A14E6F92A9DACEE0071805D /* Moya+NetworkError.swift */,
-			);
-			path = Common;
-			sourceTree = "<group>";
-		};
 		6A14E7072A9DCA4F0071805D /* Requests */ = {
 			isa = PBXGroup;
 			children = (
-				6A14E7082A9DCA720071805D /* PushRequest.swift */,
+				6A14E7082A9DCA720071805D /* PushReqDto.swift */,
 			);
 			path = Requests;
 			sourceTree = "<group>";
@@ -556,9 +523,9 @@
 		6A14E7182A9E0BC20071805D /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				6A14E7192A9E0C140071805D /* MMMAPI.swift */,
-				6A14E71B2A9E119C0071805D /* MMMProvider.swift */,
-				6A14E71D2A9E13ED0071805D /* MMMService.swift */,
+				6A14E7192A9E0C140071805D /* APIType.swift */,
+				6A14E71B2A9E119C0071805D /* MMMAPIService.swift */,
+				6A77D6D52AA01F7A00CE30DB /* NetworkProtocol.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -817,7 +784,6 @@
 			isa = PBXGroup;
 			children = (
 				6A14E7182A9E0BC20071805D /* Network */,
-				6A14E6FB2A9DADDE0071805D /* Networking */,
 				6A8B776429FF93530095ECFC /* APIConstants.swift */,
 				6A08B47929FF5CA90080719E /* APIClient.swift */,
 				6A08B47729FF5C7E0080719E /* APIParameters.swift */,
@@ -1368,11 +1334,10 @@
 				C4170B532A937AAC00CE0A65 /* StatisticsHeaderView.swift in Sources */,
 				C41193E329D287E6003DBC15 /* Ex+KeychainWrapper.swift in Sources */,
 				C4199DD329FE3051006E5DA8 /* BottomSheetViewController.swift in Sources */,
-				6A14E71A2A9E0C140071805D /* MMMAPI.swift in Sources */,
+				6A14E71A2A9E0C140071805D /* APIType.swift in Sources */,
 				C44807E529E7E76800D4B090 /* Ex+UIControl.swift in Sources */,
 				6A08B47829FF5C7E0080719E /* APIParameters.swift in Sources */,
 				C4C0CAF52A1C88DC00C41FF4 /* PriceViewModel.swift in Sources */,
-				6A14E7062A9DC9870071805D /* MyAPI+Task.swift in Sources */,
 				6A08B48029FF74B70080719E /* Ex+Encodable.swift in Sources */,
 				C41193E829D287E6003DBC15 /* Ex+UIView.swift in Sources */,
 				C40E522C2A39A09900775455 /* HomeErrorView.swift in Sources */,
@@ -1385,7 +1350,6 @@
 				6A0F234229DBA92D0063673B /* ServiceViewController.swift in Sources */,
 				C4DBAA3729DD7B2600D1BB97 /* CountPushLabel.swift in Sources */,
 				C41193E729D287E6003DBC15 /* Ex+Icon.swift in Sources */,
-				6A14E6FA2A9DACEE0071805D /* Moya+NetworkError.swift in Sources */,
 				C4199DD929FE6BE1006E5DA8 /* DatePickerViewController.swift in Sources */,
 				C4EA5B4429FA2810008D1564 /* Ex+UIStackView.swift in Sources */,
 				6A0F234729DC0DB20063673B /* TabBarController.swift in Sources */,
@@ -1415,14 +1379,14 @@
 				6A0F234029DBA8AA0063673B /* DataExportViewController.swift in Sources */,
 				C494A1FD2A98B6C700980A71 /* Satisfaction.swift in Sources */,
 				C4170B612A94FC2300CE0A65 /* BottomSheetReactor.swift in Sources */,
-				6A14E7092A9DCA720071805D /* PushRequest.swift in Sources */,
+				6A14E7092A9DCA720071805D /* PushReqDto.swift in Sources */,
 				C44807E329E649A300D4B090 /* HomeViewModel.swift in Sources */,
+				6A77D6D62AA01F7A00CE30DB /* NetworkProtocol.swift in Sources */,
 				6A2B5D5F2A9744E800CCBFBE /* TimeSettingView.swift in Sources */,
-				6A14E71C2A9E119C0071805D /* MMMProvider.swift in Sources */,
+				6A14E71C2A9E119C0071805D /* MMMAPIService.swift in Sources */,
 				6A15B0EC2A15B68D00EADAC5 /* BaseAddActivityViewController.swift in Sources */,
 				C4C8B68D2A3ACDC700FAF931 /* LoadingViewController.swift in Sources */,
 				C446BF1B2A430B1400DFA788 /* SnackView.swift in Sources */,
-				6A14E7022A9DC7F10071805D /* MyAPI+Method.swift in Sources */,
 				C4170B502A89FD1100CE0A65 /* StatisticsReactor.swift in Sources */,
 				C4D03F052A2EAB1800011B41 /* MMMWidget.intentdefinition in Sources */,
 				C411939229D2817C003DBC15 /* ProfileViewController.swift in Sources */,
@@ -1452,8 +1416,6 @@
 				C41193E429D287E6003DBC15 /* Ex+Font.swift in Sources */,
 				C41193E529D287E6003DBC15 /* Ex+UIDevice.swift in Sources */,
 				C4C0CB092A2474F900C41FF4 /* Ex+UILabel.swift in Sources */,
-				6A14E6FF2A9DBC730071805D /* MyAPI.swift in Sources */,
-				6A14E70F2A9DCB880071805D /* MyAPI+Request.swift in Sources */,
 				6A1322F12A089B2900CEEC81 /* BasePaddingLabel.swift in Sources */,
 				C4D7FC872A08942E00565291 /* Monthly.swift in Sources */,
 				C411940729D53EA0003DBC15 /* NavigationController.swift in Sources */,
@@ -1462,10 +1424,8 @@
 				C41193F329D3AED5003DBC15 /* ProfileHeaderView.swift in Sources */,
 				C4C0CB022A23A07000C41FF4 /* EditPriceViewController.swift in Sources */,
 				6A0D108529D3D209009D6DCA /* OnboardingView.swift in Sources */,
-				6A14E7042A9DC8280071805D /* MyAPI+Path.swift in Sources */,
 				6A626BC12A0C7EE700BDD5C0 /* SelectDetailResDto.swift in Sources */,
 				C41193F729D3D954003DBC15 /* Ex+UITableView.swift in Sources */,
-				6A14E71E2A9E13ED0071805D /* MMMService.swift in Sources */,
 				C4D7FC892A08A61C00565291 /* CalendarCell.swift in Sources */,
 				C433A06D29EE53BB008B26DF /* HomeTableViewCell.swift in Sources */,
 				6A14E70B2A9DCA7F0071805D /* ModelType.swift in Sources */,

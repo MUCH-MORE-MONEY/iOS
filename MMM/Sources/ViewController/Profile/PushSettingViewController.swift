@@ -53,9 +53,10 @@ extension PushSettingViewController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
+        // FIXME: - 네트워크 테스트 코드
         textSettingView.rx.tapGesture()
             .when(.recognized)
-            .map { _ in .didTapTextSettingButton }
+            .map { _ in .didTapTextSettingButton(PushReqDto(content: "test", pushAgreeDvcd: "01")) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
@@ -70,10 +71,13 @@ extension PushSettingViewController {
             }
             .disposed(by: disposeBag)
         
+        // FIXME: - 네트워크 테스트 코드
         reactor.state
-            .filter { $0.isPresentTextDetail }
-            .bind { [weak self] _ in
-                print("text Tapped")
+            .compactMap { $0.pushMessage }
+//            .filter { $0.pushMessage }
+            .bind { [weak self] data in
+                guard let self = self else { return }
+                print("text Tapped \(data)")
             }
             .disposed(by: disposeBag)
     }

@@ -61,6 +61,7 @@
 		6A626BC52A0C87E800BDD5C0 /* HomeDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A626BC42A0C87E800BDD5C0 /* HomeDetailViewModel.swift */; };
 		6A77D6D62AA01F7A00CE30DB /* NetworkProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A77D6D52AA01F7A00CE30DB /* NetworkProtocol.swift */; };
 		6A77D6D82AA0547800CE30DB /* PushAgreeUpdateReqDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A77D6D72AA0547800CE30DB /* PushAgreeUpdateReqDto.swift */; };
+		6A77D6DA2AA054D800CE30DB /* PushAgreeUpdateResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A77D6D92AA054D800CE30DB /* PushAgreeUpdateResDto.swift */; };
 		6A8605B62A24C83D00DF68BD /* UpdateResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8605B52A24C83D00DF68BD /* UpdateResDto.swift */; };
 		6A8605B82A24D0B000DF68BD /* DeleteResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8605B72A24D0B000DF68BD /* DeleteResDto.swift */; };
 		6A8B776329FF92CC0095ECFC /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8B776229FF92CC0095ECFC /* Constants.swift */; };
@@ -281,6 +282,7 @@
 		6A626BC42A0C87E800BDD5C0 /* HomeDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDetailViewModel.swift; sourceTree = "<group>"; };
 		6A77D6D52AA01F7A00CE30DB /* NetworkProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkProtocol.swift; sourceTree = "<group>"; };
 		6A77D6D72AA0547800CE30DB /* PushAgreeUpdateReqDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushAgreeUpdateReqDto.swift; sourceTree = "<group>"; };
+		6A77D6D92AA054D800CE30DB /* PushAgreeUpdateResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushAgreeUpdateResDto.swift; sourceTree = "<group>"; };
 		6A8605B52A24C83D00DF68BD /* UpdateResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateResDto.swift; sourceTree = "<group>"; };
 		6A8605B72A24D0B000DF68BD /* DeleteResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteResDto.swift; sourceTree = "<group>"; };
 		6A8B776229FF92CC0095ECFC /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -466,6 +468,7 @@
 				6A8605B52A24C83D00DF68BD /* UpdateResDto.swift */,
 				C4C792A72A35916D007FD6AA /* WithdrawResDto.swift */,
 				6A14E70C2A9DCAD00071805D /* PushResDto.swift */,
+				6A77D6D92AA054D800CE30DB /* PushAgreeUpdateResDto.swift */,
 			);
 			path = Responses;
 			sourceTree = "<group>";
@@ -1352,6 +1355,7 @@
 				6A12144729FA0C300076848A /* AppleLoginResDto.swift in Sources */,
 				6A0F234229DBA92D0063673B /* ServiceViewController.swift in Sources */,
 				C4DBAA3729DD7B2600D1BB97 /* CountPushLabel.swift in Sources */,
+				6A77D6DA2AA054D800CE30DB /* PushAgreeUpdateResDto.swift in Sources */,
 				C41193E729D287E6003DBC15 /* Ex+Icon.swift in Sources */,
 				C4199DD929FE6BE1006E5DA8 /* DatePickerViewController.swift in Sources */,
 				C4EA5B4429FA2810008D1564 /* Ex+UIStackView.swift in Sources */,

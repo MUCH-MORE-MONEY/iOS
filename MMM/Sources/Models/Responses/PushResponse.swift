@@ -14,3 +14,18 @@ struct PushResDto: Decodable {
 struct PushAgreeUpdateResDto: Decodable {
     var message: String
 }
+
+struct PushAgreeListSelectResDto: Decodable {
+    var message: String
+    var selectedList: [SelectedList]
+    
+    struct SelectedList: Decodable {
+        var pushAgreeDvcd: String
+        var pushAgreeYN: String
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case message
+        case selectedList = "selectListPushAgreeOutputDto"
+    }
+}

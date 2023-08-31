@@ -18,3 +18,5 @@ struct PushAgreeUpdateReqDto: Encodable {
     var pushAgreeDvcd: String
     var pushAgreeYN: String
 }
+
+struct PuhsAgreeListSelectReqDto: Encodable { }

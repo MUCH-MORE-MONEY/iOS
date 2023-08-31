@@ -59,6 +59,13 @@ extension PushSettingViewController {
             .map { _ in .didTapTextSettingButton(PushReqDto(content: "test", pushAgreeDvcd: "01")) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+        // event switch
+        eventSwitch.rx.value
+            .map { .eventSwitchToggle($0) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+            
     }
 
     private func bindState(_ reactor: PushSettingReactor) {
@@ -72,12 +79,20 @@ extension PushSettingViewController {
             .disposed(by: disposeBag)
         
         // FIXME: - 네트워크 테스트 코드
+//        reactor.state
+//            .compactMap { $0.pushMessage }
+////            .filter { $0.pushMessage }
+//            .bind { [weak self] data in
+//                guard let self = self else { return }
+//                print("text Tapped \(data)")
+//            }
+//            .disposed(by: disposeBag)
+        
         reactor.state
-            .compactMap { $0.pushMessage }
-//            .filter { $0.pushMessage }
+            .map { $0.pushUpdateMessage }
             .bind { [weak self] data in
                 guard let self = self else { return }
-                print("text Tapped \(data)")
+                print(data)
             }
             .disposed(by: disposeBag)
     }

@@ -22,7 +22,6 @@ enum NetworkErrorType: Error {
 }
 
 // MARK: Result Data
-struct EmptyResult: Decodable { }
 struct NetworkResult<T: Decodable>: Decodable {
     var result: T
     var status: Int
@@ -49,12 +48,15 @@ extension BaseAPIService {
 }
 
 // MARK: 사용할 API 정의
-protocol UserAPIServiceble: BaseAPIService {
+protocol MMMAPIServiceble: BaseAPIService {
+    // MARK: - Push 요청 API
     func push(_ request: PushReqDto) -> Observable<(PushResDto, Error?)>
+    func pushAgreeUpdate(_ request: PushAgreeUpdateReqDto) -> Observable<(PushAgreeUpdateResDto, Error?)>
+    
 }
 
 // MARK:
-struct MMMAPIService: UserAPIServiceble {
+struct MMMAPIService: MMMAPIServiceble {
 
     typealias APIType = MMMAPI
     
@@ -62,8 +64,13 @@ struct MMMAPIService: UserAPIServiceble {
         return MoyaProvider<APIType>()
     }
     
+    // MARK: - Push 요청 API
     func push(_ request: PushReqDto) -> Observable<(PushResDto, Error?)> {
         return provider().request(MMMAPI.push(request), type: PushResDto.self).asObservable()
+    }
+    
+    func pushAgreeUpdate(_ request: PushAgreeUpdateReqDto) -> Observable<(PushAgreeUpdateResDto, Error?)> {
+        return provider().request(MMMAPI.pushAgreeUpdate(request), type: PushAgreeUpdateResDto.self).asObservable()
     }
 }
 

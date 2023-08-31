@@ -10,3 +10,7 @@ import Foundation
 struct PushResDto: Decodable {
     var message: String
 }
+
+struct PushAgreeUpdateResDto: Decodable {
+    var message: String
+}

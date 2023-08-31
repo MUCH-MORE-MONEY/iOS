@@ -13,17 +13,21 @@ final class PushSettingReactor: Reactor {
     enum Action {
         case didTapTimeSettingButton
         case didTapTextSettingButton(PushReqDto)
+        case eventSwitchToggle(Bool)
     }
     
     enum Mutation {
         case setPresentTimeDetail
         case setPresentTextDetail(PushResDto, Error?)
+        case setEventSwitchToggle(PushAgreeUpdateResDto, Error?)
     }
     
     struct State {
         var isPresentTimeDetail = false
         var isPresentTextDetail = false
         var pushMessage: PushResDto?
+        var isEventSwitchOn = false
+        var pushUpdateMessage = ""
     }
         
     let initialState: State
@@ -43,6 +47,9 @@ extension PushSettingReactor {
         case .didTapTextSettingButton(let request):
             return push(request)
             
+        case .eventSwitchToggle(let isOn):
+            let request = PushAgreeUpdateReqDto(pushAgreeDvcd: "01", pushAgreeYN: isOn ? "Y" : "N")
+            return pushAgreeUpdate(request)
         }
     }
     
@@ -52,16 +59,19 @@ extension PushSettingReactor {
         newState.isPresentTimeDetail = false
         newState.isPresentTextDetail = false
         newState.pushMessage = PushResDto(message: "")
+        newState.pushUpdateMessage = ""
         
         switch mutation {
             
         case .setPresentTimeDetail:
             newState.isPresentTimeDetail = true
             
-        case .setPresentTextDetail(let response, _):
+        case .setPresentTextDetail(let response, let error):
 //            newState.isPresentTextDetail = true
             newState.pushMessage = response
             
+        case .setEventSwitchToggle(let response, let error):
+            newState.pushUpdateMessage = response.message
         }
         
         return newState
@@ -74,6 +84,13 @@ extension PushSettingReactor {
         return MMMAPIService().push(request)
             .map { (response, error) -> Mutation in
                 return .setPresentTextDetail(response, error)
+            }
+    }
+    
+    func pushAgreeUpdate(_ request: PushAgreeUpdateReqDto) -> Observable<Mutation> {
+        return MMMAPIService().pushAgreeUpdate(request)
+            .map { (response, error) -> Mutation in
+                return .setEventSwitchToggle(response, error)
             }
     }
 }

@@ -14,20 +14,23 @@ final class PushSettingReactor: Reactor {
         case didTapTimeSettingButton
         case didTapTextSettingButton(PushReqDto)
         case eventSwitchToggle(Bool)
+        case viewAppear
     }
     
     enum Mutation {
+        case getSwitchState(PushAgreeListSelectResDto, Error?)
         case setPresentTimeDetail
         case setPresentTextDetail(PushResDto, Error?)
-        case setEventSwitchToggle(PushAgreeUpdateResDto, Error?)
+        case updatePushAgreeSwitch(PushAgreeUpdateResDto, Error?)
     }
     
     struct State {
+        var isInit = false
         var isPresentTimeDetail = false
         var isPresentTextDetail = false
         var pushMessage: PushResDto?
         var isEventSwitchOn = false
-        var pushUpdateMessage = ""
+        var pushList: [PushAgreeListSelectResDto.SelectedList] = []
     }
         
     let initialState: State
@@ -40,6 +43,8 @@ final class PushSettingReactor: Reactor {
 extension PushSettingReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
+        case .viewAppear:
+            return pushAgreeListSelect()
             
         case .didTapTimeSettingButton:
             return .just(.setPresentTimeDetail)
@@ -59,9 +64,13 @@ extension PushSettingReactor {
         newState.isPresentTimeDetail = false
         newState.isPresentTextDetail = false
         newState.pushMessage = PushResDto(message: "")
-        newState.pushUpdateMessage = ""
+        newState.pushList = []
         
         switch mutation {
+        
+        case .getSwitchState(let response, let error):
+            newState.pushList = response.selectedList
+            newState.isInit = true
             
         case .setPresentTimeDetail:
             newState.isPresentTimeDetail = true
@@ -70,8 +79,8 @@ extension PushSettingReactor {
 //            newState.isPresentTextDetail = true
             newState.pushMessage = response
             
-        case .setEventSwitchToggle(let response, let error):
-            newState.pushUpdateMessage = response.message
+        case .updatePushAgreeSwitch(let response, let error):
+            newState.isEventSwitchOn.toggle()
         }
         
         return newState
@@ -80,6 +89,13 @@ extension PushSettingReactor {
 
 // MARK: - Actions
 extension PushSettingReactor {
+    func pushAgreeListSelect() -> Observable<Mutation> {
+        return MMMAPIService().pushAgreeListSelect()
+            .map { (response, error) -> Mutation in
+                return .getSwitchState(response, error)
+            }
+    }
+    
     func push(_ request: PushReqDto) -> Observable<Mutation>{
         return MMMAPIService().push(request)
             .map { (response, error) -> Mutation in
@@ -90,7 +106,7 @@ extension PushSettingReactor {
     func pushAgreeUpdate(_ request: PushAgreeUpdateReqDto) -> Observable<Mutation> {
         return MMMAPIService().pushAgreeUpdate(request)
             .map { (response, error) -> Mutation in
-                return .setEventSwitchToggle(response, error)
+                return .updatePushAgreeSwitch(response, error)
             }
     }
 }

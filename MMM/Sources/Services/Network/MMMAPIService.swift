@@ -51,6 +51,7 @@ extension BaseAPIService {
 protocol MMMAPIServiceble: BaseAPIService {
     // MARK: - Push 요청 API
     func push(_ request: PushReqDto) -> Observable<(PushResDto, Error?)>
+    func pushAgreeListSelect() -> Observable<(PushAgreeListSelectResDto, Error?)>
     func pushAgreeUpdate(_ request: PushAgreeUpdateReqDto) -> Observable<(PushAgreeUpdateResDto, Error?)>
     
 }
@@ -67,6 +68,10 @@ struct MMMAPIService: MMMAPIServiceble {
     // MARK: - Push 요청 API
     func push(_ request: PushReqDto) -> Observable<(PushResDto, Error?)> {
         return provider().request(MMMAPI.push(request), type: PushResDto.self).asObservable()
+    }
+    
+    func pushAgreeListSelect() -> Observable<(PushAgreeListSelectResDto, Error?)> {
+        return provider().request(MMMAPI.pushAgreeListSelect, type: PushAgreeListSelectResDto.self).asObservable()
     }
     
     func pushAgreeUpdate(_ request: PushAgreeUpdateReqDto) -> Observable<(PushAgreeUpdateResDto, Error?)> {

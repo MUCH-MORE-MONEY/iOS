@@ -12,6 +12,7 @@ import RxSwift
 enum MMMAPI {
     // MARK: - Push
     case push(PushReqDto)
+    case pushAgreeListSelect
     case pushAgreeUpdate(PushAgreeUpdateReqDto)
     
     // MARK: - Staticstics
@@ -29,6 +30,8 @@ extension MMMAPI: BaseNetworkService {
         switch self {
         case .push:
             return "/push"
+        case .pushAgreeListSelect:
+            return "/push/agree/list/select"
         case .pushAgreeUpdate:
             return "/push/agree/update"
         }
@@ -37,7 +40,7 @@ extension MMMAPI: BaseNetworkService {
     /// 메서드 방식 선택
     var method: Moya.Method {
         switch self {
-        case .push, .pushAgreeUpdate:
+        case .push, .pushAgreeListSelect, .pushAgreeUpdate:
             return .post
         }
     }
@@ -45,13 +48,18 @@ extension MMMAPI: BaseNetworkService {
     /// body parameter
     /// post - JSONEncoding.default
     /// get  -  URLEncoding.default
+    /// parameter || body가 없을 경우 .requestPlain 설정
     var task: Moya.Task {
         switch self {
         case .push(let request):
             return .requestParameters(parameters: request.asDictionary, encoding: JSONEncoding.default)
         
+        case .pushAgreeListSelect:
+            return .requestPlain
+            
         case .pushAgreeUpdate(let request):
             return .requestParameters(parameters: request.asDictionary, encoding: JSONEncoding.default)
+            
         }
     }
 

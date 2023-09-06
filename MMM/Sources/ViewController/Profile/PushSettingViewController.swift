@@ -47,6 +47,10 @@ final class PushSettingViewController: BaseViewController, View {
 
 extension PushSettingViewController {
     private func bindAction(_ reactor: PushSettingReactor) {
+        
+        // 뷰 진입 시 최초 1회 실행
+        reactor.action.onNext(.viewAppear)
+        
         timeSettingView.rx.tapGesture()
             .when(.recognized)
             .map { _ in .didTapTimeSettingButton }
@@ -89,12 +93,26 @@ extension PushSettingViewController {
 //            .disposed(by: disposeBag)
         
         reactor.state
-            .map { $0.pushUpdateMessage }
+            .map { $0.isEventSwitchOn }
             .bind { [weak self] data in
                 guard let self = self else { return }
                 print(data)
+                self.eventSwitch.isOn = data
             }
             .disposed(by: disposeBag)
+        
+        reactor.state
+            .filter { !$0.isInit }
+            .map { $0.pushList }
+            .filter { !$0.isEmpty }
+            .bind { [weak self] list in
+                guard let self = self else { return }
+                self.eventSwitch.isOn = list[0].pushAgreeYN == "Y" ? true : false
+                self.infoSwitch.isOn = list[1].pushAgreeYN == "Y" ? true : false
+
+            }
+            .disposed(by: disposeBag)
+        
     }
 }
 

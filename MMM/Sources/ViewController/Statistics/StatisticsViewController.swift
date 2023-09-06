@@ -17,6 +17,7 @@ final class StatisticsViewController: UIViewController, View {
 	// MARK: - Properties
 	var disposeBag: DisposeBag = DisposeBag()
 	private var bottomSheetReactor: BottomSheetReactor = BottomSheetReactor()
+	private var month: Date = Date()
 	private var satisfaction: Satisfaction = .low
 
 	// MARK: - UI Components
@@ -99,7 +100,7 @@ extension StatisticsViewController {
 	// Bottom Sheet 설정
 	private func presentBottomSheet() {
 		// 달력 Picker
-		let vc = DatePicker2ViewController()
+		let vc = DatePicker2ViewController(date: month, mode: .onlyMonthly)
 		let bottomSheetVC = BottomSheetViewController(contentViewController: vc)
 		vc.reactor = bottomSheetReactor
 		vc.setData(title: "월 이동")
@@ -135,6 +136,8 @@ extension StatisticsViewController {
 		} else {
 			monthButton.setTitle(date.getFormattedDate(format: "M월"), for: .normal)
 		}
+		
+		self.month = date
 	}
 	
 	/// 만족도  변경
@@ -166,10 +169,10 @@ extension StatisticsViewController {
 		activityView.reactor = self.reactor // reactor 주입
 		selectAreaView.reactor = self.reactor // reactor 주입
 		
-		let view = UIView(frame: .init(origin: .zero, size: .init(width: 80, height: 30)))
+		let view = UIView(frame: .init(origin: .zero, size: .init(width: 150, height: 30)))
 		monthButton = monthButton.then {
-			$0.frame = .init(origin: .init(x: 8, y: 0), size: .init(width: 80, height: 30))
-			$0.setTitle(Date().getFormattedDate(format: "M월"), for: .normal)
+			$0.frame = .init(origin: .init(x: 8, y: 0), size: .init(width: 150, height: 30))
+			$0.setTitle(month.getFormattedDate(format: "M월"), for: .normal)
 			$0.setImage(R.Icon.arrowExpandMore16, for: .normal)
 			$0.setTitleColor(R.Color.white, for: .normal)
 			$0.setTitleColor(R.Color.white.withAlphaComponent(0.7), for: .highlighted)

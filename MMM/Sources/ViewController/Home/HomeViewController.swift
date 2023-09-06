@@ -269,9 +269,9 @@ private extension HomeViewController {
 		view.backgroundColor = R.Color.gray900
 		view.addGestureRecognizer(self.scopeGesture)
         
-		let view = UIView(frame: .init(origin: .zero, size: .init(width: 80, height: 30)))
+		let view = UIView(frame: .init(origin: .zero, size: .init(width: 150, height: 30)))
 		monthButton = monthButton.then {
-			$0.frame = .init(origin: .init(x: 8, y: 0), size: .init(width: 80, height: 30))
+			$0.frame = .init(origin: .init(x: 8, y: 0), size: .init(width: 150, height: 30))
 			$0.setTitle(Date().getFormattedDate(format: "M월"), for: .normal)
 			$0.setImage(R.Icon.arrowExpandMore16, for: .normal)
 			$0.setTitleColor(R.Color.white, for: .normal)

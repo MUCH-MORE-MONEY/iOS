@@ -11,10 +11,11 @@ import Moya
 
 final class PushSettingReactor: Reactor {
     enum Action {
+        case viewAppear
         case didTapTimeSettingButton
         case didTapTextSettingButton(PushReqDto)
         case eventSwitchToggle(Bool)
-        case viewAppear
+        case infoSwitchToggle(Bool)
     }
     
     enum Mutation {
@@ -22,6 +23,7 @@ final class PushSettingReactor: Reactor {
         case setPresentTimeDetail
         case setPresentTextDetail(PushResDto, Error?)
         case updatePushAgreeSwitch(PushAgreeUpdateResDto, Error?)
+        case setInfoSwitch(Bool)
     }
     
     struct State {
@@ -30,6 +32,7 @@ final class PushSettingReactor: Reactor {
         var isPresentTextDetail = false
         var pushMessage: PushResDto?
         var isEventSwitchOn = false
+        var isInfoSwitchOn = false
         var pushList: [PushAgreeListSelectResDto.SelectedList] = []
     }
         
@@ -55,7 +58,12 @@ extension PushSettingReactor {
         case .eventSwitchToggle(let isOn):
             let request = PushAgreeUpdateReqDto(pushAgreeDvcd: "01", pushAgreeYN: isOn ? "Y" : "N")
             return pushAgreeUpdate(request)
+            
+        case .infoSwitchToggle(let isOn):
+            return .just(.setInfoSwitch(isOn))
         }
+        
+        
     }
     
     func reduce(state: State, mutation: Mutation) -> State {
@@ -81,6 +89,9 @@ extension PushSettingReactor {
             
         case .updatePushAgreeSwitch(let response, let error):
             newState.isEventSwitchOn.toggle()
+            
+        case .setInfoSwitch(let isOn):
+            newState.isInfoSwitchOn = isOn
         }
         
         return newState

@@ -70,10 +70,16 @@ extension PushSettingViewController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
             
+        // info switch
+        infoSwitch.rx.value
+            .map { .infoSwitchToggle($0) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 
     private func bindState(_ reactor: PushSettingReactor) {
         reactor.state
+            .filter { $0.isInfoSwitchOn }
             .filter { $0.isPresentTimeDetail }
             .bind { [weak self] _ in
                 guard let self = self else { return }
@@ -96,7 +102,6 @@ extension PushSettingViewController {
             .map { $0.isEventSwitchOn }
             .bind { [weak self] data in
                 guard let self = self else { return }
-                print(data)
                 self.eventSwitch.isOn = data
             }
             .disposed(by: disposeBag)
@@ -113,7 +118,20 @@ extension PushSettingViewController {
             }
             .disposed(by: disposeBag)
         
+        reactor.state
+            .map { $0.isInfoSwitchOn }
+            .bind { [weak self] data in
+                guard let self = self else { return }
+                self.textSettingView.configure(data)
+                self.timeSettingView.configure(data)
+            }
+            .disposed(by: disposeBag)
     }
+}
+
+// MARK: - Actions
+private extension PushSettingViewController {
+    
 }
 
 private extension PushSettingViewController {

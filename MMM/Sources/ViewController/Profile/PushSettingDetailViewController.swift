@@ -100,7 +100,9 @@ extension PushSettingDetailViewController {
 
 // MARK: - CollectionView delegate
 extension PushSettingDetailViewController: UICollectionViewDelegate {
-    
+//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        <#code#>
+//    }
 }
 
 // MARK: - CollectionView DataSource

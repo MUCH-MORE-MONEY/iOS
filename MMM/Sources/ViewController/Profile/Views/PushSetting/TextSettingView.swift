@@ -26,7 +26,23 @@ final class TextSettingView: UIView {
     
 }
 
+// MARK: - Actions
+extension TextSettingView {
+    func configure(_ isOn: Bool) {
+        if isOn {
+            backgroundColor = R.Color.gray900
+            imageView.isHidden = false
+            mainLabel.text = "오늘의 경제활동을 작성해보세요"
+        } else {
+            backgroundColor = R.Color.gray300
+            imageView.isHidden = true
+            mainLabel.text = "오늘의 가계부를 작성해보세요"
+        }
+    }
+}
 
+
+// MARK: - Style & Layout
 extension TextSettingView {
     private func setup() {
         setAttribute()

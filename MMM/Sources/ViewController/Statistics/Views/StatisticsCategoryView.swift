@@ -21,8 +21,10 @@ final class StatisticsCategoryView: UIView, View {
 	private lazy var moreLabel = UILabel() 			// 더보기
 	private lazy var payLabel = UILabel() 			// 지출
 	private lazy var payRankLabel = MarqueeLabel() 	// 지출 랭킹
+	private lazy var payBarView = UIView() 			// 지출 Bar
 	private lazy var earnLabel = UILabel() 			// 수입
 	private lazy var earnRankLabel = MarqueeLabel() // 수입 랭킹
+	private lazy var earnBarView = UIView() 		// 수입 Bar
 
 	override init(frame: CGRect) {
 		super.init(frame: frame)
@@ -81,7 +83,7 @@ private extension StatisticsCategoryView {
 		
 		payLabel = payLabel.then {
 			$0.text = "지출"
-			$0.font = R.Font.body2
+			$0.font = R.Font.title3
 			$0.textColor = R.Color.white
 		}
 		
@@ -96,9 +98,14 @@ private extension StatisticsCategoryView {
 			$0.animationDelay = 0
 		}
 		
+		payBarView = payBarView.then {
+			$0.layer.cornerRadius = 3
+			$0.backgroundColor = R.Color.orange500
+		}
+		
 		earnLabel = earnLabel.then {
 			$0.text = "수입"
-			$0.font = R.Font.body2
+			$0.font = R.Font.title3
 			$0.textColor = R.Color.white
 		}
 		
@@ -112,10 +119,15 @@ private extension StatisticsCategoryView {
 			$0.fadeLength = 44 // 얼마나 숨길지
 			$0.animationDelay = 0
 		}
+		
+		earnBarView = earnBarView.then {
+			$0.layer.cornerRadius = 3
+			$0.backgroundColor = R.Color.blue600
+		}
 	}
 	
 	private func setLayout() {
-		addSubviews(titleLabel, moreLabel, payLabel, payRankLabel, earnLabel, earnRankLabel)
+		addSubviews(titleLabel, moreLabel, payLabel, payRankLabel, payBarView, earnLabel, earnRankLabel, earnBarView)
 		
 		titleLabel.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(12)
@@ -139,6 +151,13 @@ private extension StatisticsCategoryView {
 			$0.trailing.equalToSuperview().inset(20)
 		}
 		
+		payBarView.snp.makeConstraints {
+			$0.top.equalToSuperview().inset(68)
+			$0.leading.equalToSuperview().inset(60)
+			$0.trailing.equalToSuperview().inset(20)
+			$0.height.equalTo(8)
+		}
+		
 		earnLabel.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(96)
 			$0.leading.equalToSuperview().inset(20)
@@ -148,6 +167,13 @@ private extension StatisticsCategoryView {
 			$0.top.equalToSuperview().inset(92)
 			$0.leading.equalToSuperview().inset(60)
 			$0.trailing.equalToSuperview().inset(20)
+		}
+		
+		earnBarView.snp.makeConstraints {
+			$0.top.equalToSuperview().inset(115)
+			$0.leading.equalToSuperview().inset(60)
+			$0.trailing.equalToSuperview().inset(20)
+			$0.height.equalTo(8)
 		}
 	}
 }

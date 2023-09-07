@@ -71,6 +71,7 @@
 		6ADEAFDF2A53B81300299A0E /* Ex+Window.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ADEAFDE2A53B81300299A0E /* Ex+Window.swift */; };
 		6AF1A8402A35906100135961 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = 6AF1A83F2A35906100135961 /* loading.json */; };
 		6AF9A14B2AA9BB600069981A /* ChallengeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF9A14A2AA9BB600069981A /* ChallengeViewController.swift */; };
+		6AF9A14D2AA9BD640069981A /* PushSettingDetailReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF9A14C2AA9BD640069981A /* PushSettingDetailReactor.swift */; };
 		C40E522A2A39629B00775455 /* ExportResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40E52292A39629B00775455 /* ExportResDto.swift */; };
 		C40E522C2A39A09900775455 /* HomeErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40E522B2A39A09900775455 /* HomeErrorView.swift */; };
 		C411938E29D2817C003DBC15 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411938D29D2817C003DBC15 /* AppDelegate.swift */; };
@@ -293,6 +294,7 @@
 		6ADEAFDE2A53B81300299A0E /* Ex+Window.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Window.swift"; sourceTree = "<group>"; };
 		6AF1A83F2A35906100135961 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		6AF9A14A2AA9BB600069981A /* ChallengeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeViewController.swift; sourceTree = "<group>"; };
+		6AF9A14C2AA9BD640069981A /* PushSettingDetailReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushSettingDetailReactor.swift; sourceTree = "<group>"; };
 		6AF9E85829F0D0BD00DCB330 /* MMM.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MMM.entitlements; sourceTree = "<group>"; };
 		738AB5686981CA1A28640207 /* Pods_MMM_MMMUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MMM_MMMUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A564931308C77DE145181BBF /* Pods_MMM.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MMM.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -573,6 +575,7 @@
 				6A3EDE8C2A87572F008E8782 /* SampleReactor.swift */,
 				C4170B4F2A89FD1100CE0A65 /* StatisticsReactor.swift */,
 				6A2B5D582A97217F00CCBFBE /* PushSettingReactor.swift */,
+				6AF9A14C2AA9BD640069981A /* PushSettingDetailReactor.swift */,
 			);
 			path = Reactor;
 			sourceTree = "<group>";
@@ -1400,6 +1403,7 @@
 				C4EA5B4229FA26E0008D1564 /* HomeHeaderStackView.swift in Sources */,
 				6A4313E22A13046E00095041 /* BottomPageControlView.swift in Sources */,
 				C4C792A62A358517007FD6AA /* SummaryResDto.swift in Sources */,
+				6AF9A14D2AA9BD640069981A /* PushSettingDetailReactor.swift in Sources */,
 				C4351B4C2A1601D3005F95BE /* HomeFilterView.swift in Sources */,
 				C4DBAA3229DD763D00D1BB97 /* Ex+Int.swift in Sources */,
 				6A0531242A22220D0065DB54 /* StarPickerViewController.swift in Sources */,

@@ -95,6 +95,7 @@ extension PushSettingViewController {
             .bind { [weak self] _ in
                 guard let self = self else { return }
                 let vc = PushSettingDetailViewController()
+                vc.reactor = PushSettingDetailReactor()
                 self.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)

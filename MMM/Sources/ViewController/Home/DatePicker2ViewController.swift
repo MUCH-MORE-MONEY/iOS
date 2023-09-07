@@ -55,9 +55,10 @@ final class DatePicker2ViewController: UIViewController, View {
 //MARK: - Action
 extension DatePicker2ViewController {
 	// 외부에서 설정
-	func setData(title: String, isDark: Bool = false) {
+    func setData(title: String, isDark: Bool = false, type:  UIDatePicker.Mode = .date) {
 		DispatchQueue.main.async {
 			self.titleLabel.text = title
+            self.datePicker.datePickerMode = type
 		}
 		self.isDark = isDark
 	}

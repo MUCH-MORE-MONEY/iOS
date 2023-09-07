@@ -10,19 +10,24 @@ import SnapKit
 import Then
 import RxSwift
 import RxCocoa
+import ReactorKit
 
-final class PushSettingDetailViewController: BaseViewController {
+final class PushSettingDetailViewController: BaseViewController, View {
     // MARK: - UI Components
     private lazy var mainLabel = UILabel()
-    private lazy var timeSettingView = DetailTimeSettingView()
+    private lazy var detailTimeSettingView = DetailTimeSettingView()
     private lazy var weekCollecitonView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
     // MARK: - Properties
     private let weekList = ["일", "화", "수", "목", "금", "토", "월"]
+    var disposeBag: DisposeBag = DisposeBag()
+    var reactor: PushSettingDetailReactor!
+    var bottomSheetReactor: BottomSheetReactor = BottomSheetReactor()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+        bind(reactor: reactor)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -35,8 +40,46 @@ final class PushSettingDetailViewController: BaseViewController {
         navigationController?.setNavigationBarHidden(false, animated: false)
         
     }
+    
+    func bind(reactor: PushSettingDetailReactor) {
+        bindAction(_reactor: reactor)
+        bindState(_reactor: reactor)
+    }
 }
 
+// MARK: - bind
+extension PushSettingDetailViewController {
+    private func bindAction(_reactor: PushSettingDetailReactor) {
+        detailTimeSettingView.rx.tapGesture()
+            .when(.recognized)
+            .map { _ in .didTapDetailTimeSettingView }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindState(_reactor: PushSettingDetailReactor) {
+        reactor.state
+            .map { $0.isPresentTime }
+            .distinctUntilChanged()
+            .filter { $0 }
+            .bind(onNext: presentBottomSheet)
+            .disposed(by: disposeBag)
+    }
+}
+
+// MARK: - Actions
+extension PushSettingDetailViewController {
+    private func presentBottomSheet(_ isPresent: Bool) {
+        let vc = DatePicker2ViewController()
+        let bottomSheetVC = BottomSheetViewController(contentViewController: vc)
+        vc.reactor = bottomSheetReactor
+        vc.delegate = bottomSheetVC
+        vc.setData(title: "시간 설정", type: .time)
+        bottomSheetVC.modalPresentationStyle = .overFullScreen
+        bottomSheetVC.setSetting(height: 360)
+        self.present(bottomSheetVC, animated: false)
+    }
+}
 
 extension PushSettingDetailViewController {
     private func setup() {
@@ -47,9 +90,9 @@ extension PushSettingDetailViewController {
     private func setAttribute() {
         view.backgroundColor = R.Color.gray100
         title = "알람 시간 지정"
-        view.addSubviews(mainLabel, timeSettingView, weekCollecitonView)
+        view.addSubviews(mainLabel, detailTimeSettingView, weekCollecitonView)
         
-        timeSettingView = timeSettingView.then {
+        detailTimeSettingView = detailTimeSettingView.then {
             $0.layer.cornerRadius = 4
         }
         
@@ -72,6 +115,7 @@ extension PushSettingDetailViewController {
             // 내부의 레이아웃의 padding을 주는 방법
             $0.contentInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
             $0.layer.cornerRadius = 4
+            $0.isScrollEnabled = false
         }
     }
     
@@ -82,14 +126,14 @@ extension PushSettingDetailViewController {
             $0.right.equalToSuperview().offset(-24)
         }
         
-        timeSettingView.snp.makeConstraints {
+        detailTimeSettingView.snp.makeConstraints {
             $0.top.equalTo(mainLabel.snp.bottom).offset(16)
             $0.left.equalToSuperview().offset(24)
             $0.right.equalToSuperview().offset(-24)
         }
         
         weekCollecitonView.snp.makeConstraints {
-            $0.top.equalTo(timeSettingView.snp.bottom).offset(8)
+            $0.top.equalTo(detailTimeSettingView.snp.bottom).offset(8)
             $0.left.equalToSuperview().offset(24)
             $0.right.equalToSuperview().offset(-24)
             $0.height.equalTo(102)

@@ -42,4 +42,12 @@ extension Date {
 		dateformat.dateFormat = "yyyyMM"
 		return dateformat.string(from: self)
 	}
+    
+    func getFormattedTime() -> String {
+        let dateformat = DateFormatter()
+        dateformat.locale = Locale(identifier: "ko_KR")
+        dateformat.timeZone = TimeZone(abbreviation: "KST")
+        dateformat.dateFormat = "a HH:mm"
+        return dateformat.string(from: self)
+    }
 }

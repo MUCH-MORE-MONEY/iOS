@@ -64,6 +64,12 @@ extension PushSettingDetailViewController {
             .filter { $0 }
             .bind(onNext: presentBottomSheet)
             .disposed(by: disposeBag)
+        
+        bottomSheetReactor.state
+            .map { $0.success }
+            .distinctUntilChanged()
+            .bind(onNext: setTime)
+            .disposed(by: disposeBag)
     }
 }
 
@@ -78,6 +84,10 @@ extension PushSettingDetailViewController {
         bottomSheetVC.modalPresentationStyle = .overFullScreen
         bottomSheetVC.setSetting(height: 360)
         self.present(bottomSheetVC, animated: false)
+    }
+    
+    private func setTime(_ date: Date) {
+        detailTimeSettingView.configure(date)
     }
 }
 

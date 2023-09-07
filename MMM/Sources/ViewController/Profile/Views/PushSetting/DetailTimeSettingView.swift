@@ -27,6 +27,13 @@ final class DetailTimeSettingView: UIView {
     
 }
 
+// MARK: - Actions
+extension DetailTimeSettingView {
+    func configure(_ date: Date) {
+        timeLabel.text = date.getFormattedTime()
+    }
+}
+
 extension DetailTimeSettingView {
     private func setup() {
         setAttribute()

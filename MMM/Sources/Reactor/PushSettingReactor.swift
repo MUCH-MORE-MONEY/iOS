@@ -19,6 +19,7 @@ final class PushSettingReactor: Reactor {
     }
     
     enum Mutation {
+        case setSwitchState
         case getSwitchState(PushAgreeListSelectResDto, Error?)
         case setPresentTimeDetail
         case setPresentTextDetail(PushResDto, Error?)
@@ -47,7 +48,7 @@ extension PushSettingReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .viewAppear:
-            return pushAgreeListSelect()
+            return .just(.setSwitchState)
             
         case .didTapTimeSettingButton:
             return .just(.setPresentTimeDetail)
@@ -76,9 +77,12 @@ extension PushSettingReactor {
         
         switch mutation {
         
+        case . setSwitchState:
+            newState.isInit = true
+            
         case .getSwitchState(let response, let error):
             newState.pushList = response.selectedList
-            newState.isInit = true
+//            newState.isInit = true
             
         case .setPresentTimeDetail:
             newState.isPresentTimeDetail = true

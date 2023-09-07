@@ -78,6 +78,16 @@ extension PushSettingViewController {
     }
 
     private func bindState(_ reactor: PushSettingReactor) {
+        
+        // 뷰 최초 진입 시 알람 설정 메시지 띄우기
+        reactor.state
+            .map { $0.isInit }
+            .distinctUntilChanged()
+            .filter { $0 }
+            .bind(onNext: showAlertMessage)
+            .disposed(by: disposeBag)
+        
+        
         reactor.state
             .filter { $0.isInfoSwitchOn }
             .filter { $0.isPresentTimeDetail }
@@ -106,17 +116,19 @@ extension PushSettingViewController {
             }
             .disposed(by: disposeBag)
         
-        reactor.state
-            .filter { !$0.isInit }
-            .map { $0.pushList }
-            .filter { !$0.isEmpty }
-            .bind { [weak self] list in
-                guard let self = self else { return }
-                self.eventSwitch.isOn = list[0].pushAgreeYN == "Y" ? true : false
-                self.infoSwitch.isOn = list[1].pushAgreeYN == "Y" ? true : false
-
-            }
-            .disposed(by: disposeBag)
+        
+        
+//        reactor.state
+//            .filter { !$0.isInit }
+//            .map { $0.pushList }
+//            .filter { !$0.isEmpty }
+//            .bind { [weak self] list in
+//                guard let self = self else { return }
+//                self.eventSwitch.isOn = list[0].pushAgreeYN == "Y" ? true : false
+//                self.infoSwitch.isOn = list[1].pushAgreeYN == "Y" ? true : false
+//
+//            }
+//            .disposed(by: disposeBag)
         
         reactor.state
             .map { $0.isInfoSwitchOn }
@@ -131,7 +143,12 @@ extension PushSettingViewController {
 
 // MARK: - Actions
 private extension PushSettingViewController {
-    
+    private func showAlertMessage(_ isFirst: Bool) {
+        let title = "앱 알림이 꺼져있어요"
+        let message = "알림을 받기 위해 앱 알림을 켜주세요"
+        
+        showAlert(alertType: .canCancel, titleText: title, contentText: message, cancelButtonText: "닫기", confirmButtonText: "알림 켜기")
+    }
 }
 
 private extension PushSettingViewController {
@@ -277,5 +294,16 @@ private extension PushSettingViewController {
             $0.left.equalToSuperview().offset(24)
             $0.right.equalToSuperview().offset(-24)
         }
+    }
+}
+
+// FIXME: - Delegate -> Reactorkit 변경 예정
+extension PushSettingViewController: CustomAlertDelegate {
+    func didAlertCacelButton() {
+        print("확인 버튼")
+    }
+    
+    func didAlertCofirmButton() {
+        print("취소")
     }
 }

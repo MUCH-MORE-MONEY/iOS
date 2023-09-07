@@ -49,6 +49,7 @@ final class PushSettingReactor: Reactor {
 extension PushSettingReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
+            // FIXME: - 권한 요청 시 화면 로딩이 늦는 문제
         case .viewAppear:
             return Observable.create { observer in
                 UNUserNotificationCenter.current().getNotificationSettings { settings in

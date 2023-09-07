@@ -81,7 +81,7 @@ private extension StatisticsCategoryView {
 		
 		payLabel = payLabel.then {
 			$0.text = "지출"
-			$0.font = R.Font.body2
+			$0.font = R.Font.title3
 			$0.textColor = R.Color.white
 		}
 		
@@ -98,7 +98,7 @@ private extension StatisticsCategoryView {
 		
 		earnLabel = earnLabel.then {
 			$0.text = "수입"
-			$0.font = R.Font.body2
+			$0.font = R.Font.title3
 			$0.textColor = R.Color.white
 		}
 		

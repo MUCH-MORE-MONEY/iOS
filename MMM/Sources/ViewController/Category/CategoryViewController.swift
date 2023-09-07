@@ -25,6 +25,7 @@ final class CategoryViewController: BaseViewController, View {
 	}
 	
 	// MARK: - UI Components
+	private lazy var editButton = UIButton()
 	private lazy var segmentedControl = CategorySegmentedControl(items: ["지출", "수입"])
 	private lazy var pageViewController = UIPageViewController()
 	private lazy var payViewController = UIViewController()
@@ -54,7 +55,11 @@ extension CategoryViewController {
 extension CategoryViewController {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
 	private func bindAction(_ reactor: CategoryReactor) {
-		
+		editButton.rx.tap
+			.subscribe(onNext: { [weak self] _ in
+				guard let self = self else { return }
+				
+			}).disposed(by: disposeBag)
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
@@ -70,8 +75,14 @@ extension CategoryViewController {
 	}
 	
 	private func setAttribute() {
-		view.backgroundColor = R.Color.gray900
 		title = "카테고리"
+		view.backgroundColor = R.Color.gray900
+		navigationItem.rightBarButtonItem = UIBarButtonItem(customView: editButton)
+		
+		editButton = editButton.then {
+			$0.setTitle("편집", for: .normal)
+			$0.setTitleColor(R.Color.white.withAlphaComponent(0.7), for: .highlighted)
+		}
 		
 		segmentedControl = segmentedControl.then {
 			$0.selectedSegmentIndex = 0

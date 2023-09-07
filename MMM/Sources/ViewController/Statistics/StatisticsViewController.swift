@@ -113,6 +113,7 @@ extension StatisticsViewController {
 	// 카테고리 더보기
 	private func pushCategoryViewController(_ isPresent: Bool) {
 		let vc = CategoryViewController()
+		vc.reactor = CategoryReactor()
 		navigationController?.pushViewController(vc, animated: true)
 	}
 	

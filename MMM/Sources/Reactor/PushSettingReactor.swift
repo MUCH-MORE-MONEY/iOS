@@ -8,6 +8,7 @@
 import Foundation
 import ReactorKit
 import Moya
+import UserNotifications
 
 final class PushSettingReactor: Reactor {
     enum Action {
@@ -19,7 +20,7 @@ final class PushSettingReactor: Reactor {
     }
     
     enum Mutation {
-        case setSwitchState
+        case pushSettingAvailable(Bool)
         case getSwitchState(PushAgreeListSelectResDto, Error?)
         case setPresentTimeDetail
         case setPresentTextDetail(PushResDto, Error?)
@@ -29,6 +30,7 @@ final class PushSettingReactor: Reactor {
     
     struct State {
         var isInit = false
+        var isShowPushAlert = true
         var isPresentTimeDetail = false
         var isPresentTextDetail = false
         var pushMessage: PushResDto?
@@ -36,7 +38,7 @@ final class PushSettingReactor: Reactor {
         var isInfoSwitchOn = false
         var pushList: [PushAgreeListSelectResDto.SelectedList] = []
     }
-        
+    
     let initialState: State
     
     init() {
@@ -48,7 +50,17 @@ extension PushSettingReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .viewAppear:
-            return .just(.setSwitchState)
+            return Observable.create { observer in
+                UNUserNotificationCenter.current().getNotificationSettings { settings in
+                    switch settings.authorizationStatus {
+                    case .authorized:
+                        observer.onNext(.pushSettingAvailable(true))
+                    default:
+                        observer.onNext(.pushSettingAvailable(false))
+                    }
+                }
+                return Disposables.create()
+            }
             
         case .didTapTimeSettingButton:
             return .just(.setPresentTimeDetail)
@@ -76,19 +88,18 @@ extension PushSettingReactor {
         newState.pushList = []
         
         switch mutation {
-        
-        case . setSwitchState:
-            newState.isInit = true
+        case .pushSettingAvailable(let isOn):
+            print("isOn : \(isOn)")
+            newState.isShowPushAlert = isOn
             
         case .getSwitchState(let response, let error):
             newState.pushList = response.selectedList
-//            newState.isInit = true
             
         case .setPresentTimeDetail:
             newState.isPresentTimeDetail = true
             
         case .setPresentTextDetail(let response, let error):
-//            newState.isPresentTextDetail = true
+            //            newState.isPresentTextDetail = true
             newState.pushMessage = response
             
         case .updatePushAgreeSwitch(let response, let error):
@@ -124,4 +135,24 @@ extension PushSettingReactor {
                 return .updatePushAgreeSwitch(response, error)
             }
     }
+    
+    //    func checkPushSetting() -> Observable<Mutation> {
+    //        var isOn = false
+    //        UNUserNotificationCenter.current().getNotificationSettings { settings in
+    //            switch settings.authorizationStatus {
+    //            case .authorized:
+    //                print("허용")
+    //                isOn = true
+    //            case .denied:
+    //                print("거부")
+    //                isOn = false
+    //            case .notDetermined:
+    //                print("설정 전임")
+    //            default:
+    //                break
+    //            }
+    //
+    //            return .just(.pushSettingAvailable(isOn))
+    //        }
+    //    }
 }

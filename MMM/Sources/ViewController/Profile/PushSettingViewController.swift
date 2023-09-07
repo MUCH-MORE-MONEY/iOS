@@ -11,6 +11,7 @@ import Then
 import ReactorKit
 import RxSwift
 import RxCocoa
+import UserNotifications
 
 final class PushSettingViewController: BaseViewController, View {
     // MARK: - UI Components
@@ -81,9 +82,9 @@ extension PushSettingViewController {
         
         // 뷰 최초 진입 시 알람 설정 메시지 띄우기
         reactor.state
-            .map { $0.isInit }
+            .map { $0.isShowPushAlert }
             .distinctUntilChanged()
-            .filter { $0 }
+            .filter { !$0 }
             .bind(onNext: showAlertMessage)
             .disposed(by: disposeBag)
         
@@ -108,13 +109,14 @@ extension PushSettingViewController {
         //            }
         //            .disposed(by: disposeBag)
         
-        reactor.state
-            .map { $0.isEventSwitchOn }
-            .bind { [weak self] data in
-                guard let self = self else { return }
-                self.eventSwitch.isOn = data
-            }
-            .disposed(by: disposeBag)
+//        reactor.state
+//            .subscribe(on: MainScheduler.instance)
+//            .map { $0.isEventSwitchOn }
+//            .bind { [weak self] data in
+//                guard let self = self else { return }
+//                self.eventSwitch.isOn = data
+//            }
+//            .disposed(by: disposeBag)
         
         
         
@@ -131,6 +133,7 @@ extension PushSettingViewController {
         //            .disposed(by: disposeBag)
         
         reactor.state
+            .subscribe(on: MainScheduler.instance)
             .map { $0.isInfoSwitchOn }
             .bind { [weak self] data in
                 guard let self = self else { return }

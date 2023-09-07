@@ -46,10 +46,6 @@ final class CategoryViewController: BaseViewController, View {
 }
 //MARK: - Action
 extension CategoryViewController {
-	@objc private func changeValue(control: UISegmentedControl) {
-	  // 코드로 값을 변경하면 해당 메소드 호출 x
-	  self.currentPage = control.selectedSegmentIndex
-	}
 }
 //MARK: - Bind
 extension CategoryViewController {
@@ -60,6 +56,13 @@ extension CategoryViewController {
 				guard let self = self else { return }
 				
 			}).disposed(by: disposeBag)
+		
+		segmentedControl.rx.selectedSegmentIndex
+			.map { $0 == 0 ? 0 : 1 }
+			.subscribe(onNext: {
+				self.currentPage = $0 // page 변경
+			})
+			.disposed(by: disposeBag)
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
@@ -91,7 +94,6 @@ extension CategoryViewController {
 			$0.translatesAutoresizingMaskIntoConstraints = true
 			$0.setTitleTextAttributes([.foregroundColor: R.Color.gray700, .font: R.Font.title1], for: .normal)
 			$0.setTitleTextAttributes([.foregroundColor: R.Color.white, .font: R.Font.title1], for: .selected)
-			$0.addTarget(self, action: #selector(changeValue(control:)), for: .valueChanged)
 		}
 		
 		pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil).then {

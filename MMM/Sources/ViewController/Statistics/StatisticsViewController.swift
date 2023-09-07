@@ -19,6 +19,7 @@ final class StatisticsViewController: UIViewController, View {
 	private var bottomSheetReactor: BottomSheetReactor = BottomSheetReactor()
 	private var month: Date = Date()
 	private var satisfaction: Satisfaction = .low
+	private var timer: Timer? // rank를 변경하는 시간
 
 	// MARK: - UI Components
 	private lazy var monthButtonItem = UIBarButtonItem()
@@ -29,7 +30,7 @@ final class StatisticsViewController: UIViewController, View {
 	private lazy var headerView = StatisticsHeaderView()
 	private lazy var satisfactionView = StatisticsSatisfactionView()
 	private lazy var categoryView = StatisticsCategoryView()
-	private lazy var activityView = StatisticsActivityView()
+	private lazy var activityView = StatisticsActivityView(timer: timer)
 	private lazy var selectAreaView = StatisticsSatisfactionListView()
 	
     override func viewDidLoad() {
@@ -38,7 +39,7 @@ final class StatisticsViewController: UIViewController, View {
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)		
+		super.viewWillAppear(animated)
 		// Root View인 NavigationView에 item 수정하기
 		if let navigationController = self.navigationController {
 			if let rootVC = navigationController.viewControllers.first {
@@ -46,6 +47,11 @@ final class StatisticsViewController: UIViewController, View {
 				rootVC.navigationItem.rightBarButtonItem = nil
 			}
 		}
+	}
+	
+	deinit {
+		timer?.invalidate() // 타이머 종료
+		timer = nil
 	}
 	
 	func bind(reactor: StatisticsReactor) {

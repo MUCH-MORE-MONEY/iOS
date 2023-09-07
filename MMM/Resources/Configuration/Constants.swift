@@ -79,9 +79,11 @@ final class Constants {
 		Constants.removeKeychain(forKey: Constants.KeychainKey.isDailySetting)
 		Constants.removeKeychain(forKey: Constants.KeychainKey.earnStandard)
 		Constants.removeKeychain(forKey: Constants.KeychainKey.payStandard)
+        
 	}
 }
 
+// TODO: - 데이터 삭제 함수 필요
 enum Common {
     static func setNewsPushSwitch(_ isOn: Bool) {
         UserDefaults.standard.set(isOn, forKey: "NewsPushSwitch")
@@ -101,5 +103,9 @@ enum Common {
     
     static func getCustomPushSwitch() -> Bool {
         UserDefaults.standard.bool(forKey: "CustomPushSwitch")
+    }
+    
+    static func getCustomPushTime() -> String {
+        UserDefaults.standard.string(forKey: "CustomPushTime") ?? "09:00 PM"
     }
 }

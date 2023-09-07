@@ -54,6 +54,7 @@ extension CategoryViewController {
 extension CategoryViewController {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
 	private func bindAction(_ reactor: CategoryReactor) {
+		
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)

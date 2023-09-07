@@ -104,11 +104,11 @@ extension CategoryViewController {
 		}
 		
 		payViewController = payViewController.then {
-			$0.view.backgroundColor = R.Color.gray500
+			$0.view.backgroundColor = R.Color.orange050
 		}
 		
 		earnViewController = earnViewController.then {
-			$0.view.backgroundColor = R.Color.gray600
+			$0.view.backgroundColor = R.Color.blue050
 		}
 	}
 	

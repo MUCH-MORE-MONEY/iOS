@@ -29,13 +29,18 @@ final class TimeSettingView: UIView {
 extension TimeSettingView {
     func configure(_ isOn: Bool) {
         if isOn {
-            backgroundColor = R.Color.gray900
-            imageView.isHidden = false
-            mainLabel.text = "매일 09:00 PM"
+            DispatchQueue.main.async {
+                self.backgroundColor = R.Color.gray900
+                self.imageView.isHidden = false
+                self.mainLabel.text = "매일 09:00 PM"
+            }
+
         } else {
-            backgroundColor = R.Color.gray300
-            imageView.isHidden = true
-            mainLabel.text = "매일 09:00 PM"
+            DispatchQueue.main.async {
+                self.backgroundColor = R.Color.gray300
+                self.imageView.isHidden = true
+                self.mainLabel.text = "매일 09:00 PM"
+            }
         }
     }
 }

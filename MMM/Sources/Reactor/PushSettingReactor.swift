@@ -14,28 +14,34 @@ final class PushSettingReactor: Reactor {
     enum Action {
         case viewAppear
         case didTapTimeSettingButton
-        case didTapTextSettingButton(PushReqDto)
-        case eventSwitchToggle(Bool)
-        case infoSwitchToggle(Bool)
+        //        case didTapTextSettingButton(PushReqDto)
+        case didTapTextSettingButton
+        case newsPushSwitchToggle(Bool)
+        case customPushSwitchToggle(Bool)
     }
     
     enum Mutation {
         case pushSettingAvailable(Bool)
-        case getSwitchState(PushAgreeListSelectResDto, Error?)
-        case setPresentTimeDetail
-        case setPresentTextDetail(PushResDto, Error?)
+        
+        case setPresentDetailView(Bool)
+        case setPresentSheetView(Bool)
+        
+        //        case setPresentTextDetail(PushResDto, Error?)
         case updatePushAgreeSwitch(PushAgreeUpdateResDto, Error?)
-        case setInfoSwitch(Bool)
+        case getSwitchState(PushAgreeListSelectResDto, Error?)
+        
+        case setNewsPushSwitch(Bool)
+        case setCustomPushSwitch(Bool)
+        
     }
     
     struct State {
-        var isInit = false
         var isShowPushAlert = true
-        var isPresentTimeDetail = false
-        var isPresentTextDetail = false
+        var isPresentDetailView = false
+        var isPresentSheetView = false
         var pushMessage: PushResDto?
-        var isEventSwitchOn = false
-        var isInfoSwitchOn = false
+        var isNewsPushSwitchOn = false
+        var isCustomPushSwitchOn = false
         var pushList: [PushAgreeListSelectResDto.SelectedList] = []
     }
     
@@ -64,17 +70,24 @@ extension PushSettingReactor {
             }
             
         case .didTapTimeSettingButton:
-            return .just(.setPresentTimeDetail)
+            return Observable.concat([
+                .just(.setPresentDetailView(true)),
+                .just(.setPresentDetailView(false))])
             
-        case .didTapTextSettingButton(let request):
-            return push(request)
+            //        case .didTapTextSettingButton(let request):
+            //            return push(request)
+        case .didTapTextSettingButton:
+            return Observable.concat([
+                .just(.setPresentSheetView(true)),
+                .just(.setPresentSheetView(false))])
+            //        case .newsPushSwitchToggle(let isOn):
+            //            let request = PushAgreeUpdateReqDto(pushAgreeDvcd: "01", pushAgreeYN: isOn ? "Y" : "N")
+            //            return pushAgreeUpdate(request)
+        case .newsPushSwitchToggle(let isOn):
+            return .just(.setNewsPushSwitch(isOn))
             
-        case .eventSwitchToggle(let isOn):
-            let request = PushAgreeUpdateReqDto(pushAgreeDvcd: "01", pushAgreeYN: isOn ? "Y" : "N")
-            return pushAgreeUpdate(request)
-            
-        case .infoSwitchToggle(let isOn):
-            return .just(.setInfoSwitch(isOn))
+        case .customPushSwitchToggle(let isOn):
+            return .just(.setCustomPushSwitch(isOn))
         }
         
         
@@ -83,8 +96,6 @@ extension PushSettingReactor {
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         
-        newState.isPresentTimeDetail = false
-        newState.isPresentTextDetail = false
         newState.pushMessage = PushResDto(message: "")
         newState.pushList = []
         
@@ -96,20 +107,31 @@ extension PushSettingReactor {
         case .getSwitchState(let response, let error):
             newState.pushList = response.selectedList
             
-        case .setPresentTimeDetail:
-            newState.isPresentTimeDetail = true
+
             
-        case .setPresentTextDetail(let response, let error):
-            //            newState.isPresentTextDetail = true
-            newState.pushMessage = response
+            //        case .setPresentTextDetail(let response, let error):
+            //            //            newState.isPresentTextDetail = true
+            //            newState.pushMessage = response
             
         case .updatePushAgreeSwitch(let response, let error):
-            newState.isEventSwitchOn.toggle()
+            newState.isNewsPushSwitchOn.toggle()
+
+        // MARK: - 여긴 완성
+        case .setPresentDetailView(let isPresent):
+            newState.isPresentDetailView = isPresent
             
-        case .setInfoSwitch(let isOn):
-            newState.isInfoSwitchOn = isOn
+        case .setPresentSheetView(let isPresent):
+            newState.isPresentSheetView = isPresent
+            
+        case .setNewsPushSwitch(let isOn):
+            newState.isNewsPushSwitchOn = isOn
+            Common.setNewsPushSwitch(isOn)
+            
+        case .setCustomPushSwitch(let isOn):
+            newState.isCustomPushSwitchOn = isOn
+            Common.setCustomPushSwitch(isOn)
         }
-        
+
         return newState
     }
 }
@@ -123,12 +145,12 @@ extension PushSettingReactor {
             }
     }
     
-    func push(_ request: PushReqDto) -> Observable<Mutation>{
-        return MMMAPIService().push(request)
-            .map { (response, error) -> Mutation in
-                return .setPresentTextDetail(response, error)
-            }
-    }
+    //    func push(_ request: PushReqDto) -> Observable<Mutation>{
+    //        return MMMAPIService().push(request)
+    //            .map { (response, error) -> Mutation in
+    //                return .setPresentTextDetail(response, error)
+    //            }
+    //    }
     
     func pushAgreeUpdate(_ request: PushAgreeUpdateReqDto) -> Observable<Mutation> {
         return MMMAPIService().pushAgreeUpdate(request)

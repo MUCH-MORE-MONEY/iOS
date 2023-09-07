@@ -38,7 +38,7 @@ final class PushSettingViewController: BaseViewController, View {
         setup()
         bind(reactor: reactor)
     }
-        
+    
     func bind(reactor: PushSettingReactor) {
         bindState(reactor)
         bindAction(reactor)
@@ -69,14 +69,14 @@ extension PushSettingViewController {
             .map { .eventSwitchToggle($0) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-            
+        
         // info switch
         infoSwitch.rx.value
             .map { .infoSwitchToggle($0) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
-
+    
     private func bindState(_ reactor: PushSettingReactor) {
         
         // 뷰 최초 진입 시 알람 설정 메시지 띄우기
@@ -99,14 +99,14 @@ extension PushSettingViewController {
             .disposed(by: disposeBag)
         
         // FIXME: - 네트워크 테스트 코드
-//        reactor.state
-//            .compactMap { $0.pushMessage }
-////            .filter { $0.pushMessage }
-//            .bind { [weak self] data in
-//                guard let self = self else { return }
-//                print("text Tapped \(data)")
-//            }
-//            .disposed(by: disposeBag)
+        //        reactor.state
+        //            .compactMap { $0.pushMessage }
+        ////            .filter { $0.pushMessage }
+        //            .bind { [weak self] data in
+        //                guard let self = self else { return }
+        //                print("text Tapped \(data)")
+        //            }
+        //            .disposed(by: disposeBag)
         
         reactor.state
             .map { $0.isEventSwitchOn }
@@ -118,17 +118,17 @@ extension PushSettingViewController {
         
         
         
-//        reactor.state
-//            .filter { !$0.isInit }
-//            .map { $0.pushList }
-//            .filter { !$0.isEmpty }
-//            .bind { [weak self] list in
-//                guard let self = self else { return }
-//                self.eventSwitch.isOn = list[0].pushAgreeYN == "Y" ? true : false
-//                self.infoSwitch.isOn = list[1].pushAgreeYN == "Y" ? true : false
-//
-//            }
-//            .disposed(by: disposeBag)
+        //        reactor.state
+        //            .filter { !$0.isInit }
+        //            .map { $0.pushList }
+        //            .filter { !$0.isEmpty }
+        //            .bind { [weak self] list in
+        //                guard let self = self else { return }
+        //                self.eventSwitch.isOn = list[0].pushAgreeYN == "Y" ? true : false
+        //                self.infoSwitch.isOn = list[1].pushAgreeYN == "Y" ? true : false
+        //
+        //            }
+        //            .disposed(by: disposeBag)
         
         reactor.state
             .map { $0.isInfoSwitchOn }
@@ -299,11 +299,20 @@ private extension PushSettingViewController {
 
 // FIXME: - Delegate -> Reactorkit 변경 예정
 extension PushSettingViewController: CustomAlertDelegate {
-    func didAlertCacelButton() {
-        print("확인 버튼")
+    func didAlertCofirmButton() {
+        // 16 이상 부터 알림 설정 딥링크 이동 가능
+        if #available(iOS 16.0, *) {
+            if let url = URL(string: UIApplication.openNotificationSettingsURLString) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+            else { } // 딥링크 이동 실패
+        } else { // 16미만 버전은 앱 설정 까지만 이동 가능
+            if let url = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+            else {  } // 딥링크 이동 실패
+        }
     }
     
-    func didAlertCofirmButton() {
-        print("취소")
-    }
+    func didAlertCacelButton() { }
 }

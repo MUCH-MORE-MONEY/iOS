@@ -8,6 +8,7 @@
 import Then
 import SnapKit
 import ReactorKit
+import MarqueeLabel
 
 final class StatisticsCategoryView: UIView, View {
 	typealias Reactor = StatisticsReactor
@@ -16,12 +17,14 @@ final class StatisticsCategoryView: UIView, View {
 	var disposeBag: DisposeBag = DisposeBag()
 
 	// MARK: - UI Components
-	private lazy var titleLabel = UILabel() 	// 카테고리
-	private lazy var moreLabel = UILabel() 		// 더보기
-	private lazy var payLabel = UILabel() 		// 지출
-	private lazy var payRankLabel = UILabel() 	// 지출 랭킹
-	private lazy var earnLabel = UILabel() 		// 수입
-	private lazy var earnRankLabel = UILabel() 	// 수입 랭킹
+	private lazy var titleLabel = UILabel() 		// 카테고리
+	private lazy var moreLabel = UILabel() 			// 더보기
+	private lazy var payLabel = UILabel() 			// 지출
+	private lazy var payRankLabel = MarqueeLabel() 	// 지출 랭킹
+	private lazy var payBarView = UIView() 			// 지출 Bar
+	private lazy var earnLabel = UILabel() 			// 수입
+	private lazy var earnRankLabel = MarqueeLabel() // 수입 랭킹
+	private lazy var earnBarView = UIView() 		// 수입 Bar
 
 	override init(frame: CGRect) {
 		super.init(frame: frame)
@@ -80,31 +83,51 @@ private extension StatisticsCategoryView {
 		
 		payLabel = payLabel.then {
 			$0.text = "지출"
-			$0.font = R.Font.body4
-			$0.textColor = R.Color.gray100
+			$0.font = R.Font.title3
+			$0.textColor = R.Color.white
 		}
 		
 		payRankLabel = payRankLabel.then {
-			$0.text = "아직 지출 카테고리에 작성된 경제활동이 없어요"
-			$0.font = R.Font.body5
-			$0.textColor = R.Color.gray500
+			$0.text = "1위 보기만 해도 배부른  2위 쩝쩝 박사  3위 삶의 퀄리티"
+			$0.font = R.Font.body3
+			$0.textColor = R.Color.white
+			$0.type = .continuous
+			$0.speed = .rate(50) // 숫자가 작을수록 느림
+			$0.animationCurve = .linear
+			$0.fadeLength = 44 // 얼마나 숨길지
+			$0.animationDelay = 0
+		}
+		
+		payBarView = payBarView.then {
+			$0.layer.cornerRadius = 3
+			$0.backgroundColor = R.Color.orange500
 		}
 		
 		earnLabel = earnLabel.then {
 			$0.text = "수입"
-			$0.font = R.Font.body4
-			$0.textColor = R.Color.gray100
+			$0.font = R.Font.title3
+			$0.textColor = R.Color.white
 		}
 		
 		earnRankLabel = earnRankLabel.then {
-			$0.text = "아직 수입 카테고리에 작성된 경제활동이 없어요"
-			$0.font = R.Font.body5
-			$0.textColor = R.Color.gray500
+			$0.text = "1위 먹고사는 식사  2위 내 미래에 투자  3위 개미의 웃음  4위 일상 탈출"
+			$0.font = R.Font.body3
+			$0.textColor = R.Color.white
+			$0.type = .continuous
+			$0.speed = .rate(50) // 숫자가 작을수록 느림
+			$0.animationCurve = .linear
+			$0.fadeLength = 44 // 얼마나 숨길지
+			$0.animationDelay = 0
+		}
+		
+		earnBarView = earnBarView.then {
+			$0.layer.cornerRadius = 3
+			$0.backgroundColor = R.Color.blue600
 		}
 	}
 	
 	private func setLayout() {
-		addSubviews(titleLabel, moreLabel, payLabel, payRankLabel, earnLabel, earnRankLabel)
+		addSubviews(titleLabel, moreLabel, payLabel, payRankLabel, payBarView, earnLabel, earnRankLabel, earnBarView)
 		
 		titleLabel.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(12)
@@ -118,23 +141,39 @@ private extension StatisticsCategoryView {
 		}
 		
 		payLabel.snp.makeConstraints {
-			$0.top.equalTo(titleLabel.snp.bottom).offset(14)
+			$0.top.equalToSuperview().inset(48)
 			$0.leading.equalToSuperview().inset(20)
 		}
 		
 		payRankLabel.snp.makeConstraints {
-			$0.centerY.equalTo(payLabel)
+			$0.top.equalToSuperview().inset(44)
+			$0.leading.equalToSuperview().inset(60)
 			$0.trailing.equalToSuperview().inset(20)
 		}
 		
+		payBarView.snp.makeConstraints {
+			$0.top.equalToSuperview().inset(68)
+			$0.leading.equalToSuperview().inset(60)
+			$0.trailing.equalToSuperview().inset(20)
+			$0.height.equalTo(8)
+		}
+		
 		earnLabel.snp.makeConstraints {
-			$0.top.equalTo(payLabel.snp.bottom).offset(14)
+			$0.top.equalToSuperview().inset(96)
 			$0.leading.equalToSuperview().inset(20)
 		}
 		
 		earnRankLabel.snp.makeConstraints {
-			$0.centerY.equalTo(earnLabel)
+			$0.top.equalToSuperview().inset(92)
+			$0.leading.equalToSuperview().inset(60)
 			$0.trailing.equalToSuperview().inset(20)
+		}
+		
+		earnBarView.snp.makeConstraints {
+			$0.top.equalToSuperview().inset(115)
+			$0.leading.equalToSuperview().inset(60)
+			$0.trailing.equalToSuperview().inset(20)
+			$0.height.equalTo(8)
 		}
 	}
 }

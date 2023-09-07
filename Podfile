@@ -20,6 +20,7 @@ target 'MMM' do
   pod 'RxGesture'
   pod 'Moya/RxSwift', '~> 15.0'
   pod 'Alamofire'
+  pod 'MarqueeLabel'
 
   target 'MMMTests' do
     inherit! :search_paths

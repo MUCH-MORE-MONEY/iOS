@@ -179,8 +179,7 @@ private extension PushSettingViewController {
         setAttribute()
         setLayout()
     }
-    
-    
+
     private func setAttribute() {
         title = "푸시 알림 설정"
         
@@ -188,6 +187,7 @@ private extension PushSettingViewController {
         customPushStackView.addArrangedSubviews(customPushMainLabel, customPushSwitch)
         
         view.addSubviews(newsPushStackView, newsPushSubLabel, divider, customPushStackView, customPushSubLabel, timeSettingLabel, textSettingLabel, timeSettingView, textSettingView)
+
         
         newsPushStackView = newsPushStackView.then {
             $0.axis = .horizontal
@@ -311,7 +311,7 @@ private extension PushSettingViewController {
             $0.left.equalToSuperview().offset(24)
             $0.right.equalToSuperview().offset(-24)
         }
-        
+
         textSettingView.snp.makeConstraints {
             $0.top.equalTo(textSettingLabel.snp.bottom).offset(12)
             $0.left.equalToSuperview().offset(24)

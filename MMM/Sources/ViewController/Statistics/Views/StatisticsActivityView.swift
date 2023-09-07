@@ -14,7 +14,7 @@ final class StatisticsActivityView: UIView, View {
 	
 	// MARK: - Properties
 	var disposeBag: DisposeBag = DisposeBag()
-	private var timer = Timer()
+	private var timer: Timer?
 	private var couter = 1 // 처음 Delay 때문에 0이 아닌 1로 초기화
 	private let RANK_COUNT = 3 // 활동을 보여주는 갯수
 
@@ -34,8 +34,10 @@ final class StatisticsActivityView: UIView, View {
 	private lazy var disappointingTitleLabel = UILabel()
 	private lazy var disappointingPriceLabel = UILabel()
 
-	override init(frame: CGRect) {
-		super.init(frame: frame)
+
+	init(timer: Timer?) {
+		self.timer = timer
+		super.init(frame: .zero)
 		setup() // 초기 셋업할 코드들
 	}
 	

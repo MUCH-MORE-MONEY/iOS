@@ -124,6 +124,7 @@
 		C44807E129E648D300D4B090 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44807E029E648D300D4B090 /* HomeViewController.swift */; };
 		C44807E329E649A300D4B090 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44807E229E649A300D4B090 /* HomeViewModel.swift */; };
 		C44807E529E7E76800D4B090 /* Ex+UIControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44807E429E7E76800D4B090 /* Ex+UIControl.swift */; };
+		C44B61BF2AA9A85B00950226 /* CategorySegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44B61BE2AA9A85B00950226 /* CategorySegmentedControl.swift */; };
 		C460DBAA2A96056100530351 /* SatisfactionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C460DBA92A96056100530351 /* SatisfactionTableViewCell.swift */; };
 		C46791542A539E55005FE1F6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C411939629D2817E003DBC15 /* Assets.xcassets */; };
 		C494A1FD2A98B6C700980A71 /* Satisfaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C494A1FC2A98B6C700980A71 /* Satisfaction.swift */; };
@@ -344,6 +345,7 @@
 		C44807E029E648D300D4B090 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		C44807E229E649A300D4B090 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		C44807E429E7E76800D4B090 /* Ex+UIControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIControl.swift"; sourceTree = "<group>"; };
+		C44B61BE2AA9A85B00950226 /* CategorySegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySegmentedControl.swift; sourceTree = "<group>"; };
 		C460DBA92A96056100530351 /* SatisfactionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatisfactionTableViewCell.swift; sourceTree = "<group>"; };
 		C494A1FC2A98B6C700980A71 /* Satisfaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Satisfaction.swift; sourceTree = "<group>"; };
 		C494A24A2A9B893300980A71 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -848,6 +850,7 @@
 		C4170B632A95D01500CE0A65 /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				C44B61BD2AA9A83D00950226 /* Views */,
 				C4170B642A95D03400CE0A65 /* CategoryViewController.swift */,
 			);
 			path = Category;
@@ -879,6 +882,14 @@
 				C4C8B68C2A3ACDC700FAF931 /* LoadingViewController.swift */,
 			);
 			path = Home;
+			sourceTree = "<group>";
+		};
+		C44B61BD2AA9A83D00950226 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C44B61BE2AA9A85B00950226 /* CategorySegmentedControl.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		C494A1FB2A98B6BD00980A71 /* Enums */ = {
@@ -1292,6 +1303,7 @@
 				6A08B47629FF5B150080719E /* APIRouter.swift in Sources */,
 				6A15D5372A5138D800B60CC8 /* Tracking.swift in Sources */,
 				C4170B652A95D03500CE0A65 /* CategoryViewController.swift in Sources */,
+				C44B61BF2AA9A85B00950226 /* CategorySegmentedControl.swift in Sources */,
 				6A0D5B992A4C0E3300958E72 /* ToastView.swift in Sources */,
 				C4170B5F2A94FA0700CE0A65 /* DatePicker2ViewController.swift in Sources */,
 				C4351B4A2A15C935005F95BE /* HomeFilterViewController.swift in Sources */,

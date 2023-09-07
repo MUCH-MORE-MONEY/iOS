@@ -11,6 +11,18 @@ import SnapKit
 
 final class CategorySegmentedControl: UISegmentedControl {
 	// MARK: - UI Components
+	private lazy var bgUnderlineView: UIView = {
+		let width = self.bounds.size.width
+		let height = 2.0
+		let xPosition = CGFloat(0)
+		let yPosition = self.bounds.size.height - 1.5
+		let frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
+		let view = UIView(frame: frame)
+		view.backgroundColor = R.Color.gray700
+		self.addSubview(view)
+		return view
+	}()
+	
 	private lazy var underlineView: UIView = {
 		let width = self.bounds.size.width / CGFloat(self.numberOfSegments)
 		let height = 2.0
@@ -42,6 +54,8 @@ final class CategorySegmentedControl: UISegmentedControl {
 	// layoutSubviews를 통해 underlineView 추가
 	override func layoutSubviews() {
 		super.layoutSubviews()
+		self.layer.cornerRadius = 0 // 기본적으로 지정되어 있는 radius 제거
+		self.bgUnderlineView.frame.origin.x = 0 // bar의 뒷 배경 위치
 		
 		let underlineFinalXPosition = (self.bounds.width / CGFloat(self.numberOfSegments)) * CGFloat(self.selectedSegmentIndex)
 		UIView.animate(withDuration: 0.1, animations: {

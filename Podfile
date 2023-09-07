@@ -18,6 +18,8 @@ target 'MMM' do
   pod 'ReactorKit'
   pod 'RxCocoa'
   pod 'RxGesture'
+  pod 'Moya/RxSwift', '~> 15.0'
+  pod 'Alamofire'
   pod 'MarqueeLabel'
 
   target 'MMMTests' do

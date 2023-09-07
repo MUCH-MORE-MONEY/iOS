@@ -25,6 +25,27 @@ final class TimeSettingView: UIView {
     
 }
 
+// MARK: - Actions
+extension TimeSettingView {
+    func configure(_ isOn: Bool) {
+        if isOn {
+            DispatchQueue.main.async {
+                self.backgroundColor = R.Color.gray900
+                self.imageView.isHidden = false
+                self.mainLabel.text = "매일 09:00 PM"
+            }
+
+        } else {
+            DispatchQueue.main.async {
+                self.backgroundColor = R.Color.gray300
+                self.imageView.isHidden = true
+                self.mainLabel.text = "매일 09:00 PM"
+            }
+        }
+    }
+}
+
+// MARK: - Style & Layout
 extension TimeSettingView {
     private func setup() {
         setAttribute()

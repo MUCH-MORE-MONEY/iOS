@@ -79,9 +79,11 @@ extension CategoryViewController {
 		view.backgroundColor = R.Color.gray900
 		navigationItem.rightBarButtonItem = UIBarButtonItem(customView: editButton)
 		
+		// Navigation Bar Right Button
 		editButton = editButton.then {
 			$0.setTitle("편집", for: .normal)
 			$0.setTitleColor(R.Color.white.withAlphaComponent(0.7), for: .highlighted)
+			$0.titleLabel?.font = R.Font.body1
 		}
 		
 		segmentedControl = segmentedControl.then {

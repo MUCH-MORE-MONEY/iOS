@@ -16,7 +16,7 @@ final class CategoryViewController: BaseViewController, View {
 	
 	// MARK: - Properties
 	var disposeBag: DisposeBag = DisposeBag()
-	private lazy var currentPage: Int = 0 {
+	private lazy var currentPage: Int = 0 { // 현재 선택된 page (지출/수입)
 		didSet {
 			// from segmentedControl -> pageViewController 업데이트
 			let direction: UIPageViewController.NavigationDirection = oldValue <= self.currentPage ? .forward : .reverse

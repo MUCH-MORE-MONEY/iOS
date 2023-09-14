@@ -53,7 +53,9 @@ protocol MMMAPIServiceble: BaseAPIService {
     func push(_ request: PushReqDto) -> Observable<(PushResDto, Error?)>
     func pushAgreeListSelect() -> Observable<(PushAgreeListSelectResDto, Error?)>
     func pushAgreeUpdate(_ request: PushAgreeUpdateReqDto) -> Observable<(PushAgreeUpdateResDto, Error?)>
-    
+	
+	// MARK: - Statistics 요청 API
+	func getStatisticsAverage(_ dateYM: String) -> Observable<(StatisticsResDto, Error?)>
 }
 
 // MARK:
@@ -77,6 +79,12 @@ struct MMMAPIService: MMMAPIServiceble {
     func pushAgreeUpdate(_ request: PushAgreeUpdateReqDto) -> Observable<(PushAgreeUpdateResDto, Error?)> {
         return provider().request(MMMAPI.pushAgreeUpdate(request), type: PushAgreeUpdateResDto.self).asObservable()
     }
+	
+	// MARK: - Statistics 요청 API
+	// 통계 만족도 평균 요청
+	func getStatisticsAverage(_ dateYM: String) -> Observable<(StatisticsResDto, Error?)> {
+		return provider().request(MMMAPI.getStaticsticsAverage(dateYM: dateYM), type: StatisticsResDto.self).asObservable()
+	}
 }
 
 // MARK: MoyaProvider 네트워크 공통 로직

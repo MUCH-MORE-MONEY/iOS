@@ -16,6 +16,7 @@ enum MMMAPI {
     case pushAgreeUpdate(PushAgreeUpdateReqDto)
     
     // MARK: - Staticstics
+	case getStaticsticsAverage(dateYM: String) // 월간 만족도 평균값
 }
 
 extension MMMAPI: BaseNetworkService {
@@ -34,7 +35,9 @@ extension MMMAPI: BaseNetworkService {
             return "/push/agree/list/select"
         case .pushAgreeUpdate:
             return "/push/agree/update"
-        }
+		case .getStaticsticsAverage(let dateYM):
+			return "/economic_activity/\(dateYM)/average"
+		}
     }
     
     /// 메서드 방식 선택
@@ -42,7 +45,9 @@ extension MMMAPI: BaseNetworkService {
         switch self {
         case .push, .pushAgreeListSelect, .pushAgreeUpdate:
             return .post
-        }
+		case .getStaticsticsAverage:
+			return .get
+		}
     }
     
     /// body parameter
@@ -60,7 +65,9 @@ extension MMMAPI: BaseNetworkService {
         case .pushAgreeUpdate(let request):
             return .requestParameters(parameters: request.asDictionary, encoding: JSONEncoding.default)
             
-        }
+		case .getStaticsticsAverage:
+			return .requestPlain
+		}
     }
 
     

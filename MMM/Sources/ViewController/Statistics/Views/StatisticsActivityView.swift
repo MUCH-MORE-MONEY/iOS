@@ -14,8 +14,8 @@ final class StatisticsActivityView: UIView, View {
 	
 	// MARK: - Properties
 	var disposeBag: DisposeBag = DisposeBag()
-	private var timer: Timer?
-	private var couter = 1 // 처음 Delay 때문에 0이 아닌 1로 초기화
+	private var timer: DispatchSourceTimer?
+	private var counter = 1 // 처음 Delay 때문에 0이 아닌 1로 초기화
 	private let RANK_COUNT = 3 // 활동을 보여주는 갯수
 
 	// MARK: - UI Components
@@ -35,7 +35,7 @@ final class StatisticsActivityView: UIView, View {
 	private lazy var disappointingPriceLabel = UILabel()
 
 
-	init(timer: Timer?) {
+	init(timer: DispatchSourceTimer?) {
 		self.timer = timer
 		super.init(frame: .zero)
 		setup() // 초기 셋업할 코드들
@@ -105,18 +105,24 @@ extension StatisticsActivityView {
 }
 //MARK: - Action
 extension StatisticsActivityView {
-	@objc private func moveToIndex() {
+	private func moveToIndex() {
+		// 보여줄 랭크의 개수 보다 작을 경우
+		guard counter <= RANK_COUNT else {
+			counter = 0
+			return
+		}
+		
 		// 만족스러운 활동
-		let indexSatisfaction = IndexPath.init(item: couter, section: 0)
+		let indexSatisfaction = IndexPath.init(item: counter, section: 0)
 		self.satisfactionTableView.scrollToRow(at: indexSatisfaction, at: .middle, animated: true) // 해당 인덱스로 이동.
 		
 		// 아쉬운 활동
-		let indexDisappointing = IndexPath.init(item: RANK_COUNT - couter, section: 0)
+		let indexDisappointing = IndexPath.init(item: RANK_COUNT - counter, section: 0)
 		self.disappointingTableView.scrollToRow(at: indexDisappointing, at: .middle, animated: true) // 해당 인덱스로 이동.
 
-		self.couter += 1 // 인덱스 증가
+		self.counter += 1 // 인덱스 증가
 
-		if couter >= RANK_COUNT + 1 {
+		if counter >= RANK_COUNT + 1 {
 			DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
 				// 만족스러운 활동
 				self.satisfactionTableView.scrollToRow(at: NSIndexPath(item: 0, section: 0) as IndexPath, at: .top, animated: false)
@@ -124,7 +130,7 @@ extension StatisticsActivityView {
 				// 아쉬운 활동
 				self.disappointingTableView.scrollToRow(at: NSIndexPath(item: self.RANK_COUNT, section: 0) as IndexPath, at: .top, animated: false)
 				
-				self.couter = 1 // 인덱스 초기화
+				self.counter = 1 // 인덱스 초기화
 			}
 		}
 	}
@@ -139,13 +145,7 @@ private extension StatisticsActivityView {
 	}
 	
 	private func setTimer() {
-		timer = Timer.scheduledTimer(
-			timeInterval: 1,
-			target: self,
-			selector: #selector(moveToIndex),
-			userInfo: nil,
-			repeats: true
-		)
+		timer?.setEventHandler(handler: moveToIndex)
 	}
 	
 	private func setAttribute() {

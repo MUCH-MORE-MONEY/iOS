@@ -19,7 +19,7 @@ final class StatisticsViewController: UIViewController, View {
 	private var bottomSheetReactor: BottomSheetReactor = BottomSheetReactor()
 	private var month: Date = Date()
 	private var satisfaction: Satisfaction = .low
-	private var timer: Timer? // rank를 변경하는 시간
+	private var timer: DispatchSourceTimer? // rank를 변경하는 시간
 
 	// MARK: - UI Components
 	private lazy var monthButtonItem = UIBarButtonItem()
@@ -47,13 +47,15 @@ final class StatisticsViewController: UIViewController, View {
 				rootVC.navigationItem.rightBarButtonItem = nil
 			}
 		}
+		
+		timer?.resume() // 타이머 재시작
 	}
 	
-	deinit {
-		timer?.invalidate() // 타이머 종료
-		timer = nil
+	override func viewWillDisappear(_ animated: Bool) {
+		super.viewWillDisappear(animated)
+		timer?.suspend() // 일시정지
 	}
-	
+
 	func bind(reactor: StatisticsReactor) {
 		bindState(reactor)
 		bindAction(reactor)
@@ -157,8 +159,14 @@ extension StatisticsViewController {
 extension StatisticsViewController {
 	// 초기 셋업할 코드들
 	private func setup() {
+		setTimer()
 		setAttribute()
 		setLayout()
+	}
+	
+	private func setTimer() {
+		timer = DispatchSource.makeTimerSource(flags: [], queue: DispatchQueue.main)
+		timer?.schedule(deadline: .now(), repeating: 1)
 	}
 	
 	private func setAttribute() {

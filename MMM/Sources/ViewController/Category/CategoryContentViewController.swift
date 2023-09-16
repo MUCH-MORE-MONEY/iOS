@@ -33,7 +33,7 @@ final class CategoryContentViewController: UIViewController, View {
 		
 		switch item {
 		case let .base(cellReactor):
-			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CartegoryCollectionViewCell.self), for: indexPath) as? CartegoryCollectionViewCell else { return .init() }
+			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CategoryCollectionViewCell.self), for: indexPath) as? CategoryCollectionViewCell else { return .init() }
 			
 			cell.reactor = cellReactor // reactor 주입
 			
@@ -44,7 +44,7 @@ final class CategoryContentViewController: UIViewController, View {
 
 		switch dataSource[indexPath.section].model {
 		case .base:
-			guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: String(describing: CartegorySectionHeader.self), for: indexPath) as? CartegorySectionHeader else { return .init() }
+			guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: String(describing: CategorySectionHeader.self), for: indexPath) as? CategorySectionHeader else { return .init() }
 			return header
 		}
 	}
@@ -100,6 +100,7 @@ extension CategoryContentViewController {
 extension CategoryContentViewController {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
 	private func bindAction(_ reactor: CategoryReactor) {
+		// CollectionView cell select
 		Observable.zip(
 			collectionView.rx.itemSelected,
 			collectionView.rx.modelSelected(type(of: dataSource).Section.Item.self)
@@ -108,6 +109,7 @@ extension CategoryContentViewController {
 		.bind(to: reactor.action)
 		.disposed(by: disposeBag)
 		
+		// Refresh Data
 		refreshControl.rx.controlEvent(.valueChanged)
 			.map { .fetch }
 			.bind(to: reactor.action)
@@ -116,10 +118,13 @@ extension CategoryContentViewController {
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: CategoryReactor) {
+		// Section별 items 전달
 		reactor.state
-			.map(\.sections)
+			.map(\.paySections)
 			.withUnretained(self)
 			.subscribe(onNext: { this, sections in
+				guard !sections.isEmpty else { return }
+				
 				this.collectionView.refreshControl?.endRefreshing()
 				this.dataSource.setSections(sections)
 				this.collectionView.collectionViewLayout = this.makeLayout(sections: sections)
@@ -145,7 +150,9 @@ extension CategoryContentViewController {
 		collectionView = collectionView.then {
 			$0.dataSource = dataSource
 			$0.refreshControl = refreshControl
-			$0.register(CartegoryCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: CartegoryCollectionViewCell.self))
+			$0.register(CategoryCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: CategoryCollectionViewCell.self))
+			$0.register(CategorySectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: String(describing: CategorySectionHeader.self))
+			$0.backgroundColor = R.Color.gray900
 		}
 	}
 	
@@ -155,8 +162,7 @@ extension CategoryContentViewController {
 	
 	private func setLayout() {
 		collectionView.snp.makeConstraints {
-			$0.top.equalToSuperview().inset(UI.topMargin)
-			$0.leading.trailing.bottom.equalToSuperview()
+			$0.top.leading.trailing.bottom.equalToSuperview()
 		}
 	}
 }

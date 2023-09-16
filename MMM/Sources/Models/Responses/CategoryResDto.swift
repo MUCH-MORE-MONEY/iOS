@@ -10,6 +10,6 @@ import Foundation
 /// Category Response를 위한 데이터 타입
 struct CategoryResDto: Codable {
 	var data: CategoryList
-	var message: String
-	var token: String
+	var message: String?
+	var status: String
 }

@@ -16,6 +16,9 @@ enum MMMAPI {
     case pushAgreeUpdate(PushAgreeUpdateReqDto)
     
     // MARK: - Staticstics
+	
+	// MARK: - Staticstics Category
+	case getCategory(CategoryReqDto)
 }
 
 extension MMMAPI: BaseNetworkService {
@@ -34,7 +37,9 @@ extension MMMAPI: BaseNetworkService {
             return "/push/agree/list/select"
         case .pushAgreeUpdate:
             return "/push/agree/update"
-        }
+		case .getCategory(let request):
+			return "/economic-activity-category/list/\(request.economicActivityDvcd)"
+		}
     }
     
     /// 메서드 방식 선택
@@ -42,7 +47,9 @@ extension MMMAPI: BaseNetworkService {
         switch self {
         case .push, .pushAgreeListSelect, .pushAgreeUpdate:
             return .post
-        }
+		case .getCategory:
+			return .get
+		}
     }
     
     /// body parameter
@@ -60,7 +67,9 @@ extension MMMAPI: BaseNetworkService {
         case .pushAgreeUpdate(let request):
             return .requestParameters(parameters: request.asDictionary, encoding: JSONEncoding.default)
             
-        }
+		case .getCategory:
+			return .requestPlain
+		}
     }
 
     

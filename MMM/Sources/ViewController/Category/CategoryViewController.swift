@@ -93,7 +93,7 @@ extension CategoryViewController {
 		segmentedControl = segmentedControl.then {
 			$0.selectedSegmentIndex = 0
 			$0.translatesAutoresizingMaskIntoConstraints = true
-			$0.setTitleTextAttributes([.foregroundColor: R.Color.gray700, .font: R.Font.title1], for: .normal)
+			$0.setTitleTextAttributes([.foregroundColor: R.Color.gray600, .font: R.Font.title1], for: .normal)
 			$0.setTitleTextAttributes([.foregroundColor: R.Color.white, .font: R.Font.title1], for: .selected)
 		}
 		
@@ -102,6 +102,10 @@ extension CategoryViewController {
 			$0.delegate = self
 			$0.dataSource = self
 			$0.view.translatesAutoresizingMaskIntoConstraints = false
+		}
+		
+		payViewController = payViewController.then {
+			$0.reactor = reactor
 		}
 		
 		earnViewController = earnViewController.then {

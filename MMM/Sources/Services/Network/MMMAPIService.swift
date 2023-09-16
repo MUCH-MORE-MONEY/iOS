@@ -54,6 +54,8 @@ protocol MMMAPIServiceble: BaseAPIService {
     func pushAgreeListSelect() -> Observable<(PushAgreeListSelectResDto, Error?)>
     func pushAgreeUpdate(_ request: PushAgreeUpdateReqDto) -> Observable<(PushAgreeUpdateResDto, Error?)>
     
+	// MARK: - Staticstics Category 요청 API
+	func getCategory(_ request: CategoryReqDto) -> Observable<(CategoryResDto, Error?)>
 }
 
 // MARK:
@@ -77,6 +79,11 @@ struct MMMAPIService: MMMAPIServiceble {
     func pushAgreeUpdate(_ request: PushAgreeUpdateReqDto) -> Observable<(PushAgreeUpdateResDto, Error?)> {
         return provider().request(MMMAPI.pushAgreeUpdate(request), type: PushAgreeUpdateResDto.self).asObservable()
     }
+	
+	// MARK: - Staticstics Category 요청 API
+	func getCategory(_ request: CategoryReqDto) -> RxSwift.Observable<(CategoryResDto, Error?)> {
+		return provider().request(MMMAPI.getCategory(request), type: CategoryResDto.self).asObservable()
+	}
 }
 
 // MARK: MoyaProvider 네트워크 공통 로직

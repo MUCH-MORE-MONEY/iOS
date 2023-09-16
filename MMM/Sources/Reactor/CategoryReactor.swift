@@ -17,12 +17,12 @@ final class CategoryReactor: Reactor {
 	
 	// 처리 단위
 	enum Mutation {
-		case setSections([CategorySectionModel])
+		case setPaySections([CategorySectionModel])
 	}
 	
 	// 현재 상태를 기록
 	struct State {
-		var sections: [CategorySectionModel] = []
+		var paySections: [CategorySectionModel] = []
 		var error = false
 	}
 	
@@ -43,7 +43,7 @@ extension CategoryReactor {
 		switch action {
 		case .loadData:
 			return .concat([
-				.just(.setSections(makeSections()))
+				loadData(CategoryReqDto(economicActivityDvcd: "02"))
 			])
 		case .fetch, .selectCell:
 			return .empty()
@@ -55,8 +55,8 @@ extension CategoryReactor {
 		var newState = state
 		
 		switch mutation {
-		case .setSections(let sections):
-			newState.sections = sections
+		case .setPaySections(let sections):
+			newState.paySections = sections
 		}
 		
 		return newState
@@ -64,13 +64,36 @@ extension CategoryReactor {
 }
 //MARK: - Actions
 extension CategoryReactor {
+	// 데이터
+	private func loadData(_ request: CategoryReqDto) -> Observable<Mutation> {
+		return MMMAPIService().getCategory(request)
+			.map { [weak self] (response, error) -> Mutation in
+				guard let self = self else {
+					return .setPaySections([])
+				}
+
+				if request.economicActivityDvcd == "01" { // 수입
+					return .setPaySections(makeSections(respose: response))
+				} else { // 지출
+					return .setPaySections(makeSections(respose: response))
+				}
+			}
+	}
+	
 	// Section에 따른 Data 주입
-	private func makeSections() -> [CategorySectionModel] {
-		var categoryitems: [CategoryItem] = []
+	private func makeSections(respose: CategoryResDto) -> [CategorySectionModel] {
+		var data = respose.data.selectListOutputDto
+		
+		if data.isEmpty { // 임시
+			data = [Category.getDummy()]
+		}
+		
+		let categoryitems: [CategoryItem] = data.map { categorty -> CategoryItem in
+			return .base(.init(category: categorty))
+		}
 		
 		let firstSectionModel: CategorySectionModel = .init(model: .base(categoryitems), items: categoryitems)
-		let secondSectionModel: CategorySectionModel = .init(model: .base(categoryitems), items: categoryitems)
 
-		return [firstSectionModel, secondSectionModel]
+		return [firstSectionModel]
 	}
 }

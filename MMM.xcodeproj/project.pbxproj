@@ -146,6 +146,7 @@
 		C46409B62AB5987800A899AD /* CartegoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46409B52AB5987800A899AD /* CartegoryCollectionViewCell.swift */; };
 		C46409B82AB598D100A899AD /* BaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46409B72AB598D100A899AD /* BaseCollectionViewCell.swift */; };
 		C46409BA2AB5996D00A899AD /* BaseViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46409B92AB5996D00A899AD /* BaseViewProtocol.swift */; };
+		C46409BC2AB5B07A00A899AD /* CartegorySectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46409BB2AB5B07A00A899AD /* CartegorySectionHeader.swift */; };
 		C46409BE2AB5B0A000A899AD /* BaseCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46409BD2AB5B0A000A899AD /* BaseCollectionReusableView.swift */; };
 		C46791542A539E55005FE1F6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C411939629D2817E003DBC15 /* Assets.xcassets */; };
 		C494A1FD2A98B6C700980A71 /* Satisfaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C494A1FC2A98B6C700980A71 /* Satisfaction.swift */; };
@@ -386,6 +387,7 @@
 		C46409B52AB5987800A899AD /* CartegoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartegoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		C46409B72AB598D100A899AD /* BaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewCell.swift; sourceTree = "<group>"; };
 		C46409B92AB5996D00A899AD /* BaseViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewProtocol.swift; sourceTree = "<group>"; };
+		C46409BB2AB5B07A00A899AD /* CartegorySectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartegorySectionHeader.swift; sourceTree = "<group>"; };
 		C46409BD2AB5B0A000A899AD /* BaseCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionReusableView.swift; sourceTree = "<group>"; };
 		C494A1FC2A98B6C700980A71 /* Satisfaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Satisfaction.swift; sourceTree = "<group>"; };
 		C494A24A2A9B893300980A71 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -987,6 +989,7 @@
 			children = (
 				C44B61BE2AA9A85B00950226 /* CategorySegmentedControl.swift */,
 				C46409B52AB5987800A899AD /* CartegoryCollectionViewCell.swift */,
+				C46409BB2AB5B07A00A899AD /* CartegorySectionHeader.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1511,6 +1514,7 @@
 				C41193F329D3AED5003DBC15 /* ProfileHeaderView.swift in Sources */,
 				C4C0CB022A23A07000C41FF4 /* EditPriceViewController.swift in Sources */,
 				C46409AE2AB4795100A899AD /* CategoryContentViewController.swift in Sources */,
+				C46409BC2AB5B07A00A899AD /* CartegorySectionHeader.swift in Sources */,
 				6A0D108529D3D209009D6DCA /* OnboardingView.swift in Sources */,
 				C44B61C12AA9EE7200950226 /* PushSettingDetailViewController.swift in Sources */,
 				6A626BC12A0C7EE700BDD5C0 /* SelectDetailResDto.swift in Sources */,

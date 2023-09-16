@@ -141,6 +141,7 @@
 		C44B61C32AA9EEA900950226 /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44B61C22AA9EEA900950226 /* APIConstants.swift */; };
 		C460DBAA2A96056100530351 /* SatisfactionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C460DBA92A96056100530351 /* SatisfactionTableViewCell.swift */; };
 		C46409AE2AB4795100A899AD /* CategoryContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46409AD2AB4795100A899AD /* CategoryContentViewController.swift */; };
+		C46409B82AB598D100A899AD /* BaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46409B72AB598D100A899AD /* BaseCollectionViewCell.swift */; };
 		C46409BA2AB5996D00A899AD /* BaseViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46409B92AB5996D00A899AD /* BaseViewProtocol.swift */; };
 		C46791542A539E55005FE1F6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C411939629D2817E003DBC15 /* Assets.xcassets */; };
 		C494A1FD2A98B6C700980A71 /* Satisfaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C494A1FC2A98B6C700980A71 /* Satisfaction.swift */; };
@@ -376,6 +377,7 @@
 		C44B61C22AA9EEA900950226 /* APIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = APIConstants.swift; path = MMM/Sources/Services/APIConstants.swift; sourceTree = SOURCE_ROOT; };
 		C460DBA92A96056100530351 /* SatisfactionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatisfactionTableViewCell.swift; sourceTree = "<group>"; };
 		C46409AD2AB4795100A899AD /* CategoryContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryContentViewController.swift; sourceTree = "<group>"; };
+		C46409B72AB598D100A899AD /* BaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewCell.swift; sourceTree = "<group>"; };
 		C46409B92AB5996D00A899AD /* BaseViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewProtocol.swift; sourceTree = "<group>"; };
 		C494A1FC2A98B6C700980A71 /* Satisfaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Satisfaction.swift; sourceTree = "<group>"; };
 		C494A24A2A9B893300980A71 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -888,6 +890,7 @@
 			children = (
 				6A04FA042A1C4BB00034C114 /* AddImageView.swift */,
 				6A15B0EB2A15B68D00EADAC5 /* BaseAddActivityViewController.swift */,
+				C46409B72AB598D100A899AD /* BaseCollectionViewCell.swift */,
 				6A1322E82A088DD700CEEC81 /* BaseDetailViewController.swift */,
 				6A1322F02A089B2900CEEC81 /* BasePaddingLabel.swift */,
 				6A0F234329DBC0C30063673B /* BaseViewController.swift */,
@@ -1495,6 +1498,7 @@
 				6A0D108529D3D209009D6DCA /* OnboardingView.swift in Sources */,
 				C44B61C12AA9EE7200950226 /* PushSettingDetailViewController.swift in Sources */,
 				6A626BC12A0C7EE700BDD5C0 /* SelectDetailResDto.swift in Sources */,
+				C46409B82AB598D100A899AD /* BaseCollectionViewCell.swift in Sources */,
 				C41193F729D3D954003DBC15 /* Ex+UITableView.swift in Sources */,
 				C4D7FC892A08A61C00565291 /* CalendarCell.swift in Sources */,
 				C433A06D29EE53BB008B26DF /* HomeTableViewCell.swift in Sources */,

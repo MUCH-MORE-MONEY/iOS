@@ -69,11 +69,12 @@ extension CategoryViewController {
 	private func bindState(_ reactor: CategoryReactor) {
 	}
 }
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 extension CategoryViewController {
 	// 초기 셋업할 코드들
 	private func setup() {
 		setAttribute()
+		setHierarchy()
 		setLayout()
 	}
 	
@@ -112,9 +113,11 @@ extension CategoryViewController {
 		}
 	}
 	
-	private func setLayout() {
+	private func setHierarchy() {
 		view.addSubviews(segmentedControl, pageViewController.view)
-		
+	}
+	
+	private func setLayout() {
 		segmentedControl.snp.makeConstraints {
 			$0.top.equalToSuperview()
 			$0.leading.trailing.equalToSuperview().inset(24)

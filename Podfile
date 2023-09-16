@@ -18,6 +18,7 @@ target 'MMM' do
   pod 'ReactorKit'
   pod 'RxCocoa'
   pod 'RxGesture'
+  pod 'RxDataSources', '~> 5.0'
   pod 'Moya/RxSwift', '~> 15.0'
   pod 'Alamofire'
   pod 'MarqueeLabel'

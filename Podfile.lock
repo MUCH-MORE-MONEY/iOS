@@ -1,6 +1,7 @@
 PODS:
   - Alamofire (5.7.1)
   - Cosmos (23.0.0)
+  - Differentiator (5.0.0)
   - Firebase/CoreOnly (10.14.0):
     - FirebaseCore (= 10.14.0)
   - Firebase/Messaging (10.14.0):
@@ -108,6 +109,10 @@ PODS:
   - RxCocoa (6.5.0):
     - RxRelay (= 6.5.0)
     - RxSwift (= 6.5.0)
+  - RxDataSources (5.0.0):
+    - Differentiator (~> 5.0)
+    - RxCocoa (~> 6.0)
+    - RxSwift (~> 6.0)
   - RxGesture (4.0.4):
     - RxCocoa (~> 6.0)
     - RxSwift (~> 6.0)
@@ -131,6 +136,7 @@ DEPENDENCIES:
   - Moya/RxSwift (~> 15.0)
   - ReactorKit
   - RxCocoa
+  - RxDataSources (~> 5.0)
   - RxGesture
   - SnapKit (~> 5.6.0)
   - SwiftKeychainWrapper
@@ -140,6 +146,7 @@ SPEC REPOS:
   trunk:
     - Alamofire
     - Cosmos
+    - Differentiator
     - Firebase
     - FirebaseAnalytics
     - FirebaseCore
@@ -158,6 +165,7 @@ SPEC REPOS:
     - PromisesObjC
     - ReactorKit
     - RxCocoa
+    - RxDataSources
     - RxGesture
     - RxRelay
     - RxSwift
@@ -169,6 +177,7 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Alamofire: 0123a34370cb170936ae79a8df46cc62b2edeb88
   Cosmos: b5c6a9a637e28a061b54c8f8b1d8529d7d4db73f
+  Differentiator: e8497ceab83c1b10ca233716d547b9af21b9344d
   Firebase: 6c1bf3f534bc422d52af2e41fe0d50bf08b6b773
   FirebaseAnalytics: 5c6d58814afa4db82cf7fdbc02b0b0e2fa3d43ff
   FirebaseCore: 6fc17ac9f03509d51c131298aacb3ee5698b4f02
@@ -187,6 +196,7 @@ SPEC CHECKSUMS:
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   ReactorKit: e8b11d6b9c415405f381669b095c154a05b59eca
   RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
+  RxDataSources: aa47cc1ed6c500fa0dfecac5c979b723542d79cf
   RxGesture: f3efb47ed2d26a8082f7b660d4a59970e275a7f8
   RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
   RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
@@ -195,6 +205,6 @@ SPEC CHECKSUMS:
   Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
   WeakMapTable: 05c694ce8439a7a9ebabb56187287a63c57673d6
 
-PODFILE CHECKSUM: 1524494b33124212ebcad30bc848db19b782d543
+PODFILE CHECKSUM: 9c4c43c4528846ff83a95f44012c58d34520266f
 
 COCOAPODS: 1.11.3

@@ -64,6 +64,7 @@ extension CategoryReactor {
 }
 //MARK: - Actions
 extension CategoryReactor {
+	// Section에 따른 Data 주입
 	private func makeSections() -> [CategorySectionModel] {
 		var categoryitems: [CategoryItem] = []
 		

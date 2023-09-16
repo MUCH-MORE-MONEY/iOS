@@ -113,6 +113,7 @@ extension CategoryContentViewController {
 			.bind(to: reactor.action)
 			.disposed(by: disposeBag)
 	}
+	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: CategoryReactor) {
 		reactor.state

@@ -1,34 +1,50 @@
 //
-//  CartegorySectionHeader.swift
+//  CategoryCollectionViewCell.swift
 //  MMM
 //
 //  Created by geonhyeong on 2023/09/16.
 //
 
 import UIKit
+import ReactorKit
 
-final class CartegorySectionHeader: BaseCollectionReusableView {
+final class CategoryCollectionViewCell: BaseCollectionViewCell, View {
+	typealias Reactor = CategoryCollectionViewCellReactor
 	
 	// MARK: - UI Components
 	private lazy var titleLabel = UILabel()
 	private lazy var priceLabel = UILabel()
-	private lazy var typeImageView = UIImageView()
+	
+	override func layoutSubviews() {
+		super.layoutSubviews()
+	}
+	
+	override func prepareForReuse() {
+		super.prepareForReuse()
+		titleLabel.text = ""
+		priceLabel.text = ""
+	}
+	
+	func bind(reactor: CategoryCollectionViewCellReactor) {
+		bindState(reactor)
+		bindAction(reactor)
+	}
 }
 //MARK: - Action
-extension CartegorySectionHeader {
+extension CategoryCollectionViewCell {
 }
 //MARK: - Bind
-extension CartegorySectionHeader {
+extension CategoryCollectionViewCell {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
-	private func bindAction(_ reactor: CategoryReactor) {
+	private func bindAction(_ reactor: CategoryCollectionViewCellReactor) {
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
-	private func bindState(_ reactor: CategoryReactor) {
+	private func bindState(_ reactor: CategoryCollectionViewCellReactor) {
 	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
-extension CartegorySectionHeader {
+extension CategoryCollectionViewCell {
 	override func setAttribute() {
 		super.setAttribute()
 		
@@ -48,7 +64,7 @@ extension CartegorySectionHeader {
 	override func setHierarchy() {
 		super.setHierarchy()
 		
-		addSubviews(typeImageView, titleLabel, priceLabel)
+		contentView.addSubviews(titleLabel, priceLabel)
 	}
 	
 	override func setLayout() {

@@ -17,8 +17,9 @@ final class DatePicker2ViewController: UIViewController, View {
 	private var date: Date
 	weak var delegate: BottomSheetChild?
 	var disposeBag: DisposeBag = DisposeBag()
-	private let yearList: [Int] = Array(1900...Calendar.current.component(.year, from: Date()))
-	private let monthList: [Int] = Array(1...12)
+	private let yearList: [Int] = Array(2013...2099)
+	private let monthList: [String] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+	private let monthDic: [String:Int] = ["January":1, "February":2, "March":3, "April":4, "May":5, "June":6, "July":7, "August":8, "September":9, "October":10, "November":11, "December":12]
 	private var selectedYearIndex: Int = 0 // Custom Picker View에서 선택한 년
 	private var selectedMonthIndex: Int = 0	// Custom Picker View에서 선택한 달
 	private var curMode: Mode
@@ -98,14 +99,14 @@ extension DatePicker2ViewController {
 }
 //MARK: - Action
 private extension DatePicker2ViewController {
-	private func createDateFromYearAndMonth(year: Int, month: Int) -> Date? {
+	private func createDateFromYearAndMonth(year: Int, month: String) -> Date? {
 		// 현재 달력과 타임존 설정을 사용하여 Calendar 인스턴스 생성
 		let calendar = Calendar.current
 		
 		// DateComponents를 사용하여 year와 month를 설정
 		var dateComponents = DateComponents()
 		dateComponents.year = year
-		dateComponents.month = month
+		dateComponents.month = monthDic[month]
 		
 		// DateComponents를 사용하여 Date 객체 생성
 		if let date = calendar.date(from: dateComponents) {
@@ -158,16 +159,16 @@ private extension DatePicker2ViewController {
 				// 각 component에서 보여줄 초기값.
 				let calendar = Calendar.current
 				let components = calendar.dateComponents([.year, .month, .day], from: date)
-				let initYear = components.year ?? 2023, initMonth = components.month ?? 1
-
+				let initYear = components.year ?? 2023, initMonth = (components.month ?? 1) - 1
+				
 				guard let initYearIndex = yearList.firstIndex(of: initYear) else { return }
-				guard let initMonthIndex = monthList.firstIndex(of: initMonth) else { return }
-				$0.selectRow(initMonthIndex, inComponent: 0, animated: true)
+
 				$0.selectRow(initYearIndex, inComponent: 1, animated: true)
+				$0.selectRow(initMonth, inComponent: 0, animated: true)
 
 				// 년, 월이 현재로 선택되어있는 상태에서 확인 버튼을 누를 경우를 위해 추가
 				selectedYearIndex = initYearIndex
-				selectedMonthIndex = initMonthIndex
+				selectedMonthIndex = initMonth
 			}
 		}
 	}
@@ -218,8 +219,8 @@ extension DatePicker2ViewController: UIPickerViewDataSource, UIPickerViewDelegat
 	// PickerView의 각 component에서 각 row에 내용을 정하는 메소드
 	func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
 		switch component {
-		case 0:		return "\(monthList[row])월"
-		default:	return "\(yearList[row])년"
+		case 0:		return "\(monthList[row])"
+		default:	return "\(yearList[row])"
 		}
 	}
 	

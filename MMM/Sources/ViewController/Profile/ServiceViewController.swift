@@ -10,6 +10,13 @@ import Then
 import SnapKit
 
 final class ServiceViewController: BaseViewControllerWithNav {
+	// MARK: - Constants
+	private enum UI {
+		static let mainLabelMargin: UIEdgeInsets = .init(top: 24, left: 24, bottom: 0, right: 24)
+		static let tableViewMargin: UIEdgeInsets = .init(top: 28, left: 0, bottom: 0, right: 0)
+		static let cellHeight: CGFloat = 44
+	}
+	
 	// MARK: - Properties
 	private lazy var labelCellList = ["서비스 약관", "문의 남기기"]
 
@@ -51,13 +58,13 @@ extension ServiceViewController {
     
     override func setLayout() {
         mainLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(24)
-            $0.left.right.equalToSuperview().inset(24)
+			$0.top.equalToSuperview().offset(UI.mainLabelMargin.top)
+			$0.left.right.equalToSuperview().inset(UI.mainLabelMargin.left)
         }
         
         tableView.snp.makeConstraints {
             // tableView 마진값이 피그마에 재대로 안나와 있음
-            $0.top.equalTo(mainLabel.snp.bottom).offset(28)
+			$0.top.equalTo(mainLabel.snp.bottom).offset(UI.tableViewMargin.top)
             $0.left.right.bottom.equalToSuperview()
         }
     }
@@ -66,7 +73,7 @@ extension ServiceViewController {
 extension ServiceViewController: UITableViewDataSource {
 	
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+		return labelCellList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -83,7 +90,7 @@ extension ServiceViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 44
+		return UI.cellHeight
     }
 }
 // MARK: - UITableView Delegate

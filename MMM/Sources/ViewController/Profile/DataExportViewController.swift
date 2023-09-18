@@ -11,7 +11,7 @@ import Then
 import SnapKit
 import Lottie
 
-final class DataExportViewController: BaseViewController {
+final class DataExportViewController: BaseViewControllerWithNav {
 	// MARK: - Properties
 	private let viewModel = ProfileViewModel()
 	private lazy var cancellable: Set<AnyCancellable> = .init()

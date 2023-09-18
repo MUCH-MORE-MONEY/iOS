@@ -9,7 +9,7 @@ import UIKit
 import Combine
 import Lottie
 
-final class WithdrawViewController: BaseViewController {
+final class WithdrawViewController: BaseViewControllerWithNav {
 	// MARK: - Properties
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 	private let viewModel: ProfileViewModel

@@ -9,7 +9,7 @@ import UIKit
 import Then
 import SnapKit
 
-final class ServiceViewController: BaseViewController {
+final class ServiceViewController: BaseViewControllerWithNav {
 	// MARK: - Properties
 	private lazy var labelCellList = ["서비스 약관", "문의 남기기"]
 

@@ -12,7 +12,7 @@ import RxSwift
 import RxCocoa
 import ReactorKit
 
-final class PushSettingDetailViewController: BaseViewController, View {
+final class PushSettingDetailViewController: BaseViewControllerWithNav, View {
     // MARK: - UI Components
     private lazy var mainLabel = UILabel()
     private lazy var detailTimeSettingView = DetailTimeSettingView()

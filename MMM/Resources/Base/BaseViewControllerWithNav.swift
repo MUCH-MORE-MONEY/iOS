@@ -9,7 +9,7 @@ import UIKit
 import Then
 import Combine
 
-class BaseViewController: UIViewController {
+class BaseViewControllerWithNav: UIViewController {
     // MARK: - UI Components
     private lazy var backButtonItem = UIBarButtonItem()
     lazy var backButton = UIButton()
@@ -43,7 +43,7 @@ class BaseViewController: UIViewController {
     }
 }
 //MARK: - Attribute & Hierarchy & Layouts
-extension BaseViewController {
+extension BaseViewControllerWithNav {
     private func setup() {
         setAttribute()
         setLayout()

@@ -11,7 +11,7 @@ import RxSwift
 import RxCocoa
 import ReactorKit
 
-final class CategoryViewController: BaseViewController, View {
+final class CategoryViewController: BaseViewControllerWithNav, View {
 	typealias Reactor = CategoryReactor
 	
 	// MARK: - Properties

@@ -10,7 +10,7 @@ import Combine
 import Then
 import SnapKit
 
-final class HomeFilterViewController: BaseViewController {
+final class HomeFilterViewController: BaseViewControllerWithNav {
 	// MARK: - Properties
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 	private let viewModel: HomeViewModel

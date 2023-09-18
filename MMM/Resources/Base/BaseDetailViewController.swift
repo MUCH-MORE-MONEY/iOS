@@ -9,7 +9,7 @@ import UIKit
 import Then
 import SnapKit
 
-class BaseDetailViewController: BaseViewController {
+class BaseDetailViewController: BaseViewControllerWithNav {
     // MARK: - UI Components
     lazy var headerView = UIView().then {
         $0.backgroundColor = R.Color.gray900

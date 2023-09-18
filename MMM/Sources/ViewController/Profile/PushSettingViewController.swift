@@ -13,7 +13,7 @@ import RxSwift
 import RxCocoa
 import UserNotifications
 
-final class PushSettingViewController: BaseViewController, View {
+final class PushSettingViewController: BaseViewControllerWithNav, View {
     // MARK: - UI Components
     private lazy var newsPushStackView = UIStackView()
     private lazy var newsPushMainLabel = UILabel()

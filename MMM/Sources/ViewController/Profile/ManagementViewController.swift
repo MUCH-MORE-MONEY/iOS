@@ -9,7 +9,7 @@ import UIKit
 import Then
 import SnapKit
 
-final class ManagementViewController: BaseViewController {
+final class ManagementViewController: BaseViewControllerWithNav {
 	// MARK: - Properties
 	private let viewModel: ProfileViewModel
 	private lazy var showWithdraw: Bool = false

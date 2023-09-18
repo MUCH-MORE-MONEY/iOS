@@ -11,7 +11,7 @@ import Then
 import SnapKit
 import FirebaseAnalytics
 
-final class AddViewController: BaseViewController {
+final class AddViewController: BaseViewControllerWithNav {
 	// MARK: - Properties
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 	private var viewModel = EditActivityViewModel(isAddModel: true)

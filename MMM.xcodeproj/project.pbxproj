@@ -756,6 +756,7 @@
 				C41193F029D3A867003DBC15 /* Profile */,
 				C4170B4C2A89FC1500CE0A65 /* Statistics */,
 				6A0F234529DC0D750063673B /* TabBar */,
+				C46409CB2AB881A500A899AD /* ETC. */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -907,7 +908,6 @@
 		C411940529D53E77003DBC15 /* Base */ = {
 			isa = PBXGroup;
 			children = (
-				6A04FA042A1C4BB00034C114 /* AddImageView.swift */,
 				6A15B0EB2A15B68D00EADAC5 /* BaseAddActivityViewController.swift */,
 				C46409B72AB598D100A899AD /* BaseCollectionViewCell.swift */,
 				6A1322E82A088DD700CEEC81 /* BaseDetailViewController.swift */,
@@ -915,14 +915,7 @@
 				6A1322F02A089B2900CEEC81 /* BasePaddingLabel.swift */,
 				6A0F234329DBC0C30063673B /* BaseViewController.swift */,
 				C46409B92AB5996D00A899AD /* BaseViewProtocol.swift */,
-				6A1479622A0DE0690045B8C1 /* CameraImageView.swift */,
-				C4DBAA3629DD7B2600D1BB97 /* CountPushLabel.swift */,
-				C411940A29DAEDF9003DBC15 /* CustomAlertViewController.swift */,
 				C411940629D53EA0003DBC15 /* NavigationController.swift */,
-				C4351B4D2A166DB0005F95BE /* SemanticContentAttributeButton.swift */,
-				C446BF1A2A430B1400DFA788 /* SnackView.swift */,
-				6A0531232A22220D0065DB54 /* StarPickerViewController.swift */,
-				6A0D5B982A4C0E3300958E72 /* ToastView.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -1006,6 +999,21 @@
 				C4199DD229FE3051006E5DA8 /* BottomSheetViewController.swift */,
 			);
 			path = BottomSheet;
+			sourceTree = "<group>";
+		};
+		C46409CB2AB881A500A899AD /* ETC. */ = {
+			isa = PBXGroup;
+			children = (
+				6A04FA042A1C4BB00034C114 /* AddImageView.swift */,
+				6A1479622A0DE0690045B8C1 /* CameraImageView.swift */,
+				C4DBAA3629DD7B2600D1BB97 /* CountPushLabel.swift */,
+				C411940A29DAEDF9003DBC15 /* CustomAlertViewController.swift */,
+				C4351B4D2A166DB0005F95BE /* SemanticContentAttributeButton.swift */,
+				C446BF1A2A430B1400DFA788 /* SnackView.swift */,
+				6A0531232A22220D0065DB54 /* StarPickerViewController.swift */,
+				6A0D5B982A4C0E3300958E72 /* ToastView.swift */,
+			);
+			path = ETC.;
 			sourceTree = "<group>";
 		};
 		C494A1FB2A98B6BD00980A71 /* Enums */ = {

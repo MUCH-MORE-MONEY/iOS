@@ -18,7 +18,7 @@ final class CategorySegmentedControl: UISegmentedControl {
 		let yPosition = self.bounds.size.height - 1.5
 		let frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
 		let view = UIView(frame: frame)
-		view.backgroundColor = R.Color.gray700
+		view.backgroundColor = R.Color.gray500
 		self.addSubview(view)
 		return view
 	}()

@@ -9,7 +9,7 @@ import UIKit
 import Then
 import Combine
 
-class BaseViewControllerWithNav: UIViewController {
+class BaseViewControllerWithNav: BaseViewController {
     // MARK: - UI Components
     private lazy var backButtonItem = UIBarButtonItem()
     lazy var backButton = UIButton()
@@ -19,7 +19,7 @@ class BaseViewControllerWithNav: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setup()
+		setNavigation()
         
         // 수평적확장을 해야하기 때문에 extension에서 사용불가
         backButton.tapPublisher
@@ -35,7 +35,6 @@ class BaseViewControllerWithNav: UIViewController {
         } else {
             navigationController?.popViewController(animated: true)
         }
-
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -44,21 +43,16 @@ class BaseViewControllerWithNav: UIViewController {
 }
 //MARK: - Attribute & Hierarchy & Layouts
 extension BaseViewControllerWithNav {
-    private func setup() {
-        setAttribute()
-        setLayout()
-    }
-    
-    private func setAttribute() {
-        backButtonItem = backButtonItem.then {
-            $0.customView = backButton
-        }
-        navigationItem.leftBarButtonItem = backButtonItem
-        view.backgroundColor = R.Color.gray100
-        backButton = backButton.then {
-            $0.setImage(R.Icon.arrowBack24, for: .normal)
-        }
-    }
-    
-    private func setLayout() {}
+	func setNavigation() {
+		navigationItem.leftBarButtonItem = backButtonItem
+		view.backgroundColor = R.Color.gray100
+		
+		backButtonItem = backButtonItem.then {
+			$0.customView = backButton
+		}
+		
+		backButton = backButton.then {
+			$0.setImage(R.Icon.arrowBack24, for: .normal)
+		}
+	}
 }

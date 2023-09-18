@@ -57,7 +57,6 @@ final class EditActivityViewController: BaseAddActivityViewController, UINavigat
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		setup()
 	}
 	
 	override func didTapBackButton() {
@@ -329,195 +328,192 @@ extension EditActivityViewController {
 		}
 	}
 }
+// MARK: - Bind
+extension EditActivityViewController {
+	override func setBind() {
+		// MARK: - detailVM -> editVM 데이터 주입
+		editViewModel.title = detailViewModel.detailActivity?.title ?? ""
+		editViewModel.memo = detailViewModel.detailActivity?.memo ?? ""
+		editViewModel.amount = detailViewModel.detailActivity?.amount ?? 0
+		editViewModel.createAt = detailViewModel.detailActivity?.createAt ?? ""
+		editViewModel.star = detailViewModel.detailActivity?.star ?? 0
+		editViewModel.type = detailViewModel.detailActivity?.type ?? ""
+		editViewModel.fileNo = detailViewModel.detailActivity?.fileNo ?? ""
+		editViewModel.id = detailViewModel.detailActivity?.id ?? ""
+		
+		// MARK: - Loading에 대한 처리
+		editViewModel.$isLoading
+			.receive(on: DispatchQueue.main)
+			.sink {
+				if !$0 {
+					self.loadView.dismiss(animated: false)
+					
+					if self.isDeleteButton {
+						if let navigationController = self.navigationController {
+							if let rootVC = navigationController.viewControllers.first {
+								navigationController.setViewControllers([rootVC], animated: true)
+							}
+						}
+					} else {
+						super.didTapBackButton()
+					}
+				} else {
+					
+				}
+			}.store(in: &cancellable)
+		
+		
+		// MARK: - UI Bind
+		editViewModel.$star
+			.receive(on: DispatchQueue.main)
+			.sink { [weak self] value in
+				guard let self = self else { return }
+				self.satisfyingLabel.setSatisfyingLabelEdit(by: value)
+				self.setStarImage(Int(value))
+			}.store(in: &cancellable)
+		
+		editViewModel.$type
+			.receive(on: DispatchQueue.main)
+			.sink { _ in
+				self.activityType.text = self.editViewModel.type == "01" ? "지출" : "수입"
+				self.activityType.backgroundColor = self.editViewModel.type == "01" ? R.Color.orange500 : R.Color.blue500
+			}.store(in: &cancellable)
+		
+		editViewModel.$amount
+			.receive(on: DispatchQueue.main)
+			.sink { _ in
+				self.totalPrice.text = self.editViewModel.amount.withCommas() + "원"
+			}.store(in: &cancellable)
+		
+		editViewModel.isTitleVaild
+			.sinkOnMainThread(receiveValue: {
+				if !$0 {
+					self.titleTextFeild.text?.removeLast()
+				}
+			}).store(in: &cancellable)
+		
+		editViewModel.$memo
+			.sinkOnMainThread { [weak self] text in
+				guard let self = self else { return }
+				if !text.isEmpty {
+					self.memoTextView.textColor = R.Color.black
+				} else {
+					self.memoTextView.text = textViewPlaceholder
+					self.memoTextView.textColor = R.Color.gray400
+				}
+			}.store(in: &cancellable)
+		
+		titleTextFeild.textPublisher
+			.receive(on: RunLoop.main)
+			.assign(to: \.title, on: editViewModel)
+			.store(in: &cancellable)
+		
+		
+		// textfield가 없을 때 버튼 비활성화
+		titleTextFeild.textPublisher
+			.sinkOnMainThread { [weak self] text in
+				guard let self = self else { return }
+				if text.isEmpty {
+					self.saveButton.isEnabled = false
+					self.saveButton.setBackgroundColor(R.Color.gray400, for: .disabled)
+				} else {
+					self.saveButton.isEnabled = true
+					self.saveButton.setBackgroundColor(R.Color.gray800, for: .normal)
+				}
+			}.store(in: &cancellable)
+		
+		memoTextView.textPublisher
+			.sink { [weak self] ouput in
+				guard let self = self else { return }
+				// 0 : textViewDidChange
+				// 1 : textViewDidBeginEditing
+				// 2 : textViewDidEndEditing
+				switch ouput.1 {
+				case 0:
+					self.textViewDidChange(text: ouput.0)
+				case 1:
+					self.textViewDidBeginEditing()
+				case 2:
+					self.textViewDidEndEditing()
+				default:
+					print("unknown error")
+				}
+			}.store(in: &cancellable)
+		
+		cameraImageView.setData(viewModel: editViewModel)
+		editViewModel.$didTapAddButton
+			.sinkOnMainThread(receiveValue: { [weak self] in
+				guard let self = self else { return }
+				if $0 {
+					self.editViewModel.requestPHPhotoLibraryAuthorization {
+						DispatchQueue.main.async {
+							self.didTapAlbumButton()
+						}
+					}
+				}
+			})
+			.store(in: &cancellable)
+		
+		// MARK: - Gesture Publisher
+		titleStackView.gesturePublisher()
+			.receive(on: DispatchQueue.main)
+			.sink { _ in
+				self.didTapDateTitle()
+			}.store(in: &cancellable)
+		
+		containerStackView.gesturePublisher()
+			.receive(on: DispatchQueue.main)
+			.sink { _ in
+				self.didTapMoneyLabel()
+			}.store(in: &cancellable)
+		
+		starStackView.gesturePublisher()
+			.receive(on: DispatchQueue.main)
+			.sink { _ in
+				self.didTapStarLabel()
+			}.store(in: &cancellable)
+		
+		satisfyingLabel.gesturePublisher()
+			.receive(on: DispatchQueue.main)
+			.sink { _ in
+				self.didTapStarLabel()
+			}.store(in: &cancellable)
+		
+		mainImageView.gesturePublisher()
+			.receive(on: DispatchQueue.main)
+			.sink { _ in
+				self.didTapImageView()
+			}.store(in: &cancellable)
+		
+		
+		// MARK: - CRUD Publisher
+		saveButton.tapPublisher
+			.sinkOnMainThread(receiveValue: didTapSaveButton)
+			.store(in: &cancellable)
+		
+		deleteButton.tapPublisher
+			.sinkOnMainThread(receiveValue: didTapDeleteButton)
+			.store(in: &cancellable)
+		
+		// Date Picker의 값을 받아옴
+		editViewModel.$date
+			.sinkOnMainThread(receiveValue: { [weak self] date in
+				guard let self = self else { return }
+				guard let date = date else { return }
+				// 날짜 변경 감지 및 변경된 날짜 캡처
+				self.detailViewModel.isDateChanged = true
+				self.detailViewModel.changedDate = date
+				self.date = date
+				self.titleText.text = self.navigationTitle
+				self.editViewModel.createAt = date.getFormattedDate(format: "yyyyMMdd")
+			}).store(in: &cancellable)
+	}
+
+}
 //MARK: - Attribute & Hierarchy & Layouts
 extension EditActivityViewController {
-    private func setup() {
-        bind()
-        setAttribute()
-        setLayout()
-    }
-    
-    // MARK: - Bind
-    private func bind() {
-        // MARK: - detailVM -> editVM 데이터 주입
-        editViewModel.title = detailViewModel.detailActivity?.title ?? ""
-        editViewModel.memo = detailViewModel.detailActivity?.memo ?? ""
-        editViewModel.amount = detailViewModel.detailActivity?.amount ?? 0
-        editViewModel.createAt = detailViewModel.detailActivity?.createAt ?? ""
-        editViewModel.star = detailViewModel.detailActivity?.star ?? 0
-        editViewModel.type = detailViewModel.detailActivity?.type ?? ""
-        editViewModel.fileNo = detailViewModel.detailActivity?.fileNo ?? ""
-        editViewModel.id = detailViewModel.detailActivity?.id ?? ""
-        
-        // MARK: - Loading에 대한 처리
-        editViewModel.$isLoading
-            .receive(on: DispatchQueue.main)
-            .sink {
-                if !$0 {
-                    self.loadView.dismiss(animated: false)
-                    
-                    if self.isDeleteButton {
-                        if let navigationController = self.navigationController {
-                            if let rootVC = navigationController.viewControllers.first {
-                                navigationController.setViewControllers([rootVC], animated: true)
-                            }
-                        }
-                    } else {
-                        super.didTapBackButton()
-                    }
-                } else {
-                    
-                }
-            }.store(in: &cancellable)
-        
-        
-        // MARK: - UI Bind
-        editViewModel.$star
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] value in
-                guard let self = self else { return }
-                self.satisfyingLabel.setSatisfyingLabelEdit(by: value)
-                self.setStarImage(Int(value))
-            }.store(in: &cancellable)
-        
-        editViewModel.$type
-            .receive(on: DispatchQueue.main)
-            .sink { _ in
-                self.activityType.text = self.editViewModel.type == "01" ? "지출" : "수입"
-                self.activityType.backgroundColor = self.editViewModel.type == "01" ? R.Color.orange500 : R.Color.blue500
-            }.store(in: &cancellable)
-        
-        editViewModel.$amount
-            .receive(on: DispatchQueue.main)
-            .sink { _ in
-                self.totalPrice.text = self.editViewModel.amount.withCommas() + "원"
-            }.store(in: &cancellable)
-        
-        editViewModel.isTitleVaild
-            .sinkOnMainThread(receiveValue: {
-                if !$0 {
-                    self.titleTextFeild.text?.removeLast()
-                }
-            }).store(in: &cancellable)
-        
-        editViewModel.$memo
-            .sinkOnMainThread { [weak self] text in
-                guard let self = self else { return }
-                if !text.isEmpty {
-                    self.memoTextView.textColor = R.Color.black
-                } else {
-                    self.memoTextView.text = textViewPlaceholder
-                    self.memoTextView.textColor = R.Color.gray400
-                }
-            }.store(in: &cancellable)
-        
-        titleTextFeild.textPublisher
-            .receive(on: RunLoop.main)
-            .assign(to: \.title, on: editViewModel)
-            .store(in: &cancellable)
-        
-        
-        // textfield가 없을 때 버튼 비활성화
-        titleTextFeild.textPublisher
-            .sinkOnMainThread { [weak self] text in
-                guard let self = self else { return }
-                if text.isEmpty {
-                    self.saveButton.isEnabled = false
-                    self.saveButton.setBackgroundColor(R.Color.gray400, for: .disabled)
-                } else {
-                    self.saveButton.isEnabled = true
-                    self.saveButton.setBackgroundColor(R.Color.gray800, for: .normal)
-                }
-            }.store(in: &cancellable)
-        
-        memoTextView.textPublisher
-            .sink { [weak self] ouput in
-                guard let self = self else { return }
-                // 0 : textViewDidChange
-                // 1 : textViewDidBeginEditing
-                // 2 : textViewDidEndEditing
-                switch ouput.1 {
-                case 0:
-                    self.textViewDidChange(text: ouput.0)
-                case 1:
-                    self.textViewDidBeginEditing()
-                case 2:
-                    self.textViewDidEndEditing()
-                default:
-                    print("unknown error")
-                }
-            }.store(in: &cancellable)
-        
-        cameraImageView.setData(viewModel: editViewModel)
-        editViewModel.$didTapAddButton
-            .sinkOnMainThread(receiveValue: { [weak self] in
-                guard let self = self else { return }
-                if $0 {
-                    self.editViewModel.requestPHPhotoLibraryAuthorization {
-                        DispatchQueue.main.async {
-                            self.didTapAlbumButton()
-                        }
-                    }
-                }
-            })
-            .store(in: &cancellable)
-        
-        // MARK: - Gesture Publisher
-        titleStackView.gesturePublisher()
-            .receive(on: DispatchQueue.main)
-            .sink { _ in
-                self.didTapDateTitle()
-            }.store(in: &cancellable)
-        
-        containerStackView.gesturePublisher()
-            .receive(on: DispatchQueue.main)
-            .sink { _ in
-                self.didTapMoneyLabel()
-            }.store(in: &cancellable)
-        
-        starStackView.gesturePublisher()
-            .receive(on: DispatchQueue.main)
-            .sink { _ in
-                self.didTapStarLabel()
-            }.store(in: &cancellable)
-        
-        satisfyingLabel.gesturePublisher()
-            .receive(on: DispatchQueue.main)
-            .sink { _ in
-                self.didTapStarLabel()
-            }.store(in: &cancellable)
-        
-        mainImageView.gesturePublisher()
-            .receive(on: DispatchQueue.main)
-            .sink { _ in
-                self.didTapImageView()
-            }.store(in: &cancellable)
-        
-        
-        // MARK: - CRUD Publisher
-        saveButton.tapPublisher
-            .sinkOnMainThread(receiveValue: didTapSaveButton)
-            .store(in: &cancellable)
-        
-        deleteButton.tapPublisher
-            .sinkOnMainThread(receiveValue: didTapDeleteButton)
-            .store(in: &cancellable)
-        
-        // Date Picker의 값을 받아옴
-        editViewModel.$date
-            .sinkOnMainThread(receiveValue: { [weak self] date in
-                guard let self = self else { return }
-                guard let date = date else { return }
-                // 날짜 변경 감지 및 변경된 날짜 캡처
-                self.detailViewModel.isDateChanged = true
-                self.detailViewModel.changedDate = date
-                self.date = date
-                self.titleText.text = self.navigationTitle
-                self.editViewModel.createAt = date.getFormattedDate(format: "yyyyMMdd")
-            }).store(in: &cancellable)
-    }
-    
-    private func setAttribute() {
+    override func setAttribute() {
+		super.setAttribute()
         self.hideKeyboardWhenTappedAround()
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -543,7 +539,8 @@ extension EditActivityViewController {
         setUIByViewModel()
     }
     
-    private func setLayout() {
+	override func setHierarchy() {
+		super.setHierarchy()
         containerStackView.addArrangedSubview(editIconImage)
     }
 }

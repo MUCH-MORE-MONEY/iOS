@@ -46,7 +46,6 @@ final class AddViewController: BaseViewControllerWithNav {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		setup()		// 초기 셋업할 코드들
 	}
 	
 	override func viewDidLayoutSubviews() {
@@ -121,7 +120,7 @@ extension AddViewController {
 		
 		priceView.snp.remakeConstraints {
 			$0.top.equalTo(dateButton.snp.bottom).offset(46)
-			$0.leading.trailing.equalToSuperview()
+			$0.leading.trailing.equalToSuperview().inset(24)
 			$0.height.equalTo(70)
 		}
 		
@@ -137,7 +136,7 @@ extension AddViewController {
 		
 		dateView.snp.remakeConstraints {
 			$0.top.equalTo(typeView.snp.bottom).offset(40)
-			$0.leading.trailing.equalToSuperview()
+			$0.leading.trailing.equalToSuperview().inset(24)
 			$0.height.equalTo(70)
 		}
 		
@@ -246,15 +245,8 @@ extension AddViewController {
 	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
-private extension AddViewController {
-	// 초기 셋업할 코드들
-	private func setup() {
-		bind()
-		setAttribute()
-		setLayout()
-	}
-	
-	private func bind() {
+extension AddViewController {
+	override func setBind() {
 		//MARK: input
 		view.gesturePublisher()
 			.sinkOnMainThread(receiveValue: { _ in
@@ -311,13 +303,14 @@ private extension AddViewController {
 			}).store(in: &cancellable)
 	}
 	
-	private func setAttribute() {
+	override func setAttribute() {
 		// [view]
 		view.backgroundColor = R.Color.gray900
 		navigationItem.title = "경제활동 추가"
 		
 		scrollView = scrollView.then {
 			$0.showsVerticalScrollIndicator = false
+			$0.isScrollEnabled = false
 		}
 		
 		contentView = contentView.then {
@@ -432,7 +425,7 @@ private extension AddViewController {
 		}
 	}
 	
-	private func setLayout() {
+	override func setLayout() {
 		view.addSubviews(scrollView, nextFirstButton, nextSecondButton)
 		scrollView.addSubview(contentView)
 		contentView.addSubviews(priceView, dateView, typeView)
@@ -443,8 +436,8 @@ private extension AddViewController {
 		
 		scrollView.snp.makeConstraints {
 			$0.top.equalTo(view.safeAreaLayoutGuide)
-			$0.leading.trailing.equalToSuperview().inset(24)
-			$0.bottom.equalTo(view.safeAreaLayoutGuide)
+			$0.leading.trailing.equalToSuperview()
+			$0.bottom.equalTo(view)
 		}
 		
 		contentView.snp.makeConstraints {
@@ -455,7 +448,7 @@ private extension AddViewController {
 		
 		priceView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(40)
-			$0.leading.trailing.equalToSuperview()
+			$0.leading.trailing.equalToSuperview().inset(24)
 			$0.bottom.lessThanOrEqualTo(nextFirstButton.snp.top).offset(16)
 			$0.height.equalTo(70)
 		}
@@ -477,7 +470,7 @@ private extension AddViewController {
 		
 		dateView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(40)
-			$0.leading.trailing.equalToSuperview()
+			$0.leading.trailing.equalToSuperview().inset(24)
 			$0.height.equalTo(70)
 		}
 		
@@ -493,7 +486,7 @@ private extension AddViewController {
 		
 		typeView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(40)
-			$0.leading.trailing.equalToSuperview()
+			$0.leading.trailing.equalToSuperview().inset(24)
 			$0.height.equalTo(70)
 		}
 		

@@ -37,7 +37,6 @@ class BaseAddActivityViewController: BaseDetailViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setup()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -48,12 +47,8 @@ class BaseAddActivityViewController: BaseDetailViewController {
 }
 //MARK: - Attribute & Hierarchy & Layouts
 extension BaseAddActivityViewController {
-    private func setup() {
-        setAttribute()
-        setLayout()
-    }
-    
-    private func setAttribute() {
+	override func setAttribute() {
+		super.setAttribute()
         // titleTextField 헤더뷰에 넣기
         
         view.addSubviews(titleTextFeild, scrollView, saveButton)
@@ -128,7 +123,8 @@ extension BaseAddActivityViewController {
         }
     }
     
-    private func setLayout() {
+	override func setLayout() {
+		super.setLayout()
         // FIXME: -title Text의 위치를 대충 잡아버림
         titleTextFeild.snp.makeConstraints {
             $0.left.right.equalToSuperview().inset(24)

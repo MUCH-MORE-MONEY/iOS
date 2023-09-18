@@ -15,7 +15,6 @@ final class CategoryViewController: BaseViewControllerWithNav, View {
 	typealias Reactor = CategoryReactor
 	
 	// MARK: - Properties
-	var disposeBag: DisposeBag = DisposeBag()
 	private lazy var currentPage: Int = 0 { // 현재 선택된 page (지출/수입)
 		didSet {
 			// from segmentedControl -> pageViewController 업데이트
@@ -36,7 +35,6 @@ final class CategoryViewController: BaseViewControllerWithNav, View {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		setup()		// 초기 셋업할 코드들
 	}
 	
 	func bind(reactor: CategoryReactor) {
@@ -71,14 +69,7 @@ extension CategoryViewController {
 }
 //MARK: - Attribute & Hierarchy & Layouts
 extension CategoryViewController {
-	// 초기 셋업할 코드들
-	private func setup() {
-		setAttribute()
-		setHierarchy()
-		setLayout()
-	}
-	
-	private func setAttribute() {
+	override func setAttribute() {
 		title = "카테고리"
 		view.backgroundColor = R.Color.gray900
 		navigationItem.rightBarButtonItem = UIBarButtonItem(customView: editButton)
@@ -113,11 +104,11 @@ extension CategoryViewController {
 		}
 	}
 	
-	private func setHierarchy() {
+	override func setHierarchy() {
 		view.addSubviews(segmentedControl, pageViewController.view)
 	}
 	
-	private func setLayout() {
+	override func setLayout() {
 		segmentedControl.snp.makeConstraints {
 			$0.top.equalToSuperview()
 			$0.leading.trailing.equalToSuperview().inset(24)

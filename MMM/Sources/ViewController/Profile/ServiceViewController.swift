@@ -19,21 +19,15 @@ final class ServiceViewController: BaseViewControllerWithNav {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-		setup()		// 초기 셋업할 코드들
     }
 }
 //MARK: - Attribute & Hierarchy & Layouts
-private extension ServiceViewController {
-	// 초기 셋업할 코드들
-    private func setup() {
-        setAttribute()
-        setLayout()
-    }
-    
-    private func setAttribute() {
+extension ServiceViewController {
+	override func setAttribute() {
 		// [view]
         navigationItem.title = "문의 및 서비스 약관"
-		
+		view.backgroundColor = R.Color.gray100
+
 		tableView = tableView.then {
 			$0.delegate = self
 			$0.dataSource = self
@@ -50,10 +44,12 @@ private extension ServiceViewController {
 			$0.textColor = R.Color.gray900
 		}
     }
-    
-    private func setLayout() {
+	
+	override func setHierarchy() {
 		view.addSubviews(mainLabel, tableView)
-		
+	}
+    
+    override func setLayout() {
         mainLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(24)
             $0.left.right.equalToSuperview().inset(24)

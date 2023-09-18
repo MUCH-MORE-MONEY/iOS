@@ -10,7 +10,7 @@ import Combine
 import Then
 import SnapKit
 
-final class EditPriceViewController: UIViewController {
+final class EditPriceViewController: BaseViewController {
 	// MARK: - Properties
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 	private let viewModel = PriceViewModel()
@@ -41,7 +41,6 @@ final class EditPriceViewController: UIViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		setup()		// 초기 셋업할 코드들
 	}
 
 	override func viewDidLayoutSubviews() {
@@ -108,15 +107,10 @@ extension EditPriceViewController {
 	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
-private extension EditPriceViewController {
-	// 초기 셋업할 코드들
-	func setup() {
-		bind()
-		setAttribute()
-		setLayout()
-	}
-	
-	private func bind() {
+extension EditPriceViewController {
+	override func setBind() {
+		super.setBind()
+		
 		//MARK: input
 		checkButton.tapPublisher
 			.sinkOnMainThread(receiveValue: willDismiss)
@@ -141,7 +135,8 @@ private extension EditPriceViewController {
 			.store(in: &cancellable)
 	}
 	
-	private func setAttribute() {
+	override func setAttribute() {
+		super.setAttribute()
 		// [view]
 		view.backgroundColor = R.Color.white
 		
@@ -218,10 +213,15 @@ private extension EditPriceViewController {
 		didTogglePriceTypeButton(editViewModel.type == "01" ? 0 : 1)
 	}
 	
-	private func setLayout() {
+	override func setHierarchy() {
+		super.setHierarchy()
 		view.addSubviews(stackView, priceTextField, warningLabel, buttonStackView)
 		stackView.addArrangedSubviews(titleLabel, checkButton)
 		buttonStackView.addArrangedSubviews(earnButton, payButton)
+	}
+	
+	override func setLayout() {
+		super.setLayout()
 		
 		stackView.snp.makeConstraints {
 			$0.top.equalToSuperview()

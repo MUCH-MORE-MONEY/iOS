@@ -12,7 +12,6 @@ import SnapKit
 final class ManagementViewController: BaseViewControllerWithNav {
 	// MARK: - Properties
 	private let viewModel: ProfileViewModel
-	private lazy var showWithdraw: Bool = false
 
 	// MARK: - UI components
 	private lazy var baseView = UIView()
@@ -57,14 +56,8 @@ extension ManagementViewController: CustomAlertDelegate {
 	func didAlertCacelButton() { }
 }
 //MARK: - Attribute & Hierarchy & Layouts
-private extension ManagementViewController {
-	// 초기 셋업할 코드들
-	private func setup() {
-		setAttribute()
-		setLayout()
-	}
-	
-	private func setAttribute() {
+extension ManagementViewController {
+	override func setAttribute() {
 		// [view]
 		view.backgroundColor = R.Color.gray100
 		navigationItem.title = "계정관리"
@@ -103,7 +96,7 @@ private extension ManagementViewController {
 		}
 	}
 	
-	private func setLayout() {
+	override func setLayout() {
 		view.addSubviews(baseView, tableView)
 		baseView.addSubviews(userInfoLabel, emailLabel, userEmailLabel, userLoginLabel)
 
@@ -166,7 +159,6 @@ extension ManagementViewController: UITableViewDataSource {
 		return cell
 	}
 }
-
 // MARK: - UITableView Delegate
 extension ManagementViewController: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -178,7 +170,6 @@ extension ManagementViewController: UITableViewDelegate {
 			showAlert(alertType: .canCancel, titleText: "로그아웃 하시겠어요?", contentText: "로그아웃해도 해당 계정의 데이터는 \n 계속 저장되어 있습니다.", cancelButtonText: "취소하기", confirmButtonText: "로그아웃")
 		case 1:
 			let vs = WithdrawViewController(viewModel: viewModel)
-			showWithdraw = true
 			navigationController?.pushViewController(vs, animated: true)		// 계정관리
 		default:
 			break

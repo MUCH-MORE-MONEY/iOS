@@ -40,7 +40,6 @@ final class HomeFilterViewController: BaseViewControllerWithNav {
 	
     override func viewDidLoad() {
         super.viewDidLoad()
-		setup()		// 초기 셋업할 코드들
     }
 	
 	override func viewWillDisappear(_ animated: Bool) {
@@ -78,15 +77,8 @@ private extension HomeFilterViewController {
 	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
-private extension HomeFilterViewController {
-	// 초기 셋업할 코드들
-	private func setup() {
-		bind()
-		setAttribute()
-		setLayout()
-	}
-	
-	private func bind() {
+extension HomeFilterViewController {
+	override func setBind() {
 		//MARK: input
 		highlightSwitch.statePublisher
 			.sinkOnMainThread(receiveValue: toggleHighlightSwitch)
@@ -116,7 +108,7 @@ private extension HomeFilterViewController {
 			}).store(in: &cancellable)
 	}
 	
-	private func setAttribute() {
+	override func setAttribute() {
 		// [view]
 		view.backgroundColor = R.Color.gray100
 		title = "달력 관리"
@@ -178,7 +170,7 @@ private extension HomeFilterViewController {
 		}
 	}
 	
-	private func setLayout() {
+	override func setLayout() {
 		view.addSubviews(highlightLabel, highlightSwitch, highlightDescriptionLabel, earnView, payView, dailyTotalLabel, dailyTotalSwitch, dailyTotalDescriptionLabel)
 		
 		highlightLabel.snp.makeConstraints {

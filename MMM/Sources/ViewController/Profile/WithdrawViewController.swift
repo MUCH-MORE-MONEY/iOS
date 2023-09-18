@@ -43,7 +43,6 @@ final class WithdrawViewController: BaseViewControllerWithNav {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		setup()		// 초기 셋업할 코드들
 	}
 	
 	override func viewWillDisappear(_ animated: Bool) {
@@ -126,15 +125,9 @@ extension WithdrawViewController: CustomAlertDelegate {
 }
 //MARK: - Attribute & Hierarchy & Layouts
 extension WithdrawViewController {
-	// 초기 셋업할 코드들
-	private func setup() {
-		bind()
-		fetch()
-		setAttribute()
-		setLayout()
-	}
-	
-	private func bind() {
+	override func setBind() {
+		viewModel.getSummary() // 경제활동 요약
+
 		//MARK: input
 		confirmButton.tapPublisher
 			.sinkOnMainThread(receiveValue: didTapConfirmButton)
@@ -191,11 +184,7 @@ extension WithdrawViewController {
                 } // 네트워크 에러 발생
 			}).store(in: &cancellable)
 	}
-	
-	private func fetch() {
-		viewModel.getSummary() // 경제활동 요약
-	}
-	
+
 	private func setMutiText(isMoney: Bool, first: String, count: Int, second: String) -> NSMutableAttributedString {
 		let attributedText1 = NSMutableAttributedString(string: first)
 		
@@ -226,7 +215,7 @@ extension WithdrawViewController {
 		return attributedText1
 	}
 	
-	private func setAttribute() {
+	override func setAttribute() {
 		// [view]
 		view.backgroundColor = R.Color.gray100
 		navigationItem.title = "회원탈퇴"
@@ -300,12 +289,14 @@ extension WithdrawViewController {
 		}
 	}
 	
-	private func setLayout() {
+	override func setHierarchy() {
 		view.addSubviews(reconfirmLabel, defaultLabel, economicLabel, moneyLabel, containView, confirmStackView, withdrawButton)
 		containView.addSubviews(containerStackView)
 		containerStackView.addArrangedSubviews(checkLabel, firstComfirm, secondComfirm)
 		confirmStackView.addArrangedSubviews(confirmButton, confirmLabel)
-		
+	}
+	
+	override func setLayout() {
 		reconfirmLabel.snp.makeConstraints {
 			$0.top.equalTo(view.safeAreaLayoutGuide).inset(32)
 			$0.left.equalTo(view.safeAreaLayoutGuide).inset(24)

@@ -24,7 +24,6 @@ final class DataExportViewController: BaseViewControllerWithNav {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		setup()		// 초기 셋업할 코드들
 	}
 }
 // MARK: - Action
@@ -67,15 +66,8 @@ private extension DataExportViewController {
 //	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
-private extension DataExportViewController {
-	// 초기 셋업할 코드들
-    private func setup() {
-		bind()
-        setAttribute()
-        setLayout()
-    }
-	
-	private func bind() {
+extension DataExportViewController {
+	override func setBind() {
 		//MARK: input
 		exportButton.tapPublisher
 			.sinkOnMainThread(receiveValue: {
@@ -116,7 +108,7 @@ private extension DataExportViewController {
 			}).store(in: &cancellable)
 	}
     
-    private func setAttribute() {
+	override func setAttribute() {
 		// [view]
 		view.backgroundColor = R.Color.gray100
         navigationItem.title = "데이터 내보내기"
@@ -147,7 +139,7 @@ private extension DataExportViewController {
 		}
     }
     
-    private func setLayout() {
+	override func setLayout() {
 		view.addSubviews(mainLabel, subLabel, exportButton)
 
         mainLabel.snp.makeConstraints {

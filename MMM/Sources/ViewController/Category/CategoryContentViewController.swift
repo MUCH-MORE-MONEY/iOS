@@ -61,40 +61,6 @@ final class CategoryContentViewController: BaseViewController, View {
 		bindAction(reactor)
 	}
 }
-//MARK: - Action
-extension CategoryContentViewController {
-	// Section별 Cell Layout
-	func makeLayout(sections: [CategorySectionModel]) -> UICollectionViewCompositionalLayout {
-		let layout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, _ in
-			switch sections[sectionIndex].model {
-			case let .base(items):
-				return self?.makeCategorySectionLayout(from: items)
-			}
-		}
-		
-		return layout
-	}
-	
-	func makeCategorySectionLayout(from items: [CategoryItem]) -> NSCollectionLayoutSection {
-		var layoutItems: [NSCollectionLayoutItem] = []
-		
-		items.forEach({ item in
-			switch item {
-			case .base:
-				layoutItems.append(.init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(120))))
-			}
-		})
-		
-		let layoutGroup = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100)), subitems: layoutItems)
-		layoutGroup.interItemSpacing = .fixed(20)
-		layoutGroup.contentInsets = .init(top: 0, leading: 24, bottom: 0, trailing: 24)
-		
-		let layoutSection: NSCollectionLayoutSection = .init(group: layoutGroup)
-		layoutSection.boundarySupplementaryItems = [.init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)]
-		
-		return layoutSection
-	}
-}
 //MARK: - Bind
 extension CategoryContentViewController {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
@@ -130,6 +96,40 @@ extension CategoryContentViewController {
 				this.collectionView.reloadData()
 			})
 			.disposed(by: disposeBag)
+	}
+}
+//MARK: - Action
+extension CategoryContentViewController {
+	// Section별 Cell Layout
+	func makeLayout(sections: [CategorySectionModel]) -> UICollectionViewCompositionalLayout {
+		let layout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, _ in
+			switch sections[sectionIndex].model {
+			case let .base(items):
+				return self?.makeCategorySectionLayout(from: items)
+			}
+		}
+		
+		return layout
+	}
+	
+	func makeCategorySectionLayout(from items: [CategoryItem]) -> NSCollectionLayoutSection {
+		var layoutItems: [NSCollectionLayoutItem] = []
+		
+		items.forEach({ item in
+			switch item {
+			case .base:
+				layoutItems.append(.init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(120))))
+			}
+		})
+		
+		let layoutGroup = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100)), subitems: layoutItems)
+		layoutGroup.interItemSpacing = .fixed(20)
+		layoutGroup.contentInsets = .init(top: 0, leading: 24, bottom: 0, trailing: 24)
+		
+		let layoutSection: NSCollectionLayoutSection = .init(group: layoutGroup)
+		layoutSection.boundarySupplementaryItems = [.init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)]
+		
+		return layoutSection
 	}
 }
 //MARK: - Attribute & Hierarchy & Layouts

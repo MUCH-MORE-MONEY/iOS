@@ -19,6 +19,9 @@ enum MMMAPI {
 	
 	// MARK: - Staticstics Category
 	case getCategory(CategoryReqDto)
+	
+	// MARK: - Profile
+	case exportToExcel
 }
 
 extension MMMAPI: BaseNetworkService {
@@ -39,6 +42,8 @@ extension MMMAPI: BaseNetworkService {
             return "/push/agree/update"
 		case .getCategory(let request):
 			return "/economic-activity-category/list/\(request.economicActivityDvcd)"
+		case .exportToExcel:
+			return "/economic_activity/excel/select"
 		}
     }
     
@@ -49,6 +54,8 @@ extension MMMAPI: BaseNetworkService {
             return .post
 		case .getCategory:
 			return .get
+		case .exportToExcel:
+			return .post
 		}
     }
     
@@ -68,6 +75,9 @@ extension MMMAPI: BaseNetworkService {
             return .requestParameters(parameters: request.asDictionary, encoding: JSONEncoding.default)
             
 		case .getCategory:
+			return .requestPlain
+			
+		case .exportToExcel:
 			return .requestPlain
 		}
     }

@@ -56,11 +56,14 @@ protocol MMMAPIServiceble: BaseAPIService {
     
 	// MARK: - Staticstics Category 요청 API
 	func getCategory(_ request: CategoryReqDto) -> Observable<(CategoryResDto, Error?)>
+	
+	// MARK: - Profile 요청 API
+	func exportToExcel() -> Observable<(ExportResDto, Error?)>
 }
 
 // MARK:
 struct MMMAPIService: MMMAPIServiceble {
-
+	
     typealias APIType = MMMAPI
     
     func provider() -> Moya.MoyaProvider<MMMAPI> {
@@ -83,6 +86,11 @@ struct MMMAPIService: MMMAPIServiceble {
 	// MARK: - Staticstics Category 요청 API
 	func getCategory(_ request: CategoryReqDto) -> RxSwift.Observable<(CategoryResDto, Error?)> {
 		return provider().request(MMMAPI.getCategory(request), type: CategoryResDto.self).asObservable()
+	}
+	
+	// MARK: - Profile 요청 API
+	func exportToExcel() -> RxSwift.Observable<(ExportResDto, Error?)> {
+		return provider().request(MMMAPI.exportToExcel, type: ExportResDto.self).asObservable()
 	}
 }
 

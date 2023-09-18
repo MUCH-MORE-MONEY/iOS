@@ -8,22 +8,19 @@
 import Then
 import SnapKit
 
-final class ProfileTableViewCell: UITableViewCell {
+// 상속하지 않으려면 final 꼭 붙이기
+final class ProfileTableViewCell: BaseTableViewCell {
+	// MARK: - Constants
+	private enum UI {
+		static let contentMargin: UIEdgeInsets = .init(top: 0, left: 24, bottom: 0, right: 24)
+		static let separatorMargin: UIEdgeInsets = .init(top: 0, left: 20, bottom: 0, right: 20)
+		static let separatorHeight: CGFloat = 1
+	}
+	
 	// MARK: - UI Components
 	private lazy var contentLabel = UILabel()
 	private lazy var navImage = UIImageView()
 	private lazy var separator = UIView()
-
-	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-		super.init(style: style, reuseIdentifier: reuseIdentifier)
-		setup()		// 초기 셋업할 코드들
-	}
-	
-	// Compile time에 error를 발생시키는 코드
-	@available(*, unavailable)
-	required init(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
 }
 //MARK: - Action
 extension ProfileTableViewCell {
@@ -36,19 +33,16 @@ extension ProfileTableViewCell {
 		}
 	}
 	
+	// Dummy Cell에 필요
 	func isNavigationHidden() {
 		navImage.isHidden = true
 	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
-private extension ProfileTableViewCell {
+extension ProfileTableViewCell {
 	// 초기 셋업할 코드들
-	private func setup() {
-		setAttribute()
-		setLayout()
-	}
-	
-	private func setAttribute() {
+	override func setAttribute() {
+		super.setAttribute()
 		
 		contentLabel = contentLabel.then {
 			$0.font = R.Font.body2
@@ -67,24 +61,30 @@ private extension ProfileTableViewCell {
 		}
 	}
 	
-	private func setLayout() {
+	override func setHierarchy() {
+		super.setHierarchy()
+		
 		addSubviews(contentLabel, navImage, separator)
+	}
+	
+	override func setLayout() {
+		super.setLayout()
 		
 		contentLabel.snp.makeConstraints {
-			$0.leading.equalToSuperview().inset(28)
+			$0.leading.equalToSuperview().inset(UI.contentMargin.left)
 			$0.trailing.lessThanOrEqualTo(navImage.snp.leading)
 			$0.centerY.equalToSuperview()
 		}
 		
 		navImage.snp.makeConstraints {
-			$0.trailing.equalToSuperview().inset(28)
+			$0.trailing.equalToSuperview().inset(UI.contentMargin.right)
 			$0.centerY.equalToSuperview()
 		}
 		
 		separator.snp.makeConstraints {
-			$0.leading.trailing.equalToSuperview().inset(20)
+			$0.leading.trailing.equalToSuperview().inset(UI.separatorMargin.left)
 			$0.bottom.equalToSuperview()
-			$0.height.equalTo(1)
+			$0.height.equalTo(UI.separatorHeight)
 		}
 	}
 }

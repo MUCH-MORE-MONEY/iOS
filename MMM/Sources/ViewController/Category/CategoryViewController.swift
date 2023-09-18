@@ -13,6 +13,10 @@ import ReactorKit
 
 final class CategoryViewController: BaseViewControllerWithNav, View {
 	typealias Reactor = CategoryReactor
+	// MARK: - Constants
+	private enum UI {
+		static let priceLabelTopMargin: CGFloat = 8
+	}
 	
 	// MARK: - Properties
 	private lazy var currentPage: Int = 0 { // 현재 선택된 page (지출/수입)
@@ -51,7 +55,7 @@ extension CategoryViewController {
 	private func bindAction(_ reactor: CategoryReactor) {
 		editButton.rx.tap
 			.subscribe(onNext: { [weak self] _ in
-				guard let self = self else { return }
+//				guard let self = self else { return }
 				
 			}).disposed(by: disposeBag)
 		
@@ -70,6 +74,8 @@ extension CategoryViewController {
 //MARK: - Attribute & Hierarchy & Layouts
 extension CategoryViewController {
 	override func setAttribute() {
+		super.setAttribute()
+		
 		title = "카테고리"
 		view.backgroundColor = R.Color.gray900
 		navigationItem.rightBarButtonItem = UIBarButtonItem(customView: editButton)
@@ -106,14 +112,18 @@ extension CategoryViewController {
 	}
 	
 	override func setHierarchy() {
+		super.setHierarchy()
+		
 		view.addSubviews(segmentedControl, pageViewController.view)
 	}
 	
 	override func setLayout() {
+		super.setLayout()
+		
 		segmentedControl.snp.makeConstraints {
 			$0.top.equalToSuperview()
 			$0.leading.trailing.equalToSuperview()
-			$0.height.equalTo(50)
+			$0.height.equalTo(UI.priceLabelTopMargin)
 		}
 		
 		pageViewController.view.snp.makeConstraints {

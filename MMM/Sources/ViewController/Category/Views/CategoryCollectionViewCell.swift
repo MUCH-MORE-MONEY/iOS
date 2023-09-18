@@ -10,6 +10,10 @@ import ReactorKit
 
 final class CategoryCollectionViewCell: BaseCollectionViewCell, View {
 	typealias Reactor = CategoryCollectionViewCellReactor
+	// MARK: - Constants
+	private enum UI {
+		static let segmentedControlHeight: CGFloat = 8
+	}
 	
 	// MARK: - UI Components
 	private lazy var titleLabel = UILabel()
@@ -77,7 +81,7 @@ extension CategoryCollectionViewCell {
 		}
 		
 		priceLabel.snp.makeConstraints {
-			$0.top.equalTo(titleLabel.snp.bottom).offset(8)
+			$0.top.equalTo(titleLabel.snp.bottom).offset(UI.priceLabelTopMargin)
 			$0.leading.equalToSuperview()
 		}
 	}

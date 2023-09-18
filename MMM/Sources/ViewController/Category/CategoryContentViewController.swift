@@ -12,7 +12,7 @@ import RxCocoa
 import ReactorKit
 import RxDataSources
 
-final class CategoryContentViewController: UIViewController, View {
+final class CategoryContentViewController: BaseViewController, View {
 	typealias Reactor = CategoryReactor
 	typealias DataSource = RxCollectionViewSectionedReloadDataSource<CategorySectionModel> // SectionModelType 채택
 	
@@ -27,7 +27,6 @@ final class CategoryContentViewController: UIViewController, View {
 	}
 	
 	// MARK: - Properties
-	var disposeBag: DisposeBag = DisposeBag()
 	private lazy var dataSource = DataSource { [weak self] _, collectionView, indexPath, item -> UICollectionViewCell in
 		guard let reactor = self?.reactor else { return .init() }
 		
@@ -55,7 +54,6 @@ final class CategoryContentViewController: UIViewController, View {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-		setup()		// 초기 셋업할 코드들
     }
     
 	func bind(reactor: CategoryReactor) {
@@ -65,6 +63,7 @@ final class CategoryContentViewController: UIViewController, View {
 }
 //MARK: - Action
 extension CategoryContentViewController {
+	// Section별 Cell Layout
 	func makeLayout(sections: [CategorySectionModel]) -> UICollectionViewCompositionalLayout {
 		let layout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, _ in
 			switch sections[sectionIndex].model {
@@ -135,14 +134,9 @@ extension CategoryContentViewController {
 }
 //MARK: - Attribute & Hierarchy & Layouts
 extension CategoryContentViewController {
-	// 초기 셋업할 코드들
-	private func setup() {
-		setAttribute()
-		setHierarchy()
-		setLayout()
-	}
-	
-	private func setAttribute() {
+	override func setAttribute() {
+		super.setAttribute()
+		
 		view.backgroundColor = R.Color.gray900
 
 		refreshControl = refreshControl.then {
@@ -158,11 +152,15 @@ extension CategoryContentViewController {
 		}
 	}
 	
-	private func setHierarchy() {
+	override func setHierarchy() {
+		super.setHierarchy()
+		
 		view.addSubviews(collectionView)
 	}
 	
-	private func setLayout() {
+	override func setLayout() {
+		super.setLayout()
+		
 		collectionView.snp.makeConstraints {
 			$0.top.leading.trailing.bottom.equalToSuperview()
 		}

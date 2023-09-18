@@ -34,9 +34,6 @@ final class CategoryCollectionViewCell: BaseCollectionViewCell, View {
 		bindAction(reactor)
 	}
 }
-//MARK: - Action
-extension CategoryCollectionViewCell {
-}
 //MARK: - Bind
 extension CategoryCollectionViewCell {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
@@ -48,6 +45,9 @@ extension CategoryCollectionViewCell {
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: CategoryCollectionViewCellReactor) {
 	}
+}
+//MARK: - Action
+extension CategoryCollectionViewCell {
 }
 //MARK: - Attribute & Hierarchy & Layouts
 extension CategoryCollectionViewCell {

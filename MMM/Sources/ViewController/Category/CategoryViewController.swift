@@ -46,17 +46,13 @@ final class CategoryViewController: BaseViewControllerWithNav, View {
 		bindAction(reactor)
 	}
 }
-//MARK: - Action
-extension CategoryViewController {
-}
 //MARK: - Bind
 extension CategoryViewController {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
 	private func bindAction(_ reactor: CategoryReactor) {
 		editButton.rx.tap
-			.subscribe(onNext: { [weak self] _ in
+			.subscribe(onNext: {
 //				guard let self = self else { return }
-				
 			}).disposed(by: disposeBag)
 		
 		segmentedControl.rx.selectedSegmentIndex
@@ -70,6 +66,9 @@ extension CategoryViewController {
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: CategoryReactor) {
 	}
+}
+//MARK: - Action
+extension CategoryViewController {
 }
 //MARK: - Attribute & Hierarchy & Layouts
 extension CategoryViewController {

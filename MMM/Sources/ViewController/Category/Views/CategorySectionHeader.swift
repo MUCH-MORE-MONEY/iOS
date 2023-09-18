@@ -14,9 +14,6 @@ final class CategorySectionHeader: BaseCollectionReusableView {
 	private lazy var priceLabel = UILabel()
 	private lazy var typeImageView = UIImageView()
 }
-//MARK: - Action
-extension CategorySectionHeader {
-}
 //MARK: - Bind
 extension CategorySectionHeader {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
@@ -26,6 +23,9 @@ extension CategorySectionHeader {
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: CategoryReactor) {
 	}
+}
+//MARK: - Action
+extension CategorySectionHeader {
 }
 //MARK: - Attribute & Hierarchy & Layouts
 extension CategorySectionHeader {

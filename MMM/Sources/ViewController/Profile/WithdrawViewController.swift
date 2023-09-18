@@ -11,14 +11,14 @@ import SnapKit
 import RxCocoa
 import ReactorKit
 
+// 상속하지 않으려면 final 꼭 붙이기
 final class WithdrawViewController: BaseViewControllerWithNav, View {
 	typealias Reactor = WithdrawReactor
 
 	// MARK: - Constants
 	private enum UI {
-		static let mainLabelMargin: UIEdgeInsets = .init(top: 24, left: 24, bottom: 0, right: 24)
-		static let tableViewMargin: UIEdgeInsets = .init(top: 28, left: 0, bottom: 0, right: 0)
-		static let cellHeight: CGFloat = 44
+		static let contentMargin: UIEdgeInsets = .init(top: 0, left: 24, bottom: 0, right: 24)
+		static let reconfirmLabelMargin: UIEdgeInsets = .init(top: 32, left: 24, bottom: 0, right: 24)
 	}
 	
 	// MARK: - Properties
@@ -297,28 +297,28 @@ extension WithdrawViewController {
 		super.setLayout()
 		
 		reconfirmLabel.snp.makeConstraints {
-			$0.top.equalTo(view.safeAreaLayoutGuide).inset(32)
-			$0.left.equalTo(view.safeAreaLayoutGuide).inset(24)
+			$0.top.equalTo(view.safeAreaLayoutGuide).inset(UI.reconfirmLabelMargin.top)
+			$0.leading.equalTo(view.safeAreaLayoutGuide).inset(UI.contentMargin.left)
 		}
 		
 		defaultLabel.snp.makeConstraints {
 			$0.top.equalTo(reconfirmLabel.snp.bottom).offset(12)
-			$0.left.equalTo(view.safeAreaLayoutGuide).inset(24)
+			$0.leading.equalTo(view.safeAreaLayoutGuide).inset(UI.contentMargin.left)
 		}
 		
 		economicLabel.snp.makeConstraints {
 			$0.top.equalTo(defaultLabel.snp.bottom).offset(8)
-			$0.left.equalTo(view.safeAreaLayoutGuide).inset(24)
+			$0.leading.equalTo(view.safeAreaLayoutGuide).inset(UI.contentMargin.left)
 		}
 		
 		moneyLabel.snp.makeConstraints {
 			$0.top.equalTo(economicLabel.snp.bottom).offset(8)
-			$0.left.equalTo(view.safeAreaLayoutGuide).inset(24)
+			$0.leading.equalTo(view.safeAreaLayoutGuide).inset(UI.contentMargin.left)
 		}
 		
 		containView.snp.makeConstraints {
 			$0.top.greaterThanOrEqualTo(moneyLabel.snp.bottom).offset(24)
-			$0.left.right.equalToSuperview().inset(24)
+			$0.leading.trailing.equalToSuperview().inset(UI.contentMargin.left)
 		}
 		
 		containerStackView.snp.makeConstraints {
@@ -343,7 +343,7 @@ extension WithdrawViewController {
 		}
 		
 		withdrawButton.snp.makeConstraints {
-			$0.left.right.equalToSuperview().inset(24)
+			$0.leading.trailing.equalToSuperview().inset(UI.contentMargin.left)
 			$0.bottom.equalToSuperview().inset(58)
 			$0.height.equalTo(56)
 		}

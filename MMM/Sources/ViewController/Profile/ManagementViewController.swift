@@ -13,6 +13,17 @@ import ReactorKit
 final class ManagementViewController: BaseViewControllerWithNav, View {
 	typealias Reactor = ProfileReactor
 
+	// MARK: - Constants
+	private enum UI {
+		static let baseViewMargin: UIEdgeInsets = .init(top: 24, left: 24, bottom: 0, right: 24)
+		static let emailLabelMargin: UIEdgeInsets = .init(top: 16, left: 0, bottom: 0, right: 0)
+		static let userEmailLabelMargin: UIEdgeInsets = .init(top: 16, left: 12, bottom: 0, right: 0)
+		static let userLoginLabelMargin: UIEdgeInsets = .init(top: 48, left: 0, bottom: 0, right: 0)
+		static let tableViewMargin: UIEdgeInsets = .init(top: 16, left: 0, bottom: 0, right: 0)
+		static let tableViewHeight: CGFloat = 88
+		static let cellHeight: CGFloat = 44
+	}
+	
 	// MARK: - Properties
 	private let email: String
 	
@@ -69,6 +80,7 @@ extension ManagementViewController: CustomAlertDelegate {
 }
 //MARK: - Attribute & Hierarchy & Layouts
 extension ManagementViewController {
+	// 초기 셋업할 코드들
 	override func setAttribute() {
 		// [view]
 		view.backgroundColor = R.Color.gray100
@@ -109,38 +121,42 @@ extension ManagementViewController {
 		}
 	}
 	
-	override func setLayout() {
+	override func setHierarchy() {
+		super.setHierarchy()
+		
 		view.addSubviews(baseView, tableView)
 		baseView.addSubviews(userInfoLabel, emailLabel, userEmailLabel, userLoginLabel)
-
+	}
+	
+	override func setLayout() {
 		baseView.snp.makeConstraints {
-			$0.top.equalTo(view.safeAreaLayoutGuide).inset(24)
-			$0.right.left.equalToSuperview().inset(24)
+			$0.top.equalTo(view.safeAreaLayoutGuide).inset(UI.baseViewMargin.top)
+			$0.leading.trailing.equalToSuperview().inset(UI.baseViewMargin.left)
 		}
 		
 		userInfoLabel.snp.makeConstraints {
-			$0.left.top.equalToSuperview()
+			$0.leading.top.equalToSuperview()
 		}
 		
 		emailLabel.snp.makeConstraints {
-			$0.left.equalToSuperview()
-			$0.top.equalTo(userInfoLabel.snp.bottom).offset(16)
+			$0.top.equalTo(userInfoLabel.snp.bottom).offset(UI.emailLabelMargin.top)
+			$0.leading.equalToSuperview()
 		}
 		
 		userEmailLabel.snp.makeConstraints {
-			$0.top.equalTo(userInfoLabel.snp.bottom).offset(16)
-			$0.left.equalTo(emailLabel.snp.right).offset(12)
+			$0.top.equalTo(userInfoLabel.snp.bottom).offset(UI.userEmailLabelMargin.top)
+			$0.leading.equalTo(emailLabel.snp.trailing).offset(UI.userEmailLabelMargin.left)
 		}
 		
 		userLoginLabel.snp.makeConstraints {
 			$0.left.equalToSuperview()
-			$0.top.equalTo(emailLabel.snp.bottom).offset(48)
+			$0.top.equalTo(emailLabel.snp.bottom).offset(UI.userLoginLabelMargin.top)
 		}
 		
 		tableView.snp.makeConstraints {
-			$0.top.equalTo(userLoginLabel.snp.bottom).offset(16)
-			$0.left.right.equalToSuperview()
-			$0.height.equalTo(88)
+			$0.top.equalTo(userLoginLabel.snp.bottom).offset(UI.tableViewMargin.top)
+			$0.leading.trailing.equalToSuperview()
+			$0.height.equalTo(UI.tableViewHeight)
 		}
 	}
 }
@@ -148,7 +164,7 @@ extension ManagementViewController {
 extension ManagementViewController: UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		return 44
+		return UI.cellHeight
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

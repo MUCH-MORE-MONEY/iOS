@@ -31,6 +31,8 @@ final class ServiceViewController: BaseViewControllerWithNav {
 //MARK: - Attribute & Hierarchy & Layouts
 extension ServiceViewController {
 	override func setAttribute() {
+		super.setAttribute()
+		
 		// [view]
         navigationItem.title = "문의 및 서비스 약관"
 		view.backgroundColor = R.Color.gray100
@@ -53,19 +55,23 @@ extension ServiceViewController {
     }
 	
 	override func setHierarchy() {
+		super.setHierarchy()
+		
 		view.addSubviews(mainLabel, tableView)
 	}
     
     override func setLayout() {
+		super.setLayout()
+		
         mainLabel.snp.makeConstraints {
 			$0.top.equalToSuperview().offset(UI.mainLabelMargin.top)
-			$0.left.right.equalToSuperview().inset(UI.mainLabelMargin.left)
+			$0.leading.trailing.equalToSuperview().inset(UI.mainLabelMargin.left)
         }
         
         tableView.snp.makeConstraints {
             // tableView 마진값이 피그마에 재대로 안나와 있음
 			$0.top.equalTo(mainLabel.snp.bottom).offset(UI.tableViewMargin.top)
-            $0.left.right.bottom.equalToSuperview()
+            $0.leading.trailing.bottom.equalToSuperview()
         }
     }
 }

@@ -184,11 +184,11 @@ extension DataExportViewController {
             
         subLabel.snp.makeConstraints {
 			$0.top.equalTo(mainLabel.snp.bottom).offset(UI.subLabelMargin.top)
-			$0.left.right.equalToSuperview().inset(UI.subLabelMargin.left)
+			$0.leading.trailing.equalToSuperview().inset(UI.subLabelMargin.left)
         }
         
         exportButton.snp.makeConstraints {
-			$0.left.right.equalToSuperview().inset(UI.exportButtonMargin.left)
+			$0.leading.trailing.equalToSuperview().inset(UI.exportButtonMargin.left)
 			$0.bottom.equalToSuperview().inset(UI.exportButtonMargin.bottom)
 			$0.height.equalTo(UI.exportButtonHeight)
         }

@@ -72,7 +72,9 @@ private extension StatisticsHeaderView {
 	
 	private func setAttribute() {
 		rangeLabel = rangeLabel.then {
-			$0.text = "08.01 ~ 08.17"
+			let month = Date().getFormattedDate(format: "MM") // 이번달
+			let today = Date().getFormattedDate(format: "dd") // 오늘날짜
+			$0.text = "\(month).01 ~ \(month).\(today)"
 			$0.font = R.Font.prtendard(family: .medium, size: 12)
 			$0.textColor = R.Color.gray500
 		}

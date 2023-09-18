@@ -137,7 +137,7 @@ extension StatisticsViewController {
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
 	}
 	
-	/// '월'  변경
+	/// '월'  및 범위 변경
 	private func setMonth(_ date: Date) {
 		// 올해인지 판별
 		if Date().getFormattedDate(format: "yyyy") != date.getFormattedDate(format: "yyyy") {
@@ -146,6 +146,16 @@ extension StatisticsViewController {
 			monthButton.setTitle(date.getFormattedDate(format: "M월"), for: .normal)
 		}
 		
+		// 범위 변경
+		let month = date.getFormattedDate(format: "MM")
+		var end = date.lastDay() ?? "01"
+		
+		// 이번달 인지 판별
+		if date.getFormattedYM() == Date().getFormattedYM() {
+			end = Date().getFormattedDate(format: "dd")
+		}
+		
+		self.headerView.setData(startDate: "\(month).01", endDate: "\(month).\(end)")
 		self.month = date
 	}
 	

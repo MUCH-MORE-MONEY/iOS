@@ -82,9 +82,10 @@ extension CategoryViewController {
 		}
 		
 		segmentedControl = segmentedControl.then {
+			$0.backgroundColor = R.Color.gray900
 			$0.selectedSegmentIndex = 0
 			$0.translatesAutoresizingMaskIntoConstraints = true
-			$0.setTitleTextAttributes([.foregroundColor: R.Color.gray600, .font: R.Font.title1], for: .normal)
+			$0.setTitleTextAttributes([.foregroundColor: R.Color.gray500, .font: R.Font.title1], for: .normal)
 			$0.setTitleTextAttributes([.foregroundColor: R.Color.white, .font: R.Font.title1], for: .selected)
 		}
 		
@@ -111,7 +112,7 @@ extension CategoryViewController {
 	override func setLayout() {
 		segmentedControl.snp.makeConstraints {
 			$0.top.equalToSuperview()
-			$0.leading.trailing.equalToSuperview().inset(24)
+			$0.leading.trailing.equalToSuperview()
 			$0.height.equalTo(50)
 		}
 		

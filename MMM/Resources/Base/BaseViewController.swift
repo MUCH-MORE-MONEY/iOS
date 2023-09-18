@@ -47,9 +47,7 @@ class BaseViewController: UIViewController, BaseViewControllerProtocol {
 		setBind()
 	}
 
-	@objc open dynamic func setAttribute() {
-		view.backgroundColor = R.Color.gray100
-	}
+	@objc open dynamic func setAttribute() { }
 	
 	@objc open dynamic func setDelegate() { }
 	

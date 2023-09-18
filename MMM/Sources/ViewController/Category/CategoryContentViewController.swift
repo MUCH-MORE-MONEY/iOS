@@ -143,6 +143,8 @@ extension CategoryContentViewController {
 	}
 	
 	private func setAttribute() {
+		view.backgroundColor = R.Color.gray900
+
 		refreshControl = refreshControl.then {
 			$0.transform = CGAffineTransformMakeScale(0.5, 0.5)
 		}

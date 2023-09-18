@@ -62,7 +62,7 @@ extension StatisticsHeaderView {
 		return attributedText1
 	}
 }
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 private extension StatisticsHeaderView {
 	// 초기 셋업할 코드들
 	private func setup() {

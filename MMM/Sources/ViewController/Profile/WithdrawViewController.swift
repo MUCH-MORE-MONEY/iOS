@@ -124,8 +124,7 @@ extension WithdrawViewController: CustomAlertDelegate {
 	// 취소 버튼 이벤트 처리
 	func didAlertCacelButton() { }
 }
-
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 extension WithdrawViewController {
 	// 초기 셋업할 코드들
 	private func setup() {

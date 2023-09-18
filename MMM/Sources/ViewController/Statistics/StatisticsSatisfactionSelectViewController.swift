@@ -112,7 +112,7 @@ extension StatisticsSatisfactionSelectViewController {
 			}.disposed(by: disposeBag)
 	}
 }
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 private extension StatisticsSatisfactionSelectViewController {
 	private func setAttribute() {
 		self.view.backgroundColor = isDark ? R.Color.gray900 : .white

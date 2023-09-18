@@ -36,7 +36,7 @@ extension HomeHeaderStackView {
 		moneyLabel.text = money.withCommas()
 	}
 }
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 private extension HomeHeaderStackView {
 	// 초기 셋업할 코드들
 	private func setup() {

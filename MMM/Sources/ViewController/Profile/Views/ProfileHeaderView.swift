@@ -36,7 +36,7 @@ extension ProfileHeaderView {
 		emailLabel.text = email
 	}
 }
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 private extension ProfileHeaderView {
 	// 초기 셋업할 코드들
 	private func setup() {

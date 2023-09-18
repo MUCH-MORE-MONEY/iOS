@@ -66,7 +66,7 @@ private extension DataExportViewController {
 //		toastView.toastAnimation(duration: 1.0, delay: 3.0, option: .curveEaseOut)
 //	}
 }
-// MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 private extension DataExportViewController {
 	// 초기 셋업할 코드들
     private func setup() {

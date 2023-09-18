@@ -214,8 +214,7 @@ private extension BottomSheetViewController {
 		return nearestVal
 	}
 }
-
-//MARK: - Bind & Style & Layouts
+//MARK: - Bind & Attribute & Hierarchy & Layouts
 private extension BottomSheetViewController {
 	
 	func setup() {

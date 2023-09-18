@@ -77,7 +77,7 @@ private extension HomeFilterViewController {
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
 	}
 }
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 private extension HomeFilterViewController {
 	// 초기 셋업할 코드들
 	private func setup() {

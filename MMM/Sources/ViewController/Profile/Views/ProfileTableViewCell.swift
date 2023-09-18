@@ -40,7 +40,7 @@ extension ProfileTableViewCell {
 		navImage.isHidden = true
 	}
 }
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 private extension ProfileTableViewCell {
 	// 초기 셋업할 코드들
 	private func setup() {

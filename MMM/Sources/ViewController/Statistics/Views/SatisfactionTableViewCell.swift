@@ -52,7 +52,7 @@ extension SatisfactionTableViewCell {
 		return satisfaction
 	}
 }
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 private extension SatisfactionTableViewCell {
 	// 초기 셋업할 코드들
 	private func setup() {

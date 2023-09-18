@@ -22,7 +22,7 @@ final class ServiceViewController: BaseViewController {
 		setup()		// 초기 셋업할 코드들
     }
 }
-// MARK: - Style & Layout
+//MARK: - Attribute & Hierarchy & Layouts
 private extension ServiceViewController {
 	// 초기 셋업할 코드들
     private func setup() {

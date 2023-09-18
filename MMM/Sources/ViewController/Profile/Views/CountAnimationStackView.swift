@@ -45,7 +45,7 @@ extension CountAnimationStackView {
 		}
 	}
 }
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 private extension CountAnimationStackView {
 	// 초기 셋업할 코드들
 	private func setup() {

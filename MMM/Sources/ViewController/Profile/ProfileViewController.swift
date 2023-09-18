@@ -43,7 +43,7 @@ final class ProfileViewController: UIViewController {
 		}
 	}
 }
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 private extension ProfileViewController {
 	// 초기 셋업할 코드들
 	private func setup() {

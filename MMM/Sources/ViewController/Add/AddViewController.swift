@@ -245,8 +245,7 @@ extension AddViewController {
         Tracking.FinActAddPage.nextBtnDateLogEvent()
 	}
 }
-
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 private extension AddViewController {
 	// 초기 셋업할 코드들
 	private func setup() {

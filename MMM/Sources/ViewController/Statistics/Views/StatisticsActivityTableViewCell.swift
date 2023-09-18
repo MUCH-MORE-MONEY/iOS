@@ -40,7 +40,7 @@ extension StatisticsActivityTableViewCell {
 		typeImageView.image = data.type == "01" ? R.Icon.plus16 : R.Icon.minus16
 	}
 }
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 private extension StatisticsActivityTableViewCell {
 	// 초기 셋업할 코드들
 	private func setup() {

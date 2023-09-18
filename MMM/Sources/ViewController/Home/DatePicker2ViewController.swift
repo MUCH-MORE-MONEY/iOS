@@ -116,7 +116,7 @@ private extension DatePicker2ViewController {
 		}
 	}
 }
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 private extension DatePicker2ViewController {
 	private func setAttribute() {
 		self.view.backgroundColor = isDark ? R.Color.gray900 : .white

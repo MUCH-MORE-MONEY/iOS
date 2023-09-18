@@ -48,7 +48,7 @@ extension WithdrawConfirmView {
 		contentLabel.attributedText = attributedString
 	}
 }
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 private extension WithdrawConfirmView {
 	// 초기 셋업할 코드들
 	private func setup() {

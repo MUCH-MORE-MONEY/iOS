@@ -165,7 +165,7 @@ extension StatisticsViewController {
 		self.satisfaction = satisfaction
 	}
 }
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 extension StatisticsViewController {
 	// 초기 셋업할 코드들
 	private func setup() {

@@ -213,8 +213,7 @@ extension AddDetailViewController: UIImagePickerControllerDelegate {
 		dismiss(animated: true, completion: nil)
 	}
 }
-
-// MARK: - Style & Layout & Bind
+//MARK: - Attribute & Hierarchy & Layouts & Bind
 extension AddDetailViewController {
     private func setup() {
         bind()

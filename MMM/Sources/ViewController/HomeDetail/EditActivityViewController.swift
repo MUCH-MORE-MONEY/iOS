@@ -329,9 +329,7 @@ extension EditActivityViewController {
 		}
 	}
 }
-
-
-// MARK: - Style & Layout
+//MARK: - Attribute & Hierarchy & Layouts
 extension EditActivityViewController {
     private func setup() {
         bind()

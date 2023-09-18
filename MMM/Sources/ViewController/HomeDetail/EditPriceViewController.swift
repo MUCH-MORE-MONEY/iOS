@@ -107,7 +107,7 @@ extension EditPriceViewController {
 		isEarn = tag == 0 ? true : false
 	}
 }
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 private extension EditPriceViewController {
 	// 초기 셋업할 코드들
 	func setup() {

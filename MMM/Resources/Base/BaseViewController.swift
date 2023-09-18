@@ -42,8 +42,7 @@ class BaseViewController: UIViewController {
         return .lightContent // status text color 변경
     }
 }
-
-//MARK: - Style & Layouts & Bind
+//MARK: - Attribute & Hierarchy & Layouts
 extension BaseViewController {
     private func setup() {
         setAttribute()

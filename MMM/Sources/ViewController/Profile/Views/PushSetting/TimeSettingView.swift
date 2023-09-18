@@ -44,8 +44,7 @@ extension TimeSettingView {
         }
     }
 }
-
-// MARK: - Style & Layout
+//MARK: - Attribute & Hierarchy & Layouts
 extension TimeSettingView {
     private func setup() {
         setAttribute()

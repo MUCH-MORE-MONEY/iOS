@@ -57,7 +57,7 @@ extension StatisticsCategoryView {
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: StatisticsReactor) {}
 }
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 private extension StatisticsCategoryView {
 	// 초기 셋업할 코드들
 	private func setup() {

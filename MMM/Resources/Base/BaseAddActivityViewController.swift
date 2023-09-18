@@ -46,8 +46,7 @@ class BaseAddActivityViewController: BaseDetailViewController {
         titleTextFeild.becomeFirstResponder() // 키보드 보이기 및 포커스 주기
     }
 }
-
-// MARK: - Style & Layout
+//MARK: - Attribute & Hierarchy & Layouts
 extension BaseAddActivityViewController {
     private func setup() {
         setAttribute()

@@ -149,8 +149,7 @@ extension OnboardingViewController: ASAuthorizationControllerDelegate {
         print("로그인 실패")
     }
 }
-
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 private extension OnboardingViewController {
     
     private func setup() {

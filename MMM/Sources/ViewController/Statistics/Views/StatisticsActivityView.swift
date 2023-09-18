@@ -135,7 +135,7 @@ extension StatisticsActivityView {
 		}
 	}
 }
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 private extension StatisticsActivityView {
 	// 초기 셋업할 코드들
 	private func setup() {

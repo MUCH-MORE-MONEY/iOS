@@ -58,9 +58,8 @@ final class BottomPageControlView: UIView {
 		fatalError("init(coder:) has not been implemented")
 	}
 }
-
+//MARK: - Attribute & Hierarchy & Layouts
 extension BottomPageControlView {
-	// MARK: - Style & Layout
 	private func setup() {
 		setAttribute()
 		setLayout()

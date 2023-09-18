@@ -1,5 +1,5 @@
 //
-//  BaseViewProtocol.swift
+//  BaseView.swift
 //  MMM
 //
 //  Created by geonhyeong on 2023/09/16.

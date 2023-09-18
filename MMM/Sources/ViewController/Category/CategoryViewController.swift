@@ -15,7 +15,7 @@ final class CategoryViewController: BaseViewControllerWithNav, View {
 	typealias Reactor = CategoryReactor
 	// MARK: - Constants
 	private enum UI {
-		static let priceLabelTopMargin: CGFloat = 8
+		static let segmentedControlHeight: CGFloat = 50
 	}
 	
 	// MARK: - Properties
@@ -72,6 +72,7 @@ extension CategoryViewController {
 }
 //MARK: - Attribute & Hierarchy & Layouts
 extension CategoryViewController {
+	// 초기 셋업할 코드들
 	override func setAttribute() {
 		super.setAttribute()
 		
@@ -122,7 +123,7 @@ extension CategoryViewController {
 		segmentedControl.snp.makeConstraints {
 			$0.top.equalToSuperview()
 			$0.leading.trailing.equalToSuperview()
-			$0.height.equalTo(UI.priceLabelTopMargin)
+			$0.height.equalTo(UI.segmentedControlHeight)
 		}
 		
 		pageViewController.view.snp.makeConstraints {

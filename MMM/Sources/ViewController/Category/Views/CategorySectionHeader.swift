@@ -13,6 +13,11 @@ final class CategorySectionHeader: BaseCollectionReusableView {
 	private lazy var titleLabel = UILabel()
 	private lazy var priceLabel = UILabel()
 	private lazy var typeImageView = UIImageView()
+	
+	func bind(reactor: CategoryReactor) {
+		bindState(reactor)
+		bindAction(reactor)
+	}
 }
 //MARK: - Bind
 extension CategorySectionHeader {
@@ -29,6 +34,7 @@ extension CategorySectionHeader {
 }
 //MARK: - Attribute & Hierarchy & Layouts
 extension CategorySectionHeader {
+	// 초기 셋업할 코드들
 	override func setAttribute() {
 		super.setAttribute()
 		

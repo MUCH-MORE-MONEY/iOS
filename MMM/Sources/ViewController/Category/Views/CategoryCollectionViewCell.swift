@@ -12,7 +12,7 @@ final class CategoryCollectionViewCell: BaseCollectionViewCell, View {
 	typealias Reactor = CategoryCollectionViewCellReactor
 	// MARK: - Constants
 	private enum UI {
-		static let segmentedControlHeight: CGFloat = 8
+		static let priceLabelMargin: UIEdgeInsets = .init(top: 8, left: 0, bottom: 0, right: 0)
 	}
 	
 	// MARK: - UI Components
@@ -51,6 +51,7 @@ extension CategoryCollectionViewCell {
 }
 //MARK: - Attribute & Hierarchy & Layouts
 extension CategoryCollectionViewCell {
+	// 초기 셋업할 코드들
 	override func setAttribute() {
 		super.setAttribute()
 		
@@ -81,7 +82,7 @@ extension CategoryCollectionViewCell {
 		}
 		
 		priceLabel.snp.makeConstraints {
-			$0.top.equalTo(titleLabel.snp.bottom).offset(UI.priceLabelTopMargin)
+			$0.top.equalTo(titleLabel.snp.bottom).offset(UI.priceLabelMargin.top)
 			$0.leading.equalToSuperview()
 		}
 	}

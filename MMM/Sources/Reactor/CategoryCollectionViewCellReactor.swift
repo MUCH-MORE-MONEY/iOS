@@ -29,7 +29,7 @@ final class CategoryCollectionViewCellReactor: Reactor {
 		initialState = .init(category: category)
 	}
 }
-//MARK: - Mutate, Reduce 함수
+//MARK: - Mutate, Reduce
 extension CategoryCollectionViewCellReactor {
 	/// Action이 들어온 경우, 어떤 처리를 할건지 분기
 	func mutate(action: Action) -> Observable<Mutation> {

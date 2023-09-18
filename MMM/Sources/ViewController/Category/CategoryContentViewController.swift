@@ -134,6 +134,7 @@ extension CategoryContentViewController {
 }
 //MARK: - Attribute & Hierarchy & Layouts
 extension CategoryContentViewController {
+	// 초기 셋업할 코드들
 	override func setAttribute() {
 		super.setAttribute()
 		

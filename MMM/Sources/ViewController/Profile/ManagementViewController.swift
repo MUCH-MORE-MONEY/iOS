@@ -8,11 +8,14 @@
 import UIKit
 import Then
 import SnapKit
+import ReactorKit
 
-final class ManagementViewController: BaseViewControllerWithNav {
+final class ManagementViewController: BaseViewControllerWithNav, View {
+	typealias Reactor = ProfileReactor
+
 	// MARK: - Properties
-	private let viewModel: ProfileViewModel
-
+	private let email: String
+	
 	// MARK: - UI components
 	private lazy var baseView = UIView()
 	private lazy var userInfoLabel = UILabel()
@@ -21,8 +24,8 @@ final class ManagementViewController: BaseViewControllerWithNav {
 	private lazy var userLoginLabel = UILabel()
 	private lazy var tableView = UITableView()
 	
-	init(viewModel: ProfileViewModel) {
-		self.viewModel = viewModel
+	init(email: String) {
+		self.email = email
 		super.init(nibName: nil, bundle: nil)
 	}
 
@@ -34,20 +37,29 @@ final class ManagementViewController: BaseViewControllerWithNav {
 	
 	override func viewDidLoad() {
         super.viewDidLoad()
-		setup()		// 초기 셋업할 코드들
     }
+	
+	func bind(reactor: ProfileReactor) {
+		bindState(reactor)
+		bindAction(reactor)
+	}
+}
+//MARK: - Bind
+extension ManagementViewController {
+	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
+	private func bindAction(_ reactor: ProfileReactor) {
+	}
+	
+	// MARK: 데이터 바인딩 처리 (Reactor -> View)
+	private func bindState(_ reactor: ProfileReactor) {
+	}
 }
 //MARK: - Action
 extension ManagementViewController: CustomAlertDelegate {
-	// 외부에서 설정
-	public func setData(email: String) {
-		userEmailLabel.text = email
-	}
-	
 	// 확인 버튼 이벤트 처리
 	func didAlertCofirmButton() {
 		if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
-			viewModel.logout() // 로그아웃
+			reactor?.action.onNext(.logout) // 로그아웃
 			sceneDelegate.window?.rootViewController = sceneDelegate.onboarding
 		}
 	}
@@ -75,6 +87,7 @@ extension ManagementViewController {
 		}
 		
 		userEmailLabel = userEmailLabel.then {
+			$0.text = email
 			$0.font = R.Font.body1
 			$0.textColor = R.Color.gray900
 		}
@@ -169,8 +182,9 @@ extension ManagementViewController: UITableViewDelegate {
 		case 0:
 			showAlert(alertType: .canCancel, titleText: "로그아웃 하시겠어요?", contentText: "로그아웃해도 해당 계정의 데이터는 \n 계속 저장되어 있습니다.", cancelButtonText: "취소하기", confirmButtonText: "로그아웃")
 		case 1:
-			let vs = WithdrawViewController(viewModel: viewModel)
-			navigationController?.pushViewController(vs, animated: true)		// 계정관리
+//			let vs = WithdrawViewController(viewModel: viewModel)
+//			navigationController?.pushViewController(vs, animated: true)		// 계정관리
+			break
 		default:
 			break
 		}

@@ -6,33 +6,26 @@
 //
 
 import UIKit
+import Then
+import SnapKit
 
-final class ProfileFooterView: UIView {
+final class ProfileFooterView: BaseView {
+	// MARK: - Constants
+	private enum UI {
+		static let contentMargin: UIEdgeInsets = .init(top: 12, left: 28, bottom: 0, right: 28)
+	}
+	
 	// MARK: - Properties
 	// MARK: - UI Components
 	private lazy var contentLabel = UILabel()
 	private lazy var versionLabel = UILabel()
-	
-	override init(frame: CGRect) {
-		super.init(frame: frame)
-		setup()		// 초기 셋업할 코드들
-	}
-	
-	// Compile time에 error를 발생시키는 코드
-	@available(*, unavailable)
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
-private extension ProfileFooterView {
+extension ProfileFooterView {
 	// 초기 셋업할 코드들
-	private func setup() {
-		setAttribute()
-		setLayout()
-	}
-	
-	private func setAttribute() {
+	override func setAttribute() {
+		super.setAttribute()
+		
 		// [view]
 		backgroundColor = R.Color.gray900
 
@@ -51,17 +44,23 @@ private extension ProfileFooterView {
 		}
 	}
 	
-	private func setLayout() {
+	override func setHierarchy() {
+		super.setHierarchy()
+		
 		addSubviews(contentLabel, versionLabel)
-				
+	}
+	
+	override func setLayout() {
+		super.setLayout()
+		
 		contentLabel.snp.makeConstraints {
-			$0.left.equalToSuperview().inset(28)
-			$0.top.equalTo(12)
+			$0.top.equalTo(UI.contentMargin.top)
+			$0.leading.equalToSuperview().inset(UI.contentMargin.left)
 		}
 		
 		versionLabel.snp.makeConstraints {
-			$0.right.equalToSuperview().inset(28)
-			$0.top.equalTo(12)
+			$0.top.equalTo(UI.contentMargin.top)
+			$0.trailing.equalToSuperview().inset(UI.contentMargin.right)
 		}
 	}
 }

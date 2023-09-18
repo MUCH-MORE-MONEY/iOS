@@ -64,7 +64,7 @@ extension CategoryReactor {
 }
 //MARK: - Actions
 extension CategoryReactor {
-	// 데이터
+	// 데이터 가져오기
 	private func loadData(_ request: CategoryReqDto) -> Observable<Mutation> {
 		return MMMAPIService().getCategory(request)
 			.map { [weak self] (response, error) -> Mutation in

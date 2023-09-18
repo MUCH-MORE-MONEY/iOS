@@ -6,13 +6,22 @@
 //
 
 import UIKit
-import Combine
-import Lottie
+import Then
+import SnapKit
+import RxCocoa
+import ReactorKit
 
-final class WithdrawViewController: BaseViewControllerWithNav {
+final class WithdrawViewController: BaseViewControllerWithNav, View {
+	typealias Reactor = WithdrawReactor
+
+	// MARK: - Constants
+	private enum UI {
+		static let mainLabelMargin: UIEdgeInsets = .init(top: 24, left: 24, bottom: 0, right: 24)
+		static let tableViewMargin: UIEdgeInsets = .init(top: 28, left: 0, bottom: 0, right: 0)
+		static let cellHeight: CGFloat = 44
+	}
+	
 	// MARK: - Properties
-	private lazy var cancellable: Set<AnyCancellable> = .init()
-	private let viewModel: ProfileViewModel
 	
 	// MARK: - UI Components
 	private lazy var reconfirmLabel = UILabel()
@@ -30,8 +39,7 @@ final class WithdrawViewController: BaseViewControllerWithNav {
 	private lazy var withdrawButton = UIButton()
 	private lazy var loadView = LoadingViewController()
 
-	init(viewModel: ProfileViewModel) {
-		self.viewModel = viewModel
+	init() {
 		super.init(nibName: nil, bundle: nil)
 	}
 
@@ -47,8 +55,68 @@ final class WithdrawViewController: BaseViewControllerWithNav {
 	
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
-		viewModel.summary = nil // Text가 남아있는 문제 해결
-		viewModel.isWidrawError = nil // 값이 변경되어 있는 문제 해결
+	}
+	
+	func bind(reactor: WithdrawReactor) {
+		bindState(reactor)
+		bindAction(reactor)
+	}
+}
+//MARK: - Bind
+extension WithdrawViewController {
+	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
+	private func bindAction(_ reactor: WithdrawReactor) {
+		// 동의 버튼 Toggle
+		confirmButton.rx.tap
+			.bind(onNext: didTapConfirmButton)
+			.disposed(by: disposeBag)
+		
+		// 1차 탈퇴 확인 Alert
+		withdrawButton.rx.tap
+			.bind(onNext: didTapWithdrawButton)
+			.disposed(by: disposeBag)
+	}
+	
+	// MARK: 데이터 바인딩 처리 (Reactor -> View)
+	private func bindState(_ reactor: WithdrawReactor) {
+		// 카테고리 더보기 클릭시, push
+		reactor.state
+			.compactMap { $0.summary }
+			.distinctUntilChanged() // 중복값 무시
+			.bind(onNext: setSummary)
+			.disposed(by: disposeBag)
+		
+		// 로딩 발생
+		reactor.state
+			.map { $0.isLoading }
+			.distinctUntilChanged() // 중복값 무시
+			.filter { $0 } // true 일때만
+			.subscribe(onNext: { [weak self] loading in
+				guard let self = self else { return }
+				
+				if loading && !self.loadView.isPresent {
+					self.loadView.play()
+					self.loadView.isPresent = true
+					self.loadView.modalPresentationStyle = .overFullScreen
+					self.present(self.loadView, animated: false)
+				} else {
+					self.loadView.dismiss(animated: false)
+				}
+			})
+			.disposed(by: disposeBag)
+		
+		// Error 발생
+		reactor.state
+			.map { $0.error }
+			.distinctUntilChanged() // 중복값 무시
+			.filter { $0 } // true 일때만
+			.subscribe(onNext: { isError in
+				if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+					sceneDelegate.window?.showToast(message: "일시적인 오류가 발생했습니다.")
+				}
+			})
+			.disposed(by: disposeBag)
+
 	}
 }
 //MARK: - Action
@@ -72,14 +140,14 @@ extension WithdrawViewController: CustomAlertDelegate {
 	}
 	
 	// 경제 활동 요약
-	func setSummary(_ recordCnt: Int, _ recordSumAmount: Int) {
+	func setSummary(summary: WithdrawReactor.Summary) {
 		economicLabel = economicLabel.then {
-			$0.attributedText = setMutiText(isMoney: false, first: "", count: recordCnt, second: "의 경제활동과")
+			$0.attributedText = setMutiText(isMoney: false, first: "", count: summary.recordCnt, second: "의 경제활동과")
 			$0.numberOfLines = 0
 		}
 		
 		moneyLabel = moneyLabel.then {
-			$0.setData(first: "", second: "이 사라져요.", money: recordSumAmount, unitText: "원", duration: 0.1)
+			$0.setData(first: "", second: "이 사라져요.", money: summary.recordSumAmount, unitText: "원", duration: 0.1)
 		}
 	}
 	
@@ -91,7 +159,6 @@ extension WithdrawViewController: CustomAlertDelegate {
 	// 화면전환
 	func processWidrow() {
 		if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
-			viewModel.withdraw() // 탈퇴
 			sceneDelegate.window?.rootViewController = sceneDelegate.onboarding
 			DispatchQueue.main.asyncAfter(deadline: .now()) {
 				sceneDelegate.onboarding.showAlert(alertType: .onlyConfirm, titleText: "탈퇴를 완료하였습니다", contentText: "언제든 다시 MMM을 찾아와주세요!", confirmButtonText: "확인하기")
@@ -99,92 +166,6 @@ extension WithdrawViewController: CustomAlertDelegate {
 		}
 	}
 	
-	/// 네트워크 오류시 Toast 노출
-//	func showToast() {
-//		let toastView = ToastView(toastMessage: "일시적인 오류가 발생했습니다.")
-//		toastView.setSnackAttribute()
-//
-//		self.view.addSubview(toastView)
-//
-//		toastView.snp.makeConstraints {
-//			$0.left.right.equalTo(view.safeAreaLayoutGuide).inset(24)
-//			$0.bottom.equalTo(withdrawButton.snp.top).offset(-16)
-//			$0.height.equalTo(40)
-//		}
-//
-//		toastView.toastAnimation(duration: 1.0, delay: 3.0, option: .curveEaseOut)
-//	}
-	
-	// 확인 버튼 이벤트 처리
-	func didAlertCofirmButton() {
-		viewModel.withdraw() // 회원 탈퇴
-	}
-	
-	// 취소 버튼 이벤트 처리
-	func didAlertCacelButton() { }
-}
-//MARK: - Attribute & Hierarchy & Layouts
-extension WithdrawViewController {
-	override func setBind() {
-		viewModel.getSummary() // 경제활동 요약
-
-		//MARK: input
-		confirmButton.tapPublisher
-			.sinkOnMainThread(receiveValue: didTapConfirmButton)
-			.store(in: &cancellable)
-		
-		withdrawButton.tapPublisher
-			.sinkOnMainThread(receiveValue: didTapWithdrawButton)
-			.store(in: &cancellable)
-		
-		//MARK: output
-		viewModel.$summary
-			.sinkOnMainThread(receiveValue: { [weak self] summary in
-				guard let summary = summary, let recordCnt = summary.recordCnt, let recordSumAmount = summary.recordSumAmount else { return }
-				
-				self?.setSummary(recordCnt, recordSumAmount)
-			}).store(in: &cancellable)
-		
-//		viewModel.$isLoading
-//			.sinkOnMainThread(receiveValue: { [weak self] loading in
-//				guard let self = self else { return }
-//
-//				if loading && !self.loadView.isPresent {
-//					self.loadView.play()
-//					self.loadView.isPresent = true
-//					self.loadView.modalPresentationStyle = .overFullScreen
-//					self.present(self.loadView, animated: false)
-//				} else {
-//					self.loadView.dismiss(animated: false)
-//				}
-//			}).store(in: &cancellable)
-		
-		viewModel.$isWithdraw
-			.sinkOnMainThread(receiveValue: { [weak self] loading in
-				guard let self = self, let loading = loading else { return }
-				
-				if loading && !self.loadView.isPresent {
-					self.loadView.play()
-					self.loadView.isPresent = true
-					self.loadView.modalPresentationStyle = .overFullScreen
-					self.present(self.loadView, animated: false)
-					self.processWidrow() // 화면전환
-				} else {
-					self.loadView.dismiss(animated: false)
-				}
-			}).store(in: &cancellable)
-		
-		viewModel.$isWidrawError
-			.sinkOnMainThread(receiveValue: { isError in
-				guard let isError = isError else { return }
-				if isError {
-                    if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
-                        sceneDelegate.window?.showToast(message: "일시적인 오류가 발생했습니다.")
-                    }
-                } // 네트워크 에러 발생
-			}).store(in: &cancellable)
-	}
-
 	private func setMutiText(isMoney: Bool, first: String, count: Int, second: String) -> NSMutableAttributedString {
 		let attributedText1 = NSMutableAttributedString(string: first)
 		
@@ -215,7 +196,21 @@ extension WithdrawViewController {
 		return attributedText1
 	}
 	
+	// 확인 버튼 이벤트 처리
+	func didAlertCofirmButton() {
+		reactor?.action.onNext(.tapWithdraw) // 회원 탈퇴
+		self.processWidrow() // 화면전환
+	}
+	
+	// 취소 버튼 이벤트 처리
+	func didAlertCacelButton() { }
+}
+//MARK: - Attribute & Hierarchy & Layouts
+extension WithdrawViewController {
+	// 초기 셋업할 코드들
 	override func setAttribute() {
+		super.setAttribute()
+		
 		// [view]
 		view.backgroundColor = R.Color.gray100
 		navigationItem.title = "회원탈퇴"
@@ -290,6 +285,8 @@ extension WithdrawViewController {
 	}
 	
 	override func setHierarchy() {
+		super.setHierarchy()
+		
 		view.addSubviews(reconfirmLabel, defaultLabel, economicLabel, moneyLabel, containView, confirmStackView, withdrawButton)
 		containView.addSubviews(containerStackView)
 		containerStackView.addArrangedSubviews(checkLabel, firstComfirm, secondComfirm)
@@ -297,6 +294,8 @@ extension WithdrawViewController {
 	}
 	
 	override func setLayout() {
+		super.setLayout()
+		
 		reconfirmLabel.snp.makeConstraints {
 			$0.top.equalTo(view.safeAreaLayoutGuide).inset(32)
 			$0.left.equalTo(view.safeAreaLayoutGuide).inset(24)

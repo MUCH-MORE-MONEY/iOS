@@ -198,8 +198,9 @@ extension ManagementViewController: UITableViewDelegate {
 		case 0:
 			showAlert(alertType: .canCancel, titleText: "로그아웃 하시겠어요?", contentText: "로그아웃해도 해당 계정의 데이터는 \n 계속 저장되어 있습니다.", cancelButtonText: "취소하기", confirmButtonText: "로그아웃")
 		case 1:
-//			let vs = WithdrawViewController(viewModel: viewModel)
-//			navigationController?.pushViewController(vs, animated: true)		// 계정관리
+			let vc = WithdrawViewController()
+			vc.reactor = WithdrawReactor()
+			navigationController?.pushViewController(vc, animated: true)		// 계정관리
 			break
 		default:
 			break

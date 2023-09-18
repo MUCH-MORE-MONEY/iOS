@@ -22,6 +22,8 @@ enum MMMAPI {
 	
 	// MARK: - Profile
 	case exportToExcel
+	case getSummary
+	case withdraw
 }
 
 extension MMMAPI: BaseNetworkService {
@@ -44,17 +46,21 @@ extension MMMAPI: BaseNetworkService {
 			return "/economic-activity-category/list/\(request.economicActivityDvcd)"
 		case .exportToExcel:
 			return "/economic_activity/excel/select"
+		case .getSummary:
+			return "/economic_activity/summary/select"
+		case .withdraw:
+			return "/login/delete"
 		}
     }
     
     /// 메서드 방식 선택
     var method: Moya.Method {
-        switch self {
-        case .push, .pushAgreeListSelect, .pushAgreeUpdate:
-            return .post
+		switch self {
+		case .push, .pushAgreeListSelect, .pushAgreeUpdate:
+			return .post
 		case .getCategory:
 			return .get
-		case .exportToExcel:
+		case .exportToExcel, .getSummary, .withdraw:
 			return .post
 		}
     }
@@ -67,21 +73,16 @@ extension MMMAPI: BaseNetworkService {
         switch self {
         case .push(let request):
             return .requestParameters(parameters: request.asDictionary, encoding: JSONEncoding.default)
-        
         case .pushAgreeListSelect:
             return .requestPlain
-            
         case .pushAgreeUpdate(let request):
             return .requestParameters(parameters: request.asDictionary, encoding: JSONEncoding.default)
-            
 		case .getCategory:
 			return .requestPlain
-			
-		case .exportToExcel:
+		case .exportToExcel, .getSummary, .withdraw:
 			return .requestPlain
 		}
     }
-
     
     /// Header 전달
     /// nil 일 경우 헤더 요청하지 않음

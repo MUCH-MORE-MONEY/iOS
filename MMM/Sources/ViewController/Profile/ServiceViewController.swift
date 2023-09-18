@@ -30,6 +30,7 @@ final class ServiceViewController: BaseViewControllerWithNav {
 }
 //MARK: - Attribute & Hierarchy & Layouts
 extension ServiceViewController {
+	// 초기 셋업할 코드들
 	override func setAttribute() {
 		super.setAttribute()
 		

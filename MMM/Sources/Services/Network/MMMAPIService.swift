@@ -59,11 +59,12 @@ protocol MMMAPIServiceble: BaseAPIService {
 	
 	// MARK: - Profile 요청 API
 	func exportToExcel() -> Observable<(ExportResDto, Error?)>
+	func withdraw() -> Observable<(WithdrawResDto, Error?)>
+	func getSummary() -> Observable<(SummaryResDto, Error?)>
 }
 
 // MARK:
 struct MMMAPIService: MMMAPIServiceble {
-	
     typealias APIType = MMMAPI
     
     func provider() -> Moya.MoyaProvider<MMMAPI> {
@@ -91,6 +92,14 @@ struct MMMAPIService: MMMAPIServiceble {
 	// MARK: - Profile 요청 API
 	func exportToExcel() -> RxSwift.Observable<(ExportResDto, Error?)> {
 		return provider().request(MMMAPI.exportToExcel, type: ExportResDto.self).asObservable()
+	}
+	
+	func getSummary() -> RxSwift.Observable<(SummaryResDto, Error?)> {
+		return provider().request(MMMAPI.getSummary, type: SummaryResDto.self).asObservable()
+	}
+	
+	func withdraw() -> RxSwift.Observable<(WithdrawResDto, Error?)> {
+		return provider().request(MMMAPI.exportToExcel, type: WithdrawResDto.self).asObservable()
 	}
 }
 

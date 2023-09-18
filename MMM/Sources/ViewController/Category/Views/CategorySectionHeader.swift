@@ -6,9 +6,10 @@
 //
 
 import UIKit
+import Then
+import SnapKit
 
 final class CategorySectionHeader: BaseCollectionReusableView {
-	
 	// MARK: - UI Components
 	private lazy var titleLabel = UILabel()
 	private lazy var priceLabel = UILabel()

@@ -12,6 +12,7 @@ import SnapKit
 // 상속하지 않으려면 final 꼭 붙이기
 final class CountAnimationStackView: BaseView {
 	// MARK: - Properties
+	
 	// MARK: - UI Components
 	private lazy var containerStackView = UIStackView()
 	private lazy var firstLabel = UILabel()
@@ -19,16 +20,6 @@ final class CountAnimationStackView: BaseView {
 	private lazy var middleLabel = CountScrollLabel()
 	private lazy var unitLabel = UILabel()
 	private lazy var secondLabel = UILabel()
-	
-	override init(frame: CGRect) {
-		super.init(frame: frame)
-	}
-	
-	// Compile time에 error를 발생시키는 코드
-	@available(*, unavailable)
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
 }
 //MARK: - Action
 extension CountAnimationStackView {

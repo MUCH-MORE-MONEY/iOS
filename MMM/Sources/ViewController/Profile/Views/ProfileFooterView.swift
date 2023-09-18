@@ -9,6 +9,7 @@ import UIKit
 import Then
 import SnapKit
 
+// 상속하지 않으려면 final 꼭 붙이기
 final class ProfileFooterView: BaseView {
 	// MARK: - Constants
 	private enum UI {
@@ -16,6 +17,7 @@ final class ProfileFooterView: BaseView {
 	}
 	
 	// MARK: - Properties
+	
 	// MARK: - UI Components
 	private lazy var contentLabel = UILabel()
 	private lazy var versionLabel = UILabel()

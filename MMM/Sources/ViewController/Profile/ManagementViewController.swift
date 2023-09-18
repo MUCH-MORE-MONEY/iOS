@@ -10,6 +10,7 @@ import Then
 import SnapKit
 import ReactorKit
 
+// 상속하지 않으려면 final 꼭 붙이기
 final class ManagementViewController: BaseViewControllerWithNav, View {
 	typealias Reactor = ProfileReactor
 

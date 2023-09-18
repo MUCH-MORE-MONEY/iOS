@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import Then
+import SnapKit
 import ReactorKit
 
 final class CategoryCollectionViewCell: BaseCollectionViewCell, View {

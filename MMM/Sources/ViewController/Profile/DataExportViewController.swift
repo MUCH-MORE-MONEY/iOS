@@ -11,6 +11,7 @@ import SnapKit
 import RxCocoa
 import ReactorKit
 
+// 상속하지 않으려면 final 꼭 붙이기
 final class DataExportViewController: BaseViewControllerWithNav, View {
 	typealias Reactor = ProfileReactor
 

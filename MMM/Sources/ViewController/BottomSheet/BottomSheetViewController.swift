@@ -83,7 +83,6 @@ class BottomSheetViewController: UIViewController, BottomSheetChild {
 }
 
 extension BottomSheetViewController {
-	
 	/// height : 높이,
 	/// isDrag : 드래그가 가능한지 (false: 불가능, default: true)
 	/// isExpended : 확장 가능한지 (false: 불가능, default: false)

@@ -747,6 +747,7 @@
 			isa = PBXGroup;
 			children = (
 				6A381E0829E8F3C100E0974F /* Add */,
+				C46409C82AB8805500A899AD /* BottomSheet */,
 				C4170B632A95D01500CE0A65 /* Category */,
 				6AF9A1492AA9BB320069981A /* Challenge */,
 				C44807DF29E6489300D4B090 /* Home */,
@@ -914,7 +915,6 @@
 				6A1322F02A089B2900CEEC81 /* BasePaddingLabel.swift */,
 				6A0F234329DBC0C30063673B /* BaseViewController.swift */,
 				C46409B92AB5996D00A899AD /* BaseViewProtocol.swift */,
-				C4199DD229FE3051006E5DA8 /* BottomSheetViewController.swift */,
 				6A1479622A0DE0690045B8C1 /* CameraImageView.swift */,
 				C4DBAA3629DD7B2600D1BB97 /* CountPushLabel.swift */,
 				C411940A29DAEDF9003DBC15 /* CustomAlertViewController.swift */,
@@ -998,6 +998,14 @@
 				C46409BB2AB5B07A00A899AD /* CategorySectionHeader.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		C46409C82AB8805500A899AD /* BottomSheet */ = {
+			isa = PBXGroup;
+			children = (
+				C4199DD229FE3051006E5DA8 /* BottomSheetViewController.swift */,
+			);
+			path = BottomSheet;
 			sourceTree = "<group>";
 		};
 		C494A1FB2A98B6BD00980A71 /* Enums */ = {

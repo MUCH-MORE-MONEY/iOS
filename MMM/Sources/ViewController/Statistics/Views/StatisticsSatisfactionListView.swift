@@ -10,9 +10,14 @@ import SnapKit
 import ReactorKit
 import RxGesture
 
-final class StatisticsSatisfactionListView: UIView, View {
+// 상속하지 않으려면 final 꼭 붙이기
+final class StatisticsSatisfactionListView: BaseView, View {
+	// MARK: - Constants
+	private enum UI {
+		static let sideMargin: CGFloat = 20
+	}
+	
 	// MARK: - Properties
-	var disposeBag: DisposeBag = DisposeBag()
 	
 	// MARK: - UI Components
 	private lazy var touchAreaView = UIView()
@@ -24,17 +29,6 @@ final class StatisticsSatisfactionListView: UIView, View {
 
 	// Empty & Error UI
 	private lazy var emptyView = HomeEmptyView()
-
-	override init(frame: CGRect) {
-		super.init(frame: frame)
-		setup() // 초기 셋업할 코드들
-	}
-	
-	// Compile time에 error를 발생시키는 코드
-	@available(*, unavailable)
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
 	
 	func bind(reactor: StatisticsReactor) {
 		bindState(reactor)
@@ -63,15 +57,13 @@ extension StatisticsSatisfactionListView {
 		self.scoreLabel.text = score
 	}
 }
-//MARK: - Style & Layouts
-private extension StatisticsSatisfactionListView {
+//MARK: - Attribute & Hierarchy & Layouts
+extension StatisticsSatisfactionListView {
 	// 초기 셋업할 코드들
-	private func setup() {
-		setAttribute()
-		setLayout()
-	}
-	
-	private func setAttribute() {
+
+	override func setAttribute() {
+		super.setAttribute()
+		
 		backgroundColor = R.Color.gray100
 		layer.cornerRadius = 10
 		layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner] // 상단 왼쪽, 오른쪽 모서리에만 cornerRadius 적용
@@ -116,19 +108,25 @@ private extension StatisticsSatisfactionListView {
 		}
 	}
 	
-	private func setLayout() {
+	override func setHierarchy() {
+		super.setHierarchy()
+		
 		addSubviews(touchAreaView, tableView, emptyView)
 		touchAreaView.addSubviews(titleLabel, starImageView, scoreLabel, arrowImageView)
+	}
+	
+	override func setLayout() {
+		super.setLayout()
 		
 		touchAreaView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(12)
-			$0.leading.trailing.equalToSuperview().inset(20)
+			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 			$0.height.equalTo(48)
 		}
 		
 		titleLabel.snp.makeConstraints {
 			$0.centerY.equalToSuperview()
-			$0.leading.equalToSuperview().inset(20)
+			$0.leading.equalToSuperview().inset(UI.sideMargin)
 		}
 		
 		starImageView.snp.makeConstraints {

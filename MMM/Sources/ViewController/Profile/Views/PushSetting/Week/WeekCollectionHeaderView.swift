@@ -23,8 +23,7 @@ final class WeekCollectionHeaderView: UICollectionReusableView {
     }
     
 }
-
-// MARK: - Style & Layout
+//MARK: - Attribute & Hierarchy & Layouts
 extension WeekCollectionHeaderView {
     private func setup() {
         setAttribute()

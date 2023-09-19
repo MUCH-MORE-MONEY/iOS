@@ -77,7 +77,7 @@ extension CalendarCell {
 		self.selectionLayer.fillColor = color.cgColor
 	}
 }
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 private extension CalendarCell {
 	// 초기 셋업할 코드들
 	private func setup() {

@@ -8,12 +8,26 @@
 import UIKit
 import Then
 import SnapKit
+import ReactorKit
 
-final class ManagementViewController: BaseViewController {
+// 상속하지 않으려면 final 꼭 붙이기
+final class ManagementViewController: BaseViewControllerWithNav, View {
+	typealias Reactor = ProfileReactor
+
+	// MARK: - Constants
+	private enum UI {
+		static let baseViewMargin: UIEdgeInsets = .init(top: 24, left: 24, bottom: 0, right: 24)
+		static let emailLabelMargin: UIEdgeInsets = .init(top: 16, left: 0, bottom: 0, right: 0)
+		static let userEmailLabelMargin: UIEdgeInsets = .init(top: 16, left: 12, bottom: 0, right: 0)
+		static let userLoginLabelMargin: UIEdgeInsets = .init(top: 48, left: 0, bottom: 0, right: 0)
+		static let tableViewMargin: UIEdgeInsets = .init(top: 16, left: 0, bottom: 0, right: 0)
+		static let tableViewHeight: CGFloat = 88
+		static let cellHeight: CGFloat = 44
+	}
+	
 	// MARK: - Properties
-	private let viewModel: ProfileViewModel
-	private lazy var showWithdraw: Bool = false
-
+	private let email: String
+	
 	// MARK: - UI components
 	private lazy var baseView = UIView()
 	private lazy var userInfoLabel = UILabel()
@@ -22,8 +36,8 @@ final class ManagementViewController: BaseViewController {
 	private lazy var userLoginLabel = UILabel()
 	private lazy var tableView = UITableView()
 	
-	init(viewModel: ProfileViewModel) {
-		self.viewModel = viewModel
+	init(email: String) {
+		self.email = email
 		super.init(nibName: nil, bundle: nil)
 	}
 
@@ -35,20 +49,29 @@ final class ManagementViewController: BaseViewController {
 	
 	override func viewDidLoad() {
         super.viewDidLoad()
-		setup()		// 초기 셋업할 코드들
     }
+	
+	func bind(reactor: ProfileReactor) {
+		bindState(reactor)
+		bindAction(reactor)
+	}
+}
+//MARK: - Bind
+extension ManagementViewController {
+	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
+	private func bindAction(_ reactor: ProfileReactor) {
+	}
+	
+	// MARK: 데이터 바인딩 처리 (Reactor -> View)
+	private func bindState(_ reactor: ProfileReactor) {
+	}
 }
 //MARK: - Action
 extension ManagementViewController: CustomAlertDelegate {
-	// 외부에서 설정
-	public func setData(email: String) {
-		userEmailLabel.text = email
-	}
-	
 	// 확인 버튼 이벤트 처리
 	func didAlertCofirmButton() {
 		if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
-			viewModel.logout() // 로그아웃
+			reactor?.action.onNext(.logout) // 로그아웃
 			sceneDelegate.window?.rootViewController = sceneDelegate.onboarding
 		}
 	}
@@ -56,15 +79,10 @@ extension ManagementViewController: CustomAlertDelegate {
 	// 취소 버튼 이벤트 처리
 	func didAlertCacelButton() { }
 }
-//MARK: - Style & Layouts
-private extension ManagementViewController {
+//MARK: - Attribute & Hierarchy & Layouts
+extension ManagementViewController {
 	// 초기 셋업할 코드들
-	private func setup() {
-		setAttribute()
-		setLayout()
-	}
-	
-	private func setAttribute() {
+	override func setAttribute() {
 		// [view]
 		view.backgroundColor = R.Color.gray100
 		navigationItem.title = "계정관리"
@@ -82,6 +100,7 @@ private extension ManagementViewController {
 		}
 		
 		userEmailLabel = userEmailLabel.then {
+			$0.text = email
 			$0.font = R.Font.body1
 			$0.textColor = R.Color.gray900
 		}
@@ -93,8 +112,6 @@ private extension ManagementViewController {
 		}
 		
 		tableView = tableView.then {
-			$0.delegate = self
-			$0.dataSource = self
 			$0.showsVerticalScrollIndicator = false
 			$0.backgroundColor = R.Color.gray100
 			$0.bounces = false			// TableView Scroll 방지
@@ -103,38 +120,51 @@ private extension ManagementViewController {
 		}
 	}
 	
-	private func setLayout() {
+	override func setDelegate() {
+		super.setDelegate()
+		
+		tableView = tableView.then {
+			$0.delegate = self
+			$0.dataSource = self
+		}
+	}
+	
+	override func setHierarchy() {
+		super.setHierarchy()
+		
 		view.addSubviews(baseView, tableView)
 		baseView.addSubviews(userInfoLabel, emailLabel, userEmailLabel, userLoginLabel)
-
+	}
+	
+	override func setLayout() {
 		baseView.snp.makeConstraints {
-			$0.top.equalTo(view.safeAreaLayoutGuide).inset(24)
-			$0.right.left.equalToSuperview().inset(24)
+			$0.top.equalTo(view.safeAreaLayoutGuide).inset(UI.baseViewMargin.top)
+			$0.leading.trailing.equalToSuperview().inset(UI.baseViewMargin.left)
 		}
 		
 		userInfoLabel.snp.makeConstraints {
-			$0.left.top.equalToSuperview()
+			$0.leading.top.equalToSuperview()
 		}
 		
 		emailLabel.snp.makeConstraints {
-			$0.left.equalToSuperview()
-			$0.top.equalTo(userInfoLabel.snp.bottom).offset(16)
+			$0.top.equalTo(userInfoLabel.snp.bottom).offset(UI.emailLabelMargin.top)
+			$0.leading.equalToSuperview()
 		}
 		
 		userEmailLabel.snp.makeConstraints {
-			$0.top.equalTo(userInfoLabel.snp.bottom).offset(16)
-			$0.left.equalTo(emailLabel.snp.right).offset(12)
+			$0.top.equalTo(userInfoLabel.snp.bottom).offset(UI.userEmailLabelMargin.top)
+			$0.leading.equalTo(emailLabel.snp.trailing).offset(UI.userEmailLabelMargin.left)
 		}
 		
 		userLoginLabel.snp.makeConstraints {
 			$0.left.equalToSuperview()
-			$0.top.equalTo(emailLabel.snp.bottom).offset(48)
+			$0.top.equalTo(emailLabel.snp.bottom).offset(UI.userLoginLabelMargin.top)
 		}
 		
 		tableView.snp.makeConstraints {
-			$0.top.equalTo(userLoginLabel.snp.bottom).offset(16)
-			$0.left.right.equalToSuperview()
-			$0.height.equalTo(88)
+			$0.top.equalTo(userLoginLabel.snp.bottom).offset(UI.tableViewMargin.top)
+			$0.leading.trailing.equalToSuperview()
+			$0.height.equalTo(UI.tableViewHeight)
 		}
 	}
 }
@@ -142,7 +172,7 @@ private extension ManagementViewController {
 extension ManagementViewController: UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		return 44
+		return UI.cellHeight
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -166,7 +196,6 @@ extension ManagementViewController: UITableViewDataSource {
 		return cell
 	}
 }
-
 // MARK: - UITableView Delegate
 extension ManagementViewController: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -177,9 +206,10 @@ extension ManagementViewController: UITableViewDelegate {
 		case 0:
 			showAlert(alertType: .canCancel, titleText: "로그아웃 하시겠어요?", contentText: "로그아웃해도 해당 계정의 데이터는 \n 계속 저장되어 있습니다.", cancelButtonText: "취소하기", confirmButtonText: "로그아웃")
 		case 1:
-			let vs = WithdrawViewController(viewModel: viewModel)
-			showWithdraw = true
-			navigationController?.pushViewController(vs, animated: true)		// 계정관리
+			let vc = WithdrawViewController()
+			vc.reactor = WithdrawReactor()
+			navigationController?.pushViewController(vc, animated: true)		// 계정관리
+			break
 		default:
 			break
 		}

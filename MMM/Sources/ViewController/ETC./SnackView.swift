@@ -60,8 +60,6 @@ extension SnackView {
                     guard let list = self.idList else { return }
                     guard let i = self.index else { return }
                     vm.fetchDetailActivity(id: list[i])
-				case let vm as ProfileViewModel:
-					vm.exportToExcel()
                 default:
                     print("error type")
                 }

@@ -8,7 +8,13 @@
 import Then
 import SnapKit
 
-final class SatisfactionTableViewCell: UITableViewCell {
+// 상속하지 않으려면 final 꼭 붙이기
+final class SatisfactionTableViewCell: BaseTableViewCell {
+	// MARK: - Constants
+	private enum UI {
+		static let sideMargin: CGFloat = 20
+	}
+	
 	// MARK: - Properties
 	private var satisfaction: Satisfaction = .low
 	
@@ -17,18 +23,6 @@ final class SatisfactionTableViewCell: UITableViewCell {
 	private lazy var scoreLabel = UILabel()
 	lazy var titleLabel = UILabel()
 	private lazy var checkImageView = UIImageView()	// ✓
-
-	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-		super.init(style: style, reuseIdentifier: reuseIdentifier)
-		setup() // 초기 셋업할 코드들
-	}
-	
-	// Compile time에 error를 발생시키는 코드
-	@available(*, unavailable)
-	required init?(coder: NSCoder) {
-		super.init(coder: coder)
-		fatalError("init(coder:) has not been implemented")
-	}
 	
 	override func setSelected(_ selected: Bool, animated: Bool) {
 		super.setSelected(selected, animated: animated)
@@ -52,15 +46,12 @@ extension SatisfactionTableViewCell {
 		return satisfaction
 	}
 }
-//MARK: - Style & Layouts
-private extension SatisfactionTableViewCell {
+//MARK: - Attribute & Hierarchy & Layouts
+extension SatisfactionTableViewCell {
 	// 초기 셋업할 코드들
-	private func setup() {
-		setAttribute()
-		setLayout()
-	}
-	
-	private func setAttribute() {
+	override func setAttribute() {
+		super.setAttribute()
+		
 		starImageView = starImageView.then {
 			$0.image = R.Icon.iconStarOrange36
 			$0.contentMode = .scaleAspectFill
@@ -86,11 +77,17 @@ private extension SatisfactionTableViewCell {
 		}
 	}
 	
-	private func setLayout() {
+	override func setHierarchy() {
+		super.setHierarchy()
+		
 		contentView.addSubviews(starImageView, scoreLabel, titleLabel, checkImageView)
+	}
+	
+	override func setLayout() {
+		super.setLayout()
 		
 		starImageView.snp.makeConstraints {
-			$0.leading.equalToSuperview().inset(20)
+			$0.leading.equalToSuperview().inset(UI.sideMargin)
 			$0.centerY.equalToSuperview()
 		}
 		

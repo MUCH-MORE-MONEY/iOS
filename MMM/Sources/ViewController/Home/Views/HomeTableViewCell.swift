@@ -70,7 +70,7 @@ extension HomeTableViewCell {
 		priceLabel.text = data.amount.withCommas()
 	}
 }
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 private extension HomeTableViewCell {
 	// 초기 셋업할 코드들
 	private func setup() {

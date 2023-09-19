@@ -32,7 +32,6 @@ final class AddDetailViewController: BaseAddActivityViewController, UINavigation
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		setup()
 	}
 
     override func viewDidAppear(_ animated: Bool) {
@@ -216,13 +215,8 @@ extension AddDetailViewController: UIImagePickerControllerDelegate {
 
 // MARK: - Style & Layout & Bind
 extension AddDetailViewController {
-    private func setup() {
-        bind()
-        setAttribute()
-        setLayout()
-    }
     // MARK: - bind
-    private func bind() {
+    override func setBind() {
         // MARK: - Loading
         viewModel.$isLoading
             .receive(on: DispatchQueue.main)
@@ -345,7 +339,8 @@ extension AddDetailViewController {
             }).store(in: &cancellable)
     }
     
-    private func setAttribute() {
+    override func setAttribute() {
+		super.setAttribute()
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
@@ -362,7 +357,8 @@ extension AddDetailViewController {
         }
     }
     
-    private func setLayout() {
+    override func setLayout() {
+		super.setLayout()
         remakeConstraintsByCameraImageView()
     }
 }

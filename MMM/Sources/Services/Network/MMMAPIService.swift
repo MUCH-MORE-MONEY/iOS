@@ -54,11 +54,17 @@ protocol MMMAPIServiceble: BaseAPIService {
     func pushAgreeListSelect() -> Observable<(PushAgreeListSelectResDto, Error?)>
     func pushAgreeUpdate(_ request: PushAgreeUpdateReqDto) -> Observable<(PushAgreeUpdateResDto, Error?)>
     
+	// MARK: - Staticstics Category 요청 API
+	func getCategory(_ request: CategoryReqDto) -> Observable<(CategoryResDto, Error?)>
+	
+	// MARK: - Profile 요청 API
+	func exportToExcel() -> Observable<(ExportResDto, Error?)>
+	func withdraw() -> Observable<(WithdrawResDto, Error?)>
+	func getSummary() -> Observable<(SummaryResDto, Error?)>
 }
 
 // MARK:
 struct MMMAPIService: MMMAPIServiceble {
-
     typealias APIType = MMMAPI
     
     func provider() -> Moya.MoyaProvider<MMMAPI> {
@@ -77,6 +83,24 @@ struct MMMAPIService: MMMAPIServiceble {
     func pushAgreeUpdate(_ request: PushAgreeUpdateReqDto) -> Observable<(PushAgreeUpdateResDto, Error?)> {
         return provider().request(MMMAPI.pushAgreeUpdate(request), type: PushAgreeUpdateResDto.self).asObservable()
     }
+	
+	// MARK: - Staticstics Category 요청 API
+	func getCategory(_ request: CategoryReqDto) -> RxSwift.Observable<(CategoryResDto, Error?)> {
+		return provider().request(MMMAPI.getCategory(request), type: CategoryResDto.self).asObservable()
+	}
+	
+	// MARK: - Profile 요청 API
+	func exportToExcel() -> RxSwift.Observable<(ExportResDto, Error?)> {
+		return provider().request(MMMAPI.exportToExcel, type: ExportResDto.self).asObservable()
+	}
+	
+	func getSummary() -> RxSwift.Observable<(SummaryResDto, Error?)> {
+		return provider().request(MMMAPI.getSummary, type: SummaryResDto.self).asObservable()
+	}
+	
+	func withdraw() -> RxSwift.Observable<(WithdrawResDto, Error?)> {
+		return provider().request(MMMAPI.exportToExcel, type: WithdrawResDto.self).asObservable()
+	}
 }
 
 // MARK: MoyaProvider 네트워크 공통 로직

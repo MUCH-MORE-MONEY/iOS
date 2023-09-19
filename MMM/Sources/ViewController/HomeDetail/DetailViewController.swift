@@ -64,7 +64,6 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		setup()
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -101,26 +100,21 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
 		homeViewModel.date = date // 날짜가 변경되었을 경우
 	}
 }
-
+//MARK: - Actions
 extension DetailViewController {
 	func setData(economicActivityId: [String], index: Int, date: Date) {
 		self.economicActivityId = economicActivityId
 		self.index = index
 		self.date = date
 	}
-	
-	private func setup() {
-        bind()
-		setAttribute()
-		setLayout()
-	}
-	
-    // MARK: - Bind
-    private func bind() {
+}
+//MARK: - Attribute & Hierarchy & Layouts
+extension DetailViewController {
+	// MARK: - Bind
+	override func setBind() {
+		super.setBind()
         homeDetailViewModel.fetchDetailActivity(id: economicActivityId[index])
-        
 
-        
         // MARK: - Loading
         homeDetailViewModel.$isLoading
             .receive(on: DispatchQueue.main)
@@ -190,7 +184,8 @@ extension DetailViewController {
 
     }
     
-	private func setAttribute() {
+	override func setAttribute() {
+		super.setAttribute()
 		title = navigationTitle
 		editActivityButtonItem = editActivityButtonItem.then {
 			$0.customView = editButton
@@ -259,7 +254,8 @@ extension DetailViewController {
         
 	}
 	
-	private func setLayout() {
+	override func setLayout() {
+		super.setLayout()
 		titleLabel.snp.makeConstraints {
 			$0.top.equalTo(view.safeAreaLayoutGuide).offset(24)
 			$0.left.equalToSuperview().inset(24)

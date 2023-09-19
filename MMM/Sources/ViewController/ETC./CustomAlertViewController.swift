@@ -150,8 +150,7 @@ extension CustomAlertViewController {
 		self.dismiss(animated: true)
 	}
 }
-
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 extension CustomAlertViewController {
 	private func setUp() {
 		// 초기 셋업할 코드들

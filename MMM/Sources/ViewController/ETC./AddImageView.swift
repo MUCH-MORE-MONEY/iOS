@@ -30,9 +30,8 @@ class AddImageView: UIView {
     }
 
 }
-
+//MARK: - Attribute & Hierarchy & Layouts
 extension AddImageView {
-    // MARK: - Style & Layout
     private func setup() {
         setAttribute()
         setLayout()

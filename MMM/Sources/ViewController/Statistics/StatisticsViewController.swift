@@ -173,9 +173,8 @@ extension StatisticsViewController {
 extension StatisticsViewController {
 	// 초기 셋업할 코드들
 	override func setup() {
-		super.setup()
-		
 		setTimer()
+		super.setup()
 	}
 	
 	private func setTimer() {

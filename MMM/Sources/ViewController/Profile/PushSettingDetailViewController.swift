@@ -64,7 +64,7 @@ extension PushSettingDetailViewController {
             .disposed(by: disposeBag)
         
         bottomSheetReactor.state
-            .map { $0.success }
+            .map { $0.successByMonthly }
             .distinctUntilChanged()
             .bind(onNext: setTime)
             .disposed(by: disposeBag)

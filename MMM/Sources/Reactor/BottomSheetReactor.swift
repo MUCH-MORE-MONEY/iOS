@@ -17,7 +17,7 @@ final class BottomSheetReactor: Reactor {
 	
 	// 처리 단위
 	enum Mutation {
-		case updateDataByMonthly(Date, StatisticsResDto, Error?)
+		case updateDataByMonthly(Date)
 		case updateDataBySatisfaction(Satisfaction)
 	}
 	
@@ -39,7 +39,7 @@ extension BottomSheetReactor {
 	func mutate(action: Action) -> Observable<Mutation> {
 		switch action {
 		case .didTapDateCheckButton(let date):
-			return getStatisticsAverage(date) // 만족도 평균값
+			return .just(.updateDataByMonthly(date))
 		case .didTapSatisfactionCheckButton(let satisfaction):
 			return .just(.updateDataBySatisfaction(satisfaction))
 		}
@@ -50,7 +50,7 @@ extension BottomSheetReactor {
 		var newState = state
 		
 		switch mutation {
-		case .updateDataByMonthly(let date, let respose, let error):
+		case .updateDataByMonthly(let date):
 			newState.successByMonthly = date
 		case .updateDataBySatisfaction(let satisfaction):
 			newState.successBySatisfaction = satisfaction

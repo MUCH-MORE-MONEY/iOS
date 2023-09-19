@@ -89,7 +89,7 @@ extension DatePicker2ViewController {
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: BottomSheetReactor) {
 		reactor.state
-			.map { $0.success }
+			.map { $0.successByMonthly }
 			.subscribe { [weak self] date in
 				guard let self = self else { return }
 				self.delegate?.willDismiss()

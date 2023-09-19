@@ -85,14 +85,15 @@ struct MMMAPIService: MMMAPIServiceble {
     
     func pushAgreeUpdate(_ request: PushAgreeUpdateReqDto) -> Observable<(PushAgreeUpdateResDto, Error?)> {
         return provider().request(MMMAPI.pushAgreeUpdate(request), type: PushAgreeUpdateResDto.self).asObservable()
-    }
+	}
 	
 	// MARK: - Statistics 요청 API
 	// 통계 만족도 평균 요청
 	func getStatisticsAverage(_ dateYM: String) -> Observable<(StatisticsResDto, Error?)> {
 		return provider().request(MMMAPI.getStaticsticsAverage(dateYM: dateYM), type: StatisticsResDto.self).asObservable()
-
-  // MARK: - Staticstics Category 요청 API
+	}
+	
+	// MARK: - Staticstics Category 요청 API
 	func getCategory(_ request: CategoryReqDto) -> RxSwift.Observable<(CategoryResDto, Error?)> {
 		return provider().request(MMMAPI.getCategory(request), type: CategoryResDto.self).asObservable()
 	}

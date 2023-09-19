@@ -6,15 +6,25 @@
 //
 
 import UIKit
-import Combine
 import Then
 import SnapKit
-import Lottie
+import RxCocoa
+import ReactorKit
 
-final class DataExportViewController: BaseViewController {
+// 상속하지 않으려면 final 꼭 붙이기
+final class DataExportViewController: BaseViewControllerWithNav, View {
+	typealias Reactor = ProfileReactor
+
+	// MARK: - Constants
+	private enum UI {
+		static let mainLabelMargin: UIEdgeInsets = .init(top: 32, left: 24, bottom: 0, right: 24)
+		static let subLabelMargin: UIEdgeInsets = .init(top: 32, left: 24, bottom: 0, right: 24)
+		static let exportButtonMargin: UIEdgeInsets = .init(top: 0, left: 24, bottom: 58, right: 24)
+		static let exportButtonHeight: CGFloat = 56
+
+	}
+	
 	// MARK: - Properties
-	private let viewModel = ProfileViewModel()
-	private lazy var cancellable: Set<AnyCancellable> = .init()
 
     // MARK: - UI components
     private lazy var mainLabel = UILabel()
@@ -24,12 +34,70 @@ final class DataExportViewController: BaseViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		setup()		// 초기 셋업할 코드들
+	}
+	
+	func bind(reactor: ProfileReactor) {
+		bindState(reactor)
+		bindAction(reactor)
+	}
+}
+//MARK: - Bind
+extension DataExportViewController {
+	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
+	private func bindAction(_ reactor: ProfileReactor) {
+		// 데이터 변환 요청
+		exportButton.rx.tap
+			.map { .export }
+			.bind(to: reactor.action)
+			.disposed(by: disposeBag)
+	}
+	
+	// MARK: 데이터 바인딩 처리 (Reactor -> View)
+	private func bindState(_ reactor: ProfileReactor) {
+		// 카테고리 더보기 클릭시, push
+		reactor.state
+			.compactMap { $0.file }
+			.distinctUntilChanged() // 중복값 무시
+			.bind(onNext: presentShareSheet)
+			.disposed(by: disposeBag)
+		
+		// 로딩 발생
+		reactor.state
+			.map { $0.isLoading }
+			.distinctUntilChanged() // 중복값 무시
+			.filter { $0 } // true 일때만
+			.subscribe(onNext: { [weak self] loading in
+				guard let self = self else { return }
+				
+				if loading && !self.loadView.isPresent {
+					self.loadView.play()
+					self.loadView.setLabel(label: "데이터 내보내는 중...")
+					self.loadView.isPresent = true
+					self.loadView.modalPresentationStyle = .overFullScreen
+					self.present(self.loadView, animated: false)
+				} else {
+					self.loadView.dismiss(animated: false)
+				}
+			})
+			.disposed(by: disposeBag)
+		
+		// Error 발생
+		reactor.state
+			.map { $0.error }
+			.distinctUntilChanged() // 중복값 무시
+			.filter { $0 } // true 일때만
+			.subscribe(onNext: { isError in
+				if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+					sceneDelegate.window?.showToast(message: "일시적인 오류가 발생했습니다.")
+				}
+			})
+			.disposed(by: disposeBag)
 	}
 }
 // MARK: - Action
 private extension DataExportViewController {
-    func presentShareSheet(_ fileName: String, _ data: Data) {
+	// 공유 Sheet 열기
+	func presentShareSheet(file: ProfileReactor.File) {
         // 데이터를 넘겨야함 -> sample data
         // 실제 데이터를 넘길경우 비동기 처리를 해줘야함
 		do {
@@ -39,8 +107,8 @@ private extension DataExportViewController {
 			let downloadUrl = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
 			
 			// 파일 경로 생성
-			let fileUrl = downloadUrl.appendingPathComponent("\(fileName)")
-			try data.write(to: fileUrl, options: .atomic)
+			let fileUrl = downloadUrl.appendingPathComponent("\(file.fileName)")
+			try file.data.write(to: fileUrl, options: .atomic)
 			
 			let vc = UIActivityViewController(activityItems: [fileUrl], applicationActivities: nil)
 			loadView.dismiss(animated: false)
@@ -66,57 +134,12 @@ private extension DataExportViewController {
 //		toastView.toastAnimation(duration: 1.0, delay: 3.0, option: .curveEaseOut)
 //	}
 }
-// MARK: - Style & Layouts
-private extension DataExportViewController {
+//MARK: - Attribute & Hierarchy & Layouts
+extension DataExportViewController {
 	// 초기 셋업할 코드들
-    private func setup() {
-		bind()
-        setAttribute()
-        setLayout()
-    }
-	
-	private func bind() {
-		//MARK: input
-		exportButton.tapPublisher
-			.sinkOnMainThread(receiveValue: {
-				self.viewModel.exportToExcel()
-			})
-			.store(in: &cancellable)
+	override func setAttribute() {
+		super.setAttribute()
 		
-		//MARK: output
-		viewModel.$isLoading
-			.sinkOnMainThread(receiveValue: { [weak self] loading in
-				guard let self = self else { return }
-				
-				if loading && !self.loadView.isPresent {
-					self.loadView.play()
-					self.loadView.setLabel(label: "데이터 내보내는 중...")
-					self.loadView.isPresent = true
-					self.loadView.modalPresentationStyle = .overFullScreen
-					self.present(self.loadView, animated: false)
-				} else {
-					self.loadView.dismiss(animated: false)
-				}
-			}).store(in: &cancellable)
-
-		viewModel.$file
-			.sinkOnMainThread(receiveValue: { [weak self] file in
-				guard let self = self, let file = file else { return }
-				presentShareSheet(file.fileName, file.data)
-			}).store(in: &cancellable)
-		
-		viewModel.$isError
-			.sinkOnMainThread(receiveValue: { [weak self] isError in
-				guard let self = self, let isError = isError else { return }
-				if isError {
-                    if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
-                        sceneDelegate.window?.showToast(message: "일시적인 오류가 발생했습니다.")
-                    }
-                } // 네트워크 에러 발생
-			}).store(in: &cancellable)
-	}
-    
-    private func setAttribute() {
 		// [view]
 		view.backgroundColor = R.Color.gray100
         navigationItem.title = "데이터 내보내기"
@@ -146,24 +169,30 @@ private extension DataExportViewController {
 			$0.setButtonLayer()
 		}
     }
-    
-    private func setLayout() {
+	
+	override func setHierarchy() {
+		super.setHierarchy()
+		
 		view.addSubviews(mainLabel, subLabel, exportButton)
-
+	}
+    
+	override func setLayout() {
+		super.setLayout()
+		
         mainLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(32)
-            $0.left.right.equalToSuperview().inset(24)
+			$0.top.equalTo(view.safeAreaLayoutGuide).offset(UI.mainLabelMargin.top)
+			$0.leading.trailing.equalToSuperview().inset(UI.mainLabelMargin.left)
         }
             
         subLabel.snp.makeConstraints {
-            $0.top.equalTo(mainLabel.snp.bottom).offset(32)
-            $0.left.right.equalToSuperview().inset(24)
+			$0.top.equalTo(mainLabel.snp.bottom).offset(UI.subLabelMargin.top)
+			$0.leading.trailing.equalToSuperview().inset(UI.subLabelMargin.left)
         }
         
         exportButton.snp.makeConstraints {
-            $0.left.right.equalToSuperview().inset(24)
-            $0.bottom.equalToSuperview().inset(58)
-            $0.height.equalTo(56)
+			$0.leading.trailing.equalToSuperview().inset(UI.exportButtonMargin.left)
+			$0.bottom.equalToSuperview().inset(UI.exportButtonMargin.bottom)
+			$0.height.equalTo(UI.exportButtonHeight)
         }
     }
 }

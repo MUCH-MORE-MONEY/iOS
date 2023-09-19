@@ -29,8 +29,7 @@ extension WeekCollectionViewCell {
         button.setTitle(text, for: .normal)
     }
 }
-
-// MARK: - Style & Layout
+//MARK: - Attribute & Hierarchy & Layouts
 extension WeekCollectionViewCell {
     private func setup() {
         bind()

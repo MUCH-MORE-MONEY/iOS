@@ -17,6 +17,14 @@ enum MMMAPI {
     
     // MARK: - Staticstics
 	case getStaticsticsAverage(dateYM: String) // 월간 만족도 평균값
+	
+	// MARK: - Staticstics Category
+	case getCategory(CategoryReqDto)
+	
+	// MARK: - Profile
+	case exportToExcel
+	case getSummary
+	case withdraw
 }
 
 extension MMMAPI: BaseNetworkService {
@@ -35,9 +43,17 @@ extension MMMAPI: BaseNetworkService {
             return "/push/agree/list/select"
         case .pushAgreeUpdate:
             return "/push/agree/update"
-		case .getStaticsticsAverage(let dateYM):
-			return "/economic_activity/\(dateYM)/average"
-		}
+        case .getStaticsticsAverage(let dateYM):
+          return "/economic_activity/\(dateYM)/average"
+        case .getCategory(let request):
+          return "/economic-activity-category/list/\(request.economicActivityDvcd)"
+        case .exportToExcel:
+          return "/economic_activity/excel/select"
+        case .getSummary:
+          return "/economic_activity/summary/select"
+        case .withdraw:
+          return "/login/delete"
+		    }
     }
     
     /// 메서드 방식 선택
@@ -45,9 +61,15 @@ extension MMMAPI: BaseNetworkService {
         switch self {
         case .push, .pushAgreeListSelect, .pushAgreeUpdate:
             return .post
-		case .getStaticsticsAverage:
-			return .get
-		}
+        case .getStaticsticsAverage:
+          return .get
+        case .push, .pushAgreeListSelect, .pushAgreeUpdate:
+          return .post
+        case .getCategory:
+          return .get
+        case .exportToExcel, .getSummary, .withdraw:
+          return .post
+        }
     }
     
     /// body parameter
@@ -58,18 +80,18 @@ extension MMMAPI: BaseNetworkService {
         switch self {
         case .push(let request):
             return .requestParameters(parameters: request.asDictionary, encoding: JSONEncoding.default)
-        
         case .pushAgreeListSelect:
             return .requestPlain
-            
         case .pushAgreeUpdate(let request):
-            return .requestParameters(parameters: request.asDictionary, encoding: JSONEncoding.default)
-            
-		case .getStaticsticsAverage:
-			return .requestPlain
-		}
+            return .requestParameters(parameters: request.asDictionary, encoding: JSONEncoding.default)            
+        case .getStaticsticsAverage:
+          return .requestPlain
+        case .getCategory:
+          return .requestPlain
+        case .exportToExcel, .getSummary, .withdraw:
+          return .requestPlain
+        }
     }
-
     
     /// Header 전달
     /// nil 일 경우 헤더 요청하지 않음

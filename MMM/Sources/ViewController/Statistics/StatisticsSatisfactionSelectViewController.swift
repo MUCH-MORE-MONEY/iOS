@@ -11,14 +11,40 @@ import SnapKit
 import ReactorKit
 import RxRelay
 
-final class StatisticsSatisfactionSelectViewController: UIViewController, View {
+enum Satisfaction: Int {
+	case low	// 1~2점
+	case middle	// 3점
+	case hight	// 4~5점
+	
+	var title: String {
+		switch self {
+		case .low: return "아쉬운 활동 줄이기"
+		case .middle: return "평범한 활동 돌아보기"
+		case .hight: return "만족스러운 활동 늘리기"
+		}
+	}
+	
+	var score: String {
+		switch self {
+		case .low: return "1~2점"
+		case .middle: return "3점"
+		case .hight: return "4~5점"
+		}
+	}
+}
+
+// 상속하지 않으려면 final 꼭 붙이기
+final class StatisticsSatisfactionSelectViewController: BaseViewController, View {
 	typealias Reactor = BottomSheetReactor
 
+	// MARK: - Constants
+	private enum UI {
+	}
+	
 	// MARK: - Properties
 	private var isDark: Bool = false
 	private var satisfaction: Satisfaction
 	weak var delegate: BottomSheetChild?
-	var disposeBag: DisposeBag = DisposeBag()
 	private let satisfactionList: BehaviorRelay<[Satisfaction]> = BehaviorRelay(value: [.low, .hight, .middle])
 	
 	// MARK: - UI Components
@@ -40,13 +66,6 @@ final class StatisticsSatisfactionSelectViewController: UIViewController, View {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		setup() // 초기 셋업할 코드들
-	}
-	
-	// 초기 셋업할 코드들
-	private func setup() {
-		setAttribute()
-		setLayout()
 	}
 	
 	func bind(reactor: BottomSheetReactor) {
@@ -112,9 +131,12 @@ extension StatisticsSatisfactionSelectViewController {
 			}.disposed(by: disposeBag)
 	}
 }
-//MARK: - Style & Layouts
-private extension StatisticsSatisfactionSelectViewController {
-	private func setAttribute() {
+//MARK: - Attribute & Hierarchy & Layouts
+extension StatisticsSatisfactionSelectViewController {
+	// 초기 셋업할 코드들
+	override func setAttribute() {
+		super.setAttribute()
+		
 		self.view.backgroundColor = isDark ? R.Color.gray900 : .white
 		
 		stackView = stackView.then {
@@ -150,10 +172,16 @@ private extension StatisticsSatisfactionSelectViewController {
 		}
 	}
 	
-	private func setLayout() {
+	override func setHierarchy() {
+		super.setHierarchy()
+		
 		view.addSubviews(stackView, tableView)
 		stackView.addArrangedSubviews(titleLabel, checkButton)
-		
+	}
+	
+	override func setLayout() {
+		super.setLayout()
+				
 		stackView.snp.makeConstraints {
 			$0.top.equalToSuperview()
 			$0.leading.equalToSuperview().inset(24)

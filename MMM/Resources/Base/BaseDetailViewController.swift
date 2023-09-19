@@ -9,7 +9,7 @@ import UIKit
 import Then
 import SnapKit
 
-class BaseDetailViewController: BaseViewController {
+class BaseDetailViewController: BaseViewControllerWithNav {
     // MARK: - UI Components
     lazy var headerView = UIView().then {
         $0.backgroundColor = R.Color.gray900
@@ -37,16 +37,10 @@ class BaseDetailViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setup()
     }
 }
 
 extension BaseDetailViewController {
-    private func setup() {
-        setAttribute()
-        setLayout()
-    }
-    
 //    func setData(totalPrice: String) {
 //        DispatchQueue.main.async {
 //            self.totalPrice.text = totalPrice
@@ -55,7 +49,8 @@ extension BaseDetailViewController {
 //        print("baseVC total price : ", self.totalPrice.text)
 //    }
     
-    private func setAttribute() {
+    override func setAttribute() {
+		super.setAttribute()
         totalPrice.text = "11원"
         activityType.text = "지출"
         
@@ -66,7 +61,8 @@ extension BaseDetailViewController {
         }
     }
     
-    private func setLayout() {
+	override func setLayout() {
+		super.setLayout()
         headerView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.left.right.equalToSuperview()

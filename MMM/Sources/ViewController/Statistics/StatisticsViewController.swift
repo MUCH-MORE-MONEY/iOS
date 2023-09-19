@@ -11,15 +11,20 @@ import RxSwift
 import RxCocoa
 import ReactorKit
 
-final class StatisticsViewController: UIViewController, View {
+// 상속하지 않으려면 final 꼭 붙이기
+final class StatisticsViewController: BaseViewController, View {
 	typealias Reactor = StatisticsReactor
 
+	// MARK: - Constants
+	private enum UI {
+		static let sideMargin: CGFloat = 20
+	}
+	
 	// MARK: - Properties
-	var disposeBag: DisposeBag = DisposeBag()
 	private var bottomSheetReactor: BottomSheetReactor = BottomSheetReactor()
 	private var month: Date = Date()
 	private var satisfaction: Satisfaction = .low
-	private var timer: Timer? // Ranking(순위)이 변경하는 시간
+	private var timer: DispatchSourceTimer? // rank(순위)를 변경하는 시간
 
 	// MARK: - UI Components
 	private lazy var monthButtonItem = UIBarButtonItem()
@@ -35,7 +40,6 @@ final class StatisticsViewController: UIViewController, View {
 	
     override func viewDidLoad() {
         super.viewDidLoad()
-		setup()		// 초기 셋업할 코드들
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -47,13 +51,15 @@ final class StatisticsViewController: UIViewController, View {
 				rootVC.navigationItem.rightBarButtonItem = nil
 			}
 		}
+		
+		timer?.resume() // 타이머 재시작
 	}
 	
-	deinit {
-		timer?.invalidate() // 타이머 종료
-		timer = nil
+	override func viewWillDisappear(_ animated: Bool) {
+		super.viewWillDisappear(animated)
+		timer?.suspend() // 일시정지
 	}
-	
+
 	func bind(reactor: StatisticsReactor) {
 		bindState(reactor)
 		bindAction(reactor)
@@ -135,7 +141,7 @@ extension StatisticsViewController {
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
 	}
 	
-	/// '월'  변경
+	/// '월'  및 범위 변경
 	private func setMonth(_ date: Date) {
 		// 올해인지 판별
 		if Date().getFormattedDate(format: "yyyy") != date.getFormattedDate(format: "yyyy") {
@@ -144,6 +150,16 @@ extension StatisticsViewController {
 			monthButton.setTitle(date.getFormattedDate(format: "M월"), for: .normal)
 		}
 		
+		// 범위 변경
+		let month = date.getFormattedDate(format: "MM")
+		var end = date.lastDay() ?? "01"
+		
+		// 이번달 인지 판별
+		if date.getFormattedYM() == Date().getFormattedYM() {
+			end = Date().getFormattedDate(format: "dd")
+		}
+		
+		self.headerView.setData(startDate: "\(month).01", endDate: "\(month).\(end)")
 		self.month = date
 	}
 	
@@ -153,15 +169,22 @@ extension StatisticsViewController {
 		self.satisfaction = satisfaction
 	}
 }
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 extension StatisticsViewController {
 	// 초기 셋업할 코드들
-	private func setup() {
-		setAttribute()
-		setLayout()
+	override func setup() {
+		setTimer()
+		super.setup()
 	}
 	
-	private func setAttribute() {
+	private func setTimer() {
+		timer = DispatchSource.makeTimerSource(flags: [], queue: DispatchQueue.main)
+		timer?.schedule(deadline: .now(), repeating: 1)
+	}
+	
+	override func setAttribute() {
+		super.setAttribute()
+		
 		view.backgroundColor = R.Color.gray100
 		
 		scrollView = scrollView.then {
@@ -195,10 +218,16 @@ extension StatisticsViewController {
 		}
 	}
 	
-	private func setLayout() {
+	override func setHierarchy() {
+		super.setHierarchy()
+		
 		view.addSubviews(scrollView)
 		scrollView.addSubviews(refreshView, contentView)
 		contentView.addSubviews(headerView, satisfactionView, categoryView, activityView, selectAreaView)
+	}
+	
+	override func setLayout() {
+		super.setLayout()
 		
 		scrollView.snp.makeConstraints {
 			$0.top.leading.trailing.equalTo(view)
@@ -218,24 +247,24 @@ extension StatisticsViewController {
 		headerView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(32)
 			$0.leading.equalToSuperview().inset(24)
-			$0.trailing.equalToSuperview().inset(20)
+			$0.trailing.equalToSuperview().inset(UI.sideMargin)
 		}
 		
 		satisfactionView.snp.makeConstraints {
 			$0.top.equalTo(headerView.snp.bottom)
-			$0.leading.trailing.equalToSuperview().inset(20)
+			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 			$0.height.equalTo(64)
 		}
 		
 		categoryView.snp.makeConstraints {
 			$0.top.equalTo(satisfactionView.snp.bottom).offset(16)
-			$0.leading.trailing.equalToSuperview().inset(20)
+			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 			$0.height.equalTo(146)
 		}
 		
 		activityView.snp.makeConstraints {
 			$0.top.equalTo(categoryView.snp.bottom).offset(16)
-			$0.leading.trailing.equalToSuperview().inset(20)
+			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 			$0.height.equalTo(100)
 		}
 		

@@ -8,22 +8,17 @@
 import Then
 import SnapKit
 
-final class StatisticsHeaderView: UIView {
+// 상속하지 않으려면 final 꼭 붙이기
+final class StatisticsHeaderView: BaseView {
+	// MARK: - Constants
+	private enum UI {
+		static let titleLabelTop: CGFloat = 6
+	}
+	
 	// MARK: - UI Components
 	private lazy var rangeLabel = UILabel() // 통계 범위
 	private lazy var titleLabel = UILabel()
 	private lazy var imageView = UIImageView() // Boost 아이콘
-
-	override init(frame: CGRect) {
-		super.init(frame: frame)
-		setup() // 초기 셋업할 코드들
-	}
-	
-	// Compile time에 error를 발생시키는 코드
-	@available(*, unavailable)
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
 }
 //MARK: - Action
 extension StatisticsHeaderView {
@@ -62,17 +57,16 @@ extension StatisticsHeaderView {
 		return attributedText1
 	}
 }
-//MARK: - Style & Layouts
-private extension StatisticsHeaderView {
+//MARK: - Attribute & Hierarchy & Layouts
+extension StatisticsHeaderView {
 	// 초기 셋업할 코드들
-	private func setup() {
-		setAttribute()
-		setLayout()
-	}
-	
-	private func setAttribute() {
+	override func setAttribute() {
+		super.setAttribute()
+		
 		rangeLabel = rangeLabel.then {
-			$0.text = "08.01 ~ 08.17"
+			let month = Date().getFormattedDate(format: "MM") // 이번달
+			let today = Date().getFormattedDate(format: "dd") // 오늘날짜
+			$0.text = "\(month).01 ~ \(month).\(today)"
 			$0.font = R.Font.prtendard(family: .medium, size: 12)
 			$0.textColor = R.Color.gray500
 		}
@@ -88,15 +82,21 @@ private extension StatisticsHeaderView {
 		}
 	}
 	
-	private func setLayout() {
+	override func setHierarchy() {
+		super.setHierarchy()
+		
 		addSubviews(rangeLabel, titleLabel, imageView)
-
+	}
+	
+	override func setLayout() {
+		super.setLayout()
+		
 		rangeLabel.snp.makeConstraints {
 			$0.top.leading.equalToSuperview()
 		}
 		
 		titleLabel.snp.makeConstraints {
-			$0.top.equalTo(rangeLabel.snp.bottom).offset(6)
+			$0.top.equalTo(rangeLabel.snp.bottom).offset(UI.titleLabelTop)
 			$0.leading.equalToSuperview()
 		}
 		

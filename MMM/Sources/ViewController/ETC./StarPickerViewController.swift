@@ -37,7 +37,7 @@ final class StarPickerViewController: UIViewController {
     }
 }
 
-// MARK: - Style & Layout & Bind
+// MARK: - Attribute & Hierarchy & Layouts & Bind
 extension StarPickerViewController {
     private func setup() {
         setAttribute()

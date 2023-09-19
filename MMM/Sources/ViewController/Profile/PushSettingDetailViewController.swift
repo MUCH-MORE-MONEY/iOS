@@ -12,7 +12,7 @@ import RxSwift
 import RxCocoa
 import ReactorKit
 
-final class PushSettingDetailViewController: BaseViewController, View {
+final class PushSettingDetailViewController: BaseViewControllerWithNav, View {
     // MARK: - UI Components
     private lazy var mainLabel = UILabel()
     private lazy var detailTimeSettingView = DetailTimeSettingView()
@@ -20,13 +20,11 @@ final class PushSettingDetailViewController: BaseViewController, View {
     
     // MARK: - Properties
     private let weekList = ["일", "화", "수", "목", "금", "토", "월"]
-    var disposeBag: DisposeBag = DisposeBag()
     var reactor: PushSettingDetailReactor!
     var bottomSheetReactor: BottomSheetReactor = BottomSheetReactor()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setup()
         bind(reactor: reactor)
     }
     
@@ -90,14 +88,9 @@ extension PushSettingDetailViewController {
         detailTimeSettingView.configure(date)
     }
 }
-
+//MARK: - Attribute & Hierarchy & Layouts & Bind
 extension PushSettingDetailViewController {
-    private func setup() {
-        setAttribute()
-        setLayout()
-    }
-    
-    private func setAttribute() {
+    override func setAttribute() {
         view.backgroundColor = R.Color.gray100
         title = "알람 시간 지정"
         view.addSubviews(mainLabel, detailTimeSettingView, weekCollecitonView)
@@ -129,7 +122,7 @@ extension PushSettingDetailViewController {
         }
     }
     
-    private func setLayout() {
+	override func setLayout() {
         mainLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(24)
             $0.left.equalToSuperview().offset(24)

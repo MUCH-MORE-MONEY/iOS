@@ -45,7 +45,7 @@ final class StatisticsReactor: Reactor {
 		action.onNext(.loadData)
 	}
 }
-//MARK: - Mutate, Reduce 함수
+//MARK: - Mutate, Reduce
 extension StatisticsReactor {
 	/// Action이 들어온 경우, 어떤 처리를 할건지 분기
 	func mutate(action: Action) -> Observable<Mutation> {

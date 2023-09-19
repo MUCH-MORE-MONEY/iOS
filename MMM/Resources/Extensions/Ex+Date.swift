@@ -50,4 +50,20 @@ extension Date {
         dateformat.dateFormat = "a HH:mm"
         return dateformat.string(from: self)
     }
+	
+	func lastDay() -> String? {
+		let year = self.getFormattedDate(format: "yyyy")
+		let month = self.getFormattedDate(format: "MM")
+		let dateformat = DateFormatter()
+		let calendar = Calendar(identifier: .gregorian)
+		dateformat.dateFormat = "yyyy-MM-dd"
+		let st = dateformat.date(from: "\(year)-\(month)-01")!
+		let end = calendar.date(byAdding: .month, value: +1, to: st)!
+		let result = calendar.dateComponents([.day], from: st, to: end)
+
+		guard let day = result.day else {
+			return nil
+		}
+		return String(day)
+	}
 }

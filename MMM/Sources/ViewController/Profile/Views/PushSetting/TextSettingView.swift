@@ -45,9 +45,7 @@ extension TextSettingView {
         }
     }
 }
-
-
-// MARK: - Style & Layout
+//MARK: - Attribute & Hierarchy & Layouts
 extension TextSettingView {
     private func setup() {
         setAttribute()

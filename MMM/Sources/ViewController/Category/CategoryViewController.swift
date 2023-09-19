@@ -11,11 +11,14 @@ import RxSwift
 import RxCocoa
 import ReactorKit
 
-final class CategoryViewController: BaseViewController, View {
+final class CategoryViewController: BaseViewControllerWithNav, View {
 	typealias Reactor = CategoryReactor
+	// MARK: - Constants
+	private enum UI {
+		static let segmentedControlHeight: CGFloat = 50
+	}
 	
 	// MARK: - Properties
-	var disposeBag: DisposeBag = DisposeBag()
 	private lazy var currentPage: Int = 0 { // 현재 선택된 page (지출/수입)
 		didSet {
 			// from segmentedControl -> pageViewController 업데이트
@@ -28,7 +31,7 @@ final class CategoryViewController: BaseViewController, View {
 	private lazy var editButton = UIButton()
 	private lazy var segmentedControl = CategorySegmentedControl(items: ["지출", "수입"])
 	private lazy var pageViewController = UIPageViewController()
-	private lazy var payViewController = UIViewController()
+	private lazy var payViewController = CategoryContentViewController()
 	private lazy var earnViewController = UIViewController()
 	private var dataViewControllers: [UIViewController] {
 		[self.payViewController, self.earnViewController]
@@ -36,7 +39,6 @@ final class CategoryViewController: BaseViewController, View {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		setup()		// 초기 셋업할 코드들
 	}
 	
 	func bind(reactor: CategoryReactor) {
@@ -44,17 +46,13 @@ final class CategoryViewController: BaseViewController, View {
 		bindAction(reactor)
 	}
 }
-//MARK: - Action
-extension CategoryViewController {
-}
 //MARK: - Bind
 extension CategoryViewController {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
 	private func bindAction(_ reactor: CategoryReactor) {
 		editButton.rx.tap
-			.subscribe(onNext: { [weak self] _ in
-				guard let self = self else { return }
-				
+			.subscribe(onNext: {
+//				guard let self = self else { return }
 			}).disposed(by: disposeBag)
 		
 		segmentedControl.rx.selectedSegmentIndex
@@ -69,15 +67,15 @@ extension CategoryViewController {
 	private func bindState(_ reactor: CategoryReactor) {
 	}
 }
-//MARK: - Style & Layouts
+//MARK: - Action
+extension CategoryViewController {
+}
+//MARK: - Attribute & Hierarchy & Layouts
 extension CategoryViewController {
 	// 초기 셋업할 코드들
-	private func setup() {
-		setAttribute()
-		setLayout()
-	}
-	
-	private func setAttribute() {
+	override func setAttribute() {
+		super.setAttribute()
+		
 		title = "카테고리"
 		view.backgroundColor = R.Color.gray900
 		navigationItem.rightBarButtonItem = UIBarButtonItem(customView: editButton)
@@ -90,9 +88,10 @@ extension CategoryViewController {
 		}
 		
 		segmentedControl = segmentedControl.then {
+			$0.backgroundColor = R.Color.gray900
 			$0.selectedSegmentIndex = 0
 			$0.translatesAutoresizingMaskIntoConstraints = true
-			$0.setTitleTextAttributes([.foregroundColor: R.Color.gray700, .font: R.Font.title1], for: .normal)
+			$0.setTitleTextAttributes([.foregroundColor: R.Color.gray500, .font: R.Font.title1], for: .normal)
 			$0.setTitleTextAttributes([.foregroundColor: R.Color.white, .font: R.Font.title1], for: .selected)
 		}
 		
@@ -104,7 +103,7 @@ extension CategoryViewController {
 		}
 		
 		payViewController = payViewController.then {
-			$0.view.backgroundColor = R.Color.orange050
+			$0.reactor = reactor
 		}
 		
 		earnViewController = earnViewController.then {
@@ -112,13 +111,19 @@ extension CategoryViewController {
 		}
 	}
 	
-	private func setLayout() {
+	override func setHierarchy() {
+		super.setHierarchy()
+		
 		view.addSubviews(segmentedControl, pageViewController.view)
+	}
+	
+	override func setLayout() {
+		super.setLayout()
 		
 		segmentedControl.snp.makeConstraints {
 			$0.top.equalToSuperview()
-			$0.leading.trailing.equalToSuperview().inset(24)
-			$0.height.equalTo(50)
+			$0.leading.trailing.equalToSuperview()
+			$0.height.equalTo(UI.segmentedControlHeight)
 		}
 		
 		pageViewController.view.snp.makeConstraints {

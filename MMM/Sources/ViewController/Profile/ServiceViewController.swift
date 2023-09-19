@@ -9,7 +9,15 @@ import UIKit
 import Then
 import SnapKit
 
-final class ServiceViewController: BaseViewController {
+// 상속하지 않으려면 final 꼭 붙이기
+final class ServiceViewController: BaseViewControllerWithNav {
+	// MARK: - Constants
+	private enum UI {
+		static let mainLabelMargin: UIEdgeInsets = .init(top: 24, left: 24, bottom: 0, right: 24)
+		static let tableViewMargin: UIEdgeInsets = .init(top: 28, left: 0, bottom: 0, right: 0)
+		static let cellHeight: CGFloat = 44
+	}
+	
 	// MARK: - Properties
 	private lazy var labelCellList = ["서비스 약관", "문의 남기기"]
 
@@ -19,24 +27,19 @@ final class ServiceViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-		setup()		// 초기 셋업할 코드들
     }
 }
-// MARK: - Style & Layout
-private extension ServiceViewController {
+//MARK: - Attribute & Hierarchy & Layouts
+extension ServiceViewController {
 	// 초기 셋업할 코드들
-    private func setup() {
-        setAttribute()
-        setLayout()
-    }
-    
-    private func setAttribute() {
+	override func setAttribute() {
+		super.setAttribute()
+		
 		// [view]
         navigationItem.title = "문의 및 서비스 약관"
-		
+		view.backgroundColor = R.Color.gray100
+
 		tableView = tableView.then {
-			$0.delegate = self
-			$0.dataSource = self
 			$0.showsVerticalScrollIndicator = false
 			$0.backgroundColor = R.Color.gray100
 	        $0.bounces = false            // TableView Scroll 방지
@@ -50,19 +53,34 @@ private extension ServiceViewController {
 			$0.textColor = R.Color.gray900
 		}
     }
-    
-    private func setLayout() {
+	
+	override func setDelegate() {
+		super.setDelegate()
+		
+		tableView = tableView.then {
+			$0.delegate = self
+			$0.dataSource = self
+		}
+	}
+	
+	override func setHierarchy() {
+		super.setHierarchy()
+		
 		view.addSubviews(mainLabel, tableView)
+	}
+    
+    override func setLayout() {
+		super.setLayout()
 		
         mainLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(24)
-            $0.left.right.equalToSuperview().inset(24)
+			$0.top.equalToSuperview().offset(UI.mainLabelMargin.top)
+			$0.leading.trailing.equalToSuperview().inset(UI.mainLabelMargin.left)
         }
         
         tableView.snp.makeConstraints {
             // tableView 마진값이 피그마에 재대로 안나와 있음
-            $0.top.equalTo(mainLabel.snp.bottom).offset(28)
-            $0.left.right.bottom.equalToSuperview()
+			$0.top.equalTo(mainLabel.snp.bottom).offset(UI.tableViewMargin.top)
+            $0.leading.trailing.bottom.equalToSuperview()
         }
     }
 }
@@ -70,7 +88,7 @@ private extension ServiceViewController {
 extension ServiceViewController: UITableViewDataSource {
 	
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+		return labelCellList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -87,7 +105,7 @@ extension ServiceViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 44
+		return UI.cellHeight
     }
 }
 // MARK: - UITableView Delegate

@@ -14,7 +14,7 @@ final class StatisticsActivityTableViewCell: BaseTableViewCell {
 	// MARK: - Constants
 	private enum UI {
 		static let titleLabelMargin: UIEdgeInsets = .init(top: 2, left: 0, bottom: 0, right: 0)
-		static let ivTypeMargin: UIEdgeInsets = .init(top:8, left: 0, bottom: 0, right: 0)
+		static let ivTypeMargin: UIEdgeInsets = .init(top: 8, left: 0, bottom: 0, right: 0)
 		static let priceLabelMargin: UIEdgeInsets = .init(top: 0, left: 4, bottom: 0, right: 0)
 	}
 	
@@ -79,13 +79,13 @@ extension StatisticsActivityTableViewCell {
 		}
 		
 		typeImageView.snp.makeConstraints {
-			$0.top.equalTo(titleLabel.snp.bottom).offset(UI.titleLabelMargin.top)
+			$0.top.equalTo(titleLabel.snp.bottom).offset(UI.ivTypeMargin.top)
 			$0.leading.equalToSuperview()
 		}
 		
 		priceLabel.snp.makeConstraints {
 			$0.centerY.equalTo(typeImageView)
-			$0.leading.equalTo(typeImageView.snp.trailing).offset(UI.titleLabelMargin.left)
+			$0.leading.equalTo(typeImageView.snp.trailing).offset(UI.priceLabelMargin.left)
 			$0.trailing.lessThanOrEqualToSuperview()
 		}
 	}

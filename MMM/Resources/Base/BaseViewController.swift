@@ -42,6 +42,7 @@ class BaseViewController: UIViewController, BaseViewControllerProtocol {
 	// 초기 셋업할 코드들
 	@objc open dynamic func setup() {
 		setAttribute()
+		setDelegate()
 		setHierarchy()
 		setLayout()
 		setBind()

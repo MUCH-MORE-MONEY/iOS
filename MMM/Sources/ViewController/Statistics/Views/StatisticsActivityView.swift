@@ -5,15 +5,28 @@
 //  Created by geonhyeong on 2023/08/22.
 //
 
+import UIKit
 import Then
 import SnapKit
 import ReactorKit
 
-final class StatisticsActivityView: UIView, View {
+// 상속하지 않으려면 final 꼭 붙이기
+final class StatisticsActivityView: BaseView, View {
 	typealias Reactor = StatisticsReactor
 	
+	// MARK: - Constants
+	private enum UI {
+		static let stackViewMargin: UIEdgeInsets = .init(top: 12, left: 20, bottom: 0, right: 0)
+		static let ivSatisfactionMargin: UIEdgeInsets = .init(top: 0, left: 2, bottom: 0, right: 0)
+		static let tableViewMargin: UIEdgeInsets = .init(top: 8, left: 0, bottom: 0, right: 0)
+
+		static let titleHeight: CGFloat = 44
+		static let headerHeight: CGFloat = 170
+		static let dummyCellHeight: CGFloat = 16
+		static let cellHeight: CGFloat = 48
+	}
+	
 	// MARK: - Properties
-	var disposeBag: DisposeBag = DisposeBag()
 	private var timer: DispatchSourceTimer?
 	private var counter = 1 // 처음 Delay 때문에 0이 아닌 1로 초기화
 	private let RANK_COUNT = 3 // 활동을 보여주는 갯수
@@ -38,13 +51,6 @@ final class StatisticsActivityView: UIView, View {
 	init(timer: DispatchSourceTimer?) {
 		self.timer = timer
 		super.init(frame: .zero)
-		setup() // 초기 셋업할 코드들
-	}
-	
-	// Compile time에 error를 발생시키는 코드
-	@available(*, unavailable)
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
 	}
 	
 	func bind(reactor: StatisticsReactor) {
@@ -136,19 +142,21 @@ extension StatisticsActivityView {
 	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
-private extension StatisticsActivityView {
+extension StatisticsActivityView {
 	// 초기 셋업할 코드들
-	private func setup() {
+	override func setup() {
+		super.setup()
+		
 		setTimer()
-		setAttribute()
-		setLayout()
 	}
 	
 	private func setTimer() {
 		timer?.setEventHandler(handler: moveToIndex)
 	}
 	
-	private func setAttribute() {
+	override func setAttribute() {
+		super.setAttribute()
+		
 		backgroundColor = R.Color.black
 		layer.cornerRadius = 10
 
@@ -186,7 +194,7 @@ private extension StatisticsActivityView {
 			$0.showsVerticalScrollIndicator = false
 			$0.separatorStyle = .none
 			$0.isScrollEnabled = false
-			$0.rowHeight = 48
+			$0.rowHeight = UI.cellHeight
 		}
 		
 		disappointingTableView = disappointingTableView.then {
@@ -195,7 +203,7 @@ private extension StatisticsActivityView {
 			$0.showsVerticalScrollIndicator = false
 			$0.separatorStyle = .none
 			$0.isScrollEnabled = false
-			$0.rowHeight = 48
+			$0.rowHeight = UI.cellHeight
 		}
 		
 		satisfactionTitleLabel = satisfactionTitleLabel.then {
@@ -223,15 +231,21 @@ private extension StatisticsActivityView {
 		}
 	}
 	
-	private func setLayout() {
+	override func setHierarchy() {
+		super.setHierarchy()
+		
 		addSubview(stackView)
 		stackView.addArrangedSubviews(satisfactionView, disappointingView)
 		satisfactionView.addSubviews(satisfactionLabel, satisfactionImageView, satisfactionTableView, satisfactionTitleLabel, satisfactionPriceLabel)
 		disappointingView.addSubviews(disappointingLabel, disappointingImageView, disappointingTableView, disappointingTitleLabel, disappointingPriceLabel)
+	}
+	
+	override func setLayout() {
+		super.setLayout()
 		
 		stackView.snp.makeConstraints {
-			$0.top.bottom.equalToSuperview().inset(12)
-			$0.leading.trailing.equalToSuperview().inset(20)
+			$0.top.bottom.equalToSuperview().inset(UI.stackViewMargin.top)
+			$0.leading.trailing.equalToSuperview().inset(UI.stackViewMargin.left)
 		}
 		
 		satisfactionLabel.snp.makeConstraints {
@@ -244,41 +258,22 @@ private extension StatisticsActivityView {
 		
 		satisfactionImageView.snp.makeConstraints {
 			$0.top.equalToSuperview()
-			$0.leading.equalTo(satisfactionLabel.snp.trailing).offset(2)
+			$0.leading.equalTo(satisfactionLabel.snp.trailing).offset(UI.ivSatisfactionMargin.left)
 		}
 		
 		disappointingImageView.snp.makeConstraints {
 			$0.top.equalToSuperview()
-			$0.leading.equalTo(disappointingLabel.snp.trailing).offset(2)
+			$0.leading.equalTo(disappointingLabel.snp.trailing).offset(UI.ivSatisfactionMargin.left)
 		}
 		
 		satisfactionTableView.snp.makeConstraints {
-			$0.top.equalTo(satisfactionLabel.snp.bottom).offset(8)
+			$0.top.equalTo(satisfactionLabel.snp.bottom).offset(UI.tableViewMargin.top)
 			$0.trailing.leading.bottom.equalToSuperview()
 		}
 		
 		disappointingTableView.snp.makeConstraints {
-			$0.top.equalTo(disappointingLabel.snp.bottom).offset(8)
+			$0.top.equalTo(disappointingLabel.snp.bottom).offset(UI.tableViewMargin.top)
 			$0.trailing.leading.bottom.equalToSuperview()
 		}
-		
-		
-//		satisfactionTitleLabel.snp.makeConstraints {
-//			$0.bottom.equalTo(disappointingPriceLabel.snp.top).offset(-8)
-//			$0.leading.equalToSuperview()
-//		}
-		
-//		disappointingTitleLabel.snp.makeConstraints {
-//			$0.bottom.equalTo(disappointingPriceLabel.snp.top).offset(-8)
-//			$0.leading.equalToSuperview()
-//		}
-		
-//		satisfactionPriceLabel.snp.makeConstraints {
-//			$0.leading.bottom.equalToSuperview()
-//		}
-		
-//		disappointingPriceLabel.snp.makeConstraints {
-//			$0.leading.bottom.equalToSuperview()
-//		}
 	}
 }

@@ -8,32 +8,25 @@
 import Then
 import SnapKit
 
-final class StatisticsSatisfactionView: UIView {
+// 상속하지 않으려면 final 꼭 붙이기
+final class StatisticsSatisfactionView: BaseView {
+	// MARK: - Constants
+	private enum UI {
+		static let sideMargin: CGFloat = 20
+		static let starLeading: CGFloat = 8
+	}
+	
 	// MARK: - UI Components
 	private lazy var titleLabel = UILabel() // 이번 달 경제활동 만족도
 	private lazy var satisfactionLabel = UILabel()
 	private lazy var starImageView = UIImageView() // ⭐️
-
-	override init(frame: CGRect) {
-		super.init(frame: frame)
-		setup() // 초기 셋업할 코드들
-	}
-	
-	// Compile time에 error를 발생시키는 코드
-	@available(*, unavailable)
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
-private extension StatisticsSatisfactionView {
+extension StatisticsSatisfactionView {
 	// 초기 셋업할 코드들
-	private func setup() {
-		setAttribute()
-		setLayout()
-	}
-	
-	private func setAttribute() {
+	override func setAttribute() {
+		super.setAttribute()
+		
 		backgroundColor = R.Color.black
 		layer.cornerRadius = 10
 		
@@ -55,12 +48,18 @@ private extension StatisticsSatisfactionView {
 		}
 	}
 	
-	private func setLayout() {
+	override func setHierarchy() {
+		super.setHierarchy()
+		
 		addSubviews(titleLabel, satisfactionLabel, starImageView)
-
+	}
+	
+	override func setLayout() {
+		super.setLayout()
+		
 		titleLabel.snp.makeConstraints {
 			$0.centerY.equalToSuperview()
-			$0.leading.equalToSuperview().inset(20)
+			$0.leading.equalToSuperview().inset(UI.sideMargin)
 		}
 		
 		satisfactionLabel.snp.makeConstraints {
@@ -69,8 +68,8 @@ private extension StatisticsSatisfactionView {
 		
 		starImageView.snp.makeConstraints {
 			$0.centerY.equalToSuperview()
-			$0.leading.equalTo(satisfactionLabel.snp.trailing).offset(8)
-			$0.trailing.equalToSuperview().inset(20)
+			$0.leading.equalTo(satisfactionLabel.snp.trailing).offset(UI.starLeading)
+			$0.trailing.equalToSuperview().inset(UI.sideMargin)
 		}
 	}
 }

@@ -96,8 +96,6 @@ extension ProfileViewController {
 		}
 		
 		tableView = tableView.then {
-			$0.delegate = self
-			$0.dataSource = self
 			$0.showsVerticalScrollIndicator = false
 			$0.backgroundColor = R.Color.gray100
 			$0.tableHeaderView = profileHeaderView
@@ -105,6 +103,15 @@ extension ProfileViewController {
 			$0.bounces = false			// TableView Scroll 방지
 			$0.separatorStyle = .none
 			$0.register(ProfileTableViewCell.self)
+		}
+	}
+	
+	override func setDelegate() {
+		super.setDelegate()
+		
+		tableView = tableView.then {
+			$0.delegate = self
+			$0.dataSource = self
 		}
 	}
 	

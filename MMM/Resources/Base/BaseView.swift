@@ -43,7 +43,7 @@ class BaseView: UIView, BaseViewProtocol {
 	}
 	
 	// 초기 셋업할 코드들
-	func setup() {
+	@objc open dynamic func setup() {
 		setAttribute()
 		setHierarchy()
 		setLayout()

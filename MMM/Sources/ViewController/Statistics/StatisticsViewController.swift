@@ -11,11 +11,16 @@ import RxSwift
 import RxCocoa
 import ReactorKit
 
-final class StatisticsViewController: UIViewController, View {
+// 상속하지 않으려면 final 꼭 붙이기
+final class StatisticsViewController: BaseViewController, View {
 	typealias Reactor = StatisticsReactor
 
+	// MARK: - Constants
+	private enum UI {
+		static let sideMargin: CGFloat = 20
+	}
+	
 	// MARK: - Properties
-	var disposeBag: DisposeBag = DisposeBag()
 	private var bottomSheetReactor: BottomSheetReactor = BottomSheetReactor()
 	private var month: Date = Date()
 	private var satisfaction: Satisfaction = .low
@@ -35,7 +40,6 @@ final class StatisticsViewController: UIViewController, View {
 	
     override func viewDidLoad() {
         super.viewDidLoad()
-		setup()		// 초기 셋업할 코드들
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -168,10 +172,10 @@ extension StatisticsViewController {
 //MARK: - Attribute & Hierarchy & Layouts
 extension StatisticsViewController {
 	// 초기 셋업할 코드들
-	private func setup() {
+	override func setup() {
+		super.setup()
+		
 		setTimer()
-		setAttribute()
-		setLayout()
 	}
 	
 	private func setTimer() {
@@ -179,7 +183,9 @@ extension StatisticsViewController {
 		timer?.schedule(deadline: .now(), repeating: 1)
 	}
 	
-	private func setAttribute() {
+	override func setAttribute() {
+		super.setAttribute()
+		
 		view.backgroundColor = R.Color.gray100
 		
 		scrollView = scrollView.then {
@@ -213,10 +219,16 @@ extension StatisticsViewController {
 		}
 	}
 	
-	private func setLayout() {
+	override func setHierarchy() {
+		super.setHierarchy()
+		
 		view.addSubviews(scrollView)
 		scrollView.addSubviews(refreshView, contentView)
 		contentView.addSubviews(headerView, satisfactionView, categoryView, activityView, selectAreaView)
+	}
+	
+	override func setLayout() {
+		super.setLayout()
 		
 		scrollView.snp.makeConstraints {
 			$0.top.leading.trailing.equalTo(view)
@@ -236,24 +248,24 @@ extension StatisticsViewController {
 		headerView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(32)
 			$0.leading.equalToSuperview().inset(24)
-			$0.trailing.equalToSuperview().inset(20)
+			$0.trailing.equalToSuperview().inset(UI.sideMargin)
 		}
 		
 		satisfactionView.snp.makeConstraints {
 			$0.top.equalTo(headerView.snp.bottom)
-			$0.leading.trailing.equalToSuperview().inset(20)
+			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 			$0.height.equalTo(64)
 		}
 		
 		categoryView.snp.makeConstraints {
 			$0.top.equalTo(satisfactionView.snp.bottom).offset(16)
-			$0.leading.trailing.equalToSuperview().inset(20)
+			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 			$0.height.equalTo(146)
 		}
 		
 		activityView.snp.makeConstraints {
 			$0.top.equalTo(categoryView.snp.bottom).offset(16)
-			$0.leading.trailing.equalToSuperview().inset(20)
+			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 			$0.height.equalTo(100)
 		}
 		

@@ -41,7 +41,7 @@ class BaseViewControllerWithNav: BaseViewController {
         return .lightContent // status text color 변경
     }
 }
-//MARK: - Attribute & Hierarchy & Layouts
+//MARK: - Navigation Attribute
 extension BaseViewControllerWithNav {
 	func setNavigation() {
 		navigationItem.leftBarButtonItem = backButtonItem

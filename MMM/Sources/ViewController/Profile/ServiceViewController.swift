@@ -40,8 +40,6 @@ extension ServiceViewController {
 		view.backgroundColor = R.Color.gray100
 
 		tableView = tableView.then {
-			$0.delegate = self
-			$0.dataSource = self
 			$0.showsVerticalScrollIndicator = false
 			$0.backgroundColor = R.Color.gray100
 	        $0.bounces = false            // TableView Scroll 방지
@@ -55,6 +53,15 @@ extension ServiceViewController {
 			$0.textColor = R.Color.gray900
 		}
     }
+	
+	override func setDelegate() {
+		super.setDelegate()
+		
+		tableView = tableView.then {
+			$0.delegate = self
+			$0.dataSource = self
+		}
+	}
 	
 	override func setHierarchy() {
 		super.setHierarchy()

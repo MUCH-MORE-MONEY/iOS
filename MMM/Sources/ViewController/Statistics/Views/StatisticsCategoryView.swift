@@ -5,16 +5,33 @@
 //  Created by geonhyeong on 2023/08/21.
 //
 
+import UIKit
 import Then
 import SnapKit
+import RxCocoa
 import ReactorKit
 import MarqueeLabel
 
-final class StatisticsCategoryView: UIView, View {
+// 상속하지 않으려면 final 꼭 붙이기
+final class StatisticsCategoryView: BaseView, View {
 	typealias Reactor = StatisticsReactor
 	
+	// MARK: - Constants
+	private enum UI {
+		static let sideMargin: CGFloat = 20
+		static let barViewHeight: CGFloat = 8
+		static let rankViewSide: CGFloat = 60
+		static let categoryViewTop: CGFloat = 12
+		static let moreLabelHeight: CGFloat = 18
+		static let payLabelTop: CGFloat = 48
+		static let payRankLabelTop: CGFloat = 44
+		static let payBarViewTop: CGFloat = 68
+		static let earnLabelTop: CGFloat = 96
+		static let earnRankLabelTop: CGFloat = 92
+		static let earnBarViewTop: CGFloat = 115
+	}
+	
 	// MARK: - Properties
-	var disposeBag: DisposeBag = DisposeBag()
 
 	// MARK: - UI Components
 	private lazy var titleLabel = UILabel() 		// 카테고리
@@ -25,17 +42,6 @@ final class StatisticsCategoryView: UIView, View {
 	private lazy var earnLabel = UILabel() 			// 수입
 	private lazy var earnRankLabel = MarqueeLabel() // 수입 랭킹
 	private lazy var earnBarView = UIView() 		// 수입 Bar
-
-	override init(frame: CGRect) {
-		super.init(frame: frame)
-		setup() // 초기 셋업할 코드들
-	}
-	
-	// Compile time에 error를 발생시키는 코드
-	@available(*, unavailable)
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
 	
 	func bind(reactor: StatisticsReactor) {
 		bindState(reactor)
@@ -58,14 +64,11 @@ extension StatisticsCategoryView {
 	private func bindState(_ reactor: StatisticsReactor) {}
 }
 //MARK: - Attribute & Hierarchy & Layouts
-private extension StatisticsCategoryView {
+extension StatisticsCategoryView {
 	// 초기 셋업할 코드들
-	private func setup() {
-		setAttribute()
-		setLayout()
-	}
-	
-	private func setAttribute() {
+	override func setAttribute() {
+		super.setAttribute()
+		
 		backgroundColor = R.Color.black
 		layer.cornerRadius = 10
 
@@ -126,54 +129,60 @@ private extension StatisticsCategoryView {
 		}
 	}
 	
-	private func setLayout() {
+	override func setHierarchy() {
+		super.setHierarchy()
+		
 		addSubviews(titleLabel, moreLabel, payLabel, payRankLabel, payBarView, earnLabel, earnRankLabel, earnBarView)
+	}
+	
+	override func setLayout() {
+		super.setLayout()
 		
 		titleLabel.snp.makeConstraints {
-			$0.top.equalToSuperview().inset(12)
-			$0.leading.equalToSuperview().inset(20)
+			$0.top.equalToSuperview().inset(UI.categoryViewTop)
+			$0.leading.equalToSuperview().inset(UI.sideMargin)
 		}
 		
 		moreLabel.snp.makeConstraints {
-			$0.top.equalToSuperview().inset(12)
-			$0.trailing.equalToSuperview().inset(20)
-			$0.height.equalTo(18)
+			$0.top.equalToSuperview().inset(UI.categoryViewTop)
+			$0.trailing.equalToSuperview().inset(UI.sideMargin)
+			$0.height.equalTo(UI.moreLabelHeight)
 		}
 		
 		payLabel.snp.makeConstraints {
-			$0.top.equalToSuperview().inset(48)
-			$0.leading.equalToSuperview().inset(20)
+			$0.top.equalToSuperview().inset(UI.payLabelTop)
+			$0.leading.equalToSuperview().inset(UI.sideMargin)
 		}
 		
 		payRankLabel.snp.makeConstraints {
-			$0.top.equalToSuperview().inset(44)
-			$0.leading.equalToSuperview().inset(60)
-			$0.trailing.equalToSuperview().inset(20)
+			$0.top.equalToSuperview().inset(UI.payRankLabelTop)
+			$0.leading.equalToSuperview().inset(UI.rankViewSide)
+			$0.trailing.equalToSuperview().inset(UI.sideMargin)
 		}
 		
 		payBarView.snp.makeConstraints {
-			$0.top.equalToSuperview().inset(68)
-			$0.leading.equalToSuperview().inset(60)
-			$0.trailing.equalToSuperview().inset(20)
-			$0.height.equalTo(8)
+			$0.top.equalToSuperview().inset(UI.payBarViewTop)
+			$0.leading.equalToSuperview().inset(UI.rankViewSide)
+			$0.trailing.equalToSuperview().inset(UI.sideMargin)
+			$0.height.equalTo(UI.barViewHeight)
 		}
 		
 		earnLabel.snp.makeConstraints {
-			$0.top.equalToSuperview().inset(96)
-			$0.leading.equalToSuperview().inset(20)
+			$0.top.equalToSuperview().inset(UI.earnLabelTop)
+			$0.leading.equalToSuperview().inset(UI.sideMargin)
 		}
 		
 		earnRankLabel.snp.makeConstraints {
-			$0.top.equalToSuperview().inset(92)
-			$0.leading.equalToSuperview().inset(60)
-			$0.trailing.equalToSuperview().inset(20)
+			$0.top.equalToSuperview().inset(UI.earnRankLabelTop)
+			$0.leading.equalToSuperview().inset(UI.rankViewSide)
+			$0.trailing.equalToSuperview().inset(UI.sideMargin)
 		}
 		
 		earnBarView.snp.makeConstraints {
-			$0.top.equalToSuperview().inset(115)
-			$0.leading.equalToSuperview().inset(60)
-			$0.trailing.equalToSuperview().inset(20)
-			$0.height.equalTo(8)
+			$0.top.equalToSuperview().inset(UI.earnBarViewTop)
+			$0.leading.equalToSuperview().inset(UI.rankViewSide)
+			$0.trailing.equalToSuperview().inset(UI.sideMargin)
+			$0.height.equalTo(UI.barViewHeight)
 		}
 	}
 }

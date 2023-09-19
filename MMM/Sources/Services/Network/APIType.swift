@@ -16,6 +16,7 @@ enum MMMAPI {
     case pushAgreeUpdate(PushAgreeUpdateReqDto)
     
     // MARK: - Staticstics
+	case getStaticsticsAverage(dateYM: String) // 월간 만족도 평균값
 	
 	// MARK: - Staticstics Category
 	case getCategory(CategoryReqDto)
@@ -42,27 +43,33 @@ extension MMMAPI: BaseNetworkService {
             return "/push/agree/list/select"
         case .pushAgreeUpdate:
             return "/push/agree/update"
-		case .getCategory(let request):
-			return "/economic-activity-category/list/\(request.economicActivityDvcd)"
-		case .exportToExcel:
-			return "/economic_activity/excel/select"
-		case .getSummary:
-			return "/economic_activity/summary/select"
-		case .withdraw:
-			return "/login/delete"
-		}
+        case .getStaticsticsAverage(let dateYM):
+          return "/economic_activity/\(dateYM)/average"
+        case .getCategory(let request):
+          return "/economic-activity-category/list/\(request.economicActivityDvcd)"
+        case .exportToExcel:
+          return "/economic_activity/excel/select"
+        case .getSummary:
+          return "/economic_activity/summary/select"
+        case .withdraw:
+          return "/login/delete"
+		    }
     }
     
     /// 메서드 방식 선택
     var method: Moya.Method {
-		switch self {
-		case .push, .pushAgreeListSelect, .pushAgreeUpdate:
-			return .post
-		case .getCategory:
-			return .get
-		case .exportToExcel, .getSummary, .withdraw:
-			return .post
-		}
+        switch self {
+        case .push, .pushAgreeListSelect, .pushAgreeUpdate:
+            return .post
+        case .getStaticsticsAverage:
+          return .get
+        case .push, .pushAgreeListSelect, .pushAgreeUpdate:
+          return .post
+        case .getCategory:
+          return .get
+        case .exportToExcel, .getSummary, .withdraw:
+          return .post
+        }
     }
     
     /// body parameter
@@ -76,12 +83,14 @@ extension MMMAPI: BaseNetworkService {
         case .pushAgreeListSelect:
             return .requestPlain
         case .pushAgreeUpdate(let request):
-            return .requestParameters(parameters: request.asDictionary, encoding: JSONEncoding.default)
-		case .getCategory:
-			return .requestPlain
-		case .exportToExcel, .getSummary, .withdraw:
-			return .requestPlain
-		}
+            return .requestParameters(parameters: request.asDictionary, encoding: JSONEncoding.default)            
+        case .getStaticsticsAverage:
+          return .requestPlain
+        case .getCategory:
+          return .requestPlain
+        case .exportToExcel, .getSummary, .withdraw:
+          return .requestPlain
+        }
     }
     
     /// Header 전달

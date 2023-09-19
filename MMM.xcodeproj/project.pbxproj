@@ -139,6 +139,7 @@
 		C44B61C12AA9EE7200950226 /* PushSettingDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44B61C02AA9EE7200950226 /* PushSettingDetailViewController.swift */; };
 		C44B61C32AA9EEA900950226 /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44B61C22AA9EEA900950226 /* APIConstants.swift */; };
 		C460DBAA2A96056100530351 /* SatisfactionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C460DBA92A96056100530351 /* SatisfactionTableViewCell.swift */; };
+		C46409AC2AB328EE00A899AD /* StaticsticsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46409AB2AB328EE00A899AD /* StaticsticsResponse.swift */; };
 		C46409AE2AB4795100A899AD /* CategoryContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46409AD2AB4795100A899AD /* CategoryContentViewController.swift */; };
 		C46409B02AB590EE00A899AD /* CategorySectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46409AF2AB590EE00A899AD /* CategorySectionModel.swift */; };
 		C46409B22AB593C100A899AD /* CategoryCollectionViewCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46409B12AB593C100A899AD /* CategoryCollectionViewCellReactor.swift */; };
@@ -385,6 +386,7 @@
 		C44B61C02AA9EE7200950226 /* PushSettingDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushSettingDetailViewController.swift; sourceTree = "<group>"; };
 		C44B61C22AA9EEA900950226 /* APIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = APIConstants.swift; path = MMM/Sources/Services/APIConstants.swift; sourceTree = SOURCE_ROOT; };
 		C460DBA92A96056100530351 /* SatisfactionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatisfactionTableViewCell.swift; sourceTree = "<group>"; };
+		C46409AB2AB328EE00A899AD /* StaticsticsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticsticsResponse.swift; sourceTree = "<group>"; };
 		C46409AD2AB4795100A899AD /* CategoryContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryContentViewController.swift; sourceTree = "<group>"; };
 		C46409AF2AB590EE00A899AD /* CategorySectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySectionModel.swift; sourceTree = "<group>"; };
 		C46409B12AB593C100A899AD /* CategoryCollectionViewCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCollectionViewCellReactor.swift; sourceTree = "<group>"; };
@@ -506,6 +508,7 @@
 				6A8605B52A24C83D00DF68BD /* UpdateResDto.swift */,
 				C4C792A72A35916D007FD6AA /* WithdrawResDto.swift */,
 				6A14E70C2A9DCAD00071805D /* PushResponse.swift */,
+				C46409AB2AB328EE00A899AD /* StaticsticsResponse.swift */,
 			);
 			path = Responses;
 			sourceTree = "<group>";
@@ -1414,6 +1417,7 @@
 				C411940B29DAEDF9003DBC15 /* CustomAlertViewController.swift in Sources */,
 				C4170B4E2A89FCA800CE0A65 /* StatisticsViewController.swift in Sources */,
 				C4DBAA3029DD459100D1BB97 /* WithdrawConfirmView.swift in Sources */,
+				C46409AC2AB328EE00A899AD /* StaticsticsResponse.swift in Sources */,
 				C41193FD29D42BD9003DBC15 /* ProfileFooterView.swift in Sources */,
 				C44807E129E648D300D4B090 /* HomeViewController.swift in Sources */,
 				C46409BE2AB5B0A000A899AD /* BaseCollectionReusableView.swift in Sources */,

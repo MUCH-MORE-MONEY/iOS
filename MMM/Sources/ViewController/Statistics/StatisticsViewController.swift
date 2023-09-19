@@ -24,7 +24,7 @@ final class StatisticsViewController: BaseViewController, View {
 	private var bottomSheetReactor: BottomSheetReactor = BottomSheetReactor()
 	private var month: Date = Date()
 	private var satisfaction: Satisfaction = .low
-	private var timer: DispatchSourceTimer? // rank를 변경하는 시간
+	private var timer: DispatchSourceTimer? // rank(순위)를 변경하는 시간
 
 	// MARK: - UI Components
 	private lazy var monthButtonItem = UIBarButtonItem()
@@ -79,7 +79,7 @@ extension StatisticsViewController {
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: StatisticsReactor) {
 		bottomSheetReactor.state
-			.map { $0.success }
+			.map { $0.successByMonthly }
 			.distinctUntilChanged() // 중복값 무시
 			.bind(onNext: setMonth) // '월' 변경
 			.disposed(by: disposeBag)

@@ -53,14 +53,17 @@ protocol MMMAPIServiceble: BaseAPIService {
     func push(_ request: PushReqDto) -> Observable<(PushResDto, Error?)>
     func pushAgreeListSelect() -> Observable<(PushAgreeListSelectResDto, Error?)>
     func pushAgreeUpdate(_ request: PushAgreeUpdateReqDto) -> Observable<(PushAgreeUpdateResDto, Error?)>
-    
-	// MARK: - Staticstics Category 요청 API
-	func getCategory(_ request: CategoryReqDto) -> Observable<(CategoryResDto, Error?)>
 	
-	// MARK: - Profile 요청 API
-	func exportToExcel() -> Observable<(ExportResDto, Error?)>
-	func withdraw() -> Observable<(WithdrawResDto, Error?)>
-	func getSummary() -> Observable<(SummaryResDto, Error?)>
+    // MARK: - Statistics 요청 API
+    func getStatisticsAverage(_ dateYM: String) -> Observable<(StatisticsResDto, Error?)>
+
+    // MARK: - Staticstics Category 요청 API
+    func getCategory(_ request: CategoryReqDto) -> Observable<(CategoryResDto, Error?)>
+
+    // MARK: - Profile 요청 API
+    func exportToExcel() -> Observable<(ExportResDto, Error?)>
+    func withdraw() -> Observable<(WithdrawResDto, Error?)>
+    func getSummary() -> Observable<(SummaryResDto, Error?)>
 }
 
 // MARK:
@@ -84,7 +87,12 @@ struct MMMAPIService: MMMAPIServiceble {
         return provider().request(MMMAPI.pushAgreeUpdate(request), type: PushAgreeUpdateResDto.self).asObservable()
     }
 	
-	// MARK: - Staticstics Category 요청 API
+	// MARK: - Statistics 요청 API
+	// 통계 만족도 평균 요청
+	func getStatisticsAverage(_ dateYM: String) -> Observable<(StatisticsResDto, Error?)> {
+		return provider().request(MMMAPI.getStaticsticsAverage(dateYM: dateYM), type: StatisticsResDto.self).asObservable()
+
+  // MARK: - Staticstics Category 요청 API
 	func getCategory(_ request: CategoryReqDto) -> RxSwift.Observable<(CategoryResDto, Error?)> {
 		return provider().request(MMMAPI.getCategory(request), type: CategoryResDto.self).asObservable()
 	}

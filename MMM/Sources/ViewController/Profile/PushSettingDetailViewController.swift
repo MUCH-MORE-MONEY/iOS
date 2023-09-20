@@ -21,7 +21,6 @@ final class PushSettingDetailViewController: BaseViewControllerWithNav, View {
     // MARK: - Properties
     private let weekList = ["일", "화", "수", "목", "금", "토", "월"]
     var reactor: PushSettingDetailReactor!
-    var bottomSheetReactor: BottomSheetReactor = BottomSheetReactor()
     
     override func viewDidLoad() {
         super.viewDidLoad()

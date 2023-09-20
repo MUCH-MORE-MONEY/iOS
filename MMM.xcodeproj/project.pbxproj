@@ -620,12 +620,9 @@
 		6A3EDE8B2A8756FA008E8782 /* Reactor */ = {
 			isa = PBXGroup;
 			children = (
-				C4BBD26F2ABAD8BB0055FA65 /* New Group */,
-				C4170B602A94FC2300CE0A65 /* BottomSheetReactor.swift */,
+				C4BBD26F2ABAD8BB0055FA65 /* BottomSheet */,
 				C4170B662A95EBFA00CE0A65 /* CategoryReactor.swift */,
 				C46409B12AB593C100A899AD /* CategoryCollectionViewCellReactor.swift */,
-				C4BBD2692AB9E1DA0055FA65 /* DateBottomSheetReactor.swift */,
-				C4BBD26D2ABAD6140055FA65 /* SatisfactionBottomSheetReactor.swift */,
 				C4170B4F2A89FD1100CE0A65 /* StatisticsReactor.swift */,
 				C46409D12AB8A6A400A899AD /* ProfileReactor.swift */,
 				6A2B5D582A97217F00CCBFBE /* PushSettingReactor.swift */,
@@ -1044,11 +1041,14 @@
 			path = ETC.;
 			sourceTree = "<group>";
 		};
-		C4BBD26F2ABAD8BB0055FA65 /* New Group */ = {
+		C4BBD26F2ABAD8BB0055FA65 /* BottomSheet */ = {
 			isa = PBXGroup;
 			children = (
+				C4170B602A94FC2300CE0A65 /* BottomSheetReactor.swift */,
+				C4BBD2692AB9E1DA0055FA65 /* DateBottomSheetReactor.swift */,
+				C4BBD26D2ABAD6140055FA65 /* SatisfactionBottomSheetReactor.swift */,
 			);
-			path = "New Group";
+			path = BottomSheet;
 			sourceTree = "<group>";
 		};
 		C4C0CAF82A1F1F6F00C41FF4 /* Recovered References */ = {

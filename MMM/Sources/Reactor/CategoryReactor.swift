@@ -62,7 +62,7 @@ extension CategoryReactor {
 		return newState
 	}
 }
-//MARK: - Actions
+//MARK: - Action
 extension CategoryReactor {
 	// 데이터 가져오기
 	private func loadData(_ request: CategoryReqDto) -> Observable<Mutation> {

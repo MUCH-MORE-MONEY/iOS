@@ -32,7 +32,7 @@ final class StatisticsViewController: BaseViewController, View {
 	private lazy var contentView = UIView()
 	private lazy var refreshView = UIView()
 	private lazy var headerView = StatisticsHeaderView()
-	private lazy var satisfactionView = StatisticsSatisfactionView()
+	private lazy var satisfactionView = StatisticsAverageView()
 	private lazy var categoryView = StatisticsCategoryView()
 	private lazy var activityView = StatisticsActivityView(timer: timer)
 	private lazy var selectAreaView = StatisticsSatisfactionListView()

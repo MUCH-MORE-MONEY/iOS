@@ -1,5 +1,5 @@
 //
-//  StatisticsSatisfactionView.swift
+//  StatisticsAverageView.swift
 //  MMM
 //
 //  Created by geonhyeong on 2023/08/21.
@@ -9,7 +9,7 @@ import Then
 import SnapKit
 
 // 상속하지 않으려면 final 꼭 붙이기
-final class StatisticsSatisfactionView: BaseView {
+final class StatisticsAverageView: BaseView {
 	typealias Reactor = StatisticsReactor
 
 	// MARK: - Constants
@@ -24,14 +24,14 @@ final class StatisticsSatisfactionView: BaseView {
 	private lazy var starImageView = UIImageView() // ⭐️
 }
 //MARK: - Action
-extension StatisticsSatisfactionView {
+extension StatisticsAverageView {
 	// 외부에서 설정
 	func setData(average: Double) {
 		satisfactionLabel.text = String(average)
 	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
-extension StatisticsSatisfactionView {
+extension StatisticsAverageView {
 	// 초기 셋업할 코드들
 	override func setAttribute() {
 		super.setAttribute()

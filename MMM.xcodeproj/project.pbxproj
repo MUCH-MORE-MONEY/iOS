@@ -110,7 +110,6 @@
 		C4170B572A93A58A00CE0A65 /* StatisticsCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B562A93A58A00CE0A65 /* StatisticsCategoryView.swift */; };
 		C4170B592A94853400CE0A65 /* StatisticsActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B582A94853400CE0A65 /* StatisticsActivityView.swift */; };
 		C4170B5D2A94BA9000CE0A65 /* StatisticsSatisfactionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B5C2A94BA9000CE0A65 /* StatisticsSatisfactionListView.swift */; };
-		C4170B612A94FC2300CE0A65 /* BottomSheetReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B602A94FC2300CE0A65 /* BottomSheetReactor.swift */; };
 		C4170B652A95D03500CE0A65 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B642A95D03400CE0A65 /* CategoryViewController.swift */; };
 		C4170B672A95EBFA00CE0A65 /* CategoryReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B662A95EBFA00CE0A65 /* CategoryReactor.swift */; };
 		C4199DD329FE3051006E5DA8 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4199DD229FE3051006E5DA8 /* BottomSheetViewController.swift */; };
@@ -363,7 +362,6 @@
 		C4170B562A93A58A00CE0A65 /* StatisticsCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsCategoryView.swift; sourceTree = "<group>"; };
 		C4170B582A94853400CE0A65 /* StatisticsActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsActivityView.swift; sourceTree = "<group>"; };
 		C4170B5C2A94BA9000CE0A65 /* StatisticsSatisfactionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsSatisfactionListView.swift; sourceTree = "<group>"; };
-		C4170B602A94FC2300CE0A65 /* BottomSheetReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetReactor.swift; sourceTree = "<group>"; };
 		C4170B642A95D03400CE0A65 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		C4170B662A95EBFA00CE0A65 /* CategoryReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryReactor.swift; sourceTree = "<group>"; };
 		C4199DD229FE3051006E5DA8 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
@@ -1044,7 +1042,6 @@
 		C4BBD26F2ABAD8BB0055FA65 /* BottomSheet */ = {
 			isa = PBXGroup;
 			children = (
-				C4170B602A94FC2300CE0A65 /* BottomSheetReactor.swift */,
 				C4BBD2692AB9E1DA0055FA65 /* DateBottomSheetReactor.swift */,
 				C4BBD26D2ABAD6140055FA65 /* SatisfactionBottomSheetReactor.swift */,
 			);
@@ -1520,7 +1517,6 @@
 				6ADC27E02A2AEEF400C56777 /* Ex+UIImage.swift in Sources */,
 				6A381E0A29E8F40700E0974F /* AddViewController.swift in Sources */,
 				6A0F234029DBA8AA0063673B /* DataExportViewController.swift in Sources */,
-				C4170B612A94FC2300CE0A65 /* BottomSheetReactor.swift in Sources */,
 				C4BBD2642AB9DE8C0055FA65 /* StatisticsProvider.swift in Sources */,
 				6A14E7092A9DCA720071805D /* PushRequest.swift in Sources */,
 				6A25E4482AA84D9A0055EA29 /* WeekCollectionViewCell.swift in Sources */,

@@ -110,7 +110,6 @@
 		C4170B572A93A58A00CE0A65 /* StatisticsCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B562A93A58A00CE0A65 /* StatisticsCategoryView.swift */; };
 		C4170B592A94853400CE0A65 /* StatisticsActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B582A94853400CE0A65 /* StatisticsActivityView.swift */; };
 		C4170B5D2A94BA9000CE0A65 /* StatisticsSatisfactionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B5C2A94BA9000CE0A65 /* StatisticsSatisfactionListView.swift */; };
-		C4170B5F2A94FA0700CE0A65 /* DatePicker2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B5E2A94FA0700CE0A65 /* DatePicker2ViewController.swift */; };
 		C4170B612A94FC2300CE0A65 /* BottomSheetReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B602A94FC2300CE0A65 /* BottomSheetReactor.swift */; };
 		C4170B652A95D03500CE0A65 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B642A95D03400CE0A65 /* CategoryViewController.swift */; };
 		C4170B672A95EBFA00CE0A65 /* CategoryReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B662A95EBFA00CE0A65 /* CategoryReactor.swift */; };
@@ -361,7 +360,6 @@
 		C4170B562A93A58A00CE0A65 /* StatisticsCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsCategoryView.swift; sourceTree = "<group>"; };
 		C4170B582A94853400CE0A65 /* StatisticsActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsActivityView.swift; sourceTree = "<group>"; };
 		C4170B5C2A94BA9000CE0A65 /* StatisticsSatisfactionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsSatisfactionListView.swift; sourceTree = "<group>"; };
-		C4170B5E2A94FA0700CE0A65 /* DatePicker2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePicker2ViewController.swift; sourceTree = "<group>"; };
 		C4170B602A94FC2300CE0A65 /* BottomSheetReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetReactor.swift; sourceTree = "<group>"; };
 		C4170B642A95D03400CE0A65 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		C4170B662A95EBFA00CE0A65 /* CategoryReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryReactor.swift; sourceTree = "<group>"; };
@@ -995,7 +993,6 @@
 				C4351B492A15C935005F95BE /* HomeFilterViewController.swift */,
 				C4351B4F2A1691FB005F95BE /* HighlightViewController.swift */,
 				C4199DD829FE6BE1006E5DA8 /* DatePickerViewController.swift */,
-				C4170B5E2A94FA0700CE0A65 /* DatePicker2ViewController.swift */,
 				C4C8B68C2A3ACDC700FAF931 /* LoadingViewController.swift */,
 			);
 			path = Home;
@@ -1450,7 +1447,6 @@
 				C44B61BF2AA9A85B00950226 /* CategorySegmentedControl.swift in Sources */,
 				6A0D5B992A4C0E3300958E72 /* ToastView.swift in Sources */,
 				C46409B02AB590EE00A899AD /* CategorySectionModel.swift in Sources */,
-				C4170B5F2A94FA0700CE0A65 /* DatePicker2ViewController.swift in Sources */,
 				C4351B4A2A15C935005F95BE /* HomeFilterViewController.swift in Sources */,
 				6A1322E92A088DD700CEEC81 /* BaseDetailViewController.swift in Sources */,
 				C4170B5D2A94BA9000CE0A65 /* StatisticsSatisfactionListView.swift in Sources */,

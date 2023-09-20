@@ -7,7 +7,14 @@
 
 import Foundation
 
-struct StatisticsResDto: Decodable {
+struct StatisticsAvgResDto: Decodable {
 	var economicActivityValueScoreAvg: Double
 	var message: String
+}
+
+/// /economic_activity/{dateYM}/{valueScoreDvcd}/list
+struct StatisticsListResDto: Decodable {
+	var message: String?
+	var nextOffset: Int
+	var selectListMonthlyByValueScoreOutputDto: [EconomicActivity]
 }

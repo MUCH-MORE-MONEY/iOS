@@ -1,15 +1,14 @@
 //
-//  StatisticsSatisfactionSelectViewController.swift
+//  SatisfactionBottomSheetViewController.swift
 //  MMM
 //
-//  Created by geonhyeong on 2023/08/23.
+//  Created by geonhyeong on 2023/09/20.
 //
 
-import Combine
-import Then
+import UIKit
 import SnapKit
+import Then
 import ReactorKit
-import RxRelay
 
 enum Satisfaction: Int {
 	case low	// 1~2점
@@ -34,62 +33,51 @@ enum Satisfaction: Int {
 }
 
 // 상속하지 않으려면 final 꼭 붙이기
-final class StatisticsSatisfactionSelectViewController: BaseViewController, View {
-	typealias Reactor = BottomSheetReactor
-
-	// MARK: - Constants
-	private enum UI {
-	}
+final class SatisfactionBottomSheetViewController: BottomSheetViewController2, View {
+	typealias Reactor = SatisfactionBottomSheetReactor
+	// MARK: - Sub Type
 	
 	// MARK: - Properties
-	private var isDark: Bool = false
+	private var titleStr: String = ""
 	private var satisfaction: Satisfaction
-	weak var delegate: BottomSheetChild?
-	private let satisfactionList: BehaviorRelay<[Satisfaction]> = BehaviorRelay(value: [.low, .hight, .middle])
-	
+	private var isDark: Bool = false // 다크 모드 지정
+	private var height: CGFloat
+
 	// MARK: - UI Components
+	private lazy var containerView = UIView()
 	private lazy var stackView = UIStackView() // Title Label, 확인 Button
 	private lazy var titleLabel = UILabel()
 	private lazy var checkButton = UIButton()
 	private lazy var tableView = UITableView()
 
-	init(satisfaction: Satisfaction) {
+	init(title: String, satisfaction: Satisfaction, height: CGFloat, sheetMode: BottomSheetViewController2.Mode = .drag, isDark: Bool = false) {
+		self.titleStr = title
 		self.satisfaction = satisfaction
-		super.init(nibName: nil, bundle: nil)
-	}
-	
-	// Compile time에 error를 발생시키는 코드
-	@available(*, unavailable)
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
+		self.height = height
+		self.isDark = isDark
+		super.init(mode: sheetMode, isDark: isDark)
 	}
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 	}
 	
-	func bind(reactor: BottomSheetReactor) {
+	override func touchesBegan(_: Set<UITouch>, with _: UIEvent?) {
+		view.endEditing(true)
+	}
+	
+	func bind(reactor: SatisfactionBottomSheetReactor) {
 		bindState(reactor)
 		bindAction(reactor)
 	}
 }
-//MARK: - Action
-extension StatisticsSatisfactionSelectViewController {
-	// 외부에서 설정
-	func setData(title: String, isDark: Bool = false) {
-		DispatchQueue.main.async {
-			self.titleLabel.text = title
-		}
-		self.isDark = isDark
-	}
-}
 //MARK: - Bind
-extension StatisticsSatisfactionSelectViewController {
+extension SatisfactionBottomSheetViewController {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
-	private func bindAction(_ reactor: BottomSheetReactor) {
+	private func bindAction(_ reactor: SatisfactionBottomSheetReactor) {
 		// 확인 버튼
 		checkButton.rx.tap
-			.map { .didTapSatisfactionCheckButton(type: self.satisfaction) }
+			.map { .setSatisfaction(self.satisfaction) }
 			.bind(to: reactor.action)
 			.disposed(by: disposeBag)
 		
@@ -112,15 +100,9 @@ extension StatisticsSatisfactionSelectViewController {
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
-	private func bindState(_ reactor: BottomSheetReactor) {
+	private func bindState(_ reactor: SatisfactionBottomSheetReactor) {
 		reactor.state
-			.map { $0.successBySatisfaction }
-			.subscribe { [weak self] satisfaction in
-				guard let self = self else { return }
-				self.delegate?.willDismiss()
-			}.disposed(by: disposeBag)
-		
-		satisfactionList.asObservable()
+			.map { $0.satisfactionList }
 			.bind(to: tableView.rx.items) { tv, row, data in
 				let index = IndexPath(row: row, section: 0)
 				let cell = tv.dequeueReusableCell(withIdentifier: "SatisfactionTableViewCell", for: index) as! SatisfactionTableViewCell
@@ -129,16 +111,26 @@ extension StatisticsSatisfactionSelectViewController {
 				cell.selectionStyle = .none // 테이블뷰 선택 색상 제거
 				return cell
 			}.disposed(by: disposeBag)
+		
+		reactor.state
+			.map { $0.dismiss }
+			.distinctUntilChanged()
+			.filter { $0 == true }
+			.subscribe(onNext: { [weak self] _ in
+				self?.dismiss(animated: true)
+			})
+			.disposed(by: disposeBag)
 	}
 }
+//MARK: - Action
+extension SatisfactionBottomSheetViewController {
+}
 //MARK: - Attribute & Hierarchy & Layouts
-extension StatisticsSatisfactionSelectViewController {
+extension SatisfactionBottomSheetViewController {
 	// 초기 셋업할 코드들
 	override func setAttribute() {
 		super.setAttribute()
-		
-		self.view.backgroundColor = isDark ? R.Color.gray900 : .white
-		
+						
 		stackView = stackView.then {
 			$0.axis = .horizontal
 			$0.alignment = .center
@@ -146,7 +138,7 @@ extension StatisticsSatisfactionSelectViewController {
 		}
 		
 		titleLabel = titleLabel.then {
-			$0.text = "날짜 이동"
+			$0.text = titleStr
 			$0.font = R.Font.h5
 			$0.textColor = isDark ? R.Color.gray200 : R.Color.black
 			$0.textAlignment = .left
@@ -175,13 +167,18 @@ extension StatisticsSatisfactionSelectViewController {
 	override func setHierarchy() {
 		super.setHierarchy()
 		
-		view.addSubviews(stackView, tableView)
+		containerView.addSubviews(stackView, tableView)
 		stackView.addArrangedSubviews(titleLabel, checkButton)
+		addContentView(view: containerView)
 	}
 	
 	override func setLayout() {
 		super.setLayout()
-				
+		
+		containerView.snp.makeConstraints {
+			$0.height.equalTo(height - 32.0) // 32(Super Class의 Drag 영역)를 반드시 뺴줘야한다.
+		}
+		
 		stackView.snp.makeConstraints {
 			$0.top.equalToSuperview()
 			$0.leading.equalToSuperview().inset(24)

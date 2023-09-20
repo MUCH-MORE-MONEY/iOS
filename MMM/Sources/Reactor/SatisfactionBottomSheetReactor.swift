@@ -1,17 +1,17 @@
 //
-//  DateBottomSheetReactor.swift
+//  SatisfactionBottomSheetReactor.swift
 //  MMM
 //
-//  Created by geonhyeong on 2023/09/19.
+//  Created by geonhyeong on 2023/09/20.
 //
 
 import RxSwift
 import ReactorKit
 
-final class DateBottomSheetReactor: Reactor {
+final class SatisfactionBottomSheetReactor: Reactor {
 	// 사용자의 액션
 	enum Action {
-		case setDate(Date)
+		case setSatisfaction(Satisfaction)
 		case dismiss
 	}
 	
@@ -22,6 +22,7 @@ final class DateBottomSheetReactor: Reactor {
 	
 	// 현재 상태를 기록
 	struct State {
+		var satisfactionList: [Satisfaction] = [.low, .hight, .middle]
 		var dismiss: Bool = false
 	}
 	
@@ -36,15 +37,12 @@ final class DateBottomSheetReactor: Reactor {
 	}
 }
 //MARK: - Mutate, Reduce
-extension DateBottomSheetReactor {
+extension SatisfactionBottomSheetReactor {
 	/// Action이 들어온 경우, 어떤 처리를 할건지 분기
 	func mutate(action: Action) -> Observable<Mutation> {
 		switch action {
-		case .setDate(let date):
-			return .concat([
-				provider.statisticsProvider.updateDate(to: date).map { _ in .dismiss },
-				provider.profileProvider.updateDate(to: date).map { _ in .dismiss }
-			])
+		case .setSatisfaction(let satisfaction):
+			return provider.statisticsProvider.updateSatisfaction(to: satisfaction).map { _ in .dismiss }
 		case .dismiss:
 			return .just(.dismiss)
 		}

@@ -25,9 +25,9 @@ final class PushSettingDetailReactor: Reactor {
     }
     
     let initialState: State
-	let provider: StatisticsServiceProtocol
+	let provider: ServiceProviderProtocol
 
-    init(provider: StatisticsServiceProtocol) {
+    init(provider: ServiceProviderProtocol) {
 		self.initialState = State()
 		self.provider = provider
     }
@@ -46,7 +46,7 @@ extension PushSettingDetailReactor {
 	
 	/// 각각의 stream을 변형
 	func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-		let tagEvent = provider.event.flatMap { event -> Observable<Mutation> in
+		let tagEvent = provider.profileProvider.event.flatMap { event -> Observable<Mutation> in
 			switch event {
 			case .updateDate(let date):
 				return .just(.setDate(date))

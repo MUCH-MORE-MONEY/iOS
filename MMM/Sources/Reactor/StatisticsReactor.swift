@@ -21,6 +21,7 @@ final class StatisticsReactor: Reactor {
 		case fetchActivitySatisfactionList([EconomicActivity])
 		case fetchActivityDisappointingList([EconomicActivity])
 		case setDate(Date)
+		case setSatisfaction(Satisfaction)
 		case setLoading(Bool)
 		case setPushMoreCartegory(Bool)
 		case setPresentSatisfaction(Bool)
@@ -28,7 +29,8 @@ final class StatisticsReactor: Reactor {
 	
 	// 현재 상태를 기록
 	struct State {
-		var date = Date()
+		var date = Date() // 월
+		var satisfaction: Satisfaction = .low // 만족도
 		var activitySatisfactionList: [EconomicActivity] = []
 		var activityDisappointingList: [EconomicActivity] = []
 		var isLoading = false // 로딩
@@ -39,9 +41,9 @@ final class StatisticsReactor: Reactor {
 	
 	// MARK: Properties
 	let initialState: State
-	let provider: StatisticsServiceProtocol
+	let provider: ServiceProviderProtocol
 
-	init(provider: StatisticsServiceProtocol) {
+	init(provider: ServiceProviderProtocol) {
 		self.initialState = State()
 		self.provider = provider
 
@@ -76,10 +78,12 @@ extension StatisticsReactor {
 	
 	/// 각각의 stream을 변형
 	func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-		let tagEvent = provider.event.flatMap { event -> Observable<Mutation> in
+		let tagEvent = provider.statisticsProvider.event.flatMap { event -> Observable<Mutation> in
 			switch event {
 			case .updateDate(let date):
 				return .just(.setDate(date))
+			case .updateSatisfaction(let satisfaction):
+				return .just(.setSatisfaction(satisfaction))
 			}
 		}
 		
@@ -97,6 +101,8 @@ extension StatisticsReactor {
 			newState.activityDisappointingList = list
 		case .setDate(let date):
 			newState.date = date
+		case .setSatisfaction(let satisfaction):
+			newState.satisfaction = satisfaction
 		case .setLoading(let isLoading):
 			newState.isLoading = isLoading
 		case .setPushMoreCartegory(let isPresent):

@@ -21,7 +21,6 @@ final class StatisticsViewController: BaseViewController, View {
 	}
 	
 	// MARK: - Properties
-	private var bottomSheetReactor: BottomSheetReactor = BottomSheetReactor()
 	private var month: Date = Date()
 	private var satisfaction: Satisfaction = .low
 	private var timer: DispatchSourceTimer? // rank(순위)를 변경하는 시간
@@ -78,22 +77,17 @@ extension StatisticsViewController {
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: StatisticsReactor) {
-		bottomSheetReactor.state
-			.map { $0.successByMonthly }
-			.distinctUntilChanged() // 중복값 무시
-			.bind(onNext: setMonth) // '월' 변경
-			.disposed(by: disposeBag)
-		
-		bottomSheetReactor.state
-			.map { $0.successBySatisfaction }
-			.distinctUntilChanged() // 중복값 무시
-			.bind(onNext: setSatisfaction) // 만족도 변경
-			.disposed(by: disposeBag)
 		
 		reactor.state
 			.map { $0.date }
 			.distinctUntilChanged() // 중복값 무시
 			.bind(onNext: setMonth) // '월' 변경
+			.disposed(by: disposeBag)
+		
+		reactor.state
+			.map { $0.satisfaction }
+			.distinctUntilChanged() // 중복값 무시
+			.bind(onNext: setSatisfaction) // 만족도 변경
 			.disposed(by: disposeBag)
 		
 		// 카테고리 더보기 클릭시, push
@@ -133,14 +127,12 @@ extension StatisticsViewController {
 	
 	// 만족도 보기
 	private func presentStisfactionViewController(_ isPresent: Bool) {
-		let vc = StatisticsSatisfactionSelectViewController(satisfaction: satisfaction)
-		let bottomSheetVC = BottomSheetViewController(contentViewController: vc)
-		vc.reactor = bottomSheetReactor
-		vc.setData(title: "만족도 모아보기")
-		vc.delegate = bottomSheetVC
-		bottomSheetVC.modalPresentationStyle = .overFullScreen
-		bottomSheetVC.setSetting(height: 276)
-		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
+		guard let reactor = self.reactor else { return }
+
+		let vc = SatisfactionBottomSheetViewController(title: "만족도 모아보기", satisfaction: satisfaction, height: 276)
+		vc.reactor = SatisfactionBottomSheetReactor(provider: reactor.provider)
+
+		self.present(vc, animated: true, completion: nil)
 	}
 	
 	/// '월'  및 범위 변경

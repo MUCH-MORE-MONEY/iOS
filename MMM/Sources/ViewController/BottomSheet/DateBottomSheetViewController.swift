@@ -124,7 +124,7 @@ extension DateBottomSheetViewController {
 		}
 		
 		titleLabel = titleLabel.then {
-			$0.text = "날짜 이동"
+			$0.text = titleStr
 			$0.font = R.Font.h5
 			$0.textColor = isDark ? R.Color.gray200 : R.Color.black
 			$0.textAlignment = .left
@@ -198,7 +198,6 @@ extension DateBottomSheetViewController {
 			datePicker.snp.makeConstraints {
 				$0.top.equalTo(stackView.snp.bottom).offset(16)
 				$0.leading.trailing.equalToSuperview().inset(38.5)
-//				$0.bottom.equalToSuperview().inset(30)
 			}
 		case .onlyMonthly:
 			containerView.addSubview(monthPicker)
@@ -206,7 +205,6 @@ extension DateBottomSheetViewController {
 			monthPicker.snp.makeConstraints {
 				$0.top.equalTo(stackView.snp.bottom).offset(16)
 				$0.leading.trailing.equalToSuperview().inset(38.5)
-//				$0.bottom.equalToSuperview().inset(30)
 			}
 		}
 	}

@@ -63,8 +63,6 @@ extension MMMAPI: BaseNetworkService {
             return .post
         case .getStaticsticsAverage:
           return .get
-        case .push, .pushAgreeListSelect, .pushAgreeUpdate:
-          return .post
         case .getCategory:
           return .get
         case .exportToExcel, .getSummary, .withdraw:

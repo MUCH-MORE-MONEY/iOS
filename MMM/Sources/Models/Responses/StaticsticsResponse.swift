@@ -8,6 +8,6 @@
 import Foundation
 
 struct StatisticsResDto: Decodable {
-	var economicActivityValueScoreAvg: String
+	var economicActivityValueScoreAvg: Double
 	var message: String
 }

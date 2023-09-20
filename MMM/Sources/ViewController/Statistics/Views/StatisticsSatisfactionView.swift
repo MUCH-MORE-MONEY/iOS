@@ -10,6 +10,8 @@ import SnapKit
 
 // 상속하지 않으려면 final 꼭 붙이기
 final class StatisticsSatisfactionView: BaseView {
+	typealias Reactor = StatisticsReactor
+
 	// MARK: - Constants
 	private enum UI {
 		static let sideMargin: CGFloat = 20
@@ -20,6 +22,13 @@ final class StatisticsSatisfactionView: BaseView {
 	private lazy var titleLabel = UILabel() // 이번 달 경제활동 만족도
 	private lazy var satisfactionLabel = UILabel()
 	private lazy var starImageView = UIImageView() // ⭐️
+}
+//MARK: - Action
+extension StatisticsSatisfactionView {
+	// 외부에서 설정
+	func setData(average: Double) {
+		satisfactionLabel.text = String(average)
+	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
 extension StatisticsSatisfactionView {

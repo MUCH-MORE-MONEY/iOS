@@ -22,6 +22,7 @@ final class StatisticsReactor: Reactor {
 		case fetchActivityDisappointingList([EconomicActivity])
 		case setDate(Date)
 		case setSatisfaction(Satisfaction)
+		case setAverage(Double)
 		case setLoading(Bool)
 		case setPushMoreCartegory(Bool)
 		case setPresentSatisfaction(Bool)
@@ -30,6 +31,7 @@ final class StatisticsReactor: Reactor {
 	// 현재 상태를 기록
 	struct State {
 		var date = Date() // 월
+		var average: Double = 0.0 // 평균값
 		var satisfaction: Satisfaction = .low // 만족도
 		var activitySatisfactionList: [EconomicActivity] = []
 		var activityDisappointingList: [EconomicActivity] = []
@@ -59,6 +61,7 @@ extension StatisticsReactor {
 		case .loadData:
 			return  Observable.concat([
 				.just(.setLoading(true)),
+				self.getStatisticsAverage(Date()), // 평균값
 				.just(.fetchActivitySatisfactionList(EconomicActivity.getThreeDummyList() + [EconomicActivity.getThreeDummyList().first!])),
 				.just(.fetchActivityDisappointingList([EconomicActivity.getThreeDummyList().last!] + EconomicActivity.getThreeDummyList())),
 				.just(.setLoading(false))
@@ -78,16 +81,19 @@ extension StatisticsReactor {
 	
 	/// 각각의 stream을 변형
 	func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-		let tagEvent = provider.statisticsProvider.event.flatMap { event -> Observable<Mutation> in
+		let event = provider.statisticsProvider.event.flatMap { event -> Observable<Mutation> in
 			switch event {
 			case .updateDate(let date):
-				return .just(.setDate(date))
+				return .concat([
+					.just(.setDate(date)),
+					self.getStatisticsAverage(date)
+				])
 			case .updateSatisfaction(let satisfaction):
 				return .just(.setSatisfaction(satisfaction))
 			}
 		}
 		
-		return Observable.merge(mutation, tagEvent)
+		return Observable.merge(mutation, event)
 	}
 	
 	/// 이전 상태와 처리 단위(Mutation)를 받아서 다음 상태(State)를 반환하는 함수
@@ -101,6 +107,8 @@ extension StatisticsReactor {
 			newState.activityDisappointingList = list
 		case .setDate(let date):
 			newState.date = date
+		case .setAverage(let average):
+			newState.average = average
 		case .setSatisfaction(let satisfaction):
 			newState.satisfaction = satisfaction
 		case .setLoading(let isLoading):
@@ -117,10 +125,10 @@ extension StatisticsReactor {
 //MARK: - Action
 extension StatisticsReactor {
 	// 경제활동 만족도 평균값 불러오기
-//	func getStatisticsAverage(_ date: Date) -> Observable<Mutation> {
-//		return MMMAPIService().getStatisticsAverage(date.getFormattedYM())
-//			.map { (response, error) -> Mutation in
-//				return .updateDataByMonthly(date, response, error)
-//			}
-//	}
+	func getStatisticsAverage(_ date: Date) -> Observable<Mutation> {
+		return MMMAPIService().getStatisticsAverage(date.getFormattedYM())
+			.map { (response, error) -> Mutation in
+				return .setAverage(response.economicActivityValueScoreAvg)
+			}
+	}
 }

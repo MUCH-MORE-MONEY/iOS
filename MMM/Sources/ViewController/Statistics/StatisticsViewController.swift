@@ -90,6 +90,12 @@ extension StatisticsViewController {
 			.bind(onNext: setSatisfaction) // 만족도 변경
 			.disposed(by: disposeBag)
 		
+		reactor.state
+			.map { $0.average }
+			.distinctUntilChanged() // 중복값 무시
+			.bind(onNext: satisfactionView.setData) // 평균 변경
+			.disposed(by: disposeBag)
+
 		// 카테고리 더보기 클릭시, push
 		reactor.state
 			.map { $0.isPushMoreCartegory }

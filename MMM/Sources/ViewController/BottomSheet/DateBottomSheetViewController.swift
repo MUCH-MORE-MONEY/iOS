@@ -144,7 +144,7 @@ extension DateBottomSheetViewController {
 			datePicker = datePicker.then {
 				$0.date = date
 				$0.preferredDatePickerStyle = .wheels
-				$0.datePickerMode = .date
+				$0.datePickerMode = type
 				$0.setValue(isDark ? R.Color.gray200 : R.Color.black, forKeyPath: "textColor")
 			}
 		case .onlyMonthly:

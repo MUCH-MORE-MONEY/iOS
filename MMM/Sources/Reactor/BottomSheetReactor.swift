@@ -62,10 +62,10 @@ extension BottomSheetReactor {
 //MARK: - Actions
 extension BottomSheetReactor {
 	// 경제활동 만족도 평균값 불러오기
-	func getStatisticsAverage(_ date: Date) -> Observable<Mutation> {
-		return MMMAPIService().getStatisticsAverage(date.getFormattedYM())
-			.map { (response, error) -> Mutation in
-				return .updateDataByMonthly(date, response, error)
-			}
-	}
+//	func getStatisticsAverage(_ date: Date) -> Observable<Mutation> {
+//		return MMMAPIService().getStatisticsAverage(date.getFormattedYM())
+//			.map { (response, error) -> Mutation in
+//				return .updateDataByMonthly(date, response, error)
+//			}
+//	}
 }

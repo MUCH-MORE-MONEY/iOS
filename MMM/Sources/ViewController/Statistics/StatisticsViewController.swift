@@ -89,7 +89,13 @@ extension StatisticsViewController {
 			.distinctUntilChanged() // 중복값 무시
 			.bind(onNext: setSatisfaction) // 만족도 변경
 			.disposed(by: disposeBag)
-
+		
+		reactor.state
+			.map { $0.date }
+			.distinctUntilChanged() // 중복값 무시
+			.bind(onNext: setMonth) // '월' 변경
+			.disposed(by: disposeBag)
+		
 		// 카테고리 더보기 클릭시, push
 		reactor.state
 			.map { $0.isPushMoreCartegory }
@@ -111,15 +117,11 @@ extension StatisticsViewController {
 extension StatisticsViewController {
 	// Bottom Sheet 설정
 	private func presentBottomSheet() {
+		guard let reactor = self.reactor else { return }
 		// 달력 Picker
-		let vc = DatePicker2ViewController(date: month, mode: .onlyMonthly)
-		let bottomSheetVC = BottomSheetViewController(contentViewController: vc)
-		vc.reactor = bottomSheetReactor
-		vc.setData(title: "월 이동")
-		vc.delegate = bottomSheetVC
-		bottomSheetVC.modalPresentationStyle = .overFullScreen
-		bottomSheetVC.setSetting(height: 360)
-		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
+		let vc = DateBottomSheetViewController(title: "월 이동", date: month, height: 360, mode: .onlyMonthly, sheetMode: .drag, isDark: true)
+		vc.reactor = DateBottomSheetReactor(provider: reactor.provider)
+		self.present(vc, animated: true, completion: nil)
 	}
 	
 	// 카테고리 더보기

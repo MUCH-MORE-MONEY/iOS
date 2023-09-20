@@ -88,13 +88,13 @@ extension TabBarController {
         homeVC.tabBarItem = UITabBarItem(title: "소비", image: R.Icon.iconMoneyInActive, selectedImage: R.Icon.iconMoneyActive)
         
         let statisticsVC = StatisticsViewController()
-		statisticsVC.reactor = StatisticsReactor()
+		statisticsVC.reactor = StatisticsReactor(provider: StatisticsService())
 		statisticsVC.tabBarItem = UITabBarItem(title: "예산", image: R.Icon.iconGroupInActive, selectedImage: R.Icon.iconGroupActive)
 
         let plusVC = UIViewController()
         plusVC.tabBarItem = UITabBarItem()
         
-        let challengeVC = ChallengeViewController()
+		let challengeVC = ChallengeViewController()
         challengeVC.tabBarItem = UITabBarItem(title: "챌린지", image: R.Icon.iconMoneyInActive, selectedImage: R.Icon.iconMoneyActive)
 
 		let profileVC = ProfileViewController()

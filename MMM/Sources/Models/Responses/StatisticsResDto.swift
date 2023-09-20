@@ -1,5 +1,5 @@
 //
-//  StaticsticsResponse.swift
+//  StatisticsResDto.swift
 //  MMM
 //
 //  Created by geonhyeong on 2023/09/14.

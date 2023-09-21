@@ -136,7 +136,8 @@ extension StatisticsSatisfactionListView {
 			$0.showsVerticalScrollIndicator = false
 			$0.separatorStyle = .none
 			$0.rowHeight = UITableView.automaticDimension
-//			$0.isHidden = true
+			$0.isScrollEnabled = false
+			$0.isHidden = true
 		}
 		
 		emptyView = emptyView.then {

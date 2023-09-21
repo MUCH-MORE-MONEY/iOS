@@ -105,11 +105,11 @@
 		C411940B29DAEDF9003DBC15 /* CustomAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411940A29DAEDF9003DBC15 /* CustomAlertViewController.swift */; };
 		C4170B4E2A89FCA800CE0A65 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B4D2A89FCA800CE0A65 /* StatisticsViewController.swift */; };
 		C4170B502A89FD1100CE0A65 /* StatisticsReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B4F2A89FD1100CE0A65 /* StatisticsReactor.swift */; };
-		C4170B532A937AAC00CE0A65 /* StatisticsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B522A937AAC00CE0A65 /* StatisticsHeaderView.swift */; };
+		C4170B532A937AAC00CE0A65 /* StatisticsTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B522A937AAC00CE0A65 /* StatisticsTitleView.swift */; };
 		C4170B552A93982F00CE0A65 /* StatisticsAverageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B542A93982F00CE0A65 /* StatisticsAverageView.swift */; };
 		C4170B572A93A58A00CE0A65 /* StatisticsCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B562A93A58A00CE0A65 /* StatisticsCategoryView.swift */; };
 		C4170B592A94853400CE0A65 /* StatisticsActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B582A94853400CE0A65 /* StatisticsActivityView.swift */; };
-		C4170B5D2A94BA9000CE0A65 /* StatisticsSatisfactionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B5C2A94BA9000CE0A65 /* StatisticsSatisfactionListView.swift */; };
+		C4170B5D2A94BA9000CE0A65 /* StatisticsSatisfactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B5C2A94BA9000CE0A65 /* StatisticsSatisfactionView.swift */; };
 		C4170B652A95D03500CE0A65 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B642A95D03400CE0A65 /* CategoryViewController.swift */; };
 		C4170B672A95EBFA00CE0A65 /* CategoryReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4170B662A95EBFA00CE0A65 /* CategoryReactor.swift */; };
 		C4199DD329FE3051006E5DA8 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4199DD229FE3051006E5DA8 /* BottomSheetViewController.swift */; };
@@ -357,11 +357,11 @@
 		C411940A29DAEDF9003DBC15 /* CustomAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertViewController.swift; sourceTree = "<group>"; };
 		C4170B4D2A89FCA800CE0A65 /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		C4170B4F2A89FD1100CE0A65 /* StatisticsReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsReactor.swift; sourceTree = "<group>"; };
-		C4170B522A937AAC00CE0A65 /* StatisticsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsHeaderView.swift; sourceTree = "<group>"; };
+		C4170B522A937AAC00CE0A65 /* StatisticsTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsTitleView.swift; sourceTree = "<group>"; };
 		C4170B542A93982F00CE0A65 /* StatisticsAverageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsAverageView.swift; sourceTree = "<group>"; };
 		C4170B562A93A58A00CE0A65 /* StatisticsCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsCategoryView.swift; sourceTree = "<group>"; };
 		C4170B582A94853400CE0A65 /* StatisticsActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsActivityView.swift; sourceTree = "<group>"; };
-		C4170B5C2A94BA9000CE0A65 /* StatisticsSatisfactionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsSatisfactionListView.swift; sourceTree = "<group>"; };
+		C4170B5C2A94BA9000CE0A65 /* StatisticsSatisfactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsSatisfactionView.swift; sourceTree = "<group>"; };
 		C4170B642A95D03400CE0A65 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		C4170B662A95EBFA00CE0A65 /* CategoryReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryReactor.swift; sourceTree = "<group>"; };
 		C4199DD229FE3051006E5DA8 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
@@ -958,8 +958,8 @@
 				C4DE94652A9658530069B22B /* StatisticsActivityTableViewCell.swift */,
 				C4170B542A93982F00CE0A65 /* StatisticsAverageView.swift */,
 				C4170B562A93A58A00CE0A65 /* StatisticsCategoryView.swift */,
-				C4170B522A937AAC00CE0A65 /* StatisticsHeaderView.swift */,
-				C4170B5C2A94BA9000CE0A65 /* StatisticsSatisfactionListView.swift */,
+				C4170B522A937AAC00CE0A65 /* StatisticsTitleView.swift */,
+				C4170B5C2A94BA9000CE0A65 /* StatisticsSatisfactionView.swift */,
 				C460DBA92A96056100530351 /* SatisfactionTableViewCell.swift */,
 			);
 			path = Views;
@@ -1463,8 +1463,8 @@
 				C46409B02AB590EE00A899AD /* CategorySectionModel.swift in Sources */,
 				C4351B4A2A15C935005F95BE /* HomeFilterViewController.swift in Sources */,
 				6A1322E92A088DD700CEEC81 /* BaseDetailViewController.swift in Sources */,
-				C4170B5D2A94BA9000CE0A65 /* StatisticsSatisfactionListView.swift in Sources */,
-				C4170B532A937AAC00CE0A65 /* StatisticsHeaderView.swift in Sources */,
+				C4170B5D2A94BA9000CE0A65 /* StatisticsSatisfactionView.swift in Sources */,
+				C4170B532A937AAC00CE0A65 /* StatisticsTitleView.swift in Sources */,
 				C41193E329D287E6003DBC15 /* Ex+KeychainWrapper.swift in Sources */,
 				C494A2512A9B8A0A00980A71 /* TabBarViewModel.swift in Sources */,
 				C4199DD329FE3051006E5DA8 /* BottomSheetViewController.swift in Sources */,

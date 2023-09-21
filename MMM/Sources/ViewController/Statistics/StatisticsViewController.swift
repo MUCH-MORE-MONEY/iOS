@@ -28,12 +28,12 @@ final class StatisticsViewController: BaseViewController, View {
 	// MARK: - UI Components
 	private lazy var monthButtonItem = UIBarButtonItem()
 	private lazy var monthButton = SemanticContentAttributeButton()
-	private lazy var contentView = UIView()
-	private lazy var headerView = StatisticsHeaderView()
+	private lazy var headerView = UIView()
+	private lazy var titleView = StatisticsTitleView()
 	private lazy var satisfactionView = StatisticsAverageView()
 	private lazy var categoryView = StatisticsCategoryView()
 	private lazy var activityView = StatisticsActivityView(timer: timer)
-	private lazy var listView = StatisticsSatisfactionListView()
+	private lazy var selectView = StatisticsSatisfactionView() // 만족도 선택
 	private lazy var tableView = UITableView()
 	private lazy var refreshView = UIView()
 
@@ -220,13 +220,13 @@ extension StatisticsViewController {
 			end = Date().getFormattedDate(format: "dd")
 		}
 		
-		self.headerView.setData(startDate: "\(month).01", endDate: "\(month).\(end)")
+		self.titleView.setData(startDate: "\(month).01", endDate: "\(month).\(end)")
 		self.month = date
 	}
 	
 	/// 만족도  변경
 	private func setSatisfaction(_ satisfaction: Satisfaction) {
-		listView.setData(title: satisfaction.title, score: satisfaction.score)
+		selectView.setData(title: satisfaction.title, score: satisfaction.score)
 		self.satisfaction = satisfaction
 	}
 }
@@ -246,13 +246,13 @@ extension StatisticsViewController {
 	override func setAttribute() {
 		super.setAttribute()
 		
-		view.backgroundColor = R.Color.gray100
+		view.backgroundColor = R.Color.gray900
 		
 		refreshView.backgroundColor = R.Color.gray900
-		contentView.backgroundColor = R.Color.gray900
+		headerView.backgroundColor = R.Color.gray900
 		categoryView.reactor = self.reactor // reactor 주입
 		activityView.reactor = self.reactor // reactor 주입
-		listView.reactor = self.reactor // reactor 주입
+		selectView.reactor = self.reactor // reactor 주입
 		
 		let view = UIView(frame: .init(origin: .zero, size: .init(width: 150, height: 30)))
 		monthButton = monthButton.then {
@@ -272,9 +272,14 @@ extension StatisticsViewController {
 			$0.customView = view
 		}
 		
+//		refreshControl = refreshControl.then {
+//			$0.transform = CGAffineTransformMakeScale(0.5, 0.5)
+//			$0.backgroundColor = R.Color.gray900
+//		}
+		
 		tableView = tableView.then {
 			$0.register(HomeTableViewCell.self)
-			$0.tableHeaderView = contentView
+			$0.tableHeaderView = headerView
 			$0.tableFooterView = emptyView
 			$0.backgroundColor = R.Color.gray100
 			$0.showsVerticalScrollIndicator = false
@@ -282,7 +287,7 @@ extension StatisticsViewController {
 			$0.rowHeight = UITableView.automaticDimension
 		}
 		
-		contentView = contentView.then {
+		headerView = headerView.then {
 			$0.frame = .init(x: 0, y: 0, width: view.bounds.width, height: 590)
 		}
 		
@@ -295,20 +300,20 @@ extension StatisticsViewController {
 		super.setHierarchy()
 		
 		view.addSubviews(refreshView, tableView)
-		contentView.addSubviews(headerView, satisfactionView, categoryView, activityView, listView)
+		headerView.addSubviews(titleView, satisfactionView, categoryView, activityView, selectView)
 	}
 	
 	override func setLayout() {
 		super.setLayout()
 		
-		headerView.snp.makeConstraints {
+		titleView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(32)
 			$0.leading.equalToSuperview().inset(24)
 			$0.trailing.equalToSuperview().inset(UI.sideMargin)
 		}
 		
 		satisfactionView.snp.makeConstraints {
-			$0.top.equalTo(headerView.snp.bottom)
+			$0.top.equalTo(titleView.snp.bottom)
 			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 			$0.height.equalTo(64)
 		}
@@ -325,7 +330,7 @@ extension StatisticsViewController {
 			$0.height.equalTo(100)
 		}
 
-		listView.snp.makeConstraints {
+		selectView.snp.makeConstraints {
 			$0.top.equalTo(activityView.snp.bottom).offset(58)
 			$0.leading.trailing.equalToSuperview()
 			$0.bottom.equalToSuperview()

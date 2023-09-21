@@ -1,5 +1,5 @@
 //
-//  StatisticsSatisfactionListView.swift
+//  StatisticsSatisfactionView.swift
 //  MMM
 //
 //  Created by geonhyeong on 2023/08/22.
@@ -11,7 +11,7 @@ import ReactorKit
 import RxGesture
 
 // 상속하지 않으려면 final 꼭 붙이기
-final class StatisticsSatisfactionListView: BaseView, View {
+final class StatisticsSatisfactionView: BaseView, View {
 	typealias Reactor = StatisticsReactor
 
 	// MARK: - Constants
@@ -34,7 +34,7 @@ final class StatisticsSatisfactionListView: BaseView, View {
 	}
 }
 //MARK: - Bind
-extension StatisticsSatisfactionListView {
+extension StatisticsSatisfactionView {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
 	private func bindAction(_ reactor: StatisticsReactor) {
 		touchAreaView.rx.tapGesture()
@@ -49,7 +49,7 @@ extension StatisticsSatisfactionListView {
 	}
 }
 //MARK: - Action
-extension StatisticsSatisfactionListView {
+extension StatisticsSatisfactionView {
 	// 외부에서 입력
 	func setData(title: String, score: String) {
 		self.titleLabel.text = title
@@ -57,7 +57,7 @@ extension StatisticsSatisfactionListView {
 	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
-extension StatisticsSatisfactionListView {
+extension StatisticsSatisfactionView {
 	// 초기 셋업할 코드들
 
 	override func setAttribute() {

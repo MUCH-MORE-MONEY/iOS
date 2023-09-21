@@ -58,8 +58,6 @@ extension StatisticsSatisfactionListView {
 				let index = IndexPath(row: row, section: 0)
 				let cell = tv.dequeueReusableCell(withIdentifier: HomeTableViewCell.className, for: index) as! HomeTableViewCell
 				
-				cell.isUserInteractionEnabled = false // click disable
-
 				// 데이터 설정
 				cell.setData(data: data, last: false)
 				cell.backgroundColor = R.Color.gray100

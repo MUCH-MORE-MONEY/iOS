@@ -22,7 +22,7 @@ final class SatisfactionBottomSheetReactor: Reactor {
 	
 	// 현재 상태를 기록
 	struct State {
-		var satisfactionList: [Satisfaction] = [.low, .middle, .hight]
+		var satisfactionList: [Satisfaction] = [.low, .hight, .middle]
 		var dismiss: Bool = false
 	}
 	

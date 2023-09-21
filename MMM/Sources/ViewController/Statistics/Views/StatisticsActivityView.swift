@@ -156,8 +156,10 @@ extension StatisticsActivityView {
 //MARK: - Action
 extension StatisticsActivityView {
 	private func moveToIndex() {
+		guard let reactor = reactor else { return }
+		
 		// 보여줄 list의 개수 보다 작을 경우
-		if indexSatisfaction <= cntSatisfaction && cntSatisfaction != 1 {
+		if indexSatisfaction <= cntSatisfaction && cntSatisfaction > 1 {
 			// 만족스러운 활동
 			let idxSatisfaction = IndexPath.init(item: indexSatisfaction, section: 0)
 			self.satisfactionTableView.scrollToRow(at: idxSatisfaction, at: .middle, animated: true) // 해당 인덱스로 이동.
@@ -167,7 +169,9 @@ extension StatisticsActivityView {
 			if indexSatisfaction > cntSatisfaction {
 				DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
 					// 만족스러운 활동
-					self.satisfactionTableView.scrollToRow(at: NSIndexPath(item: 0, section: 0) as IndexPath, at: .top, animated: false)
+					if !reactor.currentState.activitySatisfactionList.isEmpty {
+						self.satisfactionTableView.scrollToRow(at: NSIndexPath(item: 0, section: 0) as IndexPath, at: .top, animated: false)
+					}
 					self.indexSatisfaction = 1 // 인덱스 초기화
 				}
 			}
@@ -176,7 +180,7 @@ extension StatisticsActivityView {
 		}
 		
 		// 보여줄 list의 개수 보다 작을 경우
-		if indexDisappointing <= cntDisappointing && cntDisappointing != 1 {
+		if indexDisappointing <= cntDisappointing && cntDisappointing > 1 {
 			// 아쉬운 활동
 			let idxDisappointing = IndexPath.init(item: cntDisappointing - indexDisappointing, section: 0)
 			self.disappointingTableView.scrollToRow(at: idxDisappointing, at: .middle, animated: true) // 해당 인덱스로 이동.
@@ -186,7 +190,9 @@ extension StatisticsActivityView {
 			if indexDisappointing > cntDisappointing {
 				DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
 					// 아쉬운 활동
-					self.disappointingTableView.scrollToRow(at: NSIndexPath(item: self.cntDisappointing, section: 0) as IndexPath, at: .top, animated: false)
+					if !reactor.currentState.activityDisappointingList.isEmpty {
+						self.disappointingTableView.scrollToRow(at: NSIndexPath(item: self.cntDisappointing, section: 0) as IndexPath, at: .top, animated: false)
+					}
 					
 					self.indexDisappointing = 1 // 인덱스 초기화
 				}

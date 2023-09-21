@@ -150,7 +150,6 @@ extension DateBottomSheetViewController {
 			monthPicker = monthPicker.then {
 				$0.delegate = self
 				$0.dataSource = self
-				$0.al
 				$0.setValue(isDark ? R.Color.gray200 : R.Color.black, forKeyPath: "textColor")
 
 				// 각 component에서 보여줄 초기값.

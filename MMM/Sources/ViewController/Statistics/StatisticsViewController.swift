@@ -52,6 +52,7 @@ final class StatisticsViewController: BaseViewController, View {
 		}
 		
 		timer?.resume() // 타이머 재시작
+		reactor?.action.onNext(.loadData) // 데이터 가져오기
 	}
 	
 	override func viewWillDisappear(_ animated: Bool) {

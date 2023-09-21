@@ -64,6 +64,7 @@ extension StatisticsReactor {
 				self.getStatisticsAverage(Date()), // 평균값
 				self.getStatisticsList(Date(), "01", true), // 아쉬운 List
 				self.getStatisticsList(Date(), "03", true), // 만족스러운 List
+				self.getStatisticsList(Date(), self.currentState.satisfaction.id, true), // viewWillAppear일때, 현재 만족도를 불러와야한다.
 				.just(.setLoading(false))
 			])
 		case .didTapMoreButton:

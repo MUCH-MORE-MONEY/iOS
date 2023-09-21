@@ -74,6 +74,25 @@ extension StatisticsViewController {
 				guard let self = self else { return }
 				self.presentBottomSheet() // '월' 변경 버튼
 			}).disposed(by: disposeBag)
+		
+		// 스크롤이 아래쪽에 닿았을 때를 감지
+		scrollView.rx.contentOffset
+			.map { [weak self] contentOffset in
+				guard let self = self else { return false }
+				// 현재 UIScrollView에서 표시되고 있는 높이
+				let visibleHeight = scrollView.frame.height - scrollView.contentInset.top - scrollView.contentInset.bottom
+				// 현재 UIScrollView에서 표시되고 있는 좌측 상단 꼭짓점의 y좌표
+				let y = contentOffset.y + scrollView.contentInset.top
+				let threshold = scrollView.contentSize.height - visibleHeight - 100
+				// 임계점보다 아래로 스크롤이 되어있는지
+				return y >= threshold
+			}
+			.distinctUntilChanged()
+			.filter { $0 }
+			.bind(onNext: { _ in
+				print(true)
+			})
+			.disposed(by: disposeBag)
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)

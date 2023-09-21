@@ -68,7 +68,7 @@ extension StatisticsSatisfactionListView {
 				let cell = tv.dequeueReusableCell(withIdentifier: HomeTableViewCell.className, for: index) as! HomeTableViewCell
 				
 				// 데이터 설정
-				cell.setData(data: data, last: false)
+				cell.setData(data: data, last: row == reactor.currentState.activityList.count - 1)
 				cell.backgroundColor = R.Color.gray100
 
 				let backgroundView = UIView()

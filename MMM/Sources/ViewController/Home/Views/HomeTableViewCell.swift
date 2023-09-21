@@ -70,6 +70,12 @@ extension HomeTableViewCell {
 		categoryLabel.text = data.categoryTitle
 		plusMinusImage.image = data.type == "01" ? R.Icon.minus16 : R.Icon.plus16
 		priceLabel.text = data.amount.withCommas()
+		
+		let padding: CGFloat = 24
+		contentView.snp.updateConstraints {
+			$0.height.equalTo(data.memo.isEmpty ? 42 + padding : 64 + padding)
+			$0.width.equalToSuperview()
+		}
 	}
 }
 //MARK: - Attribute & Hierarchy & Layouts

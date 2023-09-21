@@ -611,8 +611,7 @@ extension HomeViewController: UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		let padding: CGFloat = 24
-		return viewModel.dailyList[indexPath.row].memo.isEmpty ? 42 + padding : 64 + padding
+		return UITableView.automaticDimension
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

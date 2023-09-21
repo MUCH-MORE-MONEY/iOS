@@ -122,8 +122,7 @@ extension StatisticsSatisfactionListView {
 			$0.backgroundColor = R.Color.gray100
 			$0.showsVerticalScrollIndicator = false
 			$0.separatorStyle = .none
-//			$0.isHidden = true
-			$0.rowHeight = UI.cellHeight
+			$0.rowHeight = UITableView.automaticDimension
 		}
 		
 		emptyView = emptyView.then {

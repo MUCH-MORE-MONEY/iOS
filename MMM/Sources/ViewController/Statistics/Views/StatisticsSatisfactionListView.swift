@@ -47,6 +47,15 @@ extension StatisticsSatisfactionListView {
 			.map { _ in .didTapSatisfactionButton }
 			.bind(to: reactor.action)
 			.disposed(by: disposeBag)
+		
+		// TableView cell select
+		Observable.zip(
+			tableView.rx.itemSelected,
+			tableView.rx.modelSelected(EconomicActivity.self)
+		)
+		.map { .selectCell($0, $1) }
+		.bind(to: reactor.action)
+		.disposed(by: disposeBag)
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
@@ -146,7 +155,7 @@ extension StatisticsSatisfactionListView {
 	override func setHierarchy() {
 		super.setHierarchy()
 		
-		addSubviews(touchAreaView, tableView, emptyView)
+		addSubviews(touchAreaView, emptyView, tableView)
 		touchAreaView.addSubviews(titleLabel, starImageView, scoreLabel, arrowImageView)
 	}
 	
@@ -183,7 +192,7 @@ extension StatisticsSatisfactionListView {
 		tableView.snp.makeConstraints {
 			$0.top.equalTo(touchAreaView.snp.bottom)
 			$0.leading.trailing.equalToSuperview()
-			$0.bottom.equalToSuperview()
+			$0.height.equalTo(248)
 		}
 		
 		emptyView.snp.makeConstraints {

@@ -112,6 +112,14 @@ extension StatisticsViewController {
 			.filter { $0 } // true일때만 화면 전환
 			.bind(onNext: presentStisfactionViewController)
 			.disposed(by: disposeBag)
+		
+		// Cell Click시, push
+		reactor.state
+			.map { $0.isPushDetail }
+			.distinctUntilChanged() // 중복값 무시
+			.filter { $0 } // true일때만 화면 전환
+			.bind(onNext: pushDetail)
+			.disposed(by: disposeBag)
 	}
 }
 //MARK: - Action
@@ -126,9 +134,20 @@ extension StatisticsViewController {
 	}
 	
 	// 카테고리 더보기
-	private func pushCategoryViewController(_ isPresent: Bool) {
+	private func pushCategoryViewController(_ isPush: Bool) {
 		let vc = CategoryViewController()
 		vc.reactor = CategoryReactor()
+		navigationController?.pushViewController(vc, animated: true)
+	}
+	
+	// 카테고리 더보기
+	private func pushDetail(_ isPush: Bool) {
+		guard let reactor = reactor, let data = reactor.currentState.detailData else { return }
+		
+		let index = data.IndexPath.row
+		let vc = DetailViewController(homeViewModel: HomeViewModel(), index: index) // 임시: HomeViewModel 생성
+		let economicActivityId = reactor.currentState.activityList.map { $0.id }
+		vc.setData(economicActivityId: economicActivityId, index: index, date: data.info.createAt.toDate() ?? Date())
 		navigationController?.pushViewController(vc, animated: true)
 	}
 	

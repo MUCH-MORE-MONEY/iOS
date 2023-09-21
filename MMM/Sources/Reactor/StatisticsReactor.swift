@@ -14,6 +14,7 @@ final class StatisticsReactor: Reactor {
 		case loadData
 		case didTapMoreButton // 카테고리 더보기
 		case didTapSatisfactionButton // 만족도 선택
+		case selectCell(IndexPath, EconomicActivity)
 	}
 	
 	// 처리 단위
@@ -25,6 +26,7 @@ final class StatisticsReactor: Reactor {
 		case setLoading(Bool)
 		case setPushMoreCartegory(Bool)
 		case setPresentSatisfaction(Bool)
+		case pushDetail(IndexPath, EconomicActivity, Bool)
 	}
 	
 	// 현재 상태를 기록
@@ -38,6 +40,8 @@ final class StatisticsReactor: Reactor {
 		var isLoading = false // 로딩
 		var isPushMoreCartegory = false
 		var isPresentSatisfaction = false
+		var isPushDetail = false
+		var detailData: (IndexPath: IndexPath, info: EconomicActivity)?
 		var curSatisfaction: Satisfaction = .low
 	}
 	
@@ -59,7 +63,7 @@ extension StatisticsReactor {
 	func mutate(action: Action) -> Observable<Mutation> {
 		switch action {
 		case .loadData:
-			return  Observable.concat([
+			return Observable.concat([
 				.just(.setLoading(true)),
 				self.getStatisticsAverage(Date()), // 평균값
 				self.getStatisticsList(Date(), "01", true), // 아쉬운 List
@@ -68,14 +72,19 @@ extension StatisticsReactor {
 				.just(.setLoading(false))
 			])
 		case .didTapMoreButton:
-			return  Observable.concat([
+			return Observable.concat([
 				.just(.setPushMoreCartegory(true)),
 				.just(.setPushMoreCartegory(false))
 			])
 		case .didTapSatisfactionButton:
-			return  Observable.concat([
+			return Observable.concat([
 				.just(.setPresentSatisfaction(true)),
 				.just(.setPresentSatisfaction(false))
+			])
+		case .selectCell(let indexPath, let data):
+			return .concat([
+				.just(.pushDetail(indexPath, data, true)),
+				.just(.pushDetail(indexPath, data, false))
 			])
 		}
 	}
@@ -134,10 +143,13 @@ extension StatisticsReactor {
 			newState.satisfaction = satisfaction
 		case .setLoading(let isLoading):
 			newState.isLoading = isLoading
-		case .setPushMoreCartegory(let isPresent):
-			newState.isPushMoreCartegory = isPresent
+		case .setPushMoreCartegory(let isPush):
+			newState.isPushMoreCartegory = isPush
 		case .setPresentSatisfaction(let isPresent):
 			newState.isPresentSatisfaction = isPresent
+		case .pushDetail(let indexPath, let data, let isPush):
+			newState.isPushDetail = isPush
+			newState.detailData = (indexPath, data)
 		}
 		
 		return newState

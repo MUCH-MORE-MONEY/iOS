@@ -27,8 +27,7 @@ final class DateBottomSheetViewController: BottomSheetViewController2, View {
 	private var isDark: Bool = false // 다크 모드 지정
 	private var height: CGFloat
 	private let yearList: [Int] = Array(2013...2099)
-	private let monthList: [String] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-	private let monthDic: [String:Int] = ["January":1, "February":2, "March":3, "April":4, "May":5, "June":6, "July":7, "August":8, "September":9, "October":10, "November":11, "December":12]
+	private let monthList: [Int] = Array(1...12)
 	private var selectedYearIndex: Int = 0 // Custom Picker View에서 선택한 년
 	private var selectedMonthIndex: Int = 0	// Custom Picker View에서 선택한 달
 
@@ -90,14 +89,14 @@ extension DateBottomSheetViewController {
 //MARK: - Action
 extension DateBottomSheetViewController {
 	// 연/월을 Date로 변경
-	private func createDateFromYearAndMonth(year: Int, month: String) -> Date? {
+	private func createDateFromYearAndMonth(year: Int, month: Int) -> Date? {
 		// 현재 달력과 타임존 설정을 사용하여 Calendar 인스턴스 생성
 		let calendar = Calendar.current
 		
 		// DateComponents를 사용하여 year와 month를 설정
 		var dateComponents = DateComponents()
 		dateComponents.year = year
-		dateComponents.month = monthDic[month]
+		dateComponents.month = month
 		
 		// DateComponents를 사용하여 Date 객체 생성
 		if let date = calendar.date(from: dateComponents) {
@@ -151,6 +150,7 @@ extension DateBottomSheetViewController {
 			monthPicker = monthPicker.then {
 				$0.delegate = self
 				$0.dataSource = self
+				$0.al
 				$0.setValue(isDark ? R.Color.gray200 : R.Color.black, forKeyPath: "textColor")
 
 				// 각 component에서 보여줄 초기값.
@@ -160,8 +160,8 @@ extension DateBottomSheetViewController {
 								
 				guard let initYearIndex = yearList.firstIndex(of: initYear) else { return }
 				
-				$0.selectRow(initMonth, inComponent: 0, animated: true)
-				$0.selectRow(initYearIndex, inComponent: 1, animated: true)
+				$0.selectRow(initYearIndex, inComponent: 0, animated: true)
+				$0.selectRow(initMonth, inComponent: 1, animated: true)
 
 				// 년, 월이 현재로 선택되어있는 상태에서 확인 버튼을 누를 경우를 위해 추가
 				selectedYearIndex = initYearIndex
@@ -219,24 +219,24 @@ extension DateBottomSheetViewController: UIPickerViewDataSource, UIPickerViewDel
 	// PickerView의 각 component에서 몇 개의 row를 정하는 메소드
 	func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
 		switch component {
-		case 0:		return monthList.count
-		default:	return yearList.count
+		case 0:		return yearList.count
+		default:	return monthList.count
 		}
 	}
 	
 	// PickerView의 각 component에서 각 row에 내용을 정하는 메소드
 	func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
 		switch component {
-		case 0:		return "\(monthList[row])"
-		default:	return "\(yearList[row])"
+		case 0:		return "\(yearList[row])년"
+		default:	return "\(monthList[row])월"
 		}
 	}
 	
 	// 사용자가 선택한 row 값을 저장.
 	func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
 		switch component {
-		case 0:		selectedMonthIndex = row	// 월 저장
-		default:	selectedYearIndex = row		// 년도 저장
+		case 0:		selectedYearIndex = row		// 년도 저장
+		default:	selectedMonthIndex = row	// 월 저장
 		}
 	}
 }

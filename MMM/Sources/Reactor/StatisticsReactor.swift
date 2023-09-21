@@ -18,7 +18,7 @@ final class StatisticsReactor: Reactor {
 	
 	// 처리 단위
 	enum Mutation {
-		case fetchList([EconomicActivity])
+		case fetchList([EconomicActivity], String, Bool) // list, type("01" or "03"), rank reset 여부
 		case setDate(Date)
 		case setSatisfaction(Satisfaction)
 		case setAverage(Double)
@@ -62,7 +62,8 @@ extension StatisticsReactor {
 			return  Observable.concat([
 				.just(.setLoading(true)),
 				self.getStatisticsAverage(Date()), // 평균값
-				self.getStatisticsList(Date(), self.currentState.satisfaction.id), // 만족도별 List
+				self.getStatisticsList(Date(), "01", true), // 아쉬운 List
+				self.getStatisticsList(Date(), "03", true), // 만족스러운 List
 				.just(.setLoading(false))
 			])
 		case .didTapMoreButton:
@@ -87,7 +88,8 @@ extension StatisticsReactor {
 					.just(.setLoading(true)),
 					.just(.setDate(date)),
 					self.getStatisticsAverage(date),
-					self.getStatisticsList(date, "01"),
+					self.getStatisticsList(date, "01", true),
+					self.getStatisticsList(date, "03", true),
 					.just(.setLoading(false)),
 				])
 			case .updateSatisfaction(let satisfaction):
@@ -108,11 +110,21 @@ extension StatisticsReactor {
 		var newState = state
 		
 		switch mutation {
-		case .fetchList(let list):
+		case .fetchList(let list, let type, let reset):
 			let data = list.prefix(3)
 			newState.activityList = list
-			newState.activitySatisfactionList = [] + data + list.prefix(1)
-			newState.activityDisappointingList = list.suffix(1) + data
+			
+			// 월 변경인지 판별
+			if reset {
+				switch type {
+				case "01": // 아쉬운 활동
+					newState.activityDisappointingList = list.suffix(1) + data
+				case "03": // 만족스러운 활동
+					newState.activitySatisfactionList = [] + data + list.prefix(1)
+				default:
+					break
+				}
+			}
 		case .setDate(let date):
 			newState.date = date
 		case .setAverage(let average):
@@ -141,10 +153,10 @@ extension StatisticsReactor {
 	}
 	
 	// 경제활동 만족도에 따른 List 불러오기
-	func getStatisticsList(_ date: Date, _ type: String) -> Observable<Mutation> {
+	func getStatisticsList(_ date: Date, _ type: String, _ reset: Bool = false) -> Observable<Mutation> {
 		return MMMAPIService().getStatisticsList(dateYM: date.getFormattedYM(), valueScoreDvcd: type, limit: 25, offset: 0)
 			.map { (response, error) -> Mutation in
-				return .fetchList(response.selectListMonthlyByValueScoreOutputDto)
+				return .fetchList(response.selectListMonthlyByValueScoreOutputDto, type, reset)
 			}
 	}
 }

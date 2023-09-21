@@ -28,8 +28,10 @@ final class StatisticsActivityView: BaseView, View {
 	
 	// MARK: - Properties
 	private var timer: DispatchSourceTimer?
-	private var counter = 1 // 처음 Delay 때문에 0이 아닌 1로 초기화
-	private var cntList = 0 // Rank List 갯수
+	private var indexSatisfaction = 1 // 처음 Delay 때문에 0이 아닌 1로 초기화
+	private var cntSatisfaction = 0 // Rank List 갯수
+	private var indexDisappointing = 1 // 처음 Delay 때문에 0이 아닌 1로 초기화
+	private var cntDisappointing = 0 // Rank List 갯수
 
 	// MARK: - UI Components
 	private lazy var stackView = UIStackView()
@@ -68,6 +70,7 @@ extension StatisticsActivityView {
 		// 만족스러운 활동 List
 		reactor.state
 			.map { $0.activitySatisfactionList }
+			.distinctUntilChanged() // 중복값 무시
 			.bind(to: satisfactionTableView.rx.items) { tv, row, data in
 				let index = IndexPath(row: row, section: 0)
 				let cell = tv.dequeueReusableCell(withIdentifier: "StatisticsActivityTableViewCell", for: index) as! StatisticsActivityTableViewCell
@@ -83,6 +86,7 @@ extension StatisticsActivityView {
 		// 아쉬운 활동 List
 		reactor.state
 			.map { $0.activityDisappointingList }
+			.distinctUntilChanged() // 중복값 무시
 			.bind(to: disappointingTableView.rx.items) { tv, row, data in
 				let index = IndexPath(row: row, section: 0)
 				let cell = tv.dequeueReusableCell(withIdentifier: "StatisticsActivityTableViewCell", for: index) as! StatisticsActivityTableViewCell
@@ -95,12 +99,36 @@ extension StatisticsActivityView {
 				return cell
 			}.disposed(by: disposeBag)
 		
+		// 만족스러운 활동
 		reactor.state
 			.map { $0.activitySatisfactionList }
+			.distinctUntilChanged() // 중복값 무시
 			.map { $0.count }
-			.subscribe(onNext: {
-				self.counter = 1
-				self.cntList = $0 - 1
+			.subscribe(onNext: { [weak self] count in
+				guard let self = self else { return }
+				
+				self.indexSatisfaction = 1
+				self.cntSatisfaction = count - 1
+				
+				if cntSatisfaction != -1 {
+					self.satisfactionTableView.scrollToRow(at: NSIndexPath(item: 0, section: 0) as IndexPath, at: .middle, animated: false) // 해당 인덱스로 이동.
+				}
+			})
+			.disposed(by: disposeBag)
+		
+		// 아쉬운 활동
+		reactor.state
+			.map { $0.activityDisappointingList }
+			.distinctUntilChanged() // 중복값 무시
+			.map { $0.count }
+			.subscribe(onNext: { [weak self] count in
+				guard let self = self else { return }
+				self.indexDisappointing = 1
+				self.cntDisappointing = count - 1
+				
+				if cntDisappointing != -1 {
+					disappointingTableView.scrollToRow(at: NSIndexPath(item: cntDisappointing, section: 0) as IndexPath, at: .middle, animated: false) // 해당 인덱스로 이동.
+				}
 			})
 			.disposed(by: disposeBag)
 		
@@ -108,11 +136,9 @@ extension StatisticsActivityView {
 			.map { $0.isLoading }
 			.distinctUntilChanged() // 중복값 무시
 			.bind(onNext: { [weak self] isLoading in
-				guard let self = self, cntList != -1 else { return }
+				guard let self = self else { return }
 				
 				if !isLoading { // 로딩 끝
-					// 자연스러운 UI를 위해 미리 초기화
-					self.disappointingTableView.scrollToRow(at: NSIndexPath(item: cntList, section: 0) as IndexPath, at: .middle, animated: false) // 해당 인덱스로 이동.
 				}
 			}).disposed(by: disposeBag)
 	}
@@ -121,31 +147,42 @@ extension StatisticsActivityView {
 extension StatisticsActivityView {
 	private func moveToIndex() {
 		// 보여줄 list의 개수 보다 작을 경우
-		guard counter <= cntList && cntList != 1 else {
-			counter = 0
-			return
+		if indexSatisfaction <= cntSatisfaction && cntSatisfaction != 1 {
+			// 만족스러운 활동
+			let idxSatisfaction = IndexPath.init(item: indexSatisfaction, section: 0)
+			self.satisfactionTableView.scrollToRow(at: idxSatisfaction, at: .middle, animated: true) // 해당 인덱스로 이동.
+
+			self.indexSatisfaction += 1 // 인덱스 증가
+
+			if indexSatisfaction > cntSatisfaction {
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+					// 만족스러운 활동
+					self.satisfactionTableView.scrollToRow(at: NSIndexPath(item: 0, section: 0) as IndexPath, at: .top, animated: false)
+					self.indexSatisfaction = 1 // 인덱스 초기화
+				}
+			}
+		} else {
+			indexSatisfaction = 0
 		}
 		
-		// 만족스러운 활동
-		let indexSatisfaction = IndexPath.init(item: counter, section: 0)
-		self.satisfactionTableView.scrollToRow(at: indexSatisfaction, at: .middle, animated: true) // 해당 인덱스로 이동.
-		
-		// 아쉬운 활동
-		let indexDisappointing = IndexPath.init(item: cntList - counter, section: 0)
-		self.disappointingTableView.scrollToRow(at: indexDisappointing, at: .middle, animated: true) // 해당 인덱스로 이동.
+		// 보여줄 list의 개수 보다 작을 경우
+		if indexDisappointing <= cntDisappointing && cntDisappointing != 1 {
+			// 아쉬운 활동
+			let idxDisappointing = IndexPath.init(item: cntDisappointing - indexDisappointing, section: 0)
+			self.disappointingTableView.scrollToRow(at: idxDisappointing, at: .middle, animated: true) // 해당 인덱스로 이동.
 
-		self.counter += 1 // 인덱스 증가
+			self.indexDisappointing += 1 // 인덱스 증가
 
-		if counter > cntList {
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-				// 만족스러운 활동
-				self.satisfactionTableView.scrollToRow(at: NSIndexPath(item: 0, section: 0) as IndexPath, at: .top, animated: false)
-				
-				// 아쉬운 활동
-				self.disappointingTableView.scrollToRow(at: NSIndexPath(item: self.cntList, section: 0) as IndexPath, at: .top, animated: false)
-				
-				self.counter = 1 // 인덱스 초기화
+			if indexDisappointing > cntDisappointing {
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+					// 아쉬운 활동
+					self.disappointingTableView.scrollToRow(at: NSIndexPath(item: self.cntDisappointing, section: 0) as IndexPath, at: .top, animated: false)
+					
+					self.indexDisappointing = 1 // 인덱스 초기화
+				}
 			}
+		} else {
+			indexDisappointing = 0
 		}
 	}
 }

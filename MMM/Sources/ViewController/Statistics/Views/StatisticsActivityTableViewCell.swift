@@ -34,7 +34,7 @@ extension StatisticsActivityTableViewCell {
 	func setData(data: EconomicActivity) {
 		titleLabel.text = data.title
 		priceLabel.text = data.amount.withCommas() + " 원"
-		typeImageView.image = data.type == "01" ? R.Icon.plus16 : R.Icon.minus16
+		typeImageView.image = data.type == "01" ? R.Icon.minus16 : R.Icon.plus16
 	}
 }
 //MARK: - Attribute & Hierarchy & Layouts

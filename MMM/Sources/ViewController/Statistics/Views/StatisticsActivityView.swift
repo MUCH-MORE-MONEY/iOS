@@ -39,15 +39,15 @@ final class StatisticsActivityView: BaseView, View {
 	private lazy var satisfactionTableView = UITableView()
 	private lazy var satisfactionLabel = UILabel()	// 만족스러운 활동
 	private lazy var satisfactionImageView = UIImageView()	// ✨
-	private lazy var satisfactionTitleLabel = UILabel()
-	private lazy var satisfactionPriceLabel = UILabel()
+	private lazy var satisfactionEmptyTitleLabel = UILabel()
+	private lazy var satisfactionEmptyPriceLabel = UILabel()
 
 	private lazy var disappointingView = UIView()			// 아쉬운 활동 영역
 	private lazy var disappointingTableView = UITableView()
 	private lazy var disappointingLabel = UILabel()			// 아쉬운 활동
 	private lazy var disappointingImageView = UIImageView() // 💦
-	private lazy var disappointingTitleLabel = UILabel()
-	private lazy var disappointingPriceLabel = UILabel()
+	private lazy var disappointingEmptyTitleLabel = UILabel()
+	private lazy var disappointingEmptyPriceLabel = UILabel()
 
 	init(timer: DispatchSourceTimer?) {
 		self.timer = timer
@@ -110,8 +110,13 @@ extension StatisticsActivityView {
 				self.indexSatisfaction = 1
 				self.cntSatisfaction = count - 1
 				
-				if cntSatisfaction != -1 {
+				if count != 0 {
 					self.satisfactionTableView.scrollToRow(at: NSIndexPath(item: 0, section: 0) as IndexPath, at: .middle, animated: false) // 해당 인덱스로 이동.
+					satisfactionEmptyTitleLabel.isHidden = true
+					satisfactionEmptyPriceLabel.isHidden = true
+				} else {
+					satisfactionEmptyTitleLabel.isHidden = false
+					satisfactionEmptyPriceLabel.isHidden = false
 				}
 			})
 			.disposed(by: disposeBag)
@@ -126,8 +131,13 @@ extension StatisticsActivityView {
 				self.indexDisappointing = 1
 				self.cntDisappointing = count - 1
 				
-				if cntDisappointing != -1 {
+				if count != 0 {
 					disappointingTableView.scrollToRow(at: NSIndexPath(item: cntDisappointing, section: 0) as IndexPath, at: .middle, animated: false) // 해당 인덱스로 이동.
+					disappointingEmptyTitleLabel.isHidden = true
+					disappointingEmptyPriceLabel.isHidden = true
+				} else {
+					disappointingEmptyTitleLabel.isHidden = false
+					disappointingEmptyPriceLabel.isHidden = false
 				}
 			})
 			.disposed(by: disposeBag)
@@ -251,25 +261,25 @@ extension StatisticsActivityView {
 			$0.rowHeight = UI.cellHeight
 		}
 		
-		satisfactionTitleLabel = satisfactionTitleLabel.then {
+		satisfactionEmptyTitleLabel = satisfactionEmptyTitleLabel.then {
 			$0.text = "아직 활동이 없어요"
 			$0.font = R.Font.title3
 			$0.textColor = R.Color.gray600
 		}
 		
-		disappointingTitleLabel = disappointingTitleLabel.then {
+		disappointingEmptyTitleLabel = disappointingEmptyTitleLabel.then {
 			$0.text = "아직 활동이 없어요"
 			$0.font = R.Font.title3
 			$0.textColor = R.Color.gray600
 		}
 		
-		satisfactionPriceLabel = satisfactionPriceLabel.then {
+		satisfactionEmptyPriceLabel = satisfactionEmptyPriceLabel.then {
 			$0.text = "만족한 활동을 적어주세요"
 			$0.font = R.Font.body3
 			$0.textColor = R.Color.gray800
 		}
 		
-		disappointingPriceLabel = disappointingPriceLabel.then {
+		disappointingEmptyPriceLabel = disappointingEmptyPriceLabel.then {
 			$0.text = "아쉬운 활동을 적어주세요"
 			$0.font = R.Font.body3
 			$0.textColor = R.Color.gray800
@@ -281,8 +291,8 @@ extension StatisticsActivityView {
 		
 		addSubview(stackView)
 		stackView.addArrangedSubviews(satisfactionView, disappointingView)
-		satisfactionView.addSubviews(satisfactionLabel, satisfactionImageView, satisfactionTableView, satisfactionTitleLabel, satisfactionPriceLabel)
-		disappointingView.addSubviews(disappointingLabel, disappointingImageView, disappointingTableView, disappointingTitleLabel, disappointingPriceLabel)
+		satisfactionView.addSubviews(satisfactionLabel, satisfactionImageView, satisfactionTableView, satisfactionEmptyTitleLabel, satisfactionEmptyPriceLabel)
+		disappointingView.addSubviews(disappointingLabel, disappointingImageView, disappointingTableView, disappointingEmptyTitleLabel, disappointingEmptyPriceLabel)
 	}
 	
 	override func setLayout() {
@@ -318,6 +328,27 @@ extension StatisticsActivityView {
 		
 		disappointingTableView.snp.makeConstraints {
 			$0.top.equalTo(disappointingLabel.snp.bottom).offset(UI.tableViewMargin.top)
+			$0.trailing.leading.bottom.equalToSuperview()
+		}
+		
+		// Empty Case
+		satisfactionEmptyTitleLabel.snp.makeConstraints {
+			$0.top.equalTo(satisfactionLabel.snp.bottom).offset(UI.tableViewMargin.top)
+			$0.trailing.leading.equalToSuperview()
+		}
+		
+		disappointingEmptyTitleLabel.snp.makeConstraints {
+			$0.top.equalTo(disappointingLabel.snp.bottom).offset(UI.tableViewMargin.top)
+			$0.trailing.leading.equalToSuperview()
+		}
+		
+		satisfactionEmptyPriceLabel.snp.makeConstraints {
+			$0.top.equalTo(satisfactionEmptyTitleLabel.snp.bottom).offset(UI.tableViewMargin.top)
+			$0.trailing.leading.bottom.equalToSuperview()
+		}
+		
+		disappointingEmptyPriceLabel.snp.makeConstraints {
+			$0.top.equalTo(disappointingEmptyTitleLabel.snp.bottom).offset(UI.tableViewMargin.top)
 			$0.trailing.leading.bottom.equalToSuperview()
 		}
 	}

@@ -35,7 +35,7 @@ final class StatisticsViewController: BaseViewController, View {
 	private lazy var satisfactionView = StatisticsAverageView()
 	private lazy var categoryView = StatisticsCategoryView()
 	private lazy var activityView = StatisticsActivityView(timer: timer)
-	private lazy var selectAreaView = StatisticsSatisfactionListView()
+	private lazy var listView = StatisticsSatisfactionListView()
 	
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -165,7 +165,7 @@ extension StatisticsViewController {
 	
 	/// 만족도  변경
 	private func setSatisfaction(_ satisfaction: Satisfaction) {
-		selectAreaView.setData(title: satisfaction.title, score: satisfaction.score)
+		listView.setData(title: satisfaction.title, score: satisfaction.score)
 		self.satisfaction = satisfaction
 	}
 }
@@ -197,7 +197,7 @@ extension StatisticsViewController {
 		contentView.backgroundColor = R.Color.gray900
 		categoryView.reactor = self.reactor // reactor 주입
 		activityView.reactor = self.reactor // reactor 주입
-		selectAreaView.reactor = self.reactor // reactor 주입
+		listView.reactor = self.reactor // reactor 주입
 		
 		let view = UIView(frame: .init(origin: .zero, size: .init(width: 150, height: 30)))
 		monthButton = monthButton.then {
@@ -223,7 +223,7 @@ extension StatisticsViewController {
 		
 		view.addSubviews(scrollView)
 		scrollView.addSubviews(refreshView, contentView)
-		contentView.addSubviews(headerView, satisfactionView, categoryView, activityView, selectAreaView)
+		contentView.addSubviews(headerView, satisfactionView, categoryView, activityView, listView)
 	}
 	
 	override func setLayout() {
@@ -268,7 +268,7 @@ extension StatisticsViewController {
 			$0.height.equalTo(100)
 		}
 		
-		selectAreaView.snp.makeConstraints {
+		listView.snp.makeConstraints {
 			$0.top.equalTo(activityView.snp.bottom).offset(58)
 			$0.leading.trailing.equalToSuperview()
 			$0.bottom.equalTo(contentView)

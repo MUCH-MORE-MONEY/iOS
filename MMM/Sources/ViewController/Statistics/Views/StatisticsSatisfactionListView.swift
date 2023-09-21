@@ -12,9 +12,12 @@ import RxGesture
 
 // 상속하지 않으려면 final 꼭 붙이기
 final class StatisticsSatisfactionListView: BaseView, View {
+	typealias Reactor = StatisticsReactor
+
 	// MARK: - Constants
 	private enum UI {
 		static let sideMargin: CGFloat = 20
+		static let cellHeight: CGFloat = 64
 	}
 	
 	// MARK: - Properties
@@ -47,7 +50,26 @@ extension StatisticsSatisfactionListView {
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
-	private func bindState(_ reactor: StatisticsReactor) {}
+	private func bindState(_ reactor: StatisticsReactor) {
+		reactor.state
+			.map { $0.activityList }
+			.bind(to: tableView.rx.items) { tv, row, data in
+				let index = IndexPath(row: row, section: 0)
+				let cell = tv.dequeueReusableCell(withIdentifier: HomeTableViewCell.className, for: index) as! HomeTableViewCell
+				
+				cell.isUserInteractionEnabled = false // click disable
+
+				// 데이터 설정
+				cell.setData(data: data, last: false)
+				cell.backgroundColor = R.Color.gray100
+
+				let backgroundView = UIView()
+				backgroundView.backgroundColor = R.Color.gray400.withAlphaComponent(0.3)
+				cell.selectedBackgroundView = backgroundView
+				
+				return cell
+			}.disposed(by: disposeBag)
+	}
 }
 //MARK: - Action
 extension StatisticsSatisfactionListView {
@@ -100,7 +122,8 @@ extension StatisticsSatisfactionListView {
 			$0.backgroundColor = R.Color.gray100
 			$0.showsVerticalScrollIndicator = false
 			$0.separatorStyle = .none
-			$0.isHidden = true
+//			$0.isHidden = true
+			$0.rowHeight = UI.cellHeight
 		}
 		
 		emptyView = emptyView.then {
@@ -146,9 +169,9 @@ extension StatisticsSatisfactionListView {
 		
 		// Table View
 		tableView.snp.makeConstraints {
+			$0.top.equalTo(touchAreaView.snp.bottom)
 			$0.leading.trailing.equalToSuperview()
 			$0.bottom.equalToSuperview()
-			$0.top.equalTo(touchAreaView.snp.bottom)
 		}
 		
 		emptyView.snp.makeConstraints {

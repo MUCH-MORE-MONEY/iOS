@@ -32,6 +32,7 @@ final class StatisticsReactor: Reactor {
 		var date = Date() // 월
 		var average: Double = 0.0 // 평균값
 		var satisfaction: Satisfaction = .low // 만족도
+		var activityList: [EconomicActivity] = []
 		var activitySatisfactionList: [EconomicActivity] = []
 		var activityDisappointingList: [EconomicActivity] = []
 		var isLoading = false // 로딩
@@ -109,6 +110,7 @@ extension StatisticsReactor {
 		switch mutation {
 		case .fetchList(let list):
 			let data = list.prefix(3)
+			newState.activityList = list
 			newState.activitySatisfactionList = [] + data + list.prefix(1)
 			newState.activityDisappointingList = list.suffix(1) + data
 		case .setDate(let date):

@@ -80,15 +80,6 @@ extension StatisticsActivityView {
 				return cell
 			}.disposed(by: disposeBag)
 		
-		reactor.state
-			.map { $0.activitySatisfactionList }
-			.map { $0.count }
-			.subscribe(onNext: {
-				self.counter = 1
-				self.cntList = $0 - 1
-			})
-			.disposed(by: disposeBag)
-		
 		// 아쉬운 활동 List
 		reactor.state
 			.map { $0.activityDisappointingList }
@@ -105,14 +96,22 @@ extension StatisticsActivityView {
 			}.disposed(by: disposeBag)
 		
 		reactor.state
+			.map { $0.activitySatisfactionList }
+			.map { $0.count }
+			.subscribe(onNext: {
+				self.counter = 1
+				self.cntList = $0 - 1
+			})
+			.disposed(by: disposeBag)
+		
+		reactor.state
 			.map { $0.isLoading }
 			.distinctUntilChanged() // 중복값 무시
 			.bind(onNext: { [weak self] isLoading in
-				guard let self = self else { return }
+				guard let self = self, cntList != -1 else { return }
 				
 				if !isLoading { // 로딩 끝
 					// 자연스러운 UI를 위해 미리 초기화
-//					self.satisfactionTableView.scrollToRow(at: NSIndexPath(item: 0, section: 0) as IndexPath, at: .middle, animated: false) // 해당 인덱스로 이동.
 					self.disappointingTableView.scrollToRow(at: NSIndexPath(item: cntList, section: 0) as IndexPath, at: .middle, animated: false) // 해당 인덱스로 이동.
 				}
 			}).disposed(by: disposeBag)
@@ -137,7 +136,7 @@ extension StatisticsActivityView {
 
 		self.counter += 1 // 인덱스 증가
 
-		if counter >= cntList + 1 {
+		if counter > cntList {
 			DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
 				// 만족스러운 활동
 				self.satisfactionTableView.scrollToRow(at: NSIndexPath(item: 0, section: 0) as IndexPath, at: .top, animated: false)

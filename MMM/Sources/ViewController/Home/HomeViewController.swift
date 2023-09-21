@@ -44,6 +44,10 @@ final class HomeViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
+		// 임시
+		if let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) {
+			print(#file, "Token(Header 토큰) \(token)")
+		}
 //        viewModel.showTrackingPermissionAlert()
 	}
 

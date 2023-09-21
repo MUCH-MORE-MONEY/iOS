@@ -17,7 +17,6 @@ final class StatisticsSatisfactionListView: BaseView, View {
 	// MARK: - Constants
 	private enum UI {
 		static let sideMargin: CGFloat = 20
-		static let cellHeight: CGFloat = 64
 	}
 	
 	// MARK: - Properties
@@ -28,10 +27,6 @@ final class StatisticsSatisfactionListView: BaseView, View {
 	private lazy var starImageView = UIImageView()
 	private lazy var scoreLabel = UILabel()
 	private lazy var arrowImageView = UIImageView()
-	private lazy var tableView = UITableView()
-
-	// Empty & Error UI
-	private lazy var emptyView = HomeEmptyView()
 	
 	func bind(reactor: StatisticsReactor) {
 		bindState(reactor)
@@ -47,48 +42,10 @@ extension StatisticsSatisfactionListView {
 			.map { _ in .didTapSatisfactionButton }
 			.bind(to: reactor.action)
 			.disposed(by: disposeBag)
-		
-		// TableView cell select
-		Observable.zip(
-			tableView.rx.itemSelected,
-			tableView.rx.modelSelected(EconomicActivity.self)
-		)
-		.map { .selectCell($0, $1) }
-		.bind(to: reactor.action)
-		.disposed(by: disposeBag)
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: StatisticsReactor) {
-		reactor.state
-			.map { $0.activityList }
-			.distinctUntilChanged() // 중복값 무시
-			.bind(to: tableView.rx.items) { tv, row, data in
-				let index = IndexPath(row: row, section: 0)
-				let cell = tv.dequeueReusableCell(withIdentifier: HomeTableViewCell.className, for: index) as! HomeTableViewCell
-				
-				// 데이터 설정
-				cell.setData(data: data, last: row == reactor.currentState.activityList.count - 1)
-				cell.backgroundColor = R.Color.gray100
-
-				let backgroundView = UIView()
-				backgroundView.backgroundColor = R.Color.gray400.withAlphaComponent(0.3)
-				cell.selectedBackgroundView = backgroundView
-				
-				return cell
-			}.disposed(by: disposeBag)
-		
-		// Empty case 여부 판별
-		reactor.state
-			.map { $0.activityList }
-			.distinctUntilChanged() // 중복값 무시
-			.map { $0.isEmpty }
-			.subscribe(onNext: { [weak self] isEmpty in
-				guard let self = self else { return }
-				tableView.isHidden = isEmpty
-				emptyView.isHidden = !isEmpty
-			})
-			.disposed(by: disposeBag)
 	}
 }
 //MARK: - Action
@@ -136,26 +93,12 @@ extension StatisticsSatisfactionListView {
 			$0.image = R.Icon.arrowDown32
 			$0.contentMode = .scaleAspectFit
 		}
-		
-		tableView = tableView.then {
-			$0.register(HomeTableViewCell.self)
-			$0.backgroundColor = R.Color.gray100
-			$0.showsVerticalScrollIndicator = false
-			$0.separatorStyle = .none
-			$0.rowHeight = UITableView.automaticDimension
-			$0.isScrollEnabled = false
-			$0.isHidden = true
-		}
-		
-		emptyView = emptyView.then {
-			$0.isHidden = false
-		}
 	}
 	
 	override func setHierarchy() {
 		super.setHierarchy()
 		
-		addSubviews(touchAreaView, emptyView, tableView)
+		addSubviews(touchAreaView)
 		touchAreaView.addSubviews(titleLabel, starImageView, scoreLabel, arrowImageView)
 	}
 	
@@ -186,19 +129,6 @@ extension StatisticsSatisfactionListView {
 		arrowImageView.snp.makeConstraints {
 			$0.centerY.equalToSuperview()
 			$0.trailing.equalToSuperview().inset(12)
-		}
-		
-		// Table View
-		tableView.snp.makeConstraints {
-			$0.top.equalTo(touchAreaView.snp.bottom)
-			$0.leading.trailing.equalToSuperview()
-			$0.height.equalTo(248)
-		}
-		
-		emptyView.snp.makeConstraints {
-			$0.leading.trailing.equalToSuperview()
-			$0.top.equalTo(touchAreaView.snp.bottom)
-			$0.height.equalTo(248)
 		}
 	}
 }

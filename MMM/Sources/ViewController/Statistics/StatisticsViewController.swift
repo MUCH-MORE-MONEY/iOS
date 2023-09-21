@@ -28,13 +28,17 @@ final class StatisticsViewController: BaseViewController, View {
 	// MARK: - UI Components
 	private lazy var monthButtonItem = UIBarButtonItem()
 	private lazy var monthButton = SemanticContentAttributeButton()
-	private lazy var scrollView = UIScrollView()
 	private lazy var contentView = UIView()
 	private lazy var headerView = StatisticsHeaderView()
 	private lazy var satisfactionView = StatisticsAverageView()
 	private lazy var categoryView = StatisticsCategoryView()
 	private lazy var activityView = StatisticsActivityView(timer: timer)
 	private lazy var listView = StatisticsSatisfactionListView()
+	private lazy var tableView = UITableView()
+	private lazy var refreshView = UIView()
+
+	// Empty & Error UI
+	private lazy var emptyView = HomeEmptyView()
 	
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,24 +78,14 @@ extension StatisticsViewController {
 				self.presentBottomSheet() // '월' 변경 버튼
 			}).disposed(by: disposeBag)
 		
-		// 스크롤이 아래쪽에 닿았을 때를 감지
-		scrollView.rx.contentOffset
-			.map { [weak self] contentOffset in
-				guard let self = self else { return false }
-				// 현재 UIScrollView에서 표시되고 있는 높이
-				let visibleHeight = scrollView.frame.height - scrollView.contentInset.top - scrollView.contentInset.bottom
-				// 현재 UIScrollView에서 표시되고 있는 좌측 상단 꼭짓점의 y좌표
-				let y = contentOffset.y + scrollView.contentInset.top
-				let threshold = scrollView.contentSize.height - visibleHeight - 100
-				// 임계점보다 아래로 스크롤이 되어있는지
-				return y >= threshold
-			}
-			.distinctUntilChanged()
-			.filter { $0 }
-			.bind(onNext: { _ in
-				print(true)
-			})
-			.disposed(by: disposeBag)
+		// TableView cell select
+		Observable.zip(
+			tableView.rx.itemSelected,
+			tableView.rx.modelSelected(EconomicActivity.self)
+		)
+		.map { .selectCell($0, $1) }
+		.bind(to: reactor.action)
+		.disposed(by: disposeBag)
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
@@ -104,17 +98,46 @@ extension StatisticsViewController {
 			.disposed(by: disposeBag)
 		
 		reactor.state
+			.map { $0.average }
+			.distinctUntilChanged() // 중복값 무시
+			.bind(onNext: satisfactionView.setData) // 평균 변경
+			.disposed(by: disposeBag)
+		
+		reactor.state
 			.map { $0.satisfaction }
 			.distinctUntilChanged() // 중복값 무시
 			.bind(onNext: setSatisfaction) // 만족도 변경
 			.disposed(by: disposeBag)
 		
 		reactor.state
-			.map { $0.average }
+			.map { $0.activityList }
 			.distinctUntilChanged() // 중복값 무시
-			.bind(onNext: satisfactionView.setData) // 평균 변경
-			.disposed(by: disposeBag)
+			.bind(to: tableView.rx.items) { tv, row, data in
+				let index = IndexPath(row: row, section: 0)
+				let cell = tv.dequeueReusableCell(withIdentifier: HomeTableViewCell.className, for: index) as! HomeTableViewCell
+				
+				// 데이터 설정
+				cell.setData(data: data, last: row == reactor.currentState.activityList.count - 1)
+				cell.backgroundColor = R.Color.gray100
 
+				let backgroundView = UIView()
+				backgroundView.backgroundColor = R.Color.gray400.withAlphaComponent(0.3)
+				cell.selectedBackgroundView = backgroundView
+				
+				return cell
+			}.disposed(by: disposeBag)
+		
+		// Empty case 여부 판별
+		reactor.state
+			.map { $0.activityList }
+			.distinctUntilChanged() // 중복값 무시
+			.map { $0.isEmpty }
+			.subscribe(onNext: { [weak self] isEmpty in
+				guard let self = self else { return }
+				tableView.tableFooterView = isEmpty ? emptyView : nil
+			})
+			.disposed(by: disposeBag)
+		
 		// 카테고리 더보기 클릭시, push
 		reactor.state
 			.map { $0.isPushMoreCategory }
@@ -225,12 +248,7 @@ extension StatisticsViewController {
 		
 		view.backgroundColor = R.Color.gray100
 		
-		scrollView = scrollView.then {
-			$0.showsVerticalScrollIndicator = false // bar 숨기기
-			$0.delaysContentTouches = false // highlight 효과가 작동
-			$0.canCancelContentTouches = true
-		}
-		
+		refreshView.backgroundColor = R.Color.gray900
 		contentView.backgroundColor = R.Color.gray900
 		categoryView.reactor = self.reactor // reactor 주입
 		activityView.reactor = self.reactor // reactor 주입
@@ -253,28 +271,35 @@ extension StatisticsViewController {
 		monthButtonItem = monthButtonItem.then {
 			$0.customView = view
 		}
+		
+		tableView = tableView.then {
+			$0.register(HomeTableViewCell.self)
+			$0.tableHeaderView = contentView
+			$0.tableFooterView = emptyView
+			$0.backgroundColor = R.Color.gray100
+			$0.showsVerticalScrollIndicator = false
+			$0.separatorStyle = .none
+			$0.rowHeight = UITableView.automaticDimension
+		}
+		
+		contentView = contentView.then {
+			$0.frame = .init(x: 0, y: 0, width: view.bounds.width, height: 590)
+		}
+		
+		emptyView = emptyView.then {
+			$0.frame = .init(x: 0, y: 0, width: view.bounds.width, height: 248)
+		}
 	}
 	
 	override func setHierarchy() {
 		super.setHierarchy()
 		
-		view.addSubviews(scrollView)
-		scrollView.addSubviews(contentView)
+		view.addSubviews(refreshView, tableView)
 		contentView.addSubviews(headerView, satisfactionView, categoryView, activityView, listView)
 	}
 	
 	override func setLayout() {
 		super.setLayout()
-		
-		scrollView.snp.makeConstraints {
-			$0.top.leading.trailing.equalTo(view)
-			$0.bottom.equalTo(view.safeAreaLayoutGuide)
-		}
-		
-		contentView.snp.makeConstraints {
-			$0.top.bottom.equalTo(scrollView)
-			$0.leading.trailing.equalTo(view)
-		}
 		
 		headerView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(32)
@@ -287,24 +312,28 @@ extension StatisticsViewController {
 			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 			$0.height.equalTo(64)
 		}
-		
+
 		categoryView.snp.makeConstraints {
 			$0.top.equalTo(satisfactionView.snp.bottom).offset(16)
 			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 			$0.height.equalTo(146)
 		}
-		
+
 		activityView.snp.makeConstraints {
 			$0.top.equalTo(categoryView.snp.bottom).offset(16)
 			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 			$0.height.equalTo(100)
 		}
-		
+
 		listView.snp.makeConstraints {
 			$0.top.equalTo(activityView.snp.bottom).offset(58)
 			$0.leading.trailing.equalToSuperview()
-			$0.bottom.equalTo(contentView)
-			$0.height.equalTo(300)
+			$0.bottom.equalToSuperview()
+		}
+		
+		// Table View
+		tableView.snp.makeConstraints {
+			$0.edges.equalToSuperview()
 		}
 	}
 }

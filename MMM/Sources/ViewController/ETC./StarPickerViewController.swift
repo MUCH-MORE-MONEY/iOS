@@ -117,7 +117,6 @@ extension StarPickerViewController {
         cosmosView.didTouchCosmos = { [weak self] in
             guard let self = self else { return }
             self.rating = $0
-//            print("Rated: \(self.rating)")
             DispatchQueue.main.async {
                 if self.rating != 0.0 {
                     self.checkButton.setTitleColor(R.Color.black, for: .normal)
@@ -134,7 +133,6 @@ extension StarPickerViewController {
         if self.rating != 0.0 {
             delegate?.willDismiss()
             starDelegate?.willPickerDismiss(rating)
-            print(rating)
         }
     }
 }

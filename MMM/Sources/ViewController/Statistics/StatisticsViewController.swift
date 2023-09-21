@@ -99,7 +99,7 @@ extension StatisticsViewController {
 
 		// 카테고리 더보기 클릭시, push
 		reactor.state
-			.map { $0.isPushMoreCartegory }
+			.map { $0.isPushMoreCategory }
 			.distinctUntilChanged() // 중복값 무시
 			.filter { $0 } // true일때만 화면 전환
 			.bind(onNext: pushCategoryViewController)
@@ -140,7 +140,7 @@ extension StatisticsViewController {
 		navigationController?.pushViewController(vc, animated: true)
 	}
 	
-	// 카테고리 더보기
+	// Cell의 Detail View
 	private func pushDetail(_ isPush: Bool) {
 		guard let reactor = reactor, let data = reactor.currentState.detailData else { return }
 		

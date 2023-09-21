@@ -24,8 +24,8 @@ final class StatisticsReactor: Reactor {
 		case setSatisfaction(Satisfaction)
 		case setAverage(Double)
 		case setLoading(Bool)
-		case setPushMoreCartegory(Bool)
-		case setPresentSatisfaction(Bool)
+		case presentSatisfaction(Bool)
+		case pushMoreCategory(Bool)
 		case pushDetail(IndexPath, EconomicActivity, Bool)
 	}
 	
@@ -38,7 +38,7 @@ final class StatisticsReactor: Reactor {
 		var activitySatisfactionList: [EconomicActivity] = []
 		var activityDisappointingList: [EconomicActivity] = []
 		var isLoading = false // 로딩
-		var isPushMoreCartegory = false
+		var isPushMoreCategory = false
 		var isPresentSatisfaction = false
 		var isPushDetail = false
 		var detailData: (IndexPath: IndexPath, info: EconomicActivity)?
@@ -73,13 +73,13 @@ extension StatisticsReactor {
 			])
 		case .didTapMoreButton:
 			return Observable.concat([
-				.just(.setPushMoreCartegory(true)),
-				.just(.setPushMoreCartegory(false))
+				.just(.pushMoreCategory(true)),
+				.just(.pushMoreCategory(false))
 			])
 		case .didTapSatisfactionButton:
 			return Observable.concat([
-				.just(.setPresentSatisfaction(true)),
-				.just(.setPresentSatisfaction(false))
+				.just(.presentSatisfaction(true)),
+				.just(.presentSatisfaction(false))
 			])
 		case .selectCell(let indexPath, let data):
 			return .concat([
@@ -143,10 +143,10 @@ extension StatisticsReactor {
 			newState.satisfaction = satisfaction
 		case .setLoading(let isLoading):
 			newState.isLoading = isLoading
-		case .setPushMoreCartegory(let isPush):
-			newState.isPushMoreCartegory = isPush
-		case .setPresentSatisfaction(let isPresent):
+		case .presentSatisfaction(let isPresent):
 			newState.isPresentSatisfaction = isPresent
+		case .pushMoreCategory(let isPush):
+			newState.isPushMoreCategory = isPush
 		case .pushDetail(let indexPath, let data, let isPush):
 			newState.isPushDetail = isPush
 			newState.detailData = (indexPath, data)

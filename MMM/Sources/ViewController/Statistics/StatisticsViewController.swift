@@ -30,7 +30,6 @@ final class StatisticsViewController: BaseViewController, View {
 	private lazy var monthButton = SemanticContentAttributeButton()
 	private lazy var scrollView = UIScrollView()
 	private lazy var contentView = UIView()
-	private lazy var refreshView = UIView()
 	private lazy var headerView = StatisticsHeaderView()
 	private lazy var satisfactionView = StatisticsAverageView()
 	private lazy var categoryView = StatisticsCategoryView()
@@ -232,7 +231,6 @@ extension StatisticsViewController {
 			$0.canCancelContentTouches = true
 		}
 		
-		refreshView.backgroundColor = R.Color.gray900
 		contentView.backgroundColor = R.Color.gray900
 		categoryView.reactor = self.reactor // reactor 주입
 		activityView.reactor = self.reactor // reactor 주입
@@ -261,7 +259,7 @@ extension StatisticsViewController {
 		super.setHierarchy()
 		
 		view.addSubviews(scrollView)
-		scrollView.addSubviews(refreshView, contentView)
+		scrollView.addSubviews(contentView)
 		contentView.addSubviews(headerView, satisfactionView, categoryView, activityView, listView)
 	}
 	
@@ -271,11 +269,6 @@ extension StatisticsViewController {
 		scrollView.snp.makeConstraints {
 			$0.top.leading.trailing.equalTo(view)
 			$0.bottom.equalTo(view.safeAreaLayoutGuide)
-		}
-		
-		refreshView.snp.makeConstraints {
-			$0.top.leading.trailing.equalTo(view)
-			$0.bottom.greaterThanOrEqualTo(contentView.snp.top)
 		}
 		
 		contentView.snp.makeConstraints {

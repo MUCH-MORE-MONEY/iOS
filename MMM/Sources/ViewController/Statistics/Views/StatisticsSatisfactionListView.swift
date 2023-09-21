@@ -53,6 +53,7 @@ extension StatisticsSatisfactionListView {
 	private func bindState(_ reactor: StatisticsReactor) {
 		reactor.state
 			.map { $0.activityList }
+			.distinctUntilChanged() // 중복값 무시
 			.bind(to: tableView.rx.items) { tv, row, data in
 				let index = IndexPath(row: row, section: 0)
 				let cell = tv.dequeueReusableCell(withIdentifier: HomeTableViewCell.className, for: index) as! HomeTableViewCell
@@ -69,6 +70,18 @@ extension StatisticsSatisfactionListView {
 				
 				return cell
 			}.disposed(by: disposeBag)
+		
+		// Empty case 여부 판별
+		reactor.state
+			.map { $0.activityList }
+			.distinctUntilChanged() // 중복값 무시
+			.map { $0.isEmpty }
+			.subscribe(onNext: { [weak self] isEmpty in
+				guard let self = self else { return }
+				tableView.isHidden = isEmpty
+				emptyView.isHidden = !isEmpty
+			})
+			.disposed(by: disposeBag)
 	}
 }
 //MARK: - Action
@@ -123,6 +136,7 @@ extension StatisticsSatisfactionListView {
 			$0.showsVerticalScrollIndicator = false
 			$0.separatorStyle = .none
 			$0.rowHeight = UITableView.automaticDimension
+//			$0.isHidden = true
 		}
 		
 		emptyView = emptyView.then {

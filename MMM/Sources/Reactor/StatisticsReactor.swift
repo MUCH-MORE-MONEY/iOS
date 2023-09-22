@@ -215,8 +215,7 @@ extension StatisticsReactor {
 	// 카테고리 Bar 가져오기
 	private func getCategory(_ date: Date, _ type: String) -> Observable<Mutation> {
 		return MMMAPIService().getStatisticsCategory(dateYM: date.getFormattedYM(), economicActivityDvcd: type)
-			.map { [weak self] (response, error) -> Mutation in
-				print(response)
+			.map { (response, error) -> Mutation in
 				if error != nil {
 					return .fetchCategoryBar([], type)
 				} else {

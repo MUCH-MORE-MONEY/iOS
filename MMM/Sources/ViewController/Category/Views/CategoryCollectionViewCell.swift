@@ -10,8 +10,10 @@ import Then
 import SnapKit
 import ReactorKit
 
+// 상속하지 않으려면 final 꼭 붙이기
 final class CategoryCollectionViewCell: BaseCollectionViewCell, View {
 	typealias Reactor = CategoryCollectionViewCellReactor
+	
 	// MARK: - Constants
 	private enum UI {
 		static let priceLabelMargin: UIEdgeInsets = .init(top: 8, left: 0, bottom: 0, right: 0)

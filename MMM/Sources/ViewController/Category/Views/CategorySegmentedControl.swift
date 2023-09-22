@@ -9,6 +9,7 @@ import UIKit
 import Then
 import SnapKit
 
+// 상속하지 않으려면 final 꼭 붙이기
 final class CategorySegmentedControl: UISegmentedControl {
 	// MARK: - Constants
 	private enum UI {

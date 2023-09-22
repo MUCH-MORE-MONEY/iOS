@@ -12,6 +12,7 @@ import RxCocoa
 import ReactorKit
 import RxDataSources
 
+// 상속하지 않으려면 final 꼭 붙이기
 final class CategoryContentViewController: BaseViewController, View {
 	typealias Reactor = CategoryReactor
 	typealias DataSource = RxCollectionViewSectionedReloadDataSource<CategorySectionModel> // SectionModelType 채택
@@ -44,6 +45,7 @@ final class CategoryContentViewController: BaseViewController, View {
 		switch dataSource[indexPath.section].model {
 		case .base:
 			guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: String(describing: CategorySectionHeader.self), for: indexPath) as? CategorySectionHeader else { return .init() }
+			header.setDate(radio: 27.0, title: "제목", price: "12345", type: "01")
 			return header
 		}
 	}

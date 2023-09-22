@@ -11,6 +11,7 @@ import RxSwift
 import RxCocoa
 import ReactorKit
 
+// 상속하지 않으려면 final 꼭 붙이기
 final class CategoryViewController: BaseViewControllerWithNav, View {
 	typealias Reactor = CategoryReactor
 	// MARK: - Constants

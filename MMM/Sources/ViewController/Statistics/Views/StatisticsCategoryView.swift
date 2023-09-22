@@ -32,7 +32,8 @@ final class StatisticsCategoryView: BaseView, View {
 	}
 	
 	// MARK: - Properties
-
+	private lazy var alphaList: [CGFloat] = [1, 0.8, 0.5, 0.3, 0.2]
+	
 	// MARK: - UI Components
 	private lazy var titleLabel = UILabel() 		// 카테고리
 	private lazy var moreLabel = UILabel() 			// 더보기
@@ -40,6 +41,7 @@ final class StatisticsCategoryView: BaseView, View {
 	private lazy var payRankLabel = MarqueeLabel() 	// 지출 랭킹
 	private lazy var payBarView = UIView() 			// 지출 Bar
 	private lazy var payEmptyLabel = UILabel() 		// 지출 Empty
+	
 	private lazy var earnLabel = UILabel() 			// 수입
 	private lazy var earnRankLabel = MarqueeLabel() // 수입 랭킹
 	private lazy var earnBarView = UIView() 		// 수입 Bar
@@ -93,6 +95,41 @@ extension StatisticsCategoryView {
 			earnBarView.isHidden = isEmpty
 			earnRankLabel.text = data.enumerated().map { "\($0.offset + 1)위 \($0.element.title)"}.joined(separator: "  ")
 		}
+		convertBar(data, type)
+	}
+	
+	func convertBar(_ data: [CategoryBar], _ type: String) {
+		guard !data.isEmpty else { return }
+		
+		let totalWidth = payBarView.frame.width // 전체 길이
+		let unit = totalWidth / 100.0
+		var sumWidth = 0.0
+		let cnt = data.count
+		let barView: UIView = type == "01" ? payBarView : earnBarView
+		barView.subviews.forEach { $0.removeFromSuperview() } // 기존에 있던 subView 제거
+		let color: UIColor = type == "01" ? R.Color.orange500 : R.Color.blue500
+		let minimumWidth = 2.0
+		let spacing = 2.0
+		
+		// 2씩 빼는 이유는 spacing
+		for (index, info) in data.map({ floor($0.ratio * unit) - spacing }).enumerated() {
+			let isSmall = info < minimumWidth
+			let width = isSmall ? minimumWidth : cnt == 1 ? totalWidth : info
+			let view = UIView()
+			view.layer.cornerRadius = isSmall ? 1 : 2.61
+			view.backgroundColor = color.withAlphaComponent(alphaList[index])
+			
+			barView.addSubview(view)
+			
+			view.snp.makeConstraints {
+				$0.centerY.equalToSuperview()
+				$0.width.equalTo(width)
+				$0.leading.equalToSuperview().inset(sumWidth)
+				$0.height.equalTo(UI.barViewHeight)
+			}
+			
+			sumWidth += width + spacing
+		}
 	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
@@ -135,7 +172,6 @@ extension StatisticsCategoryView {
 		
 		payBarView = payBarView.then {
 			$0.layer.cornerRadius = 3
-			$0.backgroundColor = R.Color.orange500
 			$0.isHidden = true
 		}
 		
@@ -165,7 +201,6 @@ extension StatisticsCategoryView {
 		
 		earnBarView = earnBarView.then {
 			$0.layer.cornerRadius = 3
-			$0.backgroundColor = R.Color.blue600
 			$0.isHidden = true
 		}
 		

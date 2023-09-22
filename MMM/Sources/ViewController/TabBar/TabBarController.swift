@@ -87,9 +87,9 @@ extension TabBarController {
 		let homeVC = HomeViewController()
         homeVC.tabBarItem = UITabBarItem(title: "소비", image: R.Icon.iconMoneyInActive, selectedImage: R.Icon.iconMoneyActive)
         
-        let budgetVC = StatisticsViewController()
-        budgetVC.reactor = StatisticsReactor()
-        budgetVC.tabBarItem = UITabBarItem(title: "예산", image: R.Icon.iconGroupInActive, selectedImage: R.Icon.iconGroupActive)
+        let statisticsVC = StatisticsViewController()
+		statisticsVC.reactor = StatisticsReactor()
+		statisticsVC.tabBarItem = UITabBarItem(title: "예산", image: R.Icon.iconGroupInActive, selectedImage: R.Icon.iconGroupActive)
 
         let plusVC = UIViewController()
         plusVC.tabBarItem = UITabBarItem()
@@ -99,8 +99,8 @@ extension TabBarController {
 
 		let profileVC = ProfileViewController()
         profileVC.tabBarItem = UITabBarItem(title: "마이페이지", image: R.Icon.iconMypageInActive, selectedImage: R.Icon.iconMypageActive)
-        
-        setViewControllers([homeVC, budgetVC, plusVC, challengeVC, profileVC], animated: false)
+		profileVC.reactor = ProfileReactor()
+        setViewControllers([homeVC, statisticsVC, plusVC, challengeVC, profileVC], animated: false)
     }
 }
 

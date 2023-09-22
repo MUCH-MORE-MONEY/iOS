@@ -13,7 +13,7 @@ import RxSwift
 import RxCocoa
 import UserNotifications
 
-final class PushSettingViewController: BaseViewController, View {
+final class PushSettingViewController: BaseViewControllerWithNav, View {
     // MARK: - UI Components
     private lazy var newsPushStackView = UIStackView()
     private lazy var newsPushMainLabel = UILabel()
@@ -33,12 +33,10 @@ final class PushSettingViewController: BaseViewController, View {
     
     private lazy var divider = UIView()
     // MARK: - Properties
-    var disposeBag: DisposeBag = DisposeBag()
     var reactor: PushSettingReactor!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setup()
         bind(reactor: reactor)
     }
     
@@ -47,7 +45,7 @@ final class PushSettingViewController: BaseViewController, View {
         bindAction(reactor)
     }
 }
-
+//MARK: - Bind
 extension PushSettingViewController {
     private func bindAction(_ reactor: PushSettingReactor) {
         
@@ -174,15 +172,11 @@ private extension PushSettingViewController {
     }
 }
 
-private extension PushSettingViewController {
-    private func setup() {
-        setAttribute()
-        setLayout()
-    }
-
-    private func setAttribute() {
+extension PushSettingViewController {
+	override func setAttribute() {
         title = "푸시 알림 설정"
-        
+		view.backgroundColor = R.Color.gray100
+
         newsPushStackView.addArrangedSubviews(newsPushMainLabel, newsPushSwitch)
         customPushStackView.addArrangedSubviews(customPushMainLabel, customPushSwitch)
         
@@ -262,7 +256,7 @@ private extension PushSettingViewController {
         }
     }
     
-    private func setLayout() {
+	override func setLayout() {
         newsPushStackView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(24)
             $0.left.equalToSuperview().offset(24)

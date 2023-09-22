@@ -34,7 +34,7 @@ extension HomeHeaderView {
 		earnView.setData(isEarn: true, money: earn)
 	}
 }
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 private extension HomeHeaderView {
 	// 초기 셋업할 코드들
 	private func setup() {

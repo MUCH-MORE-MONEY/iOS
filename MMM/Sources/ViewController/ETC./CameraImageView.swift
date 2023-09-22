@@ -27,8 +27,7 @@ final class CameraImageView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
-// MARK: - Style & Layout
+//MARK: - Attribute & Hierarchy & Layouts
 extension CameraImageView {
     private func setup() {
         setAttribute()

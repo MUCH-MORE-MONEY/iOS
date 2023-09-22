@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ChallengeViewController: BaseViewController {
+final class ChallengeViewController: BaseViewControllerWithNav {
 
     override func viewDidLoad() {
         super.viewDidLoad()

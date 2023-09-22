@@ -10,30 +10,34 @@ import Then
 import SnapKit
 
 final class CategorySegmentedControl: UISegmentedControl {
+	// MARK: - Constants
+	private enum UI {
+		static let sideMargin: CGFloat = 24
+		static let underLineHeight: CGFloat = 24
+	}
+	
 	// MARK: - UI Components
-	private lazy var bgUnderlineView: UIView = {
-		let width = self.bounds.size.width
-		let height = 2.0
-		let xPosition = CGFloat(0)
+	private lazy var bgUnderlineView = UIView().then {
+		let width = (self.bounds.size.width - UI.sideMargin * 2)
+		let height = UI.underLineHeight
+		let xPosition = CGFloat(UI.sideMargin)
 		let yPosition = self.bounds.size.height - 1.5
 		let frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
-		let view = UIView(frame: frame)
-		view.backgroundColor = R.Color.gray700
-		self.addSubview(view)
-		return view
-	}()
-	
-	private lazy var underlineView: UIView = {
-		let width = self.bounds.size.width / CGFloat(self.numberOfSegments)
-		let height = 2.0
+		$0.frame = frame
+		$0.backgroundColor = R.Color.gray500
+		self.addSubview($0)
+	}
+
+	private lazy var underlineView = UIView().then {
+		let width = (self.bounds.size.width - UI.sideMargin * 2) / CGFloat(self.numberOfSegments)
+		let height = UI.underLineHeight
 		let xPosition = CGFloat(self.selectedSegmentIndex * Int(width))
 		let yPosition = self.bounds.size.height - 1.5
 		let frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
-		let view = UIView(frame: frame)
-		view.backgroundColor = R.Color.orange500
-		self.addSubview(view)
-		return view
-	}()
+		$0.frame = frame
+		$0.backgroundColor = R.Color.orange500
+		self.addSubview($0)
+	}
 	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
@@ -55,9 +59,9 @@ final class CategorySegmentedControl: UISegmentedControl {
 	override func layoutSubviews() {
 		super.layoutSubviews()
 		self.layer.cornerRadius = 0 // 기본적으로 지정되어 있는 radius 제거
-		self.bgUnderlineView.frame.origin.x = 0 // bar의 뒷 배경 위치
+		self.bgUnderlineView.frame.origin.x = UI.sideMargin // bar의 뒷 배경 위치
 		
-		let underlineFinalXPosition = (self.bounds.width / CGFloat(self.numberOfSegments)) * CGFloat(self.selectedSegmentIndex)
+		let underlineFinalXPosition = UI.sideMargin + ((self.bounds.width - UI.sideMargin * 2) / CGFloat(self.numberOfSegments)) * CGFloat(self.selectedSegmentIndex)
 		UIView.animate(withDuration: 0.1, animations: {
 			self.underlineView.frame.origin.x = underlineFinalXPosition
 			self.underlineView.backgroundColor = self.selectedSegmentIndex == 0 ? R.Color.orange500 : R.Color.blue500

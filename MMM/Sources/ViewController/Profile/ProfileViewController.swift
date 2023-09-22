@@ -8,15 +8,24 @@
 import UIKit
 import Then
 import SnapKit
-import Combine
+import ReactorKit
 
 // 상속하지 않으려면 final 꼭 붙이기
-final class ProfileViewController: UIViewController {
+final class ProfileViewController: BaseViewController, View {
+	typealias Reactor = ProfileReactor
+	
+	// MARK: - Constants
+	private enum UI {
+		static let titleWidth: CGFloat = 150
+		static let titleHeight: CGFloat = 44
+		static let headerHeight: CGFloat = 170
+		static let dummyCellHeight: CGFloat = 16
+		static let cellHeight: CGFloat = 44
+	}
+	
 	// MARK: - Properties
-	private var viewModel: ProfileViewModel = ProfileViewModel()
-	private var userEmail: String = ""
+	private var email: String = ""
 	private let lableCellList = ["", "계정 관리", "데이터 내보내기", "알림 설정","문의 및 서비스 약관", "앱 버전"]
-	private var cancellable = Set<AnyCancellable>()
 	
 	// MARK: - UI Components
 	private lazy var navigationLabel = UILabel()
@@ -26,7 +35,6 @@ final class ProfileViewController: UIViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		setup()		// 초기 셋업할 코드들
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -34,7 +42,7 @@ final class ProfileViewController: UIViewController {
 		// Root View인 NavigationView에 item 수정하기
 		if let navigationController = self.navigationController {
 			if let rootVC = navigationController.viewControllers.first {
-				let view = UIView(frame: .init(origin: .zero, size: .init(width: 150, height: 44)))
+				let view = UIView(frame: .init(origin: .zero, size: .init(width: UI.titleWidth, height: UI.titleHeight)))
 				view.addSubview(navigationLabel)
 				
 				rootVC.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: view)
@@ -42,22 +50,36 @@ final class ProfileViewController: UIViewController {
 			}
 		}
 	}
+	
+	func bind(reactor: ProfileReactor) {
+		bindState(reactor)
+		bindAction(reactor)
+	}
 }
-//MARK: - Style & Layouts
-private extension ProfileViewController {
+//MARK: - Bind
+extension ProfileViewController {
+	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
+	private func bindAction(_ reactor: ProfileReactor) {
+		// 사용자 Email
+		reactor.state
+			.compactMap { $0.userEmail } // nil 무시
+			.distinctUntilChanged() // 중복값 무시
+			.bind(onNext: { email in
+				self.email = email
+				self.profileHeaderView.setData(email: email)
+			})
+			.disposed(by: disposeBag)
+	}
+	
+	// MARK: 데이터 바인딩 처리 (Reactor -> View)
+	private func bindState(_ reactor: ProfileReactor) {
+	}
+}
+//MARK: - Attribute & Hierarchy & Layouts
+extension ProfileViewController {
 	// 초기 셋업할 코드들
-	private func setup() {
-		bind()
-		setAttribute()
-		setLayout()
-	}
-	
-	private func bind() {
-		guard let email = Constants.getKeychainValue(forKey: Constants.KeychainKey.email) else { return }
-		userEmail = email
-	}
-	
-	private func setAttribute() {
+	override func setAttribute() {
+		super.setAttribute()
 		// [view]
 		view.backgroundColor = R.Color.gray100
 		
@@ -70,13 +92,10 @@ private extension ProfileViewController {
 		}
 		
 		profileHeaderView = profileHeaderView.then {
-			$0.setData(email: userEmail)
-			$0.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: 170)
+			$0.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: UI.headerHeight)
 		}
 		
 		tableView = tableView.then {
-			$0.delegate = self
-			$0.dataSource = self
 			$0.showsVerticalScrollIndicator = false
 			$0.backgroundColor = R.Color.gray100
 			$0.tableHeaderView = profileHeaderView
@@ -87,8 +106,23 @@ private extension ProfileViewController {
 		}
 	}
 	
-	private func setLayout() {
+	override func setDelegate() {
+		super.setDelegate()
+		
+		tableView = tableView.then {
+			$0.delegate = self
+			$0.dataSource = self
+		}
+	}
+	
+	override func setHierarchy() {
+		super.setHierarchy()
+		
 		view.addSubviews(tableView)
+	}
+	
+	override func setLayout() {
+		super.setLayout()
 		
 		tableView.snp.makeConstraints {
 			$0.edges.equalToSuperview()
@@ -100,19 +134,19 @@ extension ProfileViewController: UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 		if indexPath.row == 0 {
-			return 16
+			return UI.dummyCellHeight
 		}
-		return 44
+		return UI.cellHeight
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return 5
+		return lableCellList.count - 1 // 첫번째 Dunmmy Cell 제외
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: ProfileTableViewCell.className, for: indexPath) as! ProfileTableViewCell
 		
-		if indexPath.row == 0 {
+		if indexPath.row == 0 { // 첫번째 Dunmmy Cell
 			cell.isUserInteractionEnabled = false // click disable
 			cell.setData(text: "", last: true)
 			cell.isNavigationHidden()
@@ -134,26 +168,27 @@ extension ProfileViewController: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		// 셀 터치시 회색 표시 없애기
 		tableView.deselectRow(at: indexPath, animated: true)
-		
+
 		switch indexPath.row {
 		case 1:
-			let vc = ManagementViewController(viewModel: viewModel)
-			vc.setData(email: userEmail)
+			let vc = ManagementViewController(email: email)
+			vc.reactor = reactor
 			vc.hidesBottomBarWhenPushed = true	// TabBar Above
 			navigationController?.pushViewController(vc, animated: true)	// 계정관리
 		case 2:
 			let vc = DataExportViewController()
+			vc.reactor = reactor
 			vc.hidesBottomBarWhenPushed = true	// TabBar Above
-			navigationController?.pushViewController(vc, animated: true)
+			navigationController?.pushViewController(vc, animated: true)	// 계정관리
 		case 3:
 			let vc = PushSettingViewController()
 			vc.reactor = PushSettingReactor()
-			vc.hidesBottomBarWhenPushed = true    // TabBar Above
-			navigationController?.pushViewController(vc, animated: true)
+			vc.hidesBottomBarWhenPushed = true	// TabBar Above
+			navigationController?.pushViewController(vc, animated: true)	// 계정관리
 		case 4:
 			let vc = ServiceViewController()
 			vc.hidesBottomBarWhenPushed = true	// TabBar Above
-			navigationController?.pushViewController(vc, animated: true)
+			navigationController?.pushViewController(vc, animated: true)	// 계정관리
 		default:
 			break
 		}

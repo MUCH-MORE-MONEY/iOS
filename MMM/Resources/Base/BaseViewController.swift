@@ -2,64 +2,59 @@
 //  BaseViewController.swift
 //  MMM
 //
-//  Created by Park Jungwoo on 2023/04/04.
+//  Created by geonhyeong on 2023/09/18.
 //
 
 import UIKit
-import Then
-import Combine
+import RxSwift
+import SnapKit
 
-class BaseViewController: UIViewController {
-    // MARK: - UI Components
-    private lazy var backButtonItem = UIBarButtonItem()
-    lazy var backButton = UIButton()
-    
-    // MARK: - Properties
-    private var cancellable = Set<AnyCancellable>()
+/*
+	BaseViewController
+	- setAttribute()
+		- 프로퍼티 관련 - label.font, ...
+	- setDelegate()
+		- 델리게이트 패턴 관련 - tablView.delegate = self, ...
+	- setHierarchy()
+		- 계층 관련 - addSubView, ...
+	- setLayout()
+		- 레이아웃 관련 - view.snp.makeConstraints
+	- setBind()
+		- 바인딩 관련 - button.rx.tap.bind
+*/
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setup()
-        
-        // 수평적확장을 해야하기 때문에 extension에서 사용불가
-        backButton.tapPublisher
-            .sinkOnMainThread(receiveValue: didTapBackButton)
-            .store(in: &cancellable)
-    }
-    
-    /// BaseViewController를 상속받은 객체는 항상 이 메서드를 구현해야합니다
-    /// 뒤로가기에 대한 navigation pop 함수입니다.
-    func didTapBackButton() {
-        if navigationController?.viewControllers.count == 1 {
-            tabBarController?.selectedIndex = 0
-        } else {
-            navigationController?.popViewController(animated: true)
-        }
-
-    }
-    
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent // status text color 변경
-    }
+protocol BaseViewControllerProtocol: AnyObject {
+	func setAttribute()
+	func setDelegate()
+	func setHierarchy()
+	func setLayout()
+	func setBind()
 }
 
-//MARK: - Style & Layouts & Bind
-extension BaseViewController {
-    private func setup() {
-        setAttribute()
-        setLayout()
-    }
-    
-    private func setAttribute() {
-        backButtonItem = backButtonItem.then {
-            $0.customView = backButton
-        }
-        navigationItem.leftBarButtonItem = backButtonItem
-        view.backgroundColor = R.Color.gray100
-        backButton = backButton.then {
-            $0.setImage(R.Icon.arrowBack24, for: .normal)
-        }
-    }
-    
-    private func setLayout() {}
+class BaseViewController: UIViewController, BaseViewControllerProtocol {
+	var disposeBag = DisposeBag()
+	
+	override func viewDidLoad() {
+		super.viewDidLoad()
+		setup() // 초기 셋업할 코드들
+	}
+	
+	// 초기 셋업할 코드들
+	@objc open dynamic func setup() {
+		setAttribute()
+		setDelegate()
+		setHierarchy()
+		setLayout()
+		setBind()
+	}
+
+	@objc open dynamic func setAttribute() { }
+	
+	@objc open dynamic func setDelegate() { }
+	
+	@objc open dynamic func setHierarchy() { }
+	
+	@objc open dynamic func setLayout() { }
+	
+	@objc open dynamic func setBind() { }
 }

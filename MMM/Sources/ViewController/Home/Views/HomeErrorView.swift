@@ -27,7 +27,7 @@ final class HomeErrorView: UIView {
 		fatalError("init(coder:) has not been implemented")
 	}
 }
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 private extension HomeErrorView {
 	// 초기 셋업할 코드들
 	private func setup() {

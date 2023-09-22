@@ -64,7 +64,7 @@ extension HomeFilterView {
 		colorButton.isEnabled = isOn
 	}
 }
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 private extension HomeFilterView {
 	// 초기 셋업할 코드들
 	private func setup() {

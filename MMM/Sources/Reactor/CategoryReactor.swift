@@ -18,11 +18,13 @@ final class CategoryReactor: Reactor {
 	// 처리 단위
 	enum Mutation {
 		case setPaySections([CategorySectionModel])
+		case setNextScreen(Bool)
 	}
 	
 	// 현재 상태를 기록
 	struct State {
 		var paySections: [CategorySectionModel] = []
+		var nextScreen = false
 		var error = false
 	}
 	
@@ -45,8 +47,13 @@ extension CategoryReactor {
 			return .concat([
 				loadData(CategoryReqDto(economicActivityDvcd: "02"))
 			])
-		case .fetch, .selectCell:
+		case .fetch:
 			return .empty()
+		case .selectCell:
+			return .concat([
+				.just(.setNextScreen(true)),
+				.just(.setNextScreen(false))
+			])
 		}
 	}
 	
@@ -57,6 +64,8 @@ extension CategoryReactor {
 		switch mutation {
 		case .setPaySections(let sections):
 			newState.paySections = sections
+		case .setNextScreen(let nextScreen):
+			newState.nextScreen = nextScreen
 		}
 		
 		return newState

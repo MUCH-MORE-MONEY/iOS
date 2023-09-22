@@ -36,6 +36,9 @@ final class CategoryContentViewController: BaseViewController, View {
 			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CategoryCollectionViewCell.self), for: indexPath) as? CategoryCollectionViewCell else { return .init() }
 			
 			cell.reactor = cellReactor // reactor 주입
+			let backgroundView = UIView()
+			backgroundView.backgroundColor = R.Color.gray400.withAlphaComponent(0.3)
+			cell.selectedBackgroundView = backgroundView
 			
 			return cell
 		}

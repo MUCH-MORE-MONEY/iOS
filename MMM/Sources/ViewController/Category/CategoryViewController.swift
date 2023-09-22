@@ -14,6 +14,7 @@ import ReactorKit
 // 상속하지 않으려면 final 꼭 붙이기
 final class CategoryViewController: BaseViewControllerWithNav, View {
 	typealias Reactor = CategoryReactor
+	
 	// MARK: - Constants
 	private enum UI {
 		static let segmentedControlHeight: CGFloat = 50
@@ -66,10 +67,24 @@ extension CategoryViewController {
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: CategoryReactor) {
+		reactor.state
+			.map { $0.nextScreen }
+			.distinctUntilChanged() // 중복값 무시
+			.filter { $0 } // true일때만 화면 전환
+			.subscribe(onNext: { [weak self] _ in
+				self?.willPushViewController()
+			})
+			.disposed(by: disposeBag)
 	}
 }
 //MARK: - Action
 extension CategoryViewController {
+	private func willPushViewController() {
+		print(#file, #line, "push")
+//		let viewController =
+//
+//		navigationController?.pushViewController(viewController, animated: true)
+	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
 extension CategoryViewController {

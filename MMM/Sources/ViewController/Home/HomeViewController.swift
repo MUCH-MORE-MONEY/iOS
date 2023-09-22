@@ -44,6 +44,10 @@ final class HomeViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
+		// 임시
+		if let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) {
+			print(#file, "Token(Header 토큰) \(token)")
+		}
 //        viewModel.showTrackingPermissionAlert()
 	}
 
@@ -607,8 +611,7 @@ extension HomeViewController: UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		let padding: CGFloat = 24
-		return viewModel.dailyList[indexPath.row].memo.isEmpty ? 42 + padding : 64 + padding
+		return UITableView.automaticDimension
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

@@ -152,7 +152,7 @@ extension PushSettingViewController {
 private extension PushSettingViewController {
     private func presentDetailViewController(_ isPresent: Bool) {
         let vc = PushSettingDetailViewController()
-        vc.reactor = PushSettingDetailReactor()
+		vc.reactor = PushSettingDetailReactor(provider: ServiceProvider.shared)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     

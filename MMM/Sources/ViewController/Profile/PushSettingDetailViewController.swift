@@ -21,7 +21,6 @@ final class PushSettingDetailViewController: BaseViewControllerWithNav, View {
     // MARK: - Properties
     private let weekList = ["일", "화", "수", "목", "금", "토", "월"]
     var reactor: PushSettingDetailReactor!
-    var bottomSheetReactor: BottomSheetReactor = BottomSheetReactor()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +35,6 @@ final class PushSettingDetailViewController: BaseViewControllerWithNav, View {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: false)
-        
     }
     
     func bind(reactor: PushSettingDetailReactor) {
@@ -63,25 +61,20 @@ extension PushSettingDetailViewController {
             .bind(onNext: presentBottomSheet)
             .disposed(by: disposeBag)
         
-        bottomSheetReactor.state
-            .map { $0.successByMonthly }
-            .distinctUntilChanged()
-            .bind(onNext: setTime)
-            .disposed(by: disposeBag)
+		reactor.state
+			.map { $0.date }
+			.distinctUntilChanged() // 중복값 무시
+			.bind(onNext: setTime) //
+			.disposed(by: disposeBag)
     }
 }
 
 // MARK: - Actions
 extension PushSettingDetailViewController {
     private func presentBottomSheet(_ isPresent: Bool) {
-        let vc = DatePicker2ViewController()
-        let bottomSheetVC = BottomSheetViewController(contentViewController: vc)
-        vc.reactor = bottomSheetReactor
-        vc.delegate = bottomSheetVC
-        vc.setData(title: "시간 설정", type: .time)
-        bottomSheetVC.modalPresentationStyle = .overFullScreen
-        bottomSheetVC.setSetting(height: 360)
-        self.present(bottomSheetVC, animated: false)
+		let vc = DateBottomSheetViewController(title: "월 시간 설정", type: .time, height: 360, mode: .date, sheetMode: .drag, isDark: false)
+		vc.reactor = DateBottomSheetReactor(provider: reactor.provider)
+        self.present(vc, animated: true)
     }
     
     private func setTime(_ date: Date) {

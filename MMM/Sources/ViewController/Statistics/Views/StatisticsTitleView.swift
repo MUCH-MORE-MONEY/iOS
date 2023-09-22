@@ -1,5 +1,5 @@
 //
-//  StatisticsHeaderView.swift
+//  StatisticsTitleView.swift
 //  MMM
 //
 //  Created by geonhyeong on 2023/08/21.
@@ -9,7 +9,7 @@ import Then
 import SnapKit
 
 // 상속하지 않으려면 final 꼭 붙이기
-final class StatisticsHeaderView: BaseView {
+final class StatisticsTitleView: BaseView {
 	// MARK: - Constants
 	private enum UI {
 		static let titleLabelTop: CGFloat = 6
@@ -21,7 +21,7 @@ final class StatisticsHeaderView: BaseView {
 	private lazy var imageView = UIImageView() // Boost 아이콘
 }
 //MARK: - Action
-extension StatisticsHeaderView {
+extension StatisticsTitleView {
 	// 외부에서 설정
 	func setData(startDate: String, endDate: String) {
 		rangeLabel.text = startDate + " ~ " + endDate
@@ -58,7 +58,7 @@ extension StatisticsHeaderView {
 	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
-extension StatisticsHeaderView {
+extension StatisticsTitleView {
 	// 초기 셋업할 코드들
 	override func setAttribute() {
 		super.setAttribute()

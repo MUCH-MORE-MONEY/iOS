@@ -17,6 +17,8 @@ enum MMMAPI {
     
     // MARK: - Staticstics
 	case getStaticsticsAverage(dateYM: String) // 월간 만족도 평균값
+	case getStatisticsList(dateYM: String, valueScoreDvcd: String, limit: Int = 15, offset: Int = 0) // 만족도별 목록
+	case getStatisticsCategory(dateYM: String, economicActivityDvcd: String)
 	
 	// MARK: - Staticstics Category
 	case getCategory(CategoryReqDto)
@@ -45,6 +47,10 @@ extension MMMAPI: BaseNetworkService {
             return "/push/agree/update"
         case .getStaticsticsAverage(let dateYM):
           return "/economic_activity/\(dateYM)/average"
+		case .getStatisticsList(let dateYM, let valueScoreDvcd, _, _):
+			return "/economic_activity/\(dateYM)/\(valueScoreDvcd)/list"
+		case .getStatisticsCategory(let dateYM, let economicActivityDvcd):
+			return "/economic_activity/\(dateYM)/\(economicActivityDvcd)/upper-category/list"
         case .getCategory(let request):
           return "/economic-activity-category/list/\(request.economicActivityDvcd)"
         case .exportToExcel:
@@ -53,7 +59,7 @@ extension MMMAPI: BaseNetworkService {
           return "/economic_activity/summary/select"
         case .withdraw:
           return "/login/delete"
-		    }
+		}
     }
     
     /// 메서드 방식 선택
@@ -61,10 +67,8 @@ extension MMMAPI: BaseNetworkService {
         switch self {
         case .push, .pushAgreeListSelect, .pushAgreeUpdate:
             return .post
-        case .getStaticsticsAverage:
+		case .getStaticsticsAverage, .getStatisticsList, .getStatisticsCategory:
           return .get
-        case .push, .pushAgreeListSelect, .pushAgreeUpdate:
-          return .post
         case .getCategory:
           return .get
         case .exportToExcel, .getSummary, .withdraw:
@@ -78,19 +82,21 @@ extension MMMAPI: BaseNetworkService {
     /// parameter || body가 없을 경우 .requestPlain 설정
     var task: Moya.Task {
         switch self {
-        case .push(let request):
-            return .requestParameters(parameters: request.asDictionary, encoding: JSONEncoding.default)
-        case .pushAgreeListSelect:
-            return .requestPlain
-        case .pushAgreeUpdate(let request):
-            return .requestParameters(parameters: request.asDictionary, encoding: JSONEncoding.default)            
-        case .getStaticsticsAverage:
-          return .requestPlain
-        case .getCategory:
-          return .requestPlain
-        case .exportToExcel, .getSummary, .withdraw:
-          return .requestPlain
-        }
+		case .push(let request):
+			return .requestParameters(parameters: request.asDictionary, encoding: JSONEncoding.default)
+		case .pushAgreeListSelect:
+			return .requestPlain
+		case .pushAgreeUpdate(let request):
+			return .requestParameters(parameters: request.asDictionary, encoding: JSONEncoding.default)
+		case .getStaticsticsAverage, .getStatisticsCategory:
+			return .requestPlain
+		case .getStatisticsList(_, _, let limit, let offset):
+			return .requestParameters(parameters: ["limit":limit, "offset":offset], encoding: URLEncoding.default)
+		case .getCategory:
+			return .requestPlain
+		case .exportToExcel, .getSummary, .withdraw:
+			return .requestPlain
+		}
     }
     
     /// Header 전달

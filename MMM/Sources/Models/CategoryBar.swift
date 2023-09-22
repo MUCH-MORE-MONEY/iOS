@@ -11,7 +11,7 @@ struct CategoryBarList: Codable {
 	let setSelectListMonthlyByUpperCategoryOutputDto: [CategoryBar]
 }
 
-struct CategoryBar: Codable {
+struct CategoryBar: Codable, Equatable {
 	let title, price: String
 	let ratio: Double
 	

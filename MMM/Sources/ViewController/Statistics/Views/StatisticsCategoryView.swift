@@ -39,10 +39,12 @@ final class StatisticsCategoryView: BaseView, View {
 	private lazy var payLabel = UILabel() 			// 지출
 	private lazy var payRankLabel = MarqueeLabel() 	// 지출 랭킹
 	private lazy var payBarView = UIView() 			// 지출 Bar
+	private lazy var payEmptyLabel = UILabel() 		// 지출 Empty
 	private lazy var earnLabel = UILabel() 			// 수입
 	private lazy var earnRankLabel = MarqueeLabel() // 수입 랭킹
 	private lazy var earnBarView = UIView() 		// 수입 Bar
-	
+	private lazy var earnEmptyLabel = UILabel() 	// 수입 Empty
+
 	func bind(reactor: StatisticsReactor) {
 		bindState(reactor)
 		bindAction(reactor)
@@ -61,7 +63,37 @@ extension StatisticsCategoryView {
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
-	private func bindState(_ reactor: StatisticsReactor) {}
+	private func bindState(_ reactor: StatisticsReactor) {
+		reactor.state
+			.map { $0.payBarList }
+			.distinctUntilChanged() // 중복값 무시
+			.bind(onNext: { self.convertData($0, "01")})
+			.disposed(by: disposeBag)
+		
+		reactor.state
+			.map { $0.earnBarList }
+			.distinctUntilChanged() // 중복값 무시
+			.bind(onNext: { self.convertData($0, "02")})
+			.disposed(by: disposeBag)
+	}
+}
+//MARK: - Action
+extension StatisticsCategoryView {
+	func convertData(_ data: [CategoryBar], _ type: String) {
+		let isEmpty = data.isEmpty
+
+		if type == "01" {
+			payEmptyLabel.isHidden = !isEmpty
+			payRankLabel.isHidden = isEmpty
+			payBarView.isHidden = isEmpty
+			payRankLabel.text = data.enumerated().map { "\($0.offset + 1)위 \($0.element.title)"}.joined(separator: "  ")
+		} else {
+			earnEmptyLabel.isHidden = !isEmpty
+			earnRankLabel.isHidden = isEmpty
+			earnBarView.isHidden = isEmpty
+			earnRankLabel.text = data.enumerated().map { "\($0.offset + 1)위 \($0.element.title)"}.joined(separator: "  ")
+		}
+	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
 extension StatisticsCategoryView {
@@ -91,7 +123,6 @@ extension StatisticsCategoryView {
 		}
 		
 		payRankLabel = payRankLabel.then {
-			$0.text = "1위 보기만 해도 배부른  2위 쩝쩝 박사  3위 삶의 퀄리티"
 			$0.font = R.Font.body3
 			$0.textColor = R.Color.white
 			$0.type = .continuous
@@ -99,11 +130,20 @@ extension StatisticsCategoryView {
 			$0.animationCurve = .linear
 			$0.fadeLength = 44 // 얼마나 숨길지
 			$0.animationDelay = 0
+			$0.isHidden = true
 		}
 		
 		payBarView = payBarView.then {
 			$0.layer.cornerRadius = 3
 			$0.backgroundColor = R.Color.orange500
+			$0.isHidden = true
+		}
+		
+		payEmptyLabel = payEmptyLabel.then {
+			$0.text = "아직 카테고리에 작성된 경제활동이 없어요"
+			$0.font = R.Font.body3
+			$0.textColor = R.Color.gray700
+			$0.textAlignment = .center
 		}
 		
 		earnLabel = earnLabel.then {
@@ -113,7 +153,6 @@ extension StatisticsCategoryView {
 		}
 		
 		earnRankLabel = earnRankLabel.then {
-			$0.text = "1위 먹고사는 식사  2위 내 미래에 투자  3위 개미의 웃음  4위 일상 탈출"
 			$0.font = R.Font.body3
 			$0.textColor = R.Color.white
 			$0.type = .continuous
@@ -121,18 +160,27 @@ extension StatisticsCategoryView {
 			$0.animationCurve = .linear
 			$0.fadeLength = 44 // 얼마나 숨길지
 			$0.animationDelay = 0
+			$0.isHidden = true
 		}
 		
 		earnBarView = earnBarView.then {
 			$0.layer.cornerRadius = 3
 			$0.backgroundColor = R.Color.blue600
+			$0.isHidden = true
+		}
+		
+		earnEmptyLabel = earnEmptyLabel.then {
+			$0.text = "아직 카테고리에 작성된 경제활동이 없어요"
+			$0.font = R.Font.body3
+			$0.textColor = R.Color.gray700
+			$0.textAlignment = .center
 		}
 	}
 	
 	override func setHierarchy() {
 		super.setHierarchy()
 		
-		addSubviews(titleLabel, moreLabel, payLabel, payRankLabel, payBarView, earnLabel, earnRankLabel, earnBarView)
+		addSubviews(titleLabel, moreLabel, payLabel, payRankLabel, payBarView, payEmptyLabel, earnLabel, earnRankLabel, earnBarView, earnEmptyLabel)
 	}
 	
 	override func setLayout() {
@@ -167,6 +215,12 @@ extension StatisticsCategoryView {
 			$0.height.equalTo(UI.barViewHeight)
 		}
 		
+		payEmptyLabel.snp.makeConstraints {
+			$0.leading.equalTo(payLabel.snp.trailing).offset(12)
+			$0.trailing.equalToSuperview().inset(20)
+			$0.centerY.equalTo(payLabel)
+		}
+		
 		earnLabel.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(UI.earnLabelTop)
 			$0.leading.equalToSuperview().inset(UI.sideMargin)
@@ -183,6 +237,12 @@ extension StatisticsCategoryView {
 			$0.leading.equalToSuperview().inset(UI.rankViewSide)
 			$0.trailing.equalToSuperview().inset(UI.sideMargin)
 			$0.height.equalTo(UI.barViewHeight)
+		}
+		
+		earnEmptyLabel.snp.makeConstraints {
+			$0.leading.equalTo(earnLabel.snp.trailing).offset(12)
+			$0.trailing.equalToSuperview().inset(20)
+			$0.centerY.equalTo(earnLabel)
 		}
 	}
 }

@@ -35,7 +35,7 @@ final class StatisticsViewController: BaseViewController, View {
 	private lazy var activityView = StatisticsActivityView(timer: timer)
 	private lazy var selectView = StatisticsSatisfactionView() // 만족도 선택
 	private lazy var tableView = UITableView()
-	private lazy var refreshView = UIView()
+	private lazy var refreshControl = RefreshControl()
 
 	// Empty & Error UI
 	private lazy var emptyView = HomeEmptyView()
@@ -248,7 +248,6 @@ extension StatisticsViewController {
 		
 		view.backgroundColor = R.Color.gray900
 		
-		refreshView.backgroundColor = R.Color.gray900
 		headerView.backgroundColor = R.Color.gray900
 		categoryView.reactor = self.reactor // reactor 주입
 		activityView.reactor = self.reactor // reactor 주입
@@ -272,13 +271,15 @@ extension StatisticsViewController {
 			$0.customView = view
 		}
 		
-//		refreshControl = refreshControl.then {
-//			$0.transform = CGAffineTransformMakeScale(0.5, 0.5)
-//			$0.backgroundColor = R.Color.gray900
-//		}
+		refreshControl = refreshControl.then {
+			$0.tintColor = .clear
+			$0.backgroundColor = R.Color.gray900
+			$0.transform = CGAffineTransformMakeScale(0.5, 0.5)
+		}
 		
 		tableView = tableView.then {
 			$0.register(HomeTableViewCell.self)
+			$0.refreshControl = refreshControl
 			$0.tableHeaderView = headerView
 			$0.tableFooterView = emptyView
 			$0.backgroundColor = R.Color.gray100
@@ -299,7 +300,7 @@ extension StatisticsViewController {
 	override func setHierarchy() {
 		super.setHierarchy()
 		
-		view.addSubviews(refreshView, tableView)
+		view.addSubviews(tableView)
 		headerView.addSubviews(titleView, satisfactionView, categoryView, activityView, selectView)
 	}
 	

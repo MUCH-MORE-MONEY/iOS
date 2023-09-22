@@ -22,6 +22,7 @@ final class StatisticsReactor: Reactor {
 	enum Mutation {
 		case fetchList([EconomicActivity], String, Bool) // list, type("01" or "03"), rank reset 여부
 		case pagenation([EconomicActivity], Int)
+		case fetchCategoryBar([CategoryBar], String)
 		case setDate(Date)
 		case setSatisfaction(Satisfaction)
 		case setAverage(Double)
@@ -37,6 +38,8 @@ final class StatisticsReactor: Reactor {
 		var average: Double = 0.0 // 평균값
 		var satisfaction: Satisfaction = .low // 만족도
 		var activityList: [EconomicActivity] = []
+		var payBarList: [CategoryBar] = []		// 지출 카테고리
+		var earnBarList: [CategoryBar] = []	// 수입 카테고리
 		var activitySatisfactionList: [EconomicActivity] = []
 		var activityDisappointingList: [EconomicActivity] = []
 		var isLoading = false // 로딩
@@ -69,6 +72,8 @@ extension StatisticsReactor {
 			return .concat([
 				.just(.setLoading(true)),
 				self.getStatisticsAverage(currentState.date), // 평균값
+				self.getCategory(currentState.date, "01"),	// 지출 카테고리
+				self.getCategory(currentState.date, "02"),	// 수입 카테고리
 				self.getStatisticsList(currentState.date, "01", true), // 아쉬운 List
 				self.getStatisticsList(currentState.date, "03", true), // 만족스러운 List
 				self.getStatisticsList(currentState.date, self.currentState.satisfaction.id, true), // viewWillAppear일때, 현재 만족도를 불러와야한다.
@@ -108,6 +113,8 @@ extension StatisticsReactor {
 					.just(.setLoading(true)),
 					.just(.setDate(date)),
 					self.getStatisticsAverage(date),
+					self.getCategory(date, "01"),
+					self.getCategory(date, "02"),
 					self.getStatisticsList(date, "01", true),
 					self.getStatisticsList(date, "03", true),
 					.just(.setLoading(false)),
@@ -149,6 +156,12 @@ extension StatisticsReactor {
 		case .pagenation(let list, let nextIndex):
 			if nextIndex == -1 { break }
 			newState.activityList += list
+		case .fetchCategoryBar(let list, let type):
+			switch type {
+			case "01": newState.payBarList = list
+			case "02": newState.earnBarList = list
+			default: break
+			}
 		case .setDate(let date):
 			newState.date = date
 		case .setAverage(let average):
@@ -196,6 +209,19 @@ extension StatisticsReactor {
 		return MMMAPIService().getStatisticsList(dateYM: date, valueScoreDvcd: type, limit: 15, offset: currentPage)
 			.map { (response, error) -> Mutation in
 				return .pagenation(response.selectListMonthlyByValueScoreOutputDto, response.nextOffset)
+			}
+	}
+	
+	// 카테고리 Bar 가져오기
+	private func getCategory(_ date: Date, _ type: String) -> Observable<Mutation> {
+		return MMMAPIService().getStatisticsCategory(dateYM: date.getFormattedYM(), economicActivityDvcd: type)
+			.map { [weak self] (response, error) -> Mutation in
+				print(response)
+				if error != nil {
+					return .fetchCategoryBar([], type)
+				} else {
+					return .fetchCategoryBar(response.data.setSelectListMonthlyByUpperCategoryOutputDto, type)
+				}
 			}
 	}
 }

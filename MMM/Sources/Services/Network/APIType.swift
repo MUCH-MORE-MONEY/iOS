@@ -17,7 +17,8 @@ enum MMMAPI {
     
     // MARK: - Staticstics
 	case getStaticsticsAverage(dateYM: String) // 월간 만족도 평균값
-	case getStatisticsList(dateYM: String, valueScoreDvcd: String, limit: Int = 25, offset: Int = 0) // 만족도별 목록
+	case getStatisticsList(dateYM: String, valueScoreDvcd: String, limit: Int = 15, offset: Int = 0) // 만족도별 목록
+	case getStatisticsCategory(dateYM: String, economicActivityDvcd: String)
 	
 	// MARK: - Staticstics Category
 	case getCategory(CategoryReqDto)
@@ -48,6 +49,8 @@ extension MMMAPI: BaseNetworkService {
           return "/economic_activity/\(dateYM)/average"
 		case .getStatisticsList(let dateYM, let valueScoreDvcd, _, _):
 			return "/economic_activity/\(dateYM)/\(valueScoreDvcd)/list"
+		case .getStatisticsCategory(let dateYM, let economicActivityDvcd):
+			return "/economic_activity/\(dateYM)/\(economicActivityDvcd)/upper-category/list"
         case .getCategory(let request):
           return "/economic-activity-category/list/\(request.economicActivityDvcd)"
         case .exportToExcel:
@@ -64,7 +67,7 @@ extension MMMAPI: BaseNetworkService {
         switch self {
         case .push, .pushAgreeListSelect, .pushAgreeUpdate:
             return .post
-		case .getStaticsticsAverage, .getStatisticsList:
+		case .getStaticsticsAverage, .getStatisticsList, .getStatisticsCategory:
           return .get
         case .getCategory:
           return .get
@@ -85,7 +88,7 @@ extension MMMAPI: BaseNetworkService {
 			return .requestPlain
 		case .pushAgreeUpdate(let request):
 			return .requestParameters(parameters: request.asDictionary, encoding: JSONEncoding.default)
-		case .getStaticsticsAverage:
+		case .getStaticsticsAverage, .getStatisticsCategory:
 			return .requestPlain
 		case .getStatisticsList(_, _, let limit, let offset):
 			return .requestParameters(parameters: ["limit":limit, "offset":offset], encoding: URLEncoding.default)

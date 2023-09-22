@@ -12,9 +12,16 @@ struct StatisticsAvgResDto: Decodable {
 	var message: String
 }
 
-/// /economic_activity/{dateYM}/{valueScoreDvcd}/list
+// economic_activity/{dateYM}/{valueScoreDvcd}/list
 struct StatisticsListResDto: Decodable {
 	var message: String?
 	var nextOffset: Int
 	var selectListMonthlyByValueScoreOutputDto: [EconomicActivity]
+}
+
+// economic_activity/{dateYM}/{economicActivityDvcd}/upper-category/list
+struct StatisticsCategoryResDto: Decodable {
+	var data: CategoryBarList
+	var message: String?
+	var status: String
 }

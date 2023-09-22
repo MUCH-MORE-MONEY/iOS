@@ -57,7 +57,9 @@ protocol MMMAPIServiceble: BaseAPIService {
     // MARK: - Statistics 요청 API
     func getStatisticsAverage(_ dateYM: String) -> Observable<(StatisticsAvgResDto, Error?)>
 	func getStatisticsList(dateYM: String, valueScoreDvcd: String, limit: Int, offset: Int) -> Observable<(StatisticsListResDto, Error?)>
+	func getStatisticsCategory(dateYM: String, economicActivityDvcd: String) -> Observable<(StatisticsCategoryResDto, Error?)>
 
+	
     // MARK: - Staticstics Category 요청 API
     func getCategory(_ request: CategoryReqDto) -> Observable<(CategoryResDto, Error?)>
 
@@ -94,8 +96,14 @@ struct MMMAPIService: MMMAPIServiceble {
 		return provider().request(MMMAPI.getStaticsticsAverage(dateYM: dateYM), type: StatisticsAvgResDto.self).asObservable()
 	}
 	
+	// 통계 만족도별 List
 	func getStatisticsList(dateYM: String, valueScoreDvcd: String, limit: Int, offset: Int) -> RxSwift.Observable<(StatisticsListResDto, Error?)> {
 		return provider().request(MMMAPI.getStatisticsList(dateYM: dateYM, valueScoreDvcd: valueScoreDvcd, limit: limit, offset: offset), type: StatisticsListResDto.self).asObservable()
+	}
+	
+	// 통계 카테고리 Bar List
+	func getStatisticsCategory(dateYM: String, economicActivityDvcd: String) -> RxSwift.Observable<(StatisticsCategoryResDto, Error?)> {
+		return provider().request(MMMAPI.getStatisticsCategory(dateYM: dateYM, economicActivityDvcd: economicActivityDvcd), type: StatisticsCategoryResDto.self).asObservable()
 	}
 	
 	// MARK: - Staticstics Category 요청 API

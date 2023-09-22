@@ -86,6 +86,18 @@ extension StatisticsViewController {
 		.map { .selectCell($0, $1) }
 		.bind(to: reactor.action)
 		.disposed(by: disposeBag)
+		
+		// pagination
+		tableView.rx.didScroll
+			.withLatestFrom(self.tableView.rx.contentOffset)
+			.map { [weak self] in
+				return .pagination(
+					contentHeight: self?.tableView.contentSize.height ?? 0,
+					contentOffsetY: $0.y,
+					scrollViewHeight: UIScreen.main.bounds.height)
+			}
+			.bind(to: reactor.action)
+			.disposed(by: disposeBag)
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)

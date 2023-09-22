@@ -12,6 +12,7 @@ final class StatisticsReactor: Reactor {
 	// 사용자의 액션
 	enum Action {
 		case loadData
+		case pagination(contentHeight: CGFloat, contentOffsetY: CGFloat, scrollViewHeight: CGFloat) // pagination
 		case didTapMoreButton // 카테고리 더보기
 		case didTapSatisfactionButton // 만족도 선택
 		case selectCell(IndexPath, EconomicActivity)
@@ -20,6 +21,7 @@ final class StatisticsReactor: Reactor {
 	// 처리 단위
 	enum Mutation {
 		case fetchList([EconomicActivity], String, Bool) // list, type("01" or "03"), rank reset 여부
+		case pagenation([EconomicActivity], Int)
 		case setDate(Date)
 		case setSatisfaction(Satisfaction)
 		case setAverage(Double)
@@ -48,7 +50,8 @@ final class StatisticsReactor: Reactor {
 	// MARK: Properties
 	let initialState: State
 	let provider: ServiceProviderProtocol
-
+	var currentPage: Int = 0
+	
 	init(provider: ServiceProviderProtocol) {
 		self.initialState = State()
 		self.provider = provider
@@ -63,7 +66,7 @@ extension StatisticsReactor {
 	func mutate(action: Action) -> Observable<Mutation> {
 		switch action {
 		case .loadData:
-			return Observable.concat([
+			return .concat([
 				.just(.setLoading(true)),
 				self.getStatisticsAverage(Date()), // 평균값
 				self.getStatisticsList(Date(), "01", true), // 아쉬운 List
@@ -71,13 +74,20 @@ extension StatisticsReactor {
 				self.getStatisticsList(Date(), self.currentState.satisfaction.id, true), // viewWillAppear일때, 현재 만족도를 불러와야한다.
 				.just(.setLoading(false))
 			])
+		case let .pagination(contentHeight, contentOffsetY, scrollViewHeight):
+			  let paddingSpace = contentHeight - contentOffsetY
+			  if paddingSpace < scrollViewHeight {
+				return getMoreStatisticsList()
+			  } else {
+				return .empty()
+			  }
 		case .didTapMoreButton:
-			return Observable.concat([
+			return .concat([
 				.just(.pushMoreCategory(true)),
 				.just(.pushMoreCategory(false))
 			])
 		case .didTapSatisfactionButton:
-			return Observable.concat([
+			return .concat([
 				.just(.presentSatisfaction(true)),
 				.just(.presentSatisfaction(false))
 			])
@@ -123,6 +133,7 @@ extension StatisticsReactor {
 		case .fetchList(let list, let type, let reset):
 			let data = list.prefix(3)
 			newState.activityList = list
+			currentPage = 0
 			
 			// 월 변경인지 판별
 			if reset {
@@ -135,6 +146,9 @@ extension StatisticsReactor {
 					break
 				}
 			}
+		case .pagenation(let list, let nextIndex):
+			if nextIndex == -1 { break }
+			newState.activityList += list
 		case .setDate(let date):
 			newState.date = date
 		case .setAverage(let average):
@@ -167,9 +181,21 @@ extension StatisticsReactor {
 	
 	// 경제활동 만족도에 따른 List 불러오기
 	func getStatisticsList(_ date: Date, _ type: String, _ reset: Bool = false) -> Observable<Mutation> {
-		return MMMAPIService().getStatisticsList(dateYM: date.getFormattedYM(), valueScoreDvcd: type, limit: 25, offset: 0)
+		return MMMAPIService().getStatisticsList(dateYM: date.getFormattedYM(), valueScoreDvcd: type, limit: 15, offset: 0)
 			.map { (response, error) -> Mutation in
 				return .fetchList(response.selectListMonthlyByValueScoreOutputDto, type, reset)
+			}
+	}
+	
+	// Pagenation
+	func getMoreStatisticsList() -> Observable<Mutation> {
+		let date = currentState.date.getFormattedYM()
+		let type = currentState.satisfaction.id
+		currentPage += 1
+		
+		return MMMAPIService().getStatisticsList(dateYM: date, valueScoreDvcd: type, limit: 15, offset: currentPage)
+			.map { (response, error) -> Mutation in
+				return .pagenation(response.selectListMonthlyByValueScoreOutputDto, response.nextOffset)
 			}
 	}
 }

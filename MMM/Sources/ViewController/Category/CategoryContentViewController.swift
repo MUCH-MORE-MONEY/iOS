@@ -21,7 +21,7 @@ final class CategoryContentViewController: BaseViewController, View {
 	private enum UI {
 		static let topMargin: CGFloat = 0
 		static let cellWidthMargin: CGFloat = 48
-		static let cellTopMargin: CGFloat = 8
+		static let cellTopMargin: CGFloat = 16
 		static let categoryCellHeight: CGFloat = 165
 		static let headerHeight: CGFloat = 60
 		static let sectionMargin: UIEdgeInsets = .init(top: 0, left: 24, bottom: 48, right: 24)
@@ -54,7 +54,8 @@ final class CategoryContentViewController: BaseViewController, View {
 	}
 	
 	// MARK: - UI Components
-	private lazy var refreshControl: UIRefreshControl = .init()
+//	private lazy var refreshControl: UIRefreshControl = .init()
+	private lazy var headerView: UIView = .init()
 	private lazy var collectionView: UICollectionView = .init(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
 
     override func viewDidLoad() {
@@ -78,12 +79,12 @@ extension CategoryContentViewController {
 		.map { .selectCell($0, $1) }
 		.bind(to: reactor.action)
 		.disposed(by: disposeBag)
-		
+				
 		// Refresh Data
-		refreshControl.rx.controlEvent(.valueChanged)
-			.map { .fetch }
-			.bind(to: reactor.action)
-			.disposed(by: disposeBag)
+//		refreshControl.rx.controlEvent(.valueChanged)
+//			.map { .fetch }
+//			.bind(to: reactor.action)
+//			.disposed(by: disposeBag)
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
@@ -95,7 +96,7 @@ extension CategoryContentViewController {
 			.subscribe(onNext: { this, sections in
 				guard !sections.isEmpty else { return }
 				
-				this.collectionView.refreshControl?.endRefreshing()
+//				this.collectionView.refreshControl?.endRefreshing()
 				this.dataSource.setSections(sections)
 				this.collectionView.collectionViewLayout = this.makeLayout(sections: sections)
 				this.collectionView.reloadData()
@@ -123,18 +124,23 @@ extension CategoryContentViewController {
 		items.forEach({ item in
 			switch item {
 			case .base:
-				layoutItems.append(.init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(120))))
+				layoutItems.append(.init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(44))))
 			}
 		})
 		
-		let layoutGroup = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100)), subitems: layoutItems)
-		layoutGroup.interItemSpacing = .fixed(20)
-		layoutGroup.contentInsets = .init(top: 0, leading: 24, bottom: 0, trailing: 24)
+		let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100)), subitems: layoutItems)
+		group.interItemSpacing = .fixed(20)
+		group.contentInsets = .init(top: 0, leading: 24, bottom: 0, trailing: 24)
 		
-		let layoutSection: NSCollectionLayoutSection = .init(group: layoutGroup)
-		layoutSection.boundarySupplementaryItems = [.init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)]
+		let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(40)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
 		
-		return layoutSection
+		header.contentInsets = .init(top: -28, leading: 0, bottom: 0, trailing: 0)
+
+		let section: NSCollectionLayoutSection = .init(group: group)
+		section.boundarySupplementaryItems = [.init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)]
+		section.boundarySupplementaryItems = [header]
+
+		return section
 	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
@@ -145,13 +151,13 @@ extension CategoryContentViewController {
 		
 		view.backgroundColor = R.Color.gray900
 
-		refreshControl = refreshControl.then {
-			$0.transform = CGAffineTransformMakeScale(0.5, 0.5)
-		}
+//		refreshControl = refreshControl.then {
+//			$0.transform = CGAffineTransformMakeScale(0.5, 0.5)
+//		}
 		
 		collectionView = collectionView.then {
 			$0.dataSource = dataSource
-			$0.refreshControl = refreshControl
+//			$0.refreshControl = refreshControl
 			$0.register(CategoryCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: CategoryCollectionViewCell.self))
 			$0.register(CategorySectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: String(describing: CategorySectionHeader.self))
 			$0.backgroundColor = R.Color.gray900

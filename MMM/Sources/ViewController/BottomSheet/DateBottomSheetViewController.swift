@@ -1,112 +1,102 @@
 //
-//  DatePicker2ViewController.swift
+//  DateBottomSheetViewController.swift
 //  MMM
 //
-//  Created by geonhyeong on 2023/08/22.
+//  Created by geonhyeong on 2023/09/19.
 //
 
 import UIKit
-import Combine
-import Then
 import SnapKit
+import Then
 import ReactorKit
 
-final class DatePicker2ViewController: UIViewController, View {
-	// MARK: - Properties
-	private var isDark: Bool = false
-	private var date: Date
-	weak var delegate: BottomSheetChild?
-	var disposeBag: DisposeBag = DisposeBag()
-	private let yearList: [Int] = Array(2013...2099)
-	private let monthList: [String] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-	private let monthDic: [String:Int] = ["January":1, "February":2, "March":3, "April":4, "May":5, "June":6, "July":7, "August":8, "September":9, "October":10, "November":11, "December":12]
-	private var selectedYearIndex: Int = 0 // Custom Picker View에서 선택한 년
-	private var selectedMonthIndex: Int = 0	// Custom Picker View에서 선택한 달
-	private var curMode: Mode
-	
+// 상속하지 않으려면 final 꼭 붙이기
+final class DateBottomSheetViewController: BottomSheetViewController2, View {
+	typealias Reactor = DateBottomSheetReactor
+	// MARK: - Sub Type
 	enum Mode {
 		case date
 		case onlyMonthly
 	}
+	
+	// MARK: - Properties
+	private var titleStr: String = ""
+	private var date: Date
+	private var type: UIDatePicker.Mode = .date
+	private var curMode: Mode
+	private var isDark: Bool = false // 다크 모드 지정
+	private var height: CGFloat
+	private let yearList: [Int] = Array(2013...2099)
+	private let monthList: [Int] = Array(1...12)
+	private var selectedYearIndex: Int = 0 // Custom Picker View에서 선택한 년
+	private var selectedMonthIndex: Int = 0	// Custom Picker View에서 선택한 달
 
 	// MARK: - UI Components
+	private lazy var containerView = UIView()
 	private lazy var stackView = UIStackView() // 날짜 이동 Label, 확인 Button
 	private lazy var titleLabel = UILabel()
 	private lazy var checkButton = UIButton()
 	private lazy var datePicker = UIDatePicker()
 	private lazy var monthPicker = UIPickerView()
 	
-	init(date: Date = Date(), mode: Mode = .date) {
+	init(title: String = "", type: UIDatePicker.Mode = .date, date: Date = Date(), height: CGFloat, mode: Mode = .date, sheetMode: BottomSheetViewController2.Mode = .drag, isDark: Bool = false) {
+		self.titleStr = title
 		self.date = date
+		self.height = height
+		self.type = type
 		self.curMode = mode
-		super.init(nibName: nil, bundle: nil)
-	}
-	
-	// Compile time에 error를 발생시키는 코드
-	@available(*, unavailable)
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
+		self.isDark = isDark
+		super.init(mode: sheetMode, isDark: isDark)
 	}
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		setup() // 초기 셋업할 코드들
 	}
 	
-	// 초기 셋업할 코드들
-	private func setup() {
-		setAttribute()
-		setLayout()
+	override func touchesBegan(_: Set<UITouch>, with _: UIEvent?) {
+		view.endEditing(true)
 	}
 	
-	func bind(reactor: BottomSheetReactor) {
+	func bind(reactor: DateBottomSheetReactor) {
 		bindState(reactor)
 		bindAction(reactor)
 	}
 }
-//MARK: - Action
-extension DatePicker2ViewController {
-	// 외부에서 설정
-    func setData(title: String, isDark: Bool = false, type:  UIDatePicker.Mode = .date) {
-		DispatchQueue.main.async {
-			self.titleLabel.text = title
-            self.datePicker.datePickerMode = type
-		}
-		self.isDark = isDark
-	}
-}
 //MARK: - Bind
-extension DatePicker2ViewController {
+extension DateBottomSheetViewController {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
-	private func bindAction(_ reactor: BottomSheetReactor) {
+	private func bindAction(_ reactor: DateBottomSheetReactor) {
 		// 확인 버튼
 		checkButton.rx.tap
-			.map { .didTapDateCheckButton(date: (self.curMode == .date ? self.datePicker.date : self.createDateFromYearAndMonth(year: self.yearList[self.selectedYearIndex], month: self.monthList[self.selectedMonthIndex])) ?? Date()) }
+			.withUnretained(self)
+			.map { .setDate((self.curMode == .date ? self.datePicker.date : self.createDateFromYearAndMonth(year: self.yearList[self.selectedYearIndex], month: self.monthList[self.selectedMonthIndex])) ?? Date()) }
 			.bind(to: reactor.action)
 			.disposed(by: disposeBag)
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
-	private func bindState(_ reactor: BottomSheetReactor) {
+	private func bindState(_ reactor: DateBottomSheetReactor) {
 		reactor.state
-			.map { $0.successByMonthly }
-			.subscribe { [weak self] date in
-				guard let self = self else { return }
-				self.delegate?.willDismiss()
-			}
+			.map { $0.dismiss }
+			.distinctUntilChanged()
+			.filter { $0 == true }
+			.subscribe(onNext: { [weak self] _ in
+				self?.dismiss(animated: true)
+			})
 			.disposed(by: disposeBag)
 	}
 }
 //MARK: - Action
-private extension DatePicker2ViewController {
-	private func createDateFromYearAndMonth(year: Int, month: String) -> Date? {
+extension DateBottomSheetViewController {
+	// 연/월을 Date로 변경
+	private func createDateFromYearAndMonth(year: Int, month: Int) -> Date? {
 		// 현재 달력과 타임존 설정을 사용하여 Calendar 인스턴스 생성
 		let calendar = Calendar.current
 		
 		// DateComponents를 사용하여 year와 month를 설정
 		var dateComponents = DateComponents()
 		dateComponents.year = year
-		dateComponents.month = monthDic[month]
+		dateComponents.month = month
 		
 		// DateComponents를 사용하여 Date 객체 생성
 		if let date = calendar.date(from: dateComponents) {
@@ -117,9 +107,14 @@ private extension DatePicker2ViewController {
 	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
-private extension DatePicker2ViewController {
-	private func setAttribute() {
-		self.view.backgroundColor = isDark ? R.Color.gray900 : .white
+extension DateBottomSheetViewController {
+	// 초기 셋업할 코드들
+	override func setAttribute() {
+		super.setAttribute()
+				
+		containerView = containerView.then {
+			$0.backgroundColor = isDark ? R.Color.gray900 : .white
+		}
 		
 		stackView = stackView.then {
 			$0.axis = .horizontal
@@ -128,7 +123,7 @@ private extension DatePicker2ViewController {
 		}
 		
 		titleLabel = titleLabel.then {
-			$0.text = "날짜 이동"
+			$0.text = titleStr
 			$0.font = R.Font.h5
 			$0.textColor = isDark ? R.Color.gray200 : R.Color.black
 			$0.textAlignment = .left
@@ -148,23 +143,24 @@ private extension DatePicker2ViewController {
 			datePicker = datePicker.then {
 				$0.date = date
 				$0.preferredDatePickerStyle = .wheels
-				$0.datePickerMode = .date
+				$0.datePickerMode = type
 				$0.setValue(isDark ? R.Color.gray200 : R.Color.black, forKeyPath: "textColor")
 			}
 		case .onlyMonthly:
 			monthPicker = monthPicker.then {
 				$0.delegate = self
 				$0.dataSource = self
-				
+				$0.setValue(isDark ? R.Color.gray200 : R.Color.black, forKeyPath: "textColor")
+
 				// 각 component에서 보여줄 초기값.
 				let calendar = Calendar.current
 				let components = calendar.dateComponents([.year, .month, .day], from: date)
 				let initYear = components.year ?? 2023, initMonth = (components.month ?? 1) - 1
-				
+								
 				guard let initYearIndex = yearList.firstIndex(of: initYear) else { return }
-
-				$0.selectRow(initYearIndex, inComponent: 1, animated: true)
-				$0.selectRow(initMonth, inComponent: 0, animated: true)
+				
+				$0.selectRow(initYearIndex, inComponent: 0, animated: true)
+				$0.selectRow(initMonth, inComponent: 1, animated: true)
 
 				// 년, 월이 현재로 선택되어있는 상태에서 확인 버튼을 누를 경우를 위해 추가
 				selectedYearIndex = initYearIndex
@@ -173,9 +169,20 @@ private extension DatePicker2ViewController {
 		}
 	}
 	
-	private func setLayout() {
+	override func setHierarchy() {
+		super.setHierarchy()
+		
+		containerView.addSubviews(stackView)
 		stackView.addArrangedSubviews(titleLabel, checkButton)
-		view.addSubviews(stackView)
+		addContentView(view: containerView)
+	}
+	
+	override func setLayout() {
+		super.setLayout()
+		
+		containerView.snp.makeConstraints {
+			$0.height.equalTo(height - 32.0) // 32(Super Class의 Drag 영역)를 반드시 뺴줘야한다.
+		}
 		
 		stackView.snp.makeConstraints {
 			$0.top.equalToSuperview()
@@ -185,14 +192,14 @@ private extension DatePicker2ViewController {
 		
 		switch curMode {
 		case .date:
-			view.addSubviews(datePicker)
+			containerView.addSubview(datePicker)
 			
 			datePicker.snp.makeConstraints {
 				$0.top.equalTo(stackView.snp.bottom).offset(16)
 				$0.leading.trailing.equalToSuperview().inset(38.5)
 			}
 		case .onlyMonthly:
-			view.addSubviews(monthPicker)
+			containerView.addSubview(monthPicker)
 			
 			monthPicker.snp.makeConstraints {
 				$0.top.equalTo(stackView.snp.bottom).offset(16)
@@ -202,7 +209,7 @@ private extension DatePicker2ViewController {
 	}
 }
 // MARK: - UIPickerViewDataSource, UIPickerViewDelegate
-extension DatePicker2ViewController: UIPickerViewDataSource, UIPickerViewDelegate {
+extension DateBottomSheetViewController: UIPickerViewDataSource, UIPickerViewDelegate {
 	// PickerView의 component를 몇 개인지 정하는 메소드
 	func numberOfComponents(in pickerView: UIPickerView) -> Int {
 		return 2
@@ -211,24 +218,24 @@ extension DatePicker2ViewController: UIPickerViewDataSource, UIPickerViewDelegat
 	// PickerView의 각 component에서 몇 개의 row를 정하는 메소드
 	func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
 		switch component {
-		case 0:		return monthList.count
-		default:	return yearList.count
+		case 0:		return yearList.count
+		default:	return monthList.count
 		}
 	}
 	
 	// PickerView의 각 component에서 각 row에 내용을 정하는 메소드
 	func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
 		switch component {
-		case 0:		return "\(monthList[row])"
-		default:	return "\(yearList[row])"
+		case 0:		return "\(yearList[row])년"
+		default:	return "\(monthList[row])월"
 		}
 	}
 	
 	// 사용자가 선택한 row 값을 저장.
 	func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
 		switch component {
-		case 0:		selectedMonthIndex = row	// 월 저장
-		default:	selectedYearIndex = row		// 년도 저장
+		case 0:		selectedYearIndex = row		// 년도 저장
+		default:	selectedMonthIndex = row	// 월 저장
 		}
 	}
 }

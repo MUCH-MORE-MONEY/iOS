@@ -28,8 +28,10 @@ final class StatisticsActivityView: BaseView, View {
 	
 	// MARK: - Properties
 	private var timer: DispatchSourceTimer?
-	private var counter = 1 // 처음 Delay 때문에 0이 아닌 1로 초기화
-	private let RANK_COUNT = 3 // 활동을 보여주는 갯수
+	private var indexSatisfaction = 1 // 처음 Delay 때문에 0이 아닌 1로 초기화
+	private var cntSatisfaction = 0 // Rank List 갯수
+	private var indexDisappointing = 1 // 처음 Delay 때문에 0이 아닌 1로 초기화
+	private var cntDisappointing = 0 // Rank List 갯수
 
 	// MARK: - UI Components
 	private lazy var stackView = UIStackView()
@@ -37,16 +39,15 @@ final class StatisticsActivityView: BaseView, View {
 	private lazy var satisfactionTableView = UITableView()
 	private lazy var satisfactionLabel = UILabel()	// 만족스러운 활동
 	private lazy var satisfactionImageView = UIImageView()	// ✨
-	private lazy var satisfactionTitleLabel = UILabel()
-	private lazy var satisfactionPriceLabel = UILabel()
+	private lazy var satisfactionEmptyTitleLabel = UILabel()
+	private lazy var satisfactionEmptyPriceLabel = UILabel()
 
 	private lazy var disappointingView = UIView()			// 아쉬운 활동 영역
 	private lazy var disappointingTableView = UITableView()
 	private lazy var disappointingLabel = UILabel()			// 아쉬운 활동
 	private lazy var disappointingImageView = UIImageView() // 💦
-	private lazy var disappointingTitleLabel = UILabel()
-	private lazy var disappointingPriceLabel = UILabel()
-
+	private lazy var disappointingEmptyTitleLabel = UILabel()
+	private lazy var disappointingEmptyPriceLabel = UILabel()
 
 	init(timer: DispatchSourceTimer?) {
 		self.timer = timer
@@ -69,6 +70,7 @@ extension StatisticsActivityView {
 		// 만족스러운 활동 List
 		reactor.state
 			.map { $0.activitySatisfactionList }
+			.distinctUntilChanged() // 중복값 무시
 			.bind(to: satisfactionTableView.rx.items) { tv, row, data in
 				let index = IndexPath(row: row, section: 0)
 				let cell = tv.dequeueReusableCell(withIdentifier: "StatisticsActivityTableViewCell", for: index) as! StatisticsActivityTableViewCell
@@ -84,6 +86,7 @@ extension StatisticsActivityView {
 		// 아쉬운 활동 List
 		reactor.state
 			.map { $0.activityDisappointingList }
+			.distinctUntilChanged() // 중복값 무시
 			.bind(to: disappointingTableView.rx.items) { tv, row, data in
 				let index = IndexPath(row: row, section: 0)
 				let cell = tv.dequeueReusableCell(withIdentifier: "StatisticsActivityTableViewCell", for: index) as! StatisticsActivityTableViewCell
@@ -96,6 +99,49 @@ extension StatisticsActivityView {
 				return cell
 			}.disposed(by: disposeBag)
 		
+		// 만족스러운 활동
+		reactor.state
+			.map { $0.activitySatisfactionList }
+			.distinctUntilChanged() // 중복값 무시
+			.map { $0.count }
+			.subscribe(onNext: { [weak self] count in
+				guard let self = self else { return }
+				
+				self.indexSatisfaction = 1
+				self.cntSatisfaction = count - 1
+				
+				if count != 0 {
+					self.satisfactionTableView.scrollToRow(at: NSIndexPath(item: 0, section: 0) as IndexPath, at: .middle, animated: false) // 해당 인덱스로 이동.
+					satisfactionEmptyTitleLabel.isHidden = true
+					satisfactionEmptyPriceLabel.isHidden = true
+				} else {
+					satisfactionEmptyTitleLabel.isHidden = false
+					satisfactionEmptyPriceLabel.isHidden = false
+				}
+			})
+			.disposed(by: disposeBag)
+		
+		// 아쉬운 활동
+		reactor.state
+			.map { $0.activityDisappointingList }
+			.distinctUntilChanged() // 중복값 무시
+			.map { $0.count }
+			.subscribe(onNext: { [weak self] count in
+				guard let self = self else { return }
+				self.indexDisappointing = 1
+				self.cntDisappointing = count - 1
+				
+				if count != 0 {
+					disappointingTableView.scrollToRow(at: NSIndexPath(item: cntDisappointing, section: 0) as IndexPath, at: .middle, animated: false) // 해당 인덱스로 이동.
+					disappointingEmptyTitleLabel.isHidden = true
+					disappointingEmptyPriceLabel.isHidden = true
+				} else {
+					disappointingEmptyTitleLabel.isHidden = false
+					disappointingEmptyPriceLabel.isHidden = false
+				}
+			})
+			.disposed(by: disposeBag)
+		
 		reactor.state
 			.map { $0.isLoading }
 			.distinctUntilChanged() // 중복값 무시
@@ -103,8 +149,6 @@ extension StatisticsActivityView {
 				guard let self = self else { return }
 				
 				if !isLoading { // 로딩 끝
-					// 자연스러운 UI를 위해 미리 초기화
-					self.disappointingTableView.scrollToRow(at: NSIndexPath(item: RANK_COUNT, section: 0) as IndexPath, at: .middle, animated: false) // 해당 인덱스로 이동.
 				}
 			}).disposed(by: disposeBag)
 	}
@@ -112,32 +156,49 @@ extension StatisticsActivityView {
 //MARK: - Action
 extension StatisticsActivityView {
 	private func moveToIndex() {
-		// 보여줄 랭크의 개수 보다 작을 경우
-		guard counter <= RANK_COUNT else {
-			counter = 0
-			return
+		guard let reactor = reactor else { return }
+		
+		// 보여줄 list의 개수 보다 작을 경우
+		if indexSatisfaction <= cntSatisfaction && cntSatisfaction > 1 {
+			// 만족스러운 활동
+			let idxSatisfaction = IndexPath.init(item: indexSatisfaction, section: 0)
+			self.satisfactionTableView.scrollToRow(at: idxSatisfaction, at: .middle, animated: true) // 해당 인덱스로 이동.
+
+			self.indexSatisfaction += 1 // 인덱스 증가
+
+			if indexSatisfaction > cntSatisfaction {
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+					// 만족스러운 활동
+					if !reactor.currentState.activitySatisfactionList.isEmpty {
+						self.satisfactionTableView.scrollToRow(at: NSIndexPath(item: 0, section: 0) as IndexPath, at: .top, animated: false)
+					}
+					self.indexSatisfaction = 1 // 인덱스 초기화
+				}
+			}
+		} else {
+			indexSatisfaction = 0
 		}
 		
-		// 만족스러운 활동
-		let indexSatisfaction = IndexPath.init(item: counter, section: 0)
-		self.satisfactionTableView.scrollToRow(at: indexSatisfaction, at: .middle, animated: true) // 해당 인덱스로 이동.
-		
-		// 아쉬운 활동
-		let indexDisappointing = IndexPath.init(item: RANK_COUNT - counter, section: 0)
-		self.disappointingTableView.scrollToRow(at: indexDisappointing, at: .middle, animated: true) // 해당 인덱스로 이동.
+		// 보여줄 list의 개수 보다 작을 경우
+		if indexDisappointing <= cntDisappointing && cntDisappointing > 1 {
+			// 아쉬운 활동
+			let idxDisappointing = IndexPath.init(item: cntDisappointing - indexDisappointing, section: 0)
+			self.disappointingTableView.scrollToRow(at: idxDisappointing, at: .middle, animated: true) // 해당 인덱스로 이동.
 
-		self.counter += 1 // 인덱스 증가
+			self.indexDisappointing += 1 // 인덱스 증가
 
-		if counter >= RANK_COUNT + 1 {
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-				// 만족스러운 활동
-				self.satisfactionTableView.scrollToRow(at: NSIndexPath(item: 0, section: 0) as IndexPath, at: .top, animated: false)
-				
-				// 아쉬운 활동
-				self.disappointingTableView.scrollToRow(at: NSIndexPath(item: self.RANK_COUNT, section: 0) as IndexPath, at: .top, animated: false)
-				
-				self.counter = 1 // 인덱스 초기화
+			if indexDisappointing > cntDisappointing {
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+					// 아쉬운 활동
+					if !reactor.currentState.activityDisappointingList.isEmpty {
+						self.disappointingTableView.scrollToRow(at: NSIndexPath(item: self.cntDisappointing, section: 0) as IndexPath, at: .top, animated: false)
+					}
+					
+					self.indexDisappointing = 1 // 인덱스 초기화
+				}
 			}
+		} else {
+			indexDisappointing = 0
 		}
 	}
 }
@@ -206,25 +267,25 @@ extension StatisticsActivityView {
 			$0.rowHeight = UI.cellHeight
 		}
 		
-		satisfactionTitleLabel = satisfactionTitleLabel.then {
+		satisfactionEmptyTitleLabel = satisfactionEmptyTitleLabel.then {
 			$0.text = "아직 활동이 없어요"
 			$0.font = R.Font.title3
 			$0.textColor = R.Color.gray600
 		}
 		
-		disappointingTitleLabel = disappointingTitleLabel.then {
+		disappointingEmptyTitleLabel = disappointingEmptyTitleLabel.then {
 			$0.text = "아직 활동이 없어요"
 			$0.font = R.Font.title3
 			$0.textColor = R.Color.gray600
 		}
 		
-		satisfactionPriceLabel = satisfactionPriceLabel.then {
+		satisfactionEmptyPriceLabel = satisfactionEmptyPriceLabel.then {
 			$0.text = "만족한 활동을 적어주세요"
 			$0.font = R.Font.body3
 			$0.textColor = R.Color.gray800
 		}
 		
-		disappointingPriceLabel = disappointingPriceLabel.then {
+		disappointingEmptyPriceLabel = disappointingEmptyPriceLabel.then {
 			$0.text = "아쉬운 활동을 적어주세요"
 			$0.font = R.Font.body3
 			$0.textColor = R.Color.gray800
@@ -236,8 +297,8 @@ extension StatisticsActivityView {
 		
 		addSubview(stackView)
 		stackView.addArrangedSubviews(satisfactionView, disappointingView)
-		satisfactionView.addSubviews(satisfactionLabel, satisfactionImageView, satisfactionTableView, satisfactionTitleLabel, satisfactionPriceLabel)
-		disappointingView.addSubviews(disappointingLabel, disappointingImageView, disappointingTableView, disappointingTitleLabel, disappointingPriceLabel)
+		satisfactionView.addSubviews(satisfactionLabel, satisfactionImageView, satisfactionTableView, satisfactionEmptyTitleLabel, satisfactionEmptyPriceLabel)
+		disappointingView.addSubviews(disappointingLabel, disappointingImageView, disappointingTableView, disappointingEmptyTitleLabel, disappointingEmptyPriceLabel)
 	}
 	
 	override func setLayout() {
@@ -273,6 +334,27 @@ extension StatisticsActivityView {
 		
 		disappointingTableView.snp.makeConstraints {
 			$0.top.equalTo(disappointingLabel.snp.bottom).offset(UI.tableViewMargin.top)
+			$0.trailing.leading.bottom.equalToSuperview()
+		}
+		
+		// Empty Case
+		satisfactionEmptyTitleLabel.snp.makeConstraints {
+			$0.top.equalTo(satisfactionLabel.snp.bottom).offset(UI.tableViewMargin.top)
+			$0.trailing.leading.equalToSuperview()
+		}
+		
+		disappointingEmptyTitleLabel.snp.makeConstraints {
+			$0.top.equalTo(disappointingLabel.snp.bottom).offset(UI.tableViewMargin.top)
+			$0.trailing.leading.equalToSuperview()
+		}
+		
+		satisfactionEmptyPriceLabel.snp.makeConstraints {
+			$0.top.equalTo(satisfactionEmptyTitleLabel.snp.bottom).offset(UI.tableViewMargin.top)
+			$0.trailing.leading.bottom.equalToSuperview()
+		}
+		
+		disappointingEmptyPriceLabel.snp.makeConstraints {
+			$0.top.equalTo(disappointingEmptyTitleLabel.snp.bottom).offset(UI.tableViewMargin.top)
 			$0.trailing.leading.bottom.equalToSuperview()
 		}
 	}

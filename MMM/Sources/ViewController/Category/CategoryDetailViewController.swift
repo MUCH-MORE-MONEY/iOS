@@ -87,6 +87,8 @@ extension CategoryDetailViewController {
 extension CategoryDetailViewController {
 	private func willPushViewController(isPushDetail: Bool) {
 		guard let reactor = reactor, let data = reactor.currentState.detailData else { return }
+		// 셀 터치시 회색 표시 없애기
+		tableView.deselectRow(at: data.IndexPath, animated: true)
 
 		let index = data.IndexPath.row
 		let vc = DetailViewController(homeViewModel: HomeViewModel(), index: index) // 임시: HomeViewModel 생성

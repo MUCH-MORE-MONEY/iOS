@@ -203,6 +203,7 @@ extension StatisticsViewController {
 		let vc = DetailViewController(homeViewModel: HomeViewModel(), index: index) // 임시: HomeViewModel 생성
 		let economicActivityId = reactor.currentState.activityList.map { $0.id }
 		vc.setData(economicActivityId: economicActivityId, index: index, date: data.info.createAt.toDate() ?? Date())
+		
 		navigationController?.pushViewController(vc, animated: true)
 	}
 	

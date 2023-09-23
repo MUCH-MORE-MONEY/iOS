@@ -11,7 +11,6 @@ final class CategoryReactor: Reactor {
 	// 사용자의 액션
 	enum Action {
 		case loadData
-		case fetch
 		case selectCell(IndexPath, CategoryItem)
 	}
 	
@@ -56,8 +55,6 @@ extension CategoryReactor {
 				loadHeaderData(CategoryReqDto(economicActivityDvcd: "02")),
 				loadCategoryData(CategoryReqDto(economicActivityDvcd: "02"))
 			])
-		case .fetch:
-			return .empty()
 		case .selectCell(_, let categoryItem):
 			switch categoryItem {
 			case .base(let reactor):

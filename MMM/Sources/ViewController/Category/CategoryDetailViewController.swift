@@ -37,14 +37,15 @@ extension CategoryDetailViewController {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
 	private func bindAction(_ reactor: CategoryDetailReactor) {
 		// TableView cell select
-//		Observable.zip(
-//			tableView.rx.itemSelected,
-//			tableView.rx.modelSelected(EconomicActivity.self)
-//		)
-//		.map { .selectCell($0, $1) }
-//		.bind(to: reactor.action)
-//		.disposed(by: disposeBag)
+		Observable.zip(
+			tableView.rx.itemSelected,
+			tableView.rx.modelSelected(EconomicActivity.self)
+		)
+		.map { .selectCell($0, $1) }
+		.bind(to: reactor.action)
+		.disposed(by: disposeBag)
 	}
+	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: CategoryDetailReactor) {
 		reactor.state
@@ -73,10 +74,27 @@ extension CategoryDetailViewController {
 				
 				return cell
 			}.disposed(by: disposeBag)
+		
+		reactor.state
+			.map { $0.isPushDetail }
+			.distinctUntilChanged() // 중복값 무시
+			.filter { $0 } // true일때만 화면 전환
+			.bind(onNext: willPushViewController)
+			.disposed(by: disposeBag)
 	}
 }
 //MARK: - Action
 extension CategoryDetailViewController {
+	private func willPushViewController(isPushDetail: Bool) {
+		guard let reactor = reactor, let data = reactor.currentState.detailData else { return }
+
+		let index = data.IndexPath.row
+		let vc = DetailViewController(homeViewModel: HomeViewModel(), index: index) // 임시: HomeViewModel 생성
+		let economicActivityId = reactor.currentState.list.map { $0.id }
+		vc.setData(economicActivityId: economicActivityId, index: index, date: data.info.createAt.toDate() ?? Date())
+		
+		navigationController?.pushViewController(vc, animated: true)
+	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
 extension CategoryDetailViewController {

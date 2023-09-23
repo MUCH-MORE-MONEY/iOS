@@ -11,12 +11,13 @@ final class CategoryDetailReactor: Reactor {
 	// 사용자의 액션
 	enum Action {
 		case loadData
+		case selectCell(IndexPath, EconomicActivity)
 	}
 	
 	// 처리 단위
 	enum Mutation {
 		case setList([EconomicActivity])
-		case setNextScreen(Bool)
+		case pushDetail(IndexPath, EconomicActivity, Bool)
 	}
 	
 	// 현재 상태를 기록
@@ -24,7 +25,8 @@ final class CategoryDetailReactor: Reactor {
 		var date: Date
 		var category: Category
 		var list: [EconomicActivity] = []
-		var nextScreen = false
+		var detailData: (IndexPath: IndexPath, info: EconomicActivity)?
+		var isPushDetail = false
 		var error = false
 	}
 	
@@ -48,6 +50,11 @@ extension CategoryDetailReactor {
 			return .concat([
 				loadData(CategoryListReqDto(dateYM: currentState.date.getFormattedYM(), economicActivityCategoryCd: category.id))
 			])
+		case .selectCell(let indexPath, let data):
+			return .concat([
+				.just(.pushDetail(indexPath, data, true)),
+				.just(.pushDetail(indexPath, data, false))
+			])
 		}
 	}
 	
@@ -58,8 +65,9 @@ extension CategoryDetailReactor {
 		switch mutation {
 		case .setList(let economicActivityList):
 			newState.list = economicActivityList
-		case .setNextScreen(let nextScreen):
-			newState.nextScreen = nextScreen
+		case .pushDetail(let indexPath, let data, let isPush):
+			newState.detailData = (indexPath, data)
+			newState.isPushDetail = isPush
 		}
 		
 		return newState

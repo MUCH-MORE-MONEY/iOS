@@ -27,7 +27,14 @@ final class CategoryContentViewController: BaseViewController, View {
 		static let sectionMargin: UIEdgeInsets = .init(top: 0, left: 24, bottom: 48, right: 24)
 	}
 	
+	// MARK: - Constants
+	enum Mode: String {
+		case earn = "01"
+		case pay = "02"
+	}
+	
 	// MARK: - Properties
+	private let mode: Mode
 	private lazy var dataSource = DataSource { [weak self] _, collectionView, indexPath, item -> UICollectionViewCell in
 		guard let reactor = self?.reactor else { return .init() }
 		
@@ -50,7 +57,7 @@ final class CategoryContentViewController: BaseViewController, View {
 			guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: String(describing: CategorySectionHeader.self), for: indexPath) as? CategorySectionHeader else { return .init() }
 			let sectionInfo = dataSource.sectionModels[indexPath.section].model.header
 
-			header.setDate(radio: 27.0, title: "\(sectionInfo.title)", price: "\(sectionInfo.price)", type: "01")
+			header.setDate(radio: 27.0, title: "\(sectionInfo.title)", price: "\(sectionInfo.price)", type: self?.mode.rawValue ?? "01")
 			return header
 		}
 	}
@@ -60,6 +67,17 @@ final class CategoryContentViewController: BaseViewController, View {
 	private lazy var headerView: UIView = .init()
 	private lazy var collectionView: UICollectionView = .init(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
 
+	init(mode: Mode) {
+		self.mode = mode
+		super.init(nibName: nil, bundle: nil)
+	}
+	
+	// Compile time에 error를 발생시키는 코드
+	@available(*, unavailable)
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -91,9 +109,9 @@ extension CategoryContentViewController {
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: CategoryReactor) {
-		// Section별 items 전달
+		// 지출 - Section별 items 전달
 		reactor.state
-			.map(\.paySections)
+			.map( mode == .earn ? \.earnSections : \.paySections)
 			.withUnretained(self)
 			.subscribe(onNext: { this, sections in
 				guard !sections.isEmpty else { return }
@@ -112,11 +130,6 @@ extension CategoryContentViewController {
 	func makeLayout(sections: [CategorySectionModel]) -> UICollectionViewCompositionalLayout {
 		let layout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, _ in
 			return self?.makeCategorySectionLayout(from: sections[sectionIndex].items)
-
-//			switch sections[sectionIndex].model {
-//			case let .base(items):
-//				return self?.makeCategorySectionLayout(from: items)
-//			}
 		}
 		
 		return layout

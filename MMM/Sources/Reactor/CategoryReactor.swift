@@ -18,7 +18,9 @@ final class CategoryReactor: Reactor {
 	// 처리 단위
 	enum Mutation {
 		case setPayHeaders([CategoryHeader])
+		case setEarnHeaders([CategoryHeader])
 		case setPaySections([CategorySectionModel])
+		case setEarnSections([CategorySectionModel])
 		case setNextScreen(Bool)
 	}
 	
@@ -26,6 +28,7 @@ final class CategoryReactor: Reactor {
 	struct State {
 		var payHeaders: [CategoryHeader] = []
 		var paySections: [CategorySectionModel] = []
+		var earnSections: [CategorySectionModel] = []
 		var nextScreen = false
 		var error = false
 	}
@@ -47,6 +50,8 @@ extension CategoryReactor {
 		switch action {
 		case .loadData:
 			return .concat([
+				loadHeaderData(CategoryReqDto(economicActivityDvcd: "01")),
+				loadCategoryData(CategoryReqDto(economicActivityDvcd: "01")),
 				loadHeaderData(CategoryReqDto(economicActivityDvcd: "02")),
 				loadCategoryData(CategoryReqDto(economicActivityDvcd: "02"))
 			])
@@ -69,8 +74,14 @@ extension CategoryReactor {
 			newState.payHeaders = headers
 		case .setPaySections(let sections):
 			newState.paySections = sections
+		case .setEarnHeaders(let headers):
+			newState.payHeaders = headers
+		case .setEarnSections(let sections):
+			newState.earnSections = sections
 		case .setNextScreen(let nextScreen):
 			newState.nextScreen = nextScreen
+
+
 		}
 		
 		return newState
@@ -81,13 +92,9 @@ extension CategoryReactor {
 	// 데이터 Header 가져오기
 	private func loadHeaderData(_ request: CategoryReqDto) -> Observable<Mutation> {
 		return MMMAPIService().getCategoryHeader(request)
-			.map { [weak self] (response, error) -> Mutation in
-				guard let self = self else {
-					return .setPayHeaders([])
-				}
-
+			.map { (response, error) -> Mutation in
 				if request.economicActivityDvcd == "01" { // 수입
-					return .setPayHeaders(response.data.selectListUpperOutputDto)
+					return .setEarnHeaders(response.data.selectListUpperOutputDto)
 				} else { // 지출
 					return .setPayHeaders(response.data.selectListUpperOutputDto)
 				}
@@ -103,7 +110,7 @@ extension CategoryReactor {
 				}
 
 				if request.economicActivityDvcd == "01" { // 수입
-					return .setPaySections(makeSections(respose: response))
+					return .setEarnSections(makeSections(respose: response))
 				} else { // 지출
 					return .setPaySections(makeSections(respose: response))
 				}

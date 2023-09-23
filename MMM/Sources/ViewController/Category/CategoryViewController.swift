@@ -33,8 +33,8 @@ final class CategoryViewController: BaseViewControllerWithNav, View {
 	private lazy var editButton = UIButton()
 	private lazy var segmentedControl = CategorySegmentedControl(items: ["지출", "수입"])
 	private lazy var pageViewController = UIPageViewController()
-	private lazy var payViewController = CategoryContentViewController()
-	private lazy var earnViewController = UIViewController()
+	private lazy var payViewController = CategoryContentViewController(mode: .pay)
+	private lazy var earnViewController = CategoryContentViewController(mode: .earn)
 	private var dataViewControllers: [UIViewController] {
 		[self.payViewController, self.earnViewController]
 	}
@@ -123,7 +123,7 @@ extension CategoryViewController {
 		}
 		
 		earnViewController = earnViewController.then {
-			$0.view.backgroundColor = R.Color.blue050
+			$0.reactor = reactor
 		}
 	}
 	

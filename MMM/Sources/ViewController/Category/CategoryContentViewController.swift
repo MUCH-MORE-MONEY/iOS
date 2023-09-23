@@ -45,12 +45,20 @@ final class CategoryContentViewController: BaseViewController, View {
 	} configureSupplementaryView: { [weak self] dataSource, collectionView, _, indexPath -> UICollectionReusableView in
 		guard let thisReactor = self?.reactor else { return .init() }
 
-		switch dataSource[indexPath.section].model {
-		case .base:
-			guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: String(describing: CategorySectionHeader.self), for: indexPath) as? CategorySectionHeader else { return .init() }
-			header.setDate(radio: 27.0, title: "제목", price: "12345", type: "01")
-			return header
-		}
+		guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: String(describing: CategorySectionHeader.self), for: indexPath) as? CategorySectionHeader else { return .init() }
+		let sectionTitle = dataSource.sectionModels[indexPath.section].model
+		
+		header.setDate(radio: 27.0, title: sectionTitle, price: "12345", type: "01")
+		return header
+		
+//		switch dataSource[indexPath.section].model {
+//		case .base:
+//			guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: String(describing: CategorySectionHeader.self), for: indexPath) as? CategorySectionHeader else { return .init() }
+//			let sectionTitle = dataSource.sectionModels[indexPath.section].model
+//
+//			header.setDate(radio: 27.0, title: "제목", price: "12345", type: "01")
+//			return header
+//		}
 	}
 	
 	// MARK: - UI Components
@@ -109,10 +117,12 @@ extension CategoryContentViewController {
 	// Section별 Cell Layout
 	func makeLayout(sections: [CategorySectionModel]) -> UICollectionViewCompositionalLayout {
 		let layout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, _ in
-			switch sections[sectionIndex].model {
-			case let .base(items):
-				return self?.makeCategorySectionLayout(from: items)
-			}
+			return self?.makeCategorySectionLayout(from: sections[sectionIndex].items)
+
+//			switch sections[sectionIndex].model {
+//			case let .base(items):
+//				return self?.makeCategorySectionLayout(from: items)
+//			}
 		}
 		
 		return layout

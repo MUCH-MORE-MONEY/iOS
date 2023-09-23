@@ -101,7 +101,7 @@ extension CategoryReactor {
 			return .base(.init(category: categorty))
 		}
 		
-		let firstSectionModel: CategorySectionModel = .init(model: .base(categoryitems), items: categoryitems)
+		let firstSectionModel: CategorySectionModel = .init(model: "sss", items: categoryitems)
 
 		return [firstSectionModel]
 	}

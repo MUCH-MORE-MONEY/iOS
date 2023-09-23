@@ -9,11 +9,11 @@ import RxDataSources
 import Foundation
 
 // AnimatableSectionModel: 자동으로 셀 애니메이션 관리
-typealias CategorySectionModel = AnimatableSectionModel<CategorySection, CategoryItem>
+typealias CategorySectionModel = AnimatableSectionModel<String, CategoryItem>
 
-enum CategorySection {
-	case base([CategoryItem])
-}
+//enum CategorySection {
+//	case base([CategoryItem])
+//}
 
 enum CategoryItem: IdentifiableType, Equatable {
 	case base(CategoryCollectionViewCellReactor)
@@ -31,26 +31,26 @@ enum CategoryItem: IdentifiableType, Equatable {
 		lhs.identity == rhs.identity
 	}
 }
-// MARK: - AnimatableSectionModelType Protocol
-extension CategorySection: AnimatableSectionModelType {
-	typealias Item = CategoryItem
-	
-	// 준수해야할 Property
-	var identity: String {
-		return "\(items.count)"
-	}
-	
-	var items: [Item] {
-		switch self {
-		case .base(let items):
-			return items
-		}
-	}
-	
-	init(original: CategorySection, items: [CategoryItem]) {
-		switch original {
-		case .base(let items):
-			self = .base(items)
-		}
-	}
-}
+//// MARK: - AnimatableSectionModelType Protocol
+//extension CategorySection: AnimatableSectionModelType {
+//	typealias Item = CategoryItem
+//
+//	// 준수해야할 Property
+//	var identity: String {
+//		return "\(items.count)"
+//	}
+//
+//	var items: [Item] {
+//		switch self {
+//		case .base(let items):
+//			return items
+//		}
+//	}
+//
+//	init(original: CategorySection, items: [CategoryItem]) {
+//		switch original {
+//		case .base(let items):
+//			self = .base(items)
+//		}
+//	}
+//}

@@ -17,12 +17,14 @@ final class CategoryReactor: Reactor {
 	
 	// 처리 단위
 	enum Mutation {
+		case setPayHeaders([CategoryHeader])
 		case setPaySections([CategorySectionModel])
 		case setNextScreen(Bool)
 	}
 	
 	// 현재 상태를 기록
 	struct State {
+		var payHeaders: [CategoryHeader] = []
 		var paySections: [CategorySectionModel] = []
 		var nextScreen = false
 		var error = false
@@ -45,7 +47,8 @@ extension CategoryReactor {
 		switch action {
 		case .loadData:
 			return .concat([
-				loadData(CategoryReqDto(economicActivityDvcd: "02"))
+				loadHeaderData(CategoryReqDto(economicActivityDvcd: "02")),
+				loadCategoryData(CategoryReqDto(economicActivityDvcd: "02"))
 			])
 		case .fetch:
 			return .empty()
@@ -62,6 +65,8 @@ extension CategoryReactor {
 		var newState = state
 		
 		switch mutation {
+		case .setPayHeaders(let headers):
+			newState.payHeaders = headers
 		case .setPaySections(let sections):
 			newState.paySections = sections
 		case .setNextScreen(let nextScreen):
@@ -73,8 +78,24 @@ extension CategoryReactor {
 }
 //MARK: - Action
 extension CategoryReactor {
+	// 데이터 Header 가져오기
+	private func loadHeaderData(_ request: CategoryReqDto) -> Observable<Mutation> {
+		return MMMAPIService().getCategoryHeader(request)
+			.map { [weak self] (response, error) -> Mutation in
+				guard let self = self else {
+					return .setPayHeaders([])
+				}
+
+				if request.economicActivityDvcd == "01" { // 수입
+					return .setPayHeaders(response.data.selectListUpperOutputDto)
+				} else { // 지출
+					return .setPayHeaders(response.data.selectListUpperOutputDto)
+				}
+			}
+	}
+	
 	// 데이터 가져오기
-	private func loadData(_ request: CategoryReqDto) -> Observable<Mutation> {
+	private func loadCategoryData(_ request: CategoryReqDto) -> Observable<Mutation> {
 		return MMMAPIService().getCategory(request)
 			.map { [weak self] (response, error) -> Mutation in
 				guard let self = self else {
@@ -97,12 +118,17 @@ extension CategoryReactor {
 			data = [Category.getDummy()]
 		}
 		
-		let categoryitems: [CategoryItem] = data.map { categorty -> CategoryItem in
-			return .base(.init(category: categorty))
-		}
-		
-		let firstSectionModel: CategorySectionModel = .init(model: "sss", items: categoryitems)
+		var sections: [CategorySectionModel] = []
 
-		return [firstSectionModel]
+		for header in currentState.payHeaders {
+			let categoryitems: [CategoryItem] = data.filter { $0.upperId == header.id }.map { category -> CategoryItem in
+				return .base(.init(category: category))
+			}
+			
+			let model: CategorySectionModel = .init(model: .base(header, categoryitems), items: categoryitems)
+			sections.append(model)
+		}
+
+		return sections
 	}
 }

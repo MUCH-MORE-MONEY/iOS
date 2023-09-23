@@ -62,6 +62,7 @@ protocol MMMAPIServiceble: BaseAPIService {
 	
     // MARK: - Staticstics Category 요청 API
     func getCategory(_ request: CategoryReqDto) -> Observable<(CategoryResDto, Error?)>
+	func getCategoryHeader(_ request: CategoryReqDto) -> Observable<(CategoryHeaderResDto, Error?)>
 
     // MARK: - Profile 요청 API
     func exportToExcel() -> Observable<(ExportResDto, Error?)>
@@ -109,6 +110,11 @@ struct MMMAPIService: MMMAPIServiceble {
 	// MARK: - Staticstics Category 요청 API
 	func getCategory(_ request: CategoryReqDto) -> RxSwift.Observable<(CategoryResDto, Error?)> {
 		return provider().request(MMMAPI.getCategory(request), type: CategoryResDto.self).asObservable()
+	}
+	
+	// 카테고리 헤더
+	func getCategoryHeader(_ request: CategoryReqDto) -> RxSwift.Observable<(CategoryHeaderResDto, Error?)> {
+		return provider().request(MMMAPI.getCategoryHeader(request), type: CategoryHeaderResDto.self).asObservable()
 	}
 	
 	// MARK: - Profile 요청 API

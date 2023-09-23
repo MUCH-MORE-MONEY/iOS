@@ -13,3 +13,10 @@ struct CategoryResDto: Codable {
 	var message: String?
 	var status: String
 }
+
+/// Category Header Response를 위한 데이터 타입
+struct CategoryHeaderResDto: Codable {
+	var data: CategoryHeaderList
+	var message: String?
+	var status: String
+}

@@ -69,13 +69,13 @@ extension StatisticsCategoryView {
 		reactor.state
 			.map { $0.payBarList }
 			.distinctUntilChanged() // 중복값 무시
-			.bind(onNext: { self.convertData($0, "02")})
+			.bind(onNext: { self.convertData($0, "01")})
 			.disposed(by: disposeBag)
 		
 		reactor.state
 			.map { $0.earnBarList }
 			.distinctUntilChanged() // 중복값 무시
-			.bind(onNext: { self.convertData($0, "01")})
+			.bind(onNext: { self.convertData($0, "02")})
 			.disposed(by: disposeBag)
 	}
 }
@@ -85,15 +85,15 @@ extension StatisticsCategoryView {
 		let isEmpty = data.isEmpty
 
 		if type == "01" {
-			earnEmptyLabel.isHidden = !isEmpty
-			earnRankLabel.isHidden = isEmpty
-			earnBarView.isHidden = isEmpty
-			earnRankLabel.text = data.enumerated().map { "\($0.offset + 1)위 \($0.element.title)"}.joined(separator: "  ")
-		} else {
 			payEmptyLabel.isHidden = !isEmpty
 			payRankLabel.isHidden = isEmpty
 			payBarView.isHidden = isEmpty
 			payRankLabel.text = data.enumerated().map { "\($0.offset + 1)위 \($0.element.title)"}.joined(separator: "  ")
+		} else {
+			earnEmptyLabel.isHidden = !isEmpty
+			earnRankLabel.isHidden = isEmpty
+			earnBarView.isHidden = isEmpty
+			earnRankLabel.text = data.enumerated().map { "\($0.offset + 1)위 \($0.element.title)"}.joined(separator: "  ")
 		}
 		convertBar(data, type)
 	}
@@ -105,9 +105,9 @@ extension StatisticsCategoryView {
 		let unit = totalWidth / 100.0
 		var sumWidth = 0.0
 		let cnt = data.count
-		let barView: UIView = type == "01" ? earnBarView : payBarView
+		let barView: UIView = type == "01" ? payBarView : earnBarView
 		barView.subviews.forEach { $0.removeFromSuperview() } // 기존에 있던 subView 제거
-		let color: UIColor = type == "01" ? R.Color.blue500 : R.Color.orange500
+		let color: UIColor = type == "01" ? R.Color.orange500 : R.Color.blue500
 		let minimumWidth = 2.0
 		let spacing = 2.0
 		

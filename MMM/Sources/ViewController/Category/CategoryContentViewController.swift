@@ -29,8 +29,8 @@ final class CategoryContentViewController: BaseViewController, View {
 	
 	// MARK: - Constants
 	enum Mode: String {
-		case earn = "01"
-		case pay = "02"
+		case pay = "01"
+		case earn = "02"
 	}
 	
 	// MARK: - Properties

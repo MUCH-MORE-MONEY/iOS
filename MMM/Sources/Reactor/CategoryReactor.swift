@@ -91,10 +91,10 @@ extension CategoryReactor {
 	private func loadHeaderData(_ request: CategoryReqDto) -> Observable<Mutation> {
 		return MMMAPIService().getCategoryHeader(request)
 			.map { (response, error) -> Mutation in
-				if request.economicActivityDvcd == "01" { // 수입
-					return .setEarnHeaders(response.data.selectListUpperOutputDto)
-				} else { // 지출
+				if request.economicActivityDvcd == "01" { // 지출
 					return .setPayHeaders(response.data.selectListUpperOutputDto)
+				} else { // 수입
+					return .setEarnHeaders(response.data.selectListUpperOutputDto)
 				}
 			}
 	}
@@ -107,10 +107,10 @@ extension CategoryReactor {
 					return .setPaySections([])
 				}
 
-				if request.economicActivityDvcd == "01" { // 수입
-					return .setEarnSections(makeSections(respose: response))
-				} else { // 지출
+				if request.economicActivityDvcd == "01" { // 지출
 					return .setPaySections(makeSections(respose: response))
+				} else { // 수입
+					return .setEarnSections(makeSections(respose: response))
 				}
 			}
 	}

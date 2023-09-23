@@ -43,7 +43,7 @@ extension CategorySectionHeader {
 	func setDate(radio: Double, title: String, price: String, type: String) {
 		titleLabel.text = title
 		priceLabel.text = (Int(price) ?? 0).withCommas() + " 원"
-		radioButton.backgroundColor = type == "01" ? R.Color.blue500 : R.Color.orange500
+		radioButton.backgroundColor = type == "01" ? R.Color.orange500 : R.Color.blue500
 		radioButton.setTitle("\(Int(round(radio)))%", for: .normal)
 	}
 }

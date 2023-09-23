@@ -22,7 +22,7 @@ enum CategoryItem: IdentifiableType, Equatable {
 	var identity: some Hashable {
 		switch self {
 		case let .base(reactor):
-			return reactor.currentState.category.id
+			return reactor.currentState.category.orderNum
 		}
 	}
 	

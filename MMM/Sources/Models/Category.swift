@@ -11,22 +11,22 @@ struct CategoryList: Codable {
 	let selectListOutputDto: [Category]
 }
 
-struct Category: Codable {
-	let title, price, upperTitle, upperPrice: String
-	let id, upperId: Int
+struct Category: Codable, Equatable {
+	let id, title, upperId, upperTitle : String
+	let orderNum, upperOrderNum: Int
 	
 	// 파라미터 이름 변경
 	enum CodingKeys: String, CodingKey {
+		case id = "economicActivityCategoryCd"
 		case title = "economicActivityCategoryNm"
-		case price = "economicActivityCategoryCd"
-		case id = "orderNum"
+		case orderNum = "orderNum"
+		case upperId = "upperEconomicActivityCategoryCd"
 		case upperTitle = "upperEconomicActivityCategoryNm"
-		case upperPrice = "upperEconomicActivityCategoryCd"
-		case upperId = "upperOrderNum"
+		case upperOrderNum = "upperOrderNum"
 	}
 	
 	static func getDummy() -> Self {
-		return Category(title: "덕질비용", price: "10000", upperTitle: "보기만 해도 배부른", upperPrice: "10000", id: 1, upperId: 1)
+		return Category(id: "01", title: "덕질비용", upperId: "01", upperTitle: "보기만 해도 배부른", orderNum: 1, upperOrderNum: 1)
 	}
 
 }

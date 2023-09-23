@@ -58,11 +58,11 @@ protocol MMMAPIServiceble: BaseAPIService {
     func getStatisticsAverage(_ dateYM: String) -> Observable<(StatisticsAvgResDto, Error?)>
 	func getStatisticsList(dateYM: String, valueScoreDvcd: String, limit: Int, offset: Int) -> Observable<(StatisticsListResDto, Error?)>
 	func getStatisticsCategory(dateYM: String, economicActivityDvcd: String) -> Observable<(StatisticsCategoryResDto, Error?)>
-
 	
     // MARK: - Staticstics Category 요청 API
     func getCategory(_ request: CategoryReqDto) -> Observable<(CategoryResDto, Error?)>
 	func getCategoryHeader(_ request: CategoryReqDto) -> Observable<(CategoryHeaderResDto, Error?)>
+	func getCategoryList(_ request: CategoryListReqDto) -> Observable<(CategoryListResDto, Error?)>
 
     // MARK: - Profile 요청 API
     func exportToExcel() -> Observable<(ExportResDto, Error?)>
@@ -115,6 +115,11 @@ struct MMMAPIService: MMMAPIServiceble {
 	// 카테고리 헤더
 	func getCategoryHeader(_ request: CategoryReqDto) -> RxSwift.Observable<(CategoryHeaderResDto, Error?)> {
 		return provider().request(MMMAPI.getCategoryHeader(request), type: CategoryHeaderResDto.self).asObservable()
+	}
+	
+	// 카테고리 코드별 월간 경제활동 목록 조회
+	func getCategoryList(_ request: CategoryListReqDto) -> RxSwift.Observable<(CategoryListResDto, Error?)> {
+		return provider().request(MMMAPI.getCategoryList(request), type: CategoryListResDto.self).asObservable()
 	}
 	
 	// MARK: - Profile 요청 API

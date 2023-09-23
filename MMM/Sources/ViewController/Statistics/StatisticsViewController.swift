@@ -188,8 +188,10 @@ extension StatisticsViewController {
 	
 	// 카테고리 더보기
 	private func pushCategoryViewController(_ isPush: Bool) {
+		guard let reactor = self.reactor else { return }
+
 		let vc = CategoryViewController()
-		vc.reactor = CategoryReactor()
+		vc.reactor = CategoryReactor(date: reactor.currentState.date)
 		navigationController?.pushViewController(vc, animated: true)
 	}
 	

@@ -21,23 +21,24 @@ final class CategoryReactor: Reactor {
 		case setEarnHeaders([CategoryHeader])
 		case setPaySections([CategorySectionModel])
 		case setEarnSections([CategorySectionModel])
-		case setNextScreen(Bool)
+		case setNextScreen(Category)
 	}
 	
 	// 현재 상태를 기록
 	struct State {
+		var date: Date
 		var payHeaders: [CategoryHeader] = []
 		var paySections: [CategorySectionModel] = []
 		var earnSections: [CategorySectionModel] = []
-		var nextScreen = false
+		var nextScreen: Category?
 		var error = false
 	}
 	
 	// MARK: Properties
 	let initialState: State
 	
-	init() {
-		initialState = State()
+	init(date: Date) {
+		initialState = State(date: date)
 		
 		// 뷰가 최초 로드 될 경우
 		action.onNext(.loadData)
@@ -57,11 +58,13 @@ extension CategoryReactor {
 			])
 		case .fetch:
 			return .empty()
-		case .selectCell:
-			return .concat([
-				.just(.setNextScreen(true)),
-				.just(.setNextScreen(false))
-			])
+		case .selectCell(_, let categoryItem):
+			switch categoryItem {
+			case .base(let reactor):
+				return .concat([
+					.just(.setNextScreen(reactor.currentState.category))
+				])
+			}
 		}
 	}
 	
@@ -80,8 +83,6 @@ extension CategoryReactor {
 			newState.earnSections = sections
 		case .setNextScreen(let nextScreen):
 			newState.nextScreen = nextScreen
-
-
 		}
 		
 		return newState
@@ -128,7 +129,7 @@ extension CategoryReactor {
 		var sections: [CategorySectionModel] = []
 
 		for header in currentState.payHeaders {
-			let categoryitems: [CategoryItem] = data.filter { $0.upperId == header.id }.map { category -> CategoryItem in
+			let categoryitems: [CategoryItem] = data.filter { $0.upperOrderNum == header.id }.map { category -> CategoryItem in
 				return .base(.init(category: category))
 			}
 			

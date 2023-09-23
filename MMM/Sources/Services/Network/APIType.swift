@@ -23,7 +23,8 @@ enum MMMAPI {
 	// MARK: - Staticstics Category
 	case getCategory(CategoryReqDto)
 	case getCategoryHeader(CategoryReqDto)
-	
+	case getCategoryList(CategoryListReqDto) // 카테고리 코드별 월간 경제활동 목록 조회
+
 	// MARK: - Profile
 	case exportToExcel
 	case getSummary
@@ -56,6 +57,8 @@ extension MMMAPI: BaseNetworkService {
 			return "/economic-activity-category/list/\(request.economicActivityDvcd)"
 		case .getCategoryHeader(let request):
 			return "/economic-activity-category/list/upper/\(request.economicActivityDvcd)"
+		case .getCategoryList(let request):
+			return "/economic-activity-category/\(request.dateYM)/category/\(request.economicActivityCategoryCd)/list"
 		case .exportToExcel:
 			return "/economic_activity/excel/select"
 		case .getSummary:
@@ -72,7 +75,7 @@ extension MMMAPI: BaseNetworkService {
 			return .post
 		case .getStaticsticsAverage, .getStatisticsList, .getStatisticsCategory:
 			return .get
-		case .getCategory, .getCategoryHeader:
+		case .getCategory, .getCategoryHeader, .getCategoryList:
 			return .get
 		case .exportToExcel, .getSummary, .withdraw:
 			return .post
@@ -95,7 +98,7 @@ extension MMMAPI: BaseNetworkService {
 			return .requestPlain
 		case .getStatisticsList(_, _, let limit, let offset):
 			return .requestParameters(parameters: ["limit":limit, "offset":offset], encoding: URLEncoding.default)
-		case .getCategory, .getCategoryHeader:
+		case .getCategory, .getCategoryHeader, .getCategoryList:
 			return .requestPlain
 		case .exportToExcel, .getSummary, .withdraw:
 			return .requestPlain

@@ -68,22 +68,23 @@ extension CategoryViewController {
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: CategoryReactor) {
 		reactor.state
-			.map { $0.nextScreen }
+			.compactMap { $0.nextScreen }
 			.distinctUntilChanged() // 중복값 무시
-			.filter { $0 } // true일때만 화면 전환
-			.subscribe(onNext: { [weak self] _ in
-				self?.willPushViewController()
+			.subscribe(onNext: { [weak self] category in
+				self?.willPushViewController(category: category)
 			})
 			.disposed(by: disposeBag)
 	}
 }
 //MARK: - Action
 extension CategoryViewController {
-	private func willPushViewController() {
-		print(#file, #line, "push")
-//		let viewController =
-//
-//		navigationController?.pushViewController(viewController, animated: true)
+	private func willPushViewController(category: Category) {
+		guard let reactor = self.reactor else { return }
+
+		let vc = CategoryDetailViewController()
+		vc.reactor = CategoryDetailReactor(date: reactor.currentState.date, category: category)
+
+		navigationController?.pushViewController(vc, animated: true)
 	}
 }
 //MARK: - Attribute & Hierarchy & Layouts

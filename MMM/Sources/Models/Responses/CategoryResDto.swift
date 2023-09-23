@@ -20,3 +20,14 @@ struct CategoryHeaderResDto: Codable {
 	var message: String?
 	var status: String
 }
+
+/// Category List Response를 위한 데이터 타입
+struct CategoryListResDto: Decodable {
+	var data: SelectListMonthlyByCategoryCdOutputDto
+	var message: String?
+	var status: Int
+}
+
+struct SelectListMonthlyByCategoryCdOutputDto: Decodable {
+	var selectListMonthlyByCategoryCdOutputDto: [EconomicActivity]
+}

@@ -43,7 +43,7 @@ extension CategoryCollectionViewCell {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
 	private func bindAction(_ reactor: CategoryCollectionViewCellReactor) {
 		titleLabel.text = reactor.currentState.category.title
-		priceLabel.text = (Int(reactor.currentState.category.price) ?? 0).withCommas() + " 원"
+		priceLabel.text = (Int(reactor.currentState.category.id) ?? 0).withCommas() + " 원"
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)

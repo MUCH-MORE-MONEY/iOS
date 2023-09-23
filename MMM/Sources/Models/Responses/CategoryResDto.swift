@@ -25,7 +25,7 @@ struct CategoryHeaderResDto: Codable {
 struct CategoryListResDto: Decodable {
 	var data: SelectListMonthlyByCategoryCdOutputDto
 	var message: String?
-	var status: Int
+	var status: String
 }
 
 struct SelectListMonthlyByCategoryCdOutputDto: Decodable {

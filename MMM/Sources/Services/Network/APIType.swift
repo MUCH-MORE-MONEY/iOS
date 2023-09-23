@@ -58,7 +58,7 @@ extension MMMAPI: BaseNetworkService {
 		case .getCategoryHeader(let request):
 			return "/economic-activity-category/list/upper/\(request.economicActivityDvcd)"
 		case .getCategoryList(let request):
-			return "/economic-activity-category/\(request.dateYM)/category/\(request.economicActivityCategoryCd)/list"
+			return "/economic_activity/\(request.dateYM)/category/\(request.economicActivityCategoryCd)/list"
 		case .exportToExcel:
 			return "/economic_activity/excel/select"
 		case .getSummary:

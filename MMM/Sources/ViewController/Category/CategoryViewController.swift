@@ -115,6 +115,7 @@ extension CategoryViewController {
 			$0.setViewControllers([self.dataViewControllers[0]], direction: .forward, animated: true)
 			$0.delegate = self
 			$0.dataSource = self
+			$0.view.backgroundColor = R.Color.gray900
 			$0.view.translatesAutoresizingMaskIntoConstraints = false
 		}
 		

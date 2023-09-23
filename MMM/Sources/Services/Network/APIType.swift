@@ -20,10 +20,12 @@ enum MMMAPI {
 	case getStatisticsList(dateYM: String, valueScoreDvcd: String, limit: Int = 15, offset: Int = 0) // 만족도별 목록
 	case getStatisticsCategory(dateYM: String, economicActivityDvcd: String)
 	
-	// MARK: - Staticstics Category
+	// MARK: - Category Main
+	case getCategoryList(CategoryListReqDto) // 카테고리 코드별 월간 경제활동 목록 조회
+
+	// MARK: - Category Edit
 	case getCategory(CategoryReqDto)
 	case getCategoryHeader(CategoryReqDto)
-	case getCategoryList(CategoryListReqDto) // 카테고리 코드별 월간 경제활동 목록 조회
 
 	// MARK: - Profile
 	case exportToExcel

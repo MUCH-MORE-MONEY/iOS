@@ -72,8 +72,8 @@ extension StatisticsReactor {
 			return .concat([
 				.just(.setLoading(true)),
 				self.getStatisticsAverage(currentState.date), // 평균값
-				self.getCategory(currentState.date, "01"),	// 지출 카테고리
-				self.getCategory(currentState.date, "02"),	// 수입 카테고리
+				self.getCategory(currentState.date, "02"),	// 지출 카테고리
+				self.getCategory(currentState.date, "01"),	// 수입 카테고리
 				self.getStatisticsList(currentState.date, "01", true), // 아쉬운 List
 				self.getStatisticsList(currentState.date, "03", true), // 만족스러운 List
 				self.getStatisticsList(currentState.date, self.currentState.satisfaction.id, true), // viewWillAppear일때, 현재 만족도를 불러와야한다.
@@ -113,8 +113,8 @@ extension StatisticsReactor {
 					.just(.setLoading(true)),
 					.just(.setDate(date)),
 					self.getStatisticsAverage(date),
-					self.getCategory(date, "01"),
 					self.getCategory(date, "02"),
+					self.getCategory(date, "01"),
 					self.getStatisticsList(date, "01", true),
 					self.getStatisticsList(date, "03", true),
 					.just(.setLoading(false)),
@@ -158,8 +158,8 @@ extension StatisticsReactor {
 			newState.activityList += list
 		case .fetchCategoryBar(let list, let type):
 			switch type {
-			case "01": newState.payBarList = list
-			case "02": newState.earnBarList = list
+			case "01": newState.earnBarList = list
+			case "02": newState.payBarList = list
 			default: break
 			}
 		case .setDate(let date):

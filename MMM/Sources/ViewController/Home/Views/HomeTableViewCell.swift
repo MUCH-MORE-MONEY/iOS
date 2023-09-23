@@ -55,7 +55,7 @@ extension HomeTableViewCell {
 	func setData(data: EconomicActivity, last: Bool) {
 		// 이미지 비동기 처리
 		DispatchQueue.main.async {
-			self.thumbnailImageView.setImage(urlStr: data.imageUrl, defaultImage: data.type == "01" ? R.Icon.coinPay40 : R.Icon.coinEarn40)
+			self.thumbnailImageView.setImage(urlStr: data.imageUrl, defaultImage: data.type == "01" ? R.Icon.coinEarn40 : R.Icon.coinPay40)
 			
 			self.separator.isHidden = last
 		}
@@ -68,7 +68,7 @@ extension HomeTableViewCell {
 		titleLabel.text = data.title
 		memoLabel.text = data.memo
 		categoryLabel.text = data.categoryTitle
-		plusMinusImage.image = data.type == "01" ? R.Icon.minus16 : R.Icon.plus16
+		plusMinusImage.image = data.type == "01" ? R.Icon.plus16 : R.Icon.minus16
 		priceLabel.text = data.amount.withCommas()
 		
 		let padding: CGFloat = 24

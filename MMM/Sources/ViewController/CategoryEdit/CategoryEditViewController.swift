@@ -73,6 +73,7 @@ final class CategoryEditViewController: BaseViewControllerWithNav, View {
 	
 	// MARK: - UI Components
 	//	private lazy var refreshControl: UIRefreshControl = .init()
+	private lazy var checkButton = UIButton()
 	private lazy var collectionView: UICollectionView = .init(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
 	
 	init(mode: Mode) {
@@ -99,6 +100,10 @@ final class CategoryEditViewController: BaseViewControllerWithNav, View {
 extension CategoryEditViewController {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
 	private func bindAction(_ reactor: CategoryEditReactor) {
+		checkButton.rx.tap
+			.subscribe(onNext: {
+				self.navigationController?.popViewController(animated: true)
+			}).disposed(by: disposeBag)
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
@@ -162,6 +167,14 @@ extension CategoryEditViewController {
 		super.setAttribute()
 		
 		view.backgroundColor = R.Color.gray900
+		navigationItem.rightBarButtonItem = UIBarButtonItem(customView: checkButton)
+
+		// Navigation Bar Right Button
+		checkButton = checkButton.then {
+			$0.setTitle("확인", for: .normal)
+			$0.setTitleColor(R.Color.white.withAlphaComponent(0.7), for: .highlighted)
+			$0.titleLabel?.font = R.Font.body1
+		}
 		
 		collectionView = collectionView.then {
 			$0.dataSource = dataSource

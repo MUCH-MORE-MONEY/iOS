@@ -97,7 +97,7 @@ extension CategoryReactor {
 		var categoryList = respose.data
 		var sections: [CategorySectionModel] = []
 
-		for category in categoryList {
+		for category in categoryList.sorted(by: { $0.ratio > $1.ratio }) {
 			let categoryitems: [CategoryItem] = category.lowwer.map { categoryLowwer -> CategoryItem in
 				return .base(.init(categoryLowwer: categoryLowwer))
 			}

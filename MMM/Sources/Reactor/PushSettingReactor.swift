@@ -28,7 +28,6 @@ final class PushSettingReactor: Reactor {
         
         //        case setPresentTextDetail(PushResDto, Error?)
         case updatePushAgreeSwitch(PushAgreeUpdateResDto, Error?)
-        case getSwitchState(PushAgreeListSelectResDto, Error?)
         
         case setNewsPushSwitch(Bool)
         case setCustomPushSwitch(Bool)
@@ -74,8 +73,6 @@ extension PushSettingReactor {
                 .just(.setPresentDetailView(true)),
                 .just(.setPresentDetailView(false))])
             
-            //        case .didTapTextSettingButton(let request):
-            //            return push(request)
         case .didTapTextSettingButton:
             return Observable.concat([
                 .just(.setPresentSheetView(true)),
@@ -101,17 +98,14 @@ extension PushSettingReactor {
         
         switch mutation {
         case .pushSettingAvailable(let isOn):
-            print("isOn : \(isOn)")
             newState.isShowPushAlert = isOn
             
-        case .getSwitchState(let response, let error):
-            newState.pushList = response.selectedList
-            
-
-            
-            //        case .setPresentTextDetail(let response, let error):
-            //            //            newState.isPresentTextDetail = true
-            //            newState.pushMessage = response
+            if !isOn {
+                newState.isNewsPushSwitchOn = false
+                newState.isCustomPushSwitchOn = false
+                Common.setNewsPushSwitch(false)
+                Common.setCustomPushSwitch(false)
+            }
             
         case .updatePushAgreeSwitch(let response, let error):
             newState.isNewsPushSwitchOn.toggle()
@@ -138,19 +132,6 @@ extension PushSettingReactor {
 
 // MARK: - Actions
 extension PushSettingReactor {
-    func pushAgreeListSelect() -> Observable<Mutation> {
-        return MMMAPIService().pushAgreeListSelect()
-            .map { (response, error) -> Mutation in
-                return .getSwitchState(response, error)
-            }
-    }
-    
-    //    func push(_ request: PushReqDto) -> Observable<Mutation>{
-    //        return MMMAPIService().push(request)
-    //            .map { (response, error) -> Mutation in
-    //                return .setPresentTextDetail(response, error)
-    //            }
-    //    }
     
     func pushAgreeUpdate(_ request: PushAgreeUpdateReqDto) -> Observable<Mutation> {
         return MMMAPIService().pushAgreeUpdate(request)

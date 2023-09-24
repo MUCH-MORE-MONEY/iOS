@@ -90,14 +90,13 @@ extension PushSettingViewController {
     private func bindState(_ reactor: PushSettingReactor) {
         
         // FIXME: -
-        // 뷰 최초 진입 시 알람 설정 메시지 띄우기
+        // 뷰 최초 진입 시 알람 설정 메시지 띄우기 && 푸쉬 설정이 꺼져있으면 토글 false
         reactor.state
             .map { $0.isShowPushAlert }
             .distinctUntilChanged()
-            .filter { !$0 }
             .bind(onNext: showAlertMessage)
             .disposed(by: disposeBag)
-        
+                
         // FIXME: - 네트워크 테스트 코드
         //        reactor.state
         //            .compactMap { $0.pushMessage }
@@ -108,28 +107,6 @@ extension PushSettingViewController {
         //            }
         //            .disposed(by: disposeBag)
         
-        //        reactor.state
-        //            .subscribe(on: MainScheduler.instance)
-        //            .map { $0.isEventSwitchOn }
-        //            .bind { [weak self] data in
-        //                guard let self = self else { return }
-        //                self.eventSwitch.isOn = data
-        //            }
-        //            .disposed(by: disposeBag)
-        
-        
-        
-        //        reactor.state
-        //            .filter { !$0.isInit }
-        //            .map { $0.pushList }
-        //            .filter { !$0.isEmpty }
-        //            .bind { [weak self] list in
-        //                guard let self = self else { return }
-        //                self.eventSwitch.isOn = list[0].pushAgreeYN == "Y" ? true : false
-        //                self.infoSwitch.isOn = list[1].pushAgreeYN == "Y" ? true : false
-        //
-        //            }
-        //            .disposed(by: disposeBag)
         
         
         // 맞춤 알림 on 일때 버튼 활성화
@@ -152,16 +129,26 @@ extension PushSettingViewController {
 private extension PushSettingViewController {
     private func presentDetailViewController(_ isPresent: Bool) {
         let vc = PushSettingDetailViewController()
-		vc.reactor = PushSettingDetailReactor(provider: ServiceProvider.shared)
+        vc.reactor = PushSettingDetailReactor(provider: ServiceProvider.shared)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    private func showAlertMessage(_ isFirst: Bool) {
+    private func showAlertMessage(_ isPushOn: Bool) {
         let title = "앱 알림이 꺼져있어요"
         let message = "알림을 받기 위해 앱 알림을 켜주세요"
         
-        DispatchQueue.main.async {
-            self.showAlert(alertType: .canCancel, titleText: title, contentText: message, cancelButtonText: "닫기", confirmButtonText: "알림 켜기")
+        if isPushOn {
+            
+        } else {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.showAlert(alertType: .canCancel, titleText: title, contentText: message, cancelButtonText: "닫기", confirmButtonText: "알림 켜기")
+                self.newsPushSwitch.isOn = isPushOn
+                self.customPushSwitch.isOn = isPushOn
+                
+                self.newsPushSwitch.isEnabled = false
+                self.customPushSwitch.isEnabled = false
+            }
         }
     }
     
@@ -173,15 +160,15 @@ private extension PushSettingViewController {
 }
 
 extension PushSettingViewController {
-	override func setAttribute() {
+    override func setAttribute() {
         title = "푸시 알림 설정"
-		view.backgroundColor = R.Color.gray100
-
+        view.backgroundColor = R.Color.gray100
+        
         newsPushStackView.addArrangedSubviews(newsPushMainLabel, newsPushSwitch)
         customPushStackView.addArrangedSubviews(customPushMainLabel, customPushSwitch)
         
         view.addSubviews(newsPushStackView, newsPushSubLabel, divider, customPushStackView, customPushSubLabel, timeSettingLabel, textSettingLabel, timeSettingView, textSettingView)
-
+        
         
         newsPushStackView = newsPushStackView.then {
             $0.axis = .horizontal
@@ -256,7 +243,7 @@ extension PushSettingViewController {
         }
     }
     
-	override func setLayout() {
+    override func setLayout() {
         newsPushStackView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(24)
             $0.left.equalToSuperview().offset(24)
@@ -305,7 +292,7 @@ extension PushSettingViewController {
             $0.left.equalToSuperview().offset(24)
             $0.right.equalToSuperview().offset(-24)
         }
-
+        
         textSettingView.snp.makeConstraints {
             $0.top.equalTo(textSettingLabel.snp.bottom).offset(12)
             $0.left.equalToSuperview().offset(24)

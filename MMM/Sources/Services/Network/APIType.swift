@@ -21,6 +21,7 @@ enum MMMAPI {
 	case getStatisticsCategory(dateYM: String, economicActivityDvcd: String)
 	
 	// MARK: - Category Main
+	case getCategoryList(CategoryDetailListReqDto) // 경제활동구분 코드 기준 카테고리별 월간 경제활동 목록 전체 조회
 	case getCategoryDetailList(CategoryDetailListReqDto) // 카테고리 코드별 월간 경제활동 목록 조회
 
 	// MARK: - Category Edit
@@ -49,24 +50,27 @@ extension MMMAPI: BaseNetworkService {
 			return "/push/agree/list/select"
 		case .pushAgreeUpdate:
 			return "/push/agree/update"
-		case .getStaticsticsAverage(let dateYM):
+		case let .getStaticsticsAverage(dateYM):
 			return "/economic_activity/\(dateYM)/average"
-		case .getStatisticsList(let dateYM, let valueScoreDvcd, _, _):
+		case let .getStatisticsList(dateYM, valueScoreDvcd, _, _):
 			return "/economic_activity/\(dateYM)/\(valueScoreDvcd)/list"
-		case .getStatisticsCategory(let dateYM, let economicActivityDvcd):
+		case let .getStatisticsCategory(dateYM, economicActivityDvcd):
 			return "/economic_activity/\(dateYM)/\(economicActivityDvcd)/upper-category/list"
-		case .getCategoryEdit(let request):
-			return "/economic-activity-category/list/\(request.economicActivityDvcd)"
-		case .getCategoryEditHeader(let request):
-			return "/economic-activity-category/list/upper/\(request.economicActivityDvcd)"
-		case .getCategoryDetailList(let request):
+		case let .getCategoryList(request):
+			return "/economic_activity/\(request.dateYM)/\(request.economicActivityDvcd)/category/list"
+		case let .getCategoryDetailList(request):
 			return "/economic_activity/\(request.dateYM)/\(request.economicActivityDvcd)/category/detail/list"
+		case let .getCategoryEdit(request):
+			return "/economic-activity-category/list/\(request.economicActivityDvcd)"
+		case let .getCategoryEditHeader(request):
+			return "/economic-activity-category/list/upper/\(request.economicActivityDvcd)"
 		case .exportToExcel:
 			return "/economic_activity/excel/select"
 		case .getSummary:
 			return "/economic_activity/summary/select"
 		case .withdraw:
 			return "/login/delete"
+
 		}
 	}
 	
@@ -77,7 +81,7 @@ extension MMMAPI: BaseNetworkService {
 			return .post
 		case .getStaticsticsAverage, .getStatisticsList, .getStatisticsCategory:
 			return .get
-		case .getCategoryEdit, .getCategoryEditHeader, .getCategoryDetailList:
+		case .getCategoryList, .getCategoryDetailList, .getCategoryEdit, .getCategoryEditHeader:
 			return .get
 		case .exportToExcel, .getSummary, .withdraw:
 			return .post
@@ -100,7 +104,7 @@ extension MMMAPI: BaseNetworkService {
 			return .requestPlain
 		case let .getStatisticsList(_, _, limit, offset):
 			return .requestParameters(parameters: ["limit":limit, "offset":offset], encoding: URLEncoding.default)
-		case .getCategoryEdit, .getCategoryEditHeader:
+		case .getCategoryList, .getCategoryEdit, .getCategoryEditHeader:
 			return .requestPlain
 		case let .getCategoryDetailList(request):
 			return .requestParameters(parameters: ["economicActivityCategoryCd": request.economicActivityCategoryCd], encoding: URLEncoding.default)

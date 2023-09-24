@@ -91,7 +91,7 @@ extension CategorySectionHeader {
 		}
 		
 		titleLabel.snp.makeConstraints {
-			$0.top.equalToSuperview().inset(UI.contentMargin.top)
+			$0.centerY.equalTo(radioButton)
 			$0.leading.equalTo(radioButton.snp.trailing).offset(UI.priceLabelMargin.left)
 		}
 		

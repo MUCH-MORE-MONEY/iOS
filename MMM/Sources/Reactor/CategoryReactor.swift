@@ -27,6 +27,7 @@ final class CategoryReactor: Reactor {
 	struct State {
 		var date: Date
 		var payHeaders: [CategoryHeader] = []
+		var earnHeaders: [CategoryHeader] = []
 		var paySections: [CategorySectionModel] = []
 		var earnSections: [CategorySectionModel] = []
 		var nextScreen: Category?
@@ -75,7 +76,7 @@ extension CategoryReactor {
 		case .setPaySections(let sections):
 			newState.paySections = sections
 		case .setEarnHeaders(let headers):
-			newState.payHeaders = headers
+			newState.earnHeaders = headers
 		case .setEarnSections(let sections):
 			newState.earnSections = sections
 		case .setNextScreen(let nextScreen):
@@ -108,15 +109,15 @@ extension CategoryReactor {
 				}
 
 				if request.economicActivityDvcd == "01" { // 지출
-					return .setPaySections(makeSections(respose: response))
+					return .setPaySections(makeSections(respose: response, type: "01"))
 				} else { // 수입
-					return .setEarnSections(makeSections(respose: response))
+					return .setEarnSections(makeSections(respose: response, type: "02"))
 				}
 			}
 	}
 	
 	// Section에 따른 Data 주입
-	private func makeSections(respose: CategoryResDto) -> [CategorySectionModel] {
+	private func makeSections(respose: CategoryResDto, type: String) -> [CategorySectionModel] {
 		var data = respose.data.selectListOutputDto
 		
 		if data.isEmpty { // 임시
@@ -125,7 +126,7 @@ extension CategoryReactor {
 		
 		var sections: [CategorySectionModel] = []
 
-		for header in currentState.payHeaders {
+		for header in type == "01" ? currentState.payHeaders : currentState.earnHeaders {
 			let categoryitems: [CategoryItem] = data.filter { $0.upperOrderNum == header.id }.map { category -> CategoryItem in
 				return .base(.init(category: category))
 			}

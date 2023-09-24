@@ -49,16 +49,24 @@ final class CategoryContentViewController: BaseViewController, View {
 			
 			return cell
 		}
-	} configureSupplementaryView: { [weak self] dataSource, collectionView, _, indexPath -> UICollectionReusableView in
+	} configureSupplementaryView: { [weak self] dataSource, collectionView, kind, indexPath -> UICollectionReusableView in
 		guard let thisReactor = self?.reactor else { return .init() }
 		
-		switch dataSource[indexPath.section].model {
-		case .base:
-			guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: String(describing: CategorySectionHeader.self), for: indexPath) as? CategorySectionHeader else { return .init() }
-			let sectionInfo = dataSource.sectionModels[indexPath.section].model.header
+		if kind == UICollectionView.elementKindSectionHeader {
+			switch dataSource[indexPath.section].model {
+			case .base:
+				guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: String(describing: CategorySectionHeader.self), for: indexPath) as? CategorySectionHeader else { return .init() }
+				let sectionInfo = dataSource.sectionModels[indexPath.section].model.header
+				
+				header.setDate(radio: 27.0, title: "\(sectionInfo.title)", price: "\(sectionInfo.price)", type: self?.mode.rawValue ?? "01")
+				return header
+			}
+		} else {
+			guard let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: String(describing: CategorySectionFooter.self), for: indexPath) as? CategorySectionFooter else { return .init() }
 			
-			header.setDate(radio: 27.0, title: "\(sectionInfo.title)", price: "\(sectionInfo.price)", type: self?.mode.rawValue ?? "01")
-			return header
+			let count = self?.mode == .pay ? thisReactor.currentState.payHeaders.count : thisReactor.currentState.earnHeaders.count
+			footer.setData(isLast: indexPath.section == count - 1) // 마지막 섹션은 separator 숨기기
+			return footer
 		}
 	}
 	
@@ -149,12 +157,13 @@ extension CategoryContentViewController {
 		group.interItemSpacing = .fixed(UI.cellSpacingMargin)
 		group.contentInsets = .init(top: 0, leading: 192, bottom: 0, trailing: 0)
 		
-		let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(0)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .topLeading)
-		header.contentInsets = .init(top: 2, leading: 0, bottom: 0, trailing: 0)
+		let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(0.1)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .topLeading)
+		
+		let separtor = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(1)), elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
 		
 		let section: NSCollectionLayoutSection = .init(group: group)
 		section.boundarySupplementaryItems = [.init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)]
-		section.boundarySupplementaryItems = [header]
+		section.boundarySupplementaryItems = [header, separtor]
 		section.contentInsets = .init(top: UI.sectionMargin.top, leading: UI.sectionMargin.left, bottom: UI.sectionMargin.bottom, trailing: UI.sectionMargin.right)
 		
 		return section
@@ -177,6 +186,7 @@ extension CategoryContentViewController {
 			//			$0.refreshControl = refreshControl
 			$0.register(CategoryCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: CategoryCollectionViewCell.self))
 			$0.register(CategorySectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: String(describing: CategorySectionHeader.self))
+			$0.register(CategorySectionFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: String(describing: CategorySectionFooter.self))
 			$0.showsHorizontalScrollIndicator = false
 			$0.backgroundColor = R.Color.gray900
 		}

@@ -1,8 +1,8 @@
 //
-//  CategoryContentViewController.swift
+//  CategoryEditViewController.swift
 //  MMM
 //
-//  Created by geonhyeong on 2023/09/15.
+//  Created by geonhyeong on 2023/09/24.
 //
 
 import Then
@@ -13,7 +13,7 @@ import ReactorKit
 import RxDataSources
 
 // 상속하지 않으려면 final 꼭 붙이기
-final class CategoryContentViewController: BaseViewController, View {
+final class CategoryEditViewController: BaseViewController, View {
 	typealias Reactor = CategoryReactor
 	typealias DataSource = RxCollectionViewSectionedReloadDataSource<CategorySectionModel> // SectionModelType 채택
 	
@@ -96,7 +96,7 @@ final class CategoryContentViewController: BaseViewController, View {
 	}
 }
 //MARK: - Bind
-extension CategoryContentViewController {
+extension CategoryEditViewController {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
 	private func bindAction(_ reactor: CategoryReactor) {
 		// CollectionView cell select
@@ -133,7 +133,7 @@ extension CategoryContentViewController {
 	}
 }
 //MARK: - Action
-extension CategoryContentViewController {
+extension CategoryEditViewController {
 	// Section별 Cell Layout
 	func makeLayout(sections: [CategorySectionModel]) -> UICollectionViewCompositionalLayout {
 		let layout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, _ in
@@ -170,7 +170,7 @@ extension CategoryContentViewController {
 	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
-extension CategoryContentViewController {
+extension CategoryEditViewController {
 	// 초기 셋업할 코드들
 	override func setAttribute() {
 		super.setAttribute()
@@ -203,36 +203,6 @@ extension CategoryContentViewController {
 		
 		collectionView.snp.makeConstraints {
 			$0.top.leading.trailing.bottom.equalToSuperview()
-		}
-	}
-}
-// MARK: - UICollectionView DelegateFlowLayout
-extension CategoryContentViewController: UICollectionViewDelegateFlowLayout {
-	// 지정된 섹션의 헤더뷰의 크기를 반환하는 메서드. 크기를 지정하지 않으면 화면에 보이지 않습니다.
-	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-		return CGSize(width: (collectionView.frame.width) / 2, height: UI.headerHeight)
-	}
-	
-	// 지정된 섹션의 여백을 반환하는 메서드.
-	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-		return UI.sectionMargin
-	}
-	
-	// 지정된 섹션의 셀 사이의 최소간격을 반환하는 메서드.
-	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-		return UI.cellSpacingMargin
-	}
-	
-	// 지정된 섹션의 행 사이 간격 최소 간격을 반환하는 메서드. scrollDirection이 horizontal이면 수직이 행이 되고 vertical이면 수평이 행이 된다.
-	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-		return UI.cellSpacingMargin
-	}
-	
-	// 지정된 셀의 크기를 반환하는 메서드
-	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-		switch dataSource[indexPath.section].items[indexPath.row] {
-		case .base:
-			return CGSize(width: collectionView.frame.width - UI.cellWidthMargin, height: UI.categoryCellHeight)
 		}
 	}
 }

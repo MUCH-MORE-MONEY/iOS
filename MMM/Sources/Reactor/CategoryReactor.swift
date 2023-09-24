@@ -127,8 +127,8 @@ extension CategoryReactor {
 		var sections: [CategorySectionModel] = []
 
 		for header in type == "01" ? currentState.payHeaders : currentState.earnHeaders {
-			let categoryitems: [CategoryItem] = data.filter { $0.upperOrderNum == header.id }.map { category -> CategoryItem in
-				return .base(.init(category: category))
+			let categoryitems: [CategoryItem] = data.filter { $0.upperOrderNum == header.id }.map { categoryEdit -> CategoryItem in
+				return .base(.init(categoryEdit: categoryEdit))
 			}
 			
 			let model: CategorySectionModel = .init(model: .base(header, categoryitems), items: categoryitems)

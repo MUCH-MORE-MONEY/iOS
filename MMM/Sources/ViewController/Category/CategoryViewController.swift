@@ -70,20 +70,20 @@ extension CategoryViewController {
 		reactor.state
 			.compactMap { $0.nextScreen }
 			.distinctUntilChanged() // 중복값 무시
-			.subscribe(onNext: { [weak self] category in
-				self?.willPushViewController(category: category)
+			.subscribe(onNext: { [weak self] categoryEdit in
+				self?.willPushViewController(categoryEdit: categoryEdit)
 			})
 			.disposed(by: disposeBag)
 	}
 }
 //MARK: - Action
 extension CategoryViewController {
-	private func willPushViewController(category: CategoryEdit) {
+	private func willPushViewController(categoryEdit: CategoryEdit) {
 		guard let reactor = self.reactor else { return }
 
 		let vc = CategoryDetailViewController()
 		let type = segmentedControl.selectedSegmentIndex == 0 ? "01" : "02"
-		vc.reactor = CategoryDetailReactor(date: reactor.currentState.date, type: type, category: category)
+		vc.reactor = CategoryDetailReactor(date: reactor.currentState.date, type: type, categoryEdit: categoryEdit)
 
 		navigationController?.pushViewController(vc, animated: true)
 	}

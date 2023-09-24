@@ -25,8 +25,8 @@ final class CategoryCollectionViewCellReactor: Reactor {
 	let initialState: State
 	
 	// 초기 State 설정
-	init(category: CategoryEdit) {
-		initialState = .init(category: category)
+	init(categoryEdit: CategoryEdit) {
+		initialState = .init(category: categoryEdit)
 	}
 }
 //MARK: - Mutate, Reduce

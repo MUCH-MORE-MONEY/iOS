@@ -34,8 +34,8 @@ final class CategoryDetailReactor: Reactor {
 	// MARK: Properties
 	let initialState: State
 	
-	init(date: Date, type: String, category: CategoryEdit) {
-		initialState = State(date: date, type: type, category: category)
+	init(date: Date, type: String, categoryEdit: CategoryEdit) {
+		initialState = State(date: date, type: type, category: categoryEdit)
 		
 		// 뷰가 최초 로드 될 경우
 		action.onNext(.loadData)

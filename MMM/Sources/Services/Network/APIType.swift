@@ -60,7 +60,7 @@ extension MMMAPI: BaseNetworkService {
 		case .getCategoryEditHeader(let request):
 			return "/economic-activity-category/list/upper/\(request.economicActivityDvcd)"
 		case .getCategoryDetailList(let request):
-			return "/economic_activity/\(request.dateYM)/category/\(request.economicActivityCategoryCd)/list"
+			return "/economic_activity/\(request.dateYM)/\(request.economicActivityDvcd)/category/detail/list"
 		case .exportToExcel:
 			return "/economic_activity/excel/select"
 		case .getSummary:
@@ -90,18 +90,20 @@ extension MMMAPI: BaseNetworkService {
 	/// parameter || body가 없을 경우 .requestPlain 설정
 	var task: Moya.Task {
 		switch self {
-		case .push(let request):
+		case let .push(request):
 			return .requestParameters(parameters: request.asDictionary, encoding: JSONEncoding.default)
 		case .pushAgreeListSelect:
 			return .requestPlain
-		case .pushAgreeUpdate(let request):
+		case let .pushAgreeUpdate(request):
 			return .requestParameters(parameters: request.asDictionary, encoding: JSONEncoding.default)
 		case .getStaticsticsAverage, .getStatisticsCategory:
 			return .requestPlain
-		case .getStatisticsList(_, _, let limit, let offset):
+		case let .getStatisticsList(_, _, limit, offset):
 			return .requestParameters(parameters: ["limit":limit, "offset":offset], encoding: URLEncoding.default)
-		case .getCategoryEdit, .getCategoryEditHeader, .getCategoryDetailList:
+		case .getCategoryEdit, .getCategoryEditHeader:
 			return .requestPlain
+		case let .getCategoryDetailList(request):
+			return .requestParameters(parameters: ["economicActivityCategoryCd": request.economicActivityCategoryCd], encoding: URLEncoding.default)
 		case .exportToExcel, .getSummary, .withdraw:
 			return .requestPlain
 		}

@@ -23,6 +23,7 @@ final class CategoryDetailReactor: Reactor {
 	// 현재 상태를 기록
 	struct State {
 		var date: Date
+		var type: String
 		var category: Category
 		var list: [EconomicActivity] = []
 		var detailData: (IndexPath: IndexPath, info: EconomicActivity)?
@@ -33,8 +34,8 @@ final class CategoryDetailReactor: Reactor {
 	// MARK: Properties
 	let initialState: State
 	
-	init(date: Date, category: Category) {
-		initialState = State(date: date, category: category)
+	init(date: Date, type: String, category: Category) {
+		initialState = State(date: date, type: type, category: category)
 		
 		// 뷰가 최초 로드 될 경우
 		action.onNext(.loadData)
@@ -48,7 +49,7 @@ extension CategoryDetailReactor {
 		case .loadData:
 			let category = currentState.category
 			return .concat([
-				loadData(CategoryDetailListReqDto(dateYM: currentState.date.getFormattedYM(), economicActivityCategoryCd: category.id))
+				loadData(CategoryDetailListReqDto(dateYM: currentState.date.getFormattedYM(), economicActivityCategoryCd: category.id, economicActivityDvcd: currentState.type))
 			])
 		case .selectCell(let indexPath, let data):
 			return .concat([
@@ -77,7 +78,7 @@ extension CategoryDetailReactor {
 extension CategoryDetailReactor {
 	// 데이터 가져오기
 	private func loadData(_ request: CategoryDetailListReqDto) -> Observable<Mutation> {
-		return MMMAPIService().getCategoryList(request)
+		return MMMAPIService().getCategoryDetailList(request)
 			.map { (response, error) -> Mutation in
 				return .setList(response.data.selectListMonthlyByCategoryCdOutputDto)
 			}

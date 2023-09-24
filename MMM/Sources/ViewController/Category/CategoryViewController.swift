@@ -82,7 +82,8 @@ extension CategoryViewController {
 		guard let reactor = self.reactor else { return }
 
 		let vc = CategoryDetailViewController()
-		vc.reactor = CategoryDetailReactor(date: reactor.currentState.date, category: category)
+		let type = segmentedControl.selectedSegmentIndex == 0 ? "01" : "02"
+		vc.reactor = CategoryDetailReactor(date: reactor.currentState.date, type: type, category: category)
 
 		navigationController?.pushViewController(vc, animated: true)
 	}

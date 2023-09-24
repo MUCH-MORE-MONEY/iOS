@@ -113,7 +113,7 @@ extension SatisfactionBottomSheetViewController {
 			.map { $0.satisfactionList }
 			.bind(to: tableView.rx.items) { tv, row, data in
 				let index = IndexPath(row: row, section: 0)
-				let cell = tv.dequeueReusableCell(withIdentifier: "SatisfactionTableViewCell", for: index) as! StatisticsSatisfactionTableViewCell
+				let cell = tv.dequeueReusableCell(withIdentifier: "StatisticsSatisfactionTableViewCell", for: index) as! StatisticsSatisfactionTableViewCell
 				// Cell data 설정
 				cell.setData(satisfaction: data)
 				cell.selectionStyle = .none // 테이블뷰 선택 색상 제거

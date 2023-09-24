@@ -54,7 +54,7 @@ extension CategoryViewController {
 	private func bindAction(_ reactor: CategoryReactor) {
 		editButton.rx.tap
 			.subscribe(onNext: {
-//				guard let self = self else { return }
+				self.willPushEditViewController()
 			}).disposed(by: disposeBag)
 		
 		segmentedControl.rx.selectedSegmentIndex
@@ -83,6 +83,15 @@ extension CategoryViewController {
 
 		let vc = CategoryDetailViewController()
 		vc.reactor = CategoryDetailReactor(date: reactor.currentState.date, category: category)
+
+		navigationController?.pushViewController(vc, animated: true)
+	}
+	
+	private func willPushEditViewController() {
+		guard let reactor = self.reactor else { return }
+
+		let vc = CategoryEditViewController(mode: segmentedControl.selectedSegmentIndex == 0 ? .pay : .earn)
+		vc.reactor = CategoryEditReactor(type: segmentedControl.selectedSegmentIndex == 0 ? "01" : "02", date: reactor.currentState.date)
 
 		navigationController?.pushViewController(vc, animated: true)
 	}

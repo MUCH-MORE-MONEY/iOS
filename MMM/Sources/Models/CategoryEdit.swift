@@ -1,5 +1,5 @@
 //
-//  Category.swift
+//  CategoryEdit.swift
 //  MMM
 //
 //  Created by geonhyeong on 2023/09/16.

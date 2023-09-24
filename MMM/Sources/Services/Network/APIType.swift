@@ -21,11 +21,11 @@ enum MMMAPI {
 	case getStatisticsCategory(dateYM: String, economicActivityDvcd: String)
 	
 	// MARK: - Category Main
-	case getCategoryDetailList(CategoryListReqDto) // 카테고리 코드별 월간 경제활동 목록 조회
+	case getCategoryDetailList(CategoryDetailListReqDto) // 카테고리 코드별 월간 경제활동 목록 조회
 
 	// MARK: - Category Edit
-	case getCategoryEdit(CategoryReqDto)
-	case getCategoryEditHeader(CategoryReqDto)
+	case getCategoryEdit(CategoryEditReqDto)
+	case getCategoryEditHeader(CategoryEditReqDto)
 
 	// MARK: - Profile
 	case exportToExcel

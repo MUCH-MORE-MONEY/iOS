@@ -51,10 +51,10 @@ extension CategoryReactor {
 		switch action {
 		case .loadData:
 			return .concat([
-				loadHeaderData(CategoryReqDto(economicActivityDvcd: "01")),
-				loadCategoryData(CategoryReqDto(economicActivityDvcd: "01")),
-				loadHeaderData(CategoryReqDto(economicActivityDvcd: "02")),
-				loadCategoryData(CategoryReqDto(economicActivityDvcd: "02"))
+				loadHeaderData(CategoryEditReqDto(economicActivityDvcd: "01")),
+				loadCategoryData(CategoryEditReqDto(economicActivityDvcd: "01")),
+				loadHeaderData(CategoryEditReqDto(economicActivityDvcd: "02")),
+				loadCategoryData(CategoryEditReqDto(economicActivityDvcd: "02"))
 			])
 		case .selectCell(_, let categoryItem):
 			switch categoryItem {
@@ -89,7 +89,7 @@ extension CategoryReactor {
 //MARK: - Action
 extension CategoryReactor {
 	// 데이터 Header 가져오기
-	private func loadHeaderData(_ request: CategoryReqDto) -> Observable<Mutation> {
+	private func loadHeaderData(_ request: CategoryEditReqDto) -> Observable<Mutation> {
 		return MMMAPIService().getCategoryEditHeader(request)
 			.map { (response, error) -> Mutation in
 				if request.economicActivityDvcd == "01" { // 지출
@@ -101,7 +101,7 @@ extension CategoryReactor {
 	}
 	
 	// 데이터 가져오기
-	private func loadCategoryData(_ request: CategoryReqDto) -> Observable<Mutation> {
+	private func loadCategoryData(_ request: CategoryEditReqDto) -> Observable<Mutation> {
 		return MMMAPIService().getCategoryEdit(request)
 			.map { [weak self] (response, error) -> Mutation in
 				guard let self = self else {

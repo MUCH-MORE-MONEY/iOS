@@ -45,8 +45,8 @@ extension CategoryEditReactor {
 		switch action {
 		case let .loadData(type):
 			return .concat([
-				loadHeaderData(CategoryReqDto(economicActivityDvcd: type)),
-				loadCategoryData(CategoryReqDto(economicActivityDvcd: type))
+				loadHeaderData(CategoryEditReqDto(economicActivityDvcd: type)),
+				loadCategoryData(CategoryEditReqDto(economicActivityDvcd: type))
 			])
 		}
 	}
@@ -68,7 +68,7 @@ extension CategoryEditReactor {
 //MARK: - Action
 extension CategoryEditReactor {
 	// 데이터 Header 가져오기
-	private func loadHeaderData(_ request: CategoryReqDto) -> Observable<Mutation> {
+	private func loadHeaderData(_ request: CategoryEditReqDto) -> Observable<Mutation> {
 		return MMMAPIService().getCategoryEditHeader(request)
 			.map { (response, error) -> Mutation in
 				return .setHeaders(response.data.selectListUpperOutputDto)
@@ -76,7 +76,7 @@ extension CategoryEditReactor {
 	}
 	
 	// 데이터 가져오기
-	private func loadCategoryData(_ request: CategoryReqDto) -> Observable<Mutation> {
+	private func loadCategoryData(_ request: CategoryEditReqDto) -> Observable<Mutation> {
 		return MMMAPIService().getCategoryEdit(request)
 			.map { (response, error) -> Mutation in
 				return .setSections(self.makeSections(respose: response, type: request.economicActivityDvcd))

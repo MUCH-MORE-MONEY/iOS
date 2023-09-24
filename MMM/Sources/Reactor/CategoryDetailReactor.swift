@@ -48,7 +48,7 @@ extension CategoryDetailReactor {
 		case .loadData:
 			let category = currentState.category
 			return .concat([
-				loadData(CategoryListReqDto(dateYM: currentState.date.getFormattedYM(), economicActivityCategoryCd: category.id))
+				loadData(CategoryDetailListReqDto(dateYM: currentState.date.getFormattedYM(), economicActivityCategoryCd: category.id))
 			])
 		case .selectCell(let indexPath, let data):
 			return .concat([
@@ -76,7 +76,7 @@ extension CategoryDetailReactor {
 //MARK: - Action
 extension CategoryDetailReactor {
 	// 데이터 가져오기
-	private func loadData(_ request: CategoryListReqDto) -> Observable<Mutation> {
+	private func loadData(_ request: CategoryDetailListReqDto) -> Observable<Mutation> {
 		return MMMAPIService().getCategoryList(request)
 			.map { (response, error) -> Mutation in
 				return .setList(response.data.selectListMonthlyByCategoryCdOutputDto)

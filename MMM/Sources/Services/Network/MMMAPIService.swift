@@ -60,11 +60,11 @@ protocol MMMAPIServiceble: BaseAPIService {
 	func getStatisticsCategory(dateYM: String, economicActivityDvcd: String) -> Observable<(StatisticsCategoryResDto, Error?)>
 	
 	// MARK: - Category Main 요청 API
-	func getCategoryDetailList(_ request: CategoryListReqDto) -> Observable<(CategoryDetailListResDto, Error?)>
+	func getCategoryDetailList(_ request: CategoryDetailListReqDto) -> Observable<(CategoryDetailListResDto, Error?)>
 
 	// MARK: - Category Edit 요청 API
-    func getCategoryEdit(_ request: CategoryReqDto) -> Observable<(CategoryEditResDto, Error?)>
-	func getCategoryEditHeader(_ request: CategoryReqDto) -> Observable<(CategoryEditHeaderResDto, Error?)>
+    func getCategoryEdit(_ request: CategoryEditReqDto) -> Observable<(CategoryEditResDto, Error?)>
+	func getCategoryEditHeader(_ request: CategoryEditReqDto) -> Observable<(CategoryEditHeaderResDto, Error?)>
 
     // MARK: - Profile 요청 API
     func exportToExcel() -> Observable<(ExportResDto, Error?)>
@@ -111,19 +111,19 @@ struct MMMAPIService: MMMAPIServiceble {
 	
 	// MARK: - Category Main 요청 API
 	// 카테고리 코드별 월간 경제활동 목록 조회
-	func getCategoryDetailList(_ request: CategoryListReqDto) -> RxSwift.Observable<(CategoryDetailListResDto, Error?)> {
+	func getCategoryDetailList(_ request: CategoryDetailListReqDto) -> RxSwift.Observable<(CategoryDetailListResDto, Error?)> {
 		return provider().request(MMMAPI.getCategoryDetailList(request), type: CategoryDetailListResDto.self).asObservable()
 	}
 
 	
 	// MARK: - Category Edit 요청 API
 	// 경제활동카테고리 목록 조회 API
-	func getCategoryEdit(_ request: CategoryReqDto) -> RxSwift.Observable<(CategoryEditResDto, Error?)> {
+	func getCategoryEdit(_ request: CategoryEditReqDto) -> RxSwift.Observable<(CategoryEditResDto, Error?)> {
 		return provider().request(MMMAPI.getCategoryEdit(request), type: CategoryEditResDto.self).asObservable()
 	}
 	
 	// 경제활동상위카테고리 목록 조회 API
-	func getCategoryEditHeader(_ request: CategoryReqDto) -> RxSwift.Observable<(CategoryEditHeaderResDto, Error?)> {
+	func getCategoryEditHeader(_ request: CategoryEditReqDto) -> RxSwift.Observable<(CategoryEditHeaderResDto, Error?)> {
 		return provider().request(MMMAPI.getCategoryEditHeader(request), type: CategoryEditHeaderResDto.self).asObservable()
 	}
 	

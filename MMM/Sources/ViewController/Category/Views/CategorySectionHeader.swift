@@ -14,7 +14,8 @@ final class CategorySectionHeader: BaseCollectionReusableView {
 	// MARK: - Constants
 	private enum UI {
 		static let priceLabelMargin: UIEdgeInsets = .init(top: 8, left: 8, bottom: 0, right: 8)
-		static let contentMargin: UIEdgeInsets = .init(top: 12, left: 24, bottom: 0, right: 24)
+		static let contentMargin: UIEdgeInsets = .init(top: 12, left: 24, bottom: 0, right: 30)
+		static let headerRightMargin: CGFloat = 30
 	}
 	
 	// MARK: - UI Components
@@ -57,7 +58,6 @@ extension CategorySectionHeader {
 			$0.setTitleColor(R.Color.white, for: .normal)
 			$0.titleLabel?.font = R.Font.title3
 			$0.layer.cornerRadius = 3
-//			$0.contentEdgeInsets = .init(top: 0, left: 5, bottom: 0, right: 5) // touch 영역 늘리기
 			$0.isEnabled = true
 		}
 		
@@ -85,7 +85,7 @@ extension CategorySectionHeader {
 		
 		radioButton.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(UI.contentMargin.top)
-			$0.leading.equalToSuperview().inset(UI.contentMargin.left)
+			$0.leading.equalToSuperview()
 			$0.width.equalTo(43)
 			$0.height.equalTo(24)
 		}
@@ -93,11 +93,13 @@ extension CategorySectionHeader {
 		titleLabel.snp.makeConstraints {
 			$0.centerY.equalTo(radioButton)
 			$0.leading.equalTo(radioButton.snp.trailing).offset(UI.priceLabelMargin.left)
+			$0.width.equalTo(self.frame.width / 2 - (UI.headerRightMargin))
 		}
 		
 		priceLabel.snp.makeConstraints {
 			$0.top.equalTo(titleLabel.snp.bottom).offset(UI.priceLabelMargin.top)
 			$0.leading.equalTo(radioButton.snp.trailing).offset(UI.priceLabelMargin.left)
+			$0.width.equalTo(self.frame.width / 2 - (UI.headerRightMargin))
 		}
 	}
 }

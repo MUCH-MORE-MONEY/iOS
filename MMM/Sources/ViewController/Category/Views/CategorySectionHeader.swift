@@ -62,7 +62,7 @@ extension CategorySectionHeader {
 		}
 		
 		titleLabel = titleLabel.then {
-			$0.font = R.Font.body1
+			$0.font = R.Font.title3
 			$0.textColor = R.Color.gray100
 			$0.textAlignment = .left
 		}

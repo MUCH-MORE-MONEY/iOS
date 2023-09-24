@@ -16,7 +16,6 @@ final class CategoryEditCollectionViewCell: BaseCollectionViewCell, View {
 	
 	// MARK: - Constants
 	private enum UI {
-		static let priceLabelMargin: UIEdgeInsets = .init(top: 8, left: 0, bottom: 0, right: 0)
 	}
 	
 	// MARK: - UI Components

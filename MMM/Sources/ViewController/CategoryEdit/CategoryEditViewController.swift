@@ -72,6 +72,9 @@ final class CategoryEditViewController: BaseViewControllerWithNav, View {
 	}
 	
 	// MARK: - UI Components
+	private lazy var titleStackView = UIStackView()
+	private lazy var titleImageView = UIImageView()
+	private lazy var titleLabel = UILabel()
 	private lazy var checkButton = UIButton()
 	private lazy var collectionView: UICollectionView = .init(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
 	
@@ -165,8 +168,27 @@ extension CategoryEditViewController {
 		super.setAttribute()
 		
 		view.backgroundColor = R.Color.gray900
+		navigationItem.titleView = titleStackView
 		navigationItem.rightBarButtonItem = UIBarButtonItem(customView: checkButton)
 
+		// Navigation Title View
+		titleStackView = titleStackView.then {
+			$0.axis = .horizontal
+			$0.spacing = 4
+		}
+		
+		titleImageView = titleImageView.then {
+			$0.image = mode == .pay ? R.Icon.minus16 : R.Icon.plus16
+			$0.contentMode = .scaleAspectFit
+		}
+		
+		titleLabel = titleLabel.then {
+			$0.text = (mode == .pay ? "지출" : "수입") + " 카테고리 편집"
+			$0.font = R.Font.title3
+			$0.textColor = R.Color.white
+			$0.textAlignment = .left
+		}
+		
 		// Navigation Bar Right Button
 		checkButton = checkButton.then {
 			$0.setTitle("확인", for: .normal)
@@ -187,6 +209,7 @@ extension CategoryEditViewController {
 	override func setHierarchy() {
 		super.setHierarchy()
 		
+		titleStackView.addArrangedSubviews(titleImageView, titleLabel)
 		view.addSubviews(collectionView)
 	}
 	

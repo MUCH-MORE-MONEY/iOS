@@ -64,9 +64,9 @@ extension CategoryEditSectionHeader {
 		super.setLayout()
 		
 		titleLabel.snp.makeConstraints {
-			$0.centerY.equalToSuperview()
-			$0.leading.equalToSuperview().inset(UI.contentMargin)
-			$0.trailing.equalTo(231)
+			$0.top.equalToSuperview().inset(15)
+			$0.leading.equalToSuperview()
+			$0.width.equalTo(128)
 		}
 	}
 }

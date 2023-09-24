@@ -135,13 +135,13 @@ extension CategoryEditViewController {
 		items.forEach({ item in
 			switch item {
 			case .base:
-				layoutItems.append(.init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(44))))
+				layoutItems.append(.init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(24))))
 			}
 		})
 		
 		let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100)), subitems: layoutItems)
 		group.interItemSpacing = .fixed(UI.cellSpacingMargin)
-		group.contentInsets = .init(top: 0, leading: 192, bottom: 0, trailing: 0)
+		group.contentInsets = .init(top: 0, leading: 136, bottom: 0, trailing: 0)
 		
 		let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(0.1)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .topLeading)
 		

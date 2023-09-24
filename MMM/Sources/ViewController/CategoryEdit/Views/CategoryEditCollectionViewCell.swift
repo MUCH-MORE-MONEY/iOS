@@ -85,17 +85,19 @@ extension CategoryEditCollectionViewCell {
 		
 		titleLabel.snp.makeConstraints {
 			$0.top.leading.equalToSuperview()
-			$0.trailing.lessThanOrEqualTo(editButton.snp.leading).offset(4)
+			$0.trailing.lessThanOrEqualTo(editButton.snp.leading).offset(-4)
 		}
 		
 		dragButton.snp.makeConstraints {
 			$0.centerY.equalTo(titleLabel)
 			$0.trailing.equalToSuperview()
+			$0.width.height.equalTo(24)
 		}
 		
 		editButton.snp.makeConstraints {
 			$0.centerY.equalTo(titleLabel)
-			$0.trailing.equalTo(dragButton).offset(8)
+			$0.trailing.equalTo(dragButton.snp.leading).offset(-6)
+			$0.width.height.equalTo(24)
 		}
 	}
 }

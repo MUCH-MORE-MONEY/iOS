@@ -72,7 +72,6 @@ final class CategoryEditViewController: BaseViewControllerWithNav, View {
 	}
 	
 	// MARK: - UI Components
-	//	private lazy var refreshControl: UIRefreshControl = .init()
 	private lazy var checkButton = UIButton()
 	private lazy var collectionView: UICollectionView = .init(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
 	
@@ -115,7 +114,6 @@ extension CategoryEditViewController {
 			.subscribe(onNext: { this, sections in
 				guard !sections.isEmpty else { return }
 				
-//				this.collectionView.refreshControl?.endRefreshing()
 				this.dataSource.setSections(sections)
 				this.collectionView.collectionViewLayout = this.makeLayout(sections: sections)
 				this.collectionView.reloadData()

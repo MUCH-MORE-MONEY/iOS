@@ -43,7 +43,7 @@ extension CategorySectionHeader {
 	// 외부에서 입력
 	func setDate(category: Category, type: String) {
 		titleLabel.text = category.title
-		priceLabel.text = category.total.withCommas() + " 원"
+		priceLabel.text = category.dateYM.suffix(2) + "월 | " + category.total.withCommas() + " 원"
 		radioButton.backgroundColor = type == "01" ? R.Color.orange500 : R.Color.blue500
 		radioButton.setTitle("\(Int(round(category.ratio)))%", for: .normal)
 	}

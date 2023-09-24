@@ -49,11 +49,11 @@ extension CategoryDetailViewController {
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: CategoryDetailReactor) {
 		reactor.state
-			.map { $0.category }
+			.map { $0.categoryLowwer }
 			.distinctUntilChanged() // 중복값 무시
-			.subscribe(onNext: { [weak self] category in
+			.subscribe(onNext: { [weak self] categoryLowwer in
 				guard let self = self else { return }
-				self.title = category.title
+				self.title = categoryLowwer.title
 			})
 			.disposed(by: disposeBag)
 		

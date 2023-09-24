@@ -41,11 +41,11 @@ extension CategorySectionHeader {
 //MARK: - Action
 extension CategorySectionHeader {
 	// 외부에서 입력
-	func setDate(radio: Double, title: String, price: String, type: String) {
-		titleLabel.text = title
-		priceLabel.text = (Int(price) ?? 0).withCommas() + " 원"
+	func setDate(category: Category, type: String) {
+		titleLabel.text = category.title
+		priceLabel.text = category.total.withCommas() + " 원"
 		radioButton.backgroundColor = type == "01" ? R.Color.orange500 : R.Color.blue500
-		radioButton.setTitle("\(Int(round(radio)))%", for: .normal)
+		radioButton.setTitle("\(Int(round(category.ratio)))%", for: .normal)
 	}
 }
 //MARK: - Attribute & Hierarchy & Layouts

@@ -24,7 +24,7 @@ final class CategoryDetailReactor: Reactor {
 	struct State {
 		var date: Date
 		var type: String
-		var category: CategoryEdit
+		var categoryLowwer: CategoryLowwer
 		var list: [EconomicActivity] = []
 		var detailData: (IndexPath: IndexPath, info: EconomicActivity)?
 		var isPushDetail = false
@@ -34,8 +34,8 @@ final class CategoryDetailReactor: Reactor {
 	// MARK: Properties
 	let initialState: State
 	
-	init(date: Date, type: String, categoryEdit: CategoryEdit) {
-		initialState = State(date: date, type: type, category: categoryEdit)
+	init(date: Date, type: String, categoryLowwer: CategoryLowwer) {
+		initialState = State(date: date, type: type, categoryLowwer: categoryLowwer)
 		
 		// 뷰가 최초 로드 될 경우
 		action.onNext(.loadData)
@@ -47,7 +47,7 @@ extension CategoryDetailReactor {
 	func mutate(action: Action) -> Observable<Mutation> {
 		switch action {
 		case .loadData:
-			let category = currentState.category
+			let category = currentState.categoryLowwer
 			return .concat([
 				loadData(CategoryDetailListReqDto(dateYM: currentState.date.getFormattedYM(), economicActivityCategoryCd: category.id, economicActivityDvcd: currentState.type))
 			])

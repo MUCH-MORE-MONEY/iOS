@@ -9,7 +9,8 @@ import Foundation
 
 struct Category: Codable, Equatable {
 	let id, title, dateYM: String
-	let total, orderNum, ratio: Int
+	let total, orderNum: Int
+	let ratio: Double
 	let lowwer: [CategoryLowwer]
 
 	// 파라미터 이름 변경

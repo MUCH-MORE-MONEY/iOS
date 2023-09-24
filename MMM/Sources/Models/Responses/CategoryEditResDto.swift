@@ -23,7 +23,7 @@ struct CategoryEditHeaderResDto: Codable {
 
 /// 경제활동구분 코드 기준 카테고리별 월간 경제활동 목록 전체 조회 Response를 위한 데이터 타입
 struct CategoryListResDto: Decodable {
-	var data: SelectListMonthlyByCategoryCdOutputDto
+	var data: [Category]
 	var message: String?
 	var status: String
 }

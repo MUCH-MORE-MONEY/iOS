@@ -58,13 +58,13 @@ final class CategoryContentViewController: BaseViewController, View {
 				guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: String(describing: CategorySectionHeader.self), for: indexPath) as? CategorySectionHeader else { return .init() }
 				let sectionInfo = dataSource.sectionModels[indexPath.section].model.header
 				
-				header.setDate(radio: 27.0, title: "\(sectionInfo.title)", price: "\(sectionInfo.price)", type: self?.mode.rawValue ?? "01")
+				header.setDate(category: sectionInfo, type: self?.mode.rawValue ?? "01")
 				return header
 			}
 		} else {
 			guard let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: String(describing: CategorySectionFooter.self), for: indexPath) as? CategorySectionFooter else { return .init() }
 			
-			let count = self?.mode == .pay ? thisReactor.currentState.payHeaders.count : thisReactor.currentState.earnHeaders.count
+			let count = self?.mode == .pay ? thisReactor.currentState.paySections.count : thisReactor.currentState.earnSections.count
 			footer.setData(isLast: indexPath.section == count - 1) // 마지막 섹션은 separator 숨기기
 			return footer
 		}

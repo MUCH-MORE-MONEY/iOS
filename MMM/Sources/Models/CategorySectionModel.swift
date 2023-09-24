@@ -12,7 +12,7 @@ import Foundation
 typealias CategorySectionModel = AnimatableSectionModel<CategorySection, CategoryItem>
 
 enum CategorySection {
-	case base(CategoryHeader, [CategoryItem])
+	case base(Category, [CategoryItem])
 }
 
 enum CategoryItem: IdentifiableType, Equatable {
@@ -22,7 +22,7 @@ enum CategoryItem: IdentifiableType, Equatable {
 	var identity: some Hashable {
 		switch self {
 		case let .base(reactor):
-			return reactor.currentState.category.orderNum
+			return reactor.currentState.categoryLowwer.id
 		}
 	}
 	
@@ -47,7 +47,7 @@ extension CategorySection: AnimatableSectionModelType {
 		}
 	}
 	
-	var header: CategoryHeader {
+	var header: Category {
 		switch self {
 		case .base(let header, _):
 			return header

@@ -16,21 +16,17 @@ final class CategoryReactor: Reactor {
 	
 	// 처리 단위
 	enum Mutation {
-		case setPayHeaders([CategoryHeader])
-		case setEarnHeaders([CategoryHeader])
 		case setPaySections([CategorySectionModel])
 		case setEarnSections([CategorySectionModel])
-		case setNextScreen(CategoryEdit)
+		case setNextScreen(CategoryLowwer)
 	}
 	
 	// 현재 상태를 기록
 	struct State {
 		var date: Date
-		var payHeaders: [CategoryHeader] = []
-		var earnHeaders: [CategoryHeader] = []
 		var paySections: [CategorySectionModel] = []
 		var earnSections: [CategorySectionModel] = []
-		var nextScreen: CategoryEdit?
+		var nextScreen: CategoryLowwer?
 		var error = false
 	}
 	
@@ -50,17 +46,17 @@ extension CategoryReactor {
 	func mutate(action: Action) -> Observable<Mutation> {
 		switch action {
 		case .loadData:
+			let dateYM = currentState.date.getFormattedYM()
+			
 			return .concat([
-				loadHeaderData(CategoryEditReqDto(economicActivityDvcd: "01")),
-				loadCategoryData(CategoryEditReqDto(economicActivityDvcd: "01")),
-				loadHeaderData(CategoryEditReqDto(economicActivityDvcd: "02")),
-				loadCategoryData(CategoryEditReqDto(economicActivityDvcd: "02"))
+				loadData(CategoryDetailListReqDto(dateYM: dateYM, economicActivityCategoryCd: "", economicActivityDvcd: "01")),
+				loadData(CategoryDetailListReqDto(dateYM: dateYM, economicActivityCategoryCd: "", economicActivityDvcd: "02"))
 			])
 		case .selectCell(_, let categoryItem):
 			switch categoryItem {
 			case .base(let reactor):
 				return .concat([
-					.just(.setNextScreen(reactor.currentState.category))
+					.just(.setNextScreen(reactor.currentState.categoryLowwer))
 				])
 			}
 		}
@@ -71,12 +67,8 @@ extension CategoryReactor {
 		var newState = state
 		
 		switch mutation {
-		case .setPayHeaders(let headers):
-			newState.payHeaders = headers
 		case .setPaySections(let sections):
 			newState.paySections = sections
-		case .setEarnHeaders(let headers):
-			newState.earnHeaders = headers
 		case .setEarnSections(let sections):
 			newState.earnSections = sections
 		case .setNextScreen(let nextScreen):
@@ -88,50 +80,29 @@ extension CategoryReactor {
 }
 //MARK: - Action
 extension CategoryReactor {
-	// 데이터 Header 가져오기
-	private func loadHeaderData(_ request: CategoryEditReqDto) -> Observable<Mutation> {
-		return MMMAPIService().getCategoryEditHeader(request)
+	// 데이터 가져오기
+	private func loadData(_ request: CategoryDetailListReqDto) -> Observable<Mutation> {
+		return MMMAPIService().getCategoryList(request)
 			.map { (response, error) -> Mutation in
 				if request.economicActivityDvcd == "01" { // 지출
-					return .setPayHeaders(response.data.selectListUpperOutputDto)
+					return .setPaySections(self.makeSections(respose: response, type: "01"))
 				} else { // 수입
-					return .setEarnHeaders(response.data.selectListUpperOutputDto)
+					return .setEarnSections(self.makeSections(respose: response, type: "02"))
 				}
 			}
 	}
-	
-	// 데이터 가져오기
-	private func loadCategoryData(_ request: CategoryEditReqDto) -> Observable<Mutation> {
-		return MMMAPIService().getCategoryEdit(request)
-			.map { [weak self] (response, error) -> Mutation in
-				guard let self = self else {
-					return .setPaySections([])
-				}
 
-				if request.economicActivityDvcd == "01" { // 지출
-					return .setPaySections(makeSections(respose: response, type: "01"))
-				} else { // 수입
-					return .setEarnSections(makeSections(respose: response, type: "02"))
-				}
-			}
-	}
-	
 	// Section에 따른 Data 주입
-	private func makeSections(respose: CategoryEditResDto, type: String) -> [CategorySectionModel] {
-		var data = respose.data.selectListOutputDto
-		
-		if data.isEmpty { // 임시
-			data = [CategoryEdit.getDummy()]
-		}
-		
+	private func makeSections(respose: CategoryListResDto, type: String) -> [CategorySectionModel] {
+		var categoryList = respose.data
 		var sections: [CategorySectionModel] = []
 
-		for header in type == "01" ? currentState.payHeaders : currentState.earnHeaders {
-			let categoryitems: [CategoryItem] = data.filter { $0.upperOrderNum == header.id }.map { categoryEdit -> CategoryItem in
-				return .base(.init(categoryEdit: categoryEdit))
+		for category in categoryList {
+			let categoryitems: [CategoryItem] = category.lowwer.map { categoryLowwer -> CategoryItem in
+				return .base(.init(categoryLowwer: categoryLowwer))
 			}
 			
-			let model: CategorySectionModel = .init(model: .base(header, categoryitems), items: categoryitems)
+			let model: CategorySectionModel = .init(model: .base(category, categoryitems), items: categoryitems)
 			sections.append(model)
 		}
 

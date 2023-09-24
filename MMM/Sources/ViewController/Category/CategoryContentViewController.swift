@@ -120,6 +120,7 @@ extension CategoryContentViewController {
 		reactor.state
 			.map( mode == .earn ? \.earnSections : \.paySections)
 			.withUnretained(self)
+			.filter { !$0.1.isEmpty }
 			.subscribe(onNext: { this, sections in
 				guard !sections.isEmpty else { return }
 				

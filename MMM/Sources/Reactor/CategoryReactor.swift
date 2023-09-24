@@ -18,7 +18,7 @@ final class CategoryReactor: Reactor {
 	enum Mutation {
 		case setPaySections([CategorySectionModel])
 		case setEarnSections([CategorySectionModel])
-		case setNextScreen(CategoryLowwer)
+		case setNextScreen(IndexPath, CategoryLowwer)
 	}
 	
 	// 현재 상태를 기록
@@ -26,6 +26,7 @@ final class CategoryReactor: Reactor {
 		var date: Date
 		var paySections: [CategorySectionModel] = []
 		var earnSections: [CategorySectionModel] = []
+		var indexPath: IndexPath?
 		var nextScreen: CategoryLowwer?
 		var error = false
 	}
@@ -52,11 +53,11 @@ extension CategoryReactor {
 				loadData(CategoryDetailListReqDto(dateYM: dateYM, economicActivityCategoryCd: "", economicActivityDvcd: "01")),
 				loadData(CategoryDetailListReqDto(dateYM: dateYM, economicActivityCategoryCd: "", economicActivityDvcd: "02"))
 			])
-		case .selectCell(_, let categoryItem):
+		case let .selectCell(indexPath, categoryItem):
 			switch categoryItem {
 			case .base(let reactor):
 				return .concat([
-					.just(.setNextScreen(reactor.currentState.categoryLowwer))
+					.just(.setNextScreen(indexPath, reactor.currentState.categoryLowwer))
 				])
 			}
 		}
@@ -67,11 +68,12 @@ extension CategoryReactor {
 		var newState = state
 		
 		switch mutation {
-		case .setPaySections(let sections):
+		case let .setPaySections(sections):
 			newState.paySections = sections
-		case .setEarnSections(let sections):
+		case let .setEarnSections(sections):
 			newState.earnSections = sections
-		case .setNextScreen(let nextScreen):
+		case let .setNextScreen(indexPath, nextScreen):
+			newState.indexPath = indexPath
 			newState.nextScreen = nextScreen
 		}
 		
@@ -94,7 +96,7 @@ extension CategoryReactor {
 
 	// Section에 따른 Data 주입
 	private func makeSections(respose: CategoryListResDto, type: String) -> [CategorySectionModel] {
-		var categoryList = respose.data
+		let categoryList = respose.data
 		var sections: [CategorySectionModel] = []
 
 		for category in categoryList.sorted(by: { $0.ratio > $1.ratio }) {

@@ -21,6 +21,9 @@ final class CategoryDetailViewController: BaseViewControllerWithNav, View {
 	// MARK: - Properties
 	
 	// MARK: - UI Components
+	private lazy var titleStackView = UIStackView()
+	private lazy var titleLabel = UILabel()
+	private lazy var titleDescriptionLabel = UILabel()
 	private lazy var tableView = UITableView()
 
 	override func viewDidLoad() {
@@ -52,8 +55,10 @@ extension CategoryDetailViewController {
 			.map { $0.categoryLowwer }
 			.distinctUntilChanged() // 중복값 무시
 			.subscribe(onNext: { [weak self] categoryLowwer in
-				guard let self = self else { return }
-				self.title = categoryLowwer.title
+				guard let self = self, let reactor = self.reactor else { return }
+				let section = reactor.currentState.section
+				self.titleLabel.text = section.dateYM.suffix(2) + "월 " + categoryLowwer.title
+				self.titleDescriptionLabel.text = section.total.withCommas() + " 원"
 			})
 			.disposed(by: disposeBag)
 		
@@ -104,6 +109,26 @@ extension CategoryDetailViewController {
 	override func setAttribute() {
 		super.setAttribute()
 		
+		navigationItem.titleView = titleStackView
+
+		// Navigation Title View
+		titleStackView = titleStackView.then {
+			$0.axis = .vertical
+			$0.spacing = 4
+		}
+		
+		titleLabel = titleLabel.then {
+			$0.font = R.Font.title3
+			$0.textColor = R.Color.white
+			$0.textAlignment = .center
+		}
+		
+		titleDescriptionLabel = titleDescriptionLabel.then {
+			$0.font = R.Font.body3
+			$0.textColor = R.Color.gray500
+			$0.textAlignment = .center
+		}
+		
 		tableView = tableView.then {
 			$0.register(HomeTableViewCell.self)
 			$0.backgroundColor = R.Color.gray100
@@ -116,6 +141,7 @@ extension CategoryDetailViewController {
 	override func setHierarchy() {
 		super.setHierarchy()
 		
+		titleStackView.addArrangedSubviews(titleLabel, titleDescriptionLabel)
 		view.addSubviews(tableView)
 	}
 	

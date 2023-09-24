@@ -24,6 +24,7 @@ final class CategoryDetailReactor: Reactor {
 	struct State {
 		var date: Date
 		var type: String
+		var section: Category
 		var categoryLowwer: CategoryLowwer
 		var list: [EconomicActivity] = []
 		var detailData: (IndexPath: IndexPath, info: EconomicActivity)?
@@ -34,8 +35,9 @@ final class CategoryDetailReactor: Reactor {
 	// MARK: Properties
 	let initialState: State
 	
-	init(date: Date, type: String, categoryLowwer: CategoryLowwer) {
-		initialState = State(date: date, type: type, categoryLowwer: categoryLowwer)
+	init(date: Date, type: String, section: Category, categoryLowwer: CategoryLowwer) {
+		
+		initialState = State(date: date, type: type, section: section, categoryLowwer: categoryLowwer)
 		
 		// 뷰가 최초 로드 될 경우
 		action.onNext(.loadData)

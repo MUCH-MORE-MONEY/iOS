@@ -7,22 +7,22 @@
 
 import Foundation
 
-/// Category Response를 위한 데이터 타입
-struct CategoryResDto: Codable {
+/// 경제활동카테고리 목록 조회 API Response를 위한 데이터 타입
+struct CategoryEditResDto: Codable {
 	var data: CategoryList
 	var message: String?
 	var status: String
 }
 
-/// Category Header Response를 위한 데이터 타입
-struct CategoryHeaderResDto: Codable {
+/// 경제활동상위카테고리 목록 조회 API Response를 위한 데이터 타입
+struct CategoryEditHeaderResDto: Codable {
 	var data: CategoryHeaderList
 	var message: String?
 	var status: String
 }
 
-/// Category List Response를 위한 데이터 타입
-struct CategoryListResDto: Decodable {
+/// 카테고리코드 기준 월간 경제활동 상세 목록 조회 Response를 위한 데이터 타입
+struct CategoryDetailListResDto: Decodable {
 	var data: SelectListMonthlyByCategoryCdOutputDto
 	var message: String?
 	var status: String

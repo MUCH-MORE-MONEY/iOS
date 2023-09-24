@@ -69,7 +69,7 @@ extension CategoryEditReactor {
 extension CategoryEditReactor {
 	// 데이터 Header 가져오기
 	private func loadHeaderData(_ request: CategoryReqDto) -> Observable<Mutation> {
-		return MMMAPIService().getCategoryHeader(request)
+		return MMMAPIService().getCategoryEditHeader(request)
 			.map { (response, error) -> Mutation in
 				return .setHeaders(response.data.selectListUpperOutputDto)
 			}
@@ -77,14 +77,14 @@ extension CategoryEditReactor {
 	
 	// 데이터 가져오기
 	private func loadCategoryData(_ request: CategoryReqDto) -> Observable<Mutation> {
-		return MMMAPIService().getCategory(request)
+		return MMMAPIService().getCategoryEdit(request)
 			.map { (response, error) -> Mutation in
 				return .setSections(self.makeSections(respose: response, type: request.economicActivityDvcd))
 			}
 	}
 	
 	// Section에 따른 Data 주입
-	private func makeSections(respose: CategoryResDto, type: String) -> [CategoryEditSectionModel] {
+	private func makeSections(respose: CategoryEditResDto, type: String) -> [CategoryEditSectionModel] {
 		var data = respose.data.selectListOutputDto
 		
 		if data.isEmpty { // 임시

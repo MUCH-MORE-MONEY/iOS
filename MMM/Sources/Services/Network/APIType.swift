@@ -21,11 +21,11 @@ enum MMMAPI {
 	case getStatisticsCategory(dateYM: String, economicActivityDvcd: String)
 	
 	// MARK: - Category Main
-	case getCategoryList(CategoryListReqDto) // 카테고리 코드별 월간 경제활동 목록 조회
+	case getCategoryDetailList(CategoryListReqDto) // 카테고리 코드별 월간 경제활동 목록 조회
 
 	// MARK: - Category Edit
-	case getCategory(CategoryReqDto)
-	case getCategoryHeader(CategoryReqDto)
+	case getCategoryEdit(CategoryReqDto)
+	case getCategoryEditHeader(CategoryReqDto)
 
 	// MARK: - Profile
 	case exportToExcel
@@ -55,11 +55,11 @@ extension MMMAPI: BaseNetworkService {
 			return "/economic_activity/\(dateYM)/\(valueScoreDvcd)/list"
 		case .getStatisticsCategory(let dateYM, let economicActivityDvcd):
 			return "/economic_activity/\(dateYM)/\(economicActivityDvcd)/upper-category/list"
-		case .getCategory(let request):
+		case .getCategoryEdit(let request):
 			return "/economic-activity-category/list/\(request.economicActivityDvcd)"
-		case .getCategoryHeader(let request):
+		case .getCategoryEditHeader(let request):
 			return "/economic-activity-category/list/upper/\(request.economicActivityDvcd)"
-		case .getCategoryList(let request):
+		case .getCategoryDetailList(let request):
 			return "/economic_activity/\(request.dateYM)/category/\(request.economicActivityCategoryCd)/list"
 		case .exportToExcel:
 			return "/economic_activity/excel/select"
@@ -77,7 +77,7 @@ extension MMMAPI: BaseNetworkService {
 			return .post
 		case .getStaticsticsAverage, .getStatisticsList, .getStatisticsCategory:
 			return .get
-		case .getCategory, .getCategoryHeader, .getCategoryList:
+		case .getCategoryEdit, .getCategoryEditHeader, .getCategoryDetailList:
 			return .get
 		case .exportToExcel, .getSummary, .withdraw:
 			return .post
@@ -100,7 +100,7 @@ extension MMMAPI: BaseNetworkService {
 			return .requestPlain
 		case .getStatisticsList(_, _, let limit, let offset):
 			return .requestParameters(parameters: ["limit":limit, "offset":offset], encoding: URLEncoding.default)
-		case .getCategory, .getCategoryHeader, .getCategoryList:
+		case .getCategoryEdit, .getCategoryEditHeader, .getCategoryDetailList:
 			return .requestPlain
 		case .exportToExcel, .getSummary, .withdraw:
 			return .requestPlain

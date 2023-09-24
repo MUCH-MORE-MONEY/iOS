@@ -175,6 +175,7 @@
 		C4BBD28D2AC048860055FA65 /* CategoryEditSectionFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BBD28C2AC048860055FA65 /* CategoryEditSectionFooter.swift */; };
 		C4BBD28F2AC049130055FA65 /* CategoryEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BBD28E2AC049130055FA65 /* CategoryEditViewController.swift */; };
 		C4BBD2912AC0498E0055FA65 /* CategoryEditReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BBD2902AC0498E0055FA65 /* CategoryEditReactor.swift */; };
+		C4BBD2932AC04C550055FA65 /* CategoryEditSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BBD2922AC04C550055FA65 /* CategoryEditSectionModel.swift */; };
 		C4C0CAF52A1C88DC00C41FF4 /* PriceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0CAF42A1C88DC00C41FF4 /* PriceViewModel.swift */; };
 		C4C0CB022A23A07000C41FF4 /* EditPriceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0CB012A23A06F00C41FF4 /* EditPriceViewController.swift */; };
 		C4C0CB092A2474F900C41FF4 /* Ex+UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C0CB082A2474F900C41FF4 /* Ex+UILabel.swift */; };
@@ -439,6 +440,7 @@
 		C4BBD28C2AC048860055FA65 /* CategoryEditSectionFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditSectionFooter.swift; sourceTree = "<group>"; };
 		C4BBD28E2AC049130055FA65 /* CategoryEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditViewController.swift; sourceTree = "<group>"; };
 		C4BBD2902AC0498E0055FA65 /* CategoryEditReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditReactor.swift; sourceTree = "<group>"; };
+		C4BBD2922AC04C550055FA65 /* CategoryEditSectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditSectionModel.swift; sourceTree = "<group>"; };
 		C4C0CAF42A1C88DC00C41FF4 /* PriceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceViewModel.swift; sourceTree = "<group>"; };
 		C4C0CAF62A1C9B3400C41FF4 /* Ex+UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UITextField.swift"; sourceTree = "<group>"; };
 		C4C0CAFB2A1F201100C41FF4 /* Ex+UITextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UITextView.swift"; sourceTree = "<group>"; };
@@ -892,6 +894,7 @@
 				C4BBD2782ABDC8870055FA65 /* CategoryBar.swift */,
 				C4BBD27C2ABEBFB70055FA65 /* CategoryHeader.swift */,
 				C46409AF2AB590EE00A899AD /* CategorySectionModel.swift */,
+				C4BBD2922AC04C550055FA65 /* CategoryEditSectionModel.swift */,
 				C433A07029EE5516008B26DF /* EconomicActivity.swift */,
 				6A14E70A2A9DCA7F0071805D /* ModelType.swift */,
 				C4D7FC862A08942E00565291 /* Monthly.swift */,
@@ -1559,6 +1562,7 @@
 				6A04FA092A1C7EE80034C114 /* EditActivityViewModel.swift in Sources */,
 				C4170B592A94853400CE0A65 /* StatisticsActivityView.swift in Sources */,
 				C4EA5B4229FA26E0008D1564 /* HomeHeaderStackView.swift in Sources */,
+				C4BBD2932AC04C550055FA65 /* CategoryEditSectionModel.swift in Sources */,
 				6A4313E22A13046E00095041 /* BottomPageControlView.swift in Sources */,
 				C4BBD27F2ABEF6360055FA65 /* CategoryDetailReactor.swift in Sources */,
 				C4C792A62A358517007FD6AA /* SummaryResDto.swift in Sources */,

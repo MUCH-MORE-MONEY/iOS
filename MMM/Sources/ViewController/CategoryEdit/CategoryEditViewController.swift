@@ -13,9 +13,9 @@ import ReactorKit
 import RxDataSources
 
 // 상속하지 않으려면 final 꼭 붙이기
-final class CategoryEditViewController: BaseViewController, View {
-	typealias Reactor = CategoryReactor
-	typealias DataSource = RxCollectionViewSectionedReloadDataSource<CategorySectionModel> // SectionModelType 채택
+final class CategoryEditViewController: BaseViewControllerWithNav, View {
+	typealias Reactor = CategoryEditReactor
+	typealias DataSource = RxCollectionViewSectionedReloadDataSource<CategoryEditSectionModel> // SectionModelType 채택
 	
 	// MARK: - Constants
 	private enum UI {
@@ -40,9 +40,10 @@ final class CategoryEditViewController: BaseViewController, View {
 		
 		switch item {
 		case let .base(cellReactor):
-			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CategoryCollectionViewCell.self), for: indexPath) as? CategoryCollectionViewCell else { return .init() }
+			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CategoryEditCollectionViewCell.self), for: indexPath) as? CategoryEditCollectionViewCell else { return .init() }
 			
 			cell.reactor = cellReactor // reactor 주입
+			
 			let backgroundView = UIView()
 			backgroundView.backgroundColor = R.Color.gray400.withAlphaComponent(0.3)
 			cell.selectedBackgroundView = backgroundView
@@ -55,16 +56,16 @@ final class CategoryEditViewController: BaseViewController, View {
 		if kind == UICollectionView.elementKindSectionHeader {
 			switch dataSource[indexPath.section].model {
 			case .base:
-				guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: String(describing: CategorySectionHeader.self), for: indexPath) as? CategorySectionHeader else { return .init() }
+				guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: String(describing: CategoryEditSectionHeader.self), for: indexPath) as? CategoryEditSectionHeader else { return .init() }
 				let sectionInfo = dataSource.sectionModels[indexPath.section].model.header
 				
-				header.setDate(radio: 27.0, title: "\(sectionInfo.title)", price: "\(sectionInfo.price)", type: self?.mode.rawValue ?? "01")
+				header.setDate(title: "\(sectionInfo.title)")
 				return header
 			}
 		} else {
-			guard let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: String(describing: CategorySectionFooter.self), for: indexPath) as? CategorySectionFooter else { return .init() }
+			guard let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: String(describing: CategoryEditSectionFooter.self), for: indexPath) as? CategoryEditSectionFooter else { return .init() }
 			
-			let count = self?.mode == .pay ? thisReactor.currentState.payHeaders.count : thisReactor.currentState.earnHeaders.count
+			let count = thisReactor.currentState.headers.count
 			footer.setData(isLast: indexPath.section == count - 1) // 마지막 섹션은 separator 숨기기
 			return footer
 		}
@@ -72,7 +73,6 @@ final class CategoryEditViewController: BaseViewController, View {
 	
 	// MARK: - UI Components
 	//	private lazy var refreshControl: UIRefreshControl = .init()
-	private lazy var headerView: UIView = .init()
 	private lazy var collectionView: UICollectionView = .init(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
 	
 	init(mode: Mode) {
@@ -90,7 +90,7 @@ final class CategoryEditViewController: BaseViewController, View {
 		super.viewDidLoad()
 	}
 	
-	func bind(reactor: CategoryReactor) {
+	func bind(reactor: CategoryEditReactor) {
 		bindState(reactor)
 		bindAction(reactor)
 	}
@@ -98,33 +98,19 @@ final class CategoryEditViewController: BaseViewController, View {
 //MARK: - Bind
 extension CategoryEditViewController {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
-	private func bindAction(_ reactor: CategoryReactor) {
-		// CollectionView cell select
-		Observable.zip(
-			collectionView.rx.itemSelected,
-			collectionView.rx.modelSelected(type(of: dataSource).Section.Item.self)
-		)
-		.map { .selectCell($0, $1) }
-		.bind(to: reactor.action)
-		.disposed(by: disposeBag)
-		
-		// Refresh Data
-		//		refreshControl.rx.controlEvent(.valueChanged)
-		//			.map { .fetch }
-		//			.bind(to: reactor.action)
-		//			.disposed(by: disposeBag)
+	private func bindAction(_ reactor: CategoryEditReactor) {
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
-	private func bindState(_ reactor: CategoryReactor) {
+	private func bindState(_ reactor: CategoryEditReactor) {
 		// 지출 - Section별 items 전달
 		reactor.state
-			.map( mode == .earn ? \.earnSections : \.paySections)
+			.map { $0.sections }
 			.withUnretained(self)
 			.subscribe(onNext: { this, sections in
 				guard !sections.isEmpty else { return }
 				
-				//				this.collectionView.refreshControl?.endRefreshing()
+//				this.collectionView.refreshControl?.endRefreshing()
 				this.dataSource.setSections(sections)
 				this.collectionView.collectionViewLayout = this.makeLayout(sections: sections)
 				this.collectionView.reloadData()
@@ -135,7 +121,7 @@ extension CategoryEditViewController {
 //MARK: - Action
 extension CategoryEditViewController {
 	// Section별 Cell Layout
-	func makeLayout(sections: [CategorySectionModel]) -> UICollectionViewCompositionalLayout {
+	func makeLayout(sections: [CategoryEditSectionModel]) -> UICollectionViewCompositionalLayout {
 		let layout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, _ in
 			return self?.makeCategorySectionLayout(from: sections[sectionIndex].items)
 		}
@@ -143,7 +129,7 @@ extension CategoryEditViewController {
 		return layout
 	}
 	
-	func makeCategorySectionLayout(from items: [CategoryItem]) -> NSCollectionLayoutSection {
+	func makeCategorySectionLayout(from items: [CategoryEditItem]) -> NSCollectionLayoutSection {
 		var layoutItems: [NSCollectionLayoutItem] = []
 		
 		items.forEach({ item in
@@ -177,16 +163,11 @@ extension CategoryEditViewController {
 		
 		view.backgroundColor = R.Color.gray900
 		
-		//		refreshControl = refreshControl.then {
-		//			$0.transform = CGAffineTransformMakeScale(0.5, 0.5)
-		//		}
-		
 		collectionView = collectionView.then {
 			$0.dataSource = dataSource
-			//			$0.refreshControl = refreshControl
-			$0.register(CategoryCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: CategoryCollectionViewCell.self))
-			$0.register(CategorySectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: String(describing: CategorySectionHeader.self))
-			$0.register(CategorySectionFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: String(describing: CategorySectionFooter.self))
+			$0.register(CategoryEditCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: CategoryEditCollectionViewCell.self))
+			$0.register(CategoryEditSectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: String(describing: CategoryEditSectionHeader.self))
+			$0.register(CategoryEditSectionFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: String(describing: CategoryEditSectionFooter.self))
 			$0.showsHorizontalScrollIndicator = false
 			$0.backgroundColor = R.Color.gray900
 		}

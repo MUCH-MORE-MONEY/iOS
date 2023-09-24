@@ -72,7 +72,6 @@ final class CategoryContentViewController: BaseViewController, View {
 	
 	// MARK: - UI Components
 	//	private lazy var refreshControl: UIRefreshControl = .init()
-	private lazy var headerView: UIView = .init()
 	private lazy var collectionView: UICollectionView = .init(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
 	
 	init(mode: Mode) {

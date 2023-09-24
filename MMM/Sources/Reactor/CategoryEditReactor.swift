@@ -16,7 +16,7 @@ final class CategoryEditReactor: Reactor {
 	// 처리 단위
 	enum Mutation {
 		case setHeaders([CategoryHeader])
-		case setSections([CategorySectionModel])
+		case setSections([CategoryEditSectionModel])
 	}
 	
 	// 현재 상태를 기록
@@ -24,7 +24,7 @@ final class CategoryEditReactor: Reactor {
 		var type: String
 		var date: Date
 		var headers: [CategoryHeader] = []
-		var sections: [CategorySectionModel] = []
+		var sections: [CategoryEditSectionModel] = []
 		var error = false
 	}
 	
@@ -84,21 +84,21 @@ extension CategoryEditReactor {
 	}
 	
 	// Section에 따른 Data 주입
-	private func makeSections(respose: CategoryResDto, type: String) -> [CategorySectionModel] {
+	private func makeSections(respose: CategoryResDto, type: String) -> [CategoryEditSectionModel] {
 		var data = respose.data.selectListOutputDto
 		
 		if data.isEmpty { // 임시
 			data = [Category.getDummy()]
 		}
 		
-		var sections: [CategorySectionModel] = []
+		var sections: [CategoryEditSectionModel] = []
 
 		for header in currentState.headers {
-			let categoryitems: [CategoryItem] = data.filter { $0.upperOrderNum == header.id }.map { category -> CategoryItem in
+			let categoryitems: [CategoryEditItem] = data.filter { $0.upperOrderNum == header.id }.map { category -> CategoryEditItem in
 				return .base(.init(category: category))
 			}
 			
-			let model: CategorySectionModel = .init(model: .base(header, categoryitems), items: categoryitems)
+			let model: CategoryEditSectionModel = .init(model: .base(header, categoryitems), items: categoryitems)
 			sections.append(model)
 		}
 

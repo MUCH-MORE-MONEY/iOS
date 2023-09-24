@@ -88,7 +88,7 @@ extension CategoryEditReactor {
 		var data = respose.data.selectListOutputDto
 		
 		if data.isEmpty { // 임시
-			data = [Category.getDummy()]
+			data = [CategoryEdit.getDummy()]
 		}
 		
 		var sections: [CategoryEditSectionModel] = []

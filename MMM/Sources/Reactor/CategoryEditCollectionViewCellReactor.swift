@@ -18,14 +18,14 @@ final class CategoryEditCollectionViewCellReactor: Reactor {
 	
 	// 현재 상태를 기록
 	struct State {
-		let category: Category
+		let category: CategoryEdit
 	}
 	
 	// MARK: Properties
 	let initialState: State
 	
 	// 초기 State 설정
-	init(category: Category) {
+	init(category: CategoryEdit) {
 		initialState = .init(category: category)
 	}
 }

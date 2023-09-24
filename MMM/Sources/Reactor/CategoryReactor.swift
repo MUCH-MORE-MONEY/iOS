@@ -20,7 +20,7 @@ final class CategoryReactor: Reactor {
 		case setEarnHeaders([CategoryHeader])
 		case setPaySections([CategorySectionModel])
 		case setEarnSections([CategorySectionModel])
-		case setNextScreen(Category)
+		case setNextScreen(CategoryEdit)
 	}
 	
 	// 현재 상태를 기록
@@ -30,7 +30,7 @@ final class CategoryReactor: Reactor {
 		var earnHeaders: [CategoryHeader] = []
 		var paySections: [CategorySectionModel] = []
 		var earnSections: [CategorySectionModel] = []
-		var nextScreen: Category?
+		var nextScreen: CategoryEdit?
 		var error = false
 	}
 	
@@ -121,7 +121,7 @@ extension CategoryReactor {
 		var data = respose.data.selectListOutputDto
 		
 		if data.isEmpty { // 임시
-			data = [Category.getDummy()]
+			data = [CategoryEdit.getDummy()]
 		}
 		
 		var sections: [CategorySectionModel] = []

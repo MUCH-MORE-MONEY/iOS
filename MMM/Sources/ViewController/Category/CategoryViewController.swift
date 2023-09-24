@@ -78,7 +78,7 @@ extension CategoryViewController {
 }
 //MARK: - Action
 extension CategoryViewController {
-	private func willPushViewController(category: Category) {
+	private func willPushViewController(category: CategoryEdit) {
 		guard let reactor = self.reactor else { return }
 
 		let vc = CategoryDetailViewController()

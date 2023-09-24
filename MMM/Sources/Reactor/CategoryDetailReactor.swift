@@ -24,7 +24,7 @@ final class CategoryDetailReactor: Reactor {
 	struct State {
 		var date: Date
 		var type: String
-		var category: Category
+		var category: CategoryEdit
 		var list: [EconomicActivity] = []
 		var detailData: (IndexPath: IndexPath, info: EconomicActivity)?
 		var isPushDetail = false
@@ -34,7 +34,7 @@ final class CategoryDetailReactor: Reactor {
 	// MARK: Properties
 	let initialState: State
 	
-	init(date: Date, type: String, category: Category) {
+	init(date: Date, type: String, category: CategoryEdit) {
 		initialState = State(date: date, type: type, category: category)
 		
 		// 뷰가 최초 로드 될 경우

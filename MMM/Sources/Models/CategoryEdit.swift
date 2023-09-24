@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct CategoryList: Codable {
-	let selectListOutputDto: [Category]
+struct CategoryEditList: Codable {
+	let selectListOutputDto: [CategoryEdit]
 }
 
-struct Category: Codable, Equatable {
+struct CategoryEdit: Codable, Equatable {
 	let id, title, upperId, upperTitle : String
 	let orderNum, upperOrderNum: Int
 	
@@ -26,7 +26,7 @@ struct Category: Codable, Equatable {
 	}
 	
 	static func getDummy() -> Self {
-		return Category(id: "01", title: "덕질비요요요요용덕질비요요요요용", upperId: "01", upperTitle: "보기만 해도 배부른", orderNum: 1, upperOrderNum: 1)
+		return CategoryEdit(id: "01", title: "덕질비요요요요용덕질비요요요요용", upperId: "01", upperTitle: "보기만 해도 배부른", orderNum: 1, upperOrderNum: 1)
 	}
 
 }

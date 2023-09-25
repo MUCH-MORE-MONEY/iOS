@@ -114,7 +114,7 @@ extension StatisticsCategoryView {
 		// 2씩 빼는 이유는 spacing
 		for (index, info) in data.map({ floor($0.ratio * unit) - spacing }).enumerated() {
 			let isSmall = info < minimumWidth
-			let width = isSmall ? minimumWidth : cnt == 1 ? totalWidth : info
+			let width = cnt == 1 ? totalWidth : isSmall ? minimumWidth : info
 			let view = UIView()
 			view.layer.cornerRadius = isSmall ? 1 : 2.61
 			view.backgroundColor = color.withAlphaComponent(alphaList[index])

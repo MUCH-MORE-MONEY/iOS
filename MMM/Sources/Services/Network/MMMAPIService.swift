@@ -58,10 +58,14 @@ protocol MMMAPIServiceble: BaseAPIService {
     func getStatisticsAverage(_ dateYM: String) -> Observable<(StatisticsAvgResDto, Error?)>
 	func getStatisticsList(dateYM: String, valueScoreDvcd: String, limit: Int, offset: Int) -> Observable<(StatisticsListResDto, Error?)>
 	func getStatisticsCategory(dateYM: String, economicActivityDvcd: String) -> Observable<(StatisticsCategoryResDto, Error?)>
-
 	
-    // MARK: - Staticstics Category 요청 API
-    func getCategory(_ request: CategoryReqDto) -> Observable<(CategoryResDto, Error?)>
+	// MARK: - Category Main 요청 API
+	func getCategoryList(_ request: CategoryDetailListReqDto) -> Observable<(CategoryListResDto, Error?)>
+	func getCategoryDetailList(_ request: CategoryDetailListReqDto) -> Observable<(CategoryDetailListResDto, Error?)>
+
+	// MARK: - Category Edit 요청 API
+    func getCategoryEdit(_ request: CategoryEditReqDto) -> Observable<(CategoryEditResDto, Error?)>
+	func getCategoryEditHeader(_ request: CategoryEditReqDto) -> Observable<(CategoryEditHeaderResDto, Error?)>
 
     // MARK: - Profile 요청 API
     func exportToExcel() -> Observable<(ExportResDto, Error?)>
@@ -106,9 +110,26 @@ struct MMMAPIService: MMMAPIServiceble {
 		return provider().request(MMMAPI.getStatisticsCategory(dateYM: dateYM, economicActivityDvcd: economicActivityDvcd), type: StatisticsCategoryResDto.self).asObservable()
 	}
 	
-	// MARK: - Staticstics Category 요청 API
-	func getCategory(_ request: CategoryReqDto) -> RxSwift.Observable<(CategoryResDto, Error?)> {
-		return provider().request(MMMAPI.getCategory(request), type: CategoryResDto.self).asObservable()
+	// MARK: - Category Main 요청 API
+	// 경제활동구분 코드 기준 카테고리별 월간 경제활동 목록 전체 조회
+	func getCategoryList(_ request: CategoryDetailListReqDto) -> RxSwift.Observable<(CategoryListResDto, Error?)> {
+		return provider().request(MMMAPI.getCategoryList(request), type: CategoryListResDto.self).asObservable()
+	}
+	
+	// 카테고리 코드별 월간 경제활동 목록 조회
+	func getCategoryDetailList(_ request: CategoryDetailListReqDto) -> RxSwift.Observable<(CategoryDetailListResDto, Error?)> {
+		return provider().request(MMMAPI.getCategoryDetailList(request), type: CategoryDetailListResDto.self).asObservable()
+	}
+	
+	// MARK: - Category Edit 요청 API
+	// 경제활동카테고리 목록 조회 API
+	func getCategoryEdit(_ request: CategoryEditReqDto) -> RxSwift.Observable<(CategoryEditResDto, Error?)> {
+		return provider().request(MMMAPI.getCategoryEdit(request), type: CategoryEditResDto.self).asObservable()
+	}
+	
+	// 경제활동상위카테고리 목록 조회 API
+	func getCategoryEditHeader(_ request: CategoryEditReqDto) -> RxSwift.Observable<(CategoryEditHeaderResDto, Error?)> {
+		return provider().request(MMMAPI.getCategoryEditHeader(request), type: CategoryEditHeaderResDto.self).asObservable()
 	}
 	
 	// MARK: - Profile 요청 API

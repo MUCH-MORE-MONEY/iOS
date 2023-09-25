@@ -17,7 +17,7 @@ extension String {
         return removedEscape
     }
 	
-	// "yyyy-MM-dd HH:mm:ss"
+	// "yyyyMMdd"
 	func toDate() -> Date? {
 		let dateFormatter = DateFormatter()
 		dateFormatter.dateFormat = "yyyyMMdd"

@@ -2,31 +2,39 @@
 //  Category.swift
 //  MMM
 //
-//  Created by geonhyeong on 2023/09/16.
+//  Created by geonhyeong on 2023/09/24.
 //
 
 import Foundation
 
-struct CategoryList: Codable {
-	let selectListOutputDto: [Category]
+struct Category: Codable, Equatable {
+	let id, title, dateYM: String
+	let total, orderNum: Int
+	let ratio: Double
+	let lowwer: [CategoryLowwer]
+
+	// 파라미터 이름 변경
+	enum CodingKeys: String, CodingKey {
+		case id = "upperEconomicActivityCategoryCd"
+		case title = "upperEconomicActivityCategoryNm"
+		case total = "upperEconomicActivityCategorySumAmt"
+		case orderNum = "upperOrderNum"
+		case dateYM = "dateYM"
+		case ratio = "economicActivityCategoryRatio"
+		case lowwer = "selectListMonthlyEconomicActivityByCategoryOutputDto"
+	}
 }
 
-struct Category: Codable {
-	let title, price, upperTitle, upperPrice: String
-	let id, upperId: Int
+struct CategoryLowwer: Codable, Equatable {
+	let id, title: String
+	let total, orderNum: Int
 	
 	// 파라미터 이름 변경
 	enum CodingKeys: String, CodingKey {
+		case id = "economicActivityCategoryCd"
 		case title = "economicActivityCategoryNm"
-		case price = "economicActivityCategoryCd"
-		case id = "orderNum"
-		case upperTitle = "upperEconomicActivityCategoryNm"
-		case upperPrice = "upperEconomicActivityCategoryCd"
-		case upperId = "upperOrderNum"
+		case total = "economicActivityCategorySumAmt"
+		case orderNum = "orderNum"
 	}
-	
-	static func getDummy() -> Self {
-		return Category(title: "덕질비용", price: "10000", upperTitle: "보기만 해도 배부른", upperPrice: "10000", id: 1, upperId: 1)
-	}
-
 }
+

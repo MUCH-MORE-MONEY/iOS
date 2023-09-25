@@ -1,5 +1,5 @@
 //
-//  SatisfactionTableViewCell.swift
+//  StatisticsSatisfactionTableViewCell.swift
 //  MMM
 //
 //  Created by geonhyeong on 2023/08/23.
@@ -9,7 +9,7 @@ import Then
 import SnapKit
 
 // 상속하지 않으려면 final 꼭 붙이기
-final class SatisfactionTableViewCell: BaseTableViewCell {
+final class StatisticsSatisfactionTableViewCell: BaseTableViewCell {
 	// MARK: - Constants
 	private enum UI {
 		static let sideMargin: CGFloat = 20
@@ -30,7 +30,7 @@ final class SatisfactionTableViewCell: BaseTableViewCell {
 	}
 }
 //MARK: - Action
-extension SatisfactionTableViewCell {
+extension StatisticsSatisfactionTableViewCell {
 	// 외부에서 설정
 	func setData(satisfaction: Satisfaction) {
 		self.satisfaction = satisfaction
@@ -47,7 +47,7 @@ extension SatisfactionTableViewCell {
 	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
-extension SatisfactionTableViewCell {
+extension StatisticsSatisfactionTableViewCell {
 	// 초기 셋업할 코드들
 	override func setAttribute() {
 		super.setAttribute()

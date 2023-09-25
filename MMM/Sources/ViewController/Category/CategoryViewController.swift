@@ -69,7 +69,6 @@ extension CategoryViewController {
 	private func bindState(_ reactor: CategoryReactor) {
 		reactor.state
 			.compactMap { $0.nextScreen }
-			.distinctUntilChanged() // 중복값 무시
 			.subscribe(onNext: { [weak self] categoryLowwer in
 				self?.willPushViewController(categoryLowwer: categoryLowwer)
 			})

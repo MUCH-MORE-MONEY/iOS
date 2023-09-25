@@ -187,7 +187,7 @@ extension CategoryContentViewController {
 			$0.register(CategoryCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: CategoryCollectionViewCell.self))
 			$0.register(CategorySectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: String(describing: CategorySectionHeader.self))
 			$0.register(CategorySectionFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: String(describing: CategorySectionFooter.self))
-			$0.showsHorizontalScrollIndicator = false
+			$0.showsVerticalScrollIndicator = false
 			$0.backgroundColor = R.Color.gray900
 		}
 	}

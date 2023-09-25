@@ -201,7 +201,7 @@ extension CategoryEditViewController {
 			$0.register(CategoryEditCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: CategoryEditCollectionViewCell.self))
 			$0.register(CategoryEditSectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: String(describing: CategoryEditSectionHeader.self))
 			$0.register(CategoryEditSectionFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: String(describing: CategoryEditSectionFooter.self))
-			$0.showsHorizontalScrollIndicator = false
+			$0.showsVerticalScrollIndicator = false
 			$0.backgroundColor = R.Color.gray900
 		}
 	}

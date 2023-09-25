@@ -311,6 +311,8 @@
 		6A2B5D5A2A9735D500CCBFBE /* DetailTimeSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailTimeSettingView.swift; sourceTree = "<group>"; };
 		6A2B5D5C2A97415000CCBFBE /* TextSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSettingView.swift; sourceTree = "<group>"; };
 		6A2B5D5E2A9744E800CCBFBE /* TimeSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSettingView.swift; sourceTree = "<group>"; };
+		6A2CE3D62ABE9B58008C22BF /* APIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = APIConstants.swift; path = MMM/Sources/Services/APIConstants.swift; sourceTree = SOURCE_ROOT; };
+		6A2CE3D82ABE9D41008C22BF /* APIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = APIConstants.swift; path = MMM/Sources/Services/APIConstants.swift; sourceTree = SOURCE_ROOT; };
 		6A381E0929E8F40700E0974F /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 		6A4313E12A13046E00095041 /* BottomPageControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomPageControlView.swift; sourceTree = "<group>"; };
 		6A4F6E952A29ADA500754150 /* Ex+UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIViewController.swift"; sourceTree = "<group>"; };
@@ -418,7 +420,6 @@
 		C46409D52AB8DB8F00A899AD /* BaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
 		C46409D92AB9625E00A899AD /* BottomSheetViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController2.swift; sourceTree = "<group>"; };
 		C494A24A2A9B893300980A71 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		C494A24C2A9B893F00980A71 /* APIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIConstants.swift; sourceTree = "<group>"; };
 		C494A24E2A9B895100980A71 /* PushSettingDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushSettingDetailViewController.swift; sourceTree = "<group>"; };
 		C494A2502A9B8A0A00980A71 /* TabBarViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewModel.swift; sourceTree = "<group>"; };
 		C4BBD2632AB9DE8C0055FA65 /* StatisticsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsProvider.swift; sourceTree = "<group>"; };
@@ -606,7 +607,7 @@
 		6A14E7182A9E0BC20071805D /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				C4BBD27A2ABE0A700055FA65 /* APIConstants.swift */,
+				6A2CE3D82ABE9D41008C22BF /* APIConstants.swift */,
 				6A14E7192A9E0C140071805D /* APIType.swift */,
 				6A14E71B2A9E119C0071805D /* MMMAPIService.swift */,
 				6A77D6D52AA01F7A00CE30DB /* NetworkProtocol.swift */,
@@ -1116,6 +1117,7 @@
 				6A1276B42A99C5EE00C0B9D4 /* PushSettingDetailViewController.swift */,
 				C494A24E2A9B895100980A71 /* PushSettingDetailViewController.swift */,
 				C494A24C2A9B893F00980A71 /* APIConstants.swift */,
+				6A2CE3D62ABE9B58008C22BF /* APIConstants.swift */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -1584,6 +1586,8 @@
 				6A0F234029DBA8AA0063673B /* DataExportViewController.swift in Sources */,
 				C4BBD2642AB9DE8C0055FA65 /* StatisticsProvider.swift in Sources */,
 				6A14E7092A9DCA720071805D /* PushReqDto.swift in Sources */,
+				6A2CE3D72ABE9B58008C22BF /* APIConstants.swift in Sources */,
+				6A14E7092A9DCA720071805D /* PushReqDto.swift in Sources */,
 				6A25E4482AA84D9A0055EA29 /* WeekCollectionViewCell.swift in Sources */,
 				C44807E329E649A300D4B090 /* HomeViewModel.swift in Sources */,
 				C46409B62AB5987800A899AD /* CategoryCollectionViewCell.swift in Sources */,
@@ -1606,7 +1610,6 @@
 				C4EA5B4029FA1A40008D1564 /* HomeHeaderView.swift in Sources */,
 				6A8B776329FF92CC0095ECFC /* Constants.swift in Sources */,
 				C4DBAA3929DEAE0200D1BB97 /* CountAnimationStackView.swift in Sources */,
-				C4BBD27B2ABE0A700055FA65 /* APIConstants.swift in Sources */,
 				C46409B22AB593C100A899AD /* CategoryCollectionViewCellReactor.swift in Sources */,
 				6A1BAD4529E6550100818086 /* OnboardingViewModel.swift in Sources */,
 				6A14E7152A9DD4600071805D /* Ex+String.swift in Sources */,

@@ -184,9 +184,9 @@ extension CategoryContentViewController {
 		collectionView = collectionView.then {
 			$0.dataSource = dataSource
 			//			$0.refreshControl = refreshControl
-			$0.register(CategoryCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: CategoryCollectionViewCell.self))
-			$0.register(CategorySectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: String(describing: CategorySectionHeader.self))
-			$0.register(CategorySectionFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: String(describing: CategorySectionFooter.self))
+			$0.register(CategoryCollectionViewCell.self)
+			$0.register(CategorySectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
+			$0.register(CategorySectionFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter)
 			$0.showsVerticalScrollIndicator = false
 			$0.backgroundColor = R.Color.gray900
 		}

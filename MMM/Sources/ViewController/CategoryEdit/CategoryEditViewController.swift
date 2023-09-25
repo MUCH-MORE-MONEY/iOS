@@ -198,9 +198,9 @@ extension CategoryEditViewController {
 		
 		collectionView = collectionView.then {
 			$0.dataSource = dataSource
-			$0.register(CategoryEditCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: CategoryEditCollectionViewCell.self))
-			$0.register(CategoryEditSectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: String(describing: CategoryEditSectionHeader.self))
-			$0.register(CategoryEditSectionFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: String(describing: CategoryEditSectionFooter.self))
+			$0.register(CategoryEditCollectionViewCell.self)
+			$0.register(CategoryEditSectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
+			$0.register(CategoryEditSectionFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter)
 			$0.showsVerticalScrollIndicator = false
 			$0.backgroundColor = R.Color.gray900
 		}

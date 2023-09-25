@@ -100,14 +100,7 @@ extension CategoryReactor {
 		var sections: [CategorySectionModel] = []
 
 		for category in categoryList.sorted(by: { $0.ratio > $1.ratio }) {
-			let categoryitems: [CategoryItem] = category.lowwer.sorted {
-				// 정렬 우선순위 : 1.total, 2.title
-				if $0.total == $1.total {
-					return $0.title < $1.title
-				} else {
-					return $0.total > $1.total
-				}
-			}.map { categoryLowwer -> CategoryItem in
+			let categoryitems: [CategoryItem] = category.lowwer.map { categoryLowwer -> CategoryItem in
 				return .base(.init(categoryLowwer: categoryLowwer))
 			}
 			

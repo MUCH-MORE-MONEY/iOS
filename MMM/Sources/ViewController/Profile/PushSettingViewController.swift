@@ -82,8 +82,10 @@ extension PushSettingViewController {
         // 알림 문구 지정 버튼
         customPushTextSettingView.rx.tapGesture()
             .when(.recognized)
-            .map { _ in .didTapCustomPushTextSettingView }
-            .bind(to: reactor.action)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.presentBottomSheet()
+            })
             .disposed(by: disposeBag)
     }
     
@@ -130,14 +132,8 @@ extension PushSettingViewController {
             .disposed(by: disposeBag)
         
         
-        // 알림 문구 지정
-        reactor.state
-            .map { $0.isPresentSheetView }
-            .filter { $0 }
-            .bind { _ in
-                print("눌림")
-            }
-            .disposed(by: disposeBag)
+
+
     }
 }
 
@@ -178,6 +174,12 @@ private extension PushSettingViewController {
     
     private func configureNewsPushSwitch(_ isOn: Bool) {
         Common.setNewsPushSwitch(isOn)
+    }
+    
+    private func presentBottomSheet() {
+        let vc = DateBottomSheetViewController(height: 360)
+//        vc.reactor = CustomPushTextSettingReactor(provider: reactor.provider)
+        self.present(vc, animated: true, completion: nil)
     }
 }
 
@@ -342,3 +344,4 @@ extension PushSettingViewController: CustomAlertDelegate {
     
     func didAlertCacelButton() { }
 }
+

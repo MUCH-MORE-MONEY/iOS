@@ -13,9 +13,9 @@ import UserNotifications
 final class PushSettingReactor: Reactor {
     enum Action {
         case viewAppear
-        case didTapTimeSettingButton
-        //        case didTapTextSettingButton(PushReqDto)
-        case didTapTextSettingButton
+        case didTapCustomPushTimeSettingView
+//        case didTapTextSettingButton(PushReqDto)
+        case didTapCustomPushTextSettingView
         case newsPushSwitchToggle(Bool)
         case customPushSwitchToggle(Bool)
     }
@@ -24,7 +24,7 @@ final class PushSettingReactor: Reactor {
         case pushSettingAvailable(Bool)
         
         case setPresentDetailView(Bool)
-        case setPresentSheetView(Bool)
+        case setPresentSheetView(Bool)  // 맞춤 알림 시트
         
         //        case setPresentTextDetail(PushResDto, Error?)
         case updatePushAgreeSwitch(PushAgreeUpdateResDto, Error?)
@@ -68,12 +68,12 @@ extension PushSettingReactor {
                 return Disposables.create()
             }
             
-        case .didTapTimeSettingButton:
+        case .didTapCustomPushTimeSettingView:
             return Observable.concat([
                 .just(.setPresentDetailView(true)),
                 .just(.setPresentDetailView(false))])
             
-        case .didTapTextSettingButton:
+        case .didTapCustomPushTextSettingView:
             return Observable.concat([
                 .just(.setPresentSheetView(true)),
                 .just(.setPresentSheetView(false))])

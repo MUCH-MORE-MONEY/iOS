@@ -25,11 +25,11 @@ final class PushSettingViewController: BaseViewControllerWithNav, View {
     private lazy var customPushSwitch = UISwitch()
     private lazy var customPushSubLabel = UILabel()
     
-    private lazy var timeSettingLabel = UILabel()
-    private lazy var timeSettingView = TimeSettingView()
+    private lazy var customPushTimeSettingLabel = UILabel()
+    private lazy var customPushTimeSettingView = CustomPushTimeSettingView()
     
-    private lazy var textSettingLabel = UILabel()
-    private lazy var textSettingView = TextSettingView()
+    private lazy var customPushTextSettingLabel = UILabel()
+    private lazy var customPushTextSettingView = CustomPushTextSettingView()
     
     private lazy var divider = UIView()
     // MARK: - Properties
@@ -73,16 +73,16 @@ extension PushSettingViewController {
             .disposed(by: disposeBag)
         
         // 알림 시간 지정 버튼
-        timeSettingView.rx.tapGesture()
+        customPushTimeSettingView.rx.tapGesture()
             .when(.recognized)
-            .map { _ in .didTapTimeSettingButton }
+            .map { _ in .didTapCustomPushTimeSettingView }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
         // 알림 문구 지정 버튼
-        textSettingView.rx.tapGesture()
+        customPushTextSettingView.rx.tapGesture()
             .when(.recognized)
-            .map { _ in .didTapTextSettingButton }
+            .map { _ in .didTapCustomPushTextSettingView }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
@@ -107,7 +107,7 @@ extension PushSettingViewController {
         //            }
         //            .disposed(by: disposeBag)
         
-        
+        // 푸쉬 알림
         reactor.state
             .map { $0.isNewsPushSwitchOn }
             .distinctUntilChanged()
@@ -127,6 +127,16 @@ extension PushSettingViewController {
             .map { $0.isPresentDetailView }
             .filter { $0 }
             .bind(onNext: presentDetailViewController)
+            .disposed(by: disposeBag)
+        
+        
+        // 알림 문구 지정
+        reactor.state
+            .map { $0.isPresentSheetView }
+            .filter { $0 }
+            .bind { _ in
+                print("눌림")
+            }
             .disposed(by: disposeBag)
     }
 }
@@ -160,8 +170,8 @@ private extension PushSettingViewController {
     
     // 스위치 상태에 따른 버튼 비/활성화
     private func configureCustomPushSwitch(_ isOn: Bool) {
-        self.textSettingView.configure(isOn)
-        self.timeSettingView.configure(isOn)
+        self.customPushTextSettingView.configure(isOn)
+        self.customPushTimeSettingView.configure(isOn)
         // UserDefaults에 현재 스위치 상태 값 저장
         Common.setCustomPushSwitch(isOn)
     }
@@ -179,7 +189,7 @@ extension PushSettingViewController {
         newsPushStackView.addArrangedSubviews(newsPushMainLabel, newsPushSwitch)
         customPushStackView.addArrangedSubviews(customPushMainLabel, customPushSwitch)
         
-        view.addSubviews(newsPushStackView, newsPushSubLabel, divider, customPushStackView, customPushSubLabel, timeSettingLabel, textSettingLabel, timeSettingView, textSettingView)
+        view.addSubviews(newsPushStackView, newsPushSubLabel, divider, customPushStackView, customPushSubLabel, customPushTimeSettingLabel, customPushTextSettingLabel, customPushTimeSettingView, customPushTextSettingView)
         
         
         newsPushStackView = newsPushStackView.then {
@@ -234,23 +244,23 @@ extension PushSettingViewController {
             $0.textColor = R.Color.gray800
         }
         
-        timeSettingLabel = timeSettingLabel.then {
+        customPushTimeSettingLabel = customPushTimeSettingLabel.then {
             $0.text = "알림 시간 지정"
             $0.font = R.Font.title1
             $0.textColor = R.Color.gray800
         }
         
-        textSettingLabel = textSettingLabel.then {
+        customPushTextSettingLabel = customPushTextSettingLabel.then {
             $0.text = "알람 문구 지정"
             $0.font = R.Font.title1
             $0.textColor = R.Color.gray800
         }
         
-        timeSettingView = timeSettingView.then {
+        customPushTimeSettingView = customPushTimeSettingView.then {
             $0.layer.cornerRadius = 4
         }
         
-        textSettingView = textSettingView.then {
+        customPushTextSettingView = customPushTextSettingView.then {
             $0.layer.cornerRadius = 4
         }
     }
@@ -287,26 +297,26 @@ extension PushSettingViewController {
             $0.right.equalToSuperview().offset(-24)
         }
         
-        timeSettingLabel.snp.makeConstraints {
+        customPushTimeSettingLabel.snp.makeConstraints {
             $0.top.equalTo(customPushSubLabel.snp.bottom).offset(24)
             $0.left.equalToSuperview().offset(24)
             $0.right.equalToSuperview().offset(-24)
         }
         
-        timeSettingView.snp.makeConstraints {
-            $0.top.equalTo(timeSettingLabel.snp.bottom).offset(12)
+        customPushTimeSettingView.snp.makeConstraints {
+            $0.top.equalTo(customPushTimeSettingLabel.snp.bottom).offset(12)
             $0.left.equalToSuperview().offset(24)
             $0.right.equalToSuperview().offset(-24)
         }
         
-        textSettingLabel.snp.makeConstraints {
-            $0.top.equalTo(timeSettingView.snp.bottom).offset(24)
+        customPushTextSettingLabel.snp.makeConstraints {
+            $0.top.equalTo(customPushTimeSettingView.snp.bottom).offset(24)
             $0.left.equalToSuperview().offset(24)
             $0.right.equalToSuperview().offset(-24)
         }
         
-        textSettingView.snp.makeConstraints {
-            $0.top.equalTo(textSettingLabel.snp.bottom).offset(12)
+        customPushTextSettingView.snp.makeConstraints {
+            $0.top.equalTo(customPushTextSettingLabel.snp.bottom).offset(12)
             $0.left.equalToSuperview().offset(24)
             $0.right.equalToSuperview().offset(-24)
         }

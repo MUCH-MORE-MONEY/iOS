@@ -9,7 +9,7 @@ import UIKit
 import Then
 import SnapKit
 
-final class TimeSettingView: UIView {
+final class CustomPushTimeSettingView: UIView {
     // MARK: - UI Components
     private lazy var mainLabel = UILabel()
     private lazy var imageView = UIImageView()
@@ -26,7 +26,7 @@ final class TimeSettingView: UIView {
 }
 
 // MARK: - Actions
-extension TimeSettingView {
+extension CustomPushTimeSettingView {
     func configure(_ isOn: Bool) {
         if isOn {
             DispatchQueue.main.async {
@@ -45,7 +45,7 @@ extension TimeSettingView {
     }
 }
 //MARK: - Attribute & Hierarchy & Layouts
-extension TimeSettingView {
+extension CustomPushTimeSettingView {
     private func setup() {
         setAttribute()
         setLayout()

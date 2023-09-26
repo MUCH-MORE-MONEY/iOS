@@ -35,7 +35,12 @@ final class CustomPushTextSettingViewController: BottomSheetViewController2, Vie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+    }
+    
+    override func viewDidLayoutSubviews() {
+        // UnderLine 호출
+        super.viewDidLayoutSubviews()
+        textField.setUnderLine(color: R.Color.orange500)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -104,6 +109,10 @@ extension CustomPushTextSettingViewController {
         
         textField = textField.then {
             $0.placeholder = "나만의 알림 문구를 적어주세요"
+            $0.font = R.Font.h2
+            $0.textColor = R.Color.gray900
+            $0.setClearButton(with: R.Icon.cancel, mode: .whileEditing)
+            $0.becomeFirstResponder()
         }
     }
     

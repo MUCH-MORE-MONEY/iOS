@@ -43,11 +43,8 @@ final class CategoryEditViewController: BaseViewControllerWithNav, View {
 			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CategoryEditCollectionViewCell.self), for: indexPath) as? CategoryEditCollectionViewCell else { return .init() }
 			
 			cell.reactor = cellReactor // reactor 주입
-			
-			let backgroundView = UIView()
-			backgroundView.backgroundColor = R.Color.gray400.withAlphaComponent(0.3)
-			cell.selectedBackgroundView = backgroundView
-			
+			cell.isUserInteractionEnabled = false // click disable
+
 			return cell
 		}
 	} configureSupplementaryView: { [weak self] dataSource, collectionView, kind, indexPath -> UICollectionReusableView in

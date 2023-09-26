@@ -108,11 +108,17 @@ extension PushSettingViewController {
         //            .disposed(by: disposeBag)
         
         
+        reactor.state
+            .map { $0.isNewsPushSwitchOn }
+            .distinctUntilChanged()
+            .bind(onNext: configureNewsPushSwitch)
+            .disposed(by: disposeBag)
         
         // 맞춤 알림 on 일때 버튼 활성화
         reactor.state
             .map { $0.isCustomPushSwitchOn }
-            .bind(onNext: configureViews)
+            .distinctUntilChanged()
+            .bind(onNext: configureCustomPushSwitch)
             .disposed(by: disposeBag)
         
         // 맞춤 알림 on && detail 화면 전환
@@ -153,9 +159,15 @@ private extension PushSettingViewController {
     }
     
     // 스위치 상태에 따른 버튼 비/활성화
-    private func configureViews(_ isOn: Bool) {
+    private func configureCustomPushSwitch(_ isOn: Bool) {
         self.textSettingView.configure(isOn)
         self.timeSettingView.configure(isOn)
+        // UserDefaults에 현재 스위치 상태 값 저장
+        Common.setCustomPushSwitch(isOn)
+    }
+    
+    private func configureNewsPushSwitch(_ isOn: Bool) {
+        Common.setNewsPushSwitch(isOn)
     }
 }
 

@@ -119,11 +119,9 @@ extension PushSettingReactor {
             
         case .setNewsPushSwitch(let isOn):
             newState.isNewsPushSwitchOn = isOn
-            Common.setNewsPushSwitch(isOn)
             
         case .setCustomPushSwitch(let isOn):
             newState.isCustomPushSwitchOn = isOn
-            Common.setCustomPushSwitch(isOn)
         }
 
         return newState

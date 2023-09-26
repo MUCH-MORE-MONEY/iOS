@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		003B832595A61A7EA6CCC014 /* Pods_MMM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A564931308C77DE145181BBF /* Pods_MMM.framework */; };
+		451805DD2AC112C0005C9155 /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451805DC2AC112C0005C9155 /* APIConstants.swift */; };
 		62AC9C989058B479AA52D81F /* Pods_MMMTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BC1A763E0587F6517C3A5E7 /* Pods_MMMTests.framework */; };
 		6A0379752A2443B9005EE07F /* Ex+UITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0379742A2443B9005EE07F /* Ex+UITextView.swift */; };
 		6A04FA052A1C4BB00034C114 /* AddImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A04FA042A1C4BB00034C114 /* AddImageView.swift */; };
@@ -53,7 +54,6 @@
 		6A2B5D5B2A9735D500CCBFBE /* DetailTimeSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2B5D5A2A9735D500CCBFBE /* DetailTimeSettingView.swift */; };
 		6A2B5D5D2A97415000CCBFBE /* TextSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2B5D5C2A97415000CCBFBE /* TextSettingView.swift */; };
 		6A2B5D5F2A9744E800CCBFBE /* TimeSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2B5D5E2A9744E800CCBFBE /* TimeSettingView.swift */; };
-		6A2CE3D72ABE9B58008C22BF /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2CE3D62ABE9B58008C22BF /* APIConstants.swift */; };
 		6A381E0A29E8F40700E0974F /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A381E0929E8F40700E0974F /* AddViewController.swift */; };
 		6A4313E22A13046E00095041 /* BottomPageControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4313E12A13046E00095041 /* BottomPageControlView.swift */; };
 		6A4F6E962A29ADA500754150 /* Ex+UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4F6E952A29ADA500754150 /* Ex+UIViewController.swift */; };
@@ -252,6 +252,7 @@
 		0020DFFCCABA708243684054 /* Pods-MMM.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMM.release.xcconfig"; path = "Target Support Files/Pods-MMM/Pods-MMM.release.xcconfig"; sourceTree = "<group>"; };
 		1E035A75D3A833AD01047796 /* Pods-MMMTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMMTests.debug.xcconfig"; path = "Target Support Files/Pods-MMMTests/Pods-MMMTests.debug.xcconfig"; sourceTree = "<group>"; };
 		2BC1A763E0587F6517C3A5E7 /* Pods_MMMTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MMMTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		451805DC2AC112C0005C9155 /* APIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIConstants.swift; sourceTree = "<group>"; };
 		58A4D4522CDE75108D91C22E /* Pods-MMM-MMMUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMM-MMMUITests.debug.xcconfig"; path = "Target Support Files/Pods-MMM-MMMUITests/Pods-MMM-MMMUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		6A0379742A2443B9005EE07F /* Ex+UITextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UITextView.swift"; sourceTree = "<group>"; };
 		6A04FA042A1C4BB00034C114 /* AddImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddImageView.swift; sourceTree = "<group>"; };
@@ -300,7 +301,6 @@
 		6A2B5D5C2A97415000CCBFBE /* TextSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSettingView.swift; sourceTree = "<group>"; };
 		6A2B5D5E2A9744E800CCBFBE /* TimeSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSettingView.swift; sourceTree = "<group>"; };
 		6A2CE3D62ABE9B58008C22BF /* APIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = APIConstants.swift; path = MMM/Sources/Services/APIConstants.swift; sourceTree = SOURCE_ROOT; };
-		6A2CE3D82ABE9D41008C22BF /* APIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = APIConstants.swift; path = MMM/Sources/Services/APIConstants.swift; sourceTree = SOURCE_ROOT; };
 		6A381E0929E8F40700E0974F /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 		6A4313E12A13046E00095041 /* BottomPageControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomPageControlView.swift; sourceTree = "<group>"; };
 		6A4F6E952A29ADA500754150 /* Ex+UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIViewController.swift"; sourceTree = "<group>"; };
@@ -583,7 +583,7 @@
 		6A14E7182A9E0BC20071805D /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				6A2CE3D82ABE9D41008C22BF /* APIConstants.swift */,
+				451805DC2AC112C0005C9155 /* APIConstants.swift */,
 				6A14E7192A9E0C140071805D /* APIType.swift */,
 				6A14E71B2A9E119C0071805D /* MMMAPIService.swift */,
 				6A77D6D52AA01F7A00CE30DB /* NetworkProtocol.swift */,
@@ -1526,7 +1526,6 @@
 				6A0F234029DBA8AA0063673B /* DataExportViewController.swift in Sources */,
 				C4BBD2642AB9DE8C0055FA65 /* StatisticsProvider.swift in Sources */,
 				6A14E7092A9DCA720071805D /* PushReqDto.swift in Sources */,
-				6A2CE3D72ABE9B58008C22BF /* APIConstants.swift in Sources */,
 				6A14E7092A9DCA720071805D /* PushReqDto.swift in Sources */,
 				6A25E4482AA84D9A0055EA29 /* WeekCollectionViewCell.swift in Sources */,
 				C44807E329E649A300D4B090 /* HomeViewModel.swift in Sources */,
@@ -1568,6 +1567,7 @@
 				C433A07129EE5516008B26DF /* EconomicActivity.swift in Sources */,
 				C41193E429D287E6003DBC15 /* Ex+Font.swift in Sources */,
 				C41193E529D287E6003DBC15 /* Ex+UIDevice.swift in Sources */,
+				451805DD2AC112C0005C9155 /* APIConstants.swift in Sources */,
 				C4C0CB092A2474F900C41FF4 /* Ex+UILabel.swift in Sources */,
 				6A1322F12A089B2900CEEC81 /* BasePaddingLabel.swift in Sources */,
 				C4D7FC872A08942E00565291 /* Monthly.swift in Sources */,

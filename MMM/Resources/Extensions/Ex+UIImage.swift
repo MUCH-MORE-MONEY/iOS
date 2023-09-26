@@ -17,7 +17,7 @@ extension UIImage {
 	}
 
 	/// Image 오른쪽에 Text를 붙여 UIImage를 만드는 기능
-	func textEmbeded(text: String, font: UIFont, color: UIColor, spacing: CGFloat) -> UIImage {
+	func textEmbeded(text: String, font: UIFont, color: UIColor, spacing: CGFloat, leftMargin: CGFloat = 0, rightMargin: CGFloat = 0) -> UIImage {
 		let paragraphStyle = NSMutableParagraphStyle()
 		paragraphStyle.alignment = .center
 		paragraphStyle.lineBreakMode = .byWordWrapping
@@ -29,10 +29,10 @@ extension UIImage {
 		]
 		
 		let expectedTextSize = (text as NSString).size(withAttributes: [.font: font])
-		let width = expectedTextSize.width + self.size.width + spacing
+		let width = leftMargin + expectedTextSize.width + self.size.width + spacing + rightMargin
 		let height = max(expectedTextSize.height, self.size.width)
 		let size: CGSize = CGSize(width: width, height: height)
-		let rect = CGRect(x: 0, y: (height - self.size.height) / 2, width: self.size.width, height: self.size.height)
+		let rect = CGRect(x: leftMargin, y: (height - self.size.height) / 2, width: self.size.width, height: self.size.height)
 
 		UIGraphicsBeginImageContextWithOptions(size, false, 0)
 		
@@ -40,7 +40,7 @@ extension UIImage {
 		self.draw(in: rect)
 
 		// Draw text
-		let textRect: CGRect = CGRect(x: self.size.width + spacing, y: 0, width: expectedTextSize.width, height: expectedTextSize.height)
+		let textRect: CGRect = CGRect(x: leftMargin + self.size.width + spacing, y: 0, width: expectedTextSize.width, height: expectedTextSize.height)
 		(text as NSString).draw(in: textRect.integral, withAttributes: attrs)
 
 		let newImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!

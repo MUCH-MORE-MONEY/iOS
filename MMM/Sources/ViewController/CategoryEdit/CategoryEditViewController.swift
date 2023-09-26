@@ -20,8 +20,8 @@ final class CategoryEditViewController: BaseViewControllerWithNav, View {
 	// MARK: - Constants
 	private enum UI {
 		static let topMargin: CGFloat = 0
-		static let cellWidthMargin: CGFloat = 48
 		static let cellSpacingMargin: CGFloat = 16
+		static let cellHeightMargin: CGFloat = 24
 		static let categoryCellHeight: CGFloat = 165
 		static let headerHeight: CGFloat = 60
 		static let sectionMargin: UIEdgeInsets = .init(top: 16, left: 24, bottom: 16, right: 24)
@@ -138,15 +138,16 @@ extension CategoryEditViewController {
 		items.forEach({ item in
 			switch item {
 			case .base:
-				layoutItems.append(.init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(24))))
+				layoutItems.append(.init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(UI.cellHeightMargin))))
 			}
 		})
-		
+
 		let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100)), subitems: layoutItems)
 		group.interItemSpacing = .fixed(UI.cellSpacingMargin)
 		group.contentInsets = .init(top: 0, leading: 136, bottom: 0, trailing: 0)
 		
-		let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(0.1)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .topLeading)
+		let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(0.395), heightDimension: .absolute(UI.cellHeightMargin)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .topLeading)
+		header.contentInsets = .init(top: UI.cellHeightMargin, leading: 0, bottom: 0, trailing: 0)
 		
 		let footer = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(60)), elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
 		

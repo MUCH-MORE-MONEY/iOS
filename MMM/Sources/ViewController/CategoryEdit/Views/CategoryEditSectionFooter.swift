@@ -14,10 +14,11 @@ final class CategoryEditSectionFooter: BaseCollectionReusableView {
 	// MARK: - Constants
 	
 	// MARK: - UI Components
-	
+	private var categoryAddButton = UIButton()
+	private var separatorView = UIView()
+
 	override init(frame: CGRect) {
 		super.init(frame: frame)
-		self.backgroundColor = R.Color.gray800
 	}
 
 	override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
@@ -42,7 +43,7 @@ extension CategoryEditSectionFooter {
 //MARK: - Bind
 extension CategoryEditSectionFooter {
 	func setData(isLast: Bool = false) {
-		self.isHidden = isLast
+		self.separatorView.isHidden = isLast
 	}
 }
 //MARK: - Action
@@ -54,15 +55,37 @@ extension CategoryEditSectionFooter {
 	override func setAttribute() {
 		super.setAttribute()
 		
+		categoryAddButton = categoryAddButton.then {
+			$0.setTitle("+ 카테고리 추가하기", for: .normal)
+			$0.setTitleColor(R.Color.gray500, for: .normal)
+			$0.setTitleColor(R.Color.gray500.withAlphaComponent(0.7), for: .highlighted)
+			$0.titleLabel?.font = R.Font.body1
+			$0.contentHorizontalAlignment = .center
+		}
+		
+		separatorView = separatorView.then {
+			$0.backgroundColor = R.Color.gray800
+		}
 	}
 	
 	override func setHierarchy() {
 		super.setHierarchy()
 		
+		addSubviews(categoryAddButton, separatorView)
 	}
 	
 	override func setLayout() {
 		super.setLayout()
 		
+		categoryAddButton.snp.makeConstraints {
+			$0.leading.trailing.equalToSuperview()
+			$0.height.equalTo(44)
+		}
+		
+		separatorView.snp.makeConstraints {
+			$0.top.equalTo(categoryAddButton.snp.bottom).offset(16)
+			$0.horizontalEdges.bottom.equalToSuperview()
+			$0.height.equalTo(1)
+		}
 	}
 }

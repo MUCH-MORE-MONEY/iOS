@@ -177,8 +177,8 @@ private extension PushSettingViewController {
     }
     
     private func presentBottomSheet() {
-        let vc = DateBottomSheetViewController(height: 360)
-//        vc.reactor = CustomPushTextSettingReactor(provider: reactor.provider)
+        let vc = CustomPushTextSettingViewController(title: "알림 문구 지정", height: 200)
+        vc.reactor = CustomPushTextSettingReactor(provider: reactor.provider)
         self.present(vc, animated: true, completion: nil)
     }
 }

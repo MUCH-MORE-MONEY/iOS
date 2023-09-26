@@ -11,15 +11,16 @@ import ReactorKit
 
 final class CustomPushTextSettingReactor: Reactor {
     enum Action {
-        
+        case setText(String)
+        case dismiss
     }
     
     enum Mutation {
-        
+        case dismiss
     }
     
     struct State {
-        
+        var dismiss: Bool = false
     }
     
     let initialState: State
@@ -34,11 +35,12 @@ final class CustomPushTextSettingReactor: Reactor {
 extension CustomPushTextSettingReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
+        case .setText(let text):
+            return provider.profileProvider.updateCustomPushText(to: text).map { _ in .dismiss }
             
+        case .dismiss:
+            return .just(.dismiss)
         }
-        
-        
-        return .empty()
     }
     
     func reduce(state: State, mutation: Mutation) -> State {
@@ -46,6 +48,8 @@ extension CustomPushTextSettingReactor {
         
         switch mutation {
             
+        case .dismiss:
+            newState.dismiss = true
         }
         
         return newState

@@ -32,6 +32,8 @@ final class PushSettingReactor: Reactor {
         case setNewsPushSwitch(Bool)
         case setCustomPushSwitch(Bool)
         
+        case setCustomPushText(String)
+        
     }
     
     struct State {
@@ -42,12 +44,15 @@ final class PushSettingReactor: Reactor {
         var isNewsPushSwitchOn = false
         var isCustomPushSwitchOn = false
         var pushList: [PushAgreeListSelectResDto.SelectedList] = []
+        var customPushLabelText: String = ""
     }
     
     let initialState: State
+    let provider: ServiceProviderProtocol
     
-    init() {
-        initialState = State()
+    init(provider: ServiceProviderProtocol) {
+        self.initialState = State()
+        self.provider = provider
     }
 }
 
@@ -86,8 +91,20 @@ extension PushSettingReactor {
         case .customPushSwitchToggle(let isOn):
             return .just(.setCustomPushSwitch(isOn))
         }
+    }
+    
+    func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
+        let event = provider.profileProvider.event.flatMap { event ->
+            Observable<Mutation> in
+            switch event {
+            case .updateCustomPushText(let text):
+                return .just(.setCustomPushText(text))
+            default:
+                return .empty()
+            }
+        }
         
-        
+        return Observable.merge(mutation, event)
     }
     
     func reduce(state: State, mutation: Mutation) -> State {
@@ -122,6 +139,9 @@ extension PushSettingReactor {
             
         case .setCustomPushSwitch(let isOn):
             newState.isCustomPushSwitchOn = isOn
+            
+        case .setCustomPushText(let text):
+            newState.customPushLabelText = text
         }
 
         return newState

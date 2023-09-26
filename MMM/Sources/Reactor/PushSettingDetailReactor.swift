@@ -50,6 +50,8 @@ extension PushSettingDetailReactor {
 			switch event {
 			case .updateDate(let date):
 				return .just(.setDate(date))
+            default:
+                return .empty()
 			}
 		}
 		

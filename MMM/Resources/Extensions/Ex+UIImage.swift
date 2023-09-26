@@ -14,5 +14,39 @@ extension UIImage {
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return newImage!
-    }
+	}
+
+	/// Image 오른쪽에 Text를 붙여 UIImage를 만드는 기능
+	func textEmbeded(text: String, font: UIFont, color: UIColor, spacing: CGFloat) -> UIImage {
+		let paragraphStyle = NSMutableParagraphStyle()
+		paragraphStyle.alignment = .center
+		paragraphStyle.lineBreakMode = .byWordWrapping
+		
+		let attrs: [NSAttributedString.Key: Any] = [
+			.font: font,
+			.foregroundColor: color,
+			.paragraphStyle: paragraphStyle
+		]
+		
+		let expectedTextSize = (text as NSString).size(withAttributes: [.font: font])
+		let width = expectedTextSize.width + self.size.width + spacing
+		let height = max(expectedTextSize.height, self.size.width)
+		let size: CGSize = CGSize(width: width, height: height)
+		let rect = CGRect(x: 0, y: (height - self.size.height) / 2, width: self.size.width, height: self.size.height)
+
+		UIGraphicsBeginImageContextWithOptions(size, false, 0)
+		
+		// Draw image
+		self.draw(in: rect)
+
+		// Draw text
+		let textRect: CGRect = CGRect(x: self.size.width + spacing, y: 0, width: expectedTextSize.width, height: expectedTextSize.height)
+		(text as NSString).draw(in: textRect.integral, withAttributes: attrs)
+
+		let newImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+		UIGraphicsEndImageContext()
+		
+		// Render image as original
+		return newImage.withRenderingMode(.alwaysOriginal)
+	}
 }

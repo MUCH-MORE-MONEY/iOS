@@ -31,7 +31,7 @@ final class CategoryViewController: BaseViewControllerWithNav, View {
 	
 	// MARK: - UI Components
 	private lazy var editButton = UIButton()
-	private lazy var segmentedControl = CategorySegmentedControl(items: ["지출", "수입"])
+	private lazy var segmentedControl = CategorySegmentedControl()
 	private lazy var pageViewController = UIPageViewController()
 	private lazy var payViewController = CategoryContentViewController(mode: .pay)
 	private lazy var earnViewController = CategoryContentViewController(mode: .earn)
@@ -116,6 +116,8 @@ extension CategoryViewController {
 		}
 		
 		segmentedControl = segmentedControl.then {
+			$0.insertSegment(with: R.Icon.minus16?.textEmbeded(text: "지출", font: R.Font.body0, color: R.Color.white, spacing: 8), at: 0, animated: true)
+			$0.insertSegment(with: R.Icon.plus16?.textEmbeded(text: "수입", font: R.Font.body0, color: R.Color.white, spacing: 8), at: 1, animated: true)
 			$0.backgroundColor = R.Color.gray900
 			$0.selectedSegmentIndex = 0
 			$0.translatesAutoresizingMaskIntoConstraints = true

@@ -97,7 +97,7 @@ extension PushSettingDetailViewController {
     
     private func presentBottomSheet1(_ isPresent: Bool) {
         let vc = CustomPushTimeSettingViewController(title: "시간 설정", height: 360, sheetMode: .drag)
-        
+        vc.reactor = CustomPushTimeSettingReactor(provider: reactor.provider    )
         self.present(vc, animated: true)
     }
 }

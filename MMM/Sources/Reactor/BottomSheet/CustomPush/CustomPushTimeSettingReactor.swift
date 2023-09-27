@@ -11,15 +11,16 @@ import ReactorKit
 
 final class CustomPushTimeSettingReactor: Reactor {
     enum Action {
-        
+        case setDate(Date)
+        case dismiss
     }
     
     enum Mutation {
-        
+        case dismiss
     }
     
     struct State {
-        
+        var dismiss: Bool = false
     }
     
     let initialState: State
@@ -34,8 +35,12 @@ final class CustomPushTimeSettingReactor: Reactor {
 extension CustomPushTimeSettingReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        default:
-            return .empty()
+            
+        case.setDate(let date):
+            return provider.profileProvider.updateDate(to: date).map { _ in .dismiss}
+            
+        case .dismiss:
+            return .just(.dismiss)
         }
     }
     
@@ -44,6 +49,8 @@ extension CustomPushTimeSettingReactor {
         
         switch mutation {
         
+        case .dismiss:
+            newState.dismiss = true
         
         }
         

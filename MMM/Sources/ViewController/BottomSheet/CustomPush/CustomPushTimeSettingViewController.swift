@@ -50,11 +50,21 @@ final class CustomPushTimeSettingViewController: BottomSheetViewController2, Vie
 // MARK: - Bind
 extension CustomPushTimeSettingViewController {
     private func bindAction(_ reactor: CustomPushTimeSettingReactor) {
-        
+        checkButton.rx.tap
+            .map{ .setDate(self.date) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
     
     private func bindState(_ reactor: CustomPushTimeSettingReactor) {
-        
+        reactor.state
+            .map { $0.dismiss }
+            .distinctUntilChanged()
+            .filter { $0 }
+            .subscribe { [weak self] _ in
+                self?.dismiss(animated: true)
+            }
+            .disposed(by: disposeBag)
     }
 }
 

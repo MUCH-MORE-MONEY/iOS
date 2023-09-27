@@ -9,12 +9,14 @@ import RxSwift
 
 enum ProfileEvent {
 	case updateDate(Date)
+    case updateCustomPushText(String)
 }
 
 protocol ProfileServiceProtocol {
 	var event: PublishSubject<ProfileEvent> { get }
 	
 	func updateDate(to date: Date) -> Observable<Date>
+    func updateCustomPushText(to label: String) -> Observable<String>
 }
 
 final class ProfileProvider: ProfileServiceProtocol {
@@ -25,4 +27,10 @@ final class ProfileProvider: ProfileServiceProtocol {
 		
 		return .just(date)
 	}
+    
+    func updateCustomPushText(to label: String) -> Observable<String> {
+        event.onNext(.updateCustomPushText(label))
+        
+        return .just(label)
+    }
 }

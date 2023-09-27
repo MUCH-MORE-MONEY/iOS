@@ -17,6 +17,7 @@ struct APIParameters{
         var authorizationCode: String?
         var email: String?
         var identityToken: String?
+        var pushToken: String?
         var userIdentifier: String?
     }
     

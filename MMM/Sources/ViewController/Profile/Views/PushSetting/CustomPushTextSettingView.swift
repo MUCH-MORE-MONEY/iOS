@@ -9,7 +9,7 @@ import UIKit
 import Then
 import SnapKit
 
-final class TextSettingView: UIView {
+final class CustomPushTextSettingView: UIView {
     // MARK: - UI Components
     private lazy var mainLabel = UILabel()
     private lazy var imageView = UIImageView()
@@ -27,7 +27,7 @@ final class TextSettingView: UIView {
 }
 
 // MARK: - Actions
-extension TextSettingView {
+extension CustomPushTextSettingView {
     func configure(_ isOn: Bool) {
         if isOn {
             backgroundColor = R.Color.gray900
@@ -44,9 +44,16 @@ extension TextSettingView {
             backgroundColor = R.Color.gray300
         }
     }
+    
+    func setTitle(_ text: String) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.mainLabel.text = text
+        }
+    }
 }
 //MARK: - Attribute & Hierarchy & Layouts
-extension TextSettingView {
+extension CustomPushTextSettingView {
     private func setup() {
         setAttribute()
         setLayout()

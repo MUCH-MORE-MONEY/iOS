@@ -182,7 +182,7 @@ extension ProfileViewController: UITableViewDelegate {
 			navigationController?.pushViewController(vc, animated: true)	// 계정관리
 		case 3:
 			let vc = PushSettingViewController()
-			vc.reactor = PushSettingReactor()
+            vc.reactor = PushSettingReactor(provider: ServiceProvider.shared)
 			vc.hidesBottomBarWhenPushed = true	// TabBar Above
 			navigationController?.pushViewController(vc, animated: true)	// 계정관리
 		case 4:

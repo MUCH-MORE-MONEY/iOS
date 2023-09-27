@@ -46,7 +46,6 @@ extension CategoryEditCollectionViewCellReactor {
 		}
 	}
 	
-	
 	/// 각각의 stream을 변형
 	func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
 		let event = provider.categoryProvider.event.flatMap { event -> Observable<Mutation> in
@@ -55,6 +54,8 @@ extension CategoryEditCollectionViewCellReactor {
 				return .empty()
 			case let .updateTitleEdit(categoryEdit):
 				return .just(.setTitle(categoryEdit))
+			case .deleteTitleEdit:
+				return .empty()
 			}
 		}
 		

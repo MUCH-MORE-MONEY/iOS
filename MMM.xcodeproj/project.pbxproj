@@ -1092,9 +1092,9 @@
 		C4BBD26F2ABAD8BB0055FA65 /* BottomSheet */ = {
 			isa = PBXGroup;
 			children = (
+				C4EB8CB52AC44448005FBAF1 /* CategoryEditBottomSheetReactor.swift */,
 				C4BBD2692AB9E1DA0055FA65 /* DateBottomSheetReactor.swift */,
 				C4BBD26D2ABAD6140055FA65 /* SatisfactionBottomSheetReactor.swift */,
-				C4EB8CB52AC44448005FBAF1 /* CategoryEditBottomSheetReactor.swift */,
 			);
 			path = BottomSheet;
 			sourceTree = "<group>";

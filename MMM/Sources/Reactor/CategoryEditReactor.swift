@@ -18,6 +18,7 @@ final class CategoryEditReactor: Reactor {
 	enum Mutation {
 		case setHeaders([CategoryHeader])
 		case setSections([CategoryEditSectionModel])
+		case deleteItem(CategoryEdit)
 		case dragAndDrop(IndexPath, IndexPath, CategoryEditItem)
 		case setNextEditScreen(CategoryEdit)
 	}
@@ -67,6 +68,8 @@ extension CategoryEditReactor {
 				return .just(.setNextEditScreen(categoryEdit))
 			case .updateTitleEdit:
 				return .empty()
+			case let .deleteTitleEdit(categoryEdit):
+				return .just(.deleteItem(categoryEdit))
 			}
 		}
 		
@@ -82,6 +85,16 @@ extension CategoryEditReactor {
 			newState.headers = headers
 		case let .setSections(sections):
 			newState.sections = sections
+		case let .deleteItem(categoryEdit):
+			guard let sectionId = Int(categoryEdit.upperId) else {
+				return newState
+			}
+			
+			if let removeIndex = newState.sections[sectionId].items.firstIndex(where: {$0.item.id == categoryEdit.id}) {
+				newState.sections[sectionId].items.remove(at: removeIndex)
+			} else {
+				print("없음")
+			}
 		case let .dragAndDrop(startIndex, destinationIndexPath, item):
 			var sections = newState.sections
 			
@@ -95,6 +108,7 @@ extension CategoryEditReactor {
 //			}
 		case let .setNextEditScreen(categoryEdit):
 			newState.nextEditScreen = categoryEdit
+
 		}
 		
 		return newState

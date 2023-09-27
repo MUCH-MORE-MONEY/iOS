@@ -13,6 +13,7 @@ final class CategoryEditBottomSheetReactor: Reactor {
 	enum Action {
 		case inputText(String)
 		case didTapEdit(CategoryEdit)
+		case delete(CategoryEdit)
 		case dismiss
 	}
 	
@@ -47,6 +48,8 @@ extension CategoryEditBottomSheetReactor {
 			return .just(.setValid(text.count < 10))
 		case let .didTapEdit(categoryEdit):
 			return provider.categoryProvider.updateTitleEdit(to: categoryEdit).map { _ in .dismiss }
+		case let .delete(categoryEdit):
+			return provider.categoryProvider.deleteTitleEdit(to: categoryEdit).map { _ in .dismiss }
 		case .dismiss:
 			return .just(.dismiss)
 		}

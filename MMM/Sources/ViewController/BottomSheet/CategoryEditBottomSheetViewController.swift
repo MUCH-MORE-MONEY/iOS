@@ -67,6 +67,11 @@ extension CategoryEditBottomSheetViewController {
 			.bind(to: reactor.action)
 			.disposed(by: disposeBag)
 		
+		// 취소 버튼
+		cancelButton.rx.tap
+			.bind(onNext: didTapCancelButton)
+			.disposed(by: disposeBag)
+		
 		textField.rx.text.orEmpty
 			.map { .inputText($0) }
 			.bind(to: reactor.action)
@@ -103,13 +108,26 @@ extension CategoryEditBottomSheetViewController {
 	}
 }
 //MARK: - Action
-extension CategoryEditBottomSheetViewController {
+extension CategoryEditBottomSheetViewController: CustomAlertDelegate {
 	func tranformCategoryEdit() -> CategoryEdit {
 		guard let text = textField.text else { return self.categoryEdit }
 		
 		var categoryEdit = self.categoryEdit
 		categoryEdit.title = text
 		return categoryEdit
+	}
+	
+	func didTapCancelButton() {
+		showAlert(alertType: .canCancel, titleText: "카테고리를 삭제하시겠습니까?", contentText: "해당 카테고리에 담겨있는 경제활동은\n기타 카테고리로 이동됩니다.", confirmButtonText: "삭제하기")
+	}
+	
+	func didAlertCofirmButton() {
+		// 카테고리 삭제하기
+		reactor?.action.onNext(.delete(categoryEdit))
+	}
+	
+	func didAlertCacelButton() {
+		reactor?.action.onNext(.dismiss)
 	}
 	
 	@objc func keyboardWillShow(_ notification: NSNotification) {

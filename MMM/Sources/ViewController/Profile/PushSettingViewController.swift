@@ -38,9 +38,6 @@ final class PushSettingViewController: BaseViewControllerWithNav, View {
     override func viewDidLoad() {
         super.viewDidLoad()
         bind(reactor: reactor)
-        
-        print(Constants.getKeychainValue(forKey: Constants.KeychainKey.token))
-        
     }
     
     func bind(reactor: PushSettingReactor) {

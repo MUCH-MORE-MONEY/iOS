@@ -25,12 +25,21 @@ final class OnboardingViewModel {
     }
     
     func appleLogin(_ authorizationCode: String, _ email: String, _ identityToken: String, _ userIdentifier: String) {
+        guard let pushToken = Constants.getKeychainValue(forKey: Constants.KeychainKey.pushToken) else { return }
+        
+//        debugPrint(authorizationCode)
+//        debugPrint(email)
+//        debugPrint(identityToken)
+//        debugPrint(pushToken)
+//        debugPrint(userIdentifier)
+        
         APIClient.dispatch(
             APIRouter.AppleLoginReqDto(body:
                                         APIParameters.LoginReqDto(
                                             authorizationCode: authorizationCode,
                                             email: email,
                                             identityToken: identityToken,
+                                            pushToken: pushToken,
                                             userIdentifier: userIdentifier)))
         .sink(receiveCompletion: { error in
             switch error {

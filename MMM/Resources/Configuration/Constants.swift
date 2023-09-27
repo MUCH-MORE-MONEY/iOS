@@ -17,6 +17,7 @@ final class Constants {
         case token
         case authorization
         case email
+        case pushToken
 		case isHighlight
 		case isDailySetting
 		case earnStandard // 수입
@@ -79,7 +80,7 @@ final class Constants {
 		Constants.removeKeychain(forKey: Constants.KeychainKey.isDailySetting)
 		Constants.removeKeychain(forKey: Constants.KeychainKey.earnStandard)
 		Constants.removeKeychain(forKey: Constants.KeychainKey.payStandard)
-        
+        Constants.removeKeychain(forKey: Constants.KeychainKey.pushToken)
 	}
 }
 

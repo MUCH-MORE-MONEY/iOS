@@ -19,7 +19,9 @@ final class PushSettingDetailViewController: BaseViewControllerWithNav, View {
     private lazy var weekCollecitonView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
     // MARK: - Properties
-    private let weekList = ["일", "화", "수", "목", "금", "토", "월"]
+//    private let  weekList = Observable.of(["일", "화", "수", "목", "금", "토", "월"])
+    // TODO: - rx로 변경
+    private let  weekList = ["일", "화", "수", "목", "금", "토", "월"]
     var reactor: PushSettingDetailReactor!
     
     override func viewDidLoad() {
@@ -51,6 +53,18 @@ extension PushSettingDetailViewController {
             .map { _ in .didTapDetailTimeSettingView }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+//        weekList
+//            .bind(to: weekCollecitonView.rx.items(cellIdentifier: "WeekCollectionViewCell", cellType: WeekCollectionViewCell.self)) { index, color, cell in
+//                
+//            }
+//            .disposed(by: disposeBag)
+//        
+//        weekCollecitonView.rx.modelSelected(String.self)
+//            .subscribe { item in
+//                print("item : \(item)")
+//            }
+//            .disposed(by: disposeBag)
     }
     
     private func bindState(_reactor: PushSettingDetailReactor) {
@@ -139,11 +153,17 @@ extension PushSettingDetailViewController {
 }
 
 // MARK: - CollectionView delegate
-extension PushSettingDetailViewController: UICollectionViewDelegate {
+//extension PushSettingDetailViewController: UICollectionViewDelegate {
 //    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        <#code#>
+//        let cell = collectionView.cellForItem(at: indexPath) as! WeekCollectionViewCell
+//        
+//        if cell.clickCount == 1 {
+//            cell.clickCount = 0
+//        } else {
+//            cell.clickCount += 1
+//        }
 //    }
-}
+//}
 
 // MARK: - CollectionView DataSource
 extension PushSettingDetailViewController: UICollectionViewDataSource {

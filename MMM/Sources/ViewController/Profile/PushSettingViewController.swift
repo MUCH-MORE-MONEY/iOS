@@ -38,6 +38,8 @@ final class PushSettingViewController: BaseViewControllerWithNav, View {
     override func viewDidLoad() {
         super.viewDidLoad()
         bind(reactor: reactor)
+        
+        debugPrint(Common.getCustomPushText())
     }
     
     func bind(reactor: PushSettingReactor) {
@@ -132,7 +134,13 @@ extension PushSettingViewController {
             .disposed(by: disposeBag)
         
         
-
+        reactor.state
+            .map { $0.customPushLabelText }
+            .bind { text in
+                let title = Common.getCustomPushText()
+                self.customPushTextSettingView.setTitle(title)
+            }
+            .disposed(by: disposeBag)
 
     }
 }

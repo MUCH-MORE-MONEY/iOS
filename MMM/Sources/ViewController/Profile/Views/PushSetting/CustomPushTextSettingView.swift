@@ -44,6 +44,13 @@ extension CustomPushTextSettingView {
             backgroundColor = R.Color.gray300
         }
     }
+    
+    func setTitle(_ text: String) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.mainLabel.text = text
+        }
+    }
 }
 //MARK: - Attribute & Hierarchy & Layouts
 extension CustomPushTextSettingView {

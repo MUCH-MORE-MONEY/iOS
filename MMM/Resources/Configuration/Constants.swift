@@ -86,27 +86,45 @@ final class Constants {
 
 // TODO: - 데이터 삭제 함수 필요
 enum Common {
+    
+    enum keys: String {
+        case newsPushSwitch
+        case customPushSwitch
+        case customPushTime
+        case customPushText
+    }
+    
+    // MARK: - Set
     static func setNewsPushSwitch(_ isOn: Bool) {
-        UserDefaults.standard.set(isOn, forKey: "NewsPushSwitch")
+        UserDefaults.standard.set(isOn, forKey: self.keys.newsPushSwitch.rawValue)
     }
     
     static func setCustomPushSwitch(_ isOn: Bool) {
-        UserDefaults.standard.set(isOn, forKey: "CustomPushSwitch")
+        UserDefaults.standard.set(isOn, forKey: self.keys.customPushSwitch.rawValue)
     }
     
     static func setCustomPushTime(_ date: String) {
-        UserDefaults.standard.set(date, forKey: "CustomPushTime")
+        UserDefaults.standard.set(date, forKey: self.keys.customPushTime.rawValue)
     }
     
+    static func setCustomPushText(_ text: String) {
+        UserDefaults.standard.set(text, forKey: self.keys.customPushText.rawValue)
+    }
+    
+    // MARK: - Get
     static func getNewsPushSwitch() -> Bool {
-        UserDefaults.standard.bool(forKey: "NewsPushSwitch")
+        UserDefaults.standard.bool(forKey: self.keys.newsPushSwitch.rawValue)
     }
     
     static func getCustomPushSwitch() -> Bool {
-        UserDefaults.standard.bool(forKey: "CustomPushSwitch")
+        UserDefaults.standard.bool(forKey: self.keys.customPushSwitch.rawValue)
     }
     
     static func getCustomPushTime() -> String {
-        UserDefaults.standard.string(forKey: "CustomPushTime") ?? "09:00 PM"
+        UserDefaults.standard.string(forKey: self.keys.customPushTime.rawValue) ?? "매일 09:00 PM"
+    }
+    
+    static func getCustomPushText() -> String {
+        UserDefaults.standard.string(forKey: self.keys.customPushText.rawValue) ?? "💸 오늘은 어떤 경제활동을 했나요?"
     }
 }

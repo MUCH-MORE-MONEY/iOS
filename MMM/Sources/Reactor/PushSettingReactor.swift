@@ -144,6 +144,7 @@ extension PushSettingReactor {
             newState.isCustomPushSwitchOn = isOn
             
         case .setCustomPushText(let text):
+            Common.setCustomPushText(text)
             newState.customPushLabelText = text
         }
 

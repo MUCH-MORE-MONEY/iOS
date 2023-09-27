@@ -1,39 +1,39 @@
 //
-//  CategorySectionModel.swift
+//  CategoryEditSectionModel.swift
 //  MMM
 //
-//  Created by geonhyeong on 2023/09/16.
+//  Created by geonhyeong on 2023/09/24.
 //
 
 import RxDataSources
 import Foundation
 
 // AnimatableSectionModel: 자동으로 셀 애니메이션 관리
-typealias CategorySectionModel = AnimatableSectionModel<CategorySection, CategoryItem>
+typealias CategoryEditSectionModel = AnimatableSectionModel<CategoryEditSection, CategoryEditItem>
 
-enum CategorySection {
-	case base(Category, [CategoryItem])
+enum CategoryEditSection {
+	case base(CategoryHeader, [CategoryEditItem])
 }
 
-enum CategoryItem: IdentifiableType, Equatable {
-	case base(CategoryCollectionViewCellReactor)
+enum CategoryEditItem: IdentifiableType, Equatable {
+	case base(CategoryEditCollectionViewCellReactor)
 	
 	// IdentifiableType에 의한 identity 설정
 	var identity: some Hashable {
 		switch self {
 		case let .base(reactor):
-			return reactor.currentState.categoryLowwer.id
+			return reactor.currentState.category.orderNum
 		}
 	}
 	
 	// 비교를 위한 함수
-	static func == (lhs: CategoryItem, rhs: CategoryItem) -> Bool {
+	static func == (lhs: CategoryEditItem, rhs: CategoryEditItem) -> Bool {
 		lhs.identity == rhs.identity
 	}
 }
 // MARK: - AnimatableSectionModelType Protocol
-extension CategorySection: AnimatableSectionModelType {
-	typealias Item = CategoryItem
+extension CategoryEditSection: AnimatableSectionModelType {
+	typealias Item = CategoryEditItem
 	
 	// 준수해야할 Property
 	var identity: String {
@@ -47,14 +47,14 @@ extension CategorySection: AnimatableSectionModelType {
 		}
 	}
 	
-	var header: Category {
+	var header: CategoryHeader {
 		switch self {
 		case .base(let header, _):
 			return header
 		}
 	}
 	
-	init(original: CategorySection, items: [CategoryItem]) {
+	init(original: CategoryEditSection, items: [CategoryEditItem]) {
 		switch original {
 		case .base(let header, let items):
 			self = .base(header, items)

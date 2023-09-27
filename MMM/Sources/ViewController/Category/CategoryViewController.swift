@@ -11,8 +11,10 @@ import RxSwift
 import RxCocoa
 import ReactorKit
 
+// 상속하지 않으려면 final 꼭 붙이기
 final class CategoryViewController: BaseViewControllerWithNav, View {
 	typealias Reactor = CategoryReactor
+	
 	// MARK: - Constants
 	private enum UI {
 		static let segmentedControlHeight: CGFloat = 50
@@ -31,8 +33,8 @@ final class CategoryViewController: BaseViewControllerWithNav, View {
 	private lazy var editButton = UIButton()
 	private lazy var segmentedControl = CategorySegmentedControl(items: ["지출", "수입"])
 	private lazy var pageViewController = UIPageViewController()
-	private lazy var payViewController = CategoryContentViewController()
-	private lazy var earnViewController = UIViewController()
+	private lazy var payViewController = CategoryContentViewController(mode: .pay)
+	private lazy var earnViewController = CategoryContentViewController(mode: .earn)
 	private var dataViewControllers: [UIViewController] {
 		[self.payViewController, self.earnViewController]
 	}
@@ -52,7 +54,7 @@ extension CategoryViewController {
 	private func bindAction(_ reactor: CategoryReactor) {
 		editButton.rx.tap
 			.subscribe(onNext: {
-//				guard let self = self else { return }
+				self.willPushEditViewController()
 			}).disposed(by: disposeBag)
 		
 		segmentedControl.rx.selectedSegmentIndex
@@ -65,10 +67,37 @@ extension CategoryViewController {
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: CategoryReactor) {
+		reactor.state
+			.compactMap { $0.nextScreen }
+			.distinctUntilChanged() // 중복값 무시
+			.subscribe(onNext: { [weak self] categoryLowwer in
+				self?.willPushViewController(categoryLowwer: categoryLowwer)
+			})
+			.disposed(by: disposeBag)
 	}
 }
 //MARK: - Action
 extension CategoryViewController {
+	private func willPushViewController(categoryLowwer: CategoryLowwer) {
+		guard let reactor = self.reactor else { return }
+
+		let vc = CategoryDetailViewController()
+		let type = segmentedControl.selectedSegmentIndex == 0 ? "01" : "02"
+		let indexPath = reactor.currentState.indexPath ?? IndexPath(row: 0, section: 0)
+		let section = segmentedControl.selectedSegmentIndex == 0 ? reactor.currentState.paySections[indexPath.section] : reactor.currentState.earnSections[indexPath.section]
+		vc.reactor = CategoryDetailReactor(date: reactor.currentState.date, type: type, section: section.model.header, categoryLowwer: categoryLowwer)
+
+		navigationController?.pushViewController(vc, animated: true)
+	}
+	
+	private func willPushEditViewController() {
+		guard let reactor = self.reactor else { return }
+
+		let vc = CategoryEditViewController(mode: segmentedControl.selectedSegmentIndex == 0 ? .pay : .earn)
+		vc.reactor = CategoryEditReactor(type: segmentedControl.selectedSegmentIndex == 0 ? "01" : "02", date: reactor.currentState.date)
+
+		navigationController?.pushViewController(vc, animated: true)
+	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
 extension CategoryViewController {
@@ -99,6 +128,7 @@ extension CategoryViewController {
 			$0.setViewControllers([self.dataViewControllers[0]], direction: .forward, animated: true)
 			$0.delegate = self
 			$0.dataSource = self
+			$0.view.backgroundColor = R.Color.gray900
 			$0.view.translatesAutoresizingMaskIntoConstraints = false
 		}
 		
@@ -107,7 +137,7 @@ extension CategoryViewController {
 		}
 		
 		earnViewController = earnViewController.then {
-			$0.view.backgroundColor = R.Color.blue050
+			$0.reactor = reactor
 		}
 	}
 	

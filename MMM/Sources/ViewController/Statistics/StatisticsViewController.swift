@@ -188,8 +188,10 @@ extension StatisticsViewController {
 	
 	// 카테고리 더보기
 	private func pushCategoryViewController(_ isPush: Bool) {
+		guard let reactor = self.reactor else { return }
+
 		let vc = CategoryViewController()
-		vc.reactor = CategoryReactor()
+		vc.reactor = CategoryReactor(date: reactor.currentState.date)
 		navigationController?.pushViewController(vc, animated: true)
 	}
 	
@@ -201,6 +203,7 @@ extension StatisticsViewController {
 		let vc = DetailViewController(homeViewModel: HomeViewModel(), index: index) // 임시: HomeViewModel 생성
 		let economicActivityId = reactor.currentState.activityList.map { $0.id }
 		vc.setData(economicActivityId: economicActivityId, index: index, date: data.info.createAt.toDate() ?? Date())
+		
 		navigationController?.pushViewController(vc, animated: true)
 	}
 	

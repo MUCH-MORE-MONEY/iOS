@@ -10,19 +10,24 @@ import Moya
 import RxSwift
 
 enum MMMAPI {
-    // MARK: - Push
-    case push(PushReqDto)
-    case pushAgreeListSelect
-    case pushAgreeUpdate(PushAgreeUpdateReqDto)
-    
-    // MARK: - Staticstics
+	// MARK: - Push
+	case push(PushReqDto)
+	case pushAgreeListSelect
+	case pushAgreeUpdate(PushAgreeUpdateReqDto)
+	
+	// MARK: - Staticstics
 	case getStaticsticsAverage(dateYM: String) // 월간 만족도 평균값
 	case getStatisticsList(dateYM: String, valueScoreDvcd: String, limit: Int = 15, offset: Int = 0) // 만족도별 목록
 	case getStatisticsCategory(dateYM: String, economicActivityDvcd: String)
 	
-	// MARK: - Staticstics Category
-	case getCategory(CategoryReqDto)
-	
+	// MARK: - Category Main
+	case getCategoryList(CategoryDetailListReqDto) // 경제활동구분 코드 기준 카테고리별 월간 경제활동 목록 전체 조회
+	case getCategoryDetailList(CategoryDetailListReqDto) // 카테고리 코드별 월간 경제활동 목록 조회
+
+	// MARK: - Category Edit
+	case getCategoryEdit(CategoryEditReqDto)
+	case getCategoryEditHeader(CategoryEditReqDto)
+
 	// MARK: - Profile
 	case exportToExcel
 	case getSummary
@@ -30,81 +35,90 @@ enum MMMAPI {
 }
 
 extension MMMAPI: BaseNetworkService {
-    
-    /// baseURL
-    var baseURL: URL {
-        return URL(string: APIConstants.baseURL)!
-    }
-    
-    /// router에 사용될 세부 경로
-    var path: String {
-        switch self {
-        case .push:
-            return "/push"
-        case .pushAgreeListSelect:
-            return "/push/agree/list/select"
-        case .pushAgreeUpdate:
-            return "/push/agree/update"
-        case .getStaticsticsAverage(let dateYM):
-          return "/economic_activity/\(dateYM)/average"
-		case .getStatisticsList(let dateYM, let valueScoreDvcd, _, _):
+	
+	/// baseURL
+	var baseURL: URL {
+		return URL(string: APIConstants.baseURL)!
+	}
+	
+	/// router에 사용될 세부 경로
+	var path: String {
+		switch self {
+		case .push:
+			return "/push"
+		case .pushAgreeListSelect:
+			return "/push/agree/list/select"
+		case .pushAgreeUpdate:
+			return "/push/agree/update"
+		case let .getStaticsticsAverage(dateYM):
+			return "/economic_activity/\(dateYM)/average"
+		case let .getStatisticsList(dateYM, valueScoreDvcd, _, _):
 			return "/economic_activity/\(dateYM)/\(valueScoreDvcd)/list"
-		case .getStatisticsCategory(let dateYM, let economicActivityDvcd):
+		case let .getStatisticsCategory(dateYM, economicActivityDvcd):
 			return "/economic_activity/\(dateYM)/\(economicActivityDvcd)/upper-category/list"
-        case .getCategory(let request):
-          return "/economic-activity-category/list/\(request.economicActivityDvcd)"
-        case .exportToExcel:
-          return "/economic_activity/excel/select"
-        case .getSummary:
-          return "/economic_activity/summary/select"
-        case .withdraw:
-          return "/login/delete"
+		case let .getCategoryList(request):
+			return "/economic_activity/\(request.dateYM)/\(request.economicActivityDvcd)/category/list"
+		case let .getCategoryDetailList(request):
+			return "/economic_activity/\(request.dateYM)/\(request.economicActivityDvcd)/category/detail/list"
+		case let .getCategoryEdit(request):
+			return "/economic-activity-category/list/\(request.economicActivityDvcd)"
+		case let .getCategoryEditHeader(request):
+			return "/economic-activity-category/list/upper/\(request.economicActivityDvcd)"
+		case .exportToExcel:
+			return "/economic_activity/excel/select"
+		case .getSummary:
+			return "/economic_activity/summary/select"
+		case .withdraw:
+			return "/login/delete"
+
 		}
-    }
-    
-    /// 메서드 방식 선택
-    var method: Moya.Method {
-        switch self {
-        case .push, .pushAgreeListSelect, .pushAgreeUpdate:
-            return .post
+	}
+	
+	/// 메서드 방식 선택
+	var method: Moya.Method {
+		switch self {
+		case .push, .pushAgreeListSelect, .pushAgreeUpdate:
+			return .post
 		case .getStaticsticsAverage, .getStatisticsList, .getStatisticsCategory:
-          return .get
-        case .getCategory:
-          return .get
-        case .exportToExcel, .getSummary, .withdraw:
-          return .post
-        }
-    }
-    
-    /// body parameter
-    /// post - JSONEncoding.default
-    /// get  -  URLEncoding.default
-    /// parameter || body가 없을 경우 .requestPlain 설정
-    var task: Moya.Task {
-        switch self {
-		case .push(let request):
+			return .get
+		case .getCategoryList, .getCategoryDetailList, .getCategoryEdit, .getCategoryEditHeader:
+			return .get
+		case .exportToExcel, .getSummary, .withdraw:
+			return .post
+		}
+	}
+	
+	/// body parameter
+	/// post - JSONEncoding.default
+	/// get  -  URLEncoding.default
+	/// parameter || body가 없을 경우 .requestPlain 설정
+	var task: Moya.Task {
+		switch self {
+		case let .push(request):
 			return .requestParameters(parameters: request.asDictionary, encoding: JSONEncoding.default)
 		case .pushAgreeListSelect:
 			return .requestPlain
-		case .pushAgreeUpdate(let request):
+		case let .pushAgreeUpdate(request):
 			return .requestParameters(parameters: request.asDictionary, encoding: JSONEncoding.default)
 		case .getStaticsticsAverage, .getStatisticsCategory:
 			return .requestPlain
-		case .getStatisticsList(_, _, let limit, let offset):
+		case let .getStatisticsList(_, _, limit, offset):
 			return .requestParameters(parameters: ["limit":limit, "offset":offset], encoding: URLEncoding.default)
-		case .getCategory:
+		case .getCategoryList, .getCategoryEdit, .getCategoryEditHeader:
 			return .requestPlain
+		case let .getCategoryDetailList(request):
+			return .requestParameters(parameters: ["economicActivityCategoryCd": request.economicActivityCategoryCd], encoding: URLEncoding.default)
 		case .exportToExcel, .getSummary, .withdraw:
 			return .requestPlain
 		}
-    }
-    
-    /// Header 전달
-    /// nil 일 경우 헤더 요청하지 않음
-    /// 값이 들어 있을 경우만 요청
-    /// 옵셔널이지만 moya 내부적으로 헤더를 넘겨줌, 클라이언트에서 신경 쓸 필요 없음
-    var headers: [String : String]? {
-        guard let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return nil }
-        return APIHeader.Default(token: token).asDictionary as? [String: String]
-    }
+	}
+	
+	/// Header 전달
+	/// nil 일 경우 헤더 요청하지 않음
+	/// 값이 들어 있을 경우만 요청
+	/// 옵셔널이지만 moya 내부적으로 헤더를 넘겨줌, 클라이언트에서 신경 쓸 필요 없음
+	var headers: [String : String]? {
+		guard let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return nil }
+		return APIHeader.Default(token: token).asDictionary as? [String: String]
+	}
 }

@@ -113,10 +113,11 @@ extension StatisticsReactor {
 					.just(.setLoading(true)),
 					.just(.setDate(date)),
 					self.getStatisticsAverage(date),
-					self.getCategory(date, "01"),
 					self.getCategory(date, "02"),
+					self.getCategory(date, "01"),
 					self.getStatisticsList(date, "01", true),
 					self.getStatisticsList(date, "03", true),
+					self.getStatisticsList(date, self.currentState.satisfaction.id, true), // viewWillAppear일때, 현재 만족도를 불러와야한다.
 					.just(.setLoading(false)),
 				])
 			case .updateSatisfaction(let satisfaction):

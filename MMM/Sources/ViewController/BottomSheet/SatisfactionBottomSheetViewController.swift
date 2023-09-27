@@ -93,14 +93,14 @@ extension SatisfactionBottomSheetViewController {
 		tableView.rx.itemSelected
 			.subscribe(onNext: { [weak self] indexPath in
 				guard let self = self else { return }
-				let cell = tableView.cellForRow(at: indexPath) as! SatisfactionTableViewCell
+				let cell = tableView.cellForRow(at: indexPath) as! StatisticsSatisfactionTableViewCell
 				self.satisfaction = cell.getSatisfaction()
 			}).disposed(by: disposeBag)
 
 		// 이전에 선택한 만족도 표시
 		tableView.rx.willDisplayCell
 			.bind(onNext: { data in
-				let cell = data.cell as! SatisfactionTableViewCell
+				let cell = data.cell as! StatisticsSatisfactionTableViewCell
 				if cell.getSatisfaction() == self.satisfaction {
 					self.tableView.selectRow(at: data.indexPath, animated: true, scrollPosition: .middle)
 				}
@@ -113,7 +113,7 @@ extension SatisfactionBottomSheetViewController {
 			.map { $0.satisfactionList }
 			.bind(to: tableView.rx.items) { tv, row, data in
 				let index = IndexPath(row: row, section: 0)
-				let cell = tv.dequeueReusableCell(withIdentifier: "SatisfactionTableViewCell", for: index) as! SatisfactionTableViewCell
+				let cell = tv.dequeueReusableCell(withIdentifier: "StatisticsSatisfactionTableViewCell", for: index) as! StatisticsSatisfactionTableViewCell
 				// Cell data 설정
 				cell.setData(satisfaction: data)
 				cell.selectionStyle = .none // 테이블뷰 선택 색상 제거
@@ -162,7 +162,7 @@ extension SatisfactionBottomSheetViewController {
 		}
 		
 		tableView = tableView.then {
-			$0.register(SatisfactionTableViewCell.self)
+			$0.register(StatisticsSatisfactionTableViewCell.self)
 			$0.backgroundColor = R.Color.white
 			$0.showsVerticalScrollIndicator = false // indicator 제거
 			$0.separatorStyle = .none

@@ -250,7 +250,7 @@ extension CategoryEditViewController {
 		guard let reactor = self.reactor else { return }
 		
 		let vc = CategoryEditBottomSheetViewController(title: "카테고리 수정하기", categoryEdit: categoryEdit, height: 174)
-		vc.reactor = SatisfactionBottomSheetReactor(provider: reactor.provider)
+		vc.reactor = CategoryEditBottomSheetReactor(provider: reactor.provider)
 
 		self.present(vc, animated: true, completion: nil)
 	}

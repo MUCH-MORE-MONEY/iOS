@@ -1065,9 +1065,9 @@
 			children = (
 				C4199DD229FE3051006E5DA8 /* BottomSheetViewController.swift */,
 				C46409D92AB9625E00A899AD /* BottomSheetViewController2.swift */,
+				C4EB8CB32AC438BA005FBAF1 /* CategoryEditBottomSheetViewController.swift */,
 				C4BBD2652AB9E16D0055FA65 /* DateBottomSheetViewController.swift */,
 				C4BBD26B2ABAD4A60055FA65 /* SatisfactionBottomSheetViewController.swift */,
-				C4EB8CB32AC438BA005FBAF1 /* CategoryEditBottomSheetViewController.swift */,
 			);
 			path = BottomSheet;
 			sourceTree = "<group>";

@@ -9,12 +9,14 @@ import RxSwift
 
 enum CategoryEvent {
 	case presentTitleEdit(CategoryEdit)
+	case updateTitleEdit(CategoryEdit)
 }
 
 protocol CategoryServiceProtocol {
 	var event: PublishSubject<CategoryEvent> { get }
 	
 	func presentTitleEdit(to categoryEdit: CategoryEdit) -> Observable<CategoryEdit>
+	func updateTitleEdit(to categoryEdit: CategoryEdit) -> Observable<CategoryEdit>
 }
 
 final class CategoryProvider: CategoryServiceProtocol {
@@ -22,6 +24,12 @@ final class CategoryProvider: CategoryServiceProtocol {
 	
 	func presentTitleEdit(to categoryEdit: CategoryEdit) -> Observable<CategoryEdit> {
 		event.onNext(.presentTitleEdit(categoryEdit))
+		
+		return .just(categoryEdit)
+	}
+	
+	func updateTitleEdit(to categoryEdit: CategoryEdit) -> Observable<CategoryEdit> {
+		event.onNext(.updateTitleEdit(categoryEdit))
 		
 		return .just(categoryEdit)
 	}

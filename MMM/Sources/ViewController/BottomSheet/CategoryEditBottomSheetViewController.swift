@@ -12,7 +12,7 @@ import ReactorKit
 
 // 상속하지 않으려면 final 꼭 붙이기
 final class CategoryEditBottomSheetViewController: BottomSheetViewController2, View {
-	typealias Reactor = SatisfactionBottomSheetReactor
+	typealias Reactor = CategoryEditBottomSheetReactor
 	// MARK: - Sub Type
 	
 	// MARK: - Properties
@@ -52,7 +52,7 @@ final class CategoryEditBottomSheetViewController: BottomSheetViewController2, V
 		textField.setUnderLine(color: R.Color.orange500)
 	}
 	
-	func bind(reactor: SatisfactionBottomSheetReactor) {
+	func bind(reactor: CategoryEditBottomSheetReactor) {
 		bindState(reactor)
 		bindAction(reactor)
 	}
@@ -60,12 +60,12 @@ final class CategoryEditBottomSheetViewController: BottomSheetViewController2, V
 //MARK: - Bind
 extension CategoryEditBottomSheetViewController {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
-	private func bindAction(_ reactor: SatisfactionBottomSheetReactor) {
+	private func bindAction(_ reactor: CategoryEditBottomSheetReactor) {
 		// 확인 버튼
-//		checkButton.rx.tap
-//			.map { .setSatisfaction(self.satisfaction) }
-//			.bind(to: reactor.action)
-//			.disposed(by: disposeBag)
+		checkButton.rx.tap
+			.map { .didTapEdit(self.tranformCategoryEdit()) }
+			.bind(to: reactor.action)
+			.disposed(by: disposeBag)
 		
 		textField.rx.text.orEmpty
 			.bind(onNext: { text in
@@ -75,7 +75,7 @@ extension CategoryEditBottomSheetViewController {
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
-	private func bindState(_ reactor: SatisfactionBottomSheetReactor) {
+	private func bindState(_ reactor: CategoryEditBottomSheetReactor) {
 		
 		reactor.state
 			.map { $0.dismiss }
@@ -89,6 +89,14 @@ extension CategoryEditBottomSheetViewController {
 }
 //MARK: - Action
 extension CategoryEditBottomSheetViewController {
+	func tranformCategoryEdit() -> CategoryEdit {
+		guard let text = textField.text else { return self.categoryEdit }
+		
+		var categoryEdit = self.categoryEdit
+		categoryEdit.title = text
+		return categoryEdit
+	}
+	
 	@objc func keyboardWillShow(_ notification: NSNotification) {
 		moveViewWithKeyboard(notification: notification, keyboardWillShow: true)
 	}

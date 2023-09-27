@@ -57,6 +57,7 @@ extension CategoryEditCollectionViewCell {
 			.map { $0.categoryEdit }
 			.distinctUntilChanged() // 중복값 무시
 			.subscribe(onNext: { [weak self] categoryEdit in
+				print(categoryEdit.title)
 				self?.titleLabel.text = categoryEdit.title
 			})
 			.disposed(by: disposeBag)

@@ -65,6 +65,8 @@ extension CategoryEditReactor {
 			switch event {
 			case let .presentTitleEdit(categoryEdit):
 				return .just(.setNextEditScreen(categoryEdit))
+			case .updateTitleEdit:
+				return .empty()
 			}
 		}
 		

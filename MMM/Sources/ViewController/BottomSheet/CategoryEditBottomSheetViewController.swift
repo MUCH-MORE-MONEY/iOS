@@ -68,14 +68,29 @@ extension CategoryEditBottomSheetViewController {
 			.disposed(by: disposeBag)
 		
 		textField.rx.text.orEmpty
-			.bind(onNext: { text in
-				print(#file, #line, text)
-			})
+			.map { .inputText($0) }
+			.bind(to: reactor.action)
 			.disposed(by: disposeBag)
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: CategoryEditBottomSheetReactor) {
+		
+		reactor.state
+			.map { $0.isValid }
+			.subscribe(onNext: { [weak self] isValid in
+				guard let self = self, let text = self.textField.text, !text.isEmpty else { return }
+				
+				// shake 에니메이션
+				if !isValid {
+					self.textField.shake()
+					self.textField.text?.removeLast()
+				}
+				
+				self.textField.textColor = isValid ? R.Color.gray900 : R.Color.red500
+				self.warningLabel.isHidden = isValid
+			})
+			.disposed(by: disposeBag)
 		
 		reactor.state
 			.map { $0.dismiss }
@@ -190,7 +205,7 @@ extension CategoryEditBottomSheetViewController {
 		}
 		
 		warningLabel = warningLabel.then {
-			$0.text = "최대 작성 단위을 넘어선 금액이에요. (최대 1억)"
+			$0.text = "최대 글자수를 넘어선 글자예요. (최대 9글자)"
 			$0.font = R.Font.body3
 			$0.textColor = R.Color.red500
 			$0.textAlignment = .left
@@ -201,7 +216,7 @@ extension CategoryEditBottomSheetViewController {
 	override func setHierarchy() {
 		super.setHierarchy()
 		
-		containerView.addSubviews(stackView, textField)
+		containerView.addSubviews(stackView, textField, warningLabel)
 		stackView.addArrangedSubviews(titleLabel, buttonStackView)
 		buttonStackView.addArrangedSubviews(cancelButton, checkButton)
 		addContentView(view: containerView)
@@ -222,6 +237,11 @@ extension CategoryEditBottomSheetViewController {
 		
 		textField.snp.makeConstraints {
 			$0.top.equalTo(stackView.snp.bottom).offset(24)
+			$0.leading.trailing.equalToSuperview().inset(24)
+		}
+		
+		warningLabel.snp.makeConstraints {
+			$0.top.equalTo(textField.snp.bottom).offset(12)
 			$0.leading.trailing.equalToSuperview().inset(24)
 		}
 	}

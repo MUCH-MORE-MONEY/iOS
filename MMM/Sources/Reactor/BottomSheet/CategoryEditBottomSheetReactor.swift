@@ -11,17 +11,20 @@ import ReactorKit
 final class CategoryEditBottomSheetReactor: Reactor {
 	// 사용자의 액션
 	enum Action {
+		case inputText(String)
 		case didTapEdit(CategoryEdit)
 		case dismiss
 	}
 	
 	// 처리 단위
 	enum Mutation {
+		case setValid(Bool)
 		case dismiss
 	}
 	
 	// 현재 상태를 기록
 	struct State {
+		var isValid: Bool = false
 		var dismiss: Bool = false
 	}
 	
@@ -40,6 +43,8 @@ extension CategoryEditBottomSheetReactor {
 	/// Action이 들어온 경우, 어떤 처리를 할건지 분기
 	func mutate(action: Action) -> Observable<Mutation> {
 		switch action {
+		case let .inputText(text):
+			return .just(.setValid(text.count < 10))
 		case let .didTapEdit(categoryEdit):
 			return provider.categoryProvider.updateTitleEdit(to: categoryEdit).map { _ in .dismiss }
 		case .dismiss:
@@ -52,6 +57,8 @@ extension CategoryEditBottomSheetReactor {
 		var newState = state
 		
 		switch mutation {
+		case let .setValid(isValid):
+			newState.isValid = isValid
 		case .dismiss:
 			newState.dismiss = true
 		}

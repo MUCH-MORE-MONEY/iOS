@@ -249,7 +249,7 @@ extension CategoryEditViewController {
 	private func willPresentViewController(categoryEdit: CategoryEdit) {
 		guard let reactor = self.reactor else { return }
 		
-		let vc = TextFieldEditBottomSheetViewController(title: "카테고리 수정하기", categoryEdit: categoryEdit, height: 174)
+		let vc = CategoryEditBottomSheetViewController(title: "카테고리 수정하기", categoryEdit: categoryEdit, height: 174)
 		vc.reactor = SatisfactionBottomSheetReactor(provider: reactor.provider)
 
 		self.present(vc, animated: true, completion: nil)

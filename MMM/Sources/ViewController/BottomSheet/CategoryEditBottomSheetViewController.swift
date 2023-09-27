@@ -1,5 +1,5 @@
 //
-//  TextFieldEditBottomSheetViewController.swift
+//  CategoryEditBottomSheetViewController.swift
 //  MMM
 //
 //  Created by geonhyeong on 2023/09/27.
@@ -11,7 +11,7 @@ import Then
 import ReactorKit
 
 // 상속하지 않으려면 final 꼭 붙이기
-final class TextFieldEditBottomSheetViewController: BottomSheetViewController2, View {
+final class CategoryEditBottomSheetViewController: BottomSheetViewController2, View {
 	typealias Reactor = SatisfactionBottomSheetReactor
 	// MARK: - Sub Type
 	
@@ -58,7 +58,7 @@ final class TextFieldEditBottomSheetViewController: BottomSheetViewController2, 
 	}
 }
 //MARK: - Bind
-extension TextFieldEditBottomSheetViewController {
+extension CategoryEditBottomSheetViewController {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
 	private func bindAction(_ reactor: SatisfactionBottomSheetReactor) {
 		// 확인 버튼
@@ -88,7 +88,7 @@ extension TextFieldEditBottomSheetViewController {
 	}
 }
 //MARK: - Action
-extension TextFieldEditBottomSheetViewController {
+extension CategoryEditBottomSheetViewController {
 	@objc func keyboardWillShow(_ notification: NSNotification) {
 		moveViewWithKeyboard(notification: notification, keyboardWillShow: true)
 	}
@@ -125,7 +125,7 @@ extension TextFieldEditBottomSheetViewController {
 
 }
 //MARK: - Attribute & Hierarchy & Layouts
-extension TextFieldEditBottomSheetViewController {
+extension CategoryEditBottomSheetViewController {
 	// 초기 셋업할 코드들
 	override func setAttribute() {
 		super.setAttribute()

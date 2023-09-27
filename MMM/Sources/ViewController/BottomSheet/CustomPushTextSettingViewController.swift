@@ -18,9 +18,7 @@ final class CustomPushTextSettingViewController: BottomSheetViewController2, Vie
     private var isDark: Bool = false
     private var height: CGFloat
     private var updateHeight: CGFloat = 0
-    private var bottomPadding: CGFloat {
-        return UIApplication.shared.windows.first{$0.isKeyWindow}?.safeAreaInsets.bottom ?? 0
-    }
+    private var textFieldText: String = ""
     
     // MARK: - UI Components
     private lazy var containerView = UIView()
@@ -81,10 +79,17 @@ final class CustomPushTextSettingViewController: BottomSheetViewController2, Vie
 // MARK: - Bind
 extension CustomPushTextSettingViewController {
     private func bindAction(_ reactor: CustomPushTextSettingReactor) {
+        checkButton.rx.tap
+            .map { .setText(self.textFieldText) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
         textField.rx.text
             .orEmpty
             .distinctUntilChanged()
-            .subscribe { text in
+            .subscribe { [weak self] text in
+                guard let self = self else { return }
+                self.textFieldText = text
                 print(text)
             }
             .disposed(by: disposeBag)
@@ -92,7 +97,14 @@ extension CustomPushTextSettingViewController {
     }
     
     private func bindState(_ reactor: CustomPushTextSettingReactor) {
-        
+        reactor.state
+            .map { $0.dismiss }
+            .distinctUntilChanged()
+            .filter { $0 }
+            .subscribe { [weak self] _ in
+                self?.dismiss(animated: true)
+            }
+            .disposed(by: disposeBag)
     }
 }
 

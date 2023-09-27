@@ -17,6 +17,10 @@ final class CustomPushTextSettingViewController: BottomSheetViewController2, Vie
     private var titleStr: String = ""
     private var isDark: Bool = false
     private var height: CGFloat
+    private var updateHeight: CGFloat = 0
+    private var bottomPadding: CGFloat {
+        return UIApplication.shared.windows.first{$0.isKeyWindow}?.safeAreaInsets.bottom ?? 0
+    }
     
     // MARK: - UI Components
     private lazy var containerView = UIView()
@@ -35,6 +39,27 @@ final class CustomPushTextSettingViewController: BottomSheetViewController2, Vie
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        textField.becomeFirstResponder()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     override func viewDidLayoutSubviews() {
@@ -73,7 +98,53 @@ extension CustomPushTextSettingViewController {
 
 // MARK: - Actions
 extension CustomPushTextSettingViewController {
+    @objc private func keyboardWillShow(_ notification: NSNotification) {
+        moveViewWithKeyboard(notification: notification, keyboardWillShow: true)
+    }
     
+    @objc private func keyboardWillHide(_ notification: NSNotification) {
+//        moveViewWithKeyboard(notification: notification, keyboardWillShow: false)
+    }
+    
+    private func moveViewWithKeyboard(notification: NSNotification, keyboardWillShow: Bool) {
+        // Keyboard's size
+        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+        let keyboardHeight = keyboardSize.height
+        
+        // Keyboard's animation duration
+        let keyboardDuration = notification.userInfo![UIResponder.keyboardAnimationDurationUserInfoKey] as! Double
+        
+        // Keyboard's animation curve
+        let keyboardCurve = UIView.AnimationCurve(rawValue: notification.userInfo![UIResponder.keyboardAnimationCurveUserInfoKey] as! Int)!
+        
+        let isSmall = UIScreen.main.bounds.size.height <= 667.0 // 4.7 inch
+
+
+
+        if keyboardWillShow {
+//            let height = self.containerView.frame.height
+            updateHeight = height + self.containerView.frame.height
+           
+
+            containerView.snp.updateConstraints {
+                $0.height.equalTo(updateHeight + height - 32.0) // 32(Super Class의 Drag 영역)를 반드시 뺴줘야한다.
+            }
+        } else {
+            updateHeight = 0
+            
+            containerView.snp.updateConstraints {
+                $0.height.equalTo(height - 32.0)
+            }
+        }
+        
+        // 키보드 애니메이션과 동일한 방식으로 보기 애니메이션 적용하기
+        let animator = UIViewPropertyAnimator(duration: keyboardDuration, curve: keyboardCurve) { [weak self] in
+            // Update Constraints
+            self?.view.layoutIfNeeded()
+        }
+        
+        animator.startAnimation()
+    }
 }
 
 //MARK: - Attribute & Hierarchy & Layouts
@@ -108,6 +179,7 @@ extension CustomPushTextSettingViewController {
         }
         
         textField = textField.then {
+//            $0.setUnderLine(color: R.Color.orange500)
             $0.placeholder = "나만의 알림 문구를 적어주세요"
             $0.font = R.Font.h2
             $0.textColor = R.Color.gray900

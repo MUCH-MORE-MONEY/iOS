@@ -44,13 +44,22 @@ extension CategoryEditCollectionViewCell {
 		titleLabel.text = reactor.currentState.categoryEdit.title
 		
 		editButton.rx.tap
-			.subscribe(onNext: {
-				print("1111")
-			}).disposed(by: disposeBag)
+			.withUnretained(self)
+			.map { .didTapEditButton }
+			.bind(to: reactor.action)
+			.disposed(by: disposeBag)
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: CategoryEditCollectionViewCellReactor) {
+		
+		reactor.state
+			.map { $0.categoryEdit }
+			.distinctUntilChanged() // 중복값 무시
+			.subscribe(onNext: { [weak self] categoryEdit in
+				self?.titleLabel.text = categoryEdit.title
+			})
+			.disposed(by: disposeBag)
 	}
 }
 //MARK: - Action

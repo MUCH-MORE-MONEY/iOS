@@ -220,6 +220,8 @@
 		C4EA5B4429FA2810008D1564 /* Ex+UIStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EA5B4329FA2810008D1564 /* Ex+UIStackView.swift */; };
 		C4EB8CAE2AC17403005FBAF1 /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EB8CAD2AC17402005FBAF1 /* APIConstants.swift */; };
 		C4EB8CB02AC18E85005FBAF1 /* Ex+UICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EB8CAF2AC18E85005FBAF1 /* Ex+UICollectionView.swift */; };
+		C4EB8CB22AC4325C005FBAF1 /* CategoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EB8CB12AC4325C005FBAF1 /* CategoryProvider.swift */; };
+		C4EB8CB42AC438BA005FBAF1 /* TextFieldEditBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EB8CB32AC438BA005FBAF1 /* TextFieldEditBottomSheetViewController.swift */; };
 		FF7FB61A0AC167F25EB6438F /* Pods_MMM_MMMUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 738AB5686981CA1A28640207 /* Pods_MMM_MMMUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -480,6 +482,8 @@
 		C4EA5B4329FA2810008D1564 /* Ex+UIStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIStackView.swift"; sourceTree = "<group>"; };
 		C4EB8CAD2AC17402005FBAF1 /* APIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIConstants.swift; sourceTree = "<group>"; };
 		C4EB8CAF2AC18E85005FBAF1 /* Ex+UICollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UICollectionView.swift"; sourceTree = "<group>"; };
+		C4EB8CB12AC4325C005FBAF1 /* CategoryProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryProvider.swift; sourceTree = "<group>"; };
+		C4EB8CB32AC438BA005FBAF1 /* TextFieldEditBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldEditBottomSheetViewController.swift; sourceTree = "<group>"; };
 		E1F4C2751A32E5FDB91A657F /* Pods-MMMTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMMTests.release.xcconfig"; path = "Target Support Files/Pods-MMMTests/Pods-MMMTests.release.xcconfig"; sourceTree = "<group>"; };
 		F4482F9A861317CCBA1EDC6B /* Pods-MMM-MMMUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMM-MMMUITests.release.xcconfig"; path = "Target Support Files/Pods-MMM-MMMUITests/Pods-MMM-MMMUITests.release.xcconfig"; sourceTree = "<group>"; };
 		FC275A78FD9B770379D3387D /* Pods-MMM.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMM.debug.xcconfig"; path = "Target Support Files/Pods-MMM/Pods-MMM.debug.xcconfig"; sourceTree = "<group>"; };
@@ -919,6 +923,7 @@
 				6A08B47729FF5C7E0080719E /* APIParameters.swift */,
 				6A08B47529FF5B150080719E /* APIRouter.swift */,
 				C4BBD2722ABADB610055FA65 /* ServiceProvider.swift */,
+				C4EB8CB12AC4325C005FBAF1 /* CategoryProvider.swift */,
 				C4BBD2632AB9DE8C0055FA65 /* StatisticsProvider.swift */,
 				C4BBD2702ABADA8B0055FA65 /* ProfileProvider.swift */,
 			);
@@ -1060,6 +1065,7 @@
 				C46409D92AB9625E00A899AD /* BottomSheetViewController2.swift */,
 				C4BBD2652AB9E16D0055FA65 /* DateBottomSheetViewController.swift */,
 				C4BBD26B2ABAD4A60055FA65 /* SatisfactionBottomSheetViewController.swift */,
+				C4EB8CB32AC438BA005FBAF1 /* TextFieldEditBottomSheetViewController.swift */,
 			);
 			path = BottomSheet;
 			sourceTree = "<group>";
@@ -1567,6 +1573,7 @@
 				C4351B502A1691FB005F95BE /* HighlightViewController.swift in Sources */,
 				6A04FA092A1C7EE80034C114 /* EditActivityViewModel.swift in Sources */,
 				C4170B592A94853400CE0A65 /* StatisticsActivityView.swift in Sources */,
+				C4EB8CB42AC438BA005FBAF1 /* TextFieldEditBottomSheetViewController.swift in Sources */,
 				C4EA5B4229FA26E0008D1564 /* HomeHeaderStackView.swift in Sources */,
 				C4BBD2932AC04C550055FA65 /* CategoryEditSectionModel.swift in Sources */,
 				6A4313E22A13046E00095041 /* BottomPageControlView.swift in Sources */,
@@ -1611,6 +1618,7 @@
 				C433A07329EEE751008B26DF /* Ex+Date.swift in Sources */,
 				C4EA5B4029FA1A40008D1564 /* HomeHeaderView.swift in Sources */,
 				6A8B776329FF92CC0095ECFC /* Constants.swift in Sources */,
+				C4EB8CB22AC4325C005FBAF1 /* CategoryProvider.swift in Sources */,
 				C4DBAA3929DEAE0200D1BB97 /* CountAnimationStackView.swift in Sources */,
 				C46409B22AB593C100A899AD /* CategoryCollectionViewCellReactor.swift in Sources */,
 				6A1BAD4529E6550100818086 /* OnboardingViewModel.swift in Sources */,

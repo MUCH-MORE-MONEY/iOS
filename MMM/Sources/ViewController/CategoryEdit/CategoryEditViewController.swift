@@ -193,6 +193,14 @@ extension CategoryEditViewController {
 				//				}
 			})
 			.disposed(by: disposeBag)
+		
+		reactor.state
+			.compactMap { $0.nextEditScreen }
+			.subscribe(onNext: { [weak self] categoryEdit in
+				self?.willPresentViewController(categoryEdit: categoryEdit)
+			})
+			.disposed(by: disposeBag)
+
 	}
 }
 //MARK: - Action
@@ -231,11 +239,20 @@ extension CategoryEditViewController {
 		return section
 	}
 	
-	private func cellForItemAt(at indexPath: IndexPath?) -> UICollectionViewCell? {
-		guard let indexPath = indexPath else {
-			return nil
-		}
-		return collectionView.cellForItem(at: indexPath)
+//	private func cellForItemAt(at indexPath: IndexPath?) -> UICollectionViewCell? {
+//		guard let indexPath = indexPath else {
+//			return nil
+//		}
+//		return collectionView.cellForItem(at: indexPath)
+//	}
+	
+	private func willPresentViewController(categoryEdit: CategoryEdit) {
+		guard let reactor = self.reactor else { return }
+		
+		let vc = TextFieldEditBottomSheetViewController(title: "카테고리 수정하기", categoryEdit: categoryEdit, height: 174)
+		vc.reactor = SatisfactionBottomSheetReactor(provider: reactor.provider)
+
+		self.present(vc, animated: true, completion: nil)
 	}
 }
 //MARK: - Attribute & Hierarchy & Layouts

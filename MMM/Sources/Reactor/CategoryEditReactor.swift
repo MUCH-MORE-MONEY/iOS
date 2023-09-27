@@ -11,12 +11,14 @@ final class CategoryEditReactor: Reactor {
 	// 사용자의 액션
 	enum Action {
 		case loadData(String)
+		case dragAndDrop(IndexPath, IndexPath, CategoryEditItem)
 	}
 	
 	// 처리 단위
 	enum Mutation {
 		case setHeaders([CategoryHeader])
 		case setSections([CategoryEditSectionModel])
+		case dragAndDrop(IndexPath, IndexPath, CategoryEditItem)
 	}
 	
 	// 현재 상태를 기록
@@ -48,6 +50,8 @@ extension CategoryEditReactor {
 				loadHeaderData(CategoryEditReqDto(economicActivityDvcd: type)),
 				loadCategoryData(CategoryEditReqDto(economicActivityDvcd: type))
 			])
+		case let .dragAndDrop(startIndex, destinationIndexPath, item):
+			return .just(.dragAndDrop(startIndex, destinationIndexPath, item))
 		}
 	}
 	
@@ -56,10 +60,21 @@ extension CategoryEditReactor {
 		var newState = state
 		
 		switch mutation {
-		case .setHeaders(let headers):
+		case let .setHeaders(headers):
 			newState.headers = headers
-		case .setSections(let sections):
+		case let .setSections(sections):
 			newState.sections = sections
+		case let .dragAndDrop(startIndex, destinationIndexPath, item):
+			var sections = newState.sections
+			
+			sections[startIndex.section].items.remove(at: startIndex.row)
+			sections[startIndex.section].items.insert(item, at: destinationIndexPath.row)
+			newState.sections = sections
+//			let temp = newState.sections[startIndex.section].items[startIndex.row].item.orderNum
+//			newState.sections[startIndex.section].items[startIndex.row].item.orderNum = newState.sections[startIndex.section].items[destinationIndexPath.row].item.orderNum
+//			for item in newState.sections[destinationIndexPath.section].items {
+//				print(item.item)
+//			}
 		}
 		
 		return newState
@@ -85,17 +100,13 @@ extension CategoryEditReactor {
 	
 	// Section에 따른 Data 주입
 	private func makeSections(respose: CategoryEditResDto, type: String) -> [CategoryEditSectionModel] {
-		var data = respose.data.selectListOutputDto
-		
-		if data.isEmpty { // 임시
-			data = [CategoryEdit.getDummy()]
-		}
-		
+		let data = respose.data.selectListOutputDto
+
 		var sections: [CategoryEditSectionModel] = []
 
 		for header in currentState.headers {
-			let categoryitems: [CategoryEditItem] = data.filter { $0.upperOrderNum == header.id }.map { category -> CategoryEditItem in
-				return .base(.init(category: category))
+			let categoryitems: [CategoryEditItem] = data.filter { $0.upperOrderNum == header.id }.map { categoryEdit -> CategoryEditItem in
+				return .base(.init(categoryEdit: categoryEdit))
 			}
 			
 			let model: CategoryEditSectionModel = .init(model: .base(header, categoryitems), items: categoryitems)

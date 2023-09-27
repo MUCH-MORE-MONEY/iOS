@@ -62,6 +62,8 @@ extension CategoryEditCollectionViewCell {
 	override func setAttribute() {
 		super.setAttribute()
 		
+		backgroundColor = R.Color.gray900
+		
 		titleLabel = titleLabel.then {
 			$0.font = R.Font.body1
 			$0.textColor = R.Color.gray100

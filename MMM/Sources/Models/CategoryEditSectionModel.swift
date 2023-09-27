@@ -22,7 +22,14 @@ enum CategoryEditItem: IdentifiableType, Equatable {
 	var identity: some Hashable {
 		switch self {
 		case let .base(reactor):
-			return reactor.currentState.category.orderNum
+			return reactor.currentState.categoryEdit.orderNum
+		}
+	}
+	
+	var item: CategoryEdit {
+		switch self {
+		case var .base(reactor):
+			return reactor.currentState.categoryEdit
 		}
 	}
 	
@@ -32,7 +39,7 @@ enum CategoryEditItem: IdentifiableType, Equatable {
 	}
 }
 // MARK: - AnimatableSectionModelType Protocol
-extension CategoryEditSection: AnimatableSectionModelType {
+extension CategoryEditSection: AnimatableSectionModelType, Equatable {
 	typealias Item = CategoryEditItem
 	
 	// 준수해야할 Property

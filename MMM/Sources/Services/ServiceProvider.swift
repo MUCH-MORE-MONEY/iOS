@@ -8,6 +8,7 @@
 import Foundation
 
 protocol ServiceProviderProtocol: AnyObject {
+	var categoryProvider: CategoryServiceProtocol { get }
 	var statisticsProvider: StatisticsServiceProtocol { get }
 	var profileProvider: ProfileServiceProtocol { get }
 }
@@ -15,6 +16,7 @@ protocol ServiceProviderProtocol: AnyObject {
 final class ServiceProvider: ServiceProviderProtocol {
 	static let shared = ServiceProvider()
 
+	lazy var categoryProvider: CategoryServiceProtocol = CategoryProvider()
 	lazy var statisticsProvider: StatisticsServiceProtocol = StatisticsProvider()
 	lazy var profileProvider: ProfileServiceProtocol = ProfileProvider()
 

@@ -11,12 +11,16 @@ final class CategoryEditReactor: Reactor {
 	// 사용자의 액션
 	enum Action {
 		case loadData(String)
+		case dragAndDrop(IndexPath, IndexPath, CategoryEditItem)
 	}
 	
 	// 처리 단위
 	enum Mutation {
 		case setHeaders([CategoryHeader])
 		case setSections([CategoryEditSectionModel])
+		case deleteItem(CategoryEdit)
+		case dragAndDrop(IndexPath, IndexPath, CategoryEditItem)
+		case setNextEditScreen(CategoryEdit)
 	}
 	
 	// 현재 상태를 기록
@@ -25,15 +29,18 @@ final class CategoryEditReactor: Reactor {
 		var date: Date
 		var headers: [CategoryHeader] = []
 		var sections: [CategoryEditSectionModel] = []
+		var nextEditScreen: CategoryEdit?
 		var error = false
 	}
 	
 	// MARK: Properties
 	let initialState: State
-	
-	init(type: String, date: Date) {
-		initialState = State(type: type, date: date)
-		
+	let provider: ServiceProviderProtocol
+
+	init(provider: ServiceProviderProtocol, type: String, date: Date) {
+		self.initialState = State(type: type, date: date)
+		self.provider = provider
+
 		// 뷰가 최초 로드 될 경우
 		action.onNext(.loadData(type))
 	}
@@ -48,7 +55,25 @@ extension CategoryEditReactor {
 				loadHeaderData(CategoryEditReqDto(economicActivityDvcd: type)),
 				loadCategoryData(CategoryEditReqDto(economicActivityDvcd: type))
 			])
+		case let .dragAndDrop(startIndex, destinationIndexPath, item):
+			return .just(.dragAndDrop(startIndex, destinationIndexPath, item))
 		}
+	}
+	
+	/// 각각의 stream을 변형
+	func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
+		let event = provider.categoryProvider.event.flatMap { event -> Observable<Mutation> in
+			switch event {
+			case let .presentTitleEdit(categoryEdit):
+				return .just(.setNextEditScreen(categoryEdit))
+			case .updateTitleEdit:
+				return .empty()
+			case let .deleteTitleEdit(categoryEdit):
+				return .just(.deleteItem(categoryEdit))
+			}
+		}
+		
+		return Observable.merge(mutation, event)
 	}
 	
 	/// 이전 상태와 처리 단위(Mutation)를 받아서 다음 상태(State)를 반환하는 함수
@@ -56,10 +81,34 @@ extension CategoryEditReactor {
 		var newState = state
 		
 		switch mutation {
-		case .setHeaders(let headers):
+		case let .setHeaders(headers):
 			newState.headers = headers
-		case .setSections(let sections):
+		case let .setSections(sections):
 			newState.sections = sections
+		case let .deleteItem(categoryEdit):
+			guard let sectionId = Int(categoryEdit.upperId) else {
+				return newState
+			}
+			
+			if let removeIndex = newState.sections[sectionId].items.firstIndex(where: {$0.item.id == categoryEdit.id}) {
+				newState.sections[sectionId].items.remove(at: removeIndex)
+			} else {
+				print("없음")
+			}
+		case let .dragAndDrop(startIndex, destinationIndexPath, item):
+			var sections = newState.sections
+			
+			sections[startIndex.section].items.remove(at: startIndex.row)
+			sections[startIndex.section].items.insert(item, at: destinationIndexPath.row)
+			newState.sections = sections
+//			let temp = newState.sections[startIndex.section].items[startIndex.row].item.orderNum
+//			newState.sections[startIndex.section].items[startIndex.row].item.orderNum = newState.sections[startIndex.section].items[destinationIndexPath.row].item.orderNum
+//			for item in newState.sections[destinationIndexPath.section].items {
+//				print(item.item)
+//			}
+		case let .setNextEditScreen(categoryEdit):
+			newState.nextEditScreen = categoryEdit
+
 		}
 		
 		return newState
@@ -85,17 +134,13 @@ extension CategoryEditReactor {
 	
 	// Section에 따른 Data 주입
 	private func makeSections(respose: CategoryEditResDto, type: String) -> [CategoryEditSectionModel] {
-		var data = respose.data.selectListOutputDto
-		
-		if data.isEmpty { // 임시
-			data = [CategoryEdit.getDummy()]
-		}
-		
+		let data = respose.data.selectListOutputDto
+
 		var sections: [CategoryEditSectionModel] = []
 
 		for header in currentState.headers {
-			let categoryitems: [CategoryEditItem] = data.filter { $0.upperOrderNum == header.id }.map { category -> CategoryEditItem in
-				return .base(.init(category: category))
+			let categoryitems: [CategoryEditItem] = data.filter { $0.upperOrderNum == header.id }.map { categoryEdit -> CategoryEditItem in
+				return .base(.init(provider: provider, categoryEdit: categoryEdit))
 			}
 			
 			let model: CategoryEditSectionModel = .init(model: .base(header, categoryitems), items: categoryitems)

@@ -14,8 +14,7 @@ final class CategorySectionHeader: BaseCollectionReusableView {
 	// MARK: - Constants
 	private enum UI {
 		static let priceLabelMargin: UIEdgeInsets = .init(top: 8, left: 8, bottom: 0, right: 8)
-		static let contentMargin: UIEdgeInsets = .init(top: 12, left: 24, bottom: 0, right: 30)
-		static let headerRightMargin: CGFloat = 30
+		static let contentMargin: UIEdgeInsets = .init(top: 12, left: 8, bottom: 0, right: 30)
 	}
 	
 	// MARK: - UI Components
@@ -46,6 +45,11 @@ extension CategorySectionHeader {
 		priceLabel.text = category.dateYM.suffix(2) + "월 | " + category.total.withCommas() + " 원"
 		radioButton.backgroundColor = type == "01" ? R.Color.orange500 : R.Color.blue500
 		radioButton.setTitle("\(Int(round(category.ratio)))%", for: .normal)
+		
+		// 버튼 크기 변경
+		radioButton.snp.updateConstraints {
+			$0.width.equalTo(category.ratio == 100 ? 50 : 43)
+		}
 	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
@@ -93,13 +97,13 @@ extension CategorySectionHeader {
 		titleLabel.snp.makeConstraints {
 			$0.centerY.equalTo(radioButton)
 			$0.leading.equalTo(radioButton.snp.trailing).offset(UI.priceLabelMargin.left)
-			$0.width.equalTo(self.frame.width / 2 - (UI.headerRightMargin))
+			$0.trailing.equalToSuperview()
 		}
 		
 		priceLabel.snp.makeConstraints {
 			$0.top.equalTo(titleLabel.snp.bottom).offset(UI.priceLabelMargin.top)
 			$0.leading.equalTo(radioButton.snp.trailing).offset(UI.priceLabelMargin.left)
-			$0.width.equalTo(self.frame.width / 2 - (UI.headerRightMargin))
+			$0.trailing.equalToSuperview()
 		}
 	}
 }

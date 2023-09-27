@@ -86,7 +86,10 @@ extension PushSettingReactor {
             //            let request = PushAgreeUpdateReqDto(pushAgreeDvcd: "01", pushAgreeYN: isOn ? "Y" : "N")
             //            return pushAgreeUpdate(request)
         case .newsPushSwitchToggle(let isOn):
-            return .just(.setNewsPushSwitch(isOn))
+            let request = PushAgreeUpdateReqDto(pushAgreeDvcd: "01", pushAgreeYN: isOn ? "Y" : "N")
+            return Observable.concat([
+                .just(.setNewsPushSwitch(isOn)),
+                pushAgreeUpdate(request)])
             
         case .customPushSwitchToggle(let isOn):
             return .just(.setCustomPushSwitch(isOn))
@@ -125,7 +128,7 @@ extension PushSettingReactor {
             }
             
         case .updatePushAgreeSwitch(let response, let error):
-            newState.isNewsPushSwitchOn.toggle()
+            print(response)
 
         // MARK: - 여긴 완성
         case .setPresentDetailView(let isPresent):

@@ -60,14 +60,9 @@ extension AppDelegate: MessagingDelegate {
         
         print("Firebase registration token: \(String(describing: fcmToken))")
         
-        let dataDict: [String: String] = ["token": fcmToken ?? ""]
-        NotificationCenter.default.post(
-            name: Notification.Name("FCMToken"),
-            object: nil,
-            userInfo: dataDict
-        )
+        guard let fcmToken = fcmToken else { return }
         
-        // TODO: - 디바이스 토큰을 보내는 서버통신 구현
-        
+        //fcm token 저장
+        Constants.setKeychain(fcmToken, forKey: Constants.KeychainKey.pushToken)
     }
 }

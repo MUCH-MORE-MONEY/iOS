@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		003B832595A61A7EA6CCC014 /* Pods_MMM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A564931308C77DE145181BBF /* Pods_MMM.framework */; };
+		451805DD2AC112C0005C9155 /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451805DC2AC112C0005C9155 /* APIConstants.swift */; };
+		45AFC2A92AC296E1004DF76E /* CustomPushTextSettingReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AFC2A82AC296E1004DF76E /* CustomPushTextSettingReactor.swift */; };
+		45AFC2AB2AC2A564004DF76E /* CustomPushTextSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AFC2AA2AC2A564004DF76E /* CustomPushTextSettingViewController.swift */; };
+		45D07CCF2AC4071A001C08AB /* CustomPushTimeSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D07CCE2AC4071A001C08AB /* CustomPushTimeSettingViewController.swift */; };
+		45D07CD32AC4078A001C08AB /* CustomPushTimeSettingReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D07CD22AC4078A001C08AB /* CustomPushTimeSettingReactor.swift */; };
 		62AC9C989058B479AA52D81F /* Pods_MMMTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BC1A763E0587F6517C3A5E7 /* Pods_MMMTests.framework */; };
 		6A0379752A2443B9005EE07F /* Ex+UITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0379742A2443B9005EE07F /* Ex+UITextView.swift */; };
 		6A04FA052A1C4BB00034C114 /* AddImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A04FA042A1C4BB00034C114 /* AddImageView.swift */; };
@@ -51,6 +56,8 @@
 		6A27E6952A205338001A7F04 /* Ex+UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A27E6942A205338001A7F04 /* Ex+UITextField.swift */; };
 		6A2B5D592A97217F00CCBFBE /* PushSettingReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2B5D582A97217F00CCBFBE /* PushSettingReactor.swift */; };
 		6A2B5D5B2A9735D500CCBFBE /* DetailTimeSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2B5D5A2A9735D500CCBFBE /* DetailTimeSettingView.swift */; };
+		6A2B5D5D2A97415000CCBFBE /* CustomPushTextSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2B5D5C2A97415000CCBFBE /* CustomPushTextSettingView.swift */; };
+		6A2B5D5F2A9744E800CCBFBE /* CustomPushTimeSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2B5D5E2A9744E800CCBFBE /* CustomPushTimeSettingView.swift */; };
 		6A2B5D5D2A97415000CCBFBE /* TextSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2B5D5C2A97415000CCBFBE /* TextSettingView.swift */; };
 		6A2B5D5F2A9744E800CCBFBE /* TimeSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2B5D5E2A9744E800CCBFBE /* TimeSettingView.swift */; };
 		6A381E0A29E8F40700E0974F /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A381E0929E8F40700E0974F /* AddViewController.swift */; };
@@ -264,6 +271,11 @@
 		0020DFFCCABA708243684054 /* Pods-MMM.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMM.release.xcconfig"; path = "Target Support Files/Pods-MMM/Pods-MMM.release.xcconfig"; sourceTree = "<group>"; };
 		1E035A75D3A833AD01047796 /* Pods-MMMTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMMTests.debug.xcconfig"; path = "Target Support Files/Pods-MMMTests/Pods-MMMTests.debug.xcconfig"; sourceTree = "<group>"; };
 		2BC1A763E0587F6517C3A5E7 /* Pods_MMMTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MMMTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		451805DC2AC112C0005C9155 /* APIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIConstants.swift; sourceTree = "<group>"; };
+		45AFC2A82AC296E1004DF76E /* CustomPushTextSettingReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPushTextSettingReactor.swift; sourceTree = "<group>"; };
+		45AFC2AA2AC2A564004DF76E /* CustomPushTextSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPushTextSettingViewController.swift; sourceTree = "<group>"; };
+		45D07CCE2AC4071A001C08AB /* CustomPushTimeSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPushTimeSettingViewController.swift; sourceTree = "<group>"; };
+		45D07CD22AC4078A001C08AB /* CustomPushTimeSettingReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPushTimeSettingReactor.swift; sourceTree = "<group>"; };
 		58A4D4522CDE75108D91C22E /* Pods-MMM-MMMUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMM-MMMUITests.debug.xcconfig"; path = "Target Support Files/Pods-MMM-MMMUITests/Pods-MMM-MMMUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		6A0379742A2443B9005EE07F /* Ex+UITextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UITextView.swift"; sourceTree = "<group>"; };
 		6A04FA042A1C4BB00034C114 /* AddImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddImageView.swift; sourceTree = "<group>"; };
@@ -309,10 +321,9 @@
 		6A2B5D562A97215000CCBFBE /* PushSettingDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushSettingDetailViewController.swift; sourceTree = "<group>"; };
 		6A2B5D582A97217F00CCBFBE /* PushSettingReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushSettingReactor.swift; sourceTree = "<group>"; };
 		6A2B5D5A2A9735D500CCBFBE /* DetailTimeSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailTimeSettingView.swift; sourceTree = "<group>"; };
-		6A2B5D5C2A97415000CCBFBE /* TextSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSettingView.swift; sourceTree = "<group>"; };
-		6A2B5D5E2A9744E800CCBFBE /* TimeSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSettingView.swift; sourceTree = "<group>"; };
+		6A2B5D5C2A97415000CCBFBE /* CustomPushTextSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPushTextSettingView.swift; sourceTree = "<group>"; };
+		6A2B5D5E2A9744E800CCBFBE /* CustomPushTimeSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPushTimeSettingView.swift; sourceTree = "<group>"; };
 		6A2CE3D62ABE9B58008C22BF /* APIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = APIConstants.swift; path = MMM/Sources/Services/APIConstants.swift; sourceTree = SOURCE_ROOT; };
-		6A2CE3D82ABE9D41008C22BF /* APIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = APIConstants.swift; path = MMM/Sources/Services/APIConstants.swift; sourceTree = SOURCE_ROOT; };
 		6A381E0929E8F40700E0974F /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 		6A4313E12A13046E00095041 /* BottomPageControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomPageControlView.swift; sourceTree = "<group>"; };
 		6A4F6E952A29ADA500754150 /* Ex+UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIViewController.swift"; sourceTree = "<group>"; };
@@ -521,6 +532,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		45D07CD02AC4071F001C08AB /* CustomPush */ = {
+			isa = PBXGroup;
+			children = (
+				45AFC2AA2AC2A564004DF76E /* CustomPushTextSettingViewController.swift */,
+				45D07CCE2AC4071A001C08AB /* CustomPushTimeSettingViewController.swift */,
+			);
+			path = CustomPush;
+			sourceTree = "<group>";
+		};
+		45D07CD12AC4076D001C08AB /* CustomPush */ = {
+			isa = PBXGroup;
+			children = (
+				45AFC2A82AC296E1004DF76E /* CustomPushTextSettingReactor.swift */,
+				45D07CD22AC4078A001C08AB /* CustomPushTimeSettingReactor.swift */,
+			);
+			path = CustomPush;
+			sourceTree = "<group>";
+		};
 		6A08B47B29FF5D3D0080719E /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
@@ -607,7 +636,7 @@
 		6A14E7182A9E0BC20071805D /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				6A2CE3D82ABE9D41008C22BF /* APIConstants.swift */,
+				451805DC2AC112C0005C9155 /* APIConstants.swift */,
 				6A14E7192A9E0C140071805D /* APIType.swift */,
 				6A14E71B2A9E119C0071805D /* MMMAPIService.swift */,
 				6A77D6D52AA01F7A00CE30DB /* NetworkProtocol.swift */,
@@ -619,8 +648,8 @@
 			isa = PBXGroup;
 			children = (
 				6A25E44C2AA8ACDF0055EA29 /* Week */,
-				6A2B5D5C2A97415000CCBFBE /* TextSettingView.swift */,
-				6A2B5D5E2A9744E800CCBFBE /* TimeSettingView.swift */,
+				6A2B5D5C2A97415000CCBFBE /* CustomPushTextSettingView.swift */,
+				6A2B5D5E2A9744E800CCBFBE /* CustomPushTimeSettingView.swift */,
 				6A2B5D5A2A9735D500CCBFBE /* DetailTimeSettingView.swift */,
 			);
 			path = PushSetting;
@@ -1054,6 +1083,7 @@
 		C46409C82AB8805500A899AD /* BottomSheet */ = {
 			isa = PBXGroup;
 			children = (
+				45D07CD02AC4071F001C08AB /* CustomPush */,
 				C4199DD229FE3051006E5DA8 /* BottomSheetViewController.swift */,
 				C46409D92AB9625E00A899AD /* BottomSheetViewController2.swift */,
 				C4BBD2652AB9E16D0055FA65 /* DateBottomSheetViewController.swift */,
@@ -1082,6 +1112,7 @@
 		C4BBD26F2ABAD8BB0055FA65 /* BottomSheet */ = {
 			isa = PBXGroup;
 			children = (
+				45D07CD12AC4076D001C08AB /* CustomPush */,
 				C4BBD2692AB9E1DA0055FA65 /* DateBottomSheetReactor.swift */,
 				C4BBD26D2ABAD6140055FA65 /* SatisfactionBottomSheetReactor.swift */,
 			);
@@ -1497,11 +1528,13 @@
 				C411940B29DAEDF9003DBC15 /* CustomAlertViewController.swift in Sources */,
 				C4170B4E2A89FCA800CE0A65 /* StatisticsViewController.swift in Sources */,
 				C4DBAA3029DD459100D1BB97 /* WithdrawConfirmView.swift in Sources */,
+				45D07CD32AC4078A001C08AB /* CustomPushTimeSettingReactor.swift in Sources */,
 				C46409AC2AB328EE00A899AD /* StatisticsResDto.swift in Sources */,
 				C41193FD29D42BD9003DBC15 /* ProfileFooterView.swift in Sources */,
 				C44807E129E648D300D4B090 /* HomeViewController.swift in Sources */,
 				C4BBD2662AB9E16D0055FA65 /* DateBottomSheetViewController.swift in Sources */,
 				C46409BE2AB5B0A000A899AD /* BaseCollectionReusableView.swift in Sources */,
+				6A2B5D5D2A97415000CCBFBE /* CustomPushTextSettingView.swift in Sources */,
 				6A2B5D5D2A97415000CCBFBE /* TextSettingView.swift in Sources */,
 				C4BBD28D2AC048860055FA65 /* CategoryEditSectionFooter.swift in Sources */,
 				C44807DE29E4FE8000D4B090 /* Ex+Publisher.swift in Sources */,
@@ -1536,6 +1569,7 @@
 				C46409C22AB5D56700A899AD /* CategoryEditResDto.swift in Sources */,
 				C44807E529E7E76800D4B090 /* Ex+UIControl.swift in Sources */,
 				6A08B47829FF5C7E0080719E /* APIParameters.swift in Sources */,
+				45D07CCF2AC4071A001C08AB /* CustomPushTimeSettingViewController.swift in Sources */,
 				C46409DA2AB9625E00A899AD /* BottomSheetViewController2.swift in Sources */,
 				C4BBD2912AC0498E0055FA65 /* CategoryEditReactor.swift in Sources */,
 				C4C0CAF52A1C88DC00C41FF4 /* PriceViewModel.swift in Sources */,
@@ -1549,6 +1583,7 @@
 				6A12144729FA0C300076848A /* AppleLoginResDto.swift in Sources */,
 				6A0F234229DBA92D0063673B /* ServiceViewController.swift in Sources */,
 				C4DBAA3729DD7B2600D1BB97 /* CountPushLabel.swift in Sources */,
+				45AFC2A92AC296E1004DF76E /* CustomPushTextSettingReactor.swift in Sources */,
 				C41193E729D287E6003DBC15 /* Ex+Icon.swift in Sources */,
 				C4BBD26A2AB9E1DA0055FA65 /* DateBottomSheetReactor.swift in Sources */,
 				C4BBD26C2ABAD4A60055FA65 /* SatisfactionBottomSheetViewController.swift in Sources */,
@@ -1586,13 +1621,12 @@
 				6A0F234029DBA8AA0063673B /* DataExportViewController.swift in Sources */,
 				C4BBD2642AB9DE8C0055FA65 /* StatisticsProvider.swift in Sources */,
 				6A14E7092A9DCA720071805D /* PushReqDto.swift in Sources */,
-				6A2CE3D72ABE9B58008C22BF /* APIConstants.swift in Sources */,
 				6A14E7092A9DCA720071805D /* PushReqDto.swift in Sources */,
 				6A25E4482AA84D9A0055EA29 /* WeekCollectionViewCell.swift in Sources */,
 				C44807E329E649A300D4B090 /* HomeViewModel.swift in Sources */,
 				C46409B62AB5987800A899AD /* CategoryCollectionViewCell.swift in Sources */,
 				6A77D6D62AA01F7A00CE30DB /* NetworkProtocol.swift in Sources */,
-				6A2B5D5F2A9744E800CCBFBE /* TimeSettingView.swift in Sources */,
+				6A2B5D5F2A9744E800CCBFBE /* CustomPushTimeSettingView.swift in Sources */,
 				6A14E71C2A9E119C0071805D /* MMMAPIService.swift in Sources */,
 				6A15B0EC2A15B68D00EADAC5 /* BaseAddActivityViewController.swift in Sources */,
 				C4C8B68D2A3ACDC700FAF931 /* LoadingViewController.swift in Sources */,
@@ -1613,6 +1647,7 @@
 				C46409B22AB593C100A899AD /* CategoryCollectionViewCellReactor.swift in Sources */,
 				6A1BAD4529E6550100818086 /* OnboardingViewModel.swift in Sources */,
 				6A14E7152A9DD4600071805D /* Ex+String.swift in Sources */,
+				45AFC2AB2AC2A564004DF76E /* CustomPushTextSettingViewController.swift in Sources */,
 				6A08B47A29FF5CA90080719E /* APIClient.swift in Sources */,
 				C4C792A82A35916D007FD6AA /* WithdrawResDto.swift in Sources */,
 				C4BBD2952AC075E00055FA65 /* Category.swift in Sources */,
@@ -1631,6 +1666,7 @@
 				C41193E429D287E6003DBC15 /* Ex+Font.swift in Sources */,
 				C4BBD27D2ABEBFB70055FA65 /* CategoryHeader.swift in Sources */,
 				C41193E529D287E6003DBC15 /* Ex+UIDevice.swift in Sources */,
+				451805DD2AC112C0005C9155 /* APIConstants.swift in Sources */,
 				C4C0CB092A2474F900C41FF4 /* Ex+UILabel.swift in Sources */,
 				6A1322F12A089B2900CEEC81 /* BasePaddingLabel.swift in Sources */,
 				C4D7FC872A08942E00565291 /* Monthly.swift in Sources */,

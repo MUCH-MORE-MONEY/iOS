@@ -25,11 +25,11 @@ final class PushSettingViewController: BaseViewControllerWithNav, View {
     private lazy var customPushSwitch = UISwitch()
     private lazy var customPushSubLabel = UILabel()
     
-    private lazy var timeSettingLabel = UILabel()
-    private lazy var timeSettingView = TimeSettingView()
+    private lazy var customPushTimeSettingLabel = UILabel()
+    private lazy var customPushTimeSettingView = CustomPushTimeSettingView()
     
-    private lazy var textSettingLabel = UILabel()
-    private lazy var textSettingView = TextSettingView()
+    private lazy var customPushTextSettingLabel = UILabel()
+    private lazy var customPushTextSettingView = CustomPushTextSettingView()
     
     private lazy var divider = UIView()
     // MARK: - Properties
@@ -37,7 +37,7 @@ final class PushSettingViewController: BaseViewControllerWithNav, View {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        bind(reactor: reactor)
+        bind(reactor: reactor)        
     }
     
     func bind(reactor: PushSettingReactor) {
@@ -73,31 +73,32 @@ extension PushSettingViewController {
             .disposed(by: disposeBag)
         
         // 알림 시간 지정 버튼
-        timeSettingView.rx.tapGesture()
+        customPushTimeSettingView.rx.tapGesture()
             .when(.recognized)
-            .map { _ in .didTapTimeSettingButton }
+            .map { _ in .didTapCustomPushTimeSettingView }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
         // 알림 문구 지정 버튼
-        textSettingView.rx.tapGesture()
+        customPushTextSettingView.rx.tapGesture()
             .when(.recognized)
-            .map { _ in .didTapTextSettingButton }
-            .bind(to: reactor.action)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.presentBottomSheet()
+            })
             .disposed(by: disposeBag)
     }
     
     private func bindState(_ reactor: PushSettingReactor) {
         
         // FIXME: -
-        // 뷰 최초 진입 시 알람 설정 메시지 띄우기
+        // 뷰 최초 진입 시 알람 설정 메시지 띄우기 && 푸쉬 설정이 꺼져있으면 토글 false
         reactor.state
             .map { $0.isShowPushAlert }
             .distinctUntilChanged()
-            .filter { !$0 }
             .bind(onNext: showAlertMessage)
             .disposed(by: disposeBag)
-        
+                
         // FIXME: - 네트워크 테스트 코드
         //        reactor.state
         //            .compactMap { $0.pushMessage }
@@ -108,34 +109,18 @@ extension PushSettingViewController {
         //            }
         //            .disposed(by: disposeBag)
         
-        //        reactor.state
-        //            .subscribe(on: MainScheduler.instance)
-        //            .map { $0.isEventSwitchOn }
-        //            .bind { [weak self] data in
-        //                guard let self = self else { return }
-        //                self.eventSwitch.isOn = data
-        //            }
-        //            .disposed(by: disposeBag)
-        
-        
-        
-        //        reactor.state
-        //            .filter { !$0.isInit }
-        //            .map { $0.pushList }
-        //            .filter { !$0.isEmpty }
-        //            .bind { [weak self] list in
-        //                guard let self = self else { return }
-        //                self.eventSwitch.isOn = list[0].pushAgreeYN == "Y" ? true : false
-        //                self.infoSwitch.isOn = list[1].pushAgreeYN == "Y" ? true : false
-        //
-        //            }
-        //            .disposed(by: disposeBag)
-        
+        // 푸쉬 알림
+        reactor.state
+            .map { $0.isNewsPushSwitchOn }
+            .distinctUntilChanged()
+            .bind(onNext: configureNewsPushSwitch)
+            .disposed(by: disposeBag)
         
         // 맞춤 알림 on 일때 버튼 활성화
         reactor.state
             .map { $0.isCustomPushSwitchOn }
-            .bind(onNext: configureViews)
+            .distinctUntilChanged()
+            .bind(onNext: configureCustomPushSwitch)
             .disposed(by: disposeBag)
         
         // 맞춤 알림 on && detail 화면 전환
@@ -145,6 +130,16 @@ extension PushSettingViewController {
             .filter { $0 }
             .bind(onNext: presentDetailViewController)
             .disposed(by: disposeBag)
+        
+        
+        reactor.state
+            .map { $0.customPushLabelText }
+            .bind { text in
+                let title = Common.getCustomPushText()
+                self.customPushTextSettingView.setTitle(title)
+            }
+            .disposed(by: disposeBag)
+
     }
 }
 
@@ -152,36 +147,58 @@ extension PushSettingViewController {
 private extension PushSettingViewController {
     private func presentDetailViewController(_ isPresent: Bool) {
         let vc = PushSettingDetailViewController()
-		vc.reactor = PushSettingDetailReactor(provider: ServiceProvider.shared)
+        vc.reactor = PushSettingDetailReactor(provider: ServiceProvider.shared)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    private func showAlertMessage(_ isFirst: Bool) {
+    private func showAlertMessage(_ isPushOn: Bool) {
         let title = "앱 알림이 꺼져있어요"
         let message = "알림을 받기 위해 앱 알림을 켜주세요"
         
-        DispatchQueue.main.async {
-            self.showAlert(alertType: .canCancel, titleText: title, contentText: message, cancelButtonText: "닫기", confirmButtonText: "알림 켜기")
+        if isPushOn {
+            
+        } else {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.showAlert(alertType: .canCancel, titleText: title, contentText: message, cancelButtonText: "닫기", confirmButtonText: "알림 켜기")
+                self.newsPushSwitch.isOn = isPushOn
+                self.customPushSwitch.isOn = isPushOn
+                
+                self.newsPushSwitch.isEnabled = false
+                self.customPushSwitch.isEnabled = false
+            }
         }
     }
     
     // 스위치 상태에 따른 버튼 비/활성화
-    private func configureViews(_ isOn: Bool) {
-        self.textSettingView.configure(isOn)
-        self.timeSettingView.configure(isOn)
+    private func configureCustomPushSwitch(_ isOn: Bool) {
+        self.customPushTextSettingView.configure(isOn)
+        self.customPushTimeSettingView.configure(isOn)
+        // UserDefaults에 현재 스위치 상태 값 저장
+        Common.setCustomPushSwitch(isOn)
+    }
+    
+    private func configureNewsPushSwitch(_ isOn: Bool) {
+        Common.setNewsPushSwitch(isOn)
+    }
+    
+    private func presentBottomSheet() {
+        let vc = CustomPushTextSettingViewController(title: "알림 문구 지정", height: 200)
+        vc.reactor = CustomPushTextSettingReactor(provider: reactor.provider)
+        self.present(vc, animated: true, completion: nil)
     }
 }
 
 extension PushSettingViewController {
-	override func setAttribute() {
+    override func setAttribute() {
         title = "푸시 알림 설정"
-		view.backgroundColor = R.Color.gray100
-
+        view.backgroundColor = R.Color.gray100
+        
         newsPushStackView.addArrangedSubviews(newsPushMainLabel, newsPushSwitch)
         customPushStackView.addArrangedSubviews(customPushMainLabel, customPushSwitch)
         
-        view.addSubviews(newsPushStackView, newsPushSubLabel, divider, customPushStackView, customPushSubLabel, timeSettingLabel, textSettingLabel, timeSettingView, textSettingView)
-
+        view.addSubviews(newsPushStackView, newsPushSubLabel, divider, customPushStackView, customPushSubLabel, customPushTimeSettingLabel, customPushTextSettingLabel, customPushTimeSettingView, customPushTextSettingView)
+        
         
         newsPushStackView = newsPushStackView.then {
             $0.axis = .horizontal
@@ -235,28 +252,28 @@ extension PushSettingViewController {
             $0.textColor = R.Color.gray800
         }
         
-        timeSettingLabel = timeSettingLabel.then {
+        customPushTimeSettingLabel = customPushTimeSettingLabel.then {
             $0.text = "알림 시간 지정"
             $0.font = R.Font.title1
             $0.textColor = R.Color.gray800
         }
         
-        textSettingLabel = textSettingLabel.then {
+        customPushTextSettingLabel = customPushTextSettingLabel.then {
             $0.text = "알람 문구 지정"
             $0.font = R.Font.title1
             $0.textColor = R.Color.gray800
         }
         
-        timeSettingView = timeSettingView.then {
+        customPushTimeSettingView = customPushTimeSettingView.then {
             $0.layer.cornerRadius = 4
         }
         
-        textSettingView = textSettingView.then {
+        customPushTextSettingView = customPushTextSettingView.then {
             $0.layer.cornerRadius = 4
         }
     }
     
-	override func setLayout() {
+    override func setLayout() {
         newsPushStackView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(24)
             $0.left.equalToSuperview().offset(24)
@@ -288,26 +305,26 @@ extension PushSettingViewController {
             $0.right.equalToSuperview().offset(-24)
         }
         
-        timeSettingLabel.snp.makeConstraints {
+        customPushTimeSettingLabel.snp.makeConstraints {
             $0.top.equalTo(customPushSubLabel.snp.bottom).offset(24)
             $0.left.equalToSuperview().offset(24)
             $0.right.equalToSuperview().offset(-24)
         }
         
-        timeSettingView.snp.makeConstraints {
-            $0.top.equalTo(timeSettingLabel.snp.bottom).offset(12)
+        customPushTimeSettingView.snp.makeConstraints {
+            $0.top.equalTo(customPushTimeSettingLabel.snp.bottom).offset(12)
             $0.left.equalToSuperview().offset(24)
             $0.right.equalToSuperview().offset(-24)
         }
         
-        textSettingLabel.snp.makeConstraints {
-            $0.top.equalTo(timeSettingView.snp.bottom).offset(24)
+        customPushTextSettingLabel.snp.makeConstraints {
+            $0.top.equalTo(customPushTimeSettingView.snp.bottom).offset(24)
             $0.left.equalToSuperview().offset(24)
             $0.right.equalToSuperview().offset(-24)
         }
-
-        textSettingView.snp.makeConstraints {
-            $0.top.equalTo(textSettingLabel.snp.bottom).offset(12)
+        
+        customPushTextSettingView.snp.makeConstraints {
+            $0.top.equalTo(customPushTextSettingLabel.snp.bottom).offset(12)
             $0.left.equalToSuperview().offset(24)
             $0.right.equalToSuperview().offset(-24)
         }
@@ -333,3 +350,4 @@ extension PushSettingViewController: CustomAlertDelegate {
     
     func didAlertCacelButton() { }
 }
+

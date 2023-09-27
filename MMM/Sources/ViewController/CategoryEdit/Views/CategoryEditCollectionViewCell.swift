@@ -41,7 +41,12 @@ final class CategoryEditCollectionViewCell: BaseCollectionViewCell, View {
 extension CategoryEditCollectionViewCell {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
 	private func bindAction(_ reactor: CategoryEditCollectionViewCellReactor) {
-		titleLabel.text = reactor.currentState.category.title
+		titleLabel.text = reactor.currentState.categoryEdit.title
+		
+		editButton.rx.tap
+			.subscribe(onNext: {
+				print("1111")
+			}).disposed(by: disposeBag)
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
@@ -65,11 +70,13 @@ extension CategoryEditCollectionViewCell {
 		
 		editButton = editButton.then {
 			$0.setImage(R.Icon.iconEditGray24, for: .normal)
+			$0.setImage(R.Icon.iconEditGray24?.alpha(0.7), for: .highlighted)
 			$0.imageView?.contentMode = .scaleAspectFit
 		}
 		
 		dragButton = dragButton.then {
 			$0.setImage(R.Icon.drag, for: .normal)
+			$0.setImage(R.Icon.drag?.alpha(0.7), for: .highlighted)
 			$0.imageView?.contentMode = .scaleAspectFit
 		}
 	}

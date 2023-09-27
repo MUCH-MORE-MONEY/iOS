@@ -72,7 +72,7 @@ extension PushSettingDetailViewController {
             .map { $0.isPresentTime }
             .distinctUntilChanged()
             .filter { $0 }
-            .bind(onNext: presentBottomSheet)
+            .bind(onNext: presentBottomSheet1)
             .disposed(by: disposeBag)
         
 		reactor.state
@@ -93,6 +93,12 @@ extension PushSettingDetailViewController {
     
     private func setTime(_ date: Date) {
         detailTimeSettingView.configure(date)
+    }
+    
+    private func presentBottomSheet1(_ isPresent: Bool) {
+        let vc = CustomPushTimeSettingViewController(title: "시간 설정", height: 360, sheetMode: .drag)
+        
+        self.present(vc, animated: true)
     }
 }
 //MARK: - Attribute & Hierarchy & Layouts & Bind

@@ -37,9 +37,7 @@ final class PushSettingViewController: BaseViewControllerWithNav, View {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        bind(reactor: reactor)
-        
-        debugPrint(Common.getCustomPushText())
+        bind(reactor: reactor)        
     }
     
     func bind(reactor: PushSettingReactor) {

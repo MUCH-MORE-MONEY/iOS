@@ -103,7 +103,7 @@ extension CustomPushTextSettingViewController {
     }
     
     @objc private func keyboardWillHide(_ notification: NSNotification) {
-//        moveViewWithKeyboard(notification: notification, keyboardWillShow: false)
+        moveViewWithKeyboard(notification: notification, keyboardWillShow: false)
     }
     
     private func moveViewWithKeyboard(notification: NSNotification, keyboardWillShow: Bool) {
@@ -123,11 +123,11 @@ extension CustomPushTextSettingViewController {
 
         if keyboardWillShow {
 //            let height = self.containerView.frame.height
-            updateHeight = height + self.containerView.frame.height
+            updateHeight = keyboardHeight + self.containerView.frame.height
            
 
             containerView.snp.updateConstraints {
-                $0.height.equalTo(updateHeight + height - 32.0) // 32(Super Class의 Drag 영역)를 반드시 뺴줘야한다.
+                $0.height.equalTo(updateHeight - 32.0) // 32(Super Class의 Drag 영역)를 반드시 뺴줘야한다.
             }
         } else {
             updateHeight = 0

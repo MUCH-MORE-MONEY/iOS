@@ -112,8 +112,12 @@ extension CategoryEditReactor {
 				return newState
 			}
 			
-			if let removeIndex = newState.sections[sectionId - 1].items.firstIndex(where: {$0.item.id == categoryEdit.id}) {
-				newState.sections[sectionId - 1].items.remove(at: removeIndex)
+			if let section = newState.sections.enumerated().filter({ $0.element.model.header.id == categoryEdit.upperId }).first {
+				let sectionId = section.offset
+				
+				if let removeIndex = newState.sections[sectionId].items.firstIndex(where: {$0.item.id == categoryEdit.id}) {
+					newState.sections[sectionId].items.remove(at: removeIndex)
+				}
 			}
 		case let .dragAndDrop(startIndex, destinationIndexPath, item):
 			var sections = newState.sections

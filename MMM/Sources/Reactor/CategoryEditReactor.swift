@@ -90,10 +90,8 @@ extension CategoryEditReactor {
 				return newState
 			}
 			
-			if let removeIndex = newState.sections[sectionId].items.firstIndex(where: {$0.item.id == categoryEdit.id}) {
-				newState.sections[sectionId].items.remove(at: removeIndex)
-			} else {
-				print("없음")
+			if let removeIndex = newState.sections[sectionId - 1].items.firstIndex(where: {$0.item.id == categoryEdit.id}) {
+				newState.sections[sectionId - 1].items.remove(at: removeIndex)
 			}
 		case let .dragAndDrop(startIndex, destinationIndexPath, item):
 			var sections = newState.sections

@@ -44,6 +44,20 @@ final class CategoryEditBottomSheetViewController: BottomSheetViewController2, V
 		super.viewDidLoad()
 	}
 	
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		
+		NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+	}
+	
+	override func viewWillDisappear(_ animated: Bool) {
+		super.viewWillDisappear(animated)
+		
+		NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+		NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+	}
+	
 	override func touchesBegan(_: Set<UITouch>, with _: UIEvent?) {
 //		view.endEditing(true)
 	}
@@ -169,9 +183,6 @@ extension CategoryEditBottomSheetViewController {
 	// 초기 셋업할 코드들
 	override func setAttribute() {
 		super.setAttribute()
-		
-		NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
 		
 		stackView = stackView.then {
 			$0.axis = .horizontal

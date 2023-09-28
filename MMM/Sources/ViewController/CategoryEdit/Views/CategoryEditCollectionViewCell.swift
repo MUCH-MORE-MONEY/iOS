@@ -57,7 +57,6 @@ extension CategoryEditCollectionViewCell {
 			.map { $0.categoryEdit }
 			.distinctUntilChanged() // 중복값 무시
 			.subscribe(onNext: { [weak self] categoryEdit in
-				print(categoryEdit.title)
 				self?.titleLabel.text = categoryEdit.title
 			})
 			.disposed(by: disposeBag)
@@ -103,7 +102,7 @@ extension CategoryEditCollectionViewCell {
 		super.setLayout()
 		
 		titleLabel.snp.makeConstraints {
-			$0.top.leading.equalToSuperview()
+			$0.centerY.leading.equalToSuperview()
 			$0.trailing.lessThanOrEqualTo(editButton.snp.leading).offset(-4)
 		}
 		

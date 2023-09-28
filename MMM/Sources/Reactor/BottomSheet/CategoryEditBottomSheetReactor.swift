@@ -14,18 +14,24 @@ final class CategoryEditBottomSheetReactor: Reactor {
 		case inputText(String)
 		case didTapEdit(CategoryEdit)
 		case delete(CategoryEdit)
+
+		case inputAddText(String)
+		case didTapAdd(CategoryEdit)
+		
 		case dismiss
 	}
 	
 	// 처리 단위
 	enum Mutation {
 		case setValid(Bool)
+		case setAddValid(Bool)
 		case dismiss
 	}
 	
 	// 현재 상태를 기록
 	struct State {
 		var isValid: Bool = false
+		var isAddValid: Bool = false
 		var dismiss: Bool = false
 	}
 	
@@ -46,8 +52,12 @@ extension CategoryEditBottomSheetReactor {
 		switch action {
 		case let .inputText(text):
 			return .just(.setValid(text.count < 10))
+		case let .inputAddText(text):
+			return .just(.setAddValid(text.count < 9))
 		case let .didTapEdit(categoryEdit):
 			return provider.categoryProvider.updateTitleEdit(to: categoryEdit).map { _ in .dismiss }
+		case let .didTapAdd(categoryEdit):
+			return provider.categoryProvider.addCategory(to: categoryEdit).map { _ in .dismiss }
 		case let .delete(categoryEdit):
 			return provider.categoryProvider.deleteTitleEdit(to: categoryEdit).map { _ in .dismiss }
 		case .dismiss:
@@ -62,6 +72,8 @@ extension CategoryEditBottomSheetReactor {
 		switch mutation {
 		case let .setValid(isValid):
 			newState.isValid = isValid
+		case let .setAddValid(isValid):
+			newState.isAddValid = isValid
 		case .dismiss:
 			newState.dismiss = true
 		}

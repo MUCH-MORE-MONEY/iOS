@@ -56,6 +56,8 @@ extension CategoryEditCollectionViewCellReactor {
 				return .just(.setTitle(categoryEdit))
 			case .deleteTitleEdit:
 				return .empty()
+			case .addCategory:
+				return .empty()
 			}
 		}
 		

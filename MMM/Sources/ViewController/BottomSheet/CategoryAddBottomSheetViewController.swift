@@ -1,8 +1,8 @@
 //
-//  CategoryEditBottomSheetViewController.swift
+//  CategoryAddBottomSheetViewController.swift
 //  MMM
 //
-//  Created by geonhyeong on 2023/09/27.
+//  Created by geonhyeong on 2023/09/28.
 //
 
 import UIKit
@@ -11,30 +11,30 @@ import Then
 import ReactorKit
 
 // 상속하지 않으려면 final 꼭 붙이기
-final class CategoryEditBottomSheetViewController: BottomSheetViewController2, View {
+final class CategoryAddBottomSheetViewController: BottomSheetViewController2, View {
 	typealias Reactor = CategoryEditBottomSheetReactor
 	// MARK: - Sub Type
 	
 	// MARK: - Properties
 	private var titleStr: String = ""
-	private var categoryEdit: CategoryEdit
+	private var categoryHeader: CategoryHeader
+	private var addId: Int
 	private var isDark: Bool = false // 다크 모드 지정
 	private var height: CGFloat
-	private var heightConstraint: Constraint!	
+	private var heightConstraint: Constraint!
 
 	// MARK: - UI Components
 	private lazy var containerView = UIView()
 	private lazy var stackView = UIStackView() // Title Label, Button
-	private lazy var buttonStackView = UIStackView() // 삭제, 확인 Button
 	private lazy var titleLabel = UILabel()
 	private lazy var warningLabel = UILabel()
-	private lazy var deleteButton = UIButton()
 	private lazy var checkButton = UIButton()
 	private lazy var textField = UITextField()
 
-	init(title: String, categoryEdit: CategoryEdit, height: CGFloat, sheetMode: BottomSheetViewController2.Mode = .drag, isDark: Bool = false) {
+	init(title: String, categoryHeader: CategoryHeader, addId: Int, height: CGFloat, sheetMode: BottomSheetViewController2.Mode = .drag, isDark: Bool = false) {
 		self.titleStr = title
-		self.categoryEdit = categoryEdit
+		self.categoryHeader = categoryHeader
+		self.addId = addId
 		self.height = height
 		self.isDark = isDark
 		super.init(mode: sheetMode, isDark: isDark)
@@ -74,22 +74,18 @@ final class CategoryEditBottomSheetViewController: BottomSheetViewController2, V
 	}
 }
 //MARK: - Bind
-extension CategoryEditBottomSheetViewController {
+extension CategoryAddBottomSheetViewController {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
 	private func bindAction(_ reactor: CategoryEditBottomSheetReactor) {
 		// 확인 버튼
 		checkButton.rx.tap
-			.map { .didTapEdit(self.tranformCategoryEdit()) }
+			.compactMap { self.tranformCategoryEdit()}
+			.map { .didTapAdd($0) }
 			.bind(to: reactor.action)
 			.disposed(by: disposeBag)
 		
-		// 삭제 버튼
-		deleteButton.rx.tap
-			.bind(onNext: didTapDeleteButton)
-			.disposed(by: disposeBag)
-		
 		textField.rx.text.orEmpty
-			.map { .inputText($0) }
+			.map { .inputAddText($0) }
 			.bind(to: reactor.action)
 			.disposed(by: disposeBag)
 	}
@@ -98,7 +94,7 @@ extension CategoryEditBottomSheetViewController {
 	private func bindState(_ reactor: CategoryEditBottomSheetReactor) {
 		
 		reactor.state
-			.map { $0.isValid }
+			.map { $0.isAddValid }
 			.subscribe(onNext: { [weak self] isValid in
 				guard let self = self, let text = self.textField.text, !text.isEmpty else { return }
 				
@@ -124,22 +120,13 @@ extension CategoryEditBottomSheetViewController {
 	}
 }
 //MARK: - Action
-extension CategoryEditBottomSheetViewController: CustomAlertDelegate {
-	func tranformCategoryEdit() -> CategoryEdit {
-		guard let text = textField.text else { return self.categoryEdit }
-		
-		var categoryEdit = self.categoryEdit
+extension CategoryAddBottomSheetViewController {
+	func tranformCategoryEdit() -> CategoryEdit? {
+		guard let text = textField.text else { return nil }
+		let header = self.categoryHeader
+		var categoryEdit = CategoryEdit(id: String(addId), title: text, upperId: header.id, upperTitle: header.title, orderNum: -1, upperOrderNum: header.orderNum)
 		categoryEdit.title = text
 		return categoryEdit
-	}
-	
-	func didTapDeleteButton() {
-		showAlert(alertType: .canCancel, titleText: "카테고리를 삭제하시겠습니까?", contentText: "해당 카테고리에 담겨있는 경제활동은\n기타 카테고리로 이동됩니다.", confirmButtonText: "삭제하기")
-	}
-	
-	func didAlertCofirmButton() {
-		// 카테고리 삭제하기
-		reactor?.action.onNext(.delete(categoryEdit))
 	}
 	
 	func didAlertCacelButton() { }
@@ -180,7 +167,7 @@ extension CategoryEditBottomSheetViewController: CustomAlertDelegate {
 
 }
 //MARK: - Attribute & Hierarchy & Layouts
-extension CategoryEditBottomSheetViewController {
+extension CategoryAddBottomSheetViewController {
 	// 초기 셋업할 코드들
 	override func setAttribute() {
 		super.setAttribute()
@@ -191,27 +178,11 @@ extension CategoryEditBottomSheetViewController {
 			$0.distribution = .equalCentering
 		}
 		
-		buttonStackView = buttonStackView.then {
-			$0.axis = .horizontal
-			$0.alignment = .center
-			$0.spacing = 18
-			$0.distribution = .equalSpacing
-		}
-		
 		titleLabel = titleLabel.then {
 			$0.text = titleStr
 			$0.font = R.Font.h5
 			$0.textColor = isDark ? R.Color.gray200 : R.Color.black
 			$0.textAlignment = .left
-		}
-		
-		deleteButton = deleteButton.then {
-			$0.setTitle("삭제", for: .normal)
-			$0.setTitleColor(R.Color.red500, for: .normal)
-			$0.setTitleColor(R.Color.red500.withAlphaComponent(0.7), for: .highlighted)
-			$0.contentHorizontalAlignment = .center
-			$0.titleLabel?.font = R.Font.title3
-			$0.contentEdgeInsets = .init(top: 10, left: 10, bottom: 10, right: 10) // touch 영역 늘리기
 		}
 		
 		checkButton = checkButton.then {
@@ -224,7 +195,6 @@ extension CategoryEditBottomSheetViewController {
 		}
 		
 		textField = textField.then {
-			$0.text = categoryEdit.title
 			$0.placeholder = "카테고리 이름을 입력해주세요"
 			$0.font = R.Font.h2
 			$0.textColor = R.Color.gray900
@@ -234,7 +204,7 @@ extension CategoryEditBottomSheetViewController {
 		}
 		
 		warningLabel = warningLabel.then {
-			$0.text = "최대 글자수를 넘어선 글자예요. (최대 9글자)"
+			$0.text = "최대 글자수를 넘어선 글자예요. (최대 8글자)"
 			$0.font = R.Font.body3
 			$0.textColor = R.Color.red500
 			$0.textAlignment = .left
@@ -246,8 +216,7 @@ extension CategoryEditBottomSheetViewController {
 		super.setHierarchy()
 		
 		containerView.addSubviews(stackView, textField, warningLabel)
-		stackView.addArrangedSubviews(titleLabel, buttonStackView)
-		buttonStackView.addArrangedSubviews(deleteButton, checkButton)
+		stackView.addArrangedSubviews(titleLabel, checkButton)
 		addContentView(view: containerView)
 	}
 	

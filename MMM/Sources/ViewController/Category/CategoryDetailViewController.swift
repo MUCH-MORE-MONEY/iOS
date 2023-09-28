@@ -58,7 +58,7 @@ extension CategoryDetailViewController {
 				guard let self = self, let reactor = self.reactor else { return }
 				let section = reactor.currentState.section
 				self.titleLabel.text = section.dateYM.suffix(2) + "월 " + categoryLowwer.title
-				self.titleDescriptionLabel.text = section.total.withCommas() + " 원"
+				self.titleDescriptionLabel.text = categoryLowwer.total.withCommas() + " 원"
 			})
 			.disposed(by: disposeBag)
 		

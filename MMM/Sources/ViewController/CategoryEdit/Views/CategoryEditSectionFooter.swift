@@ -8,9 +8,10 @@
 import UIKit
 import Then
 import SnapKit
+import ReactorKit
 
 // 상속하지 않으려면 final 꼭 붙이기
-final class CategoryEditSectionFooter: BaseCollectionReusableView {
+final class CategoryEditSectionFooter: BaseCollectionReusableView, View {
 	// MARK: - Constants
 	
 	// MARK: - UI Components
@@ -34,6 +35,12 @@ final class CategoryEditSectionFooter: BaseCollectionReusableView {
 extension CategoryEditSectionFooter {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
 	private func bindAction(_ reactor: CategoryReactor) {
+		
+//		categoryAddButton.rx.tap
+//			.withUnretained(self)
+//			.map { .didTapEditButton }
+//			.bind(to: reactor.action)
+//			.disposed(by: disposeBag)
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
@@ -59,6 +66,7 @@ extension CategoryEditSectionFooter {
 			$0.setTitle("+ 카테고리 추가하기", for: .normal)
 			$0.setTitleColor(R.Color.gray500, for: .normal)
 			$0.setTitleColor(R.Color.gray500.withAlphaComponent(0.7), for: .highlighted)
+			$0.setBackgroundColor(R.Color.gray800, for: .highlighted)
 			$0.titleLabel?.font = R.Font.body1
 			$0.contentHorizontalAlignment = .center
 		}

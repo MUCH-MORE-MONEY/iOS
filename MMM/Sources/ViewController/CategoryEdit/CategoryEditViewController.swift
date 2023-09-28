@@ -220,49 +220,30 @@ extension CategoryEditViewController {
 	}
 	
 	func makeCategorySectionLayout(from items: [CategoryEditItem]) -> NSCollectionLayoutSection {
-		if items.isEmpty { // Item이 없을 경우
-			let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50)), subitems: .init(repeating: .init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(UI.cellHeightMargin))), count: 1))
-			group.contentInsets = .init(top: 0, leading: 136, bottom: 0, trailing: 0)
-
-			let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(0.395), heightDimension: .absolute(UI.cellHeightMargin + 6)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .topLeading)
-			
-			let footer = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(60)), elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
-			
-			let section: NSCollectionLayoutSection = .init(group: group)
-			section.boundarySupplementaryItems = [.init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)]
-			section.boundarySupplementaryItems = [header, footer]
-			section.contentInsets = .init(top: UI.sectionMargin.top, leading: UI.sectionMargin.left, bottom: UI.sectionMargin.bottom, trailing: UI.sectionMargin.right)
-			return section
-		} else {
-			var layoutItems: [NSCollectionLayoutItem] = []
-			
-			print(items.count)
-			
-			items.forEach({ item in
-				switch item {
-				case .base:
-					layoutItems.append(NSCollectionLayoutItem.init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(UI.cellHeightMargin))))
-				}
-			})
-			
-			let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100)), subitems: layoutItems)
-			group.contentInsets = .init(top: 0, leading: 136, bottom: 0, trailing: 0)
-			
-			//		for i in items {
-			//			print("111", i.item.title)
-			//		}
-			let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(0.395), heightDimension: .absolute(UI.cellHeightMargin)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .topLeading)
-			header.contentInsets = .init(top: UI.cellHeightMargin - 6, leading: 0, bottom: 0, trailing: 0)
-			
-			let footer = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(60)), elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
-			
-			let section: NSCollectionLayoutSection = .init(group: group)
-			section.boundarySupplementaryItems = [.init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)]
-			section.boundarySupplementaryItems = [header, footer]
-			section.contentInsets = .init(top: UI.sectionMargin.top, leading: UI.sectionMargin.left, bottom: UI.sectionMargin.bottom, trailing: UI.sectionMargin.right)
-			
-			return section
-		}
+		let isEmpty = items.isEmpty // Item이 없을 경우
+		var layoutItems: [NSCollectionLayoutItem] = []
+		
+		items.forEach({ item in
+			switch item {
+			case .base:
+				layoutItems.append(NSCollectionLayoutItem.init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(UI.cellHeightMargin))))
+			}
+		})
+		
+		let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100)), subitems: isEmpty ? .init(repeating: .init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(UI.cellHeightMargin))), count: 1) : layoutItems)
+		group.contentInsets = .init(top: 0, leading: 136, bottom: 0, trailing: 0)
+		
+		let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(0.395), heightDimension: .absolute(UI.cellHeightMargin + (isEmpty ? 6 : 0))), elementKind: UICollectionView.elementKindSectionHeader, alignment: .topLeading)
+		header.contentInsets = .init(top: isEmpty ? 0 : UI.cellHeightMargin - 6, leading: 0, bottom: 0, trailing: 0)
+		
+		let footer = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(60)), elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
+		
+		let section: NSCollectionLayoutSection = .init(group: group)
+		section.boundarySupplementaryItems = [.init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)]
+		section.boundarySupplementaryItems = [header, footer]
+		section.contentInsets = .init(top: UI.sectionMargin.top, leading: UI.sectionMargin.left, bottom: UI.sectionMargin.bottom, trailing: UI.sectionMargin.right)
+		
+		return section
 	}
 	
 //	private func cellForItemAt(at indexPath: IndexPath?) -> UICollectionViewCell? {

@@ -98,14 +98,15 @@ extension CategoryEditReactor {
 		case let .setSections(sections):
 			newState.sections = sections
 		case let .addItem(categoryEdit):
-			guard let sectionId = Int(categoryEdit.upperId) else {
-				return newState
+			if let section = newState.sections.enumerated().filter({ $0.element.model.header.id == categoryEdit.upperId }).first {
+				let sectionId = section.offset
+				
+				var newItem = categoryEdit
+				newItem.orderNum = newState.sections[sectionId].items.count + 1
+				let categoryEditItem: CategoryEditItem = .base(.init(provider: provider, categoryEdit: newItem))
+				newState.sections[sectionId].items.append(categoryEditItem) // 해당 Sections을 찾아서 append
+				newState.addId -= 1 // 1씩 감소 시키면서 고유한 값 유지
 			}
-			var newItem = categoryEdit
-			newItem.orderNum = newState.sections[sectionId - 1].items.count + 1
-			let categoryEditItem: CategoryEditItem = .base(.init(provider: provider, categoryEdit: newItem))
-			newState.sections[sectionId - 1].items.append(categoryEditItem) // 해당 Sections을 찾아서 append
-			newState.addId -= 1 // 1씩 감소 시키면서 고유한 값 유지
 		case let .deleteItem(categoryEdit):
 			guard let sectionId = Int(categoryEdit.upperId) else {
 				return newState

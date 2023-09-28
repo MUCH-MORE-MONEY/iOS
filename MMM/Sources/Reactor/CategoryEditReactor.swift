@@ -11,6 +11,7 @@ final class CategoryEditReactor: Reactor {
 	// 사용자의 액션
 	enum Action {
 		case loadData(String)
+		case didTapAddButton(CategoryHeader)
 		case dragAndDrop(IndexPath, IndexPath, CategoryEditItem)
 	}
 	
@@ -18,9 +19,11 @@ final class CategoryEditReactor: Reactor {
 	enum Mutation {
 		case setHeaders([CategoryHeader])
 		case setSections([CategoryEditSectionModel])
+		case addItem(CategoryEdit)
 		case deleteItem(CategoryEdit)
 		case dragAndDrop(IndexPath, IndexPath, CategoryEditItem)
-		case setNextEditScreen(CategoryEdit)
+		case setNextEditScreen(CategoryEdit?)
+		case setNextAddScreen(CategoryHeader)
 	}
 	
 	// 현재 상태를 기록
@@ -30,6 +33,7 @@ final class CategoryEditReactor: Reactor {
 		var headers: [CategoryHeader] = []
 		var sections: [CategoryEditSectionModel] = []
 		var nextEditScreen: CategoryEdit?
+		var nextAddScreen: CategoryHeader?
 		var error = false
 	}
 	
@@ -55,6 +59,8 @@ extension CategoryEditReactor {
 				loadHeaderData(CategoryEditReqDto(economicActivityDvcd: type)),
 				loadCategoryData(CategoryEditReqDto(economicActivityDvcd: type))
 			])
+		case let .didTapAddButton(categoryHeader):
+			return .just(.setNextAddScreen(categoryHeader))
 		case let .dragAndDrop(startIndex, destinationIndexPath, item):
 			return .just(.dragAndDrop(startIndex, destinationIndexPath, item))
 		}
@@ -65,9 +71,14 @@ extension CategoryEditReactor {
 		let event = provider.categoryProvider.event.flatMap { event -> Observable<Mutation> in
 			switch event {
 			case let .presentTitleEdit(categoryEdit):
-				return .just(.setNextEditScreen(categoryEdit))
+				return .concat([
+					.just(.setNextEditScreen(categoryEdit)),
+					.just(.setNextEditScreen(nil))
+				])
 			case .updateTitleEdit:
 				return .empty()
+			case let .addCategory(categoryEdit):
+				return .just(.addItem(categoryEdit))
 			case let .deleteTitleEdit(categoryEdit):
 				return .just(.deleteItem(categoryEdit))
 			}
@@ -85,6 +96,14 @@ extension CategoryEditReactor {
 			newState.headers = headers
 		case let .setSections(sections):
 			newState.sections = sections
+		case let .addItem(categoryEdit):
+			guard let sectionId = Int(categoryEdit.upperId) else {
+				return newState
+			}
+			var newItem = categoryEdit
+			newItem.orderNum = newState.sections[sectionId - 1].items.count
+			let categoryEditItem: CategoryEditItem = .base(.init(provider: provider, categoryEdit: newItem))
+			newState.sections[sectionId - 1].items.append(categoryEditItem)
 		case let .deleteItem(categoryEdit):
 			guard let sectionId = Int(categoryEdit.upperId) else {
 				return newState
@@ -106,7 +125,8 @@ extension CategoryEditReactor {
 //			}
 		case let .setNextEditScreen(categoryEdit):
 			newState.nextEditScreen = categoryEdit
-
+		case let .setNextAddScreen(categoryHeader):
+			newState.nextAddScreen = categoryHeader
 		}
 		
 		return newState
@@ -137,7 +157,7 @@ extension CategoryEditReactor {
 		var sections: [CategoryEditSectionModel] = []
 
 		for header in currentState.headers {
-			let categoryitems: [CategoryEditItem] = data.filter { $0.upperOrderNum == header.id }.map { categoryEdit -> CategoryEditItem in
+			let categoryitems: [CategoryEditItem] = data.filter { $0.upperId == header.id }.map { categoryEdit -> CategoryEditItem in
 				return .base(.init(provider: provider, categoryEdit: categoryEdit))
 			}
 			

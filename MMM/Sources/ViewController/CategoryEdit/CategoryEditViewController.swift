@@ -62,11 +62,16 @@ final class CategoryEditViewController: BaseViewControllerWithNav, View {
 				return header
 			}
 		} else {
-			guard let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: String(describing: CategoryEditSectionFooter.self), for: indexPath) as? CategoryEditSectionFooter else { return .init() }
-			
-			let count = thisReactor.currentState.headers.count
-			footer.setData(isLast: indexPath.section == count - 1) // 마지막 섹션은 separator 숨기기
-			return footer
+			switch dataSource[indexPath.section].model {
+			case .base:
+				guard let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: String(describing: CategoryEditSectionFooter.self), for: indexPath) as? CategoryEditSectionFooter else { return .init() }
+				let sectionInfo = dataSource.sectionModels[indexPath.section].model.header
+				
+				let count = thisReactor.currentState.headers.count
+				footer.setData(categoryHeader: sectionInfo, isLast: indexPath.section == count - 1) // 마지막 섹션은 separator 숨기기
+				footer.reactor = thisReactor
+				return footer
+			}
 		}
 	}
 	
@@ -196,11 +201,13 @@ extension CategoryEditViewController {
 		
 		reactor.state
 			.compactMap { $0.nextEditScreen }
-			.subscribe(onNext: { [weak self] categoryEdit in
-				self?.willPresentViewController(categoryEdit: categoryEdit)
-			})
+			.bind(onNext: willPresentEditViewController)
 			.disposed(by: disposeBag)
 
+		reactor.state
+			.compactMap { $0.nextAddScreen }
+			.bind(onNext: willPresentAddViewController)
+			.disposed(by: disposeBag)
 	}
 }
 //MARK: - Action
@@ -246,10 +253,19 @@ extension CategoryEditViewController {
 //		return collectionView.cellForItem(at: indexPath)
 //	}
 	
-	private func willPresentViewController(categoryEdit: CategoryEdit) {
+	private func willPresentEditViewController(categoryEdit: CategoryEdit) {
 		guard let reactor = self.reactor else { return }
 		
 		let vc = CategoryEditBottomSheetViewController(title: "카테고리 수정하기", categoryEdit: categoryEdit, height: 174)
+		vc.reactor = CategoryEditBottomSheetReactor(provider: reactor.provider)
+
+		self.present(vc, animated: true, completion: nil)
+	}
+	
+	private func willPresentAddViewController(categoryHeader: CategoryHeader) {
+		guard let reactor = self.reactor else { return }
+		
+		let vc = CategoryAddBottomSheetViewController(title: "카테고리 추가하기", categoryHeader: categoryHeader, height: 174)
 		vc.reactor = CategoryEditBottomSheetReactor(provider: reactor.provider)
 
 		self.present(vc, animated: true, completion: nil)

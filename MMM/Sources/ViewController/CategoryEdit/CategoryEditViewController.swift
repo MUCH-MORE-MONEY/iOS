@@ -171,6 +171,7 @@ extension CategoryEditViewController {
 		reactor.state
 			.map { $0.sections }
 			.withUnretained(self)
+			.distinctUntilChanged { $0.1 }
 //			.filter { !$0.1.isEmpty }
 			.subscribe(onNext: { this, sections in
 				guard !sections.isEmpty else { return }
@@ -194,7 +195,7 @@ extension CategoryEditViewController {
 				this.collectionView.collectionViewLayout.invalidateLayout()
 				this.collectionView.collectionViewLayout = this.makeLayout(sections: sections)
 				this.collectionView.reloadData()
-				print("-------------------------")
+//				print("-------------------------")
 				//				}
 			})
 			.disposed(by: disposeBag)
@@ -408,13 +409,13 @@ extension CategoryEditViewController: UICollectionViewDropDelegate {
 	
 	private func move(sourceIndexPath: IndexPath, destinationIndexPath: IndexPath) {
 		let sourceItem = dataSource[sourceIndexPath.section].items[sourceIndexPath.row]
-		let newIndexPath = IndexPath(row: destinationIndexPath.row + 1, section: destinationIndexPath.section)
+//		let newIndexPath = IndexPath(row: destinationIndexPath.row + 1, section: destinationIndexPath.section)
 
 		// UI에 반영
 		collectionView.deleteItems(at: [sourceIndexPath])
 		collectionView.insertItems(at: [destinationIndexPath])
 
 		// dataSource 이동
-//		reactor?.action.onNext(.dragAndDrop(sourceIndexPath, destinationIndexPath, sourceItem))
+//		reactor?.action.onNext(.dragAndDrop(sourceIndexPath, destinationIndexPath))
 	}
 }

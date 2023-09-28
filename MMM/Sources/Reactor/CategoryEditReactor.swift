@@ -12,7 +12,7 @@ final class CategoryEditReactor: Reactor {
 	enum Action {
 		case loadData(String)
 		case didTapAddButton(CategoryHeader)
-		case dragAndDrop(IndexPath, IndexPath, CategoryEditItem)
+		case dragAndDrop(IndexPath, IndexPath)
 	}
 	
 	// 처리 단위
@@ -21,7 +21,7 @@ final class CategoryEditReactor: Reactor {
 		case setSections([CategoryEditSectionModel])
 		case addItem(CategoryEdit)
 		case deleteItem(CategoryEdit)
-		case dragAndDrop(IndexPath, IndexPath, CategoryEditItem)
+		case dragAndDrop(IndexPath, IndexPath)
 		case setNextEditScreen(CategoryEdit?)
 		case setNextAddScreen(CategoryHeader)
 	}
@@ -62,8 +62,8 @@ extension CategoryEditReactor {
 			])
 		case let .didTapAddButton(categoryHeader):
 			return .just(.setNextAddScreen(categoryHeader))
-		case let .dragAndDrop(startIndex, destinationIndexPath, item):
-			return .just(.dragAndDrop(startIndex, destinationIndexPath, item))
+		case let .dragAndDrop(startIndex, destinationIndexPath):
+			return .just(.dragAndDrop(startIndex, destinationIndexPath))
 		}
 	}
 	
@@ -119,12 +119,11 @@ extension CategoryEditReactor {
 					newState.sections[sectionId].items.remove(at: removeIndex)
 				}
 			}
-		case let .dragAndDrop(startIndex, destinationIndexPath, item):
-			var sections = newState.sections
+		case let .dragAndDrop(sourceIndexPath, destinationIndexPath):
+			let sourceItem = newState.sections[sourceIndexPath.section].items[sourceIndexPath.row]
 			
-			sections[startIndex.section].items.remove(at: startIndex.row)
-			sections[startIndex.section].items.insert(item, at: destinationIndexPath.row)
-			newState.sections = sections
+			newState.sections[sourceIndexPath.section].items.remove(at: sourceIndexPath.row)
+			newState.sections[sourceIndexPath.section].items.insert(sourceItem, at: destinationIndexPath.row)
 //			let temp = newState.sections[startIndex.section].items[startIndex.row].item.orderNum
 //			newState.sections[startIndex.section].items[startIndex.row].item.orderNum = newState.sections[startIndex.section].items[destinationIndexPath.row].item.orderNum
 //			for item in newState.sections[destinationIndexPath.section].items {

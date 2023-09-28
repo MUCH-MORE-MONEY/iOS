@@ -126,9 +126,7 @@ extension CategoryEditBottomSheetViewController: CustomAlertDelegate {
 		reactor?.action.onNext(.delete(categoryEdit))
 	}
 	
-	func didAlertCacelButton() {
-		reactor?.action.onNext(.dismiss)
-	}
+	func didAlertCacelButton() { }
 	
 	@objc func keyboardWillShow(_ notification: NSNotification) {
 		moveViewWithKeyboard(notification: notification, keyboardWillShow: true)

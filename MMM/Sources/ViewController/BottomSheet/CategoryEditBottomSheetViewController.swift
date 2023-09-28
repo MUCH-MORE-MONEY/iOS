@@ -59,7 +59,8 @@ final class CategoryEditBottomSheetViewController: BottomSheetViewController2, V
 	}
 	
 	override func touchesBegan(_: Set<UITouch>, with _: UIEvent?) {
-//		view.endEditing(true)
+		// 배경을 누르면 작동
+		view.endEditing(true)
 	}
 	
 	override func viewDidLayoutSubviews() {

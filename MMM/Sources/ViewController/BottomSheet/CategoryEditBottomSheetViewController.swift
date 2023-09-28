@@ -25,10 +25,10 @@ final class CategoryEditBottomSheetViewController: BottomSheetViewController2, V
 	// MARK: - UI Components
 	private lazy var containerView = UIView()
 	private lazy var stackView = UIStackView() // Title Label, Button
-	private lazy var buttonStackView = UIStackView() // 취소, 확인 Button
+	private lazy var buttonStackView = UIStackView() // 삭제, 확인 Button
 	private lazy var titleLabel = UILabel()
 	private lazy var warningLabel = UILabel()
-	private lazy var cancelButton = UIButton()
+	private lazy var deleteButton = UIButton()
 	private lazy var checkButton = UIButton()
 	private lazy var textField = UITextField()
 
@@ -67,9 +67,9 @@ extension CategoryEditBottomSheetViewController {
 			.bind(to: reactor.action)
 			.disposed(by: disposeBag)
 		
-		// 취소 버튼
-		cancelButton.rx.tap
-			.bind(onNext: didTapCancelButton)
+		// 삭제 버튼
+		deleteButton.rx.tap
+			.bind(onNext: didTapDeleteButton)
 			.disposed(by: disposeBag)
 		
 		textField.rx.text.orEmpty
@@ -117,7 +117,7 @@ extension CategoryEditBottomSheetViewController: CustomAlertDelegate {
 		return categoryEdit
 	}
 	
-	func didTapCancelButton() {
+	func didTapDeleteButton() {
 		showAlert(alertType: .canCancel, titleText: "카테고리를 삭제하시겠습니까?", contentText: "해당 카테고리에 담겨있는 경제활동은\n기타 카테고리로 이동됩니다.", confirmButtonText: "삭제하기")
 	}
 	
@@ -192,8 +192,8 @@ extension CategoryEditBottomSheetViewController {
 			$0.textAlignment = .left
 		}
 		
-		cancelButton = cancelButton.then {
-			$0.setTitle("취소", for: .normal)
+		deleteButton = deleteButton.then {
+			$0.setTitle("삭제", for: .normal)
 			$0.setTitleColor(R.Color.red500, for: .normal)
 			$0.setTitleColor(R.Color.red500.withAlphaComponent(0.7), for: .highlighted)
 			$0.contentHorizontalAlignment = .center
@@ -234,7 +234,7 @@ extension CategoryEditBottomSheetViewController {
 		
 		containerView.addSubviews(stackView, textField, warningLabel)
 		stackView.addArrangedSubviews(titleLabel, buttonStackView)
-		buttonStackView.addArrangedSubviews(cancelButton, checkButton)
+		buttonStackView.addArrangedSubviews(deleteButton, checkButton)
 		addContentView(view: containerView)
 	}
 	

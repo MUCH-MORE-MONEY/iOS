@@ -103,7 +103,7 @@ extension CategoryEditCollectionViewCell {
 		super.setLayout()
 		
 		titleLabel.snp.makeConstraints {
-			$0.top.leading.equalToSuperview()
+			$0.centerY.leading.equalToSuperview()
 			$0.trailing.lessThanOrEqualTo(editButton.snp.leading).offset(-4)
 		}
 		

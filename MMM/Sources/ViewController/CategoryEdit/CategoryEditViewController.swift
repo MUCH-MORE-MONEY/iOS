@@ -265,7 +265,7 @@ extension CategoryEditViewController {
 	private func willPresentAddViewController(categoryHeader: CategoryHeader) {
 		guard let reactor = self.reactor else { return }
 		
-		let vc = CategoryAddBottomSheetViewController(title: "카테고리 추가하기", categoryHeader: categoryHeader, height: 174)
+		let vc = CategoryAddBottomSheetViewController(title: "카테고리 추가하기", categoryHeader: categoryHeader, addId: reactor.currentState.addId - 1, height: 174)
 		vc.reactor = CategoryEditBottomSheetReactor(provider: reactor.provider)
 
 		self.present(vc, animated: true, completion: nil)

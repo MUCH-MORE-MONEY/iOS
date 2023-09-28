@@ -28,6 +28,7 @@ final class CategoryEditReactor: Reactor {
 	
 	// 현재 상태를 기록
 	struct State {
+		var addId: Int = 0
 		var type: String
 		var date: Date
 		var headers: [CategoryHeader] = []
@@ -101,9 +102,10 @@ extension CategoryEditReactor {
 				return newState
 			}
 			var newItem = categoryEdit
-			newItem.orderNum = newState.sections[sectionId - 1].items.count
+			newItem.orderNum = newState.sections[sectionId - 1].items.count + 1
 			let categoryEditItem: CategoryEditItem = .base(.init(provider: provider, categoryEdit: newItem))
-			newState.sections[sectionId - 1].items.append(categoryEditItem)
+			newState.sections[sectionId - 1].items.append(categoryEditItem) // 해당 Sections을 찾아서 append
+			newState.addId -= 1 // 1씩 감소 시키면서 고유한 값 유지
 		case let .deleteItem(categoryEdit):
 			guard let sectionId = Int(categoryEdit.upperId) else {
 				return newState

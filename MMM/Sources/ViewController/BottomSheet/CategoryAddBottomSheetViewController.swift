@@ -18,6 +18,7 @@ final class CategoryAddBottomSheetViewController: BottomSheetViewController2, Vi
 	// MARK: - Properties
 	private var titleStr: String = ""
 	private var categoryHeader: CategoryHeader
+	private var addId: Int
 	private var isDark: Bool = false // 다크 모드 지정
 	private var height: CGFloat
 	private var heightConstraint: Constraint!
@@ -30,9 +31,10 @@ final class CategoryAddBottomSheetViewController: BottomSheetViewController2, Vi
 	private lazy var checkButton = UIButton()
 	private lazy var textField = UITextField()
 
-	init(title: String, categoryHeader: CategoryHeader, height: CGFloat, sheetMode: BottomSheetViewController2.Mode = .drag, isDark: Bool = false) {
+	init(title: String, categoryHeader: CategoryHeader, addId: Int, height: CGFloat, sheetMode: BottomSheetViewController2.Mode = .drag, isDark: Bool = false) {
 		self.titleStr = title
 		self.categoryHeader = categoryHeader
+		self.addId = addId
 		self.height = height
 		self.isDark = isDark
 		super.init(mode: sheetMode, isDark: isDark)
@@ -122,7 +124,7 @@ extension CategoryAddBottomSheetViewController {
 	func tranformCategoryEdit() -> CategoryEdit? {
 		guard let text = textField.text else { return nil }
 		let header = self.categoryHeader
-		var categoryEdit = CategoryEdit(id: "-1", title: text, upperId: header.id, upperTitle: header.title, orderNum: -1, upperOrderNum: header.orderNum)
+		var categoryEdit = CategoryEdit(id: String(addId), title: text, upperId: header.id, upperTitle: header.title, orderNum: -1, upperOrderNum: header.orderNum)
 		categoryEdit.title = text
 		return categoryEdit
 	}

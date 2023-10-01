@@ -31,7 +31,7 @@ final class CategoryViewController: BaseViewControllerWithNav, View {
 	
 	// MARK: - UI Components
 	private lazy var editButton = UIButton()
-	private lazy var segmentedControl = CategorySegmentedControl(items: ["지출", "수입"])
+	private lazy var segmentedControl = CategorySegmentedControl(items: [R.Icon.minus16!.textEmbeded(text: "지출", font: R.Font.body0, color: R.Color.white, spacing: 8, leftMargin: 24), R.Icon.plus16!.textEmbeded(text: "수입", font: R.Font.body0, color: R.Color.white, spacing: 8, rightMargin: 24)])
 	private lazy var pageViewController = UIPageViewController()
 	private lazy var payViewController = CategoryContentViewController(mode: .pay)
 	private lazy var earnViewController = CategoryContentViewController(mode: .earn)
@@ -69,7 +69,6 @@ extension CategoryViewController {
 	private func bindState(_ reactor: CategoryReactor) {
 		reactor.state
 			.compactMap { $0.nextScreen }
-			.distinctUntilChanged() // 중복값 무시
 			.subscribe(onNext: { [weak self] categoryLowwer in
 				self?.willPushViewController(categoryLowwer: categoryLowwer)
 			})
@@ -94,7 +93,7 @@ extension CategoryViewController {
 		guard let reactor = self.reactor else { return }
 
 		let vc = CategoryEditViewController(mode: segmentedControl.selectedSegmentIndex == 0 ? .pay : .earn)
-		vc.reactor = CategoryEditReactor(type: segmentedControl.selectedSegmentIndex == 0 ? "01" : "02", date: reactor.currentState.date)
+		vc.reactor = CategoryEditReactor(provider: ServiceProvider.shared, type: segmentedControl.selectedSegmentIndex == 0 ? "01" : "02", date: reactor.currentState.date)
 
 		navigationController?.pushViewController(vc, animated: true)
 	}

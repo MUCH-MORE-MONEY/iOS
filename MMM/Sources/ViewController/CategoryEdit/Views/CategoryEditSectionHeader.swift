@@ -65,8 +65,7 @@ extension CategoryEditSectionHeader {
 		
 		titleLabel.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(15)
-			$0.leading.equalToSuperview()
-			$0.width.equalTo(128)
+			$0.leading.trailing.equalToSuperview()
 		}
 	}
 }

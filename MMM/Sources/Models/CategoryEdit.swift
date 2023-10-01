@@ -12,8 +12,9 @@ struct CategoryEditList: Codable {
 }
 
 struct CategoryEdit: Codable, Equatable {
-	let id, title, upperId, upperTitle : String
-	let orderNum, upperOrderNum: Int
+	let id: String
+	var title, upperId, upperTitle: String
+	var orderNum, upperOrderNum: Int
 	
 	// 파라미터 이름 변경
 	enum CodingKeys: String, CodingKey {

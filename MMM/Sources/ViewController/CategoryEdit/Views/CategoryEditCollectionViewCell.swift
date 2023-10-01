@@ -41,11 +41,25 @@ final class CategoryEditCollectionViewCell: BaseCollectionViewCell, View {
 extension CategoryEditCollectionViewCell {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
 	private func bindAction(_ reactor: CategoryEditCollectionViewCellReactor) {
-		titleLabel.text = reactor.currentState.category.title
+		titleLabel.text = reactor.currentState.categoryEdit.title
+		
+		editButton.rx.tap
+			.withUnretained(self)
+			.map { .didTapEditButton }
+			.bind(to: reactor.action)
+			.disposed(by: disposeBag)
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: CategoryEditCollectionViewCellReactor) {
+		
+		reactor.state
+			.map { $0.categoryEdit }
+			.distinctUntilChanged() // 중복값 무시
+			.subscribe(onNext: { [weak self] categoryEdit in
+				self?.titleLabel.text = categoryEdit.title
+			})
+			.disposed(by: disposeBag)
 	}
 }
 //MARK: - Action
@@ -57,6 +71,8 @@ extension CategoryEditCollectionViewCell {
 	override func setAttribute() {
 		super.setAttribute()
 		
+		backgroundColor = R.Color.gray900
+		
 		titleLabel = titleLabel.then {
 			$0.font = R.Font.body1
 			$0.textColor = R.Color.gray100
@@ -65,11 +81,13 @@ extension CategoryEditCollectionViewCell {
 		
 		editButton = editButton.then {
 			$0.setImage(R.Icon.iconEditGray24, for: .normal)
+			$0.setImage(R.Icon.iconEditGray24?.alpha(0.7), for: .highlighted)
 			$0.imageView?.contentMode = .scaleAspectFit
 		}
 		
 		dragButton = dragButton.then {
 			$0.setImage(R.Icon.drag, for: .normal)
+			$0.setImage(R.Icon.drag?.alpha(0.7), for: .highlighted)
 			$0.imageView?.contentMode = .scaleAspectFit
 		}
 	}
@@ -84,7 +102,7 @@ extension CategoryEditCollectionViewCell {
 		super.setLayout()
 		
 		titleLabel.snp.makeConstraints {
-			$0.top.leading.equalToSuperview()
+			$0.centerY.leading.equalToSuperview()
 			$0.trailing.lessThanOrEqualTo(editButton.snp.leading).offset(-4)
 		}
 		

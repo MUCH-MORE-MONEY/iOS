@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		003B832595A61A7EA6CCC014 /* Pods_MMM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A564931308C77DE145181BBF /* Pods_MMM.framework */; };
-		451805DD2AC112C0005C9155 /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451805DC2AC112C0005C9155 /* APIConstants.swift */; };
 		45AFC2A92AC296E1004DF76E /* CustomPushTextSettingReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AFC2A82AC296E1004DF76E /* CustomPushTextSettingReactor.swift */; };
 		45AFC2AB2AC2A564004DF76E /* CustomPushTextSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AFC2AA2AC2A564004DF76E /* CustomPushTextSettingViewController.swift */; };
 		45D07CCF2AC4071A001C08AB /* CustomPushTimeSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D07CCE2AC4071A001C08AB /* CustomPushTimeSettingViewController.swift */; };
@@ -58,8 +57,6 @@
 		6A2B5D5B2A9735D500CCBFBE /* DetailTimeSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2B5D5A2A9735D500CCBFBE /* DetailTimeSettingView.swift */; };
 		6A2B5D5D2A97415000CCBFBE /* CustomPushTextSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2B5D5C2A97415000CCBFBE /* CustomPushTextSettingView.swift */; };
 		6A2B5D5F2A9744E800CCBFBE /* CustomPushTimeSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2B5D5E2A9744E800CCBFBE /* CustomPushTimeSettingView.swift */; };
-		6A2B5D5D2A97415000CCBFBE /* TextSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2B5D5C2A97415000CCBFBE /* TextSettingView.swift */; };
-		6A2B5D5F2A9744E800CCBFBE /* TimeSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2B5D5E2A9744E800CCBFBE /* TimeSettingView.swift */; };
 		6A381E0A29E8F40700E0974F /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A381E0929E8F40700E0974F /* AddViewController.swift */; };
 		6A4313E22A13046E00095041 /* BottomPageControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4313E12A13046E00095041 /* BottomPageControlView.swift */; };
 		6A4F6E962A29ADA500754150 /* Ex+UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4F6E952A29ADA500754150 /* Ex+UIViewController.swift */; };
@@ -171,7 +168,6 @@
 		C4BBD2732ABADB610055FA65 /* ServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BBD2722ABADB610055FA65 /* ServiceProvider.swift */; };
 		C4BBD2772ABD4E060055FA65 /* CustomRefreshControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BBD2762ABD4E060055FA65 /* CustomRefreshControl.swift */; };
 		C4BBD2792ABDC8870055FA65 /* CategoryBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BBD2782ABDC8870055FA65 /* CategoryBar.swift */; };
-		C4BBD27B2ABE0A700055FA65 /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BBD27A2ABE0A700055FA65 /* APIConstants.swift */; };
 		C4BBD27D2ABEBFB70055FA65 /* CategoryHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BBD27C2ABEBFB70055FA65 /* CategoryHeader.swift */; };
 		C4BBD27F2ABEF6360055FA65 /* CategoryDetailReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BBD27E2ABEF6350055FA65 /* CategoryDetailReactor.swift */; };
 		C4BBD2812ABF01B40055FA65 /* CategoryDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BBD2802ABF01B40055FA65 /* CategoryDetailViewController.swift */; };
@@ -226,6 +222,12 @@
 		C4EA5B4029FA1A40008D1564 /* HomeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EA5B3F29FA1A40008D1564 /* HomeHeaderView.swift */; };
 		C4EA5B4229FA26E0008D1564 /* HomeHeaderStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EA5B4129FA26E0008D1564 /* HomeHeaderStackView.swift */; };
 		C4EA5B4429FA2810008D1564 /* Ex+UIStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EA5B4329FA2810008D1564 /* Ex+UIStackView.swift */; };
+		C4EB8CB02AC18E85005FBAF1 /* Ex+UICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EB8CAF2AC18E85005FBAF1 /* Ex+UICollectionView.swift */; };
+		C4EB8CB22AC4325C005FBAF1 /* CategoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EB8CB12AC4325C005FBAF1 /* CategoryProvider.swift */; };
+		C4EB8CB42AC438BA005FBAF1 /* CategoryEditBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EB8CB32AC438BA005FBAF1 /* CategoryEditBottomSheetViewController.swift */; };
+		C4EB8CB62AC44448005FBAF1 /* CategoryEditBottomSheetReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EB8CB52AC44448005FBAF1 /* CategoryEditBottomSheetReactor.swift */; };
+		C4EB8CBA2AC52F52005FBAF1 /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EB8CB92AC52F52005FBAF1 /* APIConstants.swift */; };
+		C4EB8CBC2AC56341005FBAF1 /* CategoryAddBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EB8CBB2AC56341005FBAF1 /* CategoryAddBottomSheetViewController.swift */; };
 		FF7FB61A0AC167F25EB6438F /* Pods_MMM_MMMUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 738AB5686981CA1A28640207 /* Pods_MMM_MMMUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -442,7 +444,6 @@
 		C4BBD2722ABADB610055FA65 /* ServiceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceProvider.swift; sourceTree = "<group>"; };
 		C4BBD2762ABD4E060055FA65 /* CustomRefreshControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomRefreshControl.swift; sourceTree = "<group>"; };
 		C4BBD2782ABDC8870055FA65 /* CategoryBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryBar.swift; sourceTree = "<group>"; };
-		C4BBD27A2ABE0A700055FA65 /* APIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIConstants.swift; sourceTree = "<group>"; };
 		C4BBD27C2ABEBFB70055FA65 /* CategoryHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryHeader.swift; sourceTree = "<group>"; };
 		C4BBD27E2ABEF6350055FA65 /* CategoryDetailReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDetailReactor.swift; sourceTree = "<group>"; };
 		C4BBD2802ABF01B40055FA65 /* CategoryDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDetailViewController.swift; sourceTree = "<group>"; };
@@ -490,6 +491,12 @@
 		C4EA5B3F29FA1A40008D1564 /* HomeHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeaderView.swift; sourceTree = "<group>"; };
 		C4EA5B4129FA26E0008D1564 /* HomeHeaderStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeaderStackView.swift; sourceTree = "<group>"; };
 		C4EA5B4329FA2810008D1564 /* Ex+UIStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIStackView.swift"; sourceTree = "<group>"; };
+		C4EB8CAF2AC18E85005FBAF1 /* Ex+UICollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UICollectionView.swift"; sourceTree = "<group>"; };
+		C4EB8CB12AC4325C005FBAF1 /* CategoryProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryProvider.swift; sourceTree = "<group>"; };
+		C4EB8CB32AC438BA005FBAF1 /* CategoryEditBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditBottomSheetViewController.swift; sourceTree = "<group>"; };
+		C4EB8CB52AC44448005FBAF1 /* CategoryEditBottomSheetReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditBottomSheetReactor.swift; sourceTree = "<group>"; };
+		C4EB8CB92AC52F52005FBAF1 /* APIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIConstants.swift; sourceTree = "<group>"; };
+		C4EB8CBB2AC56341005FBAF1 /* CategoryAddBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryAddBottomSheetViewController.swift; sourceTree = "<group>"; };
 		E1F4C2751A32E5FDB91A657F /* Pods-MMMTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMMTests.release.xcconfig"; path = "Target Support Files/Pods-MMMTests/Pods-MMMTests.release.xcconfig"; sourceTree = "<group>"; };
 		F4482F9A861317CCBA1EDC6B /* Pods-MMM-MMMUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMM-MMMUITests.release.xcconfig"; path = "Target Support Files/Pods-MMM-MMMUITests/Pods-MMM-MMMUITests.release.xcconfig"; sourceTree = "<group>"; };
 		FC275A78FD9B770379D3387D /* Pods-MMM.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMM.debug.xcconfig"; path = "Target Support Files/Pods-MMM/Pods-MMM.debug.xcconfig"; sourceTree = "<group>"; };
@@ -636,7 +643,7 @@
 		6A14E7182A9E0BC20071805D /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				451805DC2AC112C0005C9155 /* APIConstants.swift */,
+				C4EB8CB92AC52F52005FBAF1 /* APIConstants.swift */,
 				6A14E7192A9E0C140071805D /* APIType.swift */,
 				6A14E71B2A9E119C0071805D /* MMMAPIService.swift */,
 				6A77D6D52AA01F7A00CE30DB /* NetworkProtocol.swift */,
@@ -899,6 +906,7 @@
 				C41193DD29D287E6003DBC15 /* Ex+KeychainWrapper.swift */,
 				C41193F429D3D7FB003DBC15 /* Ex+NSObject.swift */,
 				C44807DD29E4FE8000D4B090 /* Ex+Publisher.swift */,
+				C4EB8CAF2AC18E85005FBAF1 /* Ex+UICollectionView.swift */,
 				C44807E429E7E76800D4B090 /* Ex+UIControl.swift */,
 				C41193DF29D287E6003DBC15 /* Ex+UIDevice.swift */,
 				6ADC27DF2A2AEEF400C56777 /* Ex+UIImage.swift */,
@@ -946,6 +954,7 @@
 				6A08B47729FF5C7E0080719E /* APIParameters.swift */,
 				6A08B47529FF5B150080719E /* APIRouter.swift */,
 				C4BBD2722ABADB610055FA65 /* ServiceProvider.swift */,
+				C4EB8CB12AC4325C005FBAF1 /* CategoryProvider.swift */,
 				C4BBD2632AB9DE8C0055FA65 /* StatisticsProvider.swift */,
 				C4BBD2702ABADA8B0055FA65 /* ProfileProvider.swift */,
 			);
@@ -1086,6 +1095,8 @@
 				45D07CD02AC4071F001C08AB /* CustomPush */,
 				C4199DD229FE3051006E5DA8 /* BottomSheetViewController.swift */,
 				C46409D92AB9625E00A899AD /* BottomSheetViewController2.swift */,
+				C4EB8CBB2AC56341005FBAF1 /* CategoryAddBottomSheetViewController.swift */,
+				C4EB8CB32AC438BA005FBAF1 /* CategoryEditBottomSheetViewController.swift */,
 				C4BBD2652AB9E16D0055FA65 /* DateBottomSheetViewController.swift */,
 				C4BBD26B2ABAD4A60055FA65 /* SatisfactionBottomSheetViewController.swift */,
 			);
@@ -1113,6 +1124,7 @@
 			isa = PBXGroup;
 			children = (
 				45D07CD12AC4076D001C08AB /* CustomPush */,
+				C4EB8CB52AC44448005FBAF1 /* CategoryEditBottomSheetReactor.swift */,
 				C4BBD2692AB9E1DA0055FA65 /* DateBottomSheetReactor.swift */,
 				C4BBD26D2ABAD6140055FA65 /* SatisfactionBottomSheetReactor.swift */,
 			);
@@ -1147,8 +1159,8 @@
 				6A2B5D562A97215000CCBFBE /* PushSettingDetailViewController.swift */,
 				6A1276B42A99C5EE00C0B9D4 /* PushSettingDetailViewController.swift */,
 				C494A24E2A9B895100980A71 /* PushSettingDetailViewController.swift */,
-				C494A24C2A9B893F00980A71 /* APIConstants.swift */,
 				6A2CE3D62ABE9B58008C22BF /* APIConstants.swift */,
+				451805DC2AC112C0005C9155 /* APIConstants.swift */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -1530,12 +1542,13 @@
 				C4DBAA3029DD459100D1BB97 /* WithdrawConfirmView.swift in Sources */,
 				45D07CD32AC4078A001C08AB /* CustomPushTimeSettingReactor.swift in Sources */,
 				C46409AC2AB328EE00A899AD /* StatisticsResDto.swift in Sources */,
+				C4EB8CBA2AC52F52005FBAF1 /* APIConstants.swift in Sources */,
 				C41193FD29D42BD9003DBC15 /* ProfileFooterView.swift in Sources */,
 				C44807E129E648D300D4B090 /* HomeViewController.swift in Sources */,
 				C4BBD2662AB9E16D0055FA65 /* DateBottomSheetViewController.swift in Sources */,
 				C46409BE2AB5B0A000A899AD /* BaseCollectionReusableView.swift in Sources */,
 				6A2B5D5D2A97415000CCBFBE /* CustomPushTextSettingView.swift in Sources */,
-				6A2B5D5D2A97415000CCBFBE /* TextSettingView.swift in Sources */,
+				6A2B5D5D2A97415000CCBFBE /* CustomPushTextSettingView.swift in Sources */,
 				C4BBD28D2AC048860055FA65 /* CategoryEditSectionFooter.swift in Sources */,
 				C44807DE29E4FE8000D4B090 /* Ex+Publisher.swift in Sources */,
 				6A1108B32A95DFF40070682B /* PushSettingViewController.swift in Sources */,
@@ -1601,6 +1614,7 @@
 				C4351B502A1691FB005F95BE /* HighlightViewController.swift in Sources */,
 				6A04FA092A1C7EE80034C114 /* EditActivityViewModel.swift in Sources */,
 				C4170B592A94853400CE0A65 /* StatisticsActivityView.swift in Sources */,
+				C4EB8CB42AC438BA005FBAF1 /* CategoryEditBottomSheetViewController.swift in Sources */,
 				C4EA5B4229FA26E0008D1564 /* HomeHeaderStackView.swift in Sources */,
 				C4BBD2932AC04C550055FA65 /* CategoryEditSectionModel.swift in Sources */,
 				6A4313E22A13046E00095041 /* BottomPageControlView.swift in Sources */,
@@ -1618,6 +1632,7 @@
 				C41193EA29D2D7FE003DBC15 /* MMMResource.swift in Sources */,
 				6ADC27E02A2AEEF400C56777 /* Ex+UIImage.swift in Sources */,
 				6A381E0A29E8F40700E0974F /* AddViewController.swift in Sources */,
+				C4EB8CB62AC44448005FBAF1 /* CategoryEditBottomSheetReactor.swift in Sources */,
 				6A0F234029DBA8AA0063673B /* DataExportViewController.swift in Sources */,
 				C4BBD2642AB9DE8C0055FA65 /* StatisticsProvider.swift in Sources */,
 				6A14E7092A9DCA720071805D /* PushReqDto.swift in Sources */,
@@ -1628,6 +1643,7 @@
 				6A77D6D62AA01F7A00CE30DB /* NetworkProtocol.swift in Sources */,
 				6A2B5D5F2A9744E800CCBFBE /* CustomPushTimeSettingView.swift in Sources */,
 				6A14E71C2A9E119C0071805D /* MMMAPIService.swift in Sources */,
+				C4EB8CB02AC18E85005FBAF1 /* Ex+UICollectionView.swift in Sources */,
 				6A15B0EC2A15B68D00EADAC5 /* BaseAddActivityViewController.swift in Sources */,
 				C4C8B68D2A3ACDC700FAF931 /* LoadingViewController.swift in Sources */,
 				C46409D62AB8DB9000A899AD /* BaseTableViewCell.swift in Sources */,
@@ -1642,7 +1658,9 @@
 				C4170B672A95EBFA00CE0A65 /* CategoryReactor.swift in Sources */,
 				C433A07329EEE751008B26DF /* Ex+Date.swift in Sources */,
 				C4EA5B4029FA1A40008D1564 /* HomeHeaderView.swift in Sources */,
+				C4EB8CBC2AC56341005FBAF1 /* CategoryAddBottomSheetViewController.swift in Sources */,
 				6A8B776329FF92CC0095ECFC /* Constants.swift in Sources */,
+				C4EB8CB22AC4325C005FBAF1 /* CategoryProvider.swift in Sources */,
 				C4DBAA3929DEAE0200D1BB97 /* CountAnimationStackView.swift in Sources */,
 				C46409B22AB593C100A899AD /* CategoryCollectionViewCellReactor.swift in Sources */,
 				6A1BAD4529E6550100818086 /* OnboardingViewModel.swift in Sources */,
@@ -1666,7 +1684,6 @@
 				C41193E429D287E6003DBC15 /* Ex+Font.swift in Sources */,
 				C4BBD27D2ABEBFB70055FA65 /* CategoryHeader.swift in Sources */,
 				C41193E529D287E6003DBC15 /* Ex+UIDevice.swift in Sources */,
-				451805DD2AC112C0005C9155 /* APIConstants.swift in Sources */,
 				C4C0CB092A2474F900C41FF4 /* Ex+UILabel.swift in Sources */,
 				6A1322F12A089B2900CEEC81 /* BasePaddingLabel.swift in Sources */,
 				C4D7FC872A08942E00565291 /* Monthly.swift in Sources */,
@@ -1814,7 +1831,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1869,7 +1886,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -1889,10 +1906,12 @@
 				CODE_SIGN_ENTITLEMENTS = MMM/MMM.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = L7X442LA7Q;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MMM/Resources/Info/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MMM;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "\"MMM\"이 가계부 작성 시 사진을 등록하는 기능을 사용하기 위해 사진 라이브러리에 접근하도록 허용합니다.";
 				INFOPLIST_KEY_NSUserTrackingUsageDescription = "더 나은 맞춤 서비스와 콘텐츠 제공을 위해 권한을 허용해주세요.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1906,7 +1925,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = labM.project.MMM;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1929,10 +1948,12 @@
 				CODE_SIGN_ENTITLEMENTS = MMM/MMM.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = L7X442LA7Q;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MMM/Resources/Info/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MMM;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "\"MMM\"이 가계부 작성 시 사진을 등록하는 기능을 사용하기 위해 사진 라이브러리에 접근하도록 허용합니다.";
 				INFOPLIST_KEY_NSUserTrackingUsageDescription = "더 나은 맞춤 서비스와 콘텐츠 제공을 위해 권한을 허용해주세요.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1946,7 +1967,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = labM.project.MMM;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -1,77 +1,77 @@
+////
+////  MMMWidgetLiveActivity.swift
+////  MMMWidget
+////
+////  Created by geonhyeong on 2023/06/06.
+////
 //
-//  MMMWidgetLiveActivity.swift
-//  MMMWidget
+//import ActivityKit
+//import WidgetKit
+//import SwiftUI
 //
-//  Created by geonhyeong on 2023/06/06.
+//struct MMMWidgetAttributes: ActivityAttributes {
+//    public struct ContentState: Codable, Hashable {
+//        // Dynamic stateful properties about your activity go here!
+//        var value: Int
+//    }
 //
-
-import ActivityKit
-import WidgetKit
-import SwiftUI
-
-struct MMMWidgetAttributes: ActivityAttributes {
-    public struct ContentState: Codable, Hashable {
-        // Dynamic stateful properties about your activity go here!
-        var value: Int
-    }
-
-    // Fixed non-changing properties about your activity go here!
-    var name: String
-}
-
-struct MMMWidgetLiveActivity: Widget {
-    var body: some WidgetConfiguration {
-        ActivityConfiguration(for: MMMWidgetAttributes.self) { context in
-            // Lock screen/banner UI goes here
-            VStack {
-                Text("Hello")
-            }
-            .activityBackgroundTint(Color.cyan)
-            .activitySystemActionForegroundColor(Color.black)
-
-        } dynamicIsland: { context in
-            DynamicIsland {
-                // Expanded UI goes here.  Compose the expanded UI through
-                // various regions, like leading/trailing/center/bottom
-                DynamicIslandExpandedRegion(.leading) {
-                    Text("Leading")
-                }
-                DynamicIslandExpandedRegion(.trailing) {
-                    Text("Trailing")
-                }
-                DynamicIslandExpandedRegion(.bottom) {
-                    Text("Bottom")
-                    // more content
-                }
-            } compactLeading: {
-                Text("L")
-            } compactTrailing: {
-                Text("T")
-            } minimal: {
-                Text("Min")
-            }
-            .widgetURL(URL(string: "http://www.apple.com"))
-            .keylineTint(Color.red)
-        }
-    }
-}
-
-struct MMMWidgetLiveActivity_Previews: PreviewProvider {
-    static let attributes = MMMWidgetAttributes(name: "Me")
-    static let contentState = MMMWidgetAttributes.ContentState(value: 3)
-
-    static var previews: some View {
-        attributes
-            .previewContext(contentState, viewKind: .dynamicIsland(.compact))
-            .previewDisplayName("Island Compact")
-        attributes
-            .previewContext(contentState, viewKind: .dynamicIsland(.expanded))
-            .previewDisplayName("Island Expanded")
-        attributes
-            .previewContext(contentState, viewKind: .dynamicIsland(.minimal))
-            .previewDisplayName("Minimal")
-        attributes
-            .previewContext(contentState, viewKind: .content)
-            .previewDisplayName("Notification")
-    }
-}
+//    // Fixed non-changing properties about your activity go here!
+//    var name: String
+//}
+//
+//struct MMMWidgetLiveActivity: Widget {
+//    var body: some WidgetConfiguration {
+//        ActivityConfiguration(for: MMMWidgetAttributes.self) { context in
+//            // Lock screen/banner UI goes here
+//            VStack {
+//                Text("Hello")
+//            }
+//            .activityBackgroundTint(Color.cyan)
+//            .activitySystemActionForegroundColor(Color.black)
+//
+//        } dynamicIsland: { context in
+//            DynamicIsland {
+//                // Expanded UI goes here.  Compose the expanded UI through
+//                // various regions, like leading/trailing/center/bottom
+//                DynamicIslandExpandedRegion(.leading) {
+//                    Text("Leading")
+//                }
+//                DynamicIslandExpandedRegion(.trailing) {
+//                    Text("Trailing")
+//                }
+//                DynamicIslandExpandedRegion(.bottom) {
+//                    Text("Bottom")
+//                    // more content
+//                }
+//            } compactLeading: {
+//                Text("L")
+//            } compactTrailing: {
+//                Text("T")
+//            } minimal: {
+//                Text("Min")
+//            }
+//            .widgetURL(URL(string: "http://www.apple.com"))
+//            .keylineTint(Color.red)
+//        }
+//    }
+//}
+//
+//struct MMMWidgetLiveActivity_Previews: PreviewProvider {
+//    static let attributes = MMMWidgetAttributes(name: "Me")
+//    static let contentState = MMMWidgetAttributes.ContentState(value: 3)
+//
+//    static var previews: some View {
+//        attributes
+//            .previewContext(contentState, viewKind: .dynamicIsland(.compact))
+//            .previewDisplayName("Island Compact")
+//        attributes
+//            .previewContext(contentState, viewKind: .dynamicIsland(.expanded))
+//            .previewDisplayName("Island Expanded")
+//        attributes
+//            .previewContext(contentState, viewKind: .dynamicIsland(.minimal))
+//            .previewDisplayName("Minimal")
+//        attributes
+//            .previewContext(contentState, viewKind: .content)
+//            .previewDisplayName("Notification")
+//    }
+//}

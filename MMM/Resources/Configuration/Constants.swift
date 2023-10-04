@@ -92,7 +92,9 @@ enum Common {
         case customPushSwitch
         case customPushTime
         case customPushText
+        case customPushWeekList
     }
+    
     
     // MARK: - Set
     static func setNewsPushSwitch(_ isOn: Bool) {
@@ -103,12 +105,56 @@ enum Common {
         UserDefaults.standard.set(isOn, forKey: self.keys.customPushSwitch.rawValue)
     }
     
+    // 최초 앱 설치 시 저장
     static func setCustomPushTime(_ date: String) {
         UserDefaults.standard.set(date, forKey: self.keys.customPushTime.rawValue)
     }
     
+    // 시간 요일에 따른 저장
+    static func setCustomPushTime() {
+        let days = Common.getCustomPushWeekList()
+        
+        var title = ""
+        if days.filter{ $0 }.count == 7 {
+            title += "매일"
+        } else {
+            for (index, isOn) in days.enumerated() {
+                if isOn {
+                    switch index {
+                    case 0:
+                        title += "일 ,"
+                    case 1:
+                        title += "월 ,"
+                    case 3:
+                        title += "화 ,"
+                    case 4:
+                        title += "수 ,"
+                    case 5:
+                        title += "목 ,"
+                    case 6:
+                        title += "금 ,"
+                    case 7:
+                        title += "토 ,"
+                    default:
+                        break
+                    }
+                }
+            }
+        }
+
+        if title.last == "," {
+            title.removeLast(2)
+        }
+        
+        UserDefaults.standard.set(title, forKey: self.keys.customPushTime.rawValue)
+    }
+    
     static func setCustomPushText(_ text: String) {
         UserDefaults.standard.set(text, forKey: self.keys.customPushText.rawValue)
+    }
+    
+    static func setCustomPushWeekList(_ list: [Bool]) {
+        UserDefaults.standard.setValue(list, forKey: self.keys.customPushWeekList.rawValue)
     }
     
     // MARK: - Get
@@ -126,5 +172,19 @@ enum Common {
     
     static func getCustomPushText() -> String {
         UserDefaults.standard.string(forKey: self.keys.customPushText.rawValue) ?? "💸 오늘은 어떤 경제활동을 했나요?"
+    }
+    
+    static func getCustomPushWeekList() -> [Bool] {
+        // UserDefaults에서 상태 불러오기
+        var selectedDays: [Bool] = []
+        
+        if let savedDays = UserDefaults.standard.array(forKey: self.keys.customPushWeekList.rawValue) as? [Bool], savedDays.count == 7 {
+            print(savedDays)
+            selectedDays = savedDays
+        } else {
+            return Array(repeating: true, count: 7)
+        }
+        
+        return selectedDays
     }
 }

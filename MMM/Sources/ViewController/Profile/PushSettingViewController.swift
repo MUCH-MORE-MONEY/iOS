@@ -37,7 +37,14 @@ final class PushSettingViewController: BaseViewControllerWithNav, View {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        bind(reactor: reactor)        
+        bind(reactor: reactor)
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.customPushTimeSettingView.updateCustomTimeText()
     }
     
     func bind(reactor: PushSettingReactor) {
@@ -135,7 +142,11 @@ extension PushSettingViewController {
         reactor.state
             .map { $0.customPushLabelText }
             .bind { text in
-                let title = Common.getCustomPushText()
+                var title = Common.getCustomPushText()
+                if title == "" {
+                    title = "💸 오늘은 어떤 경제활동을 했나요?"
+                    Common.setCustomPushText(title)
+                }
                 self.customPushTextSettingView.setTitle(title)
             }
             .disposed(by: disposeBag)

@@ -21,7 +21,9 @@ final class PushSettingDetailViewController: BaseViewControllerWithNav, View {
     // MARK: - Properties
 //    private let  weekList = Observable.of(["일", "화", "수", "목", "금", "토", "월"])
     // TODO: - rx로 변경
-    private let  weekList = ["일", "화", "수", "목", "금", "토", "월"]
+    private let weekList = ["일", "월", "화", "수", "목", "금", "토"]
+    private var selectedDays: [Bool] = []
+    
     var reactor: PushSettingDetailReactor!
     
     override func viewDidLoad() {
@@ -72,7 +74,7 @@ extension PushSettingDetailViewController {
             .map { $0.isPresentTime }
             .distinctUntilChanged()
             .filter { $0 }
-            .bind(onNext: presentBottomSheet1)
+            .bind(onNext: presentBottomSheet)
             .disposed(by: disposeBag)
         
 		reactor.state
@@ -132,7 +134,13 @@ extension PushSettingDetailViewController {
             $0.contentInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
             $0.layer.cornerRadius = 4
             $0.isScrollEnabled = false
+            $0.allowsMultipleSelection = true
         }
+        
+        // TODO: - 로직 위치 변경, 초기 설정은 모두 true
+        selectedDays = Common.getCustomPushWeekList()
+
+        print(selectedDays)
     }
     
 	override func setLayout() {
@@ -159,17 +167,26 @@ extension PushSettingDetailViewController {
 }
 
 // MARK: - CollectionView delegate
-//extension PushSettingDetailViewController: UICollectionViewDelegate {
-//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        let cell = collectionView.cellForItem(at: indexPath) as! WeekCollectionViewCell
-//        
-//        if cell.clickCount == 1 {
-//            cell.clickCount = 0
-//        } else {
-//            cell.clickCount += 1
-//        }
-//    }
-//}
+extension PushSettingDetailViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        if let cell = collectionView.cellForItem(at: indexPath) as? WeekCollectionViewCell {
+            selectedDays[indexPath.item].toggle()
+//            selectedDays[indexPath.item] = cell.isSelected
+        }
+        
+        Common.setCustomPushWeekList(selectedDays)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) as? WeekCollectionViewCell {
+            selectedDays[indexPath.item].toggle()
+//            selectedDays[indexPath.item] = cell.isSelected
+        }
+        print(selectedDays)
+        Common.setCustomPushWeekList(selectedDays)
+    }
+}
 
 // MARK: - CollectionView DataSource
 extension PushSettingDetailViewController: UICollectionViewDataSource {
@@ -184,8 +201,9 @@ extension PushSettingDetailViewController: UICollectionViewDataSource {
         cell.layer.cornerRadius = cell.frame.size.width / 2
         cell.clipsToBounds = true
         
-        cell.backgroundColor = .lightGray
-        
+        // cell의 on/off
+        cell.isSelected = selectedDays[indexPath.item]
+        // cell의 text를 정하는 코드
         cell.configure(weekList[indexPath.row])
         
         return cell

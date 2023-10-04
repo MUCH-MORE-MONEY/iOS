@@ -10,7 +10,18 @@ import Then
 import SnapKit
 
 final class WeekCollectionViewCell: UICollectionViewCell {
-    private lazy var button = UIButton()
+    private lazy var label = UILabel()
+    
+    override var isSelected: Bool {
+        didSet {
+            if isSelected {
+                label.backgroundColor = R.Color.orange500
+            } else {
+                label.backgroundColor = R.Color.gray600
+                label.textColor = R.Color.gray400
+            }
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,7 +37,7 @@ final class WeekCollectionViewCell: UICollectionViewCell {
 // MARK: - Actions
 extension WeekCollectionViewCell {
     func configure(_ text: String) {
-        button.setTitle(text, for: .normal)
+        label.text = text
     }
 }
 //MARK: - Attribute & Hierarchy & Layouts
@@ -42,17 +53,18 @@ extension WeekCollectionViewCell {
     }
     
     private func setAttribute() {
-        addSubviews(button)
+        addSubviews(label)
         
-        button = button.then {
-            $0.setTitle("일", for: .normal)
-            $0.setTitleColor(R.Color.white, for: .normal)
-            $0.setBackgroundColor(R.Color.orange500, for: .normal)
+        label = label.then {
+            $0.text = "일"
+            $0.textAlignment = .center
+            $0.textColor = R.Color.white
+            $0.backgroundColor = R.Color.orange500
         }
     }
     
     private func setLayout() {
-        button.snp.makeConstraints {
+        label.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
     }

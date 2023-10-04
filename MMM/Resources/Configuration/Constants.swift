@@ -92,7 +92,9 @@ enum Common {
         case customPushSwitch
         case customPushTime
         case customPushText
+        case customPushWeekList
     }
+    
     
     // MARK: - Set
     static func setNewsPushSwitch(_ isOn: Bool) {
@@ -111,6 +113,10 @@ enum Common {
         UserDefaults.standard.set(text, forKey: self.keys.customPushText.rawValue)
     }
     
+    static func setCustomPushWeekList(_ list: [Bool]) {
+        UserDefaults.standard.setValue(list, forKey: self.keys.customPushWeekList.rawValue)
+    }
+    
     // MARK: - Get
     static func getNewsPushSwitch() -> Bool {
         UserDefaults.standard.bool(forKey: self.keys.newsPushSwitch.rawValue)
@@ -126,5 +132,19 @@ enum Common {
     
     static func getCustomPushText() -> String {
         UserDefaults.standard.string(forKey: self.keys.customPushText.rawValue) ?? "💸 오늘은 어떤 경제활동을 했나요?"
+    }
+    
+    static func getCustomPushWeekList() -> [Bool] {
+        // UserDefaults에서 상태 불러오기
+        var selectedDays: [Bool] = []
+        
+        if let savedDays = UserDefaults.standard.array(forKey: self.keys.customPushWeekList.rawValue) as? [Bool], savedDays.count == 7 {
+            print(savedDays)
+            selectedDays = savedDays
+        } else {
+            return Array(repeating: true, count: 7)
+        }
+        
+        return selectedDays
     }
 }

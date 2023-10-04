@@ -21,7 +21,9 @@ final class PushSettingDetailViewController: BaseViewControllerWithNav, View {
     // MARK: - Properties
 //    private let  weekList = Observable.of(["일", "화", "수", "목", "금", "토", "월"])
     // TODO: - rx로 변경
-    private let  weekList = ["일", "화", "수", "목", "금", "토", "월"]
+    private let weekList = ["일", "화", "수", "목", "금", "토", "월"]
+    private var selectedDays: [Bool] = []
+    
     var reactor: PushSettingDetailReactor!
     
     override func viewDidLoad() {
@@ -72,7 +74,7 @@ extension PushSettingDetailViewController {
             .map { $0.isPresentTime }
             .distinctUntilChanged()
             .filter { $0 }
-            .bind(onNext: presentBottomSheet1)
+            .bind(onNext: presentBottomSheet)
             .disposed(by: disposeBag)
         
 		reactor.state
@@ -133,6 +135,11 @@ extension PushSettingDetailViewController {
             $0.layer.cornerRadius = 4
             $0.isScrollEnabled = false
         }
+        
+        // TODO: - 로직 위치 변경, 초기 설정은 모두 true
+        selectedDays = Common.getCustomPushWeekList()
+
+        print(selectedDays)
     }
     
 	override func setLayout() {
@@ -159,17 +166,15 @@ extension PushSettingDetailViewController {
 }
 
 // MARK: - CollectionView delegate
-//extension PushSettingDetailViewController: UICollectionViewDelegate {
-//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        let cell = collectionView.cellForItem(at: indexPath) as! WeekCollectionViewCell
-//        
-//        if cell.clickCount == 1 {
-//            cell.clickCount = 0
-//        } else {
-//            cell.clickCount += 1
-//        }
-//    }
-//}
+extension PushSettingDetailViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        selectedDays[indexPath.item].toggle()
+        collectionView.reloadItems(at: [indexPath])
+        
+        Common.setCustomPushWeekList(selectedDays)
+        UserDefaults.standard.set(selectedDays, forKey: "selectedDays")
+    }
+}
 
 // MARK: - CollectionView DataSource
 extension PushSettingDetailViewController: UICollectionViewDataSource {
@@ -185,9 +190,9 @@ extension PushSettingDetailViewController: UICollectionViewDataSource {
         cell.clipsToBounds = true
         
         cell.backgroundColor = .lightGray
-        
-        cell.configure(weekList[indexPath.row])
-        
+
+        cell.isSelected = selectedDays[indexPath.item]
+//        cell.configure(weekList[indexPath.row])
         return cell
     }
     

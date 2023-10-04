@@ -17,7 +17,8 @@ final class WeekCollectionViewCell: UICollectionViewCell {
             if isSelected {
                 label.backgroundColor = R.Color.orange500
             } else {
-                label.backgroundColor = R.Color.gray500
+                label.backgroundColor = R.Color.gray600
+                label.textColor = R.Color.gray400
             }
         }
     }

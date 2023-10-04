@@ -27,19 +27,24 @@ final class CustomPushTimeSettingView: UIView {
 
 // MARK: - Actions
 extension CustomPushTimeSettingView {
+    func updateCustomTimeText() {
+        Common.setCustomPushTime()
+        DispatchQueue.main.async {
+            self.mainLabel.text = Common.getCustomPushTime()
+        }
+    }
+    
     func configure(_ isOn: Bool) {
         if isOn {
             DispatchQueue.main.async {
                 self.backgroundColor = R.Color.gray900
                 self.imageView.isHidden = false
-                self.mainLabel.text = "매일 09:00 PM"
             }
 
         } else {
             DispatchQueue.main.async {
                 self.backgroundColor = R.Color.gray300
                 self.imageView.isHidden = true
-                self.mainLabel.text = "매일 09:00 PM"
             }
         }
     }
@@ -57,7 +62,7 @@ extension CustomPushTimeSettingView {
         addSubviews(mainLabel, imageView)
         
         mainLabel = mainLabel.then {
-            $0.text = "매일 09:00 PM"
+            $0.text = Common.getCustomPushTime()
             $0.font = R.Font.body1
             $0.textColor = R.Color.white
         }

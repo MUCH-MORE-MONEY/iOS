@@ -111,11 +111,11 @@ enum Common {
     }
     
     // 시간 요일에 따른 저장
-    static func setCustomPushTime() {
-        let days = Common.getCustomPushWeekList()
+    static func setCustomPushTime(_ days: [Bool]) {
         
+        print("userDefaults : \(days)")
         var title = ""
-        if days.filter{ $0 }.count == 7 {
+        if days.filter({ $0 }).count == 7 {
             title += "매일"
         } else {
             for (index, isOn) in days.enumerated() {
@@ -143,7 +143,7 @@ enum Common {
         }
 
         if title.last == "," {
-            title.removeLast(2)
+            title.removeLast()
         }
         
         UserDefaults.standard.set(title, forKey: self.keys.customPushTime.rawValue)

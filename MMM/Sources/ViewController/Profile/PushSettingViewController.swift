@@ -43,8 +43,8 @@ final class PushSettingViewController: BaseViewControllerWithNav, View {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        self.customPushTimeSettingView.updateCustomTimeText()
+        newsPushMainLabel.text = Common.getCustomPushTime()
+//        self.customPushTimeSettingView.updateCustomTimeText()
     }
     
     func bind(reactor: PushSettingReactor) {

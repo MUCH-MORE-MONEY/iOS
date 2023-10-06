@@ -96,13 +96,19 @@ extension CategoryAddBottomSheetViewController {
 		reactor.state
 			.map { $0.isAddValid }
 			.subscribe(onNext: { [weak self] isValid in
-				guard let self = self, let text = self.textField.text, !text.isEmpty else { return }
+				guard let self = self, let text = self.textField.text else {
+					return
+				}
 				
 				// shake 에니메이션
-				if !isValid {
+				if !isValid && !text.isEmpty {
 					self.textField.shake()
 					self.textField.text?.removeLast()
 				}
+				
+				// 확인 버튼 비활성화
+				self.checkButton.isEnabled = !text.isEmpty
+				self.checkButton.setTitleColor(!text.isEmpty ? R.Color.gray900 : R.Color.gray500, for: .normal)
 				
 				self.textField.textColor = isValid ? R.Color.gray900 : R.Color.red500
 				self.warningLabel.isHidden = isValid

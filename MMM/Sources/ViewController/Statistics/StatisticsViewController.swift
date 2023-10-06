@@ -86,6 +86,11 @@ extension StatisticsViewController {
 		.bind(to: reactor.action)
 		.disposed(by: disposeBag)
 		
+		// Refresh 작동 없애기
+		refreshControl.rx.controlEvent(.valueChanged)
+			.bind(onNext: { self.tableView.refreshControl?.endRefreshing()})
+			.disposed(by: disposeBag)
+		
 		// pagination
 		tableView.rx.didScroll
 			.withLatestFrom(self.tableView.rx.contentOffset)

@@ -80,7 +80,9 @@ final class CategoryEditViewController: BaseViewControllerWithNav, View {
 				return footer
 			case .footer:
 				guard let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: String(describing: CategoryEditSectionDefault.self), for: indexPath) as? CategoryEditSectionDefault else { return .init() }
-				let sectionInfo = dataSource.sectionModels[indexPath.section].model.header
+				
+				footer.reactor = thisReactor
+				
 				return footer
 			}
 		}
@@ -221,6 +223,14 @@ extension CategoryEditViewController {
 			.compactMap { $0.nextAddScreen }
 			.bind(onNext: willPresentAddViewController)
 			.disposed(by: disposeBag)
+		
+		// 카테고리 유형 편집
+		reactor.state
+			.map { $0.nextUpperEditScreen }
+			.distinctUntilChanged() // 중복값 무시
+			.filter { $0 } // true 일때만
+			.bind(onNext: willPushUpperEditViewController)
+			.disposed(by: disposeBag)
 	}
 }
 //MARK: - Action
@@ -295,6 +305,15 @@ extension CategoryEditViewController {
 		vc.reactor = CategoryEditBottomSheetReactor(provider: reactor.provider)
 
 		self.present(vc, animated: true, completion: nil)
+	}
+	
+	private func willPushUpperEditViewController(isPush: Bool) {
+		guard let reactor = self.reactor else { return }
+		
+		let vc = CategoryUpperEditViewController()
+		vc.reactor = reactor
+		
+		navigationController?.pushViewController(vc, animated: true)
 	}
 }
 //MARK: - Attribute & Hierarchy & Layouts

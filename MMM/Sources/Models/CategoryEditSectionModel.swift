@@ -67,7 +67,7 @@ extension CategoryEditSection: AnimatableSectionModelType, Equatable {
 		case let .base(header, _):
 			return header
 		case .footer:
-			return CategoryHeader.getDummy()
+			return CategoryHeader.getFooter()
 		}
 	}
 	

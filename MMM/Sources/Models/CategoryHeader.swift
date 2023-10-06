@@ -22,8 +22,8 @@ struct CategoryHeader: Codable, Equatable {
 		case orderNum = "upperOrderNum"
 	}
 	
-	static func getDummy() -> Self {
-		return CategoryHeader(id: "1", title: "", orderNum: 0)
+	static func getFooter() -> Self {
+		return CategoryHeader(id: "footer", title: "", orderNum: 0)
 	}
 	
 	static func getDummyList() -> [Self] {

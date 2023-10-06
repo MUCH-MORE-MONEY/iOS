@@ -11,7 +11,8 @@ final class CategoryEditReactor: Reactor {
 	// 사용자의 액션
 	enum Action {
 		case loadData(String)
-		case didTapAddButton(CategoryHeader)
+		case didTapAddButton(CategoryHeader) // 카테고리 추가
+		case didTapUpperEditButton // 카테고리 유형 편집
 		case dragAndDrop(IndexPath, IndexPath)
 	}
 	
@@ -24,6 +25,7 @@ final class CategoryEditReactor: Reactor {
 		case dragAndDrop(IndexPath, IndexPath)
 		case setNextEditScreen(CategoryEdit?)
 		case setNextAddScreen(CategoryHeader)
+		case setNextUpperEditScreen(Bool)
 	}
 	
 	// 현재 상태를 기록
@@ -35,6 +37,7 @@ final class CategoryEditReactor: Reactor {
 		var sections: [CategoryEditSectionModel] = []
 		var nextEditScreen: CategoryEdit?
 		var nextAddScreen: CategoryHeader?
+		var nextUpperEditScreen: Bool = false
 		var error = false
 	}
 	
@@ -62,6 +65,11 @@ extension CategoryEditReactor {
 			])
 		case let .didTapAddButton(categoryHeader):
 			return .just(.setNextAddScreen(categoryHeader))
+		case .didTapUpperEditButton:
+			return .concat([
+				.just(.setNextUpperEditScreen(true)),
+				.just(.setNextUpperEditScreen(false))
+			])
 		case let .dragAndDrop(startIndex, destinationIndexPath):
 			return .just(.dragAndDrop(startIndex, destinationIndexPath))
 		}
@@ -133,6 +141,8 @@ extension CategoryEditReactor {
 			newState.nextEditScreen = categoryEdit
 		case let .setNextAddScreen(categoryHeader):
 			newState.nextAddScreen = categoryHeader
+		case let .setNextUpperEditScreen(isNext):
+			newState.nextUpperEditScreen = isNext
 		}
 		
 		return newState

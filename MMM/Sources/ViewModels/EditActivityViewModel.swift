@@ -51,7 +51,7 @@ final class EditActivityViewModel {
         .map {0 <= Int($0) ?? 0 && Int($0) ?? 0 <= 10_000 } // 1억(1,000만원)보다 작을 경우
         .eraseToAnyPublisher()
     
-    lazy var isVaildByWon: AnyPublisher<Bool, Never> = $priceInput
+    lazy var isValidByWon: AnyPublisher<Bool, Never> = $priceInput
         .map { 0 <= Int($0) ?? 0 && Int($0) ?? 0 <= 100_000_000 } // 1억(1,000만원)보다 작을 경우
         .eraseToAnyPublisher()
 	

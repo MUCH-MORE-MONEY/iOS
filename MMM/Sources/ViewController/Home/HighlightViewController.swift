@@ -77,12 +77,12 @@ extension HighlightViewController {
 	}
 	
 	// 유무에 따른 attribute 변경
-	private func setValid(_ isVaild: Bool) {
-		checkButton.setTitleColor(!viewModel.priceInput.isEmpty && isVaild ? R.Color.black : R.Color.gray500, for: .normal)
-		checkButton.isEnabled = !viewModel.priceInput.isEmpty && isVaild
+	private func setValid(_ isValid: Bool) {
+		checkButton.setTitleColor(!viewModel.priceInput.isEmpty && isValid ? R.Color.black : R.Color.gray500, for: .normal)
+		checkButton.isEnabled = !viewModel.priceInput.isEmpty && isValid
 		
 		// shake 에니메이션
-		if !viewModel.priceInput.isEmpty && !isVaild {
+		if !viewModel.priceInput.isEmpty && !isValid {
 			priceTextField.shake()
 			warningLabel.isHidden = false
 		} else {
@@ -111,7 +111,7 @@ private extension HighlightViewController {
 			.store(in: &cancellable)
 		
 		//MARK: output
-		viewModel.isVaild
+		viewModel.isValid
 			.sinkOnMainThread(receiveValue: setValid)
 			.store(in: &cancellable)
 	}

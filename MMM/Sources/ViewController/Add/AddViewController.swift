@@ -94,14 +94,14 @@ final class AddViewController: BaseViewControllerWithNav {
 extension AddViewController {
 	// MARK: - Private
 	// 유무에 따른 attribute 변경
-	private func setValid(_ isVaild: Bool) {
-		nextFirstButton.setTitleColor(!viewModel.priceInput.isEmpty && isVaild ? R.Color.white : R.Color.gray400, for: .normal)
-		nextFirstButton.isEnabled = !viewModel.priceInput.isEmpty && isVaild
-		nextSecondButton.isEnabled = !viewModel.priceInput.isEmpty && isVaild
-		warningLabel.isHidden = !viewModel.priceInput.isEmpty && isVaild
+	private func setValid(_ isValid: Bool) {
+		nextFirstButton.setTitleColor(!viewModel.priceInput.isEmpty && isValid ? R.Color.white : R.Color.gray400, for: .normal)
+		nextFirstButton.isEnabled = !viewModel.priceInput.isEmpty && isValid
+		nextSecondButton.isEnabled = !viewModel.priceInput.isEmpty && isValid
+		warningLabel.isHidden = !viewModel.priceInput.isEmpty && isValid
 		
 		// shake 에니메이션
-		if !viewModel.priceInput.isEmpty && !isVaild {
+		if !viewModel.priceInput.isEmpty && !isValid {
 			priceTextField.shake()
 			warningLabel.isHidden = false
 		} else {
@@ -289,7 +289,7 @@ extension AddViewController {
 			.store(in: &cancellable)
 		
 		//MARK: output
-		viewModel.isVaildByWon
+		viewModel.isValidByWon
 			.sinkOnMainThread(receiveValue: setValid)
 			.store(in: &cancellable)
 		

@@ -14,6 +14,7 @@ final class CategoryEditReactor: Reactor {
 		case didTapAddButton(CategoryHeader) // 카테고리 추가
 		case didTapUpperEditButton // 카테고리 유형 편집
 		case dragAndDrop(IndexPath, IndexPath)
+		case dragAndDropHeader(IndexPath, IndexPath)
 	}
 	
 	// 처리 단위
@@ -23,6 +24,7 @@ final class CategoryEditReactor: Reactor {
 		case addItem(CategoryEdit)
 		case deleteItem(CategoryEdit)
 		case dragAndDrop(IndexPath, IndexPath)
+		case dragAndDropHeader(IndexPath, IndexPath)
 		case setNextEditScreen(CategoryEdit?)
 		case setNextAddScreen(CategoryHeader)
 		case setNextUpperEditScreen(Bool)
@@ -72,6 +74,8 @@ extension CategoryEditReactor {
 			])
 		case let .dragAndDrop(startIndex, destinationIndexPath):
 			return .just(.dragAndDrop(startIndex, destinationIndexPath))
+		case let .dragAndDropHeader(startIndex, destinationIndexPath):
+			return .just(.dragAndDropHeader(startIndex, destinationIndexPath))
 		}
 	}
 	
@@ -137,6 +141,8 @@ extension CategoryEditReactor {
 //			for item in newState.sections[destinationIndexPath.section].items {
 //				print(item.item)
 //			}
+		case let .dragAndDropHeader(sourceIndexPath, destinationIndexPath):
+			newState.headers.swapAt(sourceIndexPath.row, destinationIndexPath.row)
 		case let .setNextEditScreen(categoryEdit):
 			newState.nextEditScreen = categoryEdit
 		case let .setNextAddScreen(categoryHeader):

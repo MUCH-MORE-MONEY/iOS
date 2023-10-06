@@ -42,20 +42,29 @@ extension CategoryUpperEditViewController {
 				self.navigationController?.popViewController(animated: true)
 			}).disposed(by: disposeBag)
 		
-		// TableView cell select
+		// 셀이 이동되었을때
+		tableView.rx.itemMoved
+			.bind(onNext: { [self] source, destination in
+				let sourceCell = tableView.cellForRow(at: source) as! CategoryEditTableViewCell
+				let destinationCell = tableView.cellForRow(at: destination) as! CategoryEditTableViewCell
+
+				// 데이터 설정
+				sourceCell.setData(last: destination.item == reactor.currentState.sections.map { $0.model.header }.count - 2)
+				destinationCell.setData(last: source.item == reactor.currentState.sections.map { $0.model.header }.count - 2)
+			}).disposed(by: disposeBag)
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: CategoryEditReactor) {
 		reactor.state
-			.map { $0.sections.map { $0.model.header }.filter { $0.id != "footer" } }
+			.map { $0.sections.map { $0.model.header }.filter { $0.id != "footer"} }
 			.distinctUntilChanged() // 중복값 무시
 			.bind(to: tableView.rx.items) { tv, row, data in
 				let index = IndexPath(row: row, section: 0)
 				let cell = tv.dequeueReusableCell(withIdentifier: CategoryEditTableViewCell.className, for: index) as! CategoryEditTableViewCell
-				
+
 				// 데이터 설정
-				cell.setData(last: row == reactor.currentState.sections.map { $0.model.header }.count - 2)
+				cell.setData(last: row >= reactor.currentState.sections.map { $0.model.header }.count - 2)
 				cell.reactor = CategoryEditTableViewCellReactor(provider: reactor.provider, categoryHeader: data)
 
 				let backgroundView = UIView()
@@ -87,6 +96,8 @@ extension CategoryUpperEditViewController {
 		}
 		
 		tableView = tableView.then {
+			$0.dragDelegate = self
+			$0.dropDelegate = self
 			$0.register(CategoryEditTableViewCell.self)
 			$0.backgroundColor = R.Color.gray900
 			$0.showsVerticalScrollIndicator = false
@@ -107,5 +118,64 @@ extension CategoryUpperEditViewController {
 		tableView.snp.makeConstraints {
 			$0.edges.equalToSuperview()
 		}
+	}
+}
+// MARK: - UITableView Drag Delegate
+extension CategoryUpperEditViewController: UITableViewDragDelegate {
+	func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+		return [UIDragItem(itemProvider: NSItemProvider())]
+	}
+}
+// MARK: - UITableView Drop Delegate
+extension CategoryUpperEditViewController: UITableViewDropDelegate {
+	func tableView(_ tableView: UITableView, canHandle session: UIDropSession) -> Bool {
+		return true
+	}
+	
+	// drag가 활성화 되어 있는경우에만 drop이 동작하도록 구현
+	// drag없이 drop이 동작할 수 없도록 하는 메소드
+	func tableView(_ tableView: UITableView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
+		guard tableView.hasActiveDrag else {
+			return UITableViewDropProposal(operation: .forbidden)
+		}
+		
+		return UITableViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+	}
+	
+	func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
+		let destinationIndexPath: IndexPath
+		
+		if let indexPath = coordinator.destinationIndexPath {
+			destinationIndexPath = indexPath
+		} else {
+			let section = tableView.numberOfSections - 1
+			let row = tableView.numberOfRows(inSection: section)
+			destinationIndexPath = IndexPath(row: row, section: section)
+		}
+		guard coordinator.proposal.operation == .move else { return }
+		move(coordinator: coordinator, destinationIndexPath: destinationIndexPath, tableView: tableView)
+	}
+	
+	private func move(coordinator: UITableViewDropCoordinator, destinationIndexPath: IndexPath, tableView: UITableView) {
+		guard
+			let sourceItem = coordinator.items.first,
+			let sourceIndexPath = sourceItem.sourceIndexPath
+		else { return }
+
+		tableView.performBatchUpdates { [weak self] in
+			self?.move(sourceIndexPath: sourceIndexPath, destinationIndexPath: destinationIndexPath)
+		} completion: { finish in
+			coordinator.drop(sourceItem.dragItem, toRowAt: destinationIndexPath)
+		}
+	}
+	
+	private func move(sourceIndexPath: IndexPath, destinationIndexPath: IndexPath) {
+		guard let reactor = reactor else { return }
+		var dataSource = reactor.currentState.headers
+		let sourceItem = dataSource[sourceIndexPath.row]
+
+		// UI에 반영
+		tableView.insertRows(at: [sourceIndexPath], with: .automatic)
+		tableView.deleteRows(at: [destinationIndexPath], with: .automatic)
 	}
 }

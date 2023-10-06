@@ -380,7 +380,7 @@ extension CategoryEditViewController {
 		}
 	}
 }
-// MARK: UICollectionView Drag Delegate
+// MARK: - UICollectionView Drag Delegate
 extension CategoryEditViewController: UICollectionViewDragDelegate {
 	func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
 		let itemProvider = NSItemProvider()
@@ -415,7 +415,7 @@ extension CategoryEditViewController: UICollectionViewDragDelegate {
 		return true
 	}
 }
-// MARK : UICollectionView Drop Delegate
+// MARK: - UICollectionView Drop Delegate
 extension CategoryEditViewController: UICollectionViewDropDelegate {
 	// drag가 활성화 되어 있는경우에만 drop이 동작하도록 구현
 	// drag없이 drop이 동작할 수 없도록 하는 메소드

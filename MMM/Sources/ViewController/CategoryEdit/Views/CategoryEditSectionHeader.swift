@@ -19,7 +19,7 @@ final class CategoryEditSectionHeader: BaseCollectionReusableView {
 	// MARK: - UI Components
 	private lazy var titleLabel = UILabel()
 	
-	func bind(reactor: CategoryReactor) {
+	func bind(reactor: CategoryMainReactor) {
 		bindState(reactor)
 		bindAction(reactor)
 	}
@@ -27,11 +27,11 @@ final class CategoryEditSectionHeader: BaseCollectionReusableView {
 //MARK: - Bind
 extension CategoryEditSectionHeader {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
-	private func bindAction(_ reactor: CategoryReactor) {
+	private func bindAction(_ reactor: CategoryMainReactor) {
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
-	private func bindState(_ reactor: CategoryReactor) {
+	private func bindState(_ reactor: CategoryMainReactor) {
 	}
 }
 //MARK: - Action

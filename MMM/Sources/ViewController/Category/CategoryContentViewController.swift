@@ -14,8 +14,8 @@ import RxDataSources
 
 // 상속하지 않으려면 final 꼭 붙이기
 final class CategoryContentViewController: BaseViewController, View {
-	typealias Reactor = CategoryReactor
-	typealias DataSource = RxCollectionViewSectionedReloadDataSource<CategorySectionModel> // SectionModelType 채택
+	typealias Reactor = CategoryMainReactor
+	typealias DataSource = RxCollectionViewSectionedReloadDataSource<CategoryMainSectionModel> // SectionModelType 채택
 	
 	// MARK: - Constants
 	private enum UI {
@@ -90,7 +90,7 @@ final class CategoryContentViewController: BaseViewController, View {
 		super.viewDidLoad()
 	}
 	
-	func bind(reactor: CategoryReactor) {
+	func bind(reactor: CategoryMainReactor) {
 		bindState(reactor)
 		bindAction(reactor)
 	}
@@ -98,7 +98,7 @@ final class CategoryContentViewController: BaseViewController, View {
 //MARK: - Bind
 extension CategoryContentViewController {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
-	private func bindAction(_ reactor: CategoryReactor) {
+	private func bindAction(_ reactor: CategoryMainReactor) {
 		// CollectionView cell select
 		Observable.zip(
 			collectionView.rx.itemSelected,
@@ -116,7 +116,7 @@ extension CategoryContentViewController {
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
-	private func bindState(_ reactor: CategoryReactor) {
+	private func bindState(_ reactor: CategoryMainReactor) {
 		// 지출 - Section별 items 전달
 		reactor.state
 			.map( mode == .earn ? \.earnSections : \.paySections)
@@ -136,7 +136,7 @@ extension CategoryContentViewController {
 //MARK: - Action
 extension CategoryContentViewController {
 	// Section별 Cell Layout
-	func makeLayout(sections: [CategorySectionModel]) -> UICollectionViewCompositionalLayout {
+	func makeLayout(sections: [CategoryMainSectionModel]) -> UICollectionViewCompositionalLayout {
 		let layout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, _ in
 			return self?.makeCategorySectionLayout(from: sections[sectionIndex].items)
 		}
@@ -144,7 +144,7 @@ extension CategoryContentViewController {
 		return layout
 	}
 	
-	func makeCategorySectionLayout(from items: [CategoryItem]) -> NSCollectionLayoutSection {
+	func makeCategorySectionLayout(from items: [CategoryMainItem]) -> NSCollectionLayoutSection {
 		var layoutItems: [NSCollectionLayoutItem] = []
 		
 		items.forEach({ item in

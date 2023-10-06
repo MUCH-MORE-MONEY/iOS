@@ -1,5 +1,5 @@
 //
-//  CategorySectionModel.swift
+//  CategoryMainSectionModel.swift
 //  MMM
 //
 //  Created by geonhyeong on 2023/09/16.
@@ -9,13 +9,13 @@ import RxDataSources
 import Foundation
 
 // AnimatableSectionModel: 자동으로 셀 애니메이션 관리
-typealias CategorySectionModel = AnimatableSectionModel<CategorySection, CategoryItem>
+typealias CategoryMainSectionModel = AnimatableSectionModel<CategoryMainSection, CategoryMainItem>
 
-enum CategorySection {
-	case base(Category, [CategoryItem])
+enum CategoryMainSection {
+	case base(Category, [CategoryMainItem])
 }
 
-enum CategoryItem: IdentifiableType, Equatable {
+enum CategoryMainItem: IdentifiableType, Equatable {
 	case base(CategoryCollectionViewCellReactor)
 	
 	// IdentifiableType에 의한 identity 설정
@@ -27,13 +27,13 @@ enum CategoryItem: IdentifiableType, Equatable {
 	}
 	
 	// 비교를 위한 함수
-	static func == (lhs: CategoryItem, rhs: CategoryItem) -> Bool {
+	static func == (lhs: CategoryMainItem, rhs: CategoryMainItem) -> Bool {
 		lhs.identity == rhs.identity
 	}
 }
 // MARK: - AnimatableSectionModelType Protocol
-extension CategorySection: AnimatableSectionModelType {
-	typealias Item = CategoryItem
+extension CategoryMainSection: AnimatableSectionModelType {
+	typealias Item = CategoryMainItem
 	
 	// 준수해야할 Property
 	var identity: String {
@@ -54,7 +54,7 @@ extension CategorySection: AnimatableSectionModelType {
 		}
 	}
 	
-	init(original: CategorySection, items: [CategoryItem]) {
+	init(original: CategoryMainSection, items: [CategoryMainItem]) {
 		switch original {
 		case .base(let header, let items):
 			self = .base(header, items)

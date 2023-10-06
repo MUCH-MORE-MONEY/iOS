@@ -37,4 +37,3 @@ struct CategoryLowwer: Codable, Equatable {
 		case orderNum = "orderNum"
 	}
 }
-

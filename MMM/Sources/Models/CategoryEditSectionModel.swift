@@ -13,15 +13,19 @@ typealias CategoryEditSectionModel = AnimatableSectionModel<CategoryEditSection,
 
 enum CategoryEditSection {
 	case base(CategoryHeader, [CategoryEditItem])
+	case footer(CategoryEditItem)
 }
 
 enum CategoryEditItem: IdentifiableType, Equatable {
 	case base(CategoryEditCollectionViewCellReactor)
-	
+	case footer(CategoryEditCollectionViewCellReactor)
+
 	// IdentifiableType에 의한 identity 설정
 	var identity: some Hashable {
 		switch self {
 		case let .base(reactor):
+			return reactor.currentState.categoryEdit.orderNum
+		case let .footer(reactor):
 			return reactor.currentState.categoryEdit.orderNum
 		}
 	}
@@ -30,6 +34,8 @@ enum CategoryEditItem: IdentifiableType, Equatable {
 		switch self {
 		case var .base(reactor):
 			return reactor.currentState.categoryEdit
+		case .footer:
+			return CategoryEdit.getDummy()
 		}
 	}
 	
@@ -49,22 +55,28 @@ extension CategoryEditSection: AnimatableSectionModelType, Equatable {
 	
 	var items: [Item] {
 		switch self {
-		case .base(_, let items):
+		case let .base(_, items):
 			return items
+		case let .footer(item):
+			return [item]
 		}
 	}
 	
 	var header: CategoryHeader {
 		switch self {
-		case .base(let header, _):
+		case let .base(header, _):
 			return header
+		case .footer:
+			return CategoryHeader.getDummy()
 		}
 	}
 	
 	init(original: CategoryEditSection, items: [CategoryEditItem]) {
 		switch original {
-		case .base(let header, let items):
+		case let .base(header, items):
 			self = .base(header, items)
+		case let .footer(item):
+			self = .footer(item)
 		}
 	}
 }

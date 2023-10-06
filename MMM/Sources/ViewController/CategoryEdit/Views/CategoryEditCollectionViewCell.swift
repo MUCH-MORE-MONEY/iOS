@@ -17,12 +17,12 @@ final class CategoryEditCollectionViewCell: BaseCollectionViewCell, View {
 	// MARK: - Constants
 	private enum UI {
 	}
-	
+		
 	// MARK: - UI Components
 	private lazy var titleLabel = UILabel()
 	private lazy var editButton = UIButton()
 	private lazy var dragButton = UIButton()
-
+	
 	override func layoutSubviews() {
 		super.layoutSubviews()
 	}

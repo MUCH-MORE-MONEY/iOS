@@ -170,7 +170,11 @@ extension CategoryEditReactor {
 			let model: CategoryEditSectionModel = .init(model: .base(header, categoryitems), items: categoryitems)
 			sections.append(model)
 		}
-
+		
+		let footerItem: CategoryEditItem = .footer(.init(provider: provider, categoryEdit: CategoryEdit.getDummy()))
+		let footerModel: CategoryEditSectionModel = .init(model: .footer(footerItem), items: [footerItem])
+		sections.append(footerModel)
+		
 		return sections
 	}
 }

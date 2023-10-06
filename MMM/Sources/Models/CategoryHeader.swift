@@ -22,6 +22,10 @@ struct CategoryHeader: Codable, Equatable {
 		case orderNum = "upperOrderNum"
 	}
 	
+	static func getDummy() -> Self {
+		return CategoryHeader(id: "1", title: "", orderNum: 0)
+	}
+	
 	static func getDummyList() -> [Self] {
 		return [
 			CategoryHeader(id: "1", title: "보기만해도 배부르르르르르으은", orderNum: 1),

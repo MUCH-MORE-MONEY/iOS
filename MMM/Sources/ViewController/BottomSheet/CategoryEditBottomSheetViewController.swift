@@ -89,7 +89,7 @@ extension CategoryEditBottomSheetViewController {
 			.disposed(by: disposeBag)
 		
 		textField.rx.text.orEmpty
-			.map { .inputText($0) }
+			.map { .inputEditText($0) }
 			.bind(to: reactor.action)
 			.disposed(by: disposeBag)
 	}
@@ -98,7 +98,7 @@ extension CategoryEditBottomSheetViewController {
 	private func bindState(_ reactor: CategoryEditBottomSheetReactor) {
 		
 		reactor.state
-			.map { $0.isValid }
+			.map { $0.isEditValid }
 			.subscribe(onNext: { [weak self] isValid in
 				guard let self = self, let text = self.textField.text else {
 					return

@@ -11,26 +11,28 @@ import ReactorKit
 final class CategoryEditBottomSheetReactor: Reactor {
 	// 사용자의 액션
 	enum Action {
-		case inputText(String)
+		// 편집
+		case inputEditText(String)
 		case didTapEdit(CategoryEdit)
-		case delete(CategoryEdit)
 
+		// 추가
 		case inputAddText(String)
 		case didTapAdd(CategoryEdit)
 		
+		case delete(CategoryEdit)
 		case dismiss
 	}
 	
 	// 처리 단위
 	enum Mutation {
-		case setValid(Bool)
+		case setEditValid(Bool)
 		case setAddValid(Bool)
 		case dismiss
 	}
 	
 	// 현재 상태를 기록
 	struct State {
-		var isValid: Bool = false
+		var isEditValid: Bool = false
 		var isAddValid: Bool = false
 		var dismiss: Bool = false
 	}
@@ -50,8 +52,8 @@ extension CategoryEditBottomSheetReactor {
 	/// Action이 들어온 경우, 어떤 처리를 할건지 분기
 	func mutate(action: Action) -> Observable<Mutation> {
 		switch action {
-		case let .inputText(text):
-			return .just(.setValid(text.count < 10))
+		case let .inputEditText(text):
+			return .just(.setEditValid(text.count < 10))
 		case let .inputAddText(text):
 			return .just(.setAddValid(text.count < 9))
 		case let .didTapEdit(categoryEdit):
@@ -70,8 +72,8 @@ extension CategoryEditBottomSheetReactor {
 		var newState = state
 		
 		switch mutation {
-		case let .setValid(isValid):
-			newState.isValid = isValid
+		case let .setEditValid(isValid):
+			newState.isEditValid = isValid
 		case let .setAddValid(isValid):
 			newState.isAddValid = isValid
 		case .dismiss:

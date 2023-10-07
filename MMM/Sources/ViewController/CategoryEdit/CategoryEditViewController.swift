@@ -129,22 +129,13 @@ extension CategoryEditViewController {
 //		dataSource.canMoveItemAtIndexPath = { dataSource, indexPath in
 //			return true
 //		}
-//				
+//
+		
+		// 셀이 이동되었을때
 //		dataSource.moveItem = { dataSource, sourceIndexPath, destinationIndexPath in
-//			guard sourceIndexPath.section == destinationIndexPath.section else { return }
-//			let sourceItem = dataSource[sourceIndexPath.section].items[sourceIndexPath.row]
-//
-////			reactor.action.onNext(.dragAndDrop(sourceIndexPath, destinationIndexPath, sourceItem))
-//
-//			// dataSource 이동
-//	//		dataSource.remove(at: sourceIndexPath.item)
-//	//		dataSource.insert(sourceItem, at: destinationIndexPath.item)
-//			
-//			// UI에 반영
-////			self.collectionView.deleteItems(at: [sourceIndexPath])
-////			self.collectionView.insertItems(at: [destinationIndexPath])
+//			reactor.action.onNext(.dragAndDrop(sourceIndexPath, destinationIndexPath))
 //		}
-//		
+		
 //		collectionView.rx.longPressGesture()
 //			.subscribe(onNext: { [weak self] moveGesture in
 //				guard let self = self else { return }
@@ -158,11 +149,11 @@ extension CategoryEditViewController {
 //					startIndexPath = moveIndexPath
 //					collectionView.beginInteractiveMovementForItem(at: moveIndexPath)
 //				case .changed:
-////					guard
-////						let startIndexPath = startIndexPath,
-////						let moveIndexPath = moveIndexPath,
-////						startIndexPath.section == moveIndexPath.section
-////					else { break }
+//					guard
+//						let startIndexPath = startIndexPath,
+//						let moveIndexPath = moveIndexPath,
+//						startIndexPath.section == moveIndexPath.section
+//					else { break }
 //					collectionView.updateInteractiveMovementTargetPosition(moveGesture.location(in: collectionView))
 //				case .ended:
 ////					guard
@@ -186,31 +177,11 @@ extension CategoryEditViewController {
 			.map { $0.sections }
 			.withUnretained(self)
 			.distinctUntilChanged { $0.1 }
-//			.filter { !$0.1.isEmpty }
 			.subscribe(onNext: { this, sections in
 				guard !sections.isEmpty else { return }
-				
-				//				DispatchQueue.main.async {
-//				for item in sections {
-//					print(item.model.header)
-//					for i in item.items {
-//						print(i.item)
-//					}
-//					print()
-//				}
 				this.dataSource.setSections(sections)
-//				if let layout = self.layout {
-////					this.collectionView.setCollectionViewLayout(<#T##layout: UICollectionViewLayout##UICollectionViewLayout#>, animated: <#T##Bool#>)
-//				} else {
-//					self.layout = self.makeLayout(sections: sections)
-//				}
-//				let lay = this.makeLayout(sections: sections)
-//				print("lay", self.layout)
-				this.collectionView.collectionViewLayout.invalidateLayout()
 				this.collectionView.collectionViewLayout = this.makeLayout(sections: sections)
-				this.collectionView.reloadData()
-//				print("-------------------------")
-				//				}
+//				this.collectionView.reloadData()
 			})
 			.disposed(by: disposeBag)
 		
@@ -239,8 +210,8 @@ extension CategoryEditViewController {
 	func makeLayout(sections: [CategoryEditSectionModel]) -> UICollectionViewCompositionalLayout {
 		return UICollectionViewCompositionalLayout { [weak self] sectionIndex, _ in
 			switch sections[sectionIndex].model {
-			case let .base(_, items):
-				return self?.makeCategorySectionLayout(from: items)
+			case .base:
+				return self?.makeCategorySectionLayout(from: sections[sectionIndex].items)
 			case let .footer(item):
 				return self?.makeButtonSectionLayout(from: item)
 			}
@@ -383,40 +354,15 @@ extension CategoryEditViewController {
 // MARK: - UICollectionView Drag Delegate
 extension CategoryEditViewController: UICollectionViewDragDelegate {
 	func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-		let itemProvider = NSItemProvider()
-		let dragItem = UIDragItem(itemProvider: itemProvider)
-		
-		// 2. itemsForBeginning 메소드 안에서 UIDragItem의 배열들을 리턴하게 되는데, UIDragItem안에 previewProvider를 사용하여 프리뷰의 정보 세팅이 가능
-		guard
-			let targetView = (collectionView.cellForItem(at: indexPath) as? CategoryEditCollectionViewCell)?.contentView,
-			let dragPreview = targetView.snapshotView(afterScreenUpdates: false)
-		else {
-			return [UIDragItem(itemProvider: NSItemProvider())]
-		}
-		
-		// 3. 색상 변경
-		dragPreview.backgroundColor = R.Color.gray900
-		
-		// 4. previewProvider의 값에 보여줄 뷰와 그 뷰의 rect, cornerRadius값을 설정
-		let previewParameters = UIDragPreviewParameters()
-		previewParameters.visiblePath = UIBezierPath(
-			roundedRect: dragPreview.bounds,
-			cornerRadius: targetView.layer.cornerRadius
-		)
-		
-		dragItem.previewProvider = { () -> UIDragPreview? in
-			UIDragPreview(view: dragPreview, parameters: previewParameters)
-		}
-		
-		return [dragItem]
-	}
-	
-	func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
-		return true
+		return [UIDragItem(itemProvider: NSItemProvider())]
 	}
 }
 // MARK: - UICollectionView Drop Delegate
 extension CategoryEditViewController: UICollectionViewDropDelegate {
+	func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
+		return true
+	}
+	
 	// drag가 활성화 되어 있는경우에만 drop이 동작하도록 구현
 	// drag없이 drop이 동작할 수 없도록 하는 메소드
 	func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
@@ -447,21 +393,20 @@ extension CategoryEditViewController: UICollectionViewDropDelegate {
 		else { return }
 
 		collectionView.performBatchUpdates { [weak self] in
-			self?.move(sourceIndexPath: sourceIndexPath, destinationIndexPath: destinationIndexPath)
+			self?.move(sourceIndexPath: sourceIndexPath, destinationIndexPath: destinationIndexPath, collectionView: collectionView)
 		} completion: { finish in
 			coordinator.drop(sourceItem.dragItem, toItemAt: destinationIndexPath)
+			// 끝난뒤 변경
+			self.reactor?.action.onNext(.dragAndDrop(sourceIndexPath, destinationIndexPath))
 		}
 	}
 	
-	private func move(sourceIndexPath: IndexPath, destinationIndexPath: IndexPath) {
-		let sourceItem = dataSource[sourceIndexPath.section].items[sourceIndexPath.row]
-//		let newIndexPath = IndexPath(row: destinationIndexPath.row + 1, section: destinationIndexPath.section)
+	private func move(sourceIndexPath: IndexPath, destinationIndexPath: IndexPath, collectionView: UICollectionView) {
+		// dataSource에 반영
+		dataSource.collectionView(collectionView, moveItemAt: sourceIndexPath, to: destinationIndexPath)
 
 		// UI에 반영
 		collectionView.deleteItems(at: [sourceIndexPath])
 		collectionView.insertItems(at: [destinationIndexPath])
-
-		// dataSource 이동
-//		reactor?.action.onNext(.dragAndDrop(sourceIndexPath, destinationIndexPath))
 	}
 }

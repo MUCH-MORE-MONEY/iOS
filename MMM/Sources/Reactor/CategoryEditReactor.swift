@@ -119,7 +119,7 @@ extension CategoryEditReactor {
 			guard let sectionId = Int(categoryEdit.upperId) else {
 				return newState
 			}
-			
+						
 			if let section = newState.sections.enumerated().filter({ $0.element.model.header.id == categoryEdit.upperId }).first {
 				let sectionId = section.offset
 				
@@ -129,9 +129,8 @@ extension CategoryEditReactor {
 			}
 		case let .dragAndDrop(sourceIndexPath, destinationIndexPath):
 			let sourceItem = newState.sections[sourceIndexPath.section].items[sourceIndexPath.row]
-			
 			newState.sections[sourceIndexPath.section].items.remove(at: sourceIndexPath.row)
-			newState.sections[sourceIndexPath.section].items.insert(sourceItem, at: destinationIndexPath.row)
+			newState.sections[destinationIndexPath.section].items.insert(sourceItem, at: destinationIndexPath.row)
 //			let temp = newState.sections[startIndex.section].items[startIndex.row].item.orderNum
 //			newState.sections[startIndex.section].items[startIndex.row].item.orderNum = newState.sections[startIndex.section].items[destinationIndexPath.row].item.orderNum
 //			for item in newState.sections[destinationIndexPath.section].items {

@@ -49,8 +49,8 @@ extension CategoryUpperEditViewController {
 				let destinationCell = tableView.cellForRow(at: destination) as! CategoryEditTableViewCell
 
 				// 데이터 설정
-				sourceCell.setData(last: destination.item == reactor.currentState.sections.map { $0.model.header }.count - 2)
-				destinationCell.setData(last: source.item == reactor.currentState.sections.map { $0.model.header }.count - 2)
+//				sourceCell.setData(last: source.row == reactor.currentState.sections.map { $0.model.header }.count - 2)
+//				destinationCell.setData(last: destination.row == reactor.currentState.sections.map { $0.model.header }.count - 2)
 			}).disposed(by: disposeBag)
 	}
 	
@@ -170,12 +170,8 @@ extension CategoryUpperEditViewController: UITableViewDropDelegate {
 	}
 	
 	private func move(sourceIndexPath: IndexPath, destinationIndexPath: IndexPath) {
-		guard let reactor = reactor else { return }
-		var dataSource = reactor.currentState.headers
-		let sourceItem = dataSource[sourceIndexPath.row]
-
 		// UI에 반영
-		tableView.insertRows(at: [sourceIndexPath], with: .automatic)
-		tableView.deleteRows(at: [destinationIndexPath], with: .automatic)
+		tableView.deleteRows(at: [sourceIndexPath], with: .automatic)
+		tableView.insertRows(at: [destinationIndexPath], with: .automatic)
 	}
 }

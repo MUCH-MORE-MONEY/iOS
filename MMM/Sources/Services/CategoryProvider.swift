@@ -17,6 +17,8 @@ enum CategoryEvent {
 	case addUpper(CategoryHeader)
 	case updateUpperEdit(CategoryHeader)
 	case deleteUpperEdit(CategoryHeader)
+	
+	case saveSections([CategoryEditSectionModel])
 }
 
 protocol CategoryServiceProtocol {
@@ -31,6 +33,8 @@ protocol CategoryServiceProtocol {
 	func addUpper(to categoryHeader: CategoryHeader) -> Observable<CategoryHeader>
 	func updateUpperEdit(to categoryHeader: CategoryHeader) -> Observable<CategoryHeader>
 	func deleteUpperEdit(to categoryHeader: CategoryHeader) -> Observable<CategoryHeader>
+	
+	func saveSections(to data: [CategoryEditSectionModel]) -> Observable<[CategoryEditSectionModel]>
 }
 
 final class CategoryProvider: CategoryServiceProtocol {
@@ -82,5 +86,11 @@ final class CategoryProvider: CategoryServiceProtocol {
 		event.onNext(.deleteUpperEdit(categoryHeader))
 		
 		return .just(categoryHeader)
+	}
+	
+	func saveSections(to data: [CategoryEditSectionModel]) -> Observable<[CategoryEditSectionModel]> {
+		event.onNext(.saveSections(data))
+		
+		return .just(data)
 	}
 }

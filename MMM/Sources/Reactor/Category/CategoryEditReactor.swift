@@ -91,6 +91,8 @@ extension CategoryEditReactor {
 				return .just(.addItem(categoryEdit))
 			case let .deleteTitleEdit(categoryEdit):
 				return .just(.deleteItem(categoryEdit))
+			case let .saveSections(sections): // 카테고리 유형 편집에 대한 저장
+				return .just(.setSections(sections))
 			default:
 				return .empty()
 			}

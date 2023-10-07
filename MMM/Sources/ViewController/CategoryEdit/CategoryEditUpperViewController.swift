@@ -21,7 +21,7 @@ final class CategoryEditUpperViewController: BaseViewControllerWithNav, View {
 	// MARK: - Properties
 	
 	// MARK: - UI Components
-	private lazy var checkButton = UIButton()
+	private lazy var saveButton = UIButton()
 	private lazy var tableView = UITableView()
 	private lazy var footerView = UIView()
 	private lazy var addButton = UIButton()
@@ -39,10 +39,11 @@ final class CategoryEditUpperViewController: BaseViewControllerWithNav, View {
 extension CategoryEditUpperViewController {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
 	private func bindAction(_ reactor: CategoryEditUpperReactor) {
-		checkButton.rx.tap
-			.subscribe(onNext: {
-				self.navigationController?.popViewController(animated: true)
-			}).disposed(by: disposeBag)
+		saveButton.rx.tap
+			.withUnretained(self)
+			.map { .didTabSaveButton }
+			.bind(to: reactor.action)
+			.disposed(by: disposeBag)
 		
 		// 카테고리 유형 추가
 		addButton.rx.tap
@@ -94,6 +95,15 @@ extension CategoryEditUpperViewController {
 			.distinctUntilChanged() // 중복값 무시
 			.bind(onNext: willPresentAddViewController)
 			.disposed(by: disposeBag)
+		
+		// 카테고리 유형 추가
+		reactor.state
+			.compactMap { $0.dismiss }
+			.distinctUntilChanged() // 중복값 무시
+			.bind(onNext: { _ in
+				self.navigationController?.popViewController(animated: true)
+			})
+			.disposed(by: disposeBag)
 	}
 }
 //MARK: - Action
@@ -123,11 +133,11 @@ extension CategoryEditUpperViewController {
 		super.setAttribute()
 		
 		navigationItem.title = "카테고리 유형 편집"
-		navigationItem.rightBarButtonItem = UIBarButtonItem(customView: checkButton)
+		navigationItem.rightBarButtonItem = UIBarButtonItem(customView: saveButton)
 		view.backgroundColor = R.Color.gray900
 
 		// Navigation Bar Right Button
-		checkButton = checkButton.then {
+		saveButton = saveButton.then {
 			$0.setTitle("확인", for: .normal)
 			$0.setTitleColor(R.Color.white.withAlphaComponent(0.7), for: .highlighted)
 			$0.titleLabel?.font = R.Font.body1

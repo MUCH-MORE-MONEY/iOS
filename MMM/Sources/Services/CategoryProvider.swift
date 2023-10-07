@@ -67,7 +67,7 @@ final class CategoryProvider: CategoryServiceProtocol {
 	}
 	
 	func addUpper(to categoryHeader: CategoryHeader) -> RxSwift.Observable<CategoryHeader> {
-		event.onNext(.presentUpperEdit(categoryHeader))
+		event.onNext(.addUpper(categoryHeader))
 		
 		return .just(categoryHeader)
 	}
@@ -79,7 +79,7 @@ final class CategoryProvider: CategoryServiceProtocol {
 	}
 	
 	func deleteUpperEdit(to categoryHeader: CategoryHeader) -> RxSwift.Observable<CategoryHeader> {
-		event.onNext(.presentUpperEdit(categoryHeader))
+		event.onNext(.deleteUpperEdit(categoryHeader))
 		
 		return .just(categoryHeader)
 	}

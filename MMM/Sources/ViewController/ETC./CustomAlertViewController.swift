@@ -83,7 +83,7 @@ final class CustomAlertViewController: UIViewController {
 		$0.font = R.Font.body1
 		$0.textColor = R.Color.gray700
 		$0.textAlignment = .center
-		$0.numberOfLines = 2
+		$0.numberOfLines = 0
 	}
 	
 	private lazy var cancelButton = UIButton().then {

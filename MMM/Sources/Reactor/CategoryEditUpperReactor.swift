@@ -58,6 +58,8 @@ extension CategoryEditUpperReactor {
 					.just(.setNextEditScreen(categoryHeader)),
 					.just(.setNextEditScreen(nil))
 				])
+			case let .deleteUpperEdit(categoryHeader):
+				return .just(.deleteItem(categoryHeader))
 			default:
 				return .empty()
 			}
@@ -71,11 +73,12 @@ extension CategoryEditUpperReactor {
 		var newState = state
 		
 		switch mutation {
-
 		case let .addItem(categoryHeader):
 			break
-		case let .deleteItem(categoryHeader):
-			break
+		case let .deleteItem(deleteItem):
+			if let removeIndex = newState.sections.firstIndex(where: { $0.model.header.id == deleteItem.id }) {
+				newState.sections.remove(at: removeIndex)
+			}
 		case let .dragAndDrop(sourceIndexPath, destinationIndexPath):
 			let sourceItem = newState.sections[sourceIndexPath.section].items[sourceIndexPath.row]
 			newState.sections[sourceIndexPath.section].items.remove(at: sourceIndexPath.row)

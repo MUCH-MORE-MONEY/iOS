@@ -140,7 +140,7 @@ extension CategoryEditUpperBottomSheetViewController: CustomAlertDelegate {
 	}
 	
 	func didTapDeleteButton() {
-		showAlert(alertType: .canCancel, titleText: "카테고리를 삭제하시겠습니까?", contentText: "해당 카테고리에 담겨있는 경제활동은\n기타 카테고리로 이동됩니다.", confirmButtonText: "삭제하기")
+		showAlert(alertType: .canCancel, titleText: "카테고리 유형을 삭제하시겠습니까?", contentText: "해당 유형의 카테고리가 모두 삭제되며\n담겨있는 경제활동은 기타 카테고리로 이동됩니다.", confirmButtonText: "삭제하기")
 	}
 	
 	func didAlertCofirmButton() {

@@ -72,7 +72,6 @@ final class CategoryContentViewController: BaseViewController, View {
 	}
 	
 	// MARK: - UI Components
-	//	private lazy var refreshControl: UIRefreshControl = .init()
 	private lazy var collectionView: UICollectionView = .init(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
 	
 	init(mode: Mode) {
@@ -107,12 +106,6 @@ extension CategoryContentViewController {
 		.map { .selectCell($0, $1) }
 		.bind(to: reactor.action)
 		.disposed(by: disposeBag)
-		
-		// Refresh Data
-		//		refreshControl.rx.controlEvent(.valueChanged)
-		//			.map { .fetch }
-		//			.bind(to: reactor.action)
-		//			.disposed(by: disposeBag)
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
@@ -125,7 +118,6 @@ extension CategoryContentViewController {
 			.subscribe(onNext: { this, sections in
 				guard !sections.isEmpty else { return }
 				
-				//				this.collectionView.refreshControl?.endRefreshing()
 				this.dataSource.setSections(sections)
 				this.collectionView.collectionViewLayout = this.makeLayout(sections: sections)
 				this.collectionView.reloadData()
@@ -179,13 +171,8 @@ extension CategoryContentViewController {
 		
 		view.backgroundColor = R.Color.gray900
 		
-		//		refreshControl = refreshControl.then {
-		//			$0.transform = CGAffineTransformMakeScale(0.5, 0.5)
-		//		}
-		
 		collectionView = collectionView.then {
 			$0.dataSource = dataSource
-			//			$0.refreshControl = refreshControl
 			$0.register(CategoryCollectionViewCell.self)
 			$0.register(CategorySectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
 			$0.register(CategorySectionFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter)

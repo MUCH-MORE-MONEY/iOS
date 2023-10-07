@@ -131,11 +131,6 @@ extension CategoryEditReactor {
 			let sourceItem = newState.sections[sourceIndexPath.section].items[sourceIndexPath.row]
 			newState.sections[sourceIndexPath.section].items.remove(at: sourceIndexPath.row)
 			newState.sections[destinationIndexPath.section].items.insert(sourceItem, at: destinationIndexPath.row)
-//			let temp = newState.sections[startIndex.section].items[startIndex.row].item.orderNum
-//			newState.sections[startIndex.section].items[startIndex.row].item.orderNum = newState.sections[startIndex.section].items[destinationIndexPath.row].item.orderNum
-//			for item in newState.sections[destinationIndexPath.section].items {
-//				print(item.item)
-//			}
 		case let .setNextEditScreen(categoryEdit):
 			newState.nextEditScreen = categoryEdit
 		case let .setNextAddScreen(categoryHeader):

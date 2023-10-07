@@ -41,11 +41,11 @@ final class CategoryContentViewController: BaseViewController, View {
 		
 		switch item {
 		case let .header(cellReactor):
-			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CategoryCollectionViewCell.self), for: indexPath) as? CategoryCollectionViewCell else { return .init() }
+			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCollectionViewCell.className, for: indexPath) as? CategoryCollectionViewCell else { return .init() }
 
 			return cell
 		case let .base(cellReactor):
-			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CategoryCollectionViewCell.self), for: indexPath) as? CategoryCollectionViewCell else { return .init() }
+			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCollectionViewCell.className, for: indexPath) as? CategoryCollectionViewCell else { return .init() }
 			
 			cell.reactor = cellReactor // reactor 주입
 			
@@ -61,18 +61,18 @@ final class CategoryContentViewController: BaseViewController, View {
 		if kind == UICollectionView.elementKindSectionHeader {
 			switch dataSource[indexPath.section].model {
 			case .header:
-				guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: String(describing: CategorySectionDefault.self), for: indexPath) as? CategorySectionDefault else { return .init() }
+				guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CategorySectionGlobalHeader.className, for: indexPath) as? CategorySectionGlobalHeader else { return .init() }
 				
 				return header
 			case .base:
-				guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: String(describing: CategorySectionHeader.self), for: indexPath) as? CategorySectionHeader else { return .init() }
+				guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CategorySectionHeader.className, for: indexPath) as? CategorySectionHeader else { return .init() }
 				let sectionInfo = dataSource.sectionModels[indexPath.section].model.header
 				
 				header.setDate(category: sectionInfo, type: self?.mode.rawValue ?? "01")
 				return header
 			}
 		} else {
-			guard let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: String(describing: CategorySectionFooter.self), for: indexPath) as? CategorySectionFooter else { return .init() }
+			guard let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: CategorySectionFooter.className, for: indexPath) as? CategorySectionFooter else { return .init() }
 			
 			let count = self?.mode == .pay ? thisReactor.currentState.paySections.count : thisReactor.currentState.earnSections.count
 			footer.setData(isLast: indexPath.section == count - 1) // 마지막 섹션은 separator 숨기기
@@ -205,7 +205,7 @@ extension CategoryContentViewController {
 			$0.register(CategoryCollectionViewCell.self)
 			$0.register(CategorySectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
 			$0.register(CategorySectionFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter)
-			$0.register(CategorySectionDefault.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
+			$0.register(CategorySectionGlobalHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
 			$0.showsVerticalScrollIndicator = false
 			$0.backgroundColor = R.Color.gray900
 		}

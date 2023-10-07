@@ -157,11 +157,12 @@
 		C46409D62AB8DB9000A899AD /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46409D52AB8DB8F00A899AD /* BaseTableViewCell.swift */; };
 		C46409DA2AB9625E00A899AD /* BottomSheetViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46409D92AB9625E00A899AD /* BottomSheetViewController2.swift */; };
 		C46791542A539E55005FE1F6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C411939629D2817E003DBC15 /* Assets.xcassets */; };
-		C46D5E512AD06E8400EBE5D7 /* CategoryEditSectionDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46D5E502AD06E8400EBE5D7 /* CategoryEditSectionDefault.swift */; };
+		C46D5E512AD06E8400EBE5D7 /* CategoryEditSectionGlobalFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46D5E502AD06E8400EBE5D7 /* CategoryEditSectionGlobalFooter.swift */; };
 		C46D5E532AD074E400EBE5D7 /* CategoryUpperEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46D5E522AD074E400EBE5D7 /* CategoryUpperEditViewController.swift */; };
 		C46D5E552AD078DA00EBE5D7 /* CategoryEditTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46D5E542AD078DA00EBE5D7 /* CategoryEditTableViewCell.swift */; };
 		C46D5E572AD0799900EBE5D7 /* CategoryEditTableViewCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46D5E562AD0799900EBE5D7 /* CategoryEditTableViewCellReactor.swift */; };
-		C46D5E5B2AD1265100EBE5D7 /* CategorySectionDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46D5E5A2AD1265100EBE5D7 /* CategorySectionDefault.swift */; };
+		C46D5E5B2AD1265100EBE5D7 /* CategorySectionGlobalHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46D5E5A2AD1265100EBE5D7 /* CategorySectionGlobalHeader.swift */; };
+		C46D5E5D2AD1508B00EBE5D7 /* CategoryEditSectionGlobalHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46D5E5C2AD1508B00EBE5D7 /* CategoryEditSectionGlobalHeader.swift */; };
 		C494A24B2A9B893400980A71 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C494A24A2A9B893300980A71 /* GoogleService-Info.plist */; };
 		C494A2512A9B8A0A00980A71 /* TabBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C494A2502A9B8A0A00980A71 /* TabBarViewModel.swift */; };
 		C4BBD2642AB9DE8C0055FA65 /* StatisticsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BBD2632AB9DE8C0055FA65 /* StatisticsProvider.swift */; };
@@ -437,11 +438,12 @@
 		C46409D32AB8CAE600A899AD /* WithdrawReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawReactor.swift; sourceTree = "<group>"; };
 		C46409D52AB8DB8F00A899AD /* BaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
 		C46409D92AB9625E00A899AD /* BottomSheetViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController2.swift; sourceTree = "<group>"; };
-		C46D5E502AD06E8400EBE5D7 /* CategoryEditSectionDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditSectionDefault.swift; sourceTree = "<group>"; };
+		C46D5E502AD06E8400EBE5D7 /* CategoryEditSectionGlobalFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditSectionGlobalFooter.swift; sourceTree = "<group>"; };
 		C46D5E522AD074E400EBE5D7 /* CategoryUpperEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryUpperEditViewController.swift; sourceTree = "<group>"; };
 		C46D5E542AD078DA00EBE5D7 /* CategoryEditTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditTableViewCell.swift; sourceTree = "<group>"; };
 		C46D5E562AD0799900EBE5D7 /* CategoryEditTableViewCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditTableViewCellReactor.swift; sourceTree = "<group>"; };
-		C46D5E5A2AD1265100EBE5D7 /* CategorySectionDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySectionDefault.swift; sourceTree = "<group>"; };
+		C46D5E5A2AD1265100EBE5D7 /* CategorySectionGlobalHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySectionGlobalHeader.swift; sourceTree = "<group>"; };
+		C46D5E5C2AD1508B00EBE5D7 /* CategoryEditSectionGlobalHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditSectionGlobalHeader.swift; sourceTree = "<group>"; };
 		C494A24A2A9B893300980A71 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C494A24E2A9B895100980A71 /* PushSettingDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushSettingDetailViewController.swift; sourceTree = "<group>"; };
 		C494A2502A9B8A0A00980A71 /* TabBarViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewModel.swift; sourceTree = "<group>"; };
@@ -1093,9 +1095,9 @@
 			isa = PBXGroup;
 			children = (
 				C46409B52AB5987800A899AD /* CategoryCollectionViewCell.swift */,
-				C46D5E5A2AD1265100EBE5D7 /* CategorySectionDefault.swift */,
 				C4BBD2822AC0172F0055FA65 /* CategorySectionFooter.swift */,
 				C46409BB2AB5B07A00A899AD /* CategorySectionHeader.swift */,
+				C46D5E5A2AD1265100EBE5D7 /* CategorySectionGlobalHeader.swift */,
 				C44B61BE2AA9A85B00950226 /* CategorySegmentedControl.swift */,
 			);
 			path = Views;
@@ -1158,9 +1160,10 @@
 			children = (
 				C4BBD2862AC03C300055FA65 /* CategoryEditCollectionViewCell.swift */,
 				C46D5E542AD078DA00EBE5D7 /* CategoryEditTableViewCell.swift */,
-				C46D5E502AD06E8400EBE5D7 /* CategoryEditSectionDefault.swift */,
 				C4BBD28C2AC048860055FA65 /* CategoryEditSectionFooter.swift */,
 				C4BBD28A2AC047390055FA65 /* CategoryEditSectionHeader.swift */,
+				C46D5E502AD06E8400EBE5D7 /* CategoryEditSectionGlobalFooter.swift */,
+				C46D5E5C2AD1508B00EBE5D7 /* CategoryEditSectionGlobalHeader.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1621,6 +1624,7 @@
 				6A0F234729DC0DB20063673B /* TabBarController.swift in Sources */,
 				C4BBD2812ABF01B40055FA65 /* CategoryDetailViewController.swift in Sources */,
 				6A2B5D592A97217F00CCBFBE /* PushSettingReactor.swift in Sources */,
+				C46D5E5D2AD1508B00EBE5D7 /* CategoryEditSectionGlobalHeader.swift in Sources */,
 				6A8605B62A24C83D00DF68BD /* UpdateResDto.swift in Sources */,
 				6A0531222A22183D0065DB54 /* InsertResDto.swift in Sources */,
 				6A27E6952A205338001A7F04 /* Ex+UITextField.swift in Sources */,
@@ -1667,7 +1671,7 @@
 				6A25E44B2AA89CED0055EA29 /* WeekCollectionHeaderView.swift in Sources */,
 				C4170B502A89FD1100CE0A65 /* StatisticsReactor.swift in Sources */,
 				C4BBD28B2AC047390055FA65 /* CategoryEditSectionHeader.swift in Sources */,
-				C46D5E512AD06E8400EBE5D7 /* CategoryEditSectionDefault.swift in Sources */,
+				C46D5E512AD06E8400EBE5D7 /* CategoryEditSectionGlobalFooter.swift in Sources */,
 				C4D03F052A2EAB1800011B41 /* MMMWidget.intentdefinition in Sources */,
 				C411939229D2817C003DBC15 /* ProfileViewController.swift in Sources */,
 				6A2B5D5B2A9735D500CCBFBE /* DetailTimeSettingView.swift in Sources */,
@@ -1682,7 +1686,7 @@
 				C46409B22AB593C100A899AD /* CategoryCollectionViewCellReactor.swift in Sources */,
 				6A1BAD4529E6550100818086 /* OnboardingViewModel.swift in Sources */,
 				6A14E7152A9DD4600071805D /* Ex+String.swift in Sources */,
-				C46D5E5B2AD1265100EBE5D7 /* CategorySectionDefault.swift in Sources */,
+				C46D5E5B2AD1265100EBE5D7 /* CategorySectionGlobalHeader.swift in Sources */,
 				45AFC2AB2AC2A564004DF76E /* CustomPushTextSettingViewController.swift in Sources */,
 				6A08B47A29FF5CA90080719E /* APIClient.swift in Sources */,
 				C4C792A82A35916D007FD6AA /* WithdrawResDto.swift in Sources */,

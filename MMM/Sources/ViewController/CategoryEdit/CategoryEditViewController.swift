@@ -46,32 +46,34 @@ final class CategoryEditViewController: BaseViewControllerWithNav, View {
 			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CategoryEditCollectionViewCell.self), for: indexPath) as? CategoryEditCollectionViewCell else { return .init() }
 			
 			cell.reactor = cellReactor // reactor 주입
-
+			
 			return cell
-		case let .footer(cellReactor):
-			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CategoryEditCollectionViewCell.self), for: indexPath) as? CategoryEditCollectionViewCell else { return .init() }
-			return cell
+		case let .header(cellReactor), let .footer(cellReactor):
+			return .init()
 		}
 	} configureSupplementaryView: { [weak self] dataSource, collectionView, kind, indexPath -> UICollectionReusableView in
 		guard let thisReactor = self?.reactor else { return .init() }
 		
 		if kind == UICollectionView.elementKindSectionHeader {
 			switch dataSource[indexPath.section].model {
+			case .header:
+				guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CategoryEditSectionGlobalHeader.className, for: indexPath) as? CategoryEditSectionGlobalHeader else { return .init() }
+				return header
 			case .base:
-				guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: String(describing: CategoryEditSectionHeader.self), for: indexPath) as? CategoryEditSectionHeader else { return .init() }
+				guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CategoryEditSectionHeader.className, for: indexPath) as? CategoryEditSectionHeader else { return .init() }
 				let sectionInfo = dataSource.sectionModels[indexPath.section].model.header
 				
 				header.setDate(title: "\(sectionInfo.title)")
 				return header
 			case .footer:
-				guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: String(describing: CategoryEditSectionHeader.self), for: indexPath) as? CategoryEditSectionHeader else { return .init() }
-				
-				return header
+				return .init()
 			}
 		} else {
 			switch dataSource[indexPath.section].model {
+			case .header:
+				return .init()
 			case .base:
-				guard let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: String(describing: CategoryEditSectionFooter.self), for: indexPath) as? CategoryEditSectionFooter else { return .init() }
+				guard let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: CategoryEditSectionFooter.className, for: indexPath) as? CategoryEditSectionFooter else { return .init() }
 				let sectionInfo = dataSource.sectionModels[indexPath.section].model.header
 				
 				let count = thisReactor.currentState.headers.count
@@ -79,7 +81,7 @@ final class CategoryEditViewController: BaseViewControllerWithNav, View {
 				footer.reactor = thisReactor
 				return footer
 			case .footer:
-				guard let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: String(describing: CategoryEditSectionDefault.self), for: indexPath) as? CategoryEditSectionDefault else { return .init() }
+				guard let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: CategoryEditSectionGlobalFooter.className, for: indexPath) as? CategoryEditSectionGlobalFooter else { return .init() }
 				
 				footer.reactor = thisReactor
 				
@@ -210,10 +212,12 @@ extension CategoryEditViewController {
 	func makeLayout(sections: [CategoryEditSectionModel]) -> UICollectionViewCompositionalLayout {
 		return UICollectionViewCompositionalLayout { [weak self] sectionIndex, _ in
 			switch sections[sectionIndex].model {
+			case .header:
+				return self?.makeHeaderSectionLayout()
 			case .base:
 				return self?.makeCategorySectionLayout(from: sections[sectionIndex].items)
-			case let .footer(item):
-				return self?.makeButtonSectionLayout(from: item)
+			case .footer:
+				return self?.makeFooterSectionLayout()
 			}
 		}
 	}
@@ -246,7 +250,19 @@ extension CategoryEditViewController {
 		return section
 	}
 	
-	func makeButtonSectionLayout(from item: CategoryEditItem) -> NSCollectionLayoutSection {
+	func makeHeaderSectionLayout() -> NSCollectionLayoutSection {
+		let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0)), subitems: .init(repeating: .init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(44))), count: 1))
+		
+		let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(40)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+
+		let section: NSCollectionLayoutSection = .init(group: group)
+		section.boundarySupplementaryItems = [header]
+		section.contentInsets = .init(top: 0, leading: UI.sectionMargin.left, bottom: 0, trailing: UI.sectionMargin.right)
+		
+		return section
+	}
+	
+	func makeFooterSectionLayout() -> NSCollectionLayoutSection {
 		let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0)), subitems: .init(repeating: .init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(UI.cellHeightMargin))), count: 1))
 		
 		let footer = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(56)), elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
@@ -327,8 +343,10 @@ extension CategoryEditViewController {
 			$0.register(CategoryEditCollectionViewCell.self)
 			$0.register(CategoryEditSectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
 			$0.register(CategoryEditSectionFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter)
-			// Footer Button
-			$0.register(CategoryEditSectionDefault.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter)
+			// Global Header
+			$0.register(CategoryEditSectionGlobalHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
+			// Global Footer
+			$0.register(CategoryEditSectionGlobalFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter)
 			$0.showsVerticalScrollIndicator = false
 			$0.backgroundColor = R.Color.gray900
 		}

@@ -12,17 +12,21 @@ import Foundation
 typealias CategoryEditSectionModel = AnimatableSectionModel<CategoryEditSection, CategoryEditItem>
 
 enum CategoryEditSection {
+	case header(CategoryEditItem)
 	case base(CategoryHeader, [CategoryEditItem])
 	case footer(CategoryEditItem)
 }
 
 enum CategoryEditItem: IdentifiableType, Equatable {
+	case header(CategoryEditCollectionViewCellReactor)
 	case base(CategoryEditCollectionViewCellReactor)
 	case footer(CategoryEditCollectionViewCellReactor)
 
 	// IdentifiableType에 의한 identity 설정
 	var identity: some Hashable {
 		switch self {
+		case let .header(reactor):
+			return reactor.currentState.categoryEdit.orderNum
 		case let .base(reactor):
 			return reactor.currentState.categoryEdit.orderNum
 		case let .footer(reactor):
@@ -32,6 +36,8 @@ enum CategoryEditItem: IdentifiableType, Equatable {
 	
 	var item: CategoryEdit {
 		switch self {
+		case .header:
+			return CategoryEdit.getDummy()
 		case var .base(reactor):
 			return reactor.currentState.categoryEdit
 		case .footer:
@@ -55,6 +61,8 @@ extension CategoryEditSection: AnimatableSectionModelType, Equatable {
 	
 	var items: [Item] {
 		switch self {
+		case let .header(item):
+			return [item]
 		case let .base(_, items):
 			return items
 		case let .footer(item):
@@ -64,6 +72,8 @@ extension CategoryEditSection: AnimatableSectionModelType, Equatable {
 	
 	var header: CategoryHeader {
 		switch self {
+		case .header:
+			return CategoryHeader.getHeader()
 		case let .base(header, _):
 			return header
 		case .footer:
@@ -73,6 +83,8 @@ extension CategoryEditSection: AnimatableSectionModelType, Equatable {
 	
 	init(original: CategoryEditSection, items: [CategoryEditItem]) {
 		switch original {
+		case let .header(item):
+			self = .header(item)
 		case let .base(header, items):
 			self = .base(header, items)
 		case let .footer(item):

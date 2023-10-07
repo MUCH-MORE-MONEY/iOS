@@ -22,6 +22,10 @@ struct CategoryHeader: Codable, Equatable {
 		case orderNum = "upperOrderNum"
 	}
 	
+	static func getHeader() -> Self {
+		return CategoryHeader(id: "header", title: "", orderNum: 0)
+	}
+	
 	static func getFooter() -> Self {
 		return CategoryHeader(id: "footer", title: "", orderNum: 0)
 	}

@@ -101,7 +101,7 @@ extension CategoryMainReactor {
 		let categoryList = respose.data
 		var sections: [CategoryMainSectionModel] = []
 
-		// Header
+		// Global Header
 		let headerItem: CategoryMainItem = .header(.init(categoryLowwer: CategoryLowwer.getHeader()))
 		let headerModel: CategoryMainSectionModel = .init(model: .header(headerItem), items: [headerItem])
 		sections.append(headerModel)

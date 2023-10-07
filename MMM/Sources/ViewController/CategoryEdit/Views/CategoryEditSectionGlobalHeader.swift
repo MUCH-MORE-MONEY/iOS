@@ -1,5 +1,5 @@
 //
-//  CategorySectionDefault.swift
+//  CategoryEditSectionGlobalHeader.swift
 //  MMM
 //
 //  Created by geonhyeong on 10/7/23.
@@ -11,8 +11,8 @@ import SnapKit
 import ReactorKit
 
 // 상속하지 않으려면 final 꼭 붙이기
-final class CategorySectionDefault: BaseCollectionReusableView, View {
-	typealias Reactor = CategoryMainReactor
+final class CategoryEditSectionGlobalHeader: BaseCollectionReusableView, View {
+	typealias Reactor = CategoryEditReactor
 	// MARK: - Constants
 	
 	// MARK: - UI Components
@@ -27,24 +27,24 @@ final class CategorySectionDefault: BaseCollectionReusableView, View {
 		self.frame = layoutAttributes.frame
 	}
 	
-	func bind(reactor: CategoryMainReactor) {
+	func bind(reactor: CategoryEditReactor) {
 		bindState(reactor)
 		bindAction(reactor)
 	}
 }
 //MARK: - Bind
-extension CategorySectionDefault {
+extension CategoryEditSectionGlobalHeader {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
-	private func bindAction(_ reactor: CategoryMainReactor) { }
+	private func bindAction(_ reactor: CategoryEditReactor) { }
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
-	private func bindState(_ reactor: CategoryMainReactor) { }
+	private func bindState(_ reactor: CategoryEditReactor) { }
 }
 //MARK: - Action
-extension CategorySectionDefault {
+extension CategoryEditSectionGlobalHeader {
 }
 //MARK: - Attribute & Hierarchy & Layouts
-extension CategorySectionDefault {
+extension CategoryEditSectionGlobalHeader {
 	// 초기 셋업할 코드들
 	override func setAttribute() {
 		super.setAttribute()
@@ -81,8 +81,8 @@ extension CategorySectionDefault {
 		}
 		
 		lowwerLabel.snp.makeConstraints {
-			// Category Content VC의 group의 leading과 값이 같아야함
-			$0.leading.equalToSuperview().inset(192)
+			// Category Edit VC의 group의 leading과 값이 같아야함
+			$0.leading.equalToSuperview().inset(136)
 			$0.top.equalToSuperview().inset(16)
 		}
 	}

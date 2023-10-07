@@ -166,6 +166,11 @@ extension CategoryEditReactor {
 
 		var sections: [CategoryEditSectionModel] = []
 
+		// Global Header
+		let headerItem: CategoryEditItem = .header(.init(provider: provider, categoryEdit: CategoryEdit.getDummy()))
+		let headerModel: CategoryEditSectionModel = .init(model: .header(headerItem), items: [headerItem])
+		sections.append(headerModel)
+		
 		for header in currentState.headers {
 			let categoryitems: [CategoryEditItem] = data.filter { $0.upperId == header.id }.map { categoryEdit -> CategoryEditItem in
 				return .base(.init(provider: provider, categoryEdit: categoryEdit))
@@ -175,6 +180,7 @@ extension CategoryEditReactor {
 			sections.append(model)
 		}
 		
+		// Global Footer
 		let footerItem: CategoryEditItem = .footer(.init(provider: provider, categoryEdit: CategoryEdit.getDummy()))
 		let footerModel: CategoryEditSectionModel = .init(model: .footer(footerItem), items: [footerItem])
 		sections.append(footerModel)

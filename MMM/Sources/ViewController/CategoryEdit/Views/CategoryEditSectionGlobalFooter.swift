@@ -1,5 +1,5 @@
 //
-//  CategoryEditSectionDefault.swift
+//  CategoryEditSectionGlobalFooter.swift
 //  MMM
 //
 //  Created by geonhyeong on 10/7/23.
@@ -11,7 +11,7 @@ import SnapKit
 import ReactorKit
 
 // 상속하지 않으려면 final 꼭 붙이기
-final class CategoryEditSectionDefault: BaseCollectionReusableView, View {
+final class CategoryEditSectionGlobalFooter: BaseCollectionReusableView, View {
 	typealias Reactor = CategoryEditReactor
 	// MARK: - Constants
 	
@@ -32,7 +32,7 @@ final class CategoryEditSectionDefault: BaseCollectionReusableView, View {
 	}
 }
 //MARK: - Bind
-extension CategoryEditSectionDefault {
+extension CategoryEditSectionGlobalFooter {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
 	private func bindAction(_ reactor: CategoryEditReactor) { 
 		editButton.rx.tap
@@ -46,10 +46,10 @@ extension CategoryEditSectionDefault {
 	private func bindState(_ reactor: CategoryEditReactor) { }
 }
 //MARK: - Action
-extension CategoryEditSectionDefault {
+extension CategoryEditSectionGlobalFooter {
 }
 //MARK: - Attribute & Hierarchy & Layouts
-extension CategoryEditSectionDefault {
+extension CategoryEditSectionGlobalFooter {
 	// 초기 셋업할 코드들
 	override func setAttribute() {
 		super.setAttribute()

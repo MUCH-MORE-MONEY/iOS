@@ -69,7 +69,7 @@ extension CategoryEditUpperViewController {
 		// 타입 추론이 길어서 반으로 쪼개기
 		let datasource = reactor.state
 			.map { $0.sections.map { $0.model.header }.filter { $0.id != "header" && $0.id != "footer"} }
-			.distinctUntilChanged { $0.count == $1.count }
+			.distinctUntilChanged { $0.count == $1.count } // 순서만 바뀌었을 때에는 변경안함
 		
 		datasource
 			.bind(to: tableView.rx.items) { tv, row, data in

@@ -55,8 +55,9 @@ extension CategoryEditUpperViewController {
 		// 셀이 이동되었을때
 		tableView.rx.itemMoved
 			.bind(onNext: { [self] source, destination in
+				self.reactor?.action.onNext(.dragAndDrop(source, destination))
 				let sourceCell = tableView.cellForRow(at: source) as! CategoryEditTableViewCell
-				let destinationCell = tableView.cellForRow(at: destination) as! CategoryEditTableViewCell
+//				let destinationCell = tableView.cellForRow(at: destination) as! CategoryEditTableViewCell
 
 				// 데이터 설정 - separator
 				sourceCell.setData(last: destination.row == reactor.currentState.sections.map { $0.model.header }.count - 3)
@@ -65,14 +66,18 @@ extension CategoryEditUpperViewController {
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: CategoryEditUpperReactor) {
-		reactor.state
+		// 타입 추론이 길어서 반으로 쪼개기
+		let datasource = reactor.state
 			.map { $0.sections.map { $0.model.header }.filter { $0.id != "header" && $0.id != "footer"} }
-			.distinctUntilChanged() // 중복값 무시
+			.distinctUntilChanged { $0.count == $1.count }
+		
+		datasource
 			.bind(to: tableView.rx.items) { tv, row, data in
 				let index = IndexPath(row: row, section: 0)
 				let cell = tv.dequeueReusableCell(withIdentifier: CategoryEditTableViewCell.className, for: index) as! CategoryEditTableViewCell
 
 				// 데이터 설정
+				// Grobal Header/Footer가 존재해서 -2
 				cell.setData(last: row == reactor.currentState.sections.map { $0.model.header }.count - 3)
 				cell.reactor = CategoryEditTableViewCellReactor(provider: reactor.provider, categoryHeader: data)
 

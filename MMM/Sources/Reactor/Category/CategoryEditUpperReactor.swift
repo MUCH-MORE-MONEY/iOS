@@ -30,6 +30,7 @@ final class CategoryEditUpperReactor: Reactor {
 	struct State {
 		var addId: Int
 		var sections: [CategoryEditSectionModel]
+		var isReloadData = true
 		var nextEditScreen: CategoryHeader?
 		var nextAddScreen: Bool = false
 		var dismiss = false
@@ -53,7 +54,9 @@ extension CategoryEditUpperReactor {
 		case .didTabSaveButton:
 			return provider.categoryProvider.saveSections(to: currentState.sections).map { _ in .dismiss }
 		case let .dragAndDrop(startIndex, destinationIndexPath):
-			return .just(.dragAndDrop(startIndex, destinationIndexPath))
+			return .concat([
+				.just(.dragAndDrop(startIndex, destinationIndexPath))
+			])
 		case .didTapAddButton:
 			return .concat([
 				.just(.setNextAddScreen(true)),
@@ -92,7 +95,7 @@ extension CategoryEditUpperReactor {
 		case let .editItem(categoryHeader):
 			if let editIndex = newState.sections.firstIndex(where: { $0.model.header.id == categoryHeader.id }) {
 				// 수정이 되지 않아 직접 삭제 후, insert
-				var data = newState.sections.remove(at: editIndex)
+				let data = newState.sections.remove(at: editIndex)
 				let model: CategoryEditSectionModel = .init(model: .base(categoryHeader, data.items), items: data.items)
 				newState.sections.insert(model, at: editIndex)
 			}
@@ -108,9 +111,10 @@ extension CategoryEditUpperReactor {
 				newState.sections.remove(at: removeIndex)
 			}
 		case let .dragAndDrop(sourceIndexPath, destinationIndexPath):
-			let sourceItem = newState.sections[sourceIndexPath.section].items[sourceIndexPath.row]
-			newState.sections[sourceIndexPath.section].items.remove(at: sourceIndexPath.row)
-			newState.sections[destinationIndexPath.section].items.insert(sourceItem, at: destinationIndexPath.row)
+			let sourceItem = newState.sections[sourceIndexPath.row + 1]
+			newState.sections.remove(at: sourceIndexPath.row + 1)
+			newState.sections.insert(sourceItem, at: destinationIndexPath.row + 1)
+			newState.isReloadData = false
 		case let .setNextEditScreen(categoryHeader):
 			newState.nextEditScreen = categoryHeader
 		case let .setNextAddScreen(categoryHeader):

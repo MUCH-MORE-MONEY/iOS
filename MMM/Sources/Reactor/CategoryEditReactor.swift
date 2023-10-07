@@ -24,7 +24,7 @@ final class CategoryEditReactor: Reactor {
 		case deleteItem(CategoryEdit)
 		case dragAndDrop(IndexPath, IndexPath)
 		case setNextEditScreen(CategoryEdit?)
-		case setNextAddScreen(CategoryHeader)
+		case setNextAddScreen(CategoryHeader?)
 		case setNextUpperEditScreen(Bool)
 	}
 	
@@ -64,7 +64,10 @@ extension CategoryEditReactor {
 				loadCategoryData(CategoryEditReqDto(economicActivityDvcd: type))
 			])
 		case let .didTapAddButton(categoryHeader):
-			return .just(.setNextAddScreen(categoryHeader))
+			return .concat([
+				.just(.setNextAddScreen(categoryHeader)),
+				.just(.setNextAddScreen(nil))
+			])
 		case .didTapUpperEditButton:
 			return .concat([
 				.just(.setNextUpperEditScreen(true)),

@@ -50,9 +50,9 @@ final class CategoryContentViewController: BaseViewController, View {
 			cell.reactor = cellReactor // reactor 주입
 			
 			let backgroundView = UIView()
-			backgroundView.backgroundColor = R.Color.gray400.withAlphaComponent(0.3)
+			backgroundView.backgroundColor = R.Color.gray800
 			cell.selectedBackgroundView = backgroundView
-			
+
 			return cell
 		}
 	} configureSupplementaryView: { [weak self] dataSource, collectionView, kind, indexPath -> UICollectionReusableView in
@@ -167,6 +167,8 @@ extension CategoryContentViewController {
 		group.contentInsets = .init(top: 0, leading: 192, bottom: 0, trailing: 0)
 		
 		let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(0.55), heightDimension: .absolute(UI.cellHeightMargin)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .topLeading)
+		let count = CGFloat(layoutItems.count)
+		
 		header.contentInsets = .init(top: UI.cellHeightMargin, leading: 0, bottom: 0, trailing: 0)
 		
 		let separtor = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(1)), elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)

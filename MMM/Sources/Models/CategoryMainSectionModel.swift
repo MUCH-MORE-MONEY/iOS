@@ -12,15 +12,19 @@ import Foundation
 typealias CategoryMainSectionModel = AnimatableSectionModel<CategoryMainSection, CategoryMainItem>
 
 enum CategoryMainSection {
+	case header(CategoryMainItem)
 	case base(Category, [CategoryMainItem])
 }
 
 enum CategoryMainItem: IdentifiableType, Equatable {
+	case header(CategoryCollectionViewCellReactor)
 	case base(CategoryCollectionViewCellReactor)
 	
 	// IdentifiableType에 의한 identity 설정
 	var identity: some Hashable {
 		switch self {
+		case let .header(reactor):
+			return reactor.currentState.categoryLowwer.id
 		case let .base(reactor):
 			return reactor.currentState.categoryLowwer.id
 		}
@@ -42,21 +46,27 @@ extension CategoryMainSection: AnimatableSectionModelType {
 	
 	var items: [Item] {
 		switch self {
-		case .base(_, let items):
+		case let .header(item):
+			return [item]
+		case let .base(_, items):
 			return items
 		}
 	}
 	
 	var header: Category {
 		switch self {
-		case .base(let header, _):
+		case .header:
+			return Category.getHeader()
+		case let .base(header, _):
 			return header
 		}
 	}
 	
 	init(original: CategoryMainSection, items: [CategoryMainItem]) {
 		switch original {
-		case .base(let header, let items):
+		case let .header(item):
+			self = .header(item)
+		case let .base(header, items):
 			self = .base(header, items)
 		}
 	}

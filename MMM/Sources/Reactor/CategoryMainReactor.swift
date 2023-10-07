@@ -24,8 +24,8 @@ final class CategoryMainReactor: Reactor {
 	// 현재 상태를 기록
 	struct State {
 		var date: Date
-		var paySections: [CategoryMainSectionModel] = []
-		var earnSections: [CategoryMainSectionModel] = []
+		var paySections: [CategoryMainSectionModel] = [CategoryMainSectionModel(model: .init(original: .header(CategoryMainItem.header(.init(categoryLowwer: CategoryLowwer.getHeader()))), items: []), items: [])]
+		var earnSections: [CategoryMainSectionModel] = [CategoryMainSectionModel(model: .init(original: .header(CategoryMainItem.header(.init(categoryLowwer: CategoryLowwer.getHeader()))), items: []), items: [])]
 		var indexPath: IndexPath?
 		var nextScreen: CategoryLowwer?
 		var error = false
@@ -59,6 +59,8 @@ extension CategoryMainReactor {
 				return .concat([
 					.just(.setNextScreen(indexPath, reactor.currentState.categoryLowwer))
 				])
+			case .header:
+				return .empty()
 			}
 		}
 	}
@@ -98,6 +100,11 @@ extension CategoryMainReactor {
 	private func makeSections(respose: CategoryListResDto, type: String) -> [CategoryMainSectionModel] {
 		let categoryList = respose.data
 		var sections: [CategoryMainSectionModel] = []
+
+		// Header
+		let headerItem: CategoryMainItem = .header(.init(categoryLowwer: CategoryLowwer.getHeader()))
+		let headerModel: CategoryMainSectionModel = .init(model: .header(headerItem), items: [headerItem])
+		sections.append(headerModel)
 
 		for category in categoryList {
 			let categoryitems: [CategoryMainItem] = category.lowwer.map { categoryLowwer -> CategoryMainItem in

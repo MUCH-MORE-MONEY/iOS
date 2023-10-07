@@ -40,10 +40,15 @@ final class CategoryContentViewController: BaseViewController, View {
 		guard let reactor = self?.reactor else { return .init() }
 		
 		switch item {
+		case let .header(cellReactor):
+			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CategoryCollectionViewCell.self), for: indexPath) as? CategoryCollectionViewCell else { return .init() }
+
+			return cell
 		case let .base(cellReactor):
 			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CategoryCollectionViewCell.self), for: indexPath) as? CategoryCollectionViewCell else { return .init() }
 			
 			cell.reactor = cellReactor // reactor 주입
+			
 			let backgroundView = UIView()
 			backgroundView.backgroundColor = R.Color.gray400.withAlphaComponent(0.3)
 			cell.selectedBackgroundView = backgroundView
@@ -55,10 +60,13 @@ final class CategoryContentViewController: BaseViewController, View {
 		
 		if kind == UICollectionView.elementKindSectionHeader {
 			switch dataSource[indexPath.section].model {
+			case .header:
+				guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: String(describing: CategorySectionDefault.self), for: indexPath) as? CategorySectionDefault else { return .init() }
+				return header
 			case .base:
 				guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: String(describing: CategorySectionHeader.self), for: indexPath) as? CategorySectionHeader else { return .init() }
 				let sectionInfo = dataSource.sectionModels[indexPath.section].model.header
-				
+
 				header.setDate(category: sectionInfo, type: self?.mode.rawValue ?? "01")
 				return header
 			}
@@ -130,7 +138,12 @@ extension CategoryContentViewController {
 	// Section별 Cell Layout
 	func makeLayout(sections: [CategoryMainSectionModel]) -> UICollectionViewCompositionalLayout {
 		let layout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, _ in
-			return self?.makeCategorySectionLayout(from: sections[sectionIndex].items)
+			switch sections[sectionIndex].model {
+			case let .header(item):
+				self?.makeCategoryHeaderSectionLayout(from: item)
+			case .base(_, _):
+				self?.makeCategorySectionLayout(from: sections[sectionIndex].items)
+			}
 		}
 		
 		return layout
@@ -143,6 +156,8 @@ extension CategoryContentViewController {
 			switch item {
 			case .base:
 				layoutItems.append(.init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(UI.cellHeightMargin))))
+			case .header:
+				break
 			}
 		})
 		
@@ -156,10 +171,21 @@ extension CategoryContentViewController {
 		let separtor = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(1)), elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
 		
 		let section: NSCollectionLayoutSection = .init(group: group)
-		section.boundarySupplementaryItems = [.init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)]
 		section.boundarySupplementaryItems = [header, separtor]
 		section.contentInsets = .init(top: UI.sectionMargin.top, leading: UI.sectionMargin.left, bottom: UI.sectionMargin.bottom, trailing: UI.sectionMargin.right)
 		
+		return section
+	}
+	
+	func makeCategoryHeaderSectionLayout(from item: CategoryMainItem) -> NSCollectionLayoutSection {
+		let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0)), subitems: .init(repeating: .init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(UI.cellHeightMargin))), count: 1))
+		
+		let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(40)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+
+		let section: NSCollectionLayoutSection = .init(group: group)
+		section.boundarySupplementaryItems = [header]
+		section.contentInsets = .init(top: 0, leading: UI.sectionMargin.left, bottom: 0, trailing: UI.sectionMargin.right)
+
 		return section
 	}
 }
@@ -176,6 +202,7 @@ extension CategoryContentViewController {
 			$0.register(CategoryCollectionViewCell.self)
 			$0.register(CategorySectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
 			$0.register(CategorySectionFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter)
+			$0.register(CategorySectionDefault.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
 			$0.showsVerticalScrollIndicator = false
 			$0.backgroundColor = R.Color.gray900
 		}
@@ -195,33 +222,35 @@ extension CategoryContentViewController {
 		}
 	}
 }
-// MARK: - UICollectionView DelegateFlowLayout
-extension CategoryContentViewController: UICollectionViewDelegateFlowLayout {
-	// 지정된 섹션의 헤더뷰의 크기를 반환하는 메서드. 크기를 지정하지 않으면 화면에 보이지 않습니다.
-	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-		return CGSize(width: (collectionView.frame.width) / 2, height: UI.headerHeight)
-	}
-	
-	// 지정된 섹션의 여백을 반환하는 메서드.
-	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-		return UI.sectionMargin
-	}
-	
-	// 지정된 섹션의 셀 사이의 최소간격을 반환하는 메서드.
-	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-		return UI.cellSpacingMargin
-	}
-	
-	// 지정된 섹션의 행 사이 간격 최소 간격을 반환하는 메서드. scrollDirection이 horizontal이면 수직이 행이 되고 vertical이면 수평이 행이 된다.
-	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-		return UI.cellSpacingMargin
-	}
-	
-	// 지정된 셀의 크기를 반환하는 메서드
-	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-		switch dataSource[indexPath.section].items[indexPath.row] {
-		case .base:
-			return CGSize(width: collectionView.frame.width - UI.cellWidthMargin, height: UI.categoryCellHeight)
-		}
-	}
-}
+//// MARK: - UICollectionView DelegateFlowLayout
+//extension CategoryContentViewController: UICollectionViewDelegateFlowLayout {
+//	// 지정된 섹션의 헤더뷰의 크기를 반환하는 메서드. 크기를 지정하지 않으면 화면에 보이지 않습니다.
+//	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+//		return CGSize(width: (collectionView.frame.width) / 2, height: UI.headerHeight)
+//	}
+//	
+//	// 지정된 섹션의 여백을 반환하는 메서드.
+//	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+//		return UI.sectionMargin
+//	}
+//	
+//	// 지정된 섹션의 셀 사이의 최소간격을 반환하는 메서드.
+//	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+//		return UI.cellSpacingMargin
+//	}
+//	
+//	// 지정된 섹션의 행 사이 간격 최소 간격을 반환하는 메서드. scrollDirection이 horizontal이면 수직이 행이 되고 vertical이면 수평이 행이 된다.
+//	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+//		return UI.cellSpacingMargin
+//	}
+//	
+//	// 지정된 셀의 크기를 반환하는 메서드
+//	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+//		switch dataSource[indexPath.section].items[indexPath.row] {
+//		case .header:
+//			return CGSize(width: collectionView.frame.width - UI.cellWidthMargin, height: UI.categoryCellHeight)
+//		case .base:
+//			return CGSize(width: collectionView.frame.width - UI.cellWidthMargin, height: UI.categoryCellHeight)
+//		}
+//	}
+//}

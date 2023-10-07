@@ -23,7 +23,9 @@ final class CategoryEditUpperViewController: BaseViewControllerWithNav, View {
 	// MARK: - UI Components
 	private lazy var checkButton = UIButton()
 	private lazy var tableView = UITableView()
-
+	private lazy var footerView = UIView()
+	private lazy var addButton = UIButton()
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 	}
@@ -41,6 +43,13 @@ extension CategoryEditUpperViewController {
 			.subscribe(onNext: {
 				self.navigationController?.popViewController(animated: true)
 			}).disposed(by: disposeBag)
+		
+		// 카테고리 유형 추가
+		addButton.rx.tap
+			.withUnretained(self)
+			.map { .didTapAddButton }
+			.bind(to: reactor.action)
+			.disposed(by: disposeBag)
 		
 		// 셀이 이동되었을때
 		tableView.rx.itemMoved
@@ -73,9 +82,17 @@ extension CategoryEditUpperViewController {
 				return cell
 			}.disposed(by: disposeBag)
 		
+		// 카테고리 편집
 		reactor.state
 			.compactMap { $0.nextEditScreen }
 			.bind(onNext: willPresentEditViewController)
+			.disposed(by: disposeBag)
+		
+		// 카테고리 유형 추가
+		reactor.state
+			.compactMap { $0.nextAddScreen }
+			.distinctUntilChanged() // 중복값 무시
+			.bind(onNext: willPresentAddViewController)
 			.disposed(by: disposeBag)
 	}
 }
@@ -84,7 +101,16 @@ extension CategoryEditUpperViewController {
 	private func willPresentEditViewController(categoryHeader: CategoryHeader) {
 		guard let reactor = self.reactor else { return }
 		
-		let vc = CategoryEditUpperBottomSheetViewController(title: "카테고리 수정하기", categoryHeader: categoryHeader, height: 174)
+		let vc = CategoryEditUpperBottomSheetViewController(title: "카테고리 유형 수정하기", categoryHeader: categoryHeader, height: 174)
+		vc.reactor = CategoryEditUpperBottomSheetReactor(provider: reactor.provider)
+
+		self.present(vc, animated: true, completion: nil)
+	}
+	
+	private func willPresentAddViewController(isAdd: Bool) {
+		guard let reactor = self.reactor else { return }
+		
+		let vc = CategoryAddUpperBottomSheetViewController(title: "카테고리 유형 추가하기", addId: reactor.currentState.addId - 1, height: 174)
 		vc.reactor = CategoryEditUpperBottomSheetReactor(provider: reactor.provider)
 
 		self.present(vc, animated: true, completion: nil)
@@ -112,15 +138,30 @@ extension CategoryEditUpperViewController {
 			$0.dropDelegate = self
 			$0.register(CategoryEditTableViewCell.self)
 			$0.backgroundColor = R.Color.gray900
+			$0.tableFooterView = footerView
 			$0.showsVerticalScrollIndicator = false
 			$0.separatorStyle = .none
 			$0.rowHeight = 56
+		}
+		
+		footerView = footerView.then {
+			$0.frame = .init(origin: .zero, size: .init(width: tableView.frame.width, height: 44))
+		}
+		
+		addButton = addButton.then {
+			$0.setTitle("+ 카테고리 추가하기", for: .normal)
+			$0.setTitleColor(R.Color.gray500, for: .normal)
+			$0.setTitleColor(R.Color.gray500.withAlphaComponent(0.7), for: .highlighted)
+			$0.setBackgroundColor(R.Color.gray800, for: .highlighted)
+			$0.titleLabel?.font = R.Font.body1
+			$0.contentHorizontalAlignment = .center
 		}
 	}
 	
 	override func setHierarchy() {
 		super.setHierarchy()
 		
+		footerView.addSubview(addButton)
 		view.addSubviews(tableView)
 	}
 	
@@ -129,6 +170,12 @@ extension CategoryEditUpperViewController {
 		
 		tableView.snp.makeConstraints {
 			$0.edges.equalToSuperview()
+		}
+		
+		addButton.snp.makeConstraints {
+			$0.centerY.centerX.equalToSuperview()
+			$0.horizontalEdges.equalToSuperview().inset(24)
+			$0.height.equalTo(44)
 		}
 	}
 }

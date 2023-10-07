@@ -1,8 +1,8 @@
 //
-//  CategoryAddBottomSheetViewController.swift
+//  CategoryAddUpperBottomSheetViewController.swift
 //  MMM
 //
-//  Created by geonhyeong on 2023/09/28.
+//  Created by geonhyeong on 10/7/23.
 //
 
 import UIKit
@@ -11,13 +11,12 @@ import Then
 import ReactorKit
 
 // 상속하지 않으려면 final 꼭 붙이기
-final class CategoryAddBottomSheetViewController: BottomSheetViewController2, View {
-	typealias Reactor = CategoryEditBottomSheetReactor
+final class CategoryAddUpperBottomSheetViewController: BottomSheetViewController2, View {
+	typealias Reactor = CategoryEditUpperBottomSheetReactor
 	// MARK: - Sub Type
 	
 	// MARK: - Properties
 	private var titleStr: String = ""
-	private var categoryHeader: CategoryHeader
 	private var addId: Int
 	private var isDark: Bool = false // 다크 모드 지정
 	private var height: CGFloat
@@ -31,9 +30,8 @@ final class CategoryAddBottomSheetViewController: BottomSheetViewController2, Vi
 	private lazy var checkButton = UIButton()
 	private lazy var textField = UITextField()
 
-	init(title: String, categoryHeader: CategoryHeader, addId: Int, height: CGFloat, sheetMode: BottomSheetViewController2.Mode = .drag, isDark: Bool = false) {
+	init(title: String, addId: Int, height: CGFloat, sheetMode: BottomSheetViewController2.Mode = .drag, isDark: Bool = false) {
 		self.titleStr = title
-		self.categoryHeader = categoryHeader
 		self.addId = addId
 		self.height = height
 		self.isDark = isDark
@@ -68,18 +66,18 @@ final class CategoryAddBottomSheetViewController: BottomSheetViewController2, Vi
 		textField.setUnderLine(color: R.Color.orange500)
 	}
 	
-	func bind(reactor: CategoryEditBottomSheetReactor) {
+	func bind(reactor: CategoryEditUpperBottomSheetReactor) {
 		bindState(reactor)
 		bindAction(reactor)
 	}
 }
 //MARK: - Bind
-extension CategoryAddBottomSheetViewController {
+extension CategoryAddUpperBottomSheetViewController {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
-	private func bindAction(_ reactor: CategoryEditBottomSheetReactor) {
+	private func bindAction(_ reactor: CategoryEditUpperBottomSheetReactor) {
 		// 확인 버튼
 		checkButton.rx.tap
-			.compactMap { self.tranformCategoryEdit()}
+			.compactMap { self.tranformCategoryHeader()}
 			.map { .didTapAdd($0) }
 			.bind(to: reactor.action)
 			.disposed(by: disposeBag)
@@ -91,7 +89,7 @@ extension CategoryAddBottomSheetViewController {
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
-	private func bindState(_ reactor: CategoryEditBottomSheetReactor) {
+	private func bindState(_ reactor: CategoryEditUpperBottomSheetReactor) {
 		
 		reactor.state
 			.map { $0.isAddValid }
@@ -126,13 +124,11 @@ extension CategoryAddBottomSheetViewController {
 	}
 }
 //MARK: - Action
-extension CategoryAddBottomSheetViewController {
-	func tranformCategoryEdit() -> CategoryEdit? {
+extension CategoryAddUpperBottomSheetViewController {
+	func tranformCategoryHeader() -> CategoryHeader? {
 		guard let text = textField.text else { return nil }
-		let header = self.categoryHeader
-		var categoryEdit = CategoryEdit(id: String(addId), title: text, upperId: header.id, upperTitle: header.title, orderNum: -1, upperOrderNum: header.orderNum)
-		categoryEdit.title = text
-		return categoryEdit
+		let header: CategoryHeader = .init(id: String(addId), title: text, orderNum: addId)
+		return header
 	}
 	
 	func didAlertCacelButton() { }
@@ -173,7 +169,7 @@ extension CategoryAddBottomSheetViewController {
 
 }
 //MARK: - Attribute & Hierarchy & Layouts
-extension CategoryAddBottomSheetViewController {
+extension CategoryAddUpperBottomSheetViewController {
 	// 초기 셋업할 코드들
 	override func setAttribute() {
 		super.setAttribute()
@@ -210,7 +206,7 @@ extension CategoryAddBottomSheetViewController {
 		}
 		
 		warningLabel = warningLabel.then {
-			$0.text = "최대 글자수를 넘어선 글자예요. (최대 9글자)"
+			$0.text = "최대 글자수를 넘어선 글자예요. (최대 8글자)"
 			$0.font = R.Font.body3
 			$0.textColor = R.Color.red500
 			$0.textAlignment = .left

@@ -166,6 +166,7 @@
 		C46D5E5F2AD1683400EBE5D7 /* CategoryEditUpperReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46D5E5E2AD1683400EBE5D7 /* CategoryEditUpperReactor.swift */; };
 		C46D5E632AD174AD00EBE5D7 /* CategoryEditUpperBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46D5E622AD174AD00EBE5D7 /* CategoryEditUpperBottomSheetViewController.swift */; };
 		C46D5E652AD1752700EBE5D7 /* CategoryEditUpperBottomSheetReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46D5E642AD1752700EBE5D7 /* CategoryEditUpperBottomSheetReactor.swift */; };
+		C46D5E672AD1826800EBE5D7 /* CategoryAddUpperBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46D5E662AD1826800EBE5D7 /* CategoryAddUpperBottomSheetViewController.swift */; };
 		C494A24B2A9B893400980A71 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C494A24A2A9B893300980A71 /* GoogleService-Info.plist */; };
 		C494A2512A9B8A0A00980A71 /* TabBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C494A2502A9B8A0A00980A71 /* TabBarViewModel.swift */; };
 		C4BBD2642AB9DE8C0055FA65 /* StatisticsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BBD2632AB9DE8C0055FA65 /* StatisticsProvider.swift */; };
@@ -450,6 +451,7 @@
 		C46D5E5E2AD1683400EBE5D7 /* CategoryEditUpperReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditUpperReactor.swift; sourceTree = "<group>"; };
 		C46D5E622AD174AD00EBE5D7 /* CategoryEditUpperBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditUpperBottomSheetViewController.swift; sourceTree = "<group>"; };
 		C46D5E642AD1752700EBE5D7 /* CategoryEditUpperBottomSheetReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditUpperBottomSheetReactor.swift; sourceTree = "<group>"; };
+		C46D5E662AD1826800EBE5D7 /* CategoryAddUpperBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryAddUpperBottomSheetViewController.swift; sourceTree = "<group>"; };
 		C494A24A2A9B893300980A71 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C494A24E2A9B895100980A71 /* PushSettingDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushSettingDetailViewController.swift; sourceTree = "<group>"; };
 		C494A2502A9B8A0A00980A71 /* TabBarViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewModel.swift; sourceTree = "<group>"; };
@@ -1118,6 +1120,7 @@
 				C46409D92AB9625E00A899AD /* BottomSheetViewController2.swift */,
 				C4EB8CBB2AC56341005FBAF1 /* CategoryAddBottomSheetViewController.swift */,
 				C4EB8CB32AC438BA005FBAF1 /* CategoryEditBottomSheetViewController.swift */,
+				C46D5E662AD1826800EBE5D7 /* CategoryAddUpperBottomSheetViewController.swift */,
 				C46D5E622AD174AD00EBE5D7 /* CategoryEditUpperBottomSheetViewController.swift */,
 				C4BBD2652AB9E16D0055FA65 /* DateBottomSheetViewController.swift */,
 				C4BBD26B2ABAD4A60055FA65 /* SatisfactionBottomSheetViewController.swift */,
@@ -1640,6 +1643,7 @@
 				6A8605B82A24D0B000DF68BD /* DeleteResDto.swift in Sources */,
 				6AB1151329EE6D9E00D3B813 /* Ex+UITabBar.swift in Sources */,
 				C4DE94662A9658530069B22B /* StatisticsActivityTableViewCell.swift in Sources */,
+				C46D5E672AD1826800EBE5D7 /* CategoryAddUpperBottomSheetViewController.swift in Sources */,
 				C4351B502A1691FB005F95BE /* HighlightViewController.swift in Sources */,
 				6A04FA092A1C7EE80034C114 /* EditActivityViewModel.swift in Sources */,
 				C4170B592A94853400CE0A65 /* StatisticsActivityView.swift in Sources */,

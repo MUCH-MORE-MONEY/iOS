@@ -11,6 +11,7 @@ final class CategoryEditUpperReactor: Reactor {
 	// 사용자의 액션
 	enum Action {
 		case dragAndDrop(IndexPath, IndexPath)
+		case didTapAddButton
 	}
 	
 	// 처리 단위
@@ -19,14 +20,15 @@ final class CategoryEditUpperReactor: Reactor {
 		case deleteItem(CategoryHeader)
 		case dragAndDrop(IndexPath, IndexPath)
 		case setNextEditScreen(CategoryHeader?)
-		case setNextAddScreen(CategoryHeader?)
+		case setNextAddScreen(Bool)
 	}
 	
 	// 현재 상태를 기록
 	struct State {
+		var addId: Int
 		var sections: [CategoryEditSectionModel]
 		var nextEditScreen: CategoryHeader?
-		var nextAddScreen: CategoryHeader?
+		var nextAddScreen: Bool = false
 		var error = false
 	}
 	
@@ -35,7 +37,7 @@ final class CategoryEditUpperReactor: Reactor {
 	let provider: ServiceProviderProtocol
 
 	init(provider: ServiceProviderProtocol, sections: [CategoryEditSectionModel]) {
-		self.initialState = State(sections: sections)
+		self.initialState = State(addId: -(sections.count - 1), sections: sections)
 		self.provider = provider
 	}
 }
@@ -46,6 +48,11 @@ extension CategoryEditUpperReactor {
 		switch action {
 		case let .dragAndDrop(startIndex, destinationIndexPath):
 			return .just(.dragAndDrop(startIndex, destinationIndexPath))
+		case .didTapAddButton:
+			return .concat([
+				.just(.setNextAddScreen(true)),
+				.just(.setNextAddScreen(false))
+			])
 		}
 	}
 	
@@ -58,6 +65,8 @@ extension CategoryEditUpperReactor {
 					.just(.setNextEditScreen(categoryHeader)),
 					.just(.setNextEditScreen(nil))
 				])
+			case let .addUpper(categoryHeader):
+				return .just(.addItem(categoryHeader))
 			case let .deleteUpperEdit(categoryHeader):
 				return .just(.deleteItem(categoryHeader))
 			default:
@@ -74,7 +83,10 @@ extension CategoryEditUpperReactor {
 		
 		switch mutation {
 		case let .addItem(categoryHeader):
-			break
+			let item: CategoryEditItem = .base(.init(provider: provider, categoryEdit: CategoryEdit.getDummy())) // 임시
+			let model: CategoryEditSectionModel = .init(model: .base(categoryHeader, [item]), items: [item])
+			newState.sections.append(model)
+			newState.addId -= 1 // 고유값 유지
 		case let .deleteItem(deleteItem):
 			if let removeIndex = newState.sections.firstIndex(where: { $0.model.header.id == deleteItem.id }) {
 				newState.sections.remove(at: removeIndex)

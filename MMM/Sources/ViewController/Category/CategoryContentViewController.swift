@@ -75,7 +75,10 @@ final class CategoryContentViewController: BaseViewController, View {
 			guard let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: CategorySectionFooter.className, for: indexPath) as? CategorySectionFooter else { return .init() }
 			
 			let count = self?.mode == .pay ? thisReactor.currentState.paySections.count : thisReactor.currentState.earnSections.count
-			footer.setData(isLast: indexPath.section == count - 1) // 마지막 섹션은 separator 숨기기
+			
+			// 마지막 섹션은 separator 숨기기
+			// Global Header로 인한 section수 1개 증가
+			footer.setData(isLast: indexPath.section == count - 1)
 			return footer
 		}
 	}

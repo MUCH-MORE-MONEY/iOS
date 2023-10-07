@@ -77,8 +77,12 @@ final class CategoryEditViewController: BaseViewControllerWithNav, View {
 				let sectionInfo = dataSource.sectionModels[indexPath.section].model.header
 				
 				let count = thisReactor.currentState.headers.count
-				footer.setData(categoryHeader: sectionInfo, isLast: indexPath.section == count - 1) // 마지막 섹션은 separator 숨기기
+				
+				// 마지막 섹션은 separator 숨기기
+				// Global Header로 인한 section수 1개 증가
+				footer.setData(categoryHeader: sectionInfo, isLast: indexPath.section == count)
 				footer.reactor = thisReactor
+				
 				return footer
 			case .footer:
 				guard let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: CategoryEditSectionGlobalFooter.className, for: indexPath) as? CategoryEditSectionGlobalFooter else { return .init() }

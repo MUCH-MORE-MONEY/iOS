@@ -12,7 +12,7 @@ struct CategoryHeaderList: Codable {
 }
 
 struct CategoryHeader: Codable, Equatable {
-	let id, title: String
+	var id, title: String
 	let orderNum: Int
 
 	// 파라미터 이름 변경

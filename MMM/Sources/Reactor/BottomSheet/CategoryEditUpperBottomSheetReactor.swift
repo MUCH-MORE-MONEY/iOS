@@ -1,25 +1,25 @@
 //
-//  CategoryEditBottomSheetReactor.swift
+//  CategoryEditUpperBottomSheetReactor.swift
 //  MMM
 //
-//  Created by geonhyeong on 2023/09/27.
+//  Created by geonhyeong on 10/7/23.
 //
 
 import RxSwift
 import ReactorKit
 
-final class CategoryEditBottomSheetReactor: Reactor {
+final class CategoryEditUpperBottomSheetReactor: Reactor {
 	// 사용자의 액션
 	enum Action {
 		// 편집
 		case inputEditText(String)
-		case didTapEdit(CategoryEdit)
+		case didTapEdit(CategoryHeader)
 
 		// 추가
 		case inputAddText(String)
-		case didTapAdd(CategoryEdit)
+		case didTapAdd(CategoryHeader)
 		
-		case delete(CategoryEdit)
+		case delete(CategoryHeader)
 		case dismiss
 	}
 	
@@ -48,20 +48,20 @@ final class CategoryEditBottomSheetReactor: Reactor {
 	}
 }
 //MARK: - Mutate, Reduce
-extension CategoryEditBottomSheetReactor {
+extension CategoryEditUpperBottomSheetReactor {
 	/// Action이 들어온 경우, 어떤 처리를 할건지 분기
 	func mutate(action: Action) -> Observable<Mutation> {
 		switch action {
 		case let .inputEditText(text):
-			return .just(.setEditValid(text.count < 10))
+			return .just(.setEditValid(text.count < 9))
 		case let .inputAddText(text):
-			return .just(.setAddValid(text.count < 10))
-		case let .didTapEdit(categoryEdit):
-			return provider.categoryProvider.updateTitleEdit(to: categoryEdit).map { _ in .dismiss }
-		case let .didTapAdd(categoryEdit):
-			return provider.categoryProvider.addCategory(to: categoryEdit).map { _ in .dismiss }
-		case let .delete(categoryEdit):
-			return provider.categoryProvider.deleteTitleEdit(to: categoryEdit).map { _ in .dismiss }
+			return .just(.setAddValid(text.count < 9))
+		case let .didTapEdit(categoryHeader):
+			return provider.categoryProvider.updateUpperEdit(to: categoryHeader).map { _ in .dismiss }
+		case let .didTapAdd(categoryHeader):
+			return provider.categoryProvider.addUpper(to: categoryHeader).map { _ in .dismiss }
+		case let .delete(categoryHeader):
+			return provider.categoryProvider.deleteUpperEdit(to: categoryHeader).map { _ in .dismiss }
 		case .dismiss:
 			return .just(.dismiss)
 		}

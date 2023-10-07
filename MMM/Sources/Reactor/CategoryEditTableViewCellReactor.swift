@@ -40,31 +40,26 @@ extension CategoryEditTableViewCellReactor {
 	func mutate(action: Action) -> Observable<Mutation> {
 		switch action {
 		case .didTapEditButton:
-			return .just(.presentEdit)
-//			return provider.categoryProvider.presentTitleEdit(to: currentState.categoryEdit).map {
-//				_ in .presentEdit
-//			}
+			return provider.categoryProvider.presentUpperEdit(to: currentState.categoryHeader).map {
+				_ in .presentEdit
+			}
 		}
 	}
-//	
-//	/// 각각의 stream을 변형
-//	func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-//		let event = provider.categoryProvider.event.flatMap { event -> Observable<Mutation> in
-//			switch event {
-//			case .presentTitleEdit:
-//				return .empty()
-//			case let .updateTitleEdit(categoryEdit):
-//				return .just(.setTitle(categoryEdit))
-//			case .deleteTitleEdit:
-//				return .empty()
-//			case .addCategory:
-//				return .empty()
-//			}
-//		}
-//		
-//		return Observable.merge(mutation, event)
-//	}
-//	
+	
+	/// 각각의 stream을 변형
+	func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
+		let event = provider.categoryProvider.event.flatMap { event -> Observable<Mutation> in
+			switch event {
+			case let .updateUpperEdit(categoryHeader):
+				return .just(.setTitle(categoryHeader))
+			default:
+				return .empty()
+			}
+		}
+		
+		return Observable.merge(mutation, event)
+	}
+	
 	/// 이전 상태와 처리 단위(Mutation)를 받아서 다음 상태(State)를 반환하는 함수
 	func reduce(state: State, mutation: Mutation) -> State {
 		var newState = state

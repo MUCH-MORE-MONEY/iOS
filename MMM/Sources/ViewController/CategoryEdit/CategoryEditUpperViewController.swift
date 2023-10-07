@@ -1,5 +1,5 @@
 //
-//  CategoryUpperEditViewController.swift
+//  CategoryEditUpperViewController.swift
 //  MMM
 //
 //  Created by geonhyeong on 10/7/23.
@@ -11,8 +11,8 @@ import RxSwift
 import ReactorKit
 
 // 상속하지 않으려면 final 꼭 붙이기
-final class CategoryUpperEditViewController: BaseViewControllerWithNav, View {
-	typealias Reactor = CategoryEditReactor
+final class CategoryEditUpperViewController: BaseViewControllerWithNav, View {
+	typealias Reactor = CategoryEditUpperReactor
 
 	// MARK: - Constants
 	private enum UI {
@@ -28,15 +28,15 @@ final class CategoryUpperEditViewController: BaseViewControllerWithNav, View {
 		super.viewDidLoad()
 	}
 	
-	func bind(reactor: CategoryEditReactor) {
+	func bind(reactor: CategoryEditUpperReactor) {
 		bindState(reactor)
 		bindAction(reactor)
 	}
 }
 //MARK: - Bind
-extension CategoryUpperEditViewController {
+extension CategoryEditUpperViewController {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
-	private func bindAction(_ reactor: CategoryEditReactor) {
+	private func bindAction(_ reactor: CategoryEditUpperReactor) {
 		checkButton.rx.tap
 			.subscribe(onNext: {
 				self.navigationController?.popViewController(animated: true)
@@ -48,23 +48,22 @@ extension CategoryUpperEditViewController {
 				let sourceCell = tableView.cellForRow(at: source) as! CategoryEditTableViewCell
 				let destinationCell = tableView.cellForRow(at: destination) as! CategoryEditTableViewCell
 
-				// 데이터 설정
-//				sourceCell.setData(last: source.row == reactor.currentState.sections.map { $0.model.header }.count - 2)
-//				destinationCell.setData(last: destination.row == reactor.currentState.sections.map { $0.model.header }.count - 2)
+				// 데이터 설정 - separator
+				sourceCell.setData(last: destination.row == reactor.currentState.sections.map { $0.model.header }.count - 3)
 			}).disposed(by: disposeBag)
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
-	private func bindState(_ reactor: CategoryEditReactor) {
+	private func bindState(_ reactor: CategoryEditUpperReactor) {
 		reactor.state
-			.map { $0.sections.map { $0.model.header }.filter { $0.id != "footer"} }
+			.map { $0.sections.map { $0.model.header }.filter { $0.id != "header" && $0.id != "footer"} }
 			.distinctUntilChanged() // 중복값 무시
 			.bind(to: tableView.rx.items) { tv, row, data in
 				let index = IndexPath(row: row, section: 0)
 				let cell = tv.dequeueReusableCell(withIdentifier: CategoryEditTableViewCell.className, for: index) as! CategoryEditTableViewCell
 
 				// 데이터 설정
-				cell.setData(last: row >= reactor.currentState.sections.map { $0.model.header }.count - 2)
+				cell.setData(last: row == reactor.currentState.sections.map { $0.model.header }.count - 3)
 				cell.reactor = CategoryEditTableViewCellReactor(provider: reactor.provider, categoryHeader: data)
 
 				let backgroundView = UIView()
@@ -73,13 +72,26 @@ extension CategoryUpperEditViewController {
 				
 				return cell
 			}.disposed(by: disposeBag)
+		
+		reactor.state
+			.compactMap { $0.nextEditScreen }
+			.bind(onNext: willPresentEditViewController)
+			.disposed(by: disposeBag)
 	}
 }
 //MARK: - Action
-extension CategoryUpperEditViewController {
+extension CategoryEditUpperViewController {
+	private func willPresentEditViewController(categoryHeader: CategoryHeader) {
+		guard let reactor = self.reactor else { return }
+		
+		let vc = CategoryEditUpperBottomSheetViewController(title: "카테고리 수정하기", categoryHeader: categoryHeader, height: 174)
+		vc.reactor = CategoryEditUpperBottomSheetReactor(provider: reactor.provider)
+
+		self.present(vc, animated: true, completion: nil)
+	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
-extension CategoryUpperEditViewController {
+extension CategoryEditUpperViewController {
 	// 초기 셋업할 코드들
 	override func setAttribute() {
 		super.setAttribute()
@@ -121,13 +133,13 @@ extension CategoryUpperEditViewController {
 	}
 }
 // MARK: - UITableView Drag Delegate
-extension CategoryUpperEditViewController: UITableViewDragDelegate {
+extension CategoryEditUpperViewController: UITableViewDragDelegate {
 	func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
 		return [UIDragItem(itemProvider: NSItemProvider())]
 	}
 }
 // MARK: - UITableView Drop Delegate
-extension CategoryUpperEditViewController: UITableViewDropDelegate {
+extension CategoryEditUpperViewController: UITableViewDropDelegate {
 	func tableView(_ tableView: UITableView, canHandle session: UIDropSession) -> Bool {
 		return true
 	}
@@ -165,6 +177,7 @@ extension CategoryUpperEditViewController: UITableViewDropDelegate {
 		tableView.performBatchUpdates { [weak self] in
 			self?.move(sourceIndexPath: sourceIndexPath, destinationIndexPath: destinationIndexPath)
 		} completion: { finish in
+			print(sourceItem.dragItem, destinationIndexPath)
 			coordinator.drop(sourceItem.dragItem, toRowAt: destinationIndexPath)
 		}
 	}

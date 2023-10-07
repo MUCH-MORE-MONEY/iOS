@@ -87,12 +87,12 @@ extension CategoryEditReactor {
 					.just(.setNextEditScreen(categoryEdit)),
 					.just(.setNextEditScreen(nil))
 				])
-			case .updateTitleEdit:
-				return .empty()
 			case let .addCategory(categoryEdit):
 				return .just(.addItem(categoryEdit))
 			case let .deleteTitleEdit(categoryEdit):
 				return .just(.deleteItem(categoryEdit))
+			default:
+				return .empty()
 			}
 		}
 		

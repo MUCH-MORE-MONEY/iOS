@@ -299,8 +299,8 @@ extension CategoryEditViewController {
 	private func willPushUpperEditViewController(isPush: Bool) {
 		guard let reactor = self.reactor else { return }
 		
-		let vc = CategoryUpperEditViewController()
-		vc.reactor = reactor
+		let vc = CategoryEditUpperViewController()
+		vc.reactor = CategoryEditUpperReactor(provider: reactor.provider, sections: reactor.currentState.sections)
 		
 		navigationController?.pushViewController(vc, animated: true)
 	}

@@ -12,6 +12,11 @@ enum CategoryEvent {
 	case addCategory(CategoryEdit)
 	case updateTitleEdit(CategoryEdit)
 	case deleteTitleEdit(CategoryEdit)
+	
+	case presentUpperEdit(CategoryHeader)
+	case addUpper(CategoryHeader)
+	case updateUpperEdit(CategoryHeader)
+	case deleteUpperEdit(CategoryHeader)
 }
 
 protocol CategoryServiceProtocol {
@@ -21,6 +26,11 @@ protocol CategoryServiceProtocol {
 	func addCategory(to categoryEdit: CategoryEdit) -> Observable<CategoryEdit>
 	func updateTitleEdit(to categoryEdit: CategoryEdit) -> Observable<CategoryEdit>
 	func deleteTitleEdit(to categoryEdit: CategoryEdit) -> Observable<CategoryEdit>
+
+	func presentUpperEdit(to categoryHeader: CategoryHeader) -> Observable<CategoryHeader>
+	func addUpper(to categoryHeader: CategoryHeader) -> Observable<CategoryHeader>
+	func updateUpperEdit(to categoryHeader: CategoryHeader) -> Observable<CategoryHeader>
+	func deleteUpperEdit(to categoryHeader: CategoryHeader) -> Observable<CategoryHeader>
 }
 
 final class CategoryProvider: CategoryServiceProtocol {
@@ -48,5 +58,29 @@ final class CategoryProvider: CategoryServiceProtocol {
 		event.onNext(.deleteTitleEdit(categoryEdit))
 		
 		return .just(categoryEdit)
+	}
+	
+	func presentUpperEdit(to categoryHeader: CategoryHeader) -> Observable<CategoryHeader> {
+		event.onNext(.presentUpperEdit(categoryHeader))
+		
+		return .just(categoryHeader)
+	}
+	
+	func addUpper(to categoryHeader: CategoryHeader) -> RxSwift.Observable<CategoryHeader> {
+		event.onNext(.presentUpperEdit(categoryHeader))
+		
+		return .just(categoryHeader)
+	}
+	
+	func updateUpperEdit(to categoryHeader: CategoryHeader) -> RxSwift.Observable<CategoryHeader> {
+		event.onNext(.updateUpperEdit(categoryHeader))
+		
+		return .just(categoryHeader)
+	}
+	
+	func deleteUpperEdit(to categoryHeader: CategoryHeader) -> RxSwift.Observable<CategoryHeader> {
+		event.onNext(.presentUpperEdit(categoryHeader))
+		
+		return .just(categoryHeader)
 	}
 }

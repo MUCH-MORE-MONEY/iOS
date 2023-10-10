@@ -94,10 +94,10 @@ extension PushSettingDetailViewController {
     }
     
     private func setTime(_ date: Date) {
+        print("최초 실행")
         let dd = date.getFormattedTime()
-        
-        print(dd)
-        detailTimeSettingView.configure(date)
+        Common.setCustomPushTime(dd)
+        detailTimeSettingView.configure(Common.getCustomPushTime())
     }
     
     private func presentBottomSheet1(_ isPresent: Bool) {

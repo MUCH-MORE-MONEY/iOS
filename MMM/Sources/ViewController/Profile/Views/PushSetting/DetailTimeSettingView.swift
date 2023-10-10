@@ -29,8 +29,8 @@ final class DetailTimeSettingView: UIView {
 
 // MARK: - Actions
 extension DetailTimeSettingView {
-    func configure(_ date: Date) {
-        timeLabel.text = date.getFormattedTime()
+    func configure(_ dateTitle: String) {
+        timeLabel.text = dateTitle
     }
 }
 
@@ -52,7 +52,7 @@ extension DetailTimeSettingView {
         }
         
         timeLabel = timeLabel.then {
-            $0.text = "09:00 PM"
+            $0.text = Common.getCustomPushTime()
             $0.font = R.Font.body0
             $0.textColor = R.Color.white
         }

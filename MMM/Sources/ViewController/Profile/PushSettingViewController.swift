@@ -127,10 +127,12 @@ extension PushSettingViewController {
         // 알림 문구 지정 버튼
         customPushTextSettingView.rx.tapGesture()
             .when(.recognized)
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.presentBottomSheet()
-            })
+            .map { _ in .didTapCustomPushTimeSettingView }
+//            .subscribe(onNext: { [weak self] _ in
+//                guard let self = self else { return }
+//                self.presentBottomSheet()
+//            })
+            .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
     
@@ -176,8 +178,15 @@ extension PushSettingViewController {
             .bind(onNext: presentDetailViewController)
             .disposed(by: disposeBag)
         
+        reactor.state
+            .filter { $0.isCustomPushSwitchOn }
+            .map { $0.isPresentSheetView }
+            .filter { $0 }
+            .bind(onNext: presentBottomSheet)
+            .disposed(by: disposeBag)
         
         reactor.state
+            .filter { $0.isCustomPushSwitchOn }
             .map { $0.customPushLabelText }
             .bind { text in
                 var title = Common.getCustomPushText()
@@ -198,6 +207,11 @@ private extension PushSettingViewController {
         let vc = PushSettingDetailViewController()
         vc.reactor = PushSettingDetailReactor(provider: ServiceProvider.shared)
         self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    private func presentSheetViewController(_ isPresent: Bool) {
+        //                guard let self = self else { return }
+        //                self.presentBottomSheet()
     }
     
     private func showAlertMessage(_ isPushOn: Bool) {
@@ -231,7 +245,7 @@ private extension PushSettingViewController {
         Common.setNewsPushSwitch(isOn)
     }
     
-    private func presentBottomSheet() {
+    private func presentBottomSheet(_ isPresent: Bool) {
         let vc = CustomPushTextSettingViewController(title: "알림 문구 지정", height: 200)
         vc.reactor = CustomPushTextSettingReactor(provider: reactor.provider)
         self.present(vc, animated: true, completion: nil)

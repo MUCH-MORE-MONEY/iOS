@@ -75,8 +75,8 @@ extension PushSettingReactor {
             
         case .didTapCustomPushTimeSettingView:
             return Observable.concat([
-                .just(.setPresentDetailView(true)),
-                .just(.setPresentDetailView(false))])
+                .just(.setPresentSheetView(true)),
+                .just(.setPresentSheetView(false))])
             
         case .didTapCustomPushTextSettingView:
             return Observable.concat([

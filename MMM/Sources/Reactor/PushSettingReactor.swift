@@ -188,6 +188,8 @@ extension PushSettingReactor {
         // 알림 내용 설정
         let notificationCenter = UNUserNotificationCenter.current()
         
+        notificationCenter.removeAllPendingNotificationRequests()
+        
         let hour = time.components(separatedBy: ":")[0]
         let minute = time
             .components(separatedBy: ":")[1]

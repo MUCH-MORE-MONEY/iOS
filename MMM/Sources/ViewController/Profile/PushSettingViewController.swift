@@ -43,8 +43,46 @@ final class PushSettingViewController: BaseViewControllerWithNav, View {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        newsPushMainLabel.text = Common.getCustomPushTime()
-//        self.customPushTimeSettingView.updateCustomTimeText()
+        
+        let list = Common.getCustomPushWeekList()
+        
+        if list.filter { $0 }.count == 7 {
+            customPushTimeSettingView.mainLabel.text = "매일"
+        } else {
+            var title = ""
+            for (index, isOn) in list.enumerated() {
+                if isOn {
+                    switch index {
+                    case 0:
+                        title += "일 ,"
+                    case 1:
+                        title += "월 ,"
+                    case 2:
+                        title += "화 ,"
+                    case 3:
+                        title += "수 ,"
+                    case 4:
+                        title += "목 ,"
+                    case 5:
+                        title += "금 ,"
+                    case 6:
+                        title += "토 ,"
+                    default:
+                        break
+                    }
+                }
+            }
+            
+            if !title.isEmpty {
+                title.removeLast(2)
+            } else {
+                title = "시간 지정 ㄱㄱ"
+            }
+            DispatchQueue.main.async {
+                self.customPushTimeSettingView.mainLabel.text = title
+            }
+
+        }
     }
     
     func bind(reactor: PushSettingReactor) {

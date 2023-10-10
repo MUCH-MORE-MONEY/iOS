@@ -33,6 +33,8 @@ final class PushSettingViewController: BaseViewControllerWithNav, View {
     
     private lazy var divider = UIView()
     // MARK: - Properties
+    let userNotificationCenter = UNUserNotificationCenter.current()
+    
     var reactor: PushSettingReactor!
     
     override func viewDidLoad() {
@@ -257,6 +259,7 @@ extension PushSettingViewController {
     override func setAttribute() {
         title = "푸시 알림 설정"
         view.backgroundColor = R.Color.gray100
+//        userNotificationCenter.delegate = self
         
         newsPushStackView.addArrangedSubviews(newsPushMainLabel, newsPushSwitch)
         customPushStackView.addArrangedSubviews(customPushMainLabel, customPushSwitch)
@@ -415,3 +418,13 @@ extension PushSettingViewController: CustomAlertDelegate {
     func didAlertCacelButton() { }
 }
 
+//// MARK: - Local Noti
+//extension PushSettingViewController: UNUserNotificationCenterDelegate {
+//    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+//        completionHandler()
+//    }
+//    
+//    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+//        completionHandler([.alert, .badge, .sound])
+//    }
+//}

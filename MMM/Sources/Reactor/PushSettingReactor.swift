@@ -92,6 +92,28 @@ extension PushSettingReactor {
                 pushAgreeUpdate(request)])
             
         case .customPushSwitchToggle(let isOn):
+            if isOn {
+                let notificationCenter = UNUserNotificationCenter.current()
+                
+                notificationCenter.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+                    if granted {
+                        print("알림 허용")
+                        
+                        let time = Common.getCustomPushTime()
+                        let weekList = Common.getCustomPushWeekList()
+
+                        for (day, isOn) in weekList.enumerated() {
+                            if isOn {
+                                // 특정 요일 선택 (1은 일요일, 2는 월요일, ..., 7은 토요일)
+                                self.scheduleWeeklyNotification(day: day+1, time: time)
+                            }
+                        }
+                    } else {
+                        print("알림 거부")
+                    }
+                }
+            }
+            
             return .just(.setCustomPushSwitch(isOn))
         }
     }
@@ -161,24 +183,38 @@ extension PushSettingReactor {
                 return .updatePushAgreeSwitch(response, error)
             }
     }
-    
-    //    func checkPushSetting() -> Observable<Mutation> {
-    //        var isOn = false
-    //        UNUserNotificationCenter.current().getNotificationSettings { settings in
-    //            switch settings.authorizationStatus {
-    //            case .authorized:
-    //                print("허용")
-    //                isOn = true
-    //            case .denied:
-    //                print("거부")
-    //                isOn = false
-    //            case .notDetermined:
-    //                print("설정 전임")
-    //            default:
-    //                break
-    //            }
-    //
-    //            return .just(.pushSettingAvailable(isOn))
-    //        }
-    //    }
+        
+    func scheduleWeeklyNotification(day: Int, time: String) {
+        // 알림 내용 설정
+        let notificationCenter = UNUserNotificationCenter.current()
+        
+        let hour = time.components(separatedBy: ":")[0]
+        let minute = time
+            .components(separatedBy: ":")[1]
+            .components(separatedBy: " ")[0]
+        
+        let content = UNMutableNotificationContent()
+        content.title = "매주 알림"
+        content.body = "오늘은 알림 날입니다!"
+        
+        // 알림 발생 시간 설정
+        var dateComponents = DateComponents()
+        dateComponents.calendar = Calendar.current
+        dateComponents.hour = Int(hour)! // 알림을 원하는 시간으로 변경
+        dateComponents.minute = Int(minute)!
+        dateComponents.weekday = day // 특정 요일 선택 (1은 일요일, 2는 월요일, ..., 7은 토요일)
+        
+        // 알림 요청 생성
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+        let request = UNNotificationRequest(identifier: "weeklyNotification", content: content, trigger: trigger)
+        
+        // 알림 요청 등록
+        notificationCenter.add(request) { (error) in
+            if let error = error {
+                print("알림 등록 중 오류 발생: \(error.localizedDescription)")
+            } else {
+                print("알림이 성공적으로 등록되었습니다.")
+            }
+        }
+    }
 }

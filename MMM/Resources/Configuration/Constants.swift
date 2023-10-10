@@ -179,7 +179,6 @@ enum Common {
         var selectedDays: [Bool] = []
         
         if let savedDays = UserDefaults.standard.array(forKey: self.keys.customPushWeekList.rawValue) as? [Bool], savedDays.count == 7 {
-            print(savedDays)
             selectedDays = savedDays
         } else {
             return Array(repeating: true, count: 7)

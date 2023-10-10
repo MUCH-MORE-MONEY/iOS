@@ -47,7 +47,7 @@ final class PushSettingViewController: BaseViewControllerWithNav, View {
         let list = Common.getCustomPushWeekList()
         
         if list.filter { $0 }.count == 7 {
-            customPushTimeSettingView.mainLabel.text = "매일"
+            customPushTimeSettingView.mainLabel.text = "매일 \(Common.getCustomPushTime())"
         } else {
             var title = ""
             for (index, isOn) in list.enumerated() {
@@ -75,6 +75,7 @@ final class PushSettingViewController: BaseViewControllerWithNav, View {
             
             if !title.isEmpty {
                 title.removeLast(2)
+                title += " \(Common.getCustomPushTime())"
             } else {
                 title = "시간 지정 ㄱㄱ"
             }
@@ -127,7 +128,7 @@ extension PushSettingViewController {
         // 알림 문구 지정 버튼
         customPushTextSettingView.rx.tapGesture()
             .when(.recognized)
-            .map { _ in .didTapCustomPushTimeSettingView }
+            .map { _ in .didTapCustomPushTextSettingView }
 //            .subscribe(onNext: { [weak self] _ in
 //                guard let self = self else { return }
 //                self.presentBottomSheet()

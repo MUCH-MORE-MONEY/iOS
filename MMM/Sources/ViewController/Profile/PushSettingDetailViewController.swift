@@ -50,6 +50,11 @@ final class PushSettingDetailViewController: BaseViewControllerWithNav, View {
 // MARK: - bind
 extension PushSettingDetailViewController {
     private func bindAction(_reactor: PushSettingDetailReactor) {
+        
+        // 최초 진입 시 시간 타이틀을 userdefault값으로 설정
+        reactor.action.onNext(.viewAppear(Common.getCustomPushTime()))
+        
+        
         detailTimeSettingView.rx.tapGesture()
             .when(.recognized)
             .map { _ in .didTapDetailTimeSettingView }
@@ -71,6 +76,7 @@ extension PushSettingDetailViewController {
     
     private func bindState(_reactor: PushSettingDetailReactor) {
         reactor.state
+            .filter { !$0.isViewAppear }
             .map { $0.isPresentTime }
             .distinctUntilChanged()
             .filter { $0 }
@@ -78,6 +84,7 @@ extension PushSettingDetailViewController {
             .disposed(by: disposeBag)
         
 		reactor.state
+            .filter { !$0.isViewAppear }
 			.map { $0.date }
 			.distinctUntilChanged() // 중복값 무시
 			.bind(onNext: setTime) //
@@ -94,7 +101,6 @@ extension PushSettingDetailViewController {
     }
     
     private func setTime(_ date: Date) {
-        print("최초 실행")
         let dd = date.getFormattedTime()
         Common.setCustomPushTime(dd)
         detailTimeSettingView.configure(Common.getCustomPushTime())

@@ -47,7 +47,7 @@ extension Date {
         let dateformat = DateFormatter()
         dateformat.locale = Locale(identifier: "en_US")
         dateformat.timeZone = TimeZone(abbreviation: "KST")
-        dateformat.dateFormat = "a HH:mm"
+        dateformat.dateFormat = "HH:mm a"
         return dateformat.string(from: self)
     }
 	

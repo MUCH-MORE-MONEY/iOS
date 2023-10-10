@@ -12,14 +12,18 @@ import RxSwift
 final class PushSettingDetailReactor: Reactor {
     enum Action {
         case didTapDetailTimeSettingView
+        case viewAppear(String)
     }
     
     enum Mutation {
+        case setTime(String)
 		case setDate(Date)
         case setPresentTime(Bool)
     }
     
     struct State {
+        var isViewAppear = false
+        var time = ""
 		var date = Date()
         var isPresentTime = false
     }
@@ -36,6 +40,10 @@ final class PushSettingDetailReactor: Reactor {
 extension PushSettingDetailReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
+            
+        case .viewAppear(let time):
+            return Observable.just(.setTime(time))
+            
         case .didTapDetailTimeSettingView:
             return Observable.concat([
                 .just(.setPresentTime(true)),
@@ -62,9 +70,17 @@ extension PushSettingDetailReactor {
 	func reduce(state: State, mutation: Mutation) -> State {
 		var newState = state
 		
+        newState.isViewAppear = false
+        
 		switch mutation {
+            
+        case .setTime(let time):
+            newState.time = time
+            newState.isViewAppear = true
+            
 		case .setDate(let date):
 			newState.date = date
+            
 		case .setPresentTime(let isPresent):
 			newState.isPresentTime = isPresent
 		}

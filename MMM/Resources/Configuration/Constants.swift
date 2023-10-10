@@ -167,7 +167,7 @@ enum Common {
     }
     
     static func getCustomPushTime() -> String {
-        UserDefaults.standard.string(forKey: self.keys.customPushTime.rawValue) ?? "매일 09:00 PM"
+        UserDefaults.standard.string(forKey: self.keys.customPushTime.rawValue) ?? "09:00 PM"
     }
     
     static func getCustomPushText() -> String {

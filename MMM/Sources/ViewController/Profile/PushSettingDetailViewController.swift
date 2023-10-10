@@ -94,6 +94,9 @@ extension PushSettingDetailViewController {
     }
     
     private func setTime(_ date: Date) {
+        let dd = date.getFormattedTime()
+        
+        print(dd)
         detailTimeSettingView.configure(date)
     }
     

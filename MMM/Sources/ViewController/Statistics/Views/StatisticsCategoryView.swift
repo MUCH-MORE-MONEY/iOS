@@ -100,8 +100,9 @@ extension StatisticsCategoryView {
 	
 	func convertBar(_ data: [CategoryBar], _ type: String) {
 		guard !data.isEmpty else { return }
-		
-		let totalWidth = payBarView.frame.width // 전체 길이
+
+		var bounds = UIScreen.width
+		let totalWidth = bounds - UI.rankViewSide - UI.sideMargin - 20 * 2 // 전체 Bar 길이
 		let unit = totalWidth / 100.0
 		var sumWidth = 0.0
 		let cnt = data.count

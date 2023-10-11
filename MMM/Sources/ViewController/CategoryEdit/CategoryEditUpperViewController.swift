@@ -239,7 +239,6 @@ extension CategoryEditUpperViewController: UITableViewDropDelegate {
 		tableView.performBatchUpdates { [weak self] in
 			self?.move(sourceIndexPath: sourceIndexPath, destinationIndexPath: destinationIndexPath)
 		} completion: { finish in
-			print(sourceItem.dragItem, destinationIndexPath)
 			coordinator.drop(sourceItem.dragItem, toRowAt: destinationIndexPath)
 		}
 	}

@@ -33,7 +33,8 @@ final class StatisticsCategoryView: BaseView, View {
 	
 	// MARK: - Properties
 	private lazy var alphaList: [CGFloat] = [1, 0.8, 0.5, 0.3, 0.2]
-	
+	private lazy var barWidth: CGFloat = UIScreen.width - UI.rankViewSide - UI.sideMargin - 20 * 2 // 전체 Bar 길이
+
 	// MARK: - UI Components
 	private lazy var titleLabel = UILabel() 		// 카테고리
 	private lazy var moreLabel = UILabel() 			// 더보기
@@ -83,17 +84,18 @@ extension StatisticsCategoryView {
 extension StatisticsCategoryView {
 	func convertData(_ data: [CategoryBar], _ type: String) {
 		let isEmpty = data.isEmpty
-
+		let str = data.enumerated().map { "\($0.offset + 1)위 \($0.element.title)"}.joined(separator: "  " )
+		
 		if type == "01" {
 			payEmptyLabel.isHidden = !isEmpty
 			payRankLabel.isHidden = isEmpty
 			payBarView.isHidden = isEmpty
-			payRankLabel.text = data.enumerated().map { "\($0.offset + 1)위 \($0.element.title)"}.joined(separator: "  ")
+			payRankLabel.text = str
 		} else {
 			earnEmptyLabel.isHidden = !isEmpty
 			earnRankLabel.isHidden = isEmpty
 			earnBarView.isHidden = isEmpty
-			earnRankLabel.text = data.enumerated().map { "\($0.offset + 1)위 \($0.element.title)"}.joined(separator: "  ")
+			earnRankLabel.text = str
 		}
 		convertBar(data, type)
 	}
@@ -101,9 +103,7 @@ extension StatisticsCategoryView {
 	func convertBar(_ data: [CategoryBar], _ type: String) {
 		guard !data.isEmpty else { return }
 
-		var bounds = UIScreen.width
-		let totalWidth = bounds - UI.rankViewSide - UI.sideMargin - 20 * 2 // 전체 Bar 길이
-		let unit = totalWidth / 100.0
+		let unit = barWidth / 100.0
 		var sumWidth = 0.0
 		let cnt = data.count
 		let barView: UIView = type == "01" ? payBarView : earnBarView
@@ -115,7 +115,7 @@ extension StatisticsCategoryView {
 		// 2씩 빼는 이유는 spacing
 		for (index, info) in data.map({ floor($0.ratio * unit) - spacing }).enumerated() {
 			let isSmall = info < minimumWidth
-			let width = cnt == 1 ? totalWidth : isSmall ? minimumWidth : info
+			let width = cnt == 1 ? barWidth : isSmall ? minimumWidth : info
 			let view = UIView()
 			view.layer.cornerRadius = isSmall ? 1 : 2.61
 			view.backgroundColor = color.withAlphaComponent(alphaList[index])

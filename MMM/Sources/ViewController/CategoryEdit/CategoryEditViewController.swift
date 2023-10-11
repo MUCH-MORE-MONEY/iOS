@@ -97,7 +97,7 @@ final class CategoryEditViewController: BaseViewControllerWithNav, View {
 	private lazy var titleStackView = UIStackView()
 	private lazy var titleImageView = UIImageView()
 	private lazy var titleLabel = UILabel()
-	private lazy var checkButton = UIButton()
+	private lazy var saveButton = UIButton()
 	private lazy var collectionView: UICollectionView = .init(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
 	private var startIndexPath: IndexPath?
 	private var layout: UICollectionViewCompositionalLayout?
@@ -126,10 +126,11 @@ final class CategoryEditViewController: BaseViewControllerWithNav, View {
 extension CategoryEditViewController {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
 	private func bindAction(_ reactor: CategoryEditReactor) {
-		checkButton.rx.tap
-			.subscribe(onNext: {
-				self.navigationController?.popViewController(animated: true)
-			}).disposed(by: disposeBag)
+		saveButton.rx.tap
+			.withUnretained(self)
+			.map { .didTabSaveButton }
+			.bind(to: reactor.action)
+			.disposed(by: disposeBag)
 		
 //		dataSource.canMoveItemAtIndexPath = { dataSource, indexPath in
 //			return true
@@ -206,6 +207,15 @@ extension CategoryEditViewController {
 			.distinctUntilChanged() // 중복값 무시
 			.filter { $0 } // true 일때만
 			.bind(onNext: willPushUpperEditViewController)
+			.disposed(by: disposeBag)
+		
+		// 카테고리 저장 후
+		reactor.state
+			.compactMap { $0.dismiss }
+			.distinctUntilChanged() // 중복값 무시
+			.bind(onNext: { _ in
+				self.navigationController?.popViewController(animated: true)
+			})
 			.disposed(by: disposeBag)
 	}
 }
@@ -312,7 +322,7 @@ extension CategoryEditViewController {
 		
 		view.backgroundColor = R.Color.gray900
 		navigationItem.titleView = titleStackView
-		navigationItem.rightBarButtonItem = UIBarButtonItem(customView: checkButton)
+		navigationItem.rightBarButtonItem = UIBarButtonItem(customView: saveButton)
 
 		// Navigation Title View
 		titleStackView = titleStackView.then {
@@ -333,7 +343,7 @@ extension CategoryEditViewController {
 		}
 		
 		// Navigation Bar Right Button
-		checkButton = checkButton.then {
+		saveButton = saveButton.then {
 			$0.setTitle("확인", for: .normal)
 			$0.setTitleColor(R.Color.white.withAlphaComponent(0.7), for: .highlighted)
 			$0.titleLabel?.font = R.Font.body1

@@ -11,6 +11,7 @@ final class CategoryEditReactor: Reactor {
 	// 사용자의 액션
 	enum Action {
 		case loadData(String)
+		case didTabSaveButton
 		case didTapAddButton(CategoryHeader) // 카테고리 추가
 		case didTapUpperEditButton // 카테고리 유형 편집
 		case dragAndDrop(IndexPath, IndexPath)
@@ -26,6 +27,7 @@ final class CategoryEditReactor: Reactor {
 		case setNextEditScreen(CategoryEdit?)
 		case setNextAddScreen(CategoryHeader?)
 		case setNextUpperEditScreen(Bool)
+		case dismiss
 	}
 	
 	// 현재 상태를 기록
@@ -38,6 +40,7 @@ final class CategoryEditReactor: Reactor {
 		var nextEditScreen: CategoryEdit?
 		var nextAddScreen: CategoryHeader?
 		var nextUpperEditScreen: Bool = false
+		var dismiss = false
 		var error = false
 	}
 	
@@ -62,6 +65,10 @@ extension CategoryEditReactor {
 			return .concat([
 				loadHeaderData(CategoryEditReqDto(economicActivityDvcd: type)),
 				loadCategoryData(CategoryEditReqDto(economicActivityDvcd: type))
+			])
+		case .didTabSaveButton:
+			return .concat([
+				compareData()
 			])
 		case let .didTapAddButton(categoryHeader):
 			return .concat([
@@ -122,7 +129,7 @@ extension CategoryEditReactor {
 				newState.addId -= 1 // 1씩 감소 시키면서 고유한 값 유지
 			}
 		case let .deleteItem(categoryEdit):		
-			if let section = newState.sections.enumerated().filter({ $0.element.model.header.id == categoryEdit.upperId }).first {
+			if let section = newState.sections.enumerated().filter({ !$0.element.items.filter({ $0.item.id == categoryEdit.id }).isEmpty}).first {
 				let sectionId = section.offset
 				
 				if let removeIndex = newState.sections[sectionId].items.firstIndex(where: {$0.item.id == categoryEdit.id}) {
@@ -139,6 +146,8 @@ extension CategoryEditReactor {
 			newState.nextAddScreen = categoryHeader
 		case let .setNextUpperEditScreen(isNext):
 			newState.nextUpperEditScreen = isNext
+		case .dismiss:
+			newState.dismiss = true
 		}
 		
 		return newState
@@ -165,7 +174,7 @@ extension CategoryEditReactor {
 	// Section에 따른 Data 주입
 	private func makeSections(respose: CategoryEditResDto, type: String) -> [CategoryEditSectionModel] {
 		let data = respose.data.selectListOutputDto
-
+		
 		var sections: [CategoryEditSectionModel] = []
 
 		// Global Header
@@ -189,4 +198,29 @@ extension CategoryEditReactor {
 		
 		return sections
 	}
+}
+// MARK: - 저장
+extension CategoryEditReactor {
+	// 변경된 데이터 확인하기
+	private func compareData() -> Observable<Mutation> {
+		print(#function, #line)
+		let data = currentState.sections
+		
+		for i in stride(from: 1, to: data.count - 1, by: 1) {
+			let section = data[i]
+			print(section.model.header)
+			
+			for j in stride(from: 0, to: section.items.count, by: 1) {
+				let item = section.items[j].item
+				print(item)
+			}
+			print()
+		}
+		
+		
+		
+		return .empty()
+	}
+	
+	
 }

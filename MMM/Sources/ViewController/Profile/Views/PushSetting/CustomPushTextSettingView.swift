@@ -33,13 +33,11 @@ extension CustomPushTextSettingView {
             backgroundColor = R.Color.gray900
             DispatchQueue.main.async {
                 self.imageView.isHidden = false
-                self.mainLabel.text = "오늘의 경제활동을 작성해보세요"
             }
 
         } else {
             DispatchQueue.main.async {
                 self.imageView.isHidden = true
-                self.mainLabel.text = "오늘의 가계부를 작성해보세요"
             }
             backgroundColor = R.Color.gray300
         }
@@ -65,7 +63,7 @@ extension CustomPushTextSettingView {
         addSubviews(mainLabel, imageView)
         
         mainLabel = mainLabel.then {
-            $0.text = "오늘의 경제활동을 작성해보세요"
+            $0.text = Common.getCustomPushText()
             $0.font = R.Font.body1
             $0.textColor = R.Color.white
         }

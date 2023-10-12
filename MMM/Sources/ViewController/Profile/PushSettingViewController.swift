@@ -48,7 +48,7 @@ final class PushSettingViewController: BaseViewControllerWithNav, View {
         
         let list = Common.getCustomPushWeekList()
         
-        if list.filter { $0 }.count == 7 {
+        if list.filter({ $0 }).count == 7 {
             customPushTimeSettingView.mainLabel.text = "매일 \(Common.getCustomPushTime())"
         } else {
             var title = ""
@@ -101,13 +101,6 @@ extension PushSettingViewController {
         // 뷰 진입 시 최초 1회 실행 + 최초 진입시 앱 권한을 가져오기 위한 액션
         reactor.action.onNext(.viewAppear)
         
-        // FIXME: - 네트워크 테스트 코드
-        //        textSettingView.rx.tapGesture()
-        //            .when(.recognized)
-        //            .map { _ in .didTapTextSettingButton(PushReqDto(content: "test", pushAgreeDvcd: "01")) }
-        //            .bind(to: reactor.action)
-        //            .disposed(by: disposeBag)
-        
         // 소식 일림 switch
         newsPushSwitch.rx.value
             .map { .newsPushSwitchToggle($0) }
@@ -131,10 +124,6 @@ extension PushSettingViewController {
         customPushTextSettingView.rx.tapGesture()
             .when(.recognized)
             .map { _ in .didTapCustomPushTextSettingView }
-//            .subscribe(onNext: { [weak self] _ in
-//                guard let self = self else { return }
-//                self.presentBottomSheet()
-//            })
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
@@ -149,16 +138,6 @@ extension PushSettingViewController {
             .bind(onNext: showAlertMessage)
             .disposed(by: disposeBag)
                 
-        // FIXME: - 네트워크 테스트 코드
-        //        reactor.state
-        //            .compactMap { $0.pushMessage }
-        ////            .filter { $0.pushMessage }
-        //            .bind { [weak self] data in
-        //                guard let self = self else { return }
-        //                print("text Tapped \(data)")
-        //            }
-        //            .disposed(by: disposeBag)
-        
         // 푸쉬 알림
         reactor.state
             .map { $0.isNewsPushSwitchOn }
@@ -259,7 +238,6 @@ extension PushSettingViewController {
     override func setAttribute() {
         title = "푸시 알림 설정"
         view.backgroundColor = R.Color.gray100
-//        userNotificationCenter.delegate = self
         
         newsPushStackView.addArrangedSubviews(newsPushMainLabel, newsPushSwitch)
         customPushStackView.addArrangedSubviews(customPushMainLabel, customPushSwitch)
@@ -417,14 +395,3 @@ extension PushSettingViewController: CustomAlertDelegate {
     
     func didAlertCacelButton() { }
 }
-
-//// MARK: - Local Noti
-//extension PushSettingViewController: UNUserNotificationCenterDelegate {
-//    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-//        completionHandler()
-//    }
-//    
-//    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-//        completionHandler([.alert, .badge, .sound])
-//    }
-//}

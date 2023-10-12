@@ -101,7 +101,6 @@ extension PushSettingReactor {
                         
                         let time = Common.getCustomPushTime()
                         let weekList = Common.getCustomPushWeekList()
-                        print("reactor list : \(weekList)")
                         for (day, isOn) in weekList.enumerated() {
                             if isOn {
                                 // 특정 요일 선택 (1은 일요일, 2는 월요일, ..., 7은 토요일)
@@ -198,8 +197,8 @@ extension PushSettingReactor {
             .components(separatedBy: " ")[0]
         
         let content = UNMutableNotificationContent()
-        content.title = "매주 알림"
-        content.body = "오늘은 알림 날입니다!"
+        content.title = "MMM"
+        content.body = Common.getCustomPushText()
         
         // 알림 발생 시간 설정
         var dateComponents = DateComponents()

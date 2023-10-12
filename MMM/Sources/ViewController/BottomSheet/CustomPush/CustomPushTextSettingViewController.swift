@@ -80,7 +80,7 @@ final class CustomPushTextSettingViewController: BottomSheetViewController2, Vie
 extension CustomPushTextSettingViewController {
     private func bindAction(_ reactor: CustomPushTextSettingReactor) {
         checkButton.rx.tap
-            .map { .setText(self.textFieldText) }
+            .map { .didTapCheckButton(self.textFieldText) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         

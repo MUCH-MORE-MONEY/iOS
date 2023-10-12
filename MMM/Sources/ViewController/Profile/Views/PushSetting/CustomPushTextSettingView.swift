@@ -34,7 +34,6 @@ extension CustomPushTextSettingView {
             DispatchQueue.main.async {
                 self.imageView.isHidden = false
             }
-
         } else {
             DispatchQueue.main.async {
                 self.imageView.isHidden = true

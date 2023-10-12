@@ -90,7 +90,13 @@ extension CustomPushTextSettingViewController {
             .subscribe { [weak self] text in
                 guard let self = self else { return }
                 self.textFieldText = text
-                print(text)
+                if text == "" {
+                    self.checkButton.isEnabled = false
+                    self.checkButton.setTitleColor(isDark ? R.Color.gray200 : R.Color.gray500, for: .normal)
+                } else {
+                    self.checkButton.isEnabled = true
+                    self.checkButton.setTitleColor(isDark ? R.Color.gray200 : R.Color.black, for: .normal)
+                }
             }
             .disposed(by: disposeBag)
         
@@ -183,7 +189,7 @@ extension CustomPushTextSettingViewController {
         
         checkButton = checkButton.then {
             $0.setTitle("확인", for: .normal)
-            $0.setTitleColor(isDark ? R.Color.gray200 : R.Color.black, for: .normal)
+            $0.setTitleColor(isDark ? R.Color.gray200 : R.Color.gray500, for: .normal)
             $0.setTitleColor(isDark ? R.Color.gray200.withAlphaComponent(0.7) : R.Color.black.withAlphaComponent(0.7), for: .highlighted)
             $0.contentHorizontalAlignment = .right
             $0.titleLabel?.font = R.Font.title3

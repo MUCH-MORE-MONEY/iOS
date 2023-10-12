@@ -191,11 +191,6 @@ private extension PushSettingViewController {
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    private func presentSheetViewController(_ isPresent: Bool) {
-        //                guard let self = self else { return }
-        //                self.presentBottomSheet()
-    }
-    
     private func showAlertMessage(_ isPushOn: Bool) {
         let title = "앱 알림이 꺼져있어요"
         let message = "알림을 받기 위해 앱 알림을 켜주세요"

@@ -97,7 +97,7 @@ extension PushSettingDetailViewController {
 // MARK: - Actions
 extension PushSettingDetailViewController {
     private func presentBottomSheet(_ isPresent: Bool) {
-		let vc = DateBottomSheetViewController(title: "월 시간 설정", type: .time, height: 360, mode: .date, sheetMode: .drag, isDark: false)
+		let vc = DateBottomSheetViewController(title: "시간 설정", type: .time, height: 360, mode: .date, sheetMode: .drag, isDark: false)
 		vc.reactor = DateBottomSheetReactor(provider: reactor.provider)
         self.present(vc, animated: true)
     }

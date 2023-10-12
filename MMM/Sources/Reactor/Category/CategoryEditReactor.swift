@@ -217,10 +217,6 @@ extension CategoryEditReactor {
 			print()
 		}
 		
-		
-		
 		return .empty()
 	}
-	
-	
 }

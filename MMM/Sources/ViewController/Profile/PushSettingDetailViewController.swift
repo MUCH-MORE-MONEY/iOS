@@ -39,6 +39,8 @@ final class PushSettingDetailViewController: BaseViewControllerWithNav, View {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: false)
+        // 뷰가 사라질 때 해당 저장정보를 기반으로 바로 noti로 쏴줌
+        reactor.action.onNext(.viewWillDisappear)
     }
     
     func bind(reactor: PushSettingDetailReactor) {

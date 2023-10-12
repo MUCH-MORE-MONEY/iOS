@@ -113,7 +113,6 @@ extension StatisticsCategoryView {
 		let color: UIColor = type == "01" ? R.Color.orange500 : R.Color.blue500
 		let minimumWidth = 3.0
 		
-		// 2씩 빼는 이유는 spacing
 		for (index, info) in data.map({ floor($0.ratio * unit) }).enumerated().reversed() {
 			let isSmall = info < minimumWidth
 			let width = cnt == 1 ? barWidth : isSmall ? minimumWidth : info

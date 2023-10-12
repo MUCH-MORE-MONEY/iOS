@@ -28,9 +28,10 @@ struct CategoryBar: Codable, Equatable {
 
 	static func getDummyList() -> [Self] {
 		return [
-			CategoryBar(title: "알찬 소오비", price: "가격", ratio: 70),
-			CategoryBar(title: "최고의 구매애애", price: "가격", ratio: 20),
-			CategoryBar(title: "높은 안모오오옥", price: "가격", ratio: 10)
+			CategoryBar(title: "최고의 구매애애", price: "가격", ratio: 48.5),
+			CategoryBar(title: "최고의 구매애애", price: "가격", ratio: 48.5),
+			CategoryBar(title: "높은 안모오오옥", price: "가격", ratio: 3.0),
+			CategoryBar(title: "높은 안모오오옥", price: "가격", ratio: 2.0)
 		]
 	}
 }

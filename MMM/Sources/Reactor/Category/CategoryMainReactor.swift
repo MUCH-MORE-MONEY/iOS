@@ -24,8 +24,8 @@ final class CategoryMainReactor: Reactor {
 	// 현재 상태를 기록
 	struct State {
 		var date: Date
-		var paySections: [CategoryMainSectionModel] = [CategoryMainSectionModel(model: .init(original: .header(CategoryMainItem.header(.init(categoryLowwer: CategoryLowwer.getHeader()))), items: []), items: [])]
-		var earnSections: [CategoryMainSectionModel] = [CategoryMainSectionModel(model: .init(original: .header(CategoryMainItem.header(.init(categoryLowwer: CategoryLowwer.getHeader()))), items: []), items: [])]
+		var paySections: [CategoryMainSectionModel] = [CategoryMainSectionModel(model: .init(original: .header(.header), items: []), items: [])]
+		var earnSections: [CategoryMainSectionModel] = [CategoryMainSectionModel(model: .init(original: .header(.header), items: []), items: [])]
 		var indexPath: IndexPath?
 		var nextScreen: CategoryLowwer?
 		var error = false
@@ -102,7 +102,7 @@ extension CategoryMainReactor {
 		var sections: [CategoryMainSectionModel] = []
 
 		// Global Header
-		let headerItem: CategoryMainItem = .header(.init(categoryLowwer: CategoryLowwer.getHeader()))
+		let headerItem: CategoryMainItem = .header
 		let headerModel: CategoryMainSectionModel = .init(model: .header(headerItem), items: [headerItem])
 		sections.append(headerModel)
 

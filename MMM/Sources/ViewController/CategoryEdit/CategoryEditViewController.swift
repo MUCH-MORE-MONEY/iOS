@@ -48,6 +48,10 @@ final class CategoryEditViewController: BaseViewControllerWithNav, View {
 			cell.reactor = cellReactor // reactor 주입
 			
 			return cell
+		case .empty:
+			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CategoryEditEmptyCollectionViewCell.self), for: indexPath) as? CategoryEditEmptyCollectionViewCell else { return .init() }
+			
+			return cell
 		case let .header(cellReactor), let .footer(cellReactor):
 			return .init()
 		}
@@ -241,13 +245,12 @@ extension CategoryEditViewController {
 		
 		items.forEach({ item in
 			switch item {
-			case .base:
+			case .base, .empty:
 				layoutItems.append(NSCollectionLayoutItem.init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(UI.cellHeightMargin))))
 			default:
 				break
 			}
 		})
-		
 		let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100)), subitems: isEmpty ? .init(repeating: .init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(UI.cellHeightMargin))), count: 1) : layoutItems)
 		group.contentInsets = .init(top: 0, leading: 136, bottom: 0, trailing: 0)
 		
@@ -354,6 +357,7 @@ extension CategoryEditViewController {
 			$0.dropDelegate = self
 			$0.dataSource = dataSource
 			$0.register(CategoryEditCollectionViewCell.self)
+			$0.register(CategoryEditEmptyCollectionViewCell.self)
 			$0.register(CategoryEditSectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
 			$0.register(CategoryEditSectionFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter)
 			// Global Header
@@ -362,6 +366,8 @@ extension CategoryEditViewController {
 			$0.register(CategoryEditSectionGlobalFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter)
 			$0.showsVerticalScrollIndicator = false
 			$0.backgroundColor = R.Color.gray900
+			$0.dragInteractionEnabled = true
+			$0.reorderingCadence = .fast // drag 정렬 속도
 		}
 	}
 	
@@ -385,6 +391,41 @@ extension CategoryEditViewController: UICollectionViewDragDelegate {
 	func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
 		return [UIDragItem(itemProvider: NSItemProvider())]
 	}
+	
+	func collectionView(_ collectionView: UICollectionView, itemsForAddingTo session: UIDragSession, at indexPath: IndexPath, point: CGPoint) -> [UIDragItem] {
+		return [UIDragItem(itemProvider: NSItemProvider())]
+	}
+	
+//	func collectionView(_ collectionView: UICollectionView, dragSessionWillBegin session: UIDragSession) {
+//		guard let reactor = reactor else { return }
+////		var itemsToInsert = [IndexPath]()
+//		let data = reactor.currentState.sections
+//		
+//		(0..<data.count).forEach { index in
+//			let indexPath: IndexPath = .init(item: data[index].items.count, section: index)
+//			//				itemsToInsert.append(indexPath)
+//			reactor.action.onNext(.dragBegin(indexPath))
+//		}
+//	}
+//	
+//	func collectionView(_ collectionView: UICollectionView, dragSessionDidEnd session: UIDragSession) {
+//		guard let reactor = reactor else { return }
+//		var removeItems = [IndexPath]()
+//		let data = reactor.currentState.sections
+//
+//		for section in 0..<data.count {
+//			for item in 0..<data[section].items.count {
+//				switch data[section].items[item] {
+//				case .empty:
+//					removeItems.append(IndexPath(item: item, section: section))
+//				default:
+//					break
+//				}
+//			}
+//		}
+//		
+//		removeItems.forEach { reactor.action.onNext(.dragEnd($0)) }
+//	}
 }
 // MARK: - UICollectionView Drop Delegate
 extension CategoryEditViewController: UICollectionViewDropDelegate {
@@ -408,9 +449,11 @@ extension CategoryEditViewController: UICollectionViewDropDelegate {
 		if let indexPath = coordinator.destinationIndexPath {
 			destinationIndexPath = indexPath
 		} else {
-			let row = collectionView.numberOfItems(inSection: 0)
-			destinationIndexPath = IndexPath(item: row - 1, section: 0)
+			let section = collectionView.numberOfSections - 1
+			let row = collectionView.numberOfItems(inSection: section)
+			destinationIndexPath = IndexPath(item: row, section: section)
 		}
+		
 		guard coordinator.proposal.operation == .move else { return }
 		move(coordinator: coordinator, destinationIndexPath: destinationIndexPath, collectionView: collectionView)
 	}
@@ -420,7 +463,7 @@ extension CategoryEditViewController: UICollectionViewDropDelegate {
 			let sourceItem = coordinator.items.first,
 			let sourceIndexPath = sourceItem.sourceIndexPath
 		else { return }
-
+		
 		collectionView.performBatchUpdates { [weak self] in
 			self?.move(sourceIndexPath: sourceIndexPath, destinationIndexPath: destinationIndexPath, collectionView: collectionView)
 		} completion: { finish in

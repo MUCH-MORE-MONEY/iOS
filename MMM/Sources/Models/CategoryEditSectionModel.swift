@@ -21,27 +21,27 @@ enum CategoryEditItem: IdentifiableType, Equatable {
 	case header(CategoryEditCollectionViewCellReactor)
 	case base(CategoryEditCollectionViewCellReactor)
 	case footer(CategoryEditCollectionViewCellReactor)
+	case empty
 
 	// IdentifiableType에 의한 identity 설정
 	var identity: some Hashable {
 		switch self {
-		case let .header(reactor):
-			return reactor.currentState.categoryEdit.orderNum
 		case let .base(reactor):
-			return reactor.currentState.categoryEdit.orderNum
+			return reactor.currentState.categoryEdit.id
 		case let .footer(reactor):
-			return reactor.currentState.categoryEdit.orderNum
+			return reactor.currentState.categoryEdit.id
+		case .header, .empty:
+			return UUID().uuidString
 		}
 	}
 	
-	var item: CategoryEdit {
+	// Cell content text
+	var title: String {
 		switch self {
-		case .header:
-			return CategoryEdit.getDummy()
-		case var .base(reactor):
-			return reactor.currentState.categoryEdit
-		case .footer:
-			return CategoryEdit.getDummy()
+		case let .base(reactor):
+			return reactor.currentState.categoryEdit.title
+		case .header, .footer, .empty:
+			return ""
 		}
 	}
 	

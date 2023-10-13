@@ -40,7 +40,7 @@ final class CategoryContentViewController: BaseViewController, View {
 		guard let reactor = self?.reactor else { return .init() }
 		
 		switch item {
-		case let .header(cellReactor):
+		case .header:
 			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCollectionViewCell.className, for: indexPath) as? CategoryCollectionViewCell else { return .init() }
 
 			return cell

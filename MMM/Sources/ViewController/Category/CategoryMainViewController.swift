@@ -1,5 +1,5 @@
 //
-//  CategoryViewController.swift
+//  CategoryMainViewController.swift
 //  MMM
 //
 //  Created by geonhyeong on 2023/08/23.
@@ -12,8 +12,8 @@ import RxCocoa
 import ReactorKit
 
 // 상속하지 않으려면 final 꼭 붙이기
-final class CategoryViewController: BaseViewControllerWithNav, View {
-	typealias Reactor = CategoryReactor
+final class CategoryMainViewController: BaseViewControllerWithNav, View {
+	typealias Reactor = CategoryMainReactor
 	
 	// MARK: - Constants
 	private enum UI {
@@ -43,15 +43,15 @@ final class CategoryViewController: BaseViewControllerWithNav, View {
 		super.viewDidLoad()
 	}
 	
-	func bind(reactor: CategoryReactor) {
+	func bind(reactor: CategoryMainReactor) {
 		bindState(reactor)
 		bindAction(reactor)
 	}
 }
 //MARK: - Bind
-extension CategoryViewController {
+extension CategoryMainViewController {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
-	private func bindAction(_ reactor: CategoryReactor) {
+	private func bindAction(_ reactor: CategoryMainReactor) {
 		editButton.rx.tap
 			.subscribe(onNext: {
 				self.willPushEditViewController()
@@ -66,7 +66,7 @@ extension CategoryViewController {
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
-	private func bindState(_ reactor: CategoryReactor) {
+	private func bindState(_ reactor: CategoryMainReactor) {
 		reactor.state
 			.compactMap { $0.nextScreen }
 			.subscribe(onNext: { [weak self] categoryLowwer in
@@ -76,7 +76,7 @@ extension CategoryViewController {
 	}
 }
 //MARK: - Action
-extension CategoryViewController {
+extension CategoryMainViewController {
 	private func willPushViewController(categoryLowwer: CategoryLowwer) {
 		guard let reactor = self.reactor else { return }
 
@@ -99,7 +99,7 @@ extension CategoryViewController {
 	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
-extension CategoryViewController {
+extension CategoryMainViewController {
 	// 초기 셋업할 코드들
 	override func setAttribute() {
 		super.setAttribute()
@@ -162,7 +162,7 @@ extension CategoryViewController {
 	}
 }
 //MARK: - UIPageViewController DataSource, Delegate
-extension CategoryViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+extension CategoryMainViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
 	func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
 		guard let index = self.dataViewControllers.firstIndex(of: viewController), index - 1 >= 0 else { return nil }
 		return self.dataViewControllers[index - 1]

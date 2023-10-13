@@ -11,8 +11,12 @@ final class CategoryEditReactor: Reactor {
 	// 사용자의 액션
 	enum Action {
 		case loadData(String)
-		case didTapAddButton(CategoryHeader)
+		case didTabSaveButton
+		case didTapAddButton(CategoryHeader) // 카테고리 추가
+		case didTapUpperEditButton // 카테고리 유형 편집
 		case dragAndDrop(IndexPath, IndexPath)
+		case dragBegin(IndexPath)
+		case dragEnd(IndexPath)
 	}
 	
 	// 처리 단위
@@ -22,8 +26,12 @@ final class CategoryEditReactor: Reactor {
 		case addItem(CategoryEdit)
 		case deleteItem(CategoryEdit)
 		case dragAndDrop(IndexPath, IndexPath)
+		case addEmpty(IndexPath)
+		case removeEmpty(IndexPath)
 		case setNextEditScreen(CategoryEdit?)
-		case setNextAddScreen(CategoryHeader)
+		case setNextAddScreen(CategoryHeader?)
+		case setNextUpperEditScreen(Bool)
+		case dismiss
 	}
 	
 	// 현재 상태를 기록
@@ -35,6 +43,8 @@ final class CategoryEditReactor: Reactor {
 		var sections: [CategoryEditSectionModel] = []
 		var nextEditScreen: CategoryEdit?
 		var nextAddScreen: CategoryHeader?
+		var nextUpperEditScreen: Bool = false
+		var dismiss = false
 		var error = false
 	}
 	
@@ -60,10 +70,26 @@ extension CategoryEditReactor {
 				loadHeaderData(CategoryEditReqDto(economicActivityDvcd: type)),
 				loadCategoryData(CategoryEditReqDto(economicActivityDvcd: type))
 			])
+		case .didTabSaveButton:
+			return .concat([
+				compareData()
+			])
 		case let .didTapAddButton(categoryHeader):
-			return .just(.setNextAddScreen(categoryHeader))
+			return .concat([
+				.just(.setNextAddScreen(categoryHeader)),
+				.just(.setNextAddScreen(nil))
+			])
+		case .didTapUpperEditButton:
+			return .concat([
+				.just(.setNextUpperEditScreen(true)),
+				.just(.setNextUpperEditScreen(false))
+			])
 		case let .dragAndDrop(startIndex, destinationIndexPath):
 			return .just(.dragAndDrop(startIndex, destinationIndexPath))
+		case let .dragBegin(indexPath):
+			return .just(.addEmpty(indexPath))
+		case let .dragEnd(indexPath):
+			return .just(.removeEmpty(indexPath))
 		}
 	}
 	
@@ -76,12 +102,14 @@ extension CategoryEditReactor {
 					.just(.setNextEditScreen(categoryEdit)),
 					.just(.setNextEditScreen(nil))
 				])
-			case .updateTitleEdit:
-				return .empty()
 			case let .addCategory(categoryEdit):
 				return .just(.addItem(categoryEdit))
 			case let .deleteTitleEdit(categoryEdit):
 				return .just(.deleteItem(categoryEdit))
+			case let .saveSections(sections): // 카테고리 유형 편집에 대한 저장
+				return .just(.setSections(sections))
+			default:
+				return .empty()
 			}
 		}
 		
@@ -94,6 +122,7 @@ extension CategoryEditReactor {
 		
 		switch mutation {
 		case let .setHeaders(headers):
+			newState.addId = -headers.count
 			newState.headers = headers
 		case let .setSections(sections):
 			newState.sections = sections
@@ -107,32 +136,49 @@ extension CategoryEditReactor {
 				newState.sections[sectionId].items.append(categoryEditItem) // 해당 Sections을 찾아서 append
 				newState.addId -= 1 // 1씩 감소 시키면서 고유한 값 유지
 			}
-		case let .deleteItem(categoryEdit):
-			guard let sectionId = Int(categoryEdit.upperId) else {
-				return newState
-			}
-			
-			if let section = newState.sections.enumerated().filter({ $0.element.model.header.id == categoryEdit.upperId }).first {
+		case let .deleteItem(categoryEdit):		
+			if let section = newState.sections.enumerated().filter({ !$0.element.items.filter({ $0.identity as! String == categoryEdit.id }).isEmpty}).first {
 				let sectionId = section.offset
 				
-				if let removeIndex = newState.sections[sectionId].items.firstIndex(where: {$0.item.id == categoryEdit.id}) {
+				if let removeIndex = newState.sections[sectionId].items.firstIndex(where: {$0.identity as! String == categoryEdit.id}) {
 					newState.sections[sectionId].items.remove(at: removeIndex)
 				}
 			}
 		case let .dragAndDrop(sourceIndexPath, destinationIndexPath):
 			let sourceItem = newState.sections[sourceIndexPath.section].items[sourceIndexPath.row]
-			
 			newState.sections[sourceIndexPath.section].items.remove(at: sourceIndexPath.row)
-			newState.sections[sourceIndexPath.section].items.insert(sourceItem, at: destinationIndexPath.row)
-//			let temp = newState.sections[startIndex.section].items[startIndex.row].item.orderNum
-//			newState.sections[startIndex.section].items[startIndex.row].item.orderNum = newState.sections[startIndex.section].items[destinationIndexPath.row].item.orderNum
-//			for item in newState.sections[destinationIndexPath.section].items {
-//				print(item.item)
+			newState.sections[destinationIndexPath.section].items.insert(sourceItem, at: destinationIndexPath.row)
+			
+//			if newState.sections[sourceIndexPath.section].items.isEmpty {
+//				newState.sections[sourceIndexPath.section].items.append(.empty)
 //			}
+			
+			print(sourceIndexPath, destinationIndexPath)
+			
+			let data = newState.sections
+
+			for i in stride(from: 1, to: data.count - 1, by: 1) {
+				let section = data[i]
+				print(section.model.header)
+				
+				for j in stride(from: 0, to: section.items.count, by: 1) {
+					let title = section.items[j].title
+					print(title)
+				}
+				print()
+			}
+		case let .addEmpty(indexPath):
+			newState.sections[indexPath.section].items.append(.empty)
+		case let .removeEmpty(indexPath):
+			newState.sections[indexPath.section].items.remove(at: indexPath.row)
 		case let .setNextEditScreen(categoryEdit):
 			newState.nextEditScreen = categoryEdit
 		case let .setNextAddScreen(categoryHeader):
 			newState.nextAddScreen = categoryHeader
+		case let .setNextUpperEditScreen(isNext):
+			newState.nextUpperEditScreen = isNext
+		case .dismiss:
+			newState.dismiss = true
 		}
 		
 		return newState
@@ -159,9 +205,14 @@ extension CategoryEditReactor {
 	// Section에 따른 Data 주입
 	private func makeSections(respose: CategoryEditResDto, type: String) -> [CategoryEditSectionModel] {
 		let data = respose.data.selectListOutputDto
-
+		
 		var sections: [CategoryEditSectionModel] = []
 
+		// Global Header
+		let headerItem: CategoryEditItem = .header(.init(provider: provider, categoryEdit: CategoryEdit.getDummy()))
+		let headerModel: CategoryEditSectionModel = .init(model: .header(headerItem), items: [headerItem])
+		sections.append(headerModel)
+		
 		for header in currentState.headers {
 			let categoryitems: [CategoryEditItem] = data.filter { $0.upperId == header.id }.map { categoryEdit -> CategoryEditItem in
 				return .base(.init(provider: provider, categoryEdit: categoryEdit))
@@ -170,7 +221,33 @@ extension CategoryEditReactor {
 			let model: CategoryEditSectionModel = .init(model: .base(header, categoryitems), items: categoryitems)
 			sections.append(model)
 		}
-
+		
+		// Global Footer
+		let footerItem: CategoryEditItem = .footer(.init(provider: provider, categoryEdit: CategoryEdit.getDummy()))
+		let footerModel: CategoryEditSectionModel = .init(model: .footer(footerItem), items: [footerItem])
+		sections.append(footerModel)
+		
 		return sections
+	}
+}
+// MARK: - 저장
+extension CategoryEditReactor {
+	// 변경된 데이터 확인하기
+	private func compareData() -> Observable<Mutation> {
+		print(#function, #line)
+		let data = currentState.sections
+
+		for i in stride(from: 1, to: data.count - 1, by: 1) {
+			let section = data[i]
+			print(section.model.header)
+			
+			for j in stride(from: 0, to: section.items.count, by: 1) {
+				let title = section.items[j].title
+				print(title)
+			}
+			print()
+		}
+		
+		return .empty()
 	}
 }

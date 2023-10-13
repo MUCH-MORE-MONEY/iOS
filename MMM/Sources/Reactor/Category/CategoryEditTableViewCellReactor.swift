@@ -1,13 +1,13 @@
 //
-//  CategoryEditCollectionViewCellReactor.swift
+//  CategoryEditTableViewCellReactor.swift
 //  MMM
 //
-//  Created by geonhyeong on 2023/09/24.
+//  Created by geonhyeong on 10/7/23.
 //
 
 import ReactorKit
 
-final class CategoryEditCollectionViewCellReactor: Reactor {
+final class CategoryEditTableViewCellReactor: Reactor {
 	// 사용자의 액션
 	enum Action {
 		case didTapEditButton
@@ -16,12 +16,12 @@ final class CategoryEditCollectionViewCellReactor: Reactor {
 	// 처리 단위
 	enum Mutation {
 		case presentEdit
-		case setTitle(CategoryEdit)
+		case setTitle(CategoryHeader)
 	}
 	
 	// 현재 상태를 기록
 	struct State {
-		var categoryEdit: CategoryEdit
+		var categoryHeader: CategoryHeader
 	}
 	
 	// MARK: Properties
@@ -29,18 +29,18 @@ final class CategoryEditCollectionViewCellReactor: Reactor {
 	let provider: ServiceProviderProtocol
 
 	// 초기 State 설정
-	init(provider: ServiceProviderProtocol, categoryEdit: CategoryEdit) {
-		self.initialState = .init(categoryEdit: categoryEdit)
+	init(provider: ServiceProviderProtocol, categoryHeader: CategoryHeader) {
+		self.initialState = .init(categoryHeader: categoryHeader)
 		self.provider = provider
 	}
 }
 //MARK: - Mutate, Reduce
-extension CategoryEditCollectionViewCellReactor {
+extension CategoryEditTableViewCellReactor {
 	/// Action이 들어온 경우, 어떤 처리를 할건지 분기
 	func mutate(action: Action) -> Observable<Mutation> {
 		switch action {
 		case .didTapEditButton:
-			return provider.categoryProvider.presentTitleEdit(to: currentState.categoryEdit).map {
+			return provider.categoryProvider.presentUpperEdit(to: currentState.categoryHeader).map {
 				_ in .presentEdit
 			}
 		}
@@ -50,13 +50,9 @@ extension CategoryEditCollectionViewCellReactor {
 	func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
 		let event = provider.categoryProvider.event.flatMap { event -> Observable<Mutation> in
 			switch event {
-			case .presentTitleEdit:
-				return .empty()
-			case let .updateTitleEdit(categoryEdit):
-				return .just(.setTitle(categoryEdit))
-			case .deleteTitleEdit:
-				return .empty()
-			case .addCategory:
+			case let .updateUpperEdit(categoryHeader):
+				return .just(.setTitle(categoryHeader))
+			default:
 				return .empty()
 			}
 		}
@@ -69,11 +65,11 @@ extension CategoryEditCollectionViewCellReactor {
 		var newState = state
 		
 		switch mutation {
-		case let .setTitle(categoryEdit):
-			guard newState.categoryEdit.id == categoryEdit.id else {
+		case let .setTitle(categoryHeader):
+			guard newState.categoryHeader.id == categoryHeader.id else {
 				break
 			}
-			newState.categoryEdit = categoryEdit
+			newState.categoryHeader = categoryHeader
 		case .presentEdit:
 			break
 		}

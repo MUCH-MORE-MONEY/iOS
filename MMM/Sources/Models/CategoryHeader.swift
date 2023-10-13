@@ -12,7 +12,7 @@ struct CategoryHeaderList: Codable {
 }
 
 struct CategoryHeader: Codable, Equatable {
-	let id, title: String
+	var id, title: String
 	let orderNum: Int
 
 	// 파라미터 이름 변경
@@ -20,6 +20,14 @@ struct CategoryHeader: Codable, Equatable {
 		case id = "upperEconomicActivityCategoryCd"
 		case title = "upperEconomicActivityCategoryNm"
 		case orderNum = "upperOrderNum"
+	}
+	
+	static func getHeader() -> Self {
+		return CategoryHeader(id: "header", title: "", orderNum: 0)
+	}
+	
+	static func getFooter() -> Self {
+		return CategoryHeader(id: "footer", title: "", orderNum: 0)
 	}
 	
 	static func getDummyList() -> [Self] {

@@ -1,5 +1,5 @@
 //
-//  CategoryReactor.swift
+//  CategoryMainReactor.swift
 //  MMM
 //
 //  Created by geonhyeong on 2023/08/23.
@@ -7,25 +7,25 @@
 
 import ReactorKit
 
-final class CategoryReactor: Reactor {
+final class CategoryMainReactor: Reactor {
 	// 사용자의 액션
 	enum Action {
 		case loadData
-		case selectCell(IndexPath, CategoryItem)
+		case selectCell(IndexPath, CategoryMainItem)
 	}
 	
 	// 처리 단위
 	enum Mutation {
-		case setPaySections([CategorySectionModel])
-		case setEarnSections([CategorySectionModel])
+		case setPaySections([CategoryMainSectionModel])
+		case setEarnSections([CategoryMainSectionModel])
 		case setNextScreen(IndexPath, CategoryLowwer)
 	}
 	
 	// 현재 상태를 기록
 	struct State {
 		var date: Date
-		var paySections: [CategorySectionModel] = []
-		var earnSections: [CategorySectionModel] = []
+		var paySections: [CategoryMainSectionModel] = [CategoryMainSectionModel(model: .init(original: .header(.header), items: []), items: [])]
+		var earnSections: [CategoryMainSectionModel] = [CategoryMainSectionModel(model: .init(original: .header(.header), items: []), items: [])]
 		var indexPath: IndexPath?
 		var nextScreen: CategoryLowwer?
 		var error = false
@@ -42,7 +42,7 @@ final class CategoryReactor: Reactor {
 	}
 }
 //MARK: - Mutate, Reduce
-extension CategoryReactor {
+extension CategoryMainReactor {
 	/// Action이 들어온 경우, 어떤 처리를 할건지 분기
 	func mutate(action: Action) -> Observable<Mutation> {
 		switch action {
@@ -50,8 +50,8 @@ extension CategoryReactor {
 			let dateYM = currentState.date.getFormattedYM()
 			
 			return .concat([
-				loadData(CategoryDetailListReqDto(dateYM: dateYM, economicActivityCategoryCd: "", economicActivityDvcd: "01")),
-				loadData(CategoryDetailListReqDto(dateYM: dateYM, economicActivityCategoryCd: "", economicActivityDvcd: "02"))
+				loadData(CategoryDetailListReqDto(dateYM: dateYM, economicActivityCategoryCd: "", economicActivityDvcd: "02")),
+				loadData(CategoryDetailListReqDto(dateYM: dateYM, economicActivityCategoryCd: "", economicActivityDvcd: "01"))
 			])
 		case let .selectCell(indexPath, categoryItem):
 			switch categoryItem {
@@ -59,6 +59,8 @@ extension CategoryReactor {
 				return .concat([
 					.just(.setNextScreen(indexPath, reactor.currentState.categoryLowwer))
 				])
+			case .header:
+				return .empty()
 			}
 		}
 	}
@@ -81,7 +83,7 @@ extension CategoryReactor {
 	}
 }
 //MARK: - Action
-extension CategoryReactor {
+extension CategoryMainReactor {
 	// 데이터 가져오기
 	private func loadData(_ request: CategoryDetailListReqDto) -> Observable<Mutation> {
 		return MMMAPIService().getCategoryList(request)
@@ -95,16 +97,21 @@ extension CategoryReactor {
 	}
 
 	// Section에 따른 Data 주입
-	private func makeSections(respose: CategoryListResDto, type: String) -> [CategorySectionModel] {
+	private func makeSections(respose: CategoryListResDto, type: String) -> [CategoryMainSectionModel] {
 		let categoryList = respose.data
-		var sections: [CategorySectionModel] = []
+		var sections: [CategoryMainSectionModel] = []
 
-		for category in categoryList.sorted(by: { $0.ratio > $1.ratio }) {
-			let categoryitems: [CategoryItem] = category.lowwer.map { categoryLowwer -> CategoryItem in
+		// Global Header
+		let headerItem: CategoryMainItem = .header
+		let headerModel: CategoryMainSectionModel = .init(model: .header(headerItem), items: [headerItem])
+		sections.append(headerModel)
+
+		for category in categoryList {
+			let categoryitems: [CategoryMainItem] = category.lowwer.map { categoryLowwer -> CategoryMainItem in
 				return .base(.init(categoryLowwer: categoryLowwer))
 			}
 			
-			let model: CategorySectionModel = .init(model: .base(category, categoryitems), items: categoryitems)
+			let model: CategoryMainSectionModel = .init(model: .base(category, categoryitems), items: categoryitems)
 			sections.append(model)
 		}
 

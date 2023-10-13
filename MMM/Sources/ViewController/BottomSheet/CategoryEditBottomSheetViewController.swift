@@ -89,7 +89,7 @@ extension CategoryEditBottomSheetViewController {
 			.disposed(by: disposeBag)
 		
 		textField.rx.text.orEmpty
-			.map { .inputText($0) }
+			.map { .inputEditText($0) }
 			.bind(to: reactor.action)
 			.disposed(by: disposeBag)
 	}
@@ -98,16 +98,25 @@ extension CategoryEditBottomSheetViewController {
 	private func bindState(_ reactor: CategoryEditBottomSheetReactor) {
 		
 		reactor.state
-			.map { $0.isValid }
+			.map { $0.isEditValid }
 			.subscribe(onNext: { [weak self] isValid in
-				guard let self = self, let text = self.textField.text, !text.isEmpty else { return }
-				
-				// shake 에니메이션
-				if !isValid {
-					self.textField.shake()
-					self.textField.text?.removeLast()
+				guard let self = self, let text = self.textField.text else {
+					return
 				}
 				
+				// shake 에니메이션
+				// 10글자까지 입력 가능
+				if !text.isEmpty && text.count >= 10 {
+					if text.count > 10 {
+						self.textField.text?.removeLast()
+					}
+					self.textField.shake()
+				}
+				
+				// 확인 버튼 비활성화
+				self.checkButton.isEnabled = !text.isEmpty && isValid
+				self.checkButton.setTitleColor(!text.isEmpty && isValid ? R.Color.gray900 : R.Color.gray500, for: .normal)
+
 				self.textField.textColor = isValid ? R.Color.gray900 : R.Color.red500
 				self.warningLabel.isHidden = isValid
 			})

@@ -55,7 +55,6 @@ final class StatisticsViewController: BaseViewController, View {
 		}
 		
 		timer?.resume() // 타이머 재시작
-		reactor?.action.onNext(.loadData) // 데이터 가져오기
 	}
 	
 	override func viewWillDisappear(_ animated: Bool) {
@@ -86,6 +85,11 @@ extension StatisticsViewController {
 		.map { .selectCell($0, $1) }
 		.bind(to: reactor.action)
 		.disposed(by: disposeBag)
+		
+		// Refresh 작동 없애기
+		refreshControl.rx.controlEvent(.valueChanged)
+			.bind(onNext: { self.tableView.refreshControl?.endRefreshing()})
+			.disposed(by: disposeBag)
 		
 		// pagination
 		tableView.rx.didScroll
@@ -190,8 +194,8 @@ extension StatisticsViewController {
 	private func pushCategoryViewController(_ isPush: Bool) {
 		guard let reactor = self.reactor else { return }
 
-		let vc = CategoryViewController()
-		vc.reactor = CategoryReactor(date: reactor.currentState.date)
+		let vc = CategoryMainViewController()
+		vc.reactor = CategoryMainReactor(date: reactor.currentState.date)
 		navigationController?.pushViewController(vc, animated: true)
 	}
 	

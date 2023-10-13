@@ -23,6 +23,10 @@ struct Category: Codable, Equatable {
 		case ratio = "economicActivityCategoryRatio"
 		case lowwer = "selectListMonthlyEconomicActivityByCategoryOutputDto"
 	}
+	
+	static func getHeader() -> Self {
+		return Category(id: "header", title: "", dateYM: "", total: -1, orderNum: -1, ratio: -1, lowwer: [])
+	}
 }
 
 struct CategoryLowwer: Codable, Equatable {
@@ -36,5 +40,8 @@ struct CategoryLowwer: Codable, Equatable {
 		case total = "economicActivityCategorySumAmt"
 		case orderNum = "orderNum"
 	}
+	
+	static func getHeader() -> Self {
+		return CategoryLowwer(id: "header", title: "", total: -1, orderNum: -1)
+	}
 }
-

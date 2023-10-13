@@ -33,19 +33,22 @@ final class StatisticsCategoryView: BaseView, View {
 	
 	// MARK: - Properties
 	private lazy var alphaList: [CGFloat] = [1, 0.8, 0.5, 0.3, 0.2]
-	
+	private lazy var barWidth: CGFloat = UIScreen.width - UI.rankViewSide - UI.sideMargin - 20 * 2 // 전체 Bar 길이
+
 	// MARK: - UI Components
-	private lazy var titleLabel = UILabel() 		// 카테고리
-	private lazy var moreLabel = UILabel() 			// 더보기
-	private lazy var payLabel = UILabel() 			// 지출
-	private lazy var payRankLabel = MarqueeLabel() 	// 지출 랭킹
-	private lazy var payBarView = UIView() 			// 지출 Bar
-	private lazy var payEmptyLabel = UILabel() 		// 지출 Empty
+	private lazy var titleLabel = UILabel() 		 // 카테고리
+	private lazy var moreLabel = UILabel() 			 // 더보기
+	private lazy var payLabel = UILabel() 			 // 지출
+	private lazy var payRankLabel = MarqueeLabel() 	 // 지출 랭킹
+	private lazy var payBarView = UIView() 			 // 지출 Bar
+	private lazy var payBarStackView = UIStackView() // 지출 Bar
+	private lazy var payEmptyLabel = UILabel() 		 // 지출 Empty
 	
-	private lazy var earnLabel = UILabel() 			// 수입
-	private lazy var earnRankLabel = MarqueeLabel() // 수입 랭킹
-	private lazy var earnBarView = UIView() 		// 수입 Bar
-	private lazy var earnEmptyLabel = UILabel() 	// 수입 Empty
+	private lazy var earnLabel = UILabel() 			 // 수입
+	private lazy var earnRankLabel = MarqueeLabel()  // 수입 랭킹
+	private lazy var earnBarView = UIView() 		 // 수입 Bar
+	private lazy var earnBarStackView = UIStackView()// 지출 Bar
+	private lazy var earnEmptyLabel = UILabel() 	 // 수입 Empty
 
 	func bind(reactor: StatisticsReactor) {
 		bindState(reactor)
@@ -83,52 +86,45 @@ extension StatisticsCategoryView {
 extension StatisticsCategoryView {
 	func convertData(_ data: [CategoryBar], _ type: String) {
 		let isEmpty = data.isEmpty
-
+		let str = data.enumerated().map { "\($0.offset + 1)위 \($0.element.title)"}.joined(separator: "  " )
+		
 		if type == "01" {
 			payEmptyLabel.isHidden = !isEmpty
 			payRankLabel.isHidden = isEmpty
-			payBarView.isHidden = isEmpty
-			payRankLabel.text = data.enumerated().map { "\($0.offset + 1)위 \($0.element.title)"}.joined(separator: "  ")
+			payBarStackView.isHidden = isEmpty
+			payRankLabel.text = str
 		} else {
 			earnEmptyLabel.isHidden = !isEmpty
 			earnRankLabel.isHidden = isEmpty
-			earnBarView.isHidden = isEmpty
-			earnRankLabel.text = data.enumerated().map { "\($0.offset + 1)위 \($0.element.title)"}.joined(separator: "  ")
+			earnBarStackView.isHidden = isEmpty
+			earnRankLabel.text = str
 		}
+		
 		convertBar(data, type)
 	}
 	
 	func convertBar(_ data: [CategoryBar], _ type: String) {
 		guard !data.isEmpty else { return }
-		
-		let totalWidth = payBarView.frame.width // 전체 길이
-		let unit = totalWidth / 100.0
-		var sumWidth = 0.0
+
+		let unit = barWidth / 100.0
 		let cnt = data.count
-		let barView: UIView = type == "01" ? payBarView : earnBarView
+		let barView: UIStackView = type == "01" ? payBarStackView : earnBarStackView
 		barView.subviews.forEach { $0.removeFromSuperview() } // 기존에 있던 subView 제거
 		let color: UIColor = type == "01" ? R.Color.orange500 : R.Color.blue500
-		let minimumWidth = 2.0
-		let spacing = 2.0
+		let minimumWidth = 3.0
 		
-		// 2씩 빼는 이유는 spacing
-		for (index, info) in data.map({ floor($0.ratio * unit) - spacing }).enumerated() {
+		for (index, info) in data.map({ floor($0.ratio * unit) }).enumerated().reversed() {
 			let isSmall = info < minimumWidth
-			let width = cnt == 1 ? totalWidth : isSmall ? minimumWidth : info
+			let width = cnt == 1 ? barWidth : isSmall ? minimumWidth : info
 			let view = UIView()
-			view.layer.cornerRadius = isSmall ? 1 : 2.61
+			view.layer.cornerRadius = data[index].ratio < 2.0 ? 1.7 : 2.61
 			view.backgroundColor = color.withAlphaComponent(alphaList[index])
-			
-			barView.addSubview(view)
+						
+			barView.insertArrangedSubview(view, at: 0)
 			
 			view.snp.makeConstraints {
-				$0.centerY.equalToSuperview()
 				$0.width.equalTo(width)
-				$0.leading.equalToSuperview().inset(sumWidth)
-				$0.height.equalTo(UI.barViewHeight)
 			}
-			
-			sumWidth += width + spacing
 		}
 	}
 }
@@ -170,8 +166,9 @@ extension StatisticsCategoryView {
 			$0.isHidden = true
 		}
 		
-		payBarView = payBarView.then {
-			$0.layer.cornerRadius = 3
+		payBarStackView = payBarStackView.then {
+			$0.axis = .horizontal
+			$0.spacing = 2
 			$0.isHidden = true
 		}
 		
@@ -199,8 +196,9 @@ extension StatisticsCategoryView {
 			$0.isHidden = true
 		}
 		
-		earnBarView = earnBarView.then {
-			$0.layer.cornerRadius = 3
+		earnBarStackView = earnBarStackView.then {
+			$0.axis = .horizontal
+			$0.spacing = 2
 			$0.isHidden = true
 		}
 		
@@ -215,7 +213,7 @@ extension StatisticsCategoryView {
 	override func setHierarchy() {
 		super.setHierarchy()
 		
-		addSubviews(titleLabel, moreLabel, payLabel, payRankLabel, payBarView, payEmptyLabel, earnLabel, earnRankLabel, earnBarView, earnEmptyLabel)
+		addSubviews(titleLabel, moreLabel, payLabel, payRankLabel, payBarStackView, payEmptyLabel, earnLabel, earnRankLabel, earnBarStackView, earnEmptyLabel)
 	}
 	
 	override func setLayout() {
@@ -243,7 +241,7 @@ extension StatisticsCategoryView {
 			$0.trailing.equalToSuperview().inset(UI.sideMargin)
 		}
 		
-		payBarView.snp.makeConstraints {
+		payBarStackView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(UI.payBarViewTop)
 			$0.leading.equalToSuperview().inset(UI.rankViewSide)
 			$0.trailing.equalToSuperview().inset(UI.sideMargin)
@@ -267,7 +265,7 @@ extension StatisticsCategoryView {
 			$0.trailing.equalToSuperview().inset(UI.sideMargin)
 		}
 		
-		earnBarView.snp.makeConstraints {
+		earnBarStackView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(UI.earnBarViewTop)
 			$0.leading.equalToSuperview().inset(UI.rankViewSide)
 			$0.trailing.equalToSuperview().inset(UI.sideMargin)

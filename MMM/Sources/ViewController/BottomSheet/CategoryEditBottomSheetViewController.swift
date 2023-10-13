@@ -105,14 +105,17 @@ extension CategoryEditBottomSheetViewController {
 				}
 				
 				// shake 에니메이션
-				if !isValid && !text.isEmpty {
+				// 10글자까지 입력 가능
+				if !text.isEmpty && text.count >= 10 {
+					if text.count > 10 {
+						self.textField.text?.removeLast()
+					}
 					self.textField.shake()
-					self.textField.text?.removeLast()
 				}
 				
 				// 확인 버튼 비활성화
-				self.checkButton.isEnabled = !text.isEmpty
-				self.checkButton.setTitleColor(!text.isEmpty ? R.Color.gray900 : R.Color.gray500, for: .normal)
+				self.checkButton.isEnabled = !text.isEmpty && isValid
+				self.checkButton.setTitleColor(!text.isEmpty && isValid ? R.Color.gray900 : R.Color.gray500, for: .normal)
 
 				self.textField.textColor = isValid ? R.Color.gray900 : R.Color.red500
 				self.warningLabel.isHidden = isValid

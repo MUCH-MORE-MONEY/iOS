@@ -101,9 +101,12 @@ extension CategoryAddBottomSheetViewController {
 				}
 				
 				// shake 에니메이션
-				if !isValid && !text.isEmpty {
+				// 10글자까지 입력 가능
+				if !text.isEmpty && text.count >= 10 {
+					if text.count > 10 {
+						self.textField.text?.removeLast()
+					}
 					self.textField.shake()
-					self.textField.text?.removeLast()
 				}
 				
 				// 확인 버튼 비활성화

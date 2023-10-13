@@ -205,7 +205,7 @@ extension CategoryEditReactor {
 	private func compareData() -> Observable<Mutation> {
 		print(#function, #line)
 		let data = currentState.sections
-		
+
 		for i in stride(from: 1, to: data.count - 1, by: 1) {
 			let section = data[i]
 			print(section.model.header)

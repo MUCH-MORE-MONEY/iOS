@@ -99,9 +99,12 @@ extension CategoryAddUpperBottomSheetViewController {
 				}
 				
 				// shake 에니메이션
-				if !isValid && !text.isEmpty {
+				// 9글자까지 입력 가능
+				if !text.isEmpty && text.count >= 9 {
+					if text.count > 9 {
+						self.textField.text?.removeLast()
+					}
 					self.textField.shake()
-					self.textField.text?.removeLast()
 				}
 				
 				// 확인 버튼 비활성화

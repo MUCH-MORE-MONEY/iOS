@@ -111,11 +111,11 @@ enum Common {
     }
     
     // 시간 요일에 따른 저장
-    static func setCustomPushTime() {
-        let days = Common.getCustomPushWeekList()
+    static func setCustomPushTime(_ days: [Bool]) {
         
+        print("userDefaults : \(days)")
         var title = ""
-        if days.filter{ $0 }.count == 7 {
+        if days.filter({ $0 }).count == 7 {
             title += "매일"
         } else {
             for (index, isOn) in days.enumerated() {
@@ -143,7 +143,7 @@ enum Common {
         }
 
         if title.last == "," {
-            title.removeLast(2)
+            title.removeLast()
         }
         
         UserDefaults.standard.set(title, forKey: self.keys.customPushTime.rawValue)
@@ -167,7 +167,7 @@ enum Common {
     }
     
     static func getCustomPushTime() -> String {
-        UserDefaults.standard.string(forKey: self.keys.customPushTime.rawValue) ?? "매일 09:00 PM"
+        UserDefaults.standard.string(forKey: self.keys.customPushTime.rawValue) ?? "09:00 PM"
     }
     
     static func getCustomPushText() -> String {
@@ -179,7 +179,6 @@ enum Common {
         var selectedDays: [Bool] = []
         
         if let savedDays = UserDefaults.standard.array(forKey: self.keys.customPushWeekList.rawValue) as? [Bool], savedDays.count == 7 {
-            print(savedDays)
             selectedDays = savedDays
         } else {
             return Array(repeating: true, count: 7)

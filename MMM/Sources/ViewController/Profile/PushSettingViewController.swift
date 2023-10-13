@@ -33,6 +33,8 @@ final class PushSettingViewController: BaseViewControllerWithNav, View {
     
     private lazy var divider = UIView()
     // MARK: - Properties
+    let userNotificationCenter = UNUserNotificationCenter.current()
+    
     var reactor: PushSettingReactor!
     
     override func viewDidLoad() {
@@ -44,7 +46,46 @@ final class PushSettingViewController: BaseViewControllerWithNav, View {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.customPushTimeSettingView.updateCustomTimeText()
+        let list = Common.getCustomPushWeekList()
+        
+        if list.filter({ $0 }).count == 7 {
+            customPushTimeSettingView.mainLabel.text = "매일 \(Common.getCustomPushTime())"
+        } else {
+            var title = ""
+            for (index, isOn) in list.enumerated() {
+                if isOn {
+                    switch index {
+                    case 0:
+                        title += "일 ,"
+                    case 1:
+                        title += "월 ,"
+                    case 2:
+                        title += "화 ,"
+                    case 3:
+                        title += "수 ,"
+                    case 4:
+                        title += "목 ,"
+                    case 5:
+                        title += "금 ,"
+                    case 6:
+                        title += "토 ,"
+                    default:
+                        break
+                    }
+                }
+            }
+            
+            if !title.isEmpty {
+                title.removeLast(2)
+                title += " \(Common.getCustomPushTime())"
+            } else {
+                title = "시간 지정 ㄱㄱ"
+            }
+            DispatchQueue.main.async {
+                self.customPushTimeSettingView.mainLabel.text = title
+            }
+
+        }
     }
     
     func bind(reactor: PushSettingReactor) {
@@ -59,13 +100,6 @@ extension PushSettingViewController {
         // FIXME: -
         // 뷰 진입 시 최초 1회 실행 + 최초 진입시 앱 권한을 가져오기 위한 액션
         reactor.action.onNext(.viewAppear)
-        
-        // FIXME: - 네트워크 테스트 코드
-        //        textSettingView.rx.tapGesture()
-        //            .when(.recognized)
-        //            .map { _ in .didTapTextSettingButton(PushReqDto(content: "test", pushAgreeDvcd: "01")) }
-        //            .bind(to: reactor.action)
-        //            .disposed(by: disposeBag)
         
         // 소식 일림 switch
         newsPushSwitch.rx.value
@@ -89,10 +123,8 @@ extension PushSettingViewController {
         // 알림 문구 지정 버튼
         customPushTextSettingView.rx.tapGesture()
             .when(.recognized)
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.presentBottomSheet()
-            })
+            .map { _ in .didTapCustomPushTextSettingView }
+            .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
     
@@ -106,16 +138,6 @@ extension PushSettingViewController {
             .bind(onNext: showAlertMessage)
             .disposed(by: disposeBag)
                 
-        // FIXME: - 네트워크 테스트 코드
-        //        reactor.state
-        //            .compactMap { $0.pushMessage }
-        ////            .filter { $0.pushMessage }
-        //            .bind { [weak self] data in
-        //                guard let self = self else { return }
-        //                print("text Tapped \(data)")
-        //            }
-        //            .disposed(by: disposeBag)
-        
         // 푸쉬 알림
         reactor.state
             .map { $0.isNewsPushSwitchOn }
@@ -138,8 +160,15 @@ extension PushSettingViewController {
             .bind(onNext: presentDetailViewController)
             .disposed(by: disposeBag)
         
+        reactor.state
+            .filter { $0.isCustomPushSwitchOn }
+            .map { $0.isPresentSheetView }
+            .filter { $0 }
+            .bind(onNext: presentBottomSheet)
+            .disposed(by: disposeBag)
         
         reactor.state
+            .filter { $0.isCustomPushSwitchOn }
             .map { $0.customPushLabelText }
             .bind { text in
                 var title = Common.getCustomPushText()
@@ -193,7 +222,7 @@ private extension PushSettingViewController {
         Common.setNewsPushSwitch(isOn)
     }
     
-    private func presentBottomSheet() {
+    private func presentBottomSheet(_ isPresent: Bool) {
         let vc = CustomPushTextSettingViewController(title: "알림 문구 지정", height: 200)
         vc.reactor = CustomPushTextSettingReactor(provider: reactor.provider)
         self.present(vc, animated: true, completion: nil)
@@ -361,4 +390,3 @@ extension PushSettingViewController: CustomAlertDelegate {
     
     func didAlertCacelButton() { }
 }
-

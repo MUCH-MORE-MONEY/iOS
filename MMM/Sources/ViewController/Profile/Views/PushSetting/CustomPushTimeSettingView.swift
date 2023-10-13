@@ -11,7 +11,7 @@ import SnapKit
 
 final class CustomPushTimeSettingView: UIView {
     // MARK: - UI Components
-    private lazy var mainLabel = UILabel()
+     lazy var mainLabel = UILabel()
     private lazy var imageView = UIImageView()
     
     override init(frame: CGRect) {
@@ -28,7 +28,6 @@ final class CustomPushTimeSettingView: UIView {
 // MARK: - Actions
 extension CustomPushTimeSettingView {
     func updateCustomTimeText() {
-        Common.setCustomPushTime()
         DispatchQueue.main.async {
             self.mainLabel.text = Common.getCustomPushTime()
         }

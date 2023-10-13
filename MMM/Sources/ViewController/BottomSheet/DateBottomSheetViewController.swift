@@ -47,6 +47,10 @@ final class DateBottomSheetViewController: BottomSheetViewController2, View {
 		self.curMode = mode
 		self.isDark = isDark
 		super.init(mode: sheetMode, isDark: isDark)
+        
+        if type == .time {
+            self.datePicker.minuteInterval = 5
+        }
 	}
 	
 	override func viewDidLoad() {

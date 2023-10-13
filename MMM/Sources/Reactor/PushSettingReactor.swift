@@ -82,9 +82,7 @@ extension PushSettingReactor {
             return Observable.concat([
                 .just(.setPresentSheetView(true)),
                 .just(.setPresentSheetView(false))])
-            //        case .newsPushSwitchToggle(let isOn):
-            //            let request = PushAgreeUpdateReqDto(pushAgreeDvcd: "01", pushAgreeYN: isOn ? "Y" : "N")
-            //            return pushAgreeUpdate(request)
+
         case .newsPushSwitchToggle(let isOn):
             let request = PushAgreeUpdateReqDto(pushAgreeDvcd: "01", pushAgreeYN: isOn ? "Y" : "N")
             return Observable.concat([
@@ -92,6 +90,14 @@ extension PushSettingReactor {
                 pushAgreeUpdate(request)])
             
         case .customPushSwitchToggle(let isOn):
+            let notificationCenter = UNUserNotificationCenter.current()
+            
+            if isOn {
+
+            } else {
+                notificationCenter.removeAllPendingNotificationRequests()
+            }
+            
             return .just(.setCustomPushSwitch(isOn))
         }
     }
@@ -128,6 +134,9 @@ extension PushSettingReactor {
             }
             
         case .updatePushAgreeSwitch(let response, let error):
+            if let error = error {
+                print(error.localizedDescription)
+            }
             print(response)
 
         // MARK: - 여긴 완성
@@ -161,24 +170,4 @@ extension PushSettingReactor {
                 return .updatePushAgreeSwitch(response, error)
             }
     }
-    
-    //    func checkPushSetting() -> Observable<Mutation> {
-    //        var isOn = false
-    //        UNUserNotificationCenter.current().getNotificationSettings { settings in
-    //            switch settings.authorizationStatus {
-    //            case .authorized:
-    //                print("허용")
-    //                isOn = true
-    //            case .denied:
-    //                print("거부")
-    //                isOn = false
-    //            case .notDetermined:
-    //                print("설정 전임")
-    //            default:
-    //                break
-    //            }
-    //
-    //            return .just(.pushSettingAvailable(isOn))
-    //        }
-    //    }
 }

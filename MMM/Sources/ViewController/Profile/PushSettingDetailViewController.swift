@@ -39,6 +39,8 @@ final class PushSettingDetailViewController: BaseViewControllerWithNav, View {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: false)
+        // 뷰가 사라질 때 해당 저장정보를 기반으로 바로 noti로 쏴줌
+        reactor.action.onNext(.viewWillDisappear)
     }
     
     func bind(reactor: PushSettingDetailReactor) {
@@ -50,6 +52,11 @@ final class PushSettingDetailViewController: BaseViewControllerWithNav, View {
 // MARK: - bind
 extension PushSettingDetailViewController {
     private func bindAction(_reactor: PushSettingDetailReactor) {
+        
+        // 최초 진입 시 시간 타이틀을 userdefault값으로 설정
+        reactor.action.onNext(.viewAppear(Common.getCustomPushTime()))
+        
+        
         detailTimeSettingView.rx.tapGesture()
             .when(.recognized)
             .map { _ in .didTapDetailTimeSettingView }
@@ -71,6 +78,7 @@ extension PushSettingDetailViewController {
     
     private func bindState(_reactor: PushSettingDetailReactor) {
         reactor.state
+            .filter { !$0.isViewAppear }
             .map { $0.isPresentTime }
             .distinctUntilChanged()
             .filter { $0 }
@@ -78,6 +86,7 @@ extension PushSettingDetailViewController {
             .disposed(by: disposeBag)
         
 		reactor.state
+            .filter { !$0.isViewAppear }
 			.map { $0.date }
 			.distinctUntilChanged() // 중복값 무시
 			.bind(onNext: setTime) //
@@ -88,13 +97,15 @@ extension PushSettingDetailViewController {
 // MARK: - Actions
 extension PushSettingDetailViewController {
     private func presentBottomSheet(_ isPresent: Bool) {
-		let vc = DateBottomSheetViewController(title: "월 시간 설정", type: .time, height: 360, mode: .date, sheetMode: .drag, isDark: false)
+		let vc = DateBottomSheetViewController(title: "시간 설정", type: .time, height: 360, mode: .date, sheetMode: .drag, isDark: false)
 		vc.reactor = DateBottomSheetReactor(provider: reactor.provider)
         self.present(vc, animated: true)
     }
     
     private func setTime(_ date: Date) {
-        detailTimeSettingView.configure(date)
+        let dd = date.getFormattedTime()
+        Common.setCustomPushTime(dd)
+        detailTimeSettingView.configure(Common.getCustomPushTime())
     }
     
     private func presentBottomSheet1(_ isPresent: Bool) {
@@ -139,8 +150,6 @@ extension PushSettingDetailViewController {
         
         // TODO: - 로직 위치 변경, 초기 설정은 모두 true
         selectedDays = Common.getCustomPushWeekList()
-
-        print(selectedDays)
     }
     
 	override func setLayout() {
@@ -172,18 +181,17 @@ extension PushSettingDetailViewController: UICollectionViewDelegate {
         
         if let cell = collectionView.cellForItem(at: indexPath) as? WeekCollectionViewCell {
             selectedDays[indexPath.item].toggle()
-//            selectedDays[indexPath.item] = cell.isSelected
+            cell.setSelectedItem(selectedDays[indexPath.item])
+
         }
-        
         Common.setCustomPushWeekList(selectedDays)
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) as? WeekCollectionViewCell {
             selectedDays[indexPath.item].toggle()
-//            selectedDays[indexPath.item] = cell.isSelected
+            cell.setSelectedItem(selectedDays[indexPath.item])
         }
-        print(selectedDays)
         Common.setCustomPushWeekList(selectedDays)
     }
 }
@@ -201,10 +209,10 @@ extension PushSettingDetailViewController: UICollectionViewDataSource {
         cell.layer.cornerRadius = cell.frame.size.width / 2
         cell.clipsToBounds = true
         
-        // cell의 on/off
         cell.isSelected = selectedDays[indexPath.item]
-        // cell의 text를 정하는 코드
-        cell.configure(weekList[indexPath.row])
+        
+        // cell의 text를 정하는 코드 & on/off
+        cell.configure(text: weekList[indexPath.row], isSelected: selectedDays[indexPath.item])
         
         return cell
     }

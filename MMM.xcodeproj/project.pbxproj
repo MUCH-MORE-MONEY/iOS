@@ -167,7 +167,7 @@
 		C46D5E632AD174AD00EBE5D7 /* CategoryEditUpperBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46D5E622AD174AD00EBE5D7 /* CategoryEditUpperBottomSheetViewController.swift */; };
 		C46D5E652AD1752700EBE5D7 /* CategoryEditUpperBottomSheetReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46D5E642AD1752700EBE5D7 /* CategoryEditUpperBottomSheetReactor.swift */; };
 		C46D5E672AD1826800EBE5D7 /* CategoryAddUpperBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46D5E662AD1826800EBE5D7 /* CategoryAddUpperBottomSheetViewController.swift */; };
-		C46D5E6E2AD9798800EBE5D7 /* CategoryEditEmptyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46D5E6D2AD9798800EBE5D7 /* CategoryEditEmptyCollectionViewCell.swift */; };
+		C46D5E6E2AD9798800EBE5D7 /* CategoryEditDragCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46D5E6D2AD9798800EBE5D7 /* CategoryEditDragCollectionViewCell.swift */; };
 		C494A24B2A9B893400980A71 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C494A24A2A9B893300980A71 /* GoogleService-Info.plist */; };
 		C494A2512A9B8A0A00980A71 /* TabBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C494A2502A9B8A0A00980A71 /* TabBarViewModel.swift */; };
 		C4BBD2642AB9DE8C0055FA65 /* StatisticsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BBD2632AB9DE8C0055FA65 /* StatisticsProvider.swift */; };
@@ -453,7 +453,7 @@
 		C46D5E622AD174AD00EBE5D7 /* CategoryEditUpperBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditUpperBottomSheetViewController.swift; sourceTree = "<group>"; };
 		C46D5E642AD1752700EBE5D7 /* CategoryEditUpperBottomSheetReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditUpperBottomSheetReactor.swift; sourceTree = "<group>"; };
 		C46D5E662AD1826800EBE5D7 /* CategoryAddUpperBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryAddUpperBottomSheetViewController.swift; sourceTree = "<group>"; };
-		C46D5E6D2AD9798800EBE5D7 /* CategoryEditEmptyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditEmptyCollectionViewCell.swift; sourceTree = "<group>"; };
+		C46D5E6D2AD9798800EBE5D7 /* CategoryEditDragCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditDragCollectionViewCell.swift; sourceTree = "<group>"; };
 		C494A24A2A9B893300980A71 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C494A24E2A9B895100980A71 /* PushSettingDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushSettingDetailViewController.swift; sourceTree = "<group>"; };
 		C494A2502A9B8A0A00980A71 /* TabBarViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewModel.swift; sourceTree = "<group>"; };
@@ -1181,7 +1181,7 @@
 			isa = PBXGroup;
 			children = (
 				C4BBD2862AC03C300055FA65 /* CategoryEditCollectionViewCell.swift */,
-				C46D5E6D2AD9798800EBE5D7 /* CategoryEditEmptyCollectionViewCell.swift */,
+				C46D5E6D2AD9798800EBE5D7 /* CategoryEditDragCollectionViewCell.swift */,
 				C46D5E542AD078DA00EBE5D7 /* CategoryEditTableViewCell.swift */,
 				C4BBD28C2AC048860055FA65 /* CategoryEditSectionFooter.swift */,
 				C4BBD28A2AC047390055FA65 /* CategoryEditSectionHeader.swift */,
@@ -1713,7 +1713,7 @@
 				6A1BAD4529E6550100818086 /* OnboardingViewModel.swift in Sources */,
 				6A14E7152A9DD4600071805D /* Ex+String.swift in Sources */,
 				C46D5E5B2AD1265100EBE5D7 /* CategorySectionGlobalHeader.swift in Sources */,
-				C46D5E6E2AD9798800EBE5D7 /* CategoryEditEmptyCollectionViewCell.swift in Sources */,
+				C46D5E6E2AD9798800EBE5D7 /* CategoryEditDragCollectionViewCell.swift in Sources */,
 				45AFC2AB2AC2A564004DF76E /* CustomPushTextSettingViewController.swift in Sources */,
 				6A08B47A29FF5CA90080719E /* APIClient.swift in Sources */,
 				C4C792A82A35916D007FD6AA /* WithdrawResDto.swift in Sources */,

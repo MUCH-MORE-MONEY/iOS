@@ -48,8 +48,8 @@ final class CategoryEditViewController: BaseViewControllerWithNav, View {
 			cell.reactor = cellReactor // reactor 주입
 			
 			return cell
-		case .empty:
-			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CategoryEditEmptyCollectionViewCell.self), for: indexPath) as? CategoryEditEmptyCollectionViewCell else { return .init() }
+		case .drag:
+			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CategoryEditDragCollectionViewCell.self), for: indexPath) as? CategoryEditDragCollectionViewCell else { return .init() }
 			
 			return cell
 		case let .header(cellReactor), let .footer(cellReactor):
@@ -103,8 +103,6 @@ final class CategoryEditViewController: BaseViewControllerWithNav, View {
 	private lazy var titleLabel = UILabel()
 	private lazy var saveButton = UIButton()
 	private lazy var collectionView: UICollectionView = .init(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-	private var startIndexPath: IndexPath?
-	private var layout: UICollectionViewCompositionalLayout?
 	
 	init(mode: Mode) {
 		self.mode = mode
@@ -135,49 +133,6 @@ extension CategoryEditViewController {
 			.map { .didTabSaveButton }
 			.bind(to: reactor.action)
 			.disposed(by: disposeBag)
-		
-//		dataSource.canMoveItemAtIndexPath = { dataSource, indexPath in
-//			return true
-//		}
-//
-		
-		// 셀이 이동되었을때
-//		dataSource.moveItem = { dataSource, sourceIndexPath, destinationIndexPath in
-//			reactor.action.onNext(.dragAndDrop(sourceIndexPath, destinationIndexPath))
-//		}
-		
-//		collectionView.rx.longPressGesture()
-//			.subscribe(onNext: { [weak self] moveGesture in
-//				guard let self = self else { return }
-//				let moveIndexPath = collectionView.indexPathForItem(at: moveGesture.location(in: collectionView))
-//				
-//				switch moveGesture.state {
-//				case .began:
-//					guard let moveIndexPath = moveIndexPath else {
-//						break
-//					}
-//					startIndexPath = moveIndexPath
-//					collectionView.beginInteractiveMovementForItem(at: moveIndexPath)
-//				case .changed:
-//					guard
-//						let startIndexPath = startIndexPath,
-//						let moveIndexPath = moveIndexPath,
-//						startIndexPath.section == moveIndexPath.section
-//					else { break }
-//					collectionView.updateInteractiveMovementTargetPosition(moveGesture.location(in: collectionView))
-//				case .ended:
-////					guard
-////						let startIndexPath = startIndexPath,
-////						let moveIndexPath = moveIndexPath,
-////						startIndexPath.section == moveIndexPath.section
-////					else { break }
-//					collectionView.endInteractiveMovement()
-//					break
-//				default:
-//					collectionView.cancelInteractiveMovement()
-//				}
-//			})
-//			.disposed(by: disposeBag)
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
@@ -245,12 +200,13 @@ extension CategoryEditViewController {
 		
 		items.forEach({ item in
 			switch item {
-			case .base, .empty:
-				layoutItems.append(NSCollectionLayoutItem.init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(UI.cellHeightMargin))))
+			case .base, .drag:
+				layoutItems.append(NSCollectionLayoutItem.init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(UI.cellHeightMargin)))) // 40
 			default:
 				break
 			}
 		})
+		
 		let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100)), subitems: isEmpty ? .init(repeating: .init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(UI.cellHeightMargin))), count: 1) : layoutItems)
 		group.contentInsets = .init(top: 0, leading: 136, bottom: 0, trailing: 0)
 		
@@ -357,7 +313,7 @@ extension CategoryEditViewController {
 			$0.dropDelegate = self
 			$0.dataSource = dataSource
 			$0.register(CategoryEditCollectionViewCell.self)
-			$0.register(CategoryEditEmptyCollectionViewCell.self)
+			$0.register(CategoryEditDragCollectionViewCell.self)
 			$0.register(CategoryEditSectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
 			$0.register(CategoryEditSectionFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter)
 			// Global Header
@@ -389,43 +345,56 @@ extension CategoryEditViewController {
 // MARK: - UICollectionView Drag Delegate
 extension CategoryEditViewController: UICollectionViewDragDelegate {
 	func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-		return [UIDragItem(itemProvider: NSItemProvider())]
+		guard let reactor = reactor else { return [UIDragItem(itemProvider: NSItemProvider())] }
+
+		let itemProvider = NSItemProvider(object: "\(indexPath)" as NSString)
+		let dragItem = UIDragItem(itemProvider: itemProvider)
+		dragItem.localObject = reactor.currentState.sections[indexPath.section].items[indexPath.row]
+		return [dragItem]
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, itemsForAddingTo session: UIDragSession, at indexPath: IndexPath, point: CGPoint) -> [UIDragItem] {
-		return [UIDragItem(itemProvider: NSItemProvider())]
+		guard let reactor = reactor else { return [UIDragItem(itemProvider: NSItemProvider())] }
+
+		let itemProvider = NSItemProvider(object: "\(indexPath)" as NSString)
+		let dragItem = UIDragItem(itemProvider: itemProvider)
+		dragItem.localObject = reactor.currentState.sections[indexPath.section].items[indexPath.row]
+		return [dragItem]
 	}
 	
-//	func collectionView(_ collectionView: UICollectionView, dragSessionWillBegin session: UIDragSession) {
-//		guard let reactor = reactor else { return }
-////		var itemsToInsert = [IndexPath]()
-//		let data = reactor.currentState.sections
-//		
-//		(0..<data.count).forEach { index in
-//			let indexPath: IndexPath = .init(item: data[index].items.count, section: index)
-//			//				itemsToInsert.append(indexPath)
-//			reactor.action.onNext(.dragBegin(indexPath))
-//		}
-//	}
-//	
-//	func collectionView(_ collectionView: UICollectionView, dragSessionDidEnd session: UIDragSession) {
-//		guard let reactor = reactor else { return }
-//		var removeItems = [IndexPath]()
-//		let data = reactor.currentState.sections
-//
-//		for section in 0..<data.count {
-//			for item in 0..<data[section].items.count {
-//				switch data[section].items[item] {
-//				case .empty:
-//					removeItems.append(IndexPath(item: item, section: section))
-//				default:
-//					break
-//				}
-//			}
-//		}
-//		
-//		removeItems.forEach { reactor.action.onNext(.dragEnd($0)) }
-//	}
+	func collectionView(_ collectionView: UICollectionView, dragSessionWillBegin session: UIDragSession) {
+		guard let reactor = reactor else { return }
+		var addItems = [IndexPath]()
+		let data = reactor.currentState.sections
+
+		(0..<data.count).forEach { index in
+			if data[index].items.isEmpty {
+				let indexPath: IndexPath = .init(item: data[index].items.count, section: index)
+				addItems.append(indexPath)
+			}
+		}
+		
+		reactor.action.onNext(.dragBegin(addItems))
+	}
+	
+	func collectionView(_ collectionView: UICollectionView, dragSessionDidEnd session: UIDragSession) {
+		guard let reactor = reactor else { return }
+		var removeItems = [IndexPath]()
+		let data = reactor.currentState.sections
+
+		for section in 0..<data.count {
+			for item in 0..<data[section].items.count {
+				switch data[section].items[item] {
+				case .drag:
+					removeItems.append(IndexPath(item: item, section: section))
+				default:
+					break
+				}
+			}
+		}
+		
+		reactor.action.onNext(.dragEnd(removeItems))
+	}
 }
 // MARK: - UICollectionView Drop Delegate
 extension CategoryEditViewController: UICollectionViewDropDelegate {
@@ -436,11 +405,18 @@ extension CategoryEditViewController: UICollectionViewDropDelegate {
 	// drag가 활성화 되어 있는경우에만 drop이 동작하도록 구현
 	// drag없이 drop이 동작할 수 없도록 하는 메소드
 	func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
-		guard collectionView.hasActiveDrag else {
+		guard let reactor = reactor, collectionView.hasActiveDrag, let destinationIndexPath = destinationIndexPath else {
 			return UICollectionViewDropProposal(operation: .forbidden)
 		}
 		
-		return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+		switch reactor.currentState.sections[destinationIndexPath.section].items[destinationIndexPath.row] {
+		case .base(_):
+			return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+		case .drag:
+			return UICollectionViewDropProposal(operation: .move, intent: .insertIntoDestinationIndexPath)
+		default:
+			return UICollectionViewDropProposal(operation: .forbidden)
+		}
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
@@ -476,7 +452,7 @@ extension CategoryEditViewController: UICollectionViewDropDelegate {
 	private func move(sourceIndexPath: IndexPath, destinationIndexPath: IndexPath, collectionView: UICollectionView) {
 		// dataSource에 반영
 		dataSource.collectionView(collectionView, moveItemAt: sourceIndexPath, to: destinationIndexPath)
-
+		
 		// UI에 반영
 		collectionView.deleteItems(at: [sourceIndexPath])
 		collectionView.insertItems(at: [destinationIndexPath])

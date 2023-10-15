@@ -15,8 +15,8 @@ final class CategoryEditReactor: Reactor {
 		case didTapAddButton(CategoryHeader) // 카테고리 추가
 		case didTapUpperEditButton // 카테고리 유형 편집
 		case dragAndDrop(IndexPath, IndexPath)
-		case dragBegin(IndexPath)
-		case dragEnd(IndexPath)
+		case dragBegin([IndexPath])
+		case dragEnd([IndexPath])
 	}
 	
 	// 처리 단위
@@ -26,8 +26,8 @@ final class CategoryEditReactor: Reactor {
 		case addItem(CategoryEdit)
 		case deleteItem(CategoryEdit)
 		case dragAndDrop(IndexPath, IndexPath)
-		case addEmpty(IndexPath)
-		case removeEmpty(IndexPath)
+		case addEmpty([IndexPath])
+		case removeEmpty([IndexPath])
 		case setNextEditScreen(CategoryEdit?)
 		case setNextAddScreen(CategoryHeader?)
 		case setNextUpperEditScreen(Bool)
@@ -86,10 +86,10 @@ extension CategoryEditReactor {
 			])
 		case let .dragAndDrop(startIndex, destinationIndexPath):
 			return .just(.dragAndDrop(startIndex, destinationIndexPath))
-		case let .dragBegin(indexPath):
-			return .just(.addEmpty(indexPath))
-		case let .dragEnd(indexPath):
-			return .just(.removeEmpty(indexPath))
+		case let .dragBegin(indexPathList):
+			return .just(.addEmpty(indexPathList))
+		case let .dragEnd(indexPathList):
+			return .just(.removeEmpty(indexPathList))
 		}
 	}
 	
@@ -148,29 +148,14 @@ extension CategoryEditReactor {
 			let sourceItem = newState.sections[sourceIndexPath.section].items[sourceIndexPath.row]
 			newState.sections[sourceIndexPath.section].items.remove(at: sourceIndexPath.row)
 			newState.sections[destinationIndexPath.section].items.insert(sourceItem, at: destinationIndexPath.row)
-			
-//			if newState.sections[sourceIndexPath.section].items.isEmpty {
-//				newState.sections[sourceIndexPath.section].items.append(.empty)
-//			}
-			
-			print(sourceIndexPath, destinationIndexPath)
-			
-			let data = newState.sections
-
-			for i in stride(from: 1, to: data.count - 1, by: 1) {
-				let section = data[i]
-				print(section.model.header)
-				
-				for j in stride(from: 0, to: section.items.count, by: 1) {
-					let title = section.items[j].title
-					print(title)
-				}
-				print()
+		case let .addEmpty(indexPathList):
+			for indexPath in indexPathList {
+				newState.sections[indexPath.section].items.append(.drag)
 			}
-		case let .addEmpty(indexPath):
-			newState.sections[indexPath.section].items.append(.empty)
-		case let .removeEmpty(indexPath):
-			newState.sections[indexPath.section].items.remove(at: indexPath.row)
+		case let .removeEmpty(indexPathList):
+			for indexPath in indexPathList {
+				newState.sections[indexPath.section].items.remove(at: indexPath.row)
+			}
 		case let .setNextEditScreen(categoryEdit):
 			newState.nextEditScreen = categoryEdit
 		case let .setNextAddScreen(categoryHeader):

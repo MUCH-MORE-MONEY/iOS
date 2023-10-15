@@ -18,8 +18,12 @@ enum CategoryEvent {
 	case updateUpperEdit(CategoryHeader)
 	case deleteUpperEdit(CategoryHeader)
 	
+	// 카테고리 유형 편집 후
 	case saveSections([CategoryEditSectionModel])
 	case deleteList([String:String])
+	
+	// 카테고리 편집 후
+	case refresh(isRefresh: Bool)
 }
 
 protocol CategoryServiceProtocol {
@@ -35,8 +39,12 @@ protocol CategoryServiceProtocol {
 	func updateUpperEdit(to categoryHeader: CategoryHeader) -> Observable<CategoryHeader>
 	func deleteUpperEdit(to categoryHeader: CategoryHeader) -> Observable<CategoryHeader>
 	
+	// 카테고리 유형 편집 후
 	func saveSections(to data: [CategoryEditSectionModel]) -> Observable<[CategoryEditSectionModel]>
 	func deleteList(to removeUpperList: [String:String]) -> Observable<[String:String]>
+	
+	// 카테고리 편집 후
+	func refresh(isRefresh: Bool) -> Observable<Bool>
 }
 
 final class CategoryProvider: CategoryServiceProtocol {
@@ -100,5 +108,12 @@ final class CategoryProvider: CategoryServiceProtocol {
 		event.onNext(.deleteList(removeUpperList))
 		
 		return .just(removeUpperList)
+	}
+	
+	// 카테고리 편집 후
+	func refresh(isRefresh: Bool) -> RxSwift.Observable<Bool> {
+		event.onNext(.refresh(isRefresh: isRefresh))
+		
+		return .just(isRefresh)
 	}
 }

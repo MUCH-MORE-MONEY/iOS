@@ -43,6 +43,12 @@ final class CategoryMainViewController: BaseViewControllerWithNav, View {
 		super.viewDidLoad()
 	}
 	
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		
+		reactor?.action.onNext(.loadData)
+	}
+	
 	func bind(reactor: CategoryMainReactor) {
 		bindState(reactor)
 		bindAction(reactor)

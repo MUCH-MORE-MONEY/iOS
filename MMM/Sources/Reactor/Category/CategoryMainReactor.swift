@@ -36,9 +36,6 @@ final class CategoryMainReactor: Reactor {
 	
 	init(date: Date) {
 		initialState = State(date: date)
-		
-		// 뷰가 최초 로드 될 경우
-		action.onNext(.loadData)
 	}
 }
 //MARK: - Mutate, Reduce

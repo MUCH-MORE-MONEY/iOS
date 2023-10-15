@@ -156,6 +156,7 @@ extension BaseAddActivityViewController {
         
         starStackView.snp.makeConstraints {
             $0.top.equalTo(separatorView.snp.bottom).offset(16)
+            $0.left.equalToSuperview()
             $0.width.equalTo(120)
             $0.height.equalTo(24)
         }

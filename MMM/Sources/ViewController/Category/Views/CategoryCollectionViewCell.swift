@@ -88,6 +88,7 @@ extension CategoryCollectionViewCell {
 		priceLabel.snp.makeConstraints {
 			$0.top.equalTo(titleLabel.snp.bottom).offset(UI.priceLabelMargin.top)
 			$0.leading.equalToSuperview()
+			$0.trailing.equalToSuperview().offset(24)
 		}
 	}
 }

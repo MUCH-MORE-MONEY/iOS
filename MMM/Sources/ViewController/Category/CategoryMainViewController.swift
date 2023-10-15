@@ -59,9 +59,8 @@ extension CategoryMainViewController {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
 	private func bindAction(_ reactor: CategoryMainReactor) {
 		editButton.rx.tap
-			.subscribe(onNext: {
-				self.willPushEditViewController()
-			}).disposed(by: disposeBag)
+			.subscribe(onNext: willPushEditViewController)
+			.disposed(by: disposeBag)
 		
 		segmentedControl.rx.selectedSegmentIndex
 			.map { $0 == 0 ? 0 : 1 }
@@ -75,9 +74,7 @@ extension CategoryMainViewController {
 	private func bindState(_ reactor: CategoryMainReactor) {
 		reactor.state
 			.compactMap { $0.nextScreen }
-			.subscribe(onNext: { [weak self] categoryLowwer in
-				self?.willPushViewController(categoryLowwer: categoryLowwer)
-			})
+			.subscribe(onNext: willPushViewController)
 			.disposed(by: disposeBag)
 	}
 }

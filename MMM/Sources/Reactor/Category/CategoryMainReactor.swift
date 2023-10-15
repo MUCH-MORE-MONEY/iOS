@@ -18,7 +18,7 @@ final class CategoryMainReactor: Reactor {
 	enum Mutation {
 		case setPaySections([CategoryMainSectionModel])
 		case setEarnSections([CategoryMainSectionModel])
-		case setNextScreen(IndexPath, CategoryLowwer)
+		case setNextScreen(IndexPath, CategoryLowwer?)
 	}
 	
 	// 현재 상태를 기록
@@ -54,7 +54,8 @@ extension CategoryMainReactor {
 			switch categoryItem {
 			case .base(let reactor):
 				return .concat([
-					.just(.setNextScreen(indexPath, reactor.currentState.categoryLowwer))
+					.just(.setNextScreen(indexPath, reactor.currentState.categoryLowwer)),
+					.just(.setNextScreen(indexPath, nil))
 				])
 			case .header:
 				return .empty()

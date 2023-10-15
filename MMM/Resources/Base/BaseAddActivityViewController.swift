@@ -23,6 +23,9 @@ class BaseAddActivityViewController: BaseDetailViewController {
     lazy var memoTextView = UITextView()
     lazy var saveButton = UIButton()
     lazy var satisfyingLabel = BasePaddingLabel(padding: UIEdgeInsets(top: 3, left: 12, bottom: 3, right: 12))
+    lazy var addCategoryView = AddCategoryView()
+    private lazy var separatorView = SeparatorView()
+    
     // MARK: - Properties
     lazy var starList: [UIImageView] = [
         UIImageView(image: R.Icon.iconStarDisabled16),
@@ -53,7 +56,7 @@ extension BaseAddActivityViewController {
         
         view.addSubviews(titleTextFeild, scrollView, saveButton)
         
-        contentView.addSubviews(starStackView, satisfyingLabel, mainImageView, cameraImageView, memoTextView)
+        contentView.addSubviews(addCategoryView, separatorView, starStackView, satisfyingLabel, mainImageView, cameraImageView, memoTextView)
         
         starList.forEach {
             $0.contentMode = .scaleAspectFit
@@ -141,8 +144,18 @@ extension BaseAddActivityViewController {
             $0.edges.equalToSuperview()
         }
         
+        addCategoryView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(24)
+            $0.left.right.equalToSuperview()
+        }
+        
+        separatorView.snp.makeConstraints {
+            $0.top.equalTo(addCategoryView.snp.bottom).offset(40)
+            $0.left.right.equalToSuperview()
+        }
+        
         starStackView.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(24)
+            $0.top.equalTo(separatorView.snp.bottom).offset(16)
             $0.width.equalTo(120)
             $0.height.equalTo(24)
         }

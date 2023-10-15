@@ -201,7 +201,7 @@ extension CategoryEditViewController {
 		items.forEach({ item in
 			switch item {
 			case .base, .drag:
-				layoutItems.append(NSCollectionLayoutItem.init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(UI.cellHeightMargin)))) // 40
+				layoutItems.append(NSCollectionLayoutItem.init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(UI.cellHeightMargin))))
 			default:
 				break
 			}

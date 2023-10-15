@@ -28,6 +28,7 @@ final class CategoryEditReactor: Reactor {
 		case dragAndDrop(IndexPath, IndexPath)
 		case addEmpty([IndexPath])
 		case removeEmpty([IndexPath])
+		case setRemovedUpperCategory([String:String])
 		case setNextEditScreen(CategoryEdit?)
 		case setNextAddScreen(CategoryHeader?)
 		case setNextUpperEditScreen(Bool)
@@ -41,6 +42,8 @@ final class CategoryEditReactor: Reactor {
 		var date: Date
 		var headers: [CategoryHeader] = []
 		var sections: [CategoryEditSectionModel] = []
+		var removedUpperCategory: [String:String] = [:] // id:title
+		var removedCategory: [String:String] = [:] // id:title
 		var nextEditScreen: CategoryEdit?
 		var nextAddScreen: CategoryHeader?
 		var nextUpperEditScreen: Bool = false
@@ -108,6 +111,8 @@ extension CategoryEditReactor {
 				return .just(.deleteItem(categoryEdit))
 			case let .saveSections(sections): // 카테고리 유형 편집에 대한 저장
 				return .just(.setSections(sections))
+			case let .deleteList(removedUpperList):
+				return .just(.setRemovedUpperCategory(removedUpperList))
 			default:
 				return .empty()
 			}
@@ -141,6 +146,11 @@ extension CategoryEditReactor {
 				let sectionId = section.offset
 				
 				if let removeIndex = newState.sections[sectionId].items.firstIndex(where: {$0.identity as! String == categoryEdit.id}) {
+					// 삭제된 카테고리 저장
+					let item = newState.sections[sectionId].items[removeIndex]
+					let (id, title) = (item.identity as! String, item.title)
+					newState.removedCategory[id] = title
+
 					newState.sections[sectionId].items.remove(at: removeIndex)
 				}
 			}
@@ -155,6 +165,10 @@ extension CategoryEditReactor {
 		case let .removeEmpty(indexPathList):
 			for indexPath in indexPathList {
 				newState.sections[indexPath.section].items.remove(at: indexPath.row)
+			}
+		case let .setRemovedUpperCategory(removedUpperCategory):
+			for (id, title) in removedUpperCategory {
+				newState.removedUpperCategory[id] = title
 			}
 		case let .setNextEditScreen(categoryEdit):
 			newState.nextEditScreen = categoryEdit
@@ -189,7 +203,8 @@ extension CategoryEditReactor {
 	
 	// Section에 따른 Data 주입
 	private func makeSections(respose: CategoryEditResDto, type: String) -> [CategoryEditSectionModel] {
-		let data = respose.data.selectListOutputDto
+		guard let respose = respose.data else { return [] }
+		let data = respose.selectListOutputDto
 		
 		var sections: [CategoryEditSectionModel] = []
 
@@ -219,20 +234,64 @@ extension CategoryEditReactor {
 extension CategoryEditReactor {
 	// 변경된 데이터 확인하기
 	private func compareData() -> Observable<Mutation> {
-		print(#function, #line)
+		var request: PutCategoryEditReqDto = .init(economicActivityDvcd: currentState.type, data: [])
 		let data = currentState.sections
+		let removedUpperCategory = currentState.removedUpperCategory
 
 		for i in stride(from: 1, to: data.count - 1, by: 1) {
 			let section = data[i]
-			print(section.model.header)
-			
-			for j in stride(from: 0, to: section.items.count, by: 1) {
-				let title = section.items[j].title
-				print(title)
+			let header = data[i].model.header
+			var upper: CategoryEditUpperPut = .init(id: header.id, title: header.title, useYn: "Y", list: [])
+
+			// 추가된 상위 카테고리에 대한 처리
+			if let id = Int(header.id) {
+				if id < 0 {
+					upper.id = ""
+				}
 			}
-			print()
+						
+			for j in stride(from: 0, to: section.items.count, by: 1) {
+				let id = section.items[j].identity as! String
+				let title = section.items[j].title
+				var lowwer: CategoryEditPut = .init(id: id, title: title, useYn: "Y")
+				
+				// 추가된 카테고리에 대한 처리
+				if let id = Int(id) {
+					if id < 0 {
+						lowwer.id = ""
+					}
+				}
+				
+				upper.list.append(lowwer)
+			}
+			request.data.append(upper)
 		}
 		
-		return .empty()
+		// 마지막 배열에 넣기
+		if let _ = request.data.last {
+			// 삭제된 카테고리
+			for (id, title) in currentState.removedCategory {
+				if let id = Int(id), id < 0 {
+					continue
+				}
+				let lowwer: CategoryEditPut = .init(id: id, title: title, useYn: "N")
+				request.data[request.data.count - 1].list.append(lowwer)
+			}
+		}
+		
+		// 배열에 삭제된 상위 카테고리 넣기
+		for (id, title) in removedUpperCategory {
+			if let id = Int(id), id < 0 {
+				continue
+			}
+			
+			let upper: CategoryEditUpperPut = .init(id: id, title: title, useYn: "N", list: [])
+			request.data.append(upper)
+		}
+		
+		return MMMAPIService().putCategoryEdit(request)
+			.map { (response, error) -> Mutation in
+				return .dismiss
+			}
 	}
 }

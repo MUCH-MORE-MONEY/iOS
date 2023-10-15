@@ -9,7 +9,7 @@ import Foundation
 
 /// 경제활동카테고리 목록 조회 API Response를 위한 데이터 타입
 struct CategoryEditResDto: Codable {
-	var data: CategoryEditList
+	var data: CategoryEditList?
 	var message: String?
 	var status: String
 }

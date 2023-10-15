@@ -30,6 +30,7 @@ final class CategoryEditUpperReactor: Reactor {
 	struct State {
 		var addId: Int
 		var sections: [CategoryEditSectionModel]
+		var removedUpperCategory: [String:String] = [:] // id:title
 		var isReloadData = true
 		var nextEditScreen: CategoryHeader?
 		var nextAddScreen: Bool = false
@@ -52,7 +53,8 @@ extension CategoryEditUpperReactor {
 	func mutate(action: Action) -> Observable<Mutation> {
 		switch action {
 		case .didTabSaveButton:
-			return provider.categoryProvider.saveSections(to: currentState.sections).map { _ in .dismiss }
+			return Observable.zip(provider.categoryProvider.saveSections(to: currentState.sections), provider.categoryProvider.deleteList(to: currentState.removedUpperCategory))
+				.map { _ in .dismiss }
 		case let .dragAndDrop(startIndex, destinationIndexPath):
 			return .concat([
 				.just(.dragAndDrop(startIndex, destinationIndexPath))
@@ -108,6 +110,9 @@ extension CategoryEditUpperReactor {
 			newState.sections.append(grobalFooter)
 		case let .deleteItem(categoryHeader):
 			if let removeIndex = newState.sections.firstIndex(where: { $0.model.header.id == categoryHeader.id }) {
+				// 삭제된 카테고리 저장
+				newState.removedUpperCategory[categoryHeader.id] = categoryHeader.title
+				
 				newState.sections.remove(at: removeIndex)
 			}
 		case let .dragAndDrop(sourceIndexPath, destinationIndexPath):

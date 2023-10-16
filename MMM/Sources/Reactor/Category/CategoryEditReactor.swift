@@ -34,7 +34,6 @@ final class CategoryEditReactor: Reactor {
 		case setNextEditScreen(CategoryEdit?)
 		case setNextAddScreen(CategoryHeader?)
 		case setNextUpperEditScreen(Bool)
-		case compareEdit
 		case dismiss
 	}
 	
@@ -202,13 +201,6 @@ extension CategoryEditReactor {
 				}
 			} else {
 				newState.isEdit = false
-			}
-		case .compareEdit: // 수정되었는지 판별
-			if let pre = newState.preSections {
-				let isEdit = pre == self.transformData(input: newState.sections)
-				newState.isEdit = !isEdit
-				
-				if isEdit { newState.dismiss = true }
 			}
 		case .dismiss:
 			newState.dismiss = true

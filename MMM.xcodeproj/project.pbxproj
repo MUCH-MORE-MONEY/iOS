@@ -1158,9 +1158,9 @@
 		C4BBD26F2ABAD8BB0055FA65 /* BottomSheet */ = {
 			isa = PBXGroup;
 			children = (
+				C46D5E642AD1752700EBE5D7 /* CategoryEditUpperBottomSheetReactor.swift */,
 				45D07CD12AC4076D001C08AB /* CustomPush */,
 				C4EB8CB52AC44448005FBAF1 /* CategoryEditBottomSheetReactor.swift */,
-				C46D5E642AD1752700EBE5D7 /* CategoryEditUpperBottomSheetReactor.swift */,
 				C4BBD2692AB9E1DA0055FA65 /* DateBottomSheetReactor.swift */,
 				C4BBD26D2ABAD6140055FA65 /* SatisfactionBottomSheetReactor.swift */,
 			);

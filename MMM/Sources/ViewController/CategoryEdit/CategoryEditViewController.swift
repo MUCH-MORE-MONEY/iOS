@@ -14,7 +14,7 @@ import RxDataSources
 import RxGesture
 
 // 상속하지 않으려면 final 꼭 붙이기
-final class CategoryEditViewController: BaseViewControllerWithNav, View {
+final class CategoryEditViewController: BaseViewController, View {
 	typealias Reactor = CategoryEditReactor
 	typealias DataSource = RxCollectionViewSectionedReloadDataSource<CategoryEditSectionModel> // SectionModelType 채택
 	public typealias MoveItem = (CollectionViewSectionedDataSource<CategoryEditSectionModel>, _ sourceIndexPath:IndexPath, _ destinationIndexPath:IndexPath) -> Void
@@ -98,6 +98,8 @@ final class CategoryEditViewController: BaseViewControllerWithNav, View {
 	}
 	
 	// MARK: - UI Components
+	private lazy var backButtonItem = UIBarButtonItem()
+	private lazy var backButton = UIButton()
 	private lazy var titleStackView = UIStackView()
 	private lazy var titleImageView = UIImageView()
 	private lazy var titleLabel = UILabel()
@@ -119,6 +121,10 @@ final class CategoryEditViewController: BaseViewControllerWithNav, View {
 		super.viewDidLoad()
 	}
 	
+	override var preferredStatusBarStyle: UIStatusBarStyle {
+		return .lightContent // status text color 변경
+	}
+	
 	func bind(reactor: CategoryEditReactor) {
 		bindState(reactor)
 		bindAction(reactor)
@@ -131,6 +137,12 @@ extension CategoryEditViewController {
 		saveButton.rx.tap
 			.withUnretained(self)
 			.map { .didTabSaveButton }
+			.bind(to: reactor.action)
+			.disposed(by: disposeBag)
+		
+		backButton.rx.tap
+			.withUnretained(self)
+			.map { .didTabBackButton }
 			.bind(to: reactor.action)
 			.disposed(by: disposeBag)
 	}
@@ -168,6 +180,14 @@ extension CategoryEditViewController {
 			.bind(onNext: willPushUpperEditViewController)
 			.disposed(by: disposeBag)
 		
+		// 수정 여부에 따른 Alert present
+		reactor.state
+			.map { $0.isEdit }
+			.distinctUntilChanged() // 중복값 무시
+			.filter { $0 } // true 일때만
+			.bind(onNext: willPresentAlert)
+			.disposed(by: disposeBag)
+
 		// 카테고리 저장 후
 		reactor.state
 			.compactMap { $0.dismiss }
@@ -273,6 +293,20 @@ extension CategoryEditViewController {
 		navigationController?.pushViewController(vc, animated: true)
 	}
 }
+//MARK: - 알림
+extension CategoryEditViewController: CustomAlertDelegate {
+	// 편집 여부에 따른 Present
+	private func willPresentAlert(isEdit: Bool) {
+		showAlert(alertType: .canCancel, titleText: "카테고리 편집 나가기", contentText: "화면을 나가면 변경사항은 저장되지 않습니다.\n 나가시겠습니까?", confirmButtonText: "나가기")
+	}
+	
+	func didAlertCofirmButton() {
+		// 나가기
+		self.navigationController?.popViewController(animated: true)
+	}
+	
+	func didAlertCacelButton() { }
+}
 //MARK: - Attribute & Hierarchy & Layouts
 extension CategoryEditViewController {
 	// 초기 셋업할 코드들
@@ -282,7 +316,16 @@ extension CategoryEditViewController {
 		view.backgroundColor = R.Color.gray900
 		navigationItem.titleView = titleStackView
 		navigationItem.rightBarButtonItem = UIBarButtonItem(customView: saveButton)
+		navigationItem.leftBarButtonItem = backButtonItem
 
+		backButtonItem = backButtonItem.then {
+			$0.customView = backButton
+		}
+		
+		backButton = backButton.then {
+			$0.setImage(R.Icon.arrowBack24, for: .normal)
+		}
+		
 		// Navigation Title View
 		titleStackView = titleStackView.then {
 			$0.axis = .horizontal

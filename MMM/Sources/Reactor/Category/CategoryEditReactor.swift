@@ -12,6 +12,7 @@ final class CategoryEditReactor: Reactor {
 	enum Action {
 		case loadData(String)
 		case didTabSaveButton
+		case didTabBackButton
 		case didTapAddButton(CategoryHeader) // 카테고리 추가
 		case didTapUpperEditButton // 카테고리 유형 편집
 		case dragAndDrop(IndexPath, IndexPath)
@@ -29,9 +30,11 @@ final class CategoryEditReactor: Reactor {
 		case addEmpty([IndexPath])
 		case removeEmpty([IndexPath])
 		case setRemovedUpperCategory([String:String])
+		case setPresentAlert(Bool)
 		case setNextEditScreen(CategoryEdit?)
 		case setNextAddScreen(CategoryHeader?)
 		case setNextUpperEditScreen(Bool)
+		case compareEdit
 		case dismiss
 	}
 	
@@ -41,12 +44,14 @@ final class CategoryEditReactor: Reactor {
 		var type: String
 		var date: Date
 		var headers: [CategoryHeader] = []
+		var preSections: [CategoryEditUpperPut]?
 		var sections: [CategoryEditSectionModel] = []
 		var removedUpperCategory: [String:String] = [:] // id:title
 		var removedCategory: [String:String] = [:] // id:title
 		var nextEditScreen: CategoryEdit?
 		var nextAddScreen: CategoryHeader?
 		var nextUpperEditScreen: Bool = false
+		var isEdit = false
 		var dismiss = false
 		var error = false
 	}
@@ -76,6 +81,12 @@ extension CategoryEditReactor {
 		case .didTabSaveButton:
 			return .concat([
 				compareData()
+			])
+		case .didTabBackButton:
+			// 수정이 되었는지 판별
+			return .concat([
+				.just(.setPresentAlert(true)),
+				.just(.setPresentAlert(false))
 			])
 		case let .didTapAddButton(categoryHeader):
 			return .concat([
@@ -131,6 +142,11 @@ extension CategoryEditReactor {
 			newState.headers = headers
 		case let .setSections(sections):
 			newState.sections = sections
+			
+			// 편집전 sections 정보 저장
+			if newState.preSections == nil {
+				newState.preSections = self.transformData(input: sections)
+			}
 		case let .addItem(categoryEdit):
 			if let section = newState.sections.enumerated().filter({ $0.element.model.header.id == categoryEdit.upperId }).first {
 				let sectionId = section.offset
@@ -176,6 +192,24 @@ extension CategoryEditReactor {
 			newState.nextAddScreen = categoryHeader
 		case let .setNextUpperEditScreen(isNext):
 			newState.nextUpperEditScreen = isNext
+		case let .setPresentAlert(isAlert): // 수정되었는지 판별
+			if isAlert {
+				if let pre = newState.preSections {
+					let isEdit = pre == self.transformData(input: newState.sections)
+					newState.isEdit = !isEdit
+					
+					if isEdit { newState.dismiss = true }
+				}
+			} else {
+				newState.isEdit = false
+			}
+		case .compareEdit: // 수정되었는지 판별
+			if let pre = newState.preSections {
+				let isEdit = pre == self.transformData(input: newState.sections)
+				newState.isEdit = !isEdit
+				
+				if isEdit { newState.dismiss = true }
+			}
 		case .dismiss:
 			newState.dismiss = true
 		}
@@ -232,6 +266,20 @@ extension CategoryEditReactor {
 }
 // MARK: - 저장
 extension CategoryEditReactor {
+	// 비교를 위한 Model 전환
+	private func transformData(input: [CategoryEditSectionModel]) -> [CategoryEditUpperPut] {
+		guard 1 < input.count else { return [] }
+		
+		return input[1..<input.count - 1].map { section -> CategoryEditUpperPut in
+			let id = section.model.header.id
+			let title = section.model.header.title
+			let list: [CategoryEditPut] = section.items.map { item -> CategoryEditPut in
+				return .init(id: item.identity as! String, title: item.title, useYn: "")
+			}
+			return .init(id: id, title: title, useYn: "", list: list)
+		}
+	}
+	
 	// 변경된 데이터 확인하기
 	private func compareData() -> Observable<Mutation> {
 		var request: PutCategoryEditReqDto = .init(economicActivityDvcd: currentState.type, data: [])

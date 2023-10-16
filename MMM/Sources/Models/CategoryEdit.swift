@@ -32,7 +32,7 @@ struct CategoryEdit: Codable, Equatable {
 }
 
 // 수정을 위한 모델
-struct CategoryEditUpperPut: Codable {
+struct CategoryEditUpperPut: Codable, Equatable {
 	var id, title, useYn: String
 	var list: [CategoryEditPut]
 	
@@ -43,9 +43,13 @@ struct CategoryEditUpperPut: Codable {
 		case useYn = "useYn"
 		case list = "economicActivityCategoryList"
 	}
+	
+	static func == (lhs: CategoryEditUpperPut, rhs: CategoryEditUpperPut) -> Bool {	
+		return lhs.id == rhs.id && lhs.title == rhs.title && lhs.list == rhs.list
+	}
 }
 
-struct CategoryEditPut: Codable {
+struct CategoryEditPut: Codable, Equatable {
 	var id, title, useYn: String
 	
 	// 파라미터 이름 변경
@@ -53,6 +57,10 @@ struct CategoryEditPut: Codable {
 		case id = "economicActivityCategoryCd"
 		case title = "economicActivityCategoryNm"
 		case useYn = "useYn"
+	}
+	
+	static func == (lhs: CategoryEditPut, rhs: CategoryEditPut) -> Bool {
+		return lhs.id == rhs.id && lhs.title == rhs.title
 	}
 }
 

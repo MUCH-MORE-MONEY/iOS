@@ -106,7 +106,15 @@ extension CategoryEditUpperReactor {
 			let model: CategoryEditSectionModel = .init(model: .base(categoryHeader, [item]), items: [item])
 			let grobalFooter = newState.sections.removeLast()
 			newState.sections.append(model)
+			
+			// 마지막 더미 Data 제거
+			if let _ = newState.sections.last {
+				newState.sections[newState.sections.count - 1].items.removeAll()
+			}
+			
 			newState.addId -= 1 // 고유값 유지
+			
+			// Footer 입력
 			newState.sections.append(grobalFooter)
 		case let .deleteItem(categoryHeader):
 			if let removeIndex = newState.sections.firstIndex(where: { $0.model.header.id == categoryHeader.id }) {

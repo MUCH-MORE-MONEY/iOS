@@ -67,7 +67,7 @@ final class CategoryEditBottomSheetViewController: BottomSheetViewController2, V
 		// TextField에 밑줄 추가
 		textField.setUnderLine(color: R.Color.orange500)
 	}
-	
+
 	func bind(reactor: CategoryEditBottomSheetReactor) {
 		bindState(reactor)
 		bindAction(reactor)

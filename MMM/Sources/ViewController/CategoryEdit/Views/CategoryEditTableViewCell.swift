@@ -19,7 +19,7 @@ final class CategoryEditTableViewCell: BaseTableViewCell, View {
 	}
 	
 	// MARK: - UI Components
-	private lazy var titleLabel = UILabel()
+	lazy var titleLabel = UILabel()
 	private lazy var editButton = UIButton()
 	private lazy var dragButton = UIButton()
 	private lazy var separator = UIView()

@@ -73,7 +73,7 @@ extension CategoryEditUpperViewController {
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: CategoryEditUpperReactor) {
-		// 타입 추론이 길어서 반으로 쪼개기
+		// 타입 추론이 길어서 반으로 나누기
 		let datasource = reactor.state
 			.map { $0.sections.map { $0.model.header }.filter { $0.id != "header" && $0.id != "footer"} }
 			.distinctUntilChanged { $0.count == $1.count } // 순서만 바뀌었을 때에는 변경안함
@@ -85,13 +85,13 @@ extension CategoryEditUpperViewController {
 
 				// 데이터 설정
 				// Grobal Header/Footer가 존재해서 -2
-				cell.setData(last: row == reactor.currentState.sections.map { $0.model.header }.count - 3)
+				cell.setData(last: row == reactor.currentState.sections.count - 3)
 				cell.reactor = CategoryEditTableViewCellReactor(provider: reactor.provider, categoryHeader: data)
 
 				let backgroundView = UIView()
 				backgroundView.backgroundColor = .clear
 				cell.selectedBackgroundView = backgroundView
-				
+
 				return cell
 			}.disposed(by: disposeBag)
 		
@@ -154,8 +154,7 @@ extension CategoryEditUpperViewController: CustomAlertDelegate {
 	}
 	
 	func didAlertCofirmButton() {
-		// 나가기
-		self.navigationController?.popViewController(animated: true)
+		self.navigationController?.popViewController(animated: true) // 나가기
 	}
 	
 	func didAlertCacelButton() { }
@@ -236,6 +235,20 @@ extension CategoryEditUpperViewController {
 extension CategoryEditUpperViewController: UITableViewDragDelegate {
 	func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
 		return [UIDragItem(itemProvider: NSItemProvider())]
+	}
+	
+	func tableView(_ tableView: UITableView, dragSessionDidEnd session: UIDragSession) {
+		guard let reactor = reactor else { return }
+		
+		// 마지막 아이템의 separator 제거
+		// 3을 빼는 이유 grobal header, footer가 있음
+		let count = reactor.currentState.sections.count - 3
+		
+		for row in stride(from: 0, through: count, by: 1) {
+			let index = IndexPath(row: row, section: 0)
+			let cell = tableView.cellForRow(at: index) as! CategoryEditTableViewCell
+			cell.setData(last: row == count)
+		}
 	}
 }
 // MARK: - UITableView Drop Delegate

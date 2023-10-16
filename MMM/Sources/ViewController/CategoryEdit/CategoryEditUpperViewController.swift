@@ -15,8 +15,7 @@ final class CategoryEditUpperViewController: BaseViewController, View {
 	typealias Reactor = CategoryEditUpperReactor
 
 	// MARK: - Constants
-	private enum UI {
-	}
+	private enum UI {}
 	
 	// MARK: - Properties
 	
@@ -41,12 +40,14 @@ final class CategoryEditUpperViewController: BaseViewController, View {
 extension CategoryEditUpperViewController {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
 	private func bindAction(_ reactor: CategoryEditUpperReactor) {
+		// 저장 버튼
 		saveButton.rx.tap
 			.withUnretained(self)
 			.map { .didTabSaveButton }
 			.bind(to: reactor.action)
 			.disposed(by: disposeBag)
 		
+		// 뒤로가기 버튼
 		backButton.rx.tap
 			.withUnretained(self)
 			.map { .didTabBackButton }
@@ -63,11 +64,8 @@ extension CategoryEditUpperViewController {
 		// 셀이 이동되었을때
 		tableView.rx.itemMoved
 			.bind(onNext: { [self] source, destination in
+				// DataSource 이동
 				self.reactor?.action.onNext(.dragAndDrop(source, destination))
-				let sourceCell = tableView.cellForRow(at: source) as! CategoryEditTableViewCell
-
-				// 데이터 설정 - separator
-				sourceCell.setData(last: destination.row == reactor.currentState.sections.map { $0.model.header }.count - 3)
 			}).disposed(by: disposeBag)
 	}
 	
@@ -88,6 +86,7 @@ extension CategoryEditUpperViewController {
 				cell.setData(last: row == reactor.currentState.sections.count - 3)
 				cell.reactor = CategoryEditTableViewCellReactor(provider: reactor.provider, categoryHeader: data)
 
+				// Click에 대한 색상
 				let backgroundView = UIView()
 				backgroundView.backgroundColor = .clear
 				cell.selectedBackgroundView = backgroundView
@@ -174,6 +173,7 @@ extension CategoryEditUpperViewController {
 			$0.customView = backButton
 		}
 		
+		// Navigation Bar Left Button
 		backButton = backButton.then {
 			$0.setImage(R.Icon.arrowBack24, for: .normal)
 		}
@@ -241,7 +241,7 @@ extension CategoryEditUpperViewController: UITableViewDragDelegate {
 		guard let reactor = reactor else { return }
 		
 		// 마지막 아이템의 separator 제거
-		// 3을 빼는 이유 grobal header, footer가 있음
+		// 3을 빼는 이유 양끝에 Global header, footer가 있음
 		let count = reactor.currentState.sections.count - 3
 		
 		for row in stride(from: 0, through: count, by: 1) {

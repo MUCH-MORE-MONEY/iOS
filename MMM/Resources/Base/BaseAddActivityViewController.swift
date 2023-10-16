@@ -147,11 +147,13 @@ extension BaseAddActivityViewController {
         addCategoryView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(24)
             $0.left.right.equalToSuperview()
+            $0.height.equalTo(24)
         }
         
         separatorView.snp.makeConstraints {
-            $0.top.equalTo(addCategoryView.snp.bottom).offset(40)
+            $0.top.equalTo(addCategoryView.snp.bottom).offset(16)
             $0.left.right.equalToSuperview()
+            $0.height.equalTo(1)
         }
         
         starStackView.snp.makeConstraints {

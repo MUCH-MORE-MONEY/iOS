@@ -485,6 +485,12 @@ extension EditActivityViewController {
 				self.didTapImageView()
 			}.store(in: &cancellable)
 		
+        
+        addCategoryView.gesturePublisher()
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+                print("rr")
+            }.store(in: &cancellable)
 		
 		// MARK: - CRUD Publisher
 		saveButton.tapPublisher

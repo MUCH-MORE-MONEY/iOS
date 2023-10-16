@@ -47,8 +47,8 @@ extension CategoryMainReactor {
 			let dateYM = currentState.date.getFormattedYM()
 			
 			return .concat([
-				loadData(CategoryDetailListReqDto(dateYM: dateYM, economicActivityCategoryCd: "", economicActivityDvcd: "02")),
-				loadData(CategoryDetailListReqDto(dateYM: dateYM, economicActivityCategoryCd: "", economicActivityDvcd: "01"))
+				loadData(CategoryDetailListReqDto(dateYM: dateYM, economicActivityCategoryCd: "", economicActivityDvcd: "01")),
+				loadData(CategoryDetailListReqDto(dateYM: dateYM, economicActivityCategoryCd: "", economicActivityDvcd: "02"))
 			])
 		case let .selectCell(indexPath, categoryItem):
 			switch categoryItem {

@@ -122,11 +122,10 @@ extension CategoryContentViewController {
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: CategoryMainReactor) {
-		// 지출 - Section별 items 전달
+		// Section별 items 전달
 		reactor.state
-			.map( mode == .earn ? \.earnSections : \.paySections)
+			.map( mode == .pay ? \.paySections : \.earnSections)
 			.withUnretained(self)
-			.filter { !$0.1.isEmpty }
 			.subscribe(onNext: { this, sections in
 				guard !sections.isEmpty else { return }
 				
@@ -183,9 +182,9 @@ extension CategoryContentViewController {
 	}
 	
 	func makeCategoryHeaderSectionLayout(from item: CategoryMainItem) -> NSCollectionLayoutSection {
-		let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0)), subitems: .init(repeating: .init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(UI.cellHeightMargin))), count: 1))
+		let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(1)), subitems: .init(repeating: .init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(1))), count: 1))
 		
-		let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(40)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+		let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(25)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .leading)
 
 		let section: NSCollectionLayoutSection = .init(group: group)
 		section.boundarySupplementaryItems = [header]

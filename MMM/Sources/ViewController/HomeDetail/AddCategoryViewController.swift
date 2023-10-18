@@ -15,6 +15,7 @@ final class AddCategoryViewController: UIViewController {
     private lazy var cancellables: Set<AnyCancellable> = .init()
     private var isDark: Bool = false
     private var viewModel: AnyObject
+    private let addCategoryViewModel = AddCategoryViewModel()
     weak var delegate: BottomSheetChild?
     // MARK: - UI Components
     private lazy var stackView = UIStackView() //Label, 확인 Button
@@ -22,7 +23,6 @@ final class AddCategoryViewController: UIViewController {
     private lazy var buttonStackView = UIStackView()
     private lazy var manageButton = UIButton()
     private lazy var checkButton = UIButton()
-
     
     init(viewModel: AnyObject) {
         self.viewModel = viewModel
@@ -58,6 +58,12 @@ private extension AddCategoryViewController {
     }
     
     private func bind() {
+        guard let viewModel = viewModel as? EditActivityViewModel else { return }
+        let date = viewModel.createAt
+        let dvcd = viewModel.type
+        
+        addCategoryViewModel.getCategoryList(date: date, dvcd: dvcd)
+        
         checkButton.tapPublisher
             .sinkOnMainThread(receiveValue: willDismiss)
             .store(in: &cancellables)
@@ -79,7 +85,7 @@ private extension AddCategoryViewController {
         }
         
         titleLabel = titleLabel.then {
-            $0.text = "날짜 이동"
+            $0.text = "카테고리 선택"
             $0.font = R.Font.h5
             $0.textColor = isDark ? R.Color.gray200 : R.Color.black
             $0.textAlignment = .left

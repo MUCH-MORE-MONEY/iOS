@@ -104,6 +104,10 @@ struct APIParameters{
 	/// 탈퇴를 위한 Request
 	struct WithdrawReqDto: Encodable {
 	}
+    
+    /// 카테고리 조회
+    struct CategoryListReqDto: Encodable {
+    }
 }
 
 struct APIHeader {

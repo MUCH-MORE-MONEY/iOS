@@ -27,6 +27,7 @@ enum MMMAPI {
 	// MARK: - Category Edit
 	case getCategoryEdit(CategoryEditReqDto)
 	case getCategoryEditHeader(CategoryEditReqDto)
+	case putCategoryEdit(PutCategoryEditReqDto)
 
 	// MARK: - Profile
 	case exportToExcel
@@ -64,13 +65,14 @@ extension MMMAPI: BaseNetworkService {
 			return "/economic-activity-category/list/\(request.economicActivityDvcd)"
 		case let .getCategoryEditHeader(request):
 			return "/economic-activity-category/list/upper/\(request.economicActivityDvcd)"
+		case let .putCategoryEdit(request):
+			return "/economic-activity-category/\(request.economicActivityDvcd)"
 		case .exportToExcel:
 			return "/economic_activity/excel/select"
 		case .getSummary:
 			return "/economic_activity/summary/select"
 		case .withdraw:
 			return "/login/delete"
-
 		}
 	}
 	
@@ -83,6 +85,8 @@ extension MMMAPI: BaseNetworkService {
 			return .get
 		case .getCategoryList, .getCategoryDetailList, .getCategoryEdit, .getCategoryEditHeader:
 			return .get
+		case .putCategoryEdit:
+			return .put
 		case .exportToExcel, .getSummary, .withdraw:
 			return .post
 		}
@@ -106,6 +110,8 @@ extension MMMAPI: BaseNetworkService {
 			return .requestParameters(parameters: ["limit":limit, "offset":offset], encoding: URLEncoding.default)
 		case .getCategoryList, .getCategoryEdit, .getCategoryEditHeader:
 			return .requestPlain
+		case let .putCategoryEdit(request):
+			return .requestCustomJSONEncodable(request.data, encoder: .init())
 		case let .getCategoryDetailList(request):
 			return .requestParameters(parameters: ["economicActivityCategoryCd": request.economicActivityCategoryCd], encoding: URLEncoding.default)
 		case .exportToExcel, .getSummary, .withdraw:

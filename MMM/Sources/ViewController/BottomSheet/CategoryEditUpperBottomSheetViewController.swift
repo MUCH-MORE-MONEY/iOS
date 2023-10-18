@@ -98,7 +98,7 @@ extension CategoryEditUpperBottomSheetViewController {
 	private func bindState(_ reactor: CategoryEditUpperBottomSheetReactor) {
 		
 		reactor.state
-			.map { $0.isEditValid && $0.isAddValid }
+			.map { $0.isEditValid }
 			.subscribe(onNext: { [weak self] isValid in
 				guard let self = self, let text = self.textField.text else {
 					return

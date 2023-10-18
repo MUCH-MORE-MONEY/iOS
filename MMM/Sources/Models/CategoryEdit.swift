@@ -29,5 +29,38 @@ struct CategoryEdit: Codable, Equatable {
 	static func getDummy() -> Self {
 		return CategoryEdit(id: "01", title: "덕질비요요요요용덕질비요요요요용", upperId: "01", upperTitle: "보기만 해도 배부른", orderNum: 1, upperOrderNum: 1)
 	}
-
 }
+
+// 수정을 위한 모델
+struct CategoryEditUpperPut: Codable, Equatable {
+	var id, title, useYn: String
+	var list: [CategoryEditPut]
+	
+	// 파라미터 이름 변경
+	enum CodingKeys: String, CodingKey {
+		case id = "upperEconomicActivityCategoryCd"
+		case title = "upperEconomicActivityCategoryNm"
+		case useYn = "useYn"
+		case list = "economicActivityCategoryList"
+	}
+	
+	static func == (lhs: CategoryEditUpperPut, rhs: CategoryEditUpperPut) -> Bool {	
+		return lhs.id == rhs.id && lhs.title == rhs.title && lhs.list == rhs.list
+	}
+}
+
+struct CategoryEditPut: Codable, Equatable {
+	var id, title, useYn: String
+	
+	// 파라미터 이름 변경
+	enum CodingKeys: String, CodingKey {
+		case id = "economicActivityCategoryCd"
+		case title = "economicActivityCategoryNm"
+		case useYn = "useYn"
+	}
+	
+	static func == (lhs: CategoryEditPut, rhs: CategoryEditPut) -> Bool {
+		return lhs.id == rhs.id && lhs.title == rhs.title
+	}
+}
+

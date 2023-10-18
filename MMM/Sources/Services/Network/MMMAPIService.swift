@@ -66,6 +66,7 @@ protocol MMMAPIServiceble: BaseAPIService {
 	// MARK: - Category Edit 요청 API
     func getCategoryEdit(_ request: CategoryEditReqDto) -> Observable<(CategoryEditResDto, Error?)>
 	func getCategoryEditHeader(_ request: CategoryEditReqDto) -> Observable<(CategoryEditHeaderResDto, Error?)>
+	func putCategoryEdit(_ request: PutCategoryEditReqDto) -> Observable<(CategoryEditResDto, Error?)>
 
     // MARK: - Profile 요청 API
     func exportToExcel() -> Observable<(ExportResDto, Error?)>
@@ -130,6 +131,11 @@ struct MMMAPIService: MMMAPIServiceble {
 	// 경제활동상위카테고리 목록 조회 API
 	func getCategoryEditHeader(_ request: CategoryEditReqDto) -> RxSwift.Observable<(CategoryEditHeaderResDto, Error?)> {
 		return provider().request(MMMAPI.getCategoryEditHeader(request), type: CategoryEditHeaderResDto.self).asObservable()
+	}
+	
+	// 경제활동 카테고리 전체 수정 API
+	func putCategoryEdit(_ request: PutCategoryEditReqDto) -> RxSwift.Observable<(CategoryEditResDto, Error?)> {
+		return provider().request(MMMAPI.putCategoryEdit(request), type: CategoryEditResDto.self).asObservable()
 	}
 	
 	// MARK: - Profile 요청 API

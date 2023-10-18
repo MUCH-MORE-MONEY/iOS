@@ -18,6 +18,7 @@ final class CategoryDetailReactor: Reactor {
 	enum Mutation {
 		case setList([EconomicActivity])
 		case pushDetail(IndexPath, EconomicActivity, Bool)
+		case setLoading(Bool)
 	}
 	
 	// 현재 상태를 기록
@@ -29,6 +30,7 @@ final class CategoryDetailReactor: Reactor {
 		var list: [EconomicActivity] = []
 		var detailData: (IndexPath: IndexPath, info: EconomicActivity)?
 		var isPushDetail = false
+		var isLoading = false // 로딩
 		var error = false
 	}
 	
@@ -38,9 +40,6 @@ final class CategoryDetailReactor: Reactor {
 	init(date: Date, type: String, section: Category, categoryLowwer: CategoryLowwer) {
 		
 		initialState = State(date: date, type: type, section: section, categoryLowwer: categoryLowwer)
-		
-		// 뷰가 최초 로드 될 경우
-		action.onNext(.loadData)
 	}
 }
 //MARK: - Mutate, Reduce
@@ -51,7 +50,9 @@ extension CategoryDetailReactor {
 		case .loadData:
 			let category = currentState.categoryLowwer
 			return .concat([
-				loadData(CategoryDetailListReqDto(dateYM: currentState.date.getFormattedYM(), economicActivityCategoryCd: category.id, economicActivityDvcd: currentState.type))
+				.just(.setLoading(true)),
+				loadData(CategoryDetailListReqDto(dateYM: currentState.date.getFormattedYM(), economicActivityCategoryCd: category.id, economicActivityDvcd: currentState.type)),
+				.just(.setLoading(false))
 			])
 		case .selectCell(let indexPath, let data):
 			return .concat([
@@ -71,6 +72,8 @@ extension CategoryDetailReactor {
 		case .pushDetail(let indexPath, let data, let isPush):
 			newState.detailData = (indexPath, data)
 			newState.isPushDetail = isPush
+		case let .setLoading(isLoading):
+			newState.isLoading = isLoading
 		}
 		
 		return newState

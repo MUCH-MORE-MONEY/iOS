@@ -11,6 +11,7 @@ final class CategoryEditUpperReactor: Reactor {
 	// 사용자의 액션
 	enum Action {
 		case didTabSaveButton
+		case didTabBackButton
 		case dragAndDrop(IndexPath, IndexPath)
 		case didTapAddButton
 	}
@@ -21,6 +22,7 @@ final class CategoryEditUpperReactor: Reactor {
 		case addItem(CategoryHeader)
 		case deleteItem(CategoryHeader)
 		case dragAndDrop(IndexPath, IndexPath)
+		case setPresentAlert(Bool)
 		case setNextEditScreen(CategoryHeader?)
 		case setNextAddScreen(Bool)
 		case dismiss
@@ -29,8 +31,11 @@ final class CategoryEditUpperReactor: Reactor {
 	// 현재 상태를 기록
 	struct State {
 		var addId: Int
+		var preSections: [CategoryEditSectionModel]
 		var sections: [CategoryEditSectionModel]
+		var removedUpperCategory: [String:String] = [:] // id:title
 		var isReloadData = true
+		var isEdit: Bool = false
 		var nextEditScreen: CategoryHeader?
 		var nextAddScreen: Bool = false
 		var dismiss = false
@@ -42,7 +47,7 @@ final class CategoryEditUpperReactor: Reactor {
 	let provider: ServiceProviderProtocol
 
 	init(provider: ServiceProviderProtocol, sections: [CategoryEditSectionModel]) {
-		self.initialState = State(addId: -(sections.count - 1), sections: sections)
+		self.initialState = State(addId: -(sections.count - 1), preSections: sections, sections: sections)
 		self.provider = provider
 	}
 }
@@ -52,7 +57,13 @@ extension CategoryEditUpperReactor {
 	func mutate(action: Action) -> Observable<Mutation> {
 		switch action {
 		case .didTabSaveButton:
-			return provider.categoryProvider.saveSections(to: currentState.sections).map { _ in .dismiss }
+			return Observable.zip(provider.categoryProvider.saveSections(to: currentState.sections), provider.categoryProvider.deleteList(to: currentState.removedUpperCategory))
+				.map { _ in .dismiss }
+		case .didTabBackButton:	// 수정이 되었는지 판별
+			return .concat([
+				.just(.setPresentAlert(true)),
+				.just(.setPresentAlert(false))
+			])
 		case let .dragAndDrop(startIndex, destinationIndexPath):
 			return .concat([
 				.just(.dragAndDrop(startIndex, destinationIndexPath))
@@ -104,10 +115,21 @@ extension CategoryEditUpperReactor {
 			let model: CategoryEditSectionModel = .init(model: .base(categoryHeader, [item]), items: [item])
 			let grobalFooter = newState.sections.removeLast()
 			newState.sections.append(model)
+			
+			// 마지막 더미 Data 제거
+			if let _ = newState.sections.last {
+				newState.sections[newState.sections.count - 1].items.removeAll()
+			}
+			
 			newState.addId -= 1 // 고유값 유지
+			
+			// Footer 입력
 			newState.sections.append(grobalFooter)
 		case let .deleteItem(categoryHeader):
 			if let removeIndex = newState.sections.firstIndex(where: { $0.model.header.id == categoryHeader.id }) {
+				// 삭제된 카테고리 저장
+				newState.removedUpperCategory[categoryHeader.id] = categoryHeader.title
+				
 				newState.sections.remove(at: removeIndex)
 			}
 		case let .dragAndDrop(sourceIndexPath, destinationIndexPath):
@@ -115,6 +137,15 @@ extension CategoryEditUpperReactor {
 			newState.sections.remove(at: sourceIndexPath.row + 1)
 			newState.sections.insert(sourceItem, at: destinationIndexPath.row + 1)
 			newState.isReloadData = false
+		case let .setPresentAlert(isAlert): // 수정되었는지 판별
+			if isAlert {
+				let isEdit = self.transformData(input: newState.preSections) == self.transformData(input: newState.sections)
+				newState.isEdit = !isEdit
+				
+				if isEdit { newState.dismiss = true }
+			} else {
+				newState.isEdit = false
+			}
 		case let .setNextEditScreen(categoryHeader):
 			newState.nextEditScreen = categoryHeader
 		case let .setNextAddScreen(categoryHeader):
@@ -124,5 +155,18 @@ extension CategoryEditUpperReactor {
 		}
 		
 		return newState
+	}
+}
+//MARK: - Action
+extension CategoryEditUpperReactor {
+	// 비교를 위한 데이터 변환
+	private func transformData(input: [CategoryEditSectionModel]) -> [CategoryHeader] {
+		guard 1 < input.count else { return [] }
+		
+		return input[1..<input.count - 1].map { section -> CategoryHeader in
+			let id = section.model.header.id
+			let title = section.model.header.title
+			return .init(id: id, title: title, orderNum: 0)
+		}
 	}
 }

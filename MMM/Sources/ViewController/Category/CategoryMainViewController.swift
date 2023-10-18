@@ -38,9 +38,16 @@ final class CategoryMainViewController: BaseViewControllerWithNav, View {
 	private var dataViewControllers: [UIViewController] {
 		[self.payViewController, self.earnViewController]
 	}
+	private lazy var loadView = LoadingViewController()
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
+	}
+	
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		
+		reactor?.action.onNext(.loadData)
 	}
 	
 	func bind(reactor: CategoryMainReactor) {
@@ -53,9 +60,8 @@ extension CategoryMainViewController {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
 	private func bindAction(_ reactor: CategoryMainReactor) {
 		editButton.rx.tap
-			.subscribe(onNext: {
-				self.willPushEditViewController()
-			}).disposed(by: disposeBag)
+			.subscribe(onNext: willPushEditViewController)
+			.disposed(by: disposeBag)
 		
 		segmentedControl.rx.selectedSegmentIndex
 			.map { $0 == 0 ? 0 : 1 }
@@ -69,8 +75,24 @@ extension CategoryMainViewController {
 	private func bindState(_ reactor: CategoryMainReactor) {
 		reactor.state
 			.compactMap { $0.nextScreen }
-			.subscribe(onNext: { [weak self] categoryLowwer in
-				self?.willPushViewController(categoryLowwer: categoryLowwer)
+			.subscribe(onNext: willPushViewController)
+			.disposed(by: disposeBag)
+		
+		// 로딩 발생
+		reactor.state
+			.map { $0.isLoading }
+			.distinctUntilChanged() // 중복값 무시
+			.subscribe(onNext: { [weak self] loading in
+				guard let self = self else { return }
+				
+				if loading && !self.loadView.isPresent {
+					self.loadView.play()
+					self.loadView.isPresent = true
+					self.loadView.modalPresentationStyle = .overFullScreen
+					self.present(self.loadView, animated: false, completion: nil)
+				} else {
+					self.loadView.dismiss(animated: false)
+				}
 			})
 			.disposed(by: disposeBag)
 	}

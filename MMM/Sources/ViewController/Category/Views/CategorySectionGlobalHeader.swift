@@ -48,9 +48,7 @@ extension CategorySectionGlobalHeader {
 	// 초기 셋업할 코드들
 	override func setAttribute() {
 		super.setAttribute()
-		
-		backgroundColor = R.Color.gray900
-		
+				
 		upperLabel = upperLabel.then {
 			$0.text = "카테고리 유형"
 			$0.font = R.Font.prtendard(family: .medium, size: 14)

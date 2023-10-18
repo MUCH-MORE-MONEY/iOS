@@ -18,7 +18,8 @@ final class CategoryMainReactor: Reactor {
 	enum Mutation {
 		case setPaySections([CategoryMainSectionModel])
 		case setEarnSections([CategoryMainSectionModel])
-		case setNextScreen(IndexPath, CategoryLowwer)
+		case setNextScreen(IndexPath, CategoryLowwer?)
+		case setLoading(Bool)
 	}
 	
 	// 현재 상태를 기록
@@ -28,6 +29,7 @@ final class CategoryMainReactor: Reactor {
 		var earnSections: [CategoryMainSectionModel] = [CategoryMainSectionModel(model: .init(original: .header(.header), items: []), items: [])]
 		var indexPath: IndexPath?
 		var nextScreen: CategoryLowwer?
+		var isLoading = false // 로딩
 		var error = false
 	}
 	
@@ -36,9 +38,6 @@ final class CategoryMainReactor: Reactor {
 	
 	init(date: Date) {
 		initialState = State(date: date)
-		
-		// 뷰가 최초 로드 될 경우
-		action.onNext(.loadData)
 	}
 }
 //MARK: - Mutate, Reduce
@@ -50,14 +49,17 @@ extension CategoryMainReactor {
 			let dateYM = currentState.date.getFormattedYM()
 			
 			return .concat([
+				.just(.setLoading(true)),
+				loadData(CategoryDetailListReqDto(dateYM: dateYM, economicActivityCategoryCd: "", economicActivityDvcd: "01")),
 				loadData(CategoryDetailListReqDto(dateYM: dateYM, economicActivityCategoryCd: "", economicActivityDvcd: "02")),
-				loadData(CategoryDetailListReqDto(dateYM: dateYM, economicActivityCategoryCd: "", economicActivityDvcd: "01"))
+				.just(.setLoading(false))
 			])
 		case let .selectCell(indexPath, categoryItem):
 			switch categoryItem {
 			case .base(let reactor):
 				return .concat([
-					.just(.setNextScreen(indexPath, reactor.currentState.categoryLowwer))
+					.just(.setNextScreen(indexPath, reactor.currentState.categoryLowwer)),
+					.just(.setNextScreen(indexPath, nil))
 				])
 			case .header:
 				return .empty()
@@ -77,6 +79,8 @@ extension CategoryMainReactor {
 		case let .setNextScreen(indexPath, nextScreen):
 			newState.indexPath = indexPath
 			newState.nextScreen = nextScreen
+		case let .setLoading(isLoading):
+			newState.isLoading = isLoading
 		}
 		
 		return newState

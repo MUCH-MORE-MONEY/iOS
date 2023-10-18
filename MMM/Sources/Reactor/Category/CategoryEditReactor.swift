@@ -34,6 +34,7 @@ final class CategoryEditReactor: Reactor {
 		case setNextEditScreen(CategoryEdit?)
 		case setNextAddScreen(CategoryHeader?)
 		case setNextUpperEditScreen(Bool)
+		case setLoading(Bool)
 		case dismiss
 	}
 	
@@ -52,6 +53,7 @@ final class CategoryEditReactor: Reactor {
 		var nextUpperEditScreen: Bool = false
 		var isEdit = false
 		var dismiss = false
+		var isLoading = false // 로딩
 		var error = false
 	}
 	
@@ -74,12 +76,16 @@ extension CategoryEditReactor {
 		switch action {
 		case let .loadData(type):
 			return .concat([
+				.just(.setLoading(true)),
 				loadHeaderData(CategoryEditReqDto(economicActivityDvcd: type)),
-				loadCategoryData(CategoryEditReqDto(economicActivityDvcd: type))
+				loadCategoryData(CategoryEditReqDto(economicActivityDvcd: type)),
+				.just(.setLoading(false))
 			])
 		case .didTabSaveButton:
 			return .concat([
-				compareData()
+				.just(.setLoading(true)),
+				compareData(),
+				.just(.setLoading(false))
 			])
 		case .didTabBackButton:
 			// 수정이 되었는지 판별
@@ -202,6 +208,8 @@ extension CategoryEditReactor {
 			} else {
 				newState.isEdit = false
 			}
+		case let .setLoading(isLoading):
+			newState.isLoading = isLoading
 		case .dismiss:
 			newState.dismiss = true
 		}

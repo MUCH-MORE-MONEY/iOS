@@ -19,6 +19,7 @@ final class CategoryMainReactor: Reactor {
 		case setPaySections([CategoryMainSectionModel])
 		case setEarnSections([CategoryMainSectionModel])
 		case setNextScreen(IndexPath, CategoryLowwer?)
+		case setLoading(Bool)
 	}
 	
 	// 현재 상태를 기록
@@ -28,6 +29,7 @@ final class CategoryMainReactor: Reactor {
 		var earnSections: [CategoryMainSectionModel] = [CategoryMainSectionModel(model: .init(original: .header(.header), items: []), items: [])]
 		var indexPath: IndexPath?
 		var nextScreen: CategoryLowwer?
+		var isLoading = false // 로딩
 		var error = false
 	}
 	
@@ -47,8 +49,10 @@ extension CategoryMainReactor {
 			let dateYM = currentState.date.getFormattedYM()
 			
 			return .concat([
+				.just(.setLoading(true)),
 				loadData(CategoryDetailListReqDto(dateYM: dateYM, economicActivityCategoryCd: "", economicActivityDvcd: "01")),
-				loadData(CategoryDetailListReqDto(dateYM: dateYM, economicActivityCategoryCd: "", economicActivityDvcd: "02"))
+				loadData(CategoryDetailListReqDto(dateYM: dateYM, economicActivityCategoryCd: "", economicActivityDvcd: "02")),
+				.just(.setLoading(false))
 			])
 		case let .selectCell(indexPath, categoryItem):
 			switch categoryItem {
@@ -75,6 +79,8 @@ extension CategoryMainReactor {
 		case let .setNextScreen(indexPath, nextScreen):
 			newState.indexPath = indexPath
 			newState.nextScreen = nextScreen
+		case let .setLoading(isLoading):
+			newState.isLoading = true
 		}
 		
 		return newState

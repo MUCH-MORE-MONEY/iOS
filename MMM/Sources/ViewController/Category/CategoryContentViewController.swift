@@ -84,6 +84,7 @@ final class CategoryContentViewController: BaseViewController, View {
 	}
 	
 	// MARK: - UI Components
+	private lazy var loadView = LoadingViewController()
 	private lazy var collectionView: UICollectionView = .init(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
 	
 	init(mode: Mode) {
@@ -132,6 +133,25 @@ extension CategoryContentViewController {
 				this.dataSource.setSections(sections)
 				this.collectionView.collectionViewLayout = this.makeLayout(sections: sections)
 				this.collectionView.reloadData()
+			})
+			.disposed(by: disposeBag)
+		
+		// 로딩 발생
+		reactor.state
+			.map { $0.isLoading }
+			.distinctUntilChanged() // 중복값 무시
+			.filter { $0 } // true 일때만
+			.subscribe(onNext: { [weak self] loading in
+				guard let self = self else { return }
+				
+				if loading && !self.loadView.isPresent {
+					self.loadView.play()
+					self.loadView.isPresent = true
+					self.loadView.modalPresentationStyle = .overFullScreen
+					self.present(self.loadView, animated: false, completion: nil)
+				} else {
+					self.loadView.dismiss(animated: false)
+				}
 			})
 			.disposed(by: disposeBag)
 	}

@@ -135,11 +135,6 @@ struct MMMAPIService: MMMAPIServiceble {
 	
 	// 경제활동 카테고리 전체 수정 API
 	func putCategoryEdit(_ request: PutCategoryEditReqDto) -> RxSwift.Observable<(CategoryEditResDto, Error?)> {
-		print(MMMAPI.putCategoryEdit(request).path)
-		print(MMMAPI.putCategoryEdit(request).method)
-		print(MMMAPI.putCategoryEdit(request).headers)
-		print(MMMAPI.putCategoryEdit(request).task)
-		
 		return provider().request(MMMAPI.putCategoryEdit(request), type: CategoryEditResDto.self).asObservable()
 	}
 	

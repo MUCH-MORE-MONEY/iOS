@@ -104,6 +104,7 @@ final class CategoryEditViewController: BaseViewController, View {
 	private lazy var titleImageView = UIImageView()
 	private lazy var titleLabel = UILabel()
 	private lazy var saveButton = UIButton()
+	private lazy var loadView = LoadingViewController()
 	private lazy var collectionView: UICollectionView = .init(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
 	
 	init(mode: Mode) {
@@ -194,6 +195,23 @@ extension CategoryEditViewController {
 			.distinctUntilChanged() // 중복값 무시
 			.bind(onNext: { _ in
 				self.navigationController?.popViewController(animated: true)
+			})
+			.disposed(by: disposeBag)
+		
+		// 로딩 발생
+		reactor.state
+			.map { $0.isLoading }
+			.distinctUntilChanged() // 중복값 무시
+			.filter { $0 } // true 일때만
+			.subscribe(onNext: { loading in
+				if loading && !self.loadView.isPresent {
+					self.loadView.play()
+					self.loadView.isPresent = true
+					self.loadView.modalPresentationStyle = .overFullScreen
+					self.present(self.loadView, animated: false)
+				} else {
+					self.loadView.dismiss(animated: false)
+				}
 			})
 			.disposed(by: disposeBag)
 	}

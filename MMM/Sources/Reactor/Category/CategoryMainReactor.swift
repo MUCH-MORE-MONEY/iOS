@@ -80,7 +80,7 @@ extension CategoryMainReactor {
 			newState.indexPath = indexPath
 			newState.nextScreen = nextScreen
 		case let .setLoading(isLoading):
-			newState.isLoading = true
+			newState.isLoading = isLoading
 		}
 		
 		return newState

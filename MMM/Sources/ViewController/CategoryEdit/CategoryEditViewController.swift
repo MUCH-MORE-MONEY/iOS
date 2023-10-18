@@ -122,6 +122,14 @@ final class CategoryEditViewController: BaseViewController, View {
 		super.viewDidLoad()
 	}
 	
+	override func viewWillAppear(_ animated: Bool) {
+		guard let reactor = reactor else { return }
+		
+		super.viewWillAppear(animated)
+		
+		reactor.action.onNext(.loadData(reactor.currentState.type))
+	}
+	
 	override var preferredStatusBarStyle: UIStatusBarStyle {
 		return .lightContent // status text color 변경
 	}
@@ -202,7 +210,6 @@ extension CategoryEditViewController {
 		reactor.state
 			.map { $0.isLoading }
 			.distinctUntilChanged() // 중복값 무시
-			.filter { $0 } // true 일때만
 			.subscribe(onNext: { loading in
 				if loading && !self.loadView.isPresent {
 					self.loadView.play()

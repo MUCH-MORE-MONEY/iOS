@@ -25,9 +25,18 @@ final class CategoryDetailViewController: BaseViewControllerWithNav, View {
 	private lazy var titleLabel = UILabel()
 	private lazy var titleDescriptionLabel = UILabel()
 	private lazy var tableView = UITableView()
+	private lazy var loadView = LoadingViewController()
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
+	}
+	
+	override func viewWillAppear(_ animated: Bool) {
+		guard let reactor = reactor else { return }
+		super.viewWillAppear(animated)
+		
+		// 뷰가 최초 로드 될 경우
+		reactor.action.onNext(.loadData)
 	}
 	
 	func bind(reactor: CategoryDetailReactor) {
@@ -85,6 +94,24 @@ extension CategoryDetailViewController {
 			.distinctUntilChanged() // 중복값 무시
 			.filter { $0 } // true일때만 화면 전환
 			.bind(onNext: willPushViewController)
+			.disposed(by: disposeBag)
+		
+		// 로딩 발생
+		reactor.state
+			.map { $0.isLoading }
+			.distinctUntilChanged() // 중복값 무시
+			.subscribe(onNext: { [weak self] loading in
+				guard let self = self else { return }
+				
+				if loading && !self.loadView.isPresent {
+					self.loadView.play()
+					self.loadView.isPresent = true
+					self.loadView.modalPresentationStyle = .overFullScreen
+					self.present(self.loadView, animated: false, completion: nil)
+				} else {
+					self.loadView.dismiss(animated: false)
+				}
+			})
 			.disposed(by: disposeBag)
 	}
 }

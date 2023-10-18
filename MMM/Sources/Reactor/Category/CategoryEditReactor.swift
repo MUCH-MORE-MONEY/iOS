@@ -64,9 +64,6 @@ final class CategoryEditReactor: Reactor {
 	init(provider: ServiceProviderProtocol, type: String, date: Date) {
 		self.initialState = State(type: type, date: date)
 		self.provider = provider
-
-		// 뷰가 최초 로드 될 경우
-		action.onNext(.loadData(type))
 	}
 }
 //MARK: - Mutate, Reduce

@@ -38,6 +38,7 @@ final class CategoryMainViewController: BaseViewControllerWithNav, View {
 	private var dataViewControllers: [UIViewController] {
 		[self.payViewController, self.earnViewController]
 	}
+	private lazy var loadView = LoadingViewController()
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -75,6 +76,24 @@ extension CategoryMainViewController {
 		reactor.state
 			.compactMap { $0.nextScreen }
 			.subscribe(onNext: willPushViewController)
+			.disposed(by: disposeBag)
+		
+		// 로딩 발생
+		reactor.state
+			.map { $0.isLoading }
+			.distinctUntilChanged() // 중복값 무시
+			.subscribe(onNext: { [weak self] loading in
+				guard let self = self else { return }
+				
+				if loading && !self.loadView.isPresent {
+					self.loadView.play()
+					self.loadView.isPresent = true
+					self.loadView.modalPresentationStyle = .overFullScreen
+					self.present(self.loadView, animated: false, completion: nil)
+				} else {
+					self.loadView.dismiss(animated: false)
+				}
+			})
 			.disposed(by: disposeBag)
 	}
 }

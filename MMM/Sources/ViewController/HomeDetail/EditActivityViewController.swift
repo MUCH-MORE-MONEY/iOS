@@ -177,6 +177,15 @@ extension EditActivityViewController {
 		}
 		return text
 	}
+    
+    private func didTapCategory() {
+        let picker = AddCategoryViewController(viewModel: editViewModel)
+        let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
+        bottomSheetVC.setSetting(percentHeight: 0.65)
+        picker.delegate = bottomSheetVC
+        bottomSheetVC.modalPresentationStyle = .overFullScreen
+        self.present(bottomSheetVC, animated: false, completion: nil)
+    }
 }
 
 
@@ -485,6 +494,12 @@ extension EditActivityViewController {
 				self.didTapImageView()
 			}.store(in: &cancellable)
 		
+        
+        addCategoryView.gesturePublisher()
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+                self.didTapCategory()
+            }.store(in: &cancellable)
 		
 		// MARK: - CRUD Publisher
 		saveButton.tapPublisher

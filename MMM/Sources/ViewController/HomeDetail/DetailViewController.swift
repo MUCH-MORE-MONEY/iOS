@@ -31,6 +31,8 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
 		UIImageView(image: R.Icon.iconStarDisabled16),
 		UIImageView(image: R.Icon.iconStarDisabled16)
 	]
+    lazy var addCategoryView = AddCategoryView()
+    private lazy var separatorView = SeparatorView()
 	
 	// MARK: - LoadingView
 	private lazy var loadView = LoadingViewController()
@@ -195,7 +197,7 @@ extension DetailViewController {
 		
 		view.addSubviews(titleLabel, scrollView, bottomPageControlView)
 		
-		contentView.addSubviews(starStackView, mainImageView, cameraImageView, memoLabel, satisfactionLabel)
+		contentView.addSubviews(addCategoryView, separatorView, starStackView, mainImageView, cameraImageView, memoLabel, satisfactionLabel)
 		scrollView.addSubviews(contentView)
 		starList.forEach {
 			$0.contentMode = .scaleAspectFit
@@ -271,9 +273,19 @@ extension DetailViewController {
 			$0.edges.equalToSuperview().inset(24)
 		}
 		
+        addCategoryView.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.left.right.equalToSuperview()
+        }
+        
+        separatorView.snp.makeConstraints {
+            $0.top.equalTo(addCategoryView.snp.bottom).offset(40)
+            $0.left.right.equalToSuperview()
+        }
+        
 		starStackView.snp.makeConstraints {
-			$0.left.equalToSuperview()
-			$0.top.equalToSuperview()
+            $0.top.equalTo(separatorView.snp.bottom).offset(16)
+            $0.left.equalToSuperview()
 			$0.height.equalTo(24)
 			$0.width.equalTo(120)
 		}

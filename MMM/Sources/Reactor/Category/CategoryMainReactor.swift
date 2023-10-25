@@ -20,6 +20,7 @@ final class CategoryMainReactor: Reactor {
 		case setEarnSections([CategoryMainSectionModel])
 		case setNextScreen(IndexPath, CategoryLowwer?)
 		case setLoading(Bool)
+		case setError
 	}
 	
 	// 현재 상태를 기록
@@ -81,6 +82,8 @@ extension CategoryMainReactor {
 			newState.nextScreen = nextScreen
 		case let .setLoading(isLoading):
 			newState.isLoading = isLoading
+		case .setError:
+			newState.isLoading = false
 		}
 		
 		return newState
@@ -98,6 +101,7 @@ extension CategoryMainReactor {
 					return .setEarnSections(self.makeSections(respose: response, type: "02"))
 				}
 			}
+			.catchAndReturn(.setError)
 	}
 
 	// Section에 따른 Data 주입

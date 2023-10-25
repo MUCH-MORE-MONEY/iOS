@@ -123,11 +123,7 @@ final class CategoryEditViewController: BaseViewController, View {
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
-		guard let reactor = reactor else { return }
-		
 		super.viewWillAppear(animated)
-		
-		reactor.action.onNext(.loadData(reactor.currentState.type))
 	}
 	
 	override var preferredStatusBarStyle: UIStatusBarStyle {

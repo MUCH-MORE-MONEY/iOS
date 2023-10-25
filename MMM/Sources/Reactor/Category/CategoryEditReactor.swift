@@ -35,6 +35,7 @@ final class CategoryEditReactor: Reactor {
 		case setNextAddScreen(CategoryHeader?)
 		case setNextUpperEditScreen(Bool)
 		case setLoading(Bool)
+		case setError
 		case dismiss
 	}
 	
@@ -64,6 +65,9 @@ final class CategoryEditReactor: Reactor {
 	init(provider: ServiceProviderProtocol, type: String, date: Date) {
 		self.initialState = State(type: type, date: date)
 		self.provider = provider
+		
+		// 뷰가 최초 로드 될 경우
+		action.onNext(.loadData(type))
 	}
 }
 //MARK: - Mutate, Reduce
@@ -207,6 +211,8 @@ extension CategoryEditReactor {
 			}
 		case let .setLoading(isLoading):
 			newState.isLoading = isLoading
+		case .setError:
+			newState.isLoading = false
 		case .dismiss:
 			newState.dismiss = true
 		}
@@ -230,6 +236,7 @@ extension CategoryEditReactor {
 			.map { (response, error) -> Mutation in
 				return .setSections(self.makeSections(respose: response, type: request.economicActivityDvcd))
 			}
+			.catchAndReturn(.setError)
 	}
 	
 	// Section에 따른 Data 주입

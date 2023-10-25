@@ -57,12 +57,12 @@ extension CategoryMainReactor {
 			])
 		case let .selectCell(indexPath, categoryItem):
 			switch categoryItem {
-			case .base(let reactor):
+			case let .base(reactor):
 				return .concat([
 					.just(.setNextScreen(indexPath, reactor.currentState.categoryLowwer)),
 					.just(.setNextScreen(indexPath, nil))
 				])
-			case .header:
+			case .header, .empty:
 				return .empty()
 			}
 		}
@@ -115,9 +115,12 @@ extension CategoryMainReactor {
 		sections.append(headerModel)
 
 		for category in categoryList {
-			let categoryitems: [CategoryMainItem] = category.lowwer.map { categoryLowwer -> CategoryMainItem in
+			var categoryitems: [CategoryMainItem] = category.lowwer.map { categoryLowwer -> CategoryMainItem in
 				return .base(.init(categoryLowwer: categoryLowwer))
 			}
+			
+			// 비어 있을 경우
+			if categoryitems.isEmpty { categoryitems.append(.empty) }
 			
 			let model: CategoryMainSectionModel = .init(model: .base(category, categoryitems), items: categoryitems)
 			sections.append(model)

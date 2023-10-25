@@ -19,11 +19,12 @@ enum CategoryMainSection {
 enum CategoryMainItem: IdentifiableType, Equatable {
 	case header
 	case base(CategoryCollectionViewCellReactor)
+	case empty
 	
 	// IdentifiableType에 의한 identity 설정
 	var identity: some Hashable {
 		switch self {
-		case .header:
+		case .header, .empty:
 			return UUID().uuidString
 		case let .base(reactor):
 			return reactor.currentState.categoryLowwer.id

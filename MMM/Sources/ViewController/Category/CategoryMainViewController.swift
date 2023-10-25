@@ -47,9 +47,9 @@ final class CategoryMainViewController: BaseViewControllerWithNav, View {
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		
-		reactor?.action.onNext(.loadData)
+		reactor?.action.onNext(.refresh)
 	}
-	
+
 	func bind(reactor: CategoryMainReactor) {
 		bindState(reactor)
 		bindAction(reactor)
@@ -115,7 +115,7 @@ extension CategoryMainViewController {
 		guard let reactor = self.reactor else { return }
 
 		let vc = CategoryEditViewController(mode: segmentedControl.selectedSegmentIndex == 0 ? .pay : .earn)
-		vc.reactor = CategoryEditReactor(provider: ServiceProvider.shared, type: segmentedControl.selectedSegmentIndex == 0 ? "01" : "02", date: reactor.currentState.date)
+		vc.reactor = CategoryEditReactor(provider: reactor.provider, type: segmentedControl.selectedSegmentIndex == 0 ? "01" : "02", date: reactor.currentState.date)
 
 		navigationController?.pushViewController(vc, animated: true)
 	}

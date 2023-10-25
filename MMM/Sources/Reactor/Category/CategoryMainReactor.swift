@@ -11,6 +11,7 @@ final class CategoryMainReactor: Reactor {
 	// 사용자의 액션
 	enum Action {
 		case loadData
+		case refresh
 		case selectCell(IndexPath, CategoryMainItem)
 	}
 	
@@ -19,6 +20,7 @@ final class CategoryMainReactor: Reactor {
 		case setPaySections([CategoryMainSectionModel])
 		case setEarnSections([CategoryMainSectionModel])
 		case setNextScreen(IndexPath, CategoryLowwer?)
+		case setRefresh(Bool)
 		case setLoading(Bool)
 		case setError
 	}
@@ -31,14 +33,20 @@ final class CategoryMainReactor: Reactor {
 		var indexPath: IndexPath?
 		var nextScreen: CategoryLowwer?
 		var isLoading = false // 로딩
+		var isRrefresh = false // 편집후 저장할 때만
 		var error = false
 	}
 	
 	// MARK: Properties
 	let initialState: State
-	
-	init(date: Date) {
-		initialState = State(date: date)
+	let provider: ServiceProviderProtocol
+
+	init(provider: ServiceProviderProtocol, date: Date) {
+		self.initialState = State(date: date)
+		self.provider = provider
+
+		// 뷰가 최초 로드 될 경우
+		action.onNext(.loadData)
 	}
 }
 //MARK: - Mutate, Reduce
@@ -55,6 +63,21 @@ extension CategoryMainReactor {
 				loadData(CategoryDetailListReqDto(dateYM: dateYM, economicActivityCategoryCd: "", economicActivityDvcd: "02")),
 				.just(.setLoading(false))
 			])
+		case .refresh:
+			// ViewWillAppear시, 편집 단계에서 저장을 했는지 여부에 따른 수행
+			if currentState.isRrefresh {
+				let dateYM = currentState.date.getFormattedYM()
+
+				return .concat([
+					.just(.setLoading(true)),
+					loadData(CategoryDetailListReqDto(dateYM: dateYM, economicActivityCategoryCd: "", economicActivityDvcd: "01")),
+					loadData(CategoryDetailListReqDto(dateYM: dateYM, economicActivityCategoryCd: "", economicActivityDvcd: "02")),
+					.just(.setRefresh(false)), // 다시 refresh 돌리기
+					.just(.setLoading(false))
+				])
+			} else {
+				return .empty()
+			}
 		case let .selectCell(indexPath, categoryItem):
 			switch categoryItem {
 			case let .base(reactor):
@@ -68,6 +91,19 @@ extension CategoryMainReactor {
 		}
 	}
 	
+	/// 각각의 stream을 변형
+	func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
+		let event = provider.categoryProvider.event.flatMap { event -> Observable<Mutation> in
+			switch event {
+			case .refresh(_): 	return .just(.setRefresh(true))
+			default: 			return .empty()
+			}
+		}
+		
+		return Observable.merge(mutation, event)
+	}
+
+	
 	/// 이전 상태와 처리 단위(Mutation)를 받아서 다음 상태(State)를 반환하는 함수
 	func reduce(state: State, mutation: Mutation) -> State {
 		var newState = state
@@ -80,6 +116,8 @@ extension CategoryMainReactor {
 		case let .setNextScreen(indexPath, nextScreen):
 			newState.indexPath = indexPath
 			newState.nextScreen = nextScreen
+		case let .setRefresh(isRefresh):
+			newState.isRrefresh = isRefresh
 		case let .setLoading(isLoading):
 			newState.isLoading = isLoading
 		case .setError:

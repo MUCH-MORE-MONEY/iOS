@@ -195,7 +195,7 @@ extension StatisticsViewController {
 		guard let reactor = self.reactor else { return }
 
 		let vc = CategoryMainViewController()
-		vc.reactor = CategoryMainReactor(date: reactor.currentState.date)
+		vc.reactor = CategoryMainReactor(provider: reactor.provider, date: reactor.currentState.date)
 		navigationController?.pushViewController(vc, animated: true)
 	}
 	

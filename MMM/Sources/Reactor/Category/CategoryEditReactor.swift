@@ -86,7 +86,7 @@ extension CategoryEditReactor {
 			return .concat([
 				.just(.setLoading(true)),
 				compareData(),
-				.just(.setLoading(false))
+				provider.categoryProvider.refresh(isRefresh: true).map { _ in .setLoading(false)}
 			])
 		case .didTabBackButton:
 			// 수정이 되었는지 판별

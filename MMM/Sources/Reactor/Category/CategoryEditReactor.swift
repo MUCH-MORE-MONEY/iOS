@@ -205,6 +205,8 @@ extension CategoryEditReactor {
 					newState.isEdit = !isEdit
 					
 					if isEdit { newState.dismiss = true }
+				} else { // 에러가 생겨 데이터를 받아오지 못하면 Dismiss 작동
+					newState.dismiss = true
 				}
 			} else {
 				newState.isEdit = false

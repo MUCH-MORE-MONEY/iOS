@@ -203,7 +203,7 @@ extension CategoryEditReactor {
 				if let pre = newState.preSections {
 					let isEdit = pre == self.transformData(input: newState.sections)
 					newState.isEdit = !isEdit
-					
+
 					if isEdit { newState.dismiss = true }
 				} else { // 에러가 생겨 데이터를 받아오지 못하면 Dismiss 작동
 					newState.dismiss = true

@@ -160,6 +160,8 @@ extension CategoryContentViewController {
 	
 	func makeCategorySectionLayout(from items: [CategoryMainItem]) -> NSCollectionLayoutSection {
 		var layoutItems: [NSCollectionLayoutItem] = []
+		let count: Int = items.count // cell의 갯수
+		let isEven: Bool = count % 2 == 0 // 홀/짝 여부
 		
 		items.forEach({ item in
 			switch item {
@@ -176,6 +178,12 @@ extension CategoryContentViewController {
 		
 		let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(0.55), heightDimension: .absolute(UI.cellHeightMargin)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .leading)
 		
+		// 홀/짝을 계산해서 top inset 계산
+		let insetBase: CGFloat = CGFloat(count / 2) * (UI.cellHeightMargin + UI.cellSpacingMargin)
+		let insetByOdd: CGFloat = insetBase + UI.cellSpacingMargin
+		let insetByEven: CGFloat = insetBase - UI.cellSpacingMargin
+		header.contentInsets = .init(top: isEven ? -insetByEven : -insetByOdd, leading: 0, bottom: 0, trailing: 0)
+		
 		let separtor = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(1)), elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
 		
 		let section: NSCollectionLayoutSection = .init(group: group)
@@ -188,7 +196,7 @@ extension CategoryContentViewController {
 	func makeCategoryHeaderSectionLayout(from item: CategoryMainItem) -> NSCollectionLayoutSection {
 		let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(1)), subitems: .init(repeating: .init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(1))), count: 1))
 		
-		let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(25)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .leading)
+		let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(40)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .leading)
 
 		let section: NSCollectionLayoutSection = .init(group: group)
 		section.boundarySupplementaryItems = [header]

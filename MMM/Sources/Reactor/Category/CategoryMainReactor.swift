@@ -95,8 +95,8 @@ extension CategoryMainReactor {
 	func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
 		let event = provider.categoryProvider.event.flatMap { event -> Observable<Mutation> in
 			switch event {
-			case .refresh(_): 	return .just(.setRefresh(true))
-			default: 			return .empty()
+			case let .refresh(isRefresh): 	return .just(.setRefresh(isRefresh))
+			default: 						return .empty()
 			}
 		}
 		

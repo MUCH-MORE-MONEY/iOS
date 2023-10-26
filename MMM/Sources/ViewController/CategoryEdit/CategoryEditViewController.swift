@@ -490,7 +490,7 @@ extension CategoryEditViewController: UICollectionViewDropDelegate {
 		switch reactor.currentState.sections[destinationIndexPath.section].items[destinationIndexPath.row] {
 		case .base(_):
 			return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
-		case .drag:
+		case .empty, .drag:
 			return UICollectionViewDropProposal(operation: .move, intent: .insertIntoDestinationIndexPath)
 		default:
 			return UICollectionViewDropProposal(operation: .forbidden)

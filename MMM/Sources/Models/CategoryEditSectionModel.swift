@@ -31,8 +31,10 @@ enum CategoryEditItem: IdentifiableType, Equatable {
 			return reactor.currentState.categoryEdit.id
 		case let .footer(reactor):
 			return reactor.currentState.categoryEdit.id
-		case .header, .empty, .drag:
+		case .header, .drag:
 			return UUID().uuidString
+		case .empty:
+			return ""
 		}
 	}
 	

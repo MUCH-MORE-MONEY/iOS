@@ -27,6 +27,7 @@ final class CategoryEditViewController: BaseViewController, View {
 		static let cellHeightMargin: CGFloat = 40 // spacing(16)도 더하기
 		static let categoryCellHeight: CGFloat = 165
 		static let headerHeight: CGFloat = 60
+		static let footerHeight: CGFloat = 60
 		static let sectionMargin: UIEdgeInsets = .init(top: 0, left: 24, bottom: 8, right: 24)
 	}
 	
@@ -46,6 +47,12 @@ final class CategoryEditViewController: BaseViewController, View {
 			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CategoryEditCollectionViewCell.self), for: indexPath) as? CategoryEditCollectionViewCell else { return .init() }
 			
 			cell.reactor = cellReactor // reactor 주입
+			
+			return cell
+		case .empty:
+			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CategoryEditEmptyCollectionViewCell.self), for: indexPath) as? CategoryEditEmptyCollectionViewCell else { return .init() }
+			
+			cell.setData() // TextField text 값을 이때 넣어줘야 UI에 보임
 			
 			return cell
 		case .drag:
@@ -236,25 +243,32 @@ extension CategoryEditViewController {
 	}
 	
 	func makeCategorySectionLayout(from items: [CategoryEditItem]) -> NSCollectionLayoutSection {
-		let isEmpty = items.isEmpty // Item이 없을 경우
 		var layoutItems: [NSCollectionLayoutItem] = []
-		
+		let count: Int = items.count // cell의 갯수
+		let isEven: Bool = count % 2 == 0 // 홀/짝 여부
+
 		items.forEach({ item in
 			switch item {
-			case .base, .drag:
+			case .base, .empty, .drag:
 				layoutItems.append(NSCollectionLayoutItem.init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(UI.cellHeightMargin))))
 			default:
 				break
 			}
 		})
 		
-		let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100)), subitems: isEmpty ? .init(repeating: .init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(UI.cellHeightMargin))), count: 1) : layoutItems)
+		let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100)), subitems: layoutItems)
 		group.contentInsets = .init(top: 0, leading: 136, bottom: 0, trailing: 0)
 		
-		let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(0.395), heightDimension: .absolute(UI.cellHeightMargin + (isEmpty ? 6 : 0))), elementKind: UICollectionView.elementKindSectionHeader, alignment: .topLeading)
-		header.contentInsets = .init(top: isEmpty ? 0 : UI.cellHeightMargin - 6, leading: 0, bottom: 0, trailing: 0)
+		// 홀/짝을 계산해서 top inset 계산
+		let insetBase: CGFloat = CGFloat(count / 2) * (UI.cellHeightMargin + UI.cellSpacingMargin)
+		let insetByOdd: CGFloat = insetBase + UI.cellSpacingMargin
+		let insetByEven: CGFloat = insetBase - UI.cellSpacingMargin
 		
-		let footer = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(60)), elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
+		let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(0.395), heightDimension: .absolute(UI.cellHeightMargin)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .leading)
+//		header.contentInsets = .init(top: -6, leading: 0, bottom: 0, trailing: 0)
+//		header.contentInsets = .init(top: isEmpty ? 0 : UI.cellHeightMargin - 6, leading: 0, bottom: 0, trailing: 0)
+		
+		let footer = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(UI.footerHeight)), elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
 		
 		let section: NSCollectionLayoutSection = .init(group: group)
 		section.boundarySupplementaryItems = [header, footer]
@@ -376,8 +390,9 @@ extension CategoryEditViewController {
 			$0.dragDelegate = self
 			$0.dropDelegate = self
 			$0.dataSource = dataSource
-			$0.register(CategoryEditCollectionViewCell.self)
-			$0.register(CategoryEditDragCollectionViewCell.self)
+			$0.register(CategoryEditCollectionViewCell.self)		// base
+			$0.register(CategoryEditDragCollectionViewCell.self)	// drag
+			$0.register(CategoryEditEmptyCollectionViewCell.self) 	// empty
 			$0.register(CategoryEditSectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
 			$0.register(CategoryEditSectionFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter)
 			// Global Header

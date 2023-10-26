@@ -102,7 +102,6 @@ extension CategoryMainReactor {
 		
 		return Observable.merge(mutation, event)
 	}
-
 	
 	/// 이전 상태와 처리 단위(Mutation)를 받아서 다음 상태(State)를 반환하는 함수
 	func reduce(state: State, mutation: Mutation) -> State {

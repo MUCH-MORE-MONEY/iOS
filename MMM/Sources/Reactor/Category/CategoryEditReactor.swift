@@ -157,9 +157,18 @@ extension CategoryEditReactor {
 			if let section = newState.sections.enumerated().filter({ $0.element.model.header.id == categoryEdit.upperId }).first {
 				let sectionId = section.offset
 				
+				// 데이터를 넣기 전에 Empty Cell이 있는지 확인후 제거
+				if let first = newState.sections[sectionId].items.first {
+					switch first {
+					case .empty:	newState.sections[sectionId].items.removeAll()
+					default: 		break
+					}
+				}
+				
 				var newItem = categoryEdit
 				newItem.orderNum = newState.sections[sectionId].items.count + 1
 				let categoryEditItem: CategoryEditItem = .base(.init(provider: provider, categoryEdit: newItem))
+				
 				newState.sections[sectionId].items.append(categoryEditItem) // 해당 Sections을 찾아서 append
 				newState.addId -= 1 // 1씩 감소 시키면서 고유한 값 유지
 			}
@@ -254,9 +263,12 @@ extension CategoryEditReactor {
 		sections.append(headerModel)
 		
 		for header in currentState.headers {
-			let categoryitems: [CategoryEditItem] = data.filter { $0.upperId == header.id }.map { categoryEdit -> CategoryEditItem in
+			var categoryitems: [CategoryEditItem] = data.filter { $0.upperId == header.id }.map { categoryEdit -> CategoryEditItem in
 				return .base(.init(provider: provider, categoryEdit: categoryEdit))
 			}
+			
+			// 빈 List는 empty cell 주입
+			if categoryitems.isEmpty { categoryitems.append(.empty) }
 			
 			let model: CategoryEditSectionModel = .init(model: .base(header, categoryitems), items: categoryitems)
 			sections.append(model)

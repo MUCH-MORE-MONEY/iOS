@@ -260,13 +260,12 @@ extension CategoryEditViewController {
 		group.contentInsets = .init(top: 0, leading: 136, bottom: 0, trailing: 0)
 		
 		// 홀/짝을 계산해서 top inset 계산
-		let insetBase: CGFloat = CGFloat(count / 2) * (UI.cellHeightMargin + UI.cellSpacingMargin)
-		let insetByOdd: CGFloat = insetBase + UI.cellSpacingMargin
-		let insetByEven: CGFloat = insetBase - UI.cellSpacingMargin
+		let insetBase: CGFloat = CGFloat(count / 2) * (UI.cellHeightMargin)
+		let insetByOdd: CGFloat = insetBase + UI.cellSpacingMargin / 2 + 1
+		let insetByEven: CGFloat = insetBase - UI.cellSpacingMargin / 2 - 3
 		
 		let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(0.395), heightDimension: .absolute(UI.cellHeightMargin)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .leading)
-//		header.contentInsets = .init(top: -6, leading: 0, bottom: 0, trailing: 0)
-//		header.contentInsets = .init(top: isEmpty ? 0 : UI.cellHeightMargin - 6, leading: 0, bottom: 0, trailing: 0)
+		header.contentInsets = .init(top: isEven ? -insetByEven : -insetByOdd, leading: 0, bottom: 0, trailing: 0)
 		
 		let footer = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(UI.footerHeight)), elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
 		

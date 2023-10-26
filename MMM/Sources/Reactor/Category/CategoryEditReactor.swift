@@ -183,6 +183,11 @@ extension CategoryEditReactor {
 					newState.removedCategory[id] = title
 
 					newState.sections[sectionId].items.remove(at: removeIndex)
+					
+					// 카테고리가 비어있을 경우, Empty Cell 추가
+					if newState.sections[sectionId].items.isEmpty {
+						newState.sections[sectionId].items.append(.empty)
+					}
 				}
 			}
 		case let .dragAndDrop(sourceIndexPath, destinationIndexPath):

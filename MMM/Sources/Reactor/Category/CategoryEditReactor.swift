@@ -27,7 +27,7 @@ final class CategoryEditReactor: Reactor {
 		case addItem(CategoryEdit)
 		case deleteItem(CategoryEdit)
 		case dragAndDrop(IndexPath, IndexPath)
-		case addEmpty([IndexPath])
+		case addDrag([IndexPath])
 		case removeEmpty([IndexPath])
 		case setRemovedUpperCategory([String:String])
 		case setPresentAlert(Bool)
@@ -107,7 +107,7 @@ extension CategoryEditReactor {
 		case let .dragAndDrop(startIndex, destinationIndexPath):
 			return .just(.dragAndDrop(startIndex, destinationIndexPath))
 		case let .dragBegin(indexPathList):
-			return .just(.addEmpty(indexPathList))
+			return .just(.addDrag(indexPathList))
 		case let .dragEnd(indexPathList):
 			return .just(.removeEmpty(indexPathList))
 		}
@@ -194,7 +194,12 @@ extension CategoryEditReactor {
 			let sourceItem = newState.sections[sourceIndexPath.section].items[sourceIndexPath.row]
 			newState.sections[sourceIndexPath.section].items.remove(at: sourceIndexPath.row)
 			newState.sections[destinationIndexPath.section].items.insert(sourceItem, at: destinationIndexPath.row)
-		case let .addEmpty(indexPathList):
+			
+			// 카테고리가 비어있을 경우, Empty Cell 추가
+			if newState.sections[sourceIndexPath.section].items.isEmpty {
+				newState.sections[sourceIndexPath.section].items.append(.empty)
+			}
+		case let .addDrag(indexPathList):
 			for indexPath in indexPathList {
 				newState.sections[indexPath.section].items.append(.drag)
 			}

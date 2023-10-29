@@ -27,7 +27,7 @@ final class CategoryEditReactor: Reactor {
 		case addItem(CategoryEdit)
 		case deleteItem(CategoryEdit)
 		case dragAndDrop(IndexPath, IndexPath)
-		case addEmpty([IndexPath])
+		case addDrag([IndexPath])
 		case removeEmpty([IndexPath])
 		case setRemovedUpperCategory([String:String])
 		case setPresentAlert(Bool)
@@ -35,6 +35,7 @@ final class CategoryEditReactor: Reactor {
 		case setNextAddScreen(CategoryHeader?)
 		case setNextUpperEditScreen(Bool)
 		case setLoading(Bool)
+		case setError
 		case dismiss
 	}
 	
@@ -64,6 +65,9 @@ final class CategoryEditReactor: Reactor {
 	init(provider: ServiceProviderProtocol, type: String, date: Date) {
 		self.initialState = State(type: type, date: date)
 		self.provider = provider
+		
+		// 뷰가 최초 로드 될 경우
+		action.onNext(.loadData(type))
 	}
 }
 //MARK: - Mutate, Reduce
@@ -82,7 +86,7 @@ extension CategoryEditReactor {
 			return .concat([
 				.just(.setLoading(true)),
 				compareData(),
-				.just(.setLoading(false))
+				provider.categoryProvider.refresh(isRefresh: true).map { _ in .setLoading(false)}
 			])
 		case .didTabBackButton:
 			// 수정이 되었는지 판별
@@ -103,7 +107,7 @@ extension CategoryEditReactor {
 		case let .dragAndDrop(startIndex, destinationIndexPath):
 			return .just(.dragAndDrop(startIndex, destinationIndexPath))
 		case let .dragBegin(indexPathList):
-			return .just(.addEmpty(indexPathList))
+			return .just(.addDrag(indexPathList))
 		case let .dragEnd(indexPathList):
 			return .just(.removeEmpty(indexPathList))
 		}
@@ -153,9 +157,18 @@ extension CategoryEditReactor {
 			if let section = newState.sections.enumerated().filter({ $0.element.model.header.id == categoryEdit.upperId }).first {
 				let sectionId = section.offset
 				
+				// 데이터를 넣기 전에 Empty Cell이 있는지 확인후 제거
+				if let first = newState.sections[sectionId].items.first {
+					switch first {
+					case .empty:	newState.sections[sectionId].items.removeAll()
+					default: 		break
+					}
+				}
+				
 				var newItem = categoryEdit
 				newItem.orderNum = newState.sections[sectionId].items.count + 1
 				let categoryEditItem: CategoryEditItem = .base(.init(provider: provider, categoryEdit: newItem))
+				
 				newState.sections[sectionId].items.append(categoryEditItem) // 해당 Sections을 찾아서 append
 				newState.addId -= 1 // 1씩 감소 시키면서 고유한 값 유지
 			}
@@ -170,13 +183,36 @@ extension CategoryEditReactor {
 					newState.removedCategory[id] = title
 
 					newState.sections[sectionId].items.remove(at: removeIndex)
+					
+					// 카테고리가 비어있을 경우, Empty Cell 추가
+					if newState.sections[sectionId].items.isEmpty {
+						newState.sections[sectionId].items.append(.empty)
+					}
 				}
 			}
 		case let .dragAndDrop(sourceIndexPath, destinationIndexPath):
 			let sourceItem = newState.sections[sourceIndexPath.section].items[sourceIndexPath.row]
 			newState.sections[sourceIndexPath.section].items.remove(at: sourceIndexPath.row)
 			newState.sections[destinationIndexPath.section].items.insert(sourceItem, at: destinationIndexPath.row)
-		case let .addEmpty(indexPathList):
+			
+			// '출발지'의 카테고리가 비어있을 경우, Empty Cell 추가
+			if newState.sections[sourceIndexPath.section].items.isEmpty {
+				newState.sections[sourceIndexPath.section].items.append(.empty)
+			}
+			
+			// '목적지'의 카테고리가 비어있을 경우, Empty Cell 삭제
+			if let first = newState.sections[destinationIndexPath.section].items.first, let last = newState.sections[destinationIndexPath.section].items.last {
+				switch first {
+				case .empty: 	newState.sections[destinationIndexPath.section].items.removeFirst()
+				default: 		break
+				}
+				
+				switch last {
+				case .empty: 	newState.sections[destinationIndexPath.section].items.removeLast()
+				default: 		break
+				}
+			}
+		case let .addDrag(indexPathList):
 			for indexPath in indexPathList {
 				newState.sections[indexPath.section].items.append(.drag)
 			}
@@ -199,14 +235,23 @@ extension CategoryEditReactor {
 				if let pre = newState.preSections {
 					let isEdit = pre == self.transformData(input: newState.sections)
 					newState.isEdit = !isEdit
+					let com = self.transformData(input: newState.sections)
+					for i in 0..<pre.count {
+						print(pre[i].list, com[i].list)
+					}
+					
 					
 					if isEdit { newState.dismiss = true }
+				} else { // 에러가 생겨 데이터를 받아오지 못하면 Dismiss 작동
+					newState.dismiss = true
 				}
 			} else {
 				newState.isEdit = false
 			}
 		case let .setLoading(isLoading):
 			newState.isLoading = isLoading
+		case .setError:
+			newState.isLoading = false
 		case .dismiss:
 			newState.dismiss = true
 		}
@@ -230,6 +275,7 @@ extension CategoryEditReactor {
 			.map { (response, error) -> Mutation in
 				return .setSections(self.makeSections(respose: response, type: request.economicActivityDvcd))
 			}
+			.catchAndReturn(.setError)
 	}
 	
 	// Section에 따른 Data 주입
@@ -245,9 +291,12 @@ extension CategoryEditReactor {
 		sections.append(headerModel)
 		
 		for header in currentState.headers {
-			let categoryitems: [CategoryEditItem] = data.filter { $0.upperId == header.id }.map { categoryEdit -> CategoryEditItem in
+			var categoryitems: [CategoryEditItem] = data.filter { $0.upperId == header.id }.map { categoryEdit -> CategoryEditItem in
 				return .base(.init(provider: provider, categoryEdit: categoryEdit))
 			}
+			
+			// 빈 List는 empty cell 주입
+			if categoryitems.isEmpty { categoryitems.append(.empty) }
 			
 			let model: CategoryEditSectionModel = .init(model: .base(header, categoryitems), items: categoryitems)
 			sections.append(model)

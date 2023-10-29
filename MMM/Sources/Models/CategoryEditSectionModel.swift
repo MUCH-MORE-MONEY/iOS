@@ -21,6 +21,7 @@ enum CategoryEditItem: IdentifiableType, Equatable {
 	case header(CategoryEditCollectionViewCellReactor)
 	case base(CategoryEditCollectionViewCellReactor)
 	case footer(CategoryEditCollectionViewCellReactor)
+	case empty
 	case drag
 
 	// IdentifiableType에 의한 identity 설정
@@ -32,6 +33,8 @@ enum CategoryEditItem: IdentifiableType, Equatable {
 			return reactor.currentState.categoryEdit.id
 		case .header, .drag:
 			return UUID().uuidString
+		case .empty:
+			return ""
 		}
 	}
 	
@@ -40,7 +43,7 @@ enum CategoryEditItem: IdentifiableType, Equatable {
 		switch self {
 		case let .base(reactor):
 			return reactor.currentState.categoryEdit.title
-		case .header, .footer, .drag:
+		case .header, .footer, .empty, .drag:
 			return ""
 		}
 	}

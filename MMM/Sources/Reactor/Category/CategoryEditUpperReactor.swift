@@ -111,16 +111,10 @@ extension CategoryEditUpperReactor {
 				newState.sections.insert(model, at: editIndex)
 			}
 		case let .addItem(categoryHeader):
-			let item: CategoryEditItem = .base(.init(provider: provider, categoryEdit: CategoryEdit.getDummy())) // 임시
+			let item: CategoryEditItem = .empty // 빈 Cell 넣어주기
 			let model: CategoryEditSectionModel = .init(model: .base(categoryHeader, [item]), items: [item])
 			let grobalFooter = newState.sections.removeLast()
 			newState.sections.append(model)
-			
-			// 마지막 더미 Data 제거
-			if let _ = newState.sections.last {
-				newState.sections[newState.sections.count - 1].items.removeAll()
-			}
-			
 			newState.addId -= 1 // 고유값 유지
 			
 			// Footer 입력

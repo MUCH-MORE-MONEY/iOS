@@ -44,11 +44,14 @@ extension CategorySectionHeader {
 		titleLabel.text = category.title
 		priceLabel.text = category.dateYM.suffix(2) + "월 | " + category.total.withCommas() + " 원"
 		radioButton.backgroundColor = type == "01" ? R.Color.orange500 : R.Color.blue500
-		radioButton.setTitle("\(Int(round(category.ratio)))%", for: .normal)
+		
+		// 비율 반올림
+		let roundValue = Int(round(category.ratio))
+		radioButton.setTitle("\(roundValue)%", for: .normal)
 		
 		// 버튼 크기 변경
 		radioButton.snp.updateConstraints {
-			$0.width.equalTo(category.ratio == 100 ? 50 : 43)
+			$0.width.equalTo(roundValue == 100 ? 50 : 43)
 		}
 	}
 }

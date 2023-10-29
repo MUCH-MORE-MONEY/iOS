@@ -161,7 +161,7 @@ extension MoyaProvider {
                 case .success(let response):
                     guard response.statusCode == NetworkStatusType.success.rawValue else {
                         single(.failure(NetworkErrorType.wrongURL))
-                        return
+						return 
                     }
                     let data = response.data
                     

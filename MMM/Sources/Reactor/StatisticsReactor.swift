@@ -26,10 +26,11 @@ final class StatisticsReactor: Reactor {
 		case setDate(Date)
 		case setSatisfaction(Satisfaction)
 		case setAverage(Double)
-		case setLoading(Bool)
 		case presentSatisfaction(Bool)
 		case pushMoreCategory(Bool)
 		case pushDetail(IndexPath, EconomicActivity, Bool)
+		case setLoading(Bool)
+		case setError
 	}
 	
 	// 현재 상태를 기록
@@ -178,6 +179,8 @@ extension StatisticsReactor {
 		case .pushDetail(let indexPath, let data, let isPush):
 			newState.isPushDetail = isPush
 			newState.detailData = (indexPath, data)
+		case .setError:
+			newState.isLoading = false
 		}
 		
 		return newState
@@ -191,6 +194,7 @@ extension StatisticsReactor {
 			.map { (response, error) -> Mutation in
 				return .setAverage(response.economicActivityValueScoreAvg)
 			}
+			.catchAndReturn(.setError)
 	}
 	
 	// 경제활동 만족도에 따른 List 불러오기
@@ -199,6 +203,7 @@ extension StatisticsReactor {
 			.map { (response, error) -> Mutation in
 				return .fetchList(response.selectListMonthlyByValueScoreOutputDto, type, reset)
 			}
+			.catchAndReturn(.setError)
 	}
 	
 	// Pagenation
@@ -211,17 +216,15 @@ extension StatisticsReactor {
 			.map { (response, error) -> Mutation in
 				return .pagenation(response.selectListMonthlyByValueScoreOutputDto, response.nextOffset)
 			}
+			.catchAndReturn(.setError)
 	}
 	
 	// 카테고리 Bar 가져오기
 	private func getCategory(_ date: Date, _ type: String) -> Observable<Mutation> {
 		return MMMAPIService().getStatisticsCategory(dateYM: date.getFormattedYM(), economicActivityDvcd: type)
 			.map { (response, error) -> Mutation in
-				if error != nil {
-					return .fetchCategoryBar([], type)
-				} else {
-					return .fetchCategoryBar(response.data.setSelectListMonthlyByUpperCategoryOutputDto, type)
-				}
+				return .fetchCategoryBar(response.data.setSelectListMonthlyByUpperCategoryOutputDto, type)
 			}
+			.catchAndReturn(.setError)
 	}
 }

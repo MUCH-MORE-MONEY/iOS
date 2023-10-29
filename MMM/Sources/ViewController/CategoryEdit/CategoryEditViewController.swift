@@ -27,6 +27,7 @@ final class CategoryEditViewController: BaseViewController, View {
 		static let cellHeightMargin: CGFloat = 40 // spacing(16)도 더하기
 		static let categoryCellHeight: CGFloat = 165
 		static let headerHeight: CGFloat = 60
+		static let footerHeight: CGFloat = 60
 		static let sectionMargin: UIEdgeInsets = .init(top: 0, left: 24, bottom: 8, right: 24)
 	}
 	
@@ -46,6 +47,12 @@ final class CategoryEditViewController: BaseViewController, View {
 			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CategoryEditCollectionViewCell.self), for: indexPath) as? CategoryEditCollectionViewCell else { return .init() }
 			
 			cell.reactor = cellReactor // reactor 주입
+			
+			return cell
+		case .empty:
+			guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CategoryEditEmptyCollectionViewCell.self), for: indexPath) as? CategoryEditEmptyCollectionViewCell else { return .init() }
+			
+			cell.setData() // TextField text 값을 이때 넣어줘야 UI에 보임
 			
 			return cell
 		case .drag:
@@ -123,11 +130,7 @@ final class CategoryEditViewController: BaseViewController, View {
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
-		guard let reactor = reactor else { return }
-		
 		super.viewWillAppear(animated)
-		
-		reactor.action.onNext(.loadData(reactor.currentState.type))
 	}
 	
 	override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -227,7 +230,7 @@ extension CategoryEditViewController {
 extension CategoryEditViewController {
 	// Section별 Cell Layout
 	func makeLayout(sections: [CategoryEditSectionModel]) -> UICollectionViewCompositionalLayout {
-		return UICollectionViewCompositionalLayout { [weak self] sectionIndex, _ in
+		return UICollectionViewCompositionalLayout { [weak self] sectionIndex, env in
 			switch sections[sectionIndex].model {
 			case .header:
 				return self?.makeHeaderSectionLayout()
@@ -240,25 +243,31 @@ extension CategoryEditViewController {
 	}
 	
 	func makeCategorySectionLayout(from items: [CategoryEditItem]) -> NSCollectionLayoutSection {
-		let isEmpty = items.isEmpty // Item이 없을 경우
 		var layoutItems: [NSCollectionLayoutItem] = []
-		
+		let count: Int = items.count // cell의 갯수
+		let isEven: Bool = count % 2 == 0 // 홀/짝 여부
+
 		items.forEach({ item in
 			switch item {
-			case .base, .drag:
+			case .base, .empty, .drag:
 				layoutItems.append(NSCollectionLayoutItem.init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(UI.cellHeightMargin))))
 			default:
 				break
 			}
 		})
 		
-		let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100)), subitems: isEmpty ? .init(repeating: .init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(UI.cellHeightMargin))), count: 1) : layoutItems)
+		let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100)), subitems: layoutItems)
 		group.contentInsets = .init(top: 0, leading: 136, bottom: 0, trailing: 0)
 		
-		let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(0.395), heightDimension: .absolute(UI.cellHeightMargin + (isEmpty ? 6 : 0))), elementKind: UICollectionView.elementKindSectionHeader, alignment: .topLeading)
-		header.contentInsets = .init(top: isEmpty ? 0 : UI.cellHeightMargin - 6, leading: 0, bottom: 0, trailing: 0)
+		// 홀/짝을 계산해서 top inset 계산
+//		let insetBase: CGFloat = CGFloat(count / 2) * (UI.cellHeightMargin)
+//		let insetByOdd: CGFloat = insetBase + UI.cellSpacingMargin / 2 + 1
+//		let insetByEven: CGFloat = insetBase - UI.cellSpacingMargin / 2 - 3
 		
-		let footer = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(60)), elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
+		let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(0.395), heightDimension: .absolute(UI.cellHeightMargin)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .topLeading)
+		header.contentInsets = .init(top: 34, leading: 0, bottom: 0, trailing: 0)
+		
+		let footer = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(UI.footerHeight)), elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
 		
 		let section: NSCollectionLayoutSection = .init(group: group)
 		section.boundarySupplementaryItems = [header, footer]
@@ -380,8 +389,9 @@ extension CategoryEditViewController {
 			$0.dragDelegate = self
 			$0.dropDelegate = self
 			$0.dataSource = dataSource
-			$0.register(CategoryEditCollectionViewCell.self)
-			$0.register(CategoryEditDragCollectionViewCell.self)
+			$0.register(CategoryEditCollectionViewCell.self)		// base
+			$0.register(CategoryEditDragCollectionViewCell.self)	// drag
+			$0.register(CategoryEditEmptyCollectionViewCell.self) 	// empty
 			$0.register(CategoryEditSectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
 			$0.register(CategoryEditSectionFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter)
 			// Global Header
@@ -480,7 +490,7 @@ extension CategoryEditViewController: UICollectionViewDropDelegate {
 		switch reactor.currentState.sections[destinationIndexPath.section].items[destinationIndexPath.row] {
 		case .base(_):
 			return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
-		case .drag:
+		case .empty, .drag:
 			return UICollectionViewDropProposal(operation: .move, intent: .insertIntoDestinationIndexPath)
 		default:
 			return UICollectionViewDropProposal(operation: .forbidden)

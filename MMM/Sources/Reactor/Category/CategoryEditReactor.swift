@@ -201,9 +201,14 @@ extension CategoryEditReactor {
 			}
 			
 			// '목적지'의 카테고리가 비어있을 경우, Empty Cell 삭제
-			if let first = newState.sections[destinationIndexPath.section].items.first {
+			if let first = newState.sections[destinationIndexPath.section].items.first, let last = newState.sections[destinationIndexPath.section].items.last {
 				switch first {
-				case .empty: 	newState.sections[destinationIndexPath.section].items.removeAll()
+				case .empty: 	newState.sections[destinationIndexPath.section].items.removeFirst()
+				default: 		break
+				}
+				
+				switch last {
+				case .empty: 	newState.sections[destinationIndexPath.section].items.removeLast()
 				default: 		break
 				}
 			}

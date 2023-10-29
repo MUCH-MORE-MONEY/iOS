@@ -230,7 +230,7 @@ extension CategoryEditViewController {
 extension CategoryEditViewController {
 	// Section별 Cell Layout
 	func makeLayout(sections: [CategoryEditSectionModel]) -> UICollectionViewCompositionalLayout {
-		return UICollectionViewCompositionalLayout { [weak self] sectionIndex, _ in
+		return UICollectionViewCompositionalLayout { [weak self] sectionIndex, env in
 			switch sections[sectionIndex].model {
 			case .header:
 				return self?.makeHeaderSectionLayout()

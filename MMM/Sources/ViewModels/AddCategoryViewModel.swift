@@ -10,7 +10,7 @@ import Combine
 
 final class AddCategoryViewModel {
     // MARK: - API Request를 위한 Property Wrapper
-    @Published var categoryListResponse: CategoryListResDto?
+    @Published var categoryList: [Category] = []
     
     // MARK: - Porperties
     private var cancellable: Set<AnyCancellable> = []
@@ -30,9 +30,9 @@ final class AddCategoryViewModel {
             case.finished:
                 break
             }
-        } receiveValue: { response in
-            print(response)
-            self.categoryListResponse = response
+        } receiveValue: { [weak self] response in
+            guard let self = self else { return }
+            self.categoryList = response.data
         }
         .store(in: &cancellable)
     }

@@ -62,18 +62,6 @@ extension PushSettingDetailViewController {
             .map { _ in .didTapDetailTimeSettingView }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
-//        weekList
-//            .bind(to: weekCollecitonView.rx.items(cellIdentifier: "WeekCollectionViewCell", cellType: WeekCollectionViewCell.self)) { index, color, cell in
-//                
-//            }
-//            .disposed(by: disposeBag)
-//        
-//        weekCollecitonView.rx.modelSelected(String.self)
-//            .subscribe { item in
-//                print("item : \(item)")
-//            }
-//            .disposed(by: disposeBag)
     }
     
     private func bindState(_reactor: PushSettingDetailReactor) {

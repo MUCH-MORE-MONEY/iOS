@@ -14,6 +14,8 @@ final class CategorySelectCell: UICollectionViewCell {
     private lazy var imageView = UIImageView()
     private lazy var stackView = UIStackView()
     
+    private lazy var containerView = UIView()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -36,7 +38,8 @@ extension CategorySelectCell {
     }
     
     private func setAttribute() {
-        addSubviews(stackView)
+        addSubviews(containerView)
+        containerView.addSubviews(stackView)
         stackView.addArrangedSubviews(label, imageView)
         
         stackView = stackView.then {
@@ -49,6 +52,7 @@ extension CategorySelectCell {
             $0.text = "덕질 비용"
             $0.backgroundColor = R.Color.gray200
             $0.textColor = R.Color.white
+            $0.font = R.Font.body2
         }
         
         imageView = imageView.then {

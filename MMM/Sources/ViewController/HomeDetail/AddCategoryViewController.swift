@@ -24,6 +24,8 @@ final class AddCategoryViewController: UIViewController {
     private lazy var manageButton = UIButton()
     private lazy var checkButton = UIButton()
     
+    private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    
     init(viewModel: AnyObject) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -73,6 +75,13 @@ private extension AddCategoryViewController {
                 print("관리 버튼 Tapped")
             }
             .store(in: &cancellables)
+        
+        addCategoryViewModel.$categoryList
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                self.collectionView.reloadData()
+            }
+            .store(in: &cancellables)
     }
     
     private func setAttribute() {
@@ -113,17 +122,58 @@ private extension AddCategoryViewController {
             $0.titleLabel?.font = R.Font.title3
 //            $0.contentEdgeInsets = .init(top: 10, left: 10, bottom: 10, right: 10) // touch 영역 늘리기
         }
+        
+        collectionView = collectionView.then {
+            let layout = UICollectionViewFlowLayout()
+            layout.scrollDirection = .horizontal
+            layout.estimatedItemSize = CGSize(width: $0.bounds.width, height: 50)
+            $0.collectionViewLayout = layout
+            $0.backgroundColor = R.Color.white
+            $0.delegate = self
+            $0.dataSource = self
+            
+            $0.register(CategorySelectCell.self, forCellWithReuseIdentifier: "CategorySelectCell")
+        }
     }
     
     private func setLayout() {
         stackView.addArrangedSubviews(titleLabel, buttonStackView)
         buttonStackView.addArrangedSubviews(manageButton, checkButton)
-        view.addSubviews(stackView)
+        view.addSubviews(stackView, collectionView)
         
         stackView.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.leading.equalToSuperview().inset(24)
             $0.trailing.equalToSuperview().inset(28)
         }
+        
+        collectionView.snp.makeConstraints {
+            $0.top.equalTo(stackView.snp.bottom).offset(12)
+            $0.left.equalToSuperview().offset(24)
+            $0.right.equalToSuperview().offset(-24)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
     }
+}
+
+extension AddCategoryViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        return addCategoryViewModel.categoryList[section].lowwer.count
+        10
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategorySelectCell", for: indexPath) as? CategorySelectCell else { return UICollectionViewCell()}
+        cell.backgroundColor = .red
+        return cell
+    }
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+//        return addCategoryViewModel.categoryList.count
+        6
+    }
+}
+
+extension AddCategoryViewController: UICollectionViewDelegateFlowLayout {
+    
 }

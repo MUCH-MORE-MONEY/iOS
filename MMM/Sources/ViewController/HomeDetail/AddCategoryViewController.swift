@@ -58,24 +58,24 @@ extension AddCategoryViewController {
     private func layout() -> UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, environment) -> NSCollectionLayoutSection? in
             // 아이템의 크기 정의
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.25),
-                                                  heightDimension: .fractionalHeight(1.0))
+            let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(100),
+                                                  heightDimension: .estimated(30))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             
             // 수평 그룹 생성
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.9),
-                                                   heightDimension: .absolute(100))
-            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 4)
-            group.interItemSpacing = NSCollectionLayoutSpacing.fixed(10) // 아이템 간의 간격
+            let groupSize = NSCollectionLayoutSize(widthDimension: .estimated(100),
+                                                   heightDimension: .estimated(30))
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+            group.interItemSpacing = NSCollectionLayoutSpacing.fixed(8) // 아이템 간의 간격
 
             // 섹션 생성 및 구성
             let section = NSCollectionLayoutSection(group: group)
             section.orthogonalScrollingBehavior = .groupPagingCentered // 수평 스크롤 설정
             section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 0, bottom: 0, trailing: 0) // 섹션 간격 설정
-            section.interGroupSpacing = 10 // 그룹 간의 간격
+            section.interGroupSpacing = 8 // 그룹 간의 간격
             
             // 섹션의 헤더 (제목) 설정
-            let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(50))
+            let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(24))
             let headerElement = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize,
                                                                             elementKind: UICollectionView.elementKindSectionHeader,
                                                                             alignment: .top)
@@ -112,8 +112,8 @@ private extension AddCategoryViewController {
                 guard let self = self else { return }
                 
                 if let viewModel = self.viewModel as? EditActivityViewModel {
-                    viewModel.isCategoryManageButtonTapped = true
                     delegate?.willDismiss()
+                    viewModel.isCategoryManageButtonTapped = true
                 }
                 print("관리 버튼 Tapped")
             }
@@ -172,6 +172,7 @@ private extension AddCategoryViewController {
             $0.delegate = self
             $0.dataSource = self
             $0.register(CategorySelectCell.self, forCellWithReuseIdentifier: "CategorySelectCell")
+            $0.register(CategorySelectHeaderCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "CategorySelectHeaderCell")
             $0.isScrollEnabled = true
         }
     }
@@ -203,20 +204,42 @@ extension AddCategoryViewController: UICollectionViewDataSource, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategorySelectCell", for: indexPath) as? CategorySelectCell else { return UICollectionViewCell()}
-        cell.backgroundColor = .green
+        
+        let title = addCategoryViewModel.categoryList[indexPath.section].lowwer[indexPath.item].title
+    
+        if let viewModel = viewModel as? EditActivityViewModel {
+            cell.setData(title, viewModel.type == "01")
+        }
+        
         return cell
     }
+    
+//    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+//        // header
+//        if kind == UICollectionView.elementKindSectionHeader {
+//            guard let header = collectionView
+//                .dequeueReusableSupplementaryView(
+//                    ofKind: UICollectionView.elementKindSectionHeader,
+//                    withReuseIdentifier: "CategorySelectCell",
+//                    for: indexPath) as? CategorySelectCell else { return CategorySelectCell() }
+//            return header
+//        } else { // footer
+//            guard let footer = collectionView
+//                .dequeueReusableSupplementaryView(
+//                    ofKind: UICollectionView.elementKindSectionFooter,
+//                    withReuseIdentifier: "CategorySelectCell",
+//                    for: indexPath) as? CategorySelectCell else { return CategorySelectCell() }
+//
+//            return footer
+//        }
+//    }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return addCategoryViewModel.categoryList.isEmpty ? 0 : addCategoryViewModel.categoryList.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("대분류\(addCategoryViewModel.categoryList[indexPath.section])")
-        print("소분류\(addCategoryViewModel.categoryList[indexPath.section].lowwer[indexPath.item])")
-        
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {        
         addCategoryViewModel.selectedCategoryID = addCategoryViewModel.categoryList[indexPath.section].lowwer[indexPath.item].id
         addCategoryViewModel.selectedCategoryName = addCategoryViewModel.categoryList[indexPath.section].lowwer[indexPath.item].title
     }
 }
-

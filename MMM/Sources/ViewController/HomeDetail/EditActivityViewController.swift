@@ -538,8 +538,11 @@ extension EditActivityViewController {
                 guard let self = self else { return }
                 print(isTapped)
                 if isTapped {
-                    let vc = CategoryMainViewController()
-                    vc.reactor = CategoryMainReactor(date: Date())
+                    let mode: CategoryEditViewController.Mode = self.editViewModel.type == "01" ? .pay : .earn
+                    
+                    let vc = CategoryEditViewController(mode: mode)
+                    vc.bind(reactor: CategoryEditReactor(provider: ServiceProvider.shared, type: self.editViewModel.type, date: Date()))
+                    // FIXME: - 의존성 주입 바꿔야함
                     vc.editViewModel = self.editViewModel
                     self.navigationController?.pushViewController(vc, animated: true)
                 }

@@ -51,7 +51,7 @@ public extension MMMResource {
         public static let iconCategory24 = UIImage(named: "iconCategory24", in: .main, compatibleWith: nil)
         public static let iconArrowNextGray24 = UIImage(named: "iconArrowNextGray16", in: .main, compatibleWith: nil)
         public static let iconCheckGray16 = UIImage(named: "iconCheckGray16", in: .main, compatibleWith: nil)
-        public static let iconCheckWhite16 = UIImage(named: "iconCheckWhite16 ", in: .main, compatibleWith: nil)
+        public static let iconCheckWhite16 = UIImage(named: "iconCheckWhite16", in: .main, compatibleWith: nil)
         
 		// MARK: - FAB
 		public static let onboarding1 = UIImage(named: "iconOnboarding1", in: .main, compatibleWith: nil)

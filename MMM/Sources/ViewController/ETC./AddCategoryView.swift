@@ -25,6 +25,14 @@ final class AddCategoryView: BaseView {
     }
 }
 
+// MARK: - Action
+extension AddCategoryView {
+    func setTitleAndColor(by text: String) {
+        titleLabel.text = text == "" ? "카테고리" : text
+        titleLabel.textColor = text == "" ? R.Color.gray400 : R.Color.gray800
+    }
+}
+
 // MARK: - setup
 extension AddCategoryView {
     override func setup() {

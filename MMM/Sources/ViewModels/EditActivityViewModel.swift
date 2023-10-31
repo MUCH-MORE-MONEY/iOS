@@ -27,6 +27,10 @@ final class EditActivityViewModel {
     @Published var fileNo = ""
     @Published var binaryFileList:  [APIParameters.BinaryFileList] = []
   	@Published var date: Date? // picker
+    // UI용 카테고리
+    @Published var categoryName = ""
+    // api 통신용
+    @Published var categoryId = ""
 
     @Published var editResponse: UpdateResDto?
     @Published var deleteResponse: DeleteResDto?
@@ -121,6 +125,7 @@ final class EditActivityViewModel {
                 body: APIParameters.UpdateReqDto(
                     binaryFileList: binaryFileList,
                     amount: amount,
+                    category: categoryId,
                     type: type,
                     title: title,
                     memo: memo,
@@ -156,6 +161,7 @@ final class EditActivityViewModel {
                 body: APIParameters.UpdateReqDto(
                     binaryFileList: binaryFileList,
                     amount: amount,
+                    category: categoryId,
                     type: type,
                     title: title,
                     memo: memo,

@@ -522,6 +522,14 @@ extension EditActivityViewController {
 				self.titleText.text = self.navigationTitle
 				self.editViewModel.createAt = date.getFormattedDate(format: "yyyyMMdd")
 			}).store(in: &cancellable)
+        
+        // 카테고리 이름 변경
+        editViewModel.$categoryName
+            .sinkOnMainThread { [weak self] name in
+                guard let self = self else { return }
+                self.addCategoryView.setTitleAndColor(by: name)
+            }
+            .store(in: &cancellable)
 	}
 
 }

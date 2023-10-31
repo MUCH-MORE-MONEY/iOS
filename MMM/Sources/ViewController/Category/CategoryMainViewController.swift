@@ -108,7 +108,6 @@ extension CategoryMainViewController {
 				}
 			})
 			.disposed(by: disposeBag)
-
 	}
 }
 //MARK: - Action

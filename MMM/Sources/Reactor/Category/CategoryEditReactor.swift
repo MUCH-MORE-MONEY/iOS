@@ -18,6 +18,8 @@ final class CategoryEditReactor: Reactor {
 		case dragAndDrop(IndexPath, IndexPath)
 		case dragBegin([IndexPath])
 		case dragEnd([IndexPath])
+		case endAddToast
+		case endDeleteToast
 	}
 	
 	// 처리 단위
@@ -34,6 +36,8 @@ final class CategoryEditReactor: Reactor {
 		case setNextEditScreen(CategoryEdit?)
 		case setNextAddScreen(CategoryHeader?)
 		case setNextUpperEditScreen(Bool)
+		case setAddFlag(Bool)
+		case setDeleteFlag(Bool)
 		case setLoading(Bool)
 		case setError
 		case dismiss
@@ -53,8 +57,10 @@ final class CategoryEditReactor: Reactor {
 		var nextAddScreen: CategoryHeader?
 		var nextUpperEditScreen: Bool = false
 		var isEdit = false
-		var dismiss = false
+		var isAdd = false
+		var isDelete = false
 		var isLoading = false // 로딩
+		var dismiss = false
 		var error = false
 	}
 	
@@ -110,6 +116,10 @@ extension CategoryEditReactor {
 			return .just(.addDrag(indexPathList))
 		case let .dragEnd(indexPathList):
 			return .just(.removeEmpty(indexPathList))
+		case .endAddToast:
+			return .just(.setAddFlag(false))
+		case .endDeleteToast:
+			return .just(.setDeleteFlag(false))
 		}
 	}
 	
@@ -171,6 +181,7 @@ extension CategoryEditReactor {
 				
 				newState.sections[sectionId].items.append(categoryEditItem) // 해당 Sections을 찾아서 append
 				newState.addId -= 1 // 1씩 감소 시키면서 고유한 값 유지
+				newState.isAdd = true // Toast Message
 			}
 		case let .deleteItem(categoryEdit):		
 			if let section = newState.sections.enumerated().filter({ !$0.element.items.filter({ $0.identity as! String == categoryEdit.id }).isEmpty}).first {
@@ -188,6 +199,9 @@ extension CategoryEditReactor {
 					if newState.sections[sectionId].items.isEmpty {
 						newState.sections[sectionId].items.append(.empty)
 					}
+					
+					// Toast Message
+					newState.isDelete = true
 				}
 			}
 		case let .dragAndDrop(sourceIndexPath, destinationIndexPath):
@@ -248,6 +262,10 @@ extension CategoryEditReactor {
 			} else {
 				newState.isEdit = false
 			}
+		case let .setAddFlag(flag):
+			newState.isAdd = flag
+		case let .setDeleteFlag(flag):
+			newState.isDelete = flag
 		case let .setLoading(isLoading):
 			newState.isLoading = isLoading
 		case .setError:
@@ -267,7 +285,6 @@ extension CategoryEditReactor {
 			.map { (response, error) -> Mutation in
 				return .setHeaders(response.data.selectListUpperOutputDto)
 			}
-			.catchAndReturn(.setError)
 	}
 	
 	// 데이터 가져오기

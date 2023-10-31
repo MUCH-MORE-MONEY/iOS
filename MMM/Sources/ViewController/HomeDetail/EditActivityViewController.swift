@@ -62,7 +62,7 @@ final class EditActivityViewController: BaseAddActivityViewController, UINavigat
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        titleTextFeild.becomeFirstResponder() // 키보드 보이기 및 포커스 주기
+//        titleTextFeild.becomeFirstResponder() // 키보드 보이기 및 포커스 주기
     }
     
 	override func didTapBackButton() {
@@ -395,6 +395,16 @@ extension EditActivityViewController {
 				self.activityType.backgroundColor = self.editViewModel.type == "01" ? R.Color.orange500 : R.Color.blue500
 			}.store(in: &cancellable)
 		
+        editViewModel.$type
+            .removeDuplicates() // 값 변경전까지 이벤트 미방출
+            .sinkOnMainThread { [weak self] _ in
+                guard let self = self else { return }
+                self.editViewModel.categoryId = ""
+                self.editViewModel.categoryName = ""
+            }
+            .store(in: &cancellable)
+
+        
 		editViewModel.$amount
 			.receive(on: DispatchQueue.main)
 			.sink { _ in

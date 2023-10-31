@@ -94,6 +94,7 @@ final class EditActivityViewModel {
                 body: APIParameters.InsertEconomicActivityReqDto(
                     binaryFileList: binaryFileList,
                     amount: amount,
+                    category: categoryId,
                     type: type,
                     title: title,
                     memo: memo,

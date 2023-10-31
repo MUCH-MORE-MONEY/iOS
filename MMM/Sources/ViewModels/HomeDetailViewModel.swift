@@ -76,6 +76,7 @@ final class HomeDetailViewModel {
 			guard let self = self else { return }
             isError = false
 			self.detailActivity = response
+            print(self.detailActivity)
 		}.store(in: &cancellable)
 	}
 	

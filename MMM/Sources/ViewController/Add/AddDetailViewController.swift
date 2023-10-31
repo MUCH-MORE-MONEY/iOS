@@ -13,102 +13,102 @@ import Photos
 import Lottie
 
 final class AddDetailViewController: BaseAddActivityViewController, UINavigationControllerDelegate {
-	// MARK: - UI Components
-	// MARK: - Loading
-	private lazy var loadView = LoadingViewController()
-	// MARK: - Properties
-	private var viewModel: EditActivityViewModel
-	var keyboardHeight: CGFloat = 0
-	private var cancellable = Set<AnyCancellable>()
-	
-	init(viewModel: EditActivityViewModel) {
-		self.viewModel = viewModel
-		super.init(nibName: nil, bundle: nil)
-	}
-	
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
-	
-	override func viewDidLoad() {
-		super.viewDidLoad()
-	}
-
+    // MARK: - UI Components
+    // MARK: - Loading
+    private lazy var loadView = LoadingViewController()
+    // MARK: - Properties
+    private var viewModel: EditActivityViewModel
+    var keyboardHeight: CGFloat = 0
+    private var cancellable = Set<AnyCancellable>()
+    
+    init(viewModel: EditActivityViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        titleTextFeild.becomeFirstResponder() // 키보드 보이기 및 포커스 주기
+        //        titleTextFeild.becomeFirstResponder() // 키보드 보이기 및 포커스 주기
         Tracking.FinActAddPage.viewDetailLogEvent()
     }
 }
 // MARK: - Action
 extension AddDetailViewController {
-	func didTapStarLabel() {
-		let picker = StarPickerViewController()
-		let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
-		picker.delegate = bottomSheetVC
-		picker.starDelegate = self
-		bottomSheetVC.modalPresentationStyle = .overFullScreen
-		bottomSheetVC.setSetting(height: 288)
-		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
-	}
-	
-	func didTapSaveButton() {
-		viewModel.insertDetailActivity()
-		
-		self.loadView.play()
-		self.loadView.isPresent = true
-		self.loadView.modalPresentationStyle = .overFullScreen
-		self.present(self.loadView, animated: false)
+    func didTapStarLabel() {
+        let picker = StarPickerViewController()
+        let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
+        picker.delegate = bottomSheetVC
+        picker.starDelegate = self
+        bottomSheetVC.modalPresentationStyle = .overFullScreen
+        bottomSheetVC.setSetting(height: 288)
+        self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
+    }
+    
+    func didTapSaveButton() {
+        viewModel.insertDetailActivity()
+        
+        self.loadView.play()
+        self.loadView.isPresent = true
+        self.loadView.modalPresentationStyle = .overFullScreen
+        self.present(self.loadView, animated: false)
         
         Tracking.FinActAddPage.completeLogEvent()
-	}
-	
-	func didTapAlbumButton() {
+    }
+    
+    func didTapAlbumButton() {
         Tracking.FinActAddPage.inputPhotoLogEvent()
-		let picker = UIImagePickerController().then {
-			$0.sourceType = .photoLibrary
-			$0.allowsEditing = true
-			$0.delegate = self
-		}
-		
-		present(picker, animated: true)
-	}
-	
-	func didTapImageView() {
-		
-		let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-		
-		//앨범 선택 - 스타일(default)
-		actionSheet.addAction(UIAlertAction(title: "앨범선택", style: .default, handler: { [weak self] (ACTION:UIAlertAction) in
-			guard let self = self else { return }
-			self.didTapAlbumButton()
-			print("앨범선택")
-		}))
-		
-		//사진삭제 - 스타일(destructive)
-		actionSheet.addAction(UIAlertAction(title: "사진삭제", style: .destructive, handler: { [weak self] (ACTION:UIAlertAction) in
-			guard let self = self else { return }
-			self.mainImageView.image = nil
-			self.viewModel.binaryFileList = []
-			self.viewModel.fileNo = ""
-			print("사진삭제")
-			self.remakeConstraintsByCameraImageView()
-		}))
-		
-		//취소 버튼 - 스타일(cancel)
-		actionSheet.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
-		
-		self.present(actionSheet, animated: true, completion: nil)
-	}
-	
-	private func limitTextLength(_ text: String, maxLength: Int) -> String {
-		let length = text.count
-		if length > maxLength {
-			let endIndex = text.index(text.startIndex, offsetBy: maxLength)
-			return String(text[..<endIndex])
-		}
-		return text
-	}
+        let picker = UIImagePickerController().then {
+            $0.sourceType = .photoLibrary
+            $0.allowsEditing = true
+            $0.delegate = self
+        }
+        
+        present(picker, animated: true)
+    }
+    
+    func didTapImageView() {
+        
+        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        //앨범 선택 - 스타일(default)
+        actionSheet.addAction(UIAlertAction(title: "앨범선택", style: .default, handler: { [weak self] (ACTION:UIAlertAction) in
+            guard let self = self else { return }
+            self.didTapAlbumButton()
+            print("앨범선택")
+        }))
+        
+        //사진삭제 - 스타일(destructive)
+        actionSheet.addAction(UIAlertAction(title: "사진삭제", style: .destructive, handler: { [weak self] (ACTION:UIAlertAction) in
+            guard let self = self else { return }
+            self.mainImageView.image = nil
+            self.viewModel.binaryFileList = []
+            self.viewModel.fileNo = ""
+            print("사진삭제")
+            self.remakeConstraintsByCameraImageView()
+        }))
+        
+        //취소 버튼 - 스타일(cancel)
+        actionSheet.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        
+        self.present(actionSheet, animated: true, completion: nil)
+    }
+    
+    private func limitTextLength(_ text: String, maxLength: Int) -> String {
+        let length = text.count
+        if length > maxLength {
+            let endIndex = text.index(text.startIndex, offsetBy: maxLength)
+            return String(text[..<endIndex])
+        }
+        return text
+    }
     
     private func setStarImage(_ rate: Int) {
         for star in starList {
@@ -170,48 +170,57 @@ extension AddDetailViewController {
             memoTextView.textColor = R.Color.gray400
         }
     }
+    
+    private func didTapCategory() {
+        let picker = AddCategoryViewController(viewModel: viewModel)
+        let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
+        bottomSheetVC.setSetting(percentHeight: 0.65)
+        picker.delegate = bottomSheetVC
+        bottomSheetVC.modalPresentationStyle = .overFullScreen
+        self.present(bottomSheetVC, animated: false, completion: nil)
+    }
 }
 
 // MARK: - Star Picker의 확인을 눌렀을 때
 extension AddDetailViewController: StarPickerViewProtocol {
-	func willPickerDismiss(_ rate: Double) {
-		let rate = Int(rate)
-		DispatchQueue.main.async { [weak self] in
-			guard let self = self else { return }
-			self.viewModel.star = rate
-			self.setStarImage(rate)
-		}
+    func willPickerDismiss(_ rate: Double) {
+        let rate = Int(rate)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.viewModel.star = rate
+            self.setStarImage(rate)
+        }
         Tracking.FinActAddPage.nextBtnRatingLogEvent()
-	}
+    }
 }
 
 // MARK: - ImagePicker Delegate
 extension AddDetailViewController: UIImagePickerControllerDelegate {
-	func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-		picker.dismiss(animated: false) { [weak self] in
-			guard let self = self else { return }
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: false) { [weak self] in
+            guard let self = self else { return }
             self.viewModel.binaryFileList.removeAll()
-			let img = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
-			self.mainImageView.image = img
-			
-			guard let data = img?.jpegData(compressionQuality: 1)?.base64EncodedString() else { return }
-			var imageName = ""
-			if let imageUrl = info[UIImagePickerController.InfoKey.referenceURL] as? URL {
-				let assets = PHAsset.fetchAssets(withALAssetURLs: [imageUrl], options: nil)
-				
-				guard let firstObject = assets.firstObject else { return }
-				imageName = PHAssetResource.assetResources(for: firstObject).first?.originalFilename ?? "DefualtName"
-			}
-			
-			self.viewModel.binaryFileList.append(APIParameters.BinaryFileList(binaryData: data, fileNm: imageName))
-			self.remakeConstraintsByMainImageView()
-		}
+            let img = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
+            self.mainImageView.image = img
+            
+            guard let data = img?.jpegData(compressionQuality: 1)?.base64EncodedString() else { return }
+            var imageName = ""
+            if let imageUrl = info[UIImagePickerController.InfoKey.referenceURL] as? URL {
+                let assets = PHAsset.fetchAssets(withALAssetURLs: [imageUrl], options: nil)
+                
+                guard let firstObject = assets.firstObject else { return }
+                imageName = PHAssetResource.assetResources(for: firstObject).first?.originalFilename ?? "DefualtName"
+            }
+            
+            self.viewModel.binaryFileList.append(APIParameters.BinaryFileList(binaryData: data, fileNm: imageName))
+            self.remakeConstraintsByMainImageView()
+        }
         self.viewModel.didTapAddButton = false
-	}
-	func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+    }
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         self.viewModel.didTapAddButton = false
-		dismiss(animated: true, completion: nil)
-	}
+        dismiss(animated: true, completion: nil)
+    }
 }
 
 // MARK: - Style & Layout & Bind
@@ -287,7 +296,7 @@ extension AddDetailViewController {
         addCategoryView.gesturePublisher()
             .receive(on: DispatchQueue.main)
             .sink { _ in
-                print("Category Tapped")
+                self.didTapCategory()
             }.store(in: &cancellable)
         
         // MARK: - UI Bind
@@ -343,10 +352,54 @@ extension AddDetailViewController {
                     }
                 }
             }).store(in: &cancellable)
+        
+        // 카테고리 이름 변경
+        viewModel.$categoryName
+            .sinkOnMainThread { [weak self] name in
+                guard let self = self else { return }
+                self.addCategoryView.setTitleAndColor(by: name)
+            }
+            .store(in: &cancellable)
+        
+        viewModel.$isCategoryManageButtonTapped
+            .sinkOnMainThread { [weak self] isTapped in
+                guard let self = self else { return }
+                print(isTapped)
+                if isTapped {
+                    let mode: CategoryEditViewController.Mode = self.viewModel.type == "01" ? .pay : .earn
+                    
+                    let vc = CategoryEditViewController(mode: mode)
+                    vc.reactor = CategoryEditReactor(provider: ServiceProvider.shared, type: self.viewModel.type, date: Date())
+
+                    // FIXME: - 의존성 주입 바꿔야함
+                    vc.editViewModel = self.viewModel
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
+            }
+            .store(in: &cancellable)
+        
+        viewModel.$isViewFromCategoryViewController
+            .sinkOnMainThread { [weak self] isFromView in
+                guard let self = self else { return }
+                if isFromView {
+                    view.endEditing(true)
+                    self.didTapCategory()
+                }
+            }
+            .store(in: &cancellable)
+        
+        viewModel.$type
+            .removeDuplicates() // 값 변경전까지 이벤트 미방출
+            .sinkOnMainThread { [weak self] _ in
+                guard let self = self else { return }
+                self.viewModel.categoryId = ""
+                self.viewModel.categoryName = ""
+            }
+            .store(in: &cancellable)
     }
     
     override func setAttribute() {
-		super.setAttribute()
+        super.setAttribute()
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
@@ -364,7 +417,7 @@ extension AddDetailViewController {
     }
     
     override func setLayout() {
-		super.setLayout()
+        super.setLayout()
         remakeConstraintsByCameraImageView()
     }
 }

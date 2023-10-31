@@ -143,15 +143,7 @@ final class CategoryEditViewController: BaseViewController, View {
 	func bind(reactor: CategoryEditReactor) {
 		bindState(reactor)
 		bindAction(reactor)
-	}
-    
-    override func didTapBackButton() {
-        super.didTapBackButton()
-        if let viewModel = editViewModel {
-            viewModel.isCategoryManageButtonTapped = false
-            viewModel.isViewFromCategoryViewController = true
-        }
-    }
+	}    
 }
 //MARK: - Bind
 extension CategoryEditViewController {
@@ -215,7 +207,13 @@ extension CategoryEditViewController {
 		reactor.state
 			.compactMap { $0.dismiss }
 			.distinctUntilChanged() // 중복값 무시
-			.bind(onNext: { _ in
+			.bind(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                if let viewModel = self.editViewModel {
+                    viewModel.isCategoryManageButtonTapped = false
+                    viewModel.isViewFromCategoryViewController = true
+                }
+                
 				self.navigationController?.popViewController(animated: true)
 			})
 			.disposed(by: disposeBag)

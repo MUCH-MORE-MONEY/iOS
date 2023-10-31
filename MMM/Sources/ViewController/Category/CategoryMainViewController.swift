@@ -29,6 +29,10 @@ final class CategoryMainViewController: BaseViewControllerWithNav, View {
 		}
 	}
 	
+    // 편집 뷰에서 들어온 경우를 판단하기 위한 변수
+    var isEditView = false
+    var editViewModel: EditActivityViewModel?
+    
 	// MARK: - UI Components
 	private lazy var editButton = UIButton()
 	private lazy var segmentedControl = CategorySegmentedControl(items: [R.Icon.minus16!.textEmbeded(text: "지출", font: R.Font.body0, color: R.Color.white, spacing: 8, leftMargin: 24), R.Icon.plus16!.textEmbeded(text: "수입", font: R.Font.body0, color: R.Color.white, spacing: 8, rightMargin: 24)])
@@ -54,7 +58,18 @@ final class CategoryMainViewController: BaseViewControllerWithNav, View {
 		bindState(reactor)
 		bindAction(reactor)
 	}
+    
+    // 편집 뷰에서 들어온 경우
+    override func didTapBackButton() {
+        super.didTapBackButton()
+        
+        if let viewModel = editViewModel {
+            viewModel.isCategoryManageButtonTapped = false
+            viewModel.isViewFromCategoryViewController = true
+        }
+    }
 }
+
 //MARK: - Bind
 extension CategoryMainViewController {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)

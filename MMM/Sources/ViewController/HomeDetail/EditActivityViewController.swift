@@ -59,6 +59,12 @@ final class EditActivityViewController: BaseAddActivityViewController, UINavigat
 		super.viewDidLoad()
 	}
 	
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        titleTextFeild.becomeFirstResponder() // 키보드 보이기 및 포커스 주기
+    }
+    
 	override func didTapBackButton() {
 		//FIXME: - showAlert에서 super.didTapBackButton()호출하면 문제생김
 		isDeleteButton = false
@@ -349,7 +355,8 @@ extension EditActivityViewController {
 		editViewModel.type = detailViewModel.detailActivity?.type ?? ""
 		editViewModel.fileNo = detailViewModel.detailActivity?.fileNo ?? ""
 		editViewModel.id = detailViewModel.detailActivity?.id ?? ""
-		
+        editViewModel.categoryId = detailViewModel.detailActivity?.categoryID ?? ""
+        editViewModel.categoryName = detailViewModel.detailActivity?.categoryName ?? ""
 		// MARK: - Loading에 대한 처리
 		editViewModel.$isLoading
 			.receive(on: DispatchQueue.main)
@@ -522,6 +529,42 @@ extension EditActivityViewController {
 				self.titleText.text = self.navigationTitle
 				self.editViewModel.createAt = date.getFormattedDate(format: "yyyyMMdd")
 			}).store(in: &cancellable)
+        
+        // 카테고리 이름 변경
+        editViewModel.$categoryName
+            .sinkOnMainThread { [weak self] name in
+                guard let self = self else { return }
+                self.addCategoryView.setTitleAndColor(by: name)
+            }
+            .store(in: &cancellable)
+        
+        
+        editViewModel.$isCategoryManageButtonTapped
+            .sinkOnMainThread { [weak self] isTapped in
+                guard let self = self else { return }
+                print(isTapped)
+                if isTapped {
+                    let mode: CategoryEditViewController.Mode = self.editViewModel.type == "01" ? .pay : .earn
+                    
+                    let vc = CategoryEditViewController(mode: mode)
+                    vc.reactor = CategoryEditReactor(provider: ServiceProvider.shared, type: self.editViewModel.type, date: Date())
+
+                    // FIXME: - 의존성 주입 바꿔야함
+                    vc.editViewModel = self.editViewModel
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
+            }
+            .store(in: &cancellable)
+        
+        editViewModel.$isViewFromCategoryViewController
+            .sinkOnMainThread { [weak self] isFromView in
+                guard let self = self else { return }
+                if isFromView {
+                    view.endEditing(true)
+                    self.didTapCategory()
+                }
+            }
+            .store(in: &cancellable)
 	}
 
 }
@@ -531,8 +574,8 @@ extension EditActivityViewController {
 		super.setAttribute()
         self.hideKeyboardWhenTappedAround()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         
         navigationItem.rightBarButtonItem = deleteActivityButtonItem

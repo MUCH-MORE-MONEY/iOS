@@ -104,6 +104,9 @@ final class CategoryEditViewController: BaseViewController, View {
 		}
 	}
 	
+    // 편집 뷰에서 온지 확인하기 위한 property
+    var editViewModel: EditActivityViewModel?
+    
 	// MARK: - UI Components
 	private lazy var backButtonItem = UIBarButtonItem()
 	private lazy var backButton = UIButton()
@@ -141,6 +144,14 @@ final class CategoryEditViewController: BaseViewController, View {
 		bindState(reactor)
 		bindAction(reactor)
 	}
+    
+    override func didTapBackButton() {
+        super.didTapBackButton()
+        if let viewModel = editViewModel {
+            viewModel.isCategoryManageButtonTapped = false
+            viewModel.isViewFromCategoryViewController = true
+        }
+    }
 }
 //MARK: - Bind
 extension CategoryEditViewController {

@@ -36,6 +36,7 @@ final class AddDetailViewController: BaseAddActivityViewController, UINavigation
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        titleTextFeild.becomeFirstResponder() // 키보드 보이기 및 포커스 주기
         Tracking.FinActAddPage.viewDetailLogEvent()
     }
 }

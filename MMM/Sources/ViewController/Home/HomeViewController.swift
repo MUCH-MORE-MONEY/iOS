@@ -140,7 +140,7 @@ extension HomeViewController {
 		
 		snackView.snp.makeConstraints {
 			$0.left.right.equalTo(view.safeAreaLayoutGuide).inset(24)
-			$0.bottom.equalTo(view.snp.bottom).offset(-16 - (82+24)) // tabBar 높이 + Plus 버튼 윗부분
+			$0.bottom.equalTo(view.snp.bottom).offset(-24) // Plus 버튼 윗부분과의 거리
 			$0.height.equalTo(40)
 		}
 		
@@ -253,7 +253,8 @@ private extension HomeViewController {
 			.sinkOnMainThread(receiveValue: { [weak self] isError in
 				guard let self = self else { return }
 				
-				if isError { showSnack() } // 네트워크 오류
+				// 에러 Snack Message 띄우기
+				if isError { showSnack() }
 			}).store(in: &cancellable)
 
 //		viewModel

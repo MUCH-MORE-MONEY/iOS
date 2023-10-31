@@ -63,11 +63,6 @@ final class HomeViewModel {
 	lazy var isLoading: AnyPublisher<Bool, Never> = Publishers.CombineLatest3($isWillAppear, $isDailyLoading, $isMonthlyLoading)
 		.map { $0 && ($1 || $2) }
 		.eraseToAnyPublisher()
-	
-	// 월별 데이터는 정상동작, 일별 데이터가 비정상 동작할 경우
-	lazy var isError: AnyPublisher<Bool, Never> = Publishers.CombineLatest($errorMonthly, $errorDaily)
-		.compactMap { $0 == false && $1 ?? false }
-		.eraseToAnyPublisher()
 }
 //MARK: Action
 extension HomeViewModel {

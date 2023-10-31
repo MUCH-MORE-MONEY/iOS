@@ -23,7 +23,7 @@ final class APIRouter {
 	/// 일별 경제 활동 List를 위한 Router
 	struct SelectListDailyReqDto: Request {
 		typealias ReturnType = EconomicActivitySelectListDailyResDto
-		var path: String = "/economic_activity/daily/list/select"
+		var path: String = "/economic_activity/daily/list/selectㄴ"
 		var method: HTTPMethod = .post
 		var headers: [String:String]?
 		var body: [String : Any]?

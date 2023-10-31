@@ -139,7 +139,7 @@ extension HomeViewController {
 		self.view.addSubview(snackView)
 		
 		snackView.snp.makeConstraints {
-			$0.left.right.equalTo(view.safeAreaLayoutGuide).inset(24)
+			$0.leading.trailing.equalToSuperview().inset(24)
 			$0.bottom.equalTo(view.snp.bottom).offset(-24) // Plus 버튼 윗부분과의 거리
 			$0.height.equalTo(40)
 		}
@@ -218,6 +218,12 @@ private extension HomeViewController {
 					self.present(self.loadView, animated: false)
 				} else {
 					self.loadView.dismiss(animated: false)
+					
+					// 로딩이 끝나고, Snack Message 처리
+					if viewModel.errorMonthly == false && viewModel.errorDaily == true {
+						// 에러 Snack Message 띄우기
+						showSnack()
+					}
 				}
 			}).store(in: &cancellable)
 		
@@ -248,25 +254,6 @@ private extension HomeViewController {
 
 				dailyErrorView.isHidden = !isError
 			}).store(in: &cancellable)
-		
-		viewModel.isError
-			.sinkOnMainThread(receiveValue: { [weak self] isError in
-				guard let self = self else { return }
-				
-				// 에러 Snack Message 띄우기
-				if isError { showSnack() }
-			}).store(in: &cancellable)
-
-//		viewModel
-//			.transform(input: viewModel.input.eraseToAnyPublisher())
-//			.sinkOnMainThread(receiveValue: { [weak self] state in
-//				switch state {
-//				case .errorMessage(_):
-//					break
-//				case .toggleButton(isEnabled: let isEnabled):
-//					self?.toggleCheckButton(isEnabled)
-//				}
-//			}).store(in: &cancellables)
 	}
 	
 	private func setAttribute() {

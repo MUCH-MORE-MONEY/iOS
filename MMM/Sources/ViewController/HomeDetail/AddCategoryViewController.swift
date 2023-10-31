@@ -41,7 +41,7 @@ final class AddCategoryViewController: UIViewController {
         super.viewDidLoad()
         setup()
     }
-
+    
 }
 
 // MARK: - Action
@@ -67,7 +67,7 @@ extension AddCategoryViewController {
                                                    heightDimension: .estimated(30))
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
             group.interItemSpacing = NSCollectionLayoutSpacing.fixed(8) // 아이템 간의 간격
-
+            
             // 섹션 생성 및 구성
             let section = NSCollectionLayoutSection(group: group)
             section.orthogonalScrollingBehavior = .groupPagingCentered // 수평 스크롤 설정
@@ -80,7 +80,7 @@ extension AddCategoryViewController {
                                                                             elementKind: UICollectionView.elementKindSectionHeader,
                                                                             alignment: .top)
             section.boundarySupplementaryItems = [headerElement]
-
+            
             return section
         }
         
@@ -129,7 +129,7 @@ private extension AddCategoryViewController {
     
     private func setAttribute() {
         self.view.backgroundColor = isDark ? R.Color.gray900 : .white
-
+        
         stackView = stackView.then {
             $0.axis = .horizontal
             $0.alignment = .center
@@ -155,7 +155,7 @@ private extension AddCategoryViewController {
             $0.setTitleColor(isDark ? R.Color.gray200.withAlphaComponent(0.7) : R.Color.black.withAlphaComponent(0.7), for: .highlighted)
             $0.contentHorizontalAlignment = .right
             $0.titleLabel?.font = R.Font.title3
-//            $0.contentEdgeInsets = .init(top: 10, left: 10, bottom: 10, right: 10) // touch 영역 늘리기
+            //            $0.contentEdgeInsets = .init(top: 10, left: 10, bottom: 10, right: 10) // touch 영역 늘리기
         }
         manageButton = manageButton.then {
             $0.setTitle("관리", for: .normal)
@@ -163,7 +163,7 @@ private extension AddCategoryViewController {
             $0.setTitleColor(isDark ? R.Color.gray200.withAlphaComponent(0.7) : R.Color.black.withAlphaComponent(0.7), for: .highlighted)
             $0.contentHorizontalAlignment = .right
             $0.titleLabel?.font = R.Font.title3
-//            $0.contentEdgeInsets = .init(top: 10, left: 10, bottom: 10, right: 10) // touch 영역 늘리기
+            //            $0.contentEdgeInsets = .init(top: 10, left: 10, bottom: 10, right: 10) // touch 영역 늘리기
         }
         
         collectionView = collectionView.then {
@@ -206,7 +206,7 @@ extension AddCategoryViewController: UICollectionViewDataSource, UICollectionVie
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategorySelectCell", for: indexPath) as? CategorySelectCell else { return UICollectionViewCell()}
         
         let title = addCategoryViewModel.categoryList[indexPath.section].lowwer[indexPath.item].title
-    
+        
         if let viewModel = viewModel as? EditActivityViewModel {
             cell.setData(title, viewModel.type == "01")
         }
@@ -214,31 +214,34 @@ extension AddCategoryViewController: UICollectionViewDataSource, UICollectionVie
         return cell
     }
     
-//    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-//        // header
-//        if kind == UICollectionView.elementKindSectionHeader {
-//            guard let header = collectionView
-//                .dequeueReusableSupplementaryView(
-//                    ofKind: UICollectionView.elementKindSectionHeader,
-//                    withReuseIdentifier: "CategorySelectCell",
-//                    for: indexPath) as? CategorySelectCell else { return CategorySelectCell() }
-//            return header
-//        } else { // footer
-//            guard let footer = collectionView
-//                .dequeueReusableSupplementaryView(
-//                    ofKind: UICollectionView.elementKindSectionFooter,
-//                    withReuseIdentifier: "CategorySelectCell",
-//                    for: indexPath) as? CategorySelectCell else { return CategorySelectCell() }
-//
-//            return footer
-//        }
-//    }
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        // header
+        let title = addCategoryViewModel.categoryList[indexPath.section].title
+        
+        if kind == UICollectionView.elementKindSectionHeader {
+            guard let header = collectionView
+                .dequeueReusableSupplementaryView(
+                    ofKind: UICollectionView.elementKindSectionHeader,
+                    withReuseIdentifier: "CategorySelectHeaderCell",
+                    for: indexPath) as? CategorySelectHeaderCell else { return CategorySelectHeaderCell() }
+            header.setData(title)
+            return header
+        } else { // footer
+            guard let footer = collectionView
+                .dequeueReusableSupplementaryView(
+                    ofKind: UICollectionView.elementKindSectionFooter,
+                    withReuseIdentifier: "CategorySelectHeaderCell",
+                    for: indexPath) as? CategorySelectHeaderCell else { return CategorySelectHeaderCell() }
+            footer.setData(title)
+            return footer
+        }
+    }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return addCategoryViewModel.categoryList.isEmpty ? 0 : addCategoryViewModel.categoryList.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {        
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         addCategoryViewModel.selectedCategoryID = addCategoryViewModel.categoryList[indexPath.section].lowwer[indexPath.item].id
         addCategoryViewModel.selectedCategoryName = addCategoryViewModel.categoryList[indexPath.section].lowwer[indexPath.item].title
     }

@@ -9,12 +9,11 @@ import UIKit
 import Then
 import SnapKit
 
-final class CategorySelectHeaderCell: UICollectionReusableView {
+final class CategorySelectHeaderCell: BaseCollectionReusableView {
     lazy var label = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setup()
     }
     
     required init?(coder: NSCoder) {
@@ -25,19 +24,14 @@ final class CategorySelectHeaderCell: UICollectionReusableView {
 }
 
 extension CategorySelectHeaderCell {
-    private func setup() {
-        bind()
-        setAttribute()
-        setLayout()
+    func setData(_ title: String) {
+        label.text = title
     }
-    
-    private func bind() {
-        
-    }
-    
-    private func setAttribute() {
-        addSubviews(label)
-        
+}
+
+extension CategorySelectHeaderCell {
+    override func setAttribute() {
+        super.setAttribute()
         label = label.then {
             $0.text = "라벨이다"
             $0.font = R.Font.title3
@@ -45,7 +39,15 @@ extension CategorySelectHeaderCell {
         }
     }
     
-    private func setLayout() {
+    override func setHierarchy() {
+        super.setHierarchy()
+        
+        addSubviews(label)
+    }
+    
+    override func setLayout() {
+        super.setLayout()
+        
         label.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }

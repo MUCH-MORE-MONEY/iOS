@@ -48,6 +48,11 @@ final class AddCategoryViewController: UIViewController {
 extension AddCategoryViewController {
     private func willDismiss() {
         delegate?.willDismiss()
+        
+        if let editViewModel = viewModel as? EditActivityViewModel {
+            editViewModel.categoryName = addCategoryViewModel.selectedCategoryName
+            editViewModel.categoryId = addCategoryViewModel.selectedCategoryID
+        }
     }
     
     private func layout() -> UICollectionViewCompositionalLayout {
@@ -103,7 +108,13 @@ private extension AddCategoryViewController {
             .store(in: &cancellables)
         
         manageButton.tapPublisher
-            .sinkOnMainThread { _ in
+            .sinkOnMainThread { [weak self] _ in
+                guard let self = self else { return }
+                
+                if let viewModel = self.viewModel as? EditActivityViewModel {
+                    viewModel.isCategoryManageButtonTapped = true
+                    delegate?.willDismiss()
+                }
                 print("관리 버튼 Tapped")
             }
             .store(in: &cancellables)
@@ -204,13 +215,8 @@ extension AddCategoryViewController: UICollectionViewDataSource, UICollectionVie
         print("대분류\(addCategoryViewModel.categoryList[indexPath.section])")
         print("소분류\(addCategoryViewModel.categoryList[indexPath.section].lowwer[indexPath.item])")
         
-        if let editViewModel = viewModel as? EditActivityViewModel {
-            editViewModel.categoryName = addCategoryViewModel.categoryList[indexPath.section].lowwer[indexPath.item].title
-            editViewModel.categoryId = addCategoryViewModel.categoryList[indexPath.section].lowwer[indexPath.item].id
-        }
-        
-        willDismiss()
-        
+        addCategoryViewModel.selectedCategoryID = addCategoryViewModel.categoryList[indexPath.section].lowwer[indexPath.item].id
+        addCategoryViewModel.selectedCategoryName = addCategoryViewModel.categoryList[indexPath.section].lowwer[indexPath.item].title
     }
 }
 

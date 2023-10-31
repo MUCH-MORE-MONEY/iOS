@@ -32,6 +32,11 @@ final class EditActivityViewModel {
     // api 통신용
     @Published var categoryId = ""
 
+    
+    // 카테고리 시트 뷰에서 관리 버튼을 눌렀을 때를 나타내는 flag
+    @Published var isCategoryManageButtonTapped = false
+    @Published var isViewFromCategoryViewController = false
+    
     @Published var editResponse: UpdateResDto?
     @Published var deleteResponse: DeleteResDto?
     @Published var insertResponse: InsertResDto?

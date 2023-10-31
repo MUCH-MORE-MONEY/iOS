@@ -11,6 +11,8 @@ import Combine
 final class AddCategoryViewModel {
     // MARK: - API Request를 위한 Property Wrapper
     @Published var categoryList: [Category] = []
+    @Published var selectedCategoryID: String = ""
+    @Published var selectedCategoryName: String = ""
     
     // MARK: - Porperties
     private var cancellable: Set<AnyCancellable> = []

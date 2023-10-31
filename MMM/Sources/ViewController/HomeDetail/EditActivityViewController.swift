@@ -349,7 +349,8 @@ extension EditActivityViewController {
 		editViewModel.type = detailViewModel.detailActivity?.type ?? ""
 		editViewModel.fileNo = detailViewModel.detailActivity?.fileNo ?? ""
 		editViewModel.id = detailViewModel.detailActivity?.id ?? ""
-		
+        editViewModel.categoryId = detailViewModel.detailActivity?.categoryID ?? ""
+        editViewModel.categoryName = detailViewModel.detailActivity?.categoryName ?? ""
 		// MARK: - Loading에 대한 처리
 		editViewModel.$isLoading
 			.receive(on: DispatchQueue.main)
@@ -528,6 +529,29 @@ extension EditActivityViewController {
             .sinkOnMainThread { [weak self] name in
                 guard let self = self else { return }
                 self.addCategoryView.setTitleAndColor(by: name)
+            }
+            .store(in: &cancellable)
+        
+        
+        editViewModel.$isCategoryManageButtonTapped
+            .sinkOnMainThread { [weak self] isTapped in
+                guard let self = self else { return }
+                print(isTapped)
+                if isTapped {
+                    let vc = CategoryMainViewController()
+                    vc.reactor = CategoryMainReactor(date: Date())
+                    vc.editViewModel = self.editViewModel
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
+            }
+            .store(in: &cancellable)
+        
+        editViewModel.$isViewFromCategoryViewController
+            .sinkOnMainThread { [weak self] isFromView in
+                guard let self = self else { return }
+                if isFromView {
+                    self.didTapCategory()
+                }
             }
             .store(in: &cancellable)
 	}

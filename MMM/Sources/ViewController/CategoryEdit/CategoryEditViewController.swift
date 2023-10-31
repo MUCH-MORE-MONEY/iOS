@@ -224,6 +224,34 @@ extension CategoryEditViewController {
 				}
 			})
 			.disposed(by: disposeBag)
+		
+		// 추가 Toast Message 표시
+		reactor.state
+			.map { $0.isAdd }
+			.distinctUntilChanged() // 중복값 무시
+			.filter{ $0 } // True일 경우만
+			.withUnretained(self)
+			.subscribe(onNext: { this, isRefresh in
+				if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+					sceneDelegate.window?.showToast(message: "카테고리가 추가되었습니다")
+					reactor.action.onNext(.endAddToast)
+				}
+			})
+			.disposed(by: disposeBag)
+		
+		// 삭제 Toast Message 표시
+		reactor.state
+			.map { $0.isDelete }
+			.distinctUntilChanged() // 중복값 무시
+			.filter{ $0 } // True일 경우만
+			.withUnretained(self)
+			.subscribe(onNext: { this, isRefresh in
+				if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+					sceneDelegate.window?.showToast(message: "카테고리가 삭제되었습니다")
+					reactor.action.onNext(.endDeleteToast)
+				}
+			})
+			.disposed(by: disposeBag)
 	}
 }
 //MARK: - Action

@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class ToastView: UIView {
+final class ToastView: BaseView {
     // MARK: - UI Components
     private lazy var toastLabel = BasePaddingLabel(padding: UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16))
     
@@ -18,24 +18,13 @@ class ToastView: UIView {
     init(toastMessage: String) {
         self.toastMessage = toastMessage
         super.init(frame: .zero)
-        setup()
-    }
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
-
+//MARK: - Attribute & Hierarchy & Layouts
 extension ToastView {
-    private func setup() {
-        bind()
-        setAttribute()
-        setLayout()
-    }
-    
-    private func bind() { }
-    
-    private func setAttribute() {
-        addSubviews(toastLabel)
+	// 초기 셋업할 코드들
+	override func setAttribute() {
+		super.setAttribute()
         
         toastLabel = toastLabel.then {
             $0.text = toastMessage
@@ -47,8 +36,16 @@ extension ToastView {
             $0.clipsToBounds = true
         }
     }
+	
+	override func setHierarchy() {
+		super.setHierarchy()
+		
+		addSubviews(toastLabel)
+	}
     
-    private func setLayout() {
+	override func setLayout() {
+		super.setHierarchy()
+		
         toastLabel.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }

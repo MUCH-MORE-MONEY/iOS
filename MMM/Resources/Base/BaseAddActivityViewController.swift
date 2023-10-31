@@ -45,7 +45,7 @@ class BaseAddActivityViewController: BaseDetailViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        titleTextFeild.becomeFirstResponder() // 키보드 보이기 및 포커스 주기
+//        titleTextFeild.becomeFirstResponder() // 키보드 보이기 및 포커스 주기
     }
 }
 //MARK: - Attribute & Hierarchy & Layouts
@@ -75,7 +75,7 @@ extension BaseAddActivityViewController {
             $0.textColor = R.Color.gray200
             $0.attributedPlaceholder = NSAttributedString(string: "경제활동의 제목을 입력해주세요.", attributes: [NSAttributedString.Key.foregroundColor : R.Color.gray400])
             $0.keyboardType = .webSearch
-            $0.delegate = self
+//            $0.delegate = self
         }
         
         starStackView = starStackView.then {
@@ -222,7 +222,7 @@ extension BaseAddActivityViewController {
 // MARK: - Textfield Delegate
 extension BaseAddActivityViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder() // 키보드 내리기
+        textField.resignFirstResponder() // 키보드 올리기
         return true
     }
 }

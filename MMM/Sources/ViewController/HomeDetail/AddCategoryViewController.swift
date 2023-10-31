@@ -42,6 +42,12 @@ final class AddCategoryViewController: UIViewController {
         setup()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        view.endEditing(true)
+//        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+//        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
 }
 
 // MARK: - Action
@@ -101,6 +107,8 @@ private extension AddCategoryViewController {
         guard let viewModel = viewModel as? EditActivityViewModel else { return }
         let date = viewModel.createAt
         let dvcd = viewModel.type
+        // 뷰가 생성될때 카테고리편집에서 온 경우일수도 있기 때문에 항상 초기화해줌
+        viewModel.isViewFromCategoryViewController = false
         
         addCategoryViewModel.getCategoryList(date: date, dvcd: dvcd)
         

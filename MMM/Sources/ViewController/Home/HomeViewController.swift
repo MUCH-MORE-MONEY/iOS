@@ -40,14 +40,11 @@ final class HomeViewController: UIViewController {
 	private lazy var monthlyErrorView = HomeErrorView()
 	private lazy var dailyErrorView = HomeErrorView()
 	private lazy var retryButton = UIButton()
-    
+	private lazy var snackView = SnackView(viewModel: viewModel)
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
-		// 임시
-		if let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) {
-			print(#file, "Token(Header 토큰) \(token)")
-		}
 //        viewModel.showTrackingPermissionAlert()
 	}
 
@@ -133,18 +130,11 @@ extension HomeViewController {
 	
 	/// 네트워크 오류시 스낵바 노출
 	func showSnack() {
-		let snackView = SnackView(viewModel: viewModel)
-		snackView.setSnackAttribute()
+		self.snackView.alpha = 1.0
 		
-		self.view.addSubview(snackView)
-		
-		snackView.snp.makeConstraints {
-			$0.leading.trailing.equalToSuperview().inset(24)
-			$0.bottom.equalTo(view.snp.bottom).offset(-24) // Plus 버튼 윗부분과의 거리
-			$0.height.equalTo(40)
+		UIView.animate(withDuration: 1.0, delay: 3.0, options: [.curveEaseInOut, .allowUserInteraction]) {
+			self.snackView.alpha = 0.0
 		}
-		
-		snackView.toastAnimation(duration: 1.0, delay: 3.0, option: .curveEaseOut)
 	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
@@ -257,6 +247,11 @@ private extension HomeViewController {
 	}
 	
 	private func setAttribute() {
+		// 토큰 출력
+		if let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) {
+			print(#file, "Header Token : \(token)")
+		}
+		
 		// [view]
 		view.backgroundColor = R.Color.gray900
 		view.addGestureRecognizer(self.scopeGesture)
@@ -385,12 +380,17 @@ private extension HomeViewController {
 		dailyErrorView = dailyErrorView.then {
 			$0.isHidden = true
 		}
+		
+		snackView = snackView.then {
+			$0.setSnackAttribute()
+			$0.alpha = 0.0
+		}
 	}
 	
 	private func setLayout() {
 		headerView.addSubview(dayLabel)
 		errorBgView.addSubviews(monthlyErrorView, retryButton)
-		view.addSubviews(calendarHeaderView, calendar, separator, tableView, emptyView, dailyErrorView, errorBgView)
+		view.addSubviews(calendarHeaderView, calendar, separator, tableView, emptyView, dailyErrorView, errorBgView, snackView)
 
 		todayButton.snp.makeConstraints {
 			$0.width.equalTo(49)
@@ -454,6 +454,12 @@ private extension HomeViewController {
 			$0.centerX.equalTo(tableView.snp.centerX)
 			$0.centerY.equalTo(tableView.snp.centerY)
 			$0.width.equalTo(tableView)
+		}
+				
+		snackView.snp.makeConstraints {
+			$0.leading.trailing.equalToSuperview().inset(24)
+			$0.bottom.equalTo(view.snp.bottom).offset(-24) // Plus 버튼 윗부분과의 거리
+			$0.height.equalTo(40)
 		}
 	}
 }

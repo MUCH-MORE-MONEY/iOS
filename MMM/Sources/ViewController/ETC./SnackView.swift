@@ -72,14 +72,12 @@ extension SnackView {
         
         stackView = stackView.then {
             $0.axis = .horizontal
-            $0.spacing = 16
-            $0.alignment = .fill
-            $0.distribution = .equalSpacing
+			$0.distribution = .fill
         }
         
         textLabel = textLabel.then {
             $0.text = "일시적인 오류가 발생했습니다."
-            $0.numberOfLines = 2
+            $0.numberOfLines = 1
             $0.textColor = R.Color.white
             $0.font = R.Font.body1
         }
@@ -94,16 +92,8 @@ extension SnackView {
 	
 	private func setLayout() {
 		stackView.snp.makeConstraints {
-			$0.top.bottom.left.right.equalToSuperview()
+			$0.top.bottom.equalToSuperview()
+			$0.leading.trailing.equalToSuperview().inset(16)
 		}
-        
-        textLabel.snp.makeConstraints {
-            $0.left.equalToSuperview().offset(16)
-        }
-        
-        // FIXME: - padding 수정 필요
-         retryButton.snp.makeConstraints {
-            $0.right.equalToSuperview().offset(16)
-        }
-    }
+	}
 }

@@ -95,6 +95,20 @@ extension CategoryMainViewController {
 				}
 			})
 			.disposed(by: disposeBag)
+		
+		// Toast Message 표시
+		reactor.state
+			.map { $0.isRrefresh }
+			.distinctUntilChanged() // 중복값 무시
+			.filter{ $0 } // 편집되었을 경우에만
+			.withUnretained(self)
+			.subscribe(onNext: { this, isRefresh in
+				if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+					sceneDelegate.window?.showToast(message: "카테고리가 수정되었습니다")
+				}
+			})
+			.disposed(by: disposeBag)
+
 	}
 }
 //MARK: - Action

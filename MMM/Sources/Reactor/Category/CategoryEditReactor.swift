@@ -267,6 +267,7 @@ extension CategoryEditReactor {
 			.map { (response, error) -> Mutation in
 				return .setHeaders(response.data.selectListUpperOutputDto)
 			}
+			.catchAndReturn(.setError)
 	}
 	
 	// 데이터 가져오기

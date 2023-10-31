@@ -19,11 +19,11 @@ final class CategorySelectCell: BaseCollectionViewCell {
     override var isSelected: Bool {
         didSet {
             if isSelected {
-                backgroundColor = backgroundType ? R.Color.orange500 : R.Color.blue500
+                stackView.backgroundColor = backgroundType ? R.Color.orange500 : R.Color.blue500
                 imageView.image = R.Icon.iconCheckWhite16
                 label.textColor = R.Color.white
             } else {
-                backgroundColor = R.Color.gray200
+                stackView.backgroundColor = R.Color.gray200
                 imageView.image = R.Icon.iconCheckGray16
                 label.textColor = R.Color.gray600
             }
@@ -66,11 +66,15 @@ extension CategorySelectCell {
     
     override func setAttribute() {
         super.setAttribute()
-        backgroundColor = R.Color.gray200
         
         stackView = stackView.then {
             $0.axis = .horizontal
             $0.spacing = 2
+            $0.layer.cornerRadius = 16
+            $0.clipsToBounds = true
+            $0.backgroundColor = R.Color.gray200            
+            $0.layoutMargins = UIEdgeInsets(top: 6, left: 12, bottom: 6, right: 12)
+            $0.isLayoutMarginsRelativeArrangement = true
         }
         
         label = label.then {
@@ -88,7 +92,7 @@ extension CategorySelectCell {
     override func setLayout() {
         super.setLayout()
         stackView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.edges.equalToSuperview().offset(10)
         }
     }
 }

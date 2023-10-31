@@ -70,8 +70,9 @@ extension AddCategoryViewController {
             
             // 섹션 생성 및 구성
             let section = NSCollectionLayoutSection(group: group)
-            section.orthogonalScrollingBehavior = .groupPagingCentered // 수평 스크롤 설정
-            section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 0, bottom: 0, trailing: 0) // 섹션 간격 설정
+            section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary // 수평 스크롤 설정
+
+            section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 0, bottom: 20, trailing: 0) // 섹션 간격 설정
             section.interGroupSpacing = 8 // 그룹 간의 간격
             
             // 섹션의 헤더 (제목) 설정
@@ -189,7 +190,7 @@ private extension AddCategoryViewController {
         }
         
         collectionView.snp.makeConstraints {
-            $0.top.equalTo(stackView.snp.bottom).offset(12)
+            $0.top.equalTo(stackView.snp.bottom).offset(24)
             $0.left.equalToSuperview().offset(24)
             $0.right.equalToSuperview().offset(-24)
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
@@ -246,3 +247,37 @@ extension AddCategoryViewController: UICollectionViewDataSource, UICollectionVie
         addCategoryViewModel.selectedCategoryName = addCategoryViewModel.categoryList[indexPath.section].lowwer[indexPath.item].title
     }
 }
+
+// MARK: - 이거 보면서 바꾸기
+//// MARK: - UICollectionView DelegateFlowLayout
+//extension CategoryContentViewController: UICollectionViewDelegateFlowLayout {
+//    // 지정된 섹션의 헤더뷰의 크기를 반환하는 메서드. 크기를 지정하지 않으면 화면에 보이지 않습니다.
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+//        return CGSize(width: (collectionView.frame.width) / 2, height: UI.headerHeight)
+//    }
+//
+//    // 지정된 섹션의 여백을 반환하는 메서드.
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+//        return UI.sectionMargin
+//    }
+//
+//    // 지정된 섹션의 셀 사이의 최소간격을 반환하는 메서드.
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+//        return UI.cellSpacingMargin
+//    }
+//
+//    // 지정된 섹션의 행 사이 간격 최소 간격을 반환하는 메서드. scrollDirection이 horizontal이면 수직이 행이 되고 vertical이면 수평이 행이 된다.
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+//        return UI.cellSpacingMargin
+//    }
+//
+//    // 지정된 셀의 크기를 반환하는 메서드
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        switch dataSource[indexPath.section].items[indexPath.row] {
+//        case .header:
+//            return CGSize(width: collectionView.frame.width - UI.cellWidthMargin, height: UI.categoryCellHeight)
+//        case .base:
+//            return CGSize(width: collectionView.frame.width - UI.cellWidthMargin, height: UI.categoryCellHeight)
+//        }
+//    }
+//}

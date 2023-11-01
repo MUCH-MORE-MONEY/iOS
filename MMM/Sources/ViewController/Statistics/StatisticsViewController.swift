@@ -203,6 +203,9 @@ extension StatisticsViewController {
 	private func pushDetail(_ isPush: Bool) {
 		guard let reactor = reactor, let data = reactor.currentState.detailData else { return }
 		
+		// 셀 터치시 회색 표시 없애기
+		tableView.deselectRow(at: data.IndexPath, animated: true)
+
 		let index = data.IndexPath.row
 		let vc = DetailViewController(homeViewModel: HomeViewModel(), index: index) // 임시: HomeViewModel 생성
 		let economicActivityId = reactor.currentState.activityList.map { $0.id }

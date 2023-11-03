@@ -54,7 +54,14 @@ extension AddDetailViewController {
     
     func didTapSaveButton() {
         viewModel.insertDetailActivity()
-        
+		
+		// 통계 Refresh
+		if let str = Constants.getKeychainValue(forKey: Constants.KeychainKey.statisticsDate), let date = str.toDate() {
+			ServiceProvider.shared.statisticsProvider.updateDate(to: date)
+		} else {
+			ServiceProvider.shared.statisticsProvider.updateDate(to: Date())
+		}
+		
         self.loadView.play()
         self.loadView.isPresent = true
         self.loadView.modalPresentationStyle = .overFullScreen
@@ -369,7 +376,7 @@ extension AddDetailViewController {
                     let mode: CategoryEditViewController.Mode = self.viewModel.type == "01" ? .pay : .earn
                     
                     let vc = CategoryEditViewController(mode: mode)
-                    vc.reactor = CategoryEditReactor(provider: ServiceProvider.shared, type: self.viewModel.type, date: Date())
+                    vc.reactor = CategoryEditReactor(provider: ServiceProvider.shared, type: self.viewModel.type)
 
                     // FIXME: - 의존성 주입 바꿔야함
                     vc.editViewModel = self.viewModel

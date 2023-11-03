@@ -143,7 +143,7 @@ extension CategoryMainViewController {
 		guard let reactor = self.reactor else { return }
 
 		let vc = CategoryEditViewController(mode: segmentedControl.selectedSegmentIndex == 0 ? .pay : .earn)
-		vc.reactor = CategoryEditReactor(provider: reactor.provider, type: segmentedControl.selectedSegmentIndex == 0 ? "01" : "02", date: reactor.currentState.date)
+		vc.reactor = CategoryEditReactor(provider: reactor.provider, type: segmentedControl.selectedSegmentIndex == 0 ? "01" : "02")
 
 		navigationController?.pushViewController(vc, animated: true)
 	}

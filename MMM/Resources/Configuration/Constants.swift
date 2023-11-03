@@ -22,6 +22,7 @@ final class Constants {
 		case isDailySetting
 		case earnStandard // 수입
 		case payStandard // 지출
+		case statisticsDate // 현재 통계 날짜
     }
     
     /**

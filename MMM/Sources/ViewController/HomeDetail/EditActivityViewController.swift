@@ -557,7 +557,7 @@ extension EditActivityViewController {
                     let mode: CategoryEditViewController.Mode = self.editViewModel.type == "01" ? .pay : .earn
                     
                     let vc = CategoryEditViewController(mode: mode)
-                    vc.reactor = CategoryEditReactor(provider: ServiceProvider.shared, type: self.editViewModel.type, date: Date())
+                    vc.reactor = CategoryEditReactor(provider: ServiceProvider.shared, type: self.editViewModel.type)
 
                     // FIXME: - 의존성 주입 바꿔야함
                     vc.editViewModel = self.editViewModel

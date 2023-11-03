@@ -126,6 +126,7 @@ struct MMMActivityWidget: Widget {
 		}
 		.configurationDisplayName("경제 활동 현황") // 표시되는 이름
 		.description("이번 달 나의 경제활동 합계를 확인할 수 있어요") // 표시되는 설명
+		.contentMarginsDisabledIfAvailable() // iOS 17 부터 Margin이 나타남
 		.supportedFamilies([.systemSmall]) // 가장 작은 사이즈 하나로만 설정
 	}
 }

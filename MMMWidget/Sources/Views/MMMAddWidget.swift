@@ -46,7 +46,7 @@ struct MMMAddWidgetEntryView : View {
 	//MARK: Property
     var entry: AddProvider.Entry
 
-    var body: some View {
+	var body: some View {
 		VStack {
 			ZStack(alignment: .top) {
 				HStack {
@@ -87,6 +87,7 @@ struct MMMAddWidget: Widget {
         }
 		.configurationDisplayName("경제 활동 추가") // 표시되는 이름
         .description("오늘 소비하거나 지출한 이력을 빠르게 작성할 수 있어요") // 표시되는 설명
+		.contentMarginsDisabledIfAvailable() // iOS 17 부터 Margin이 나타남
 		.supportedFamilies([.systemSmall]) // 가장 작은 사이즈 하나로만 설정
 	}
 }

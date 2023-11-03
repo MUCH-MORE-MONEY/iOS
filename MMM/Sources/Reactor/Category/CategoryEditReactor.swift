@@ -47,7 +47,6 @@ final class CategoryEditReactor: Reactor {
 	struct State {
 		var addId: Int = 0
 		var type: String
-		var date: Date
 		var headers: [CategoryHeader] = []
 		var preSections: [CategoryEditUpperPut]?
 		var sections: ([CategoryEditSectionModel], Int) = ([], 0) // Section List와 Item 총 갯수
@@ -68,8 +67,8 @@ final class CategoryEditReactor: Reactor {
 	let initialState: State
 	let provider: ServiceProviderProtocol
 
-	init(provider: ServiceProviderProtocol, type: String, date: Date) {
-		self.initialState = State(type: type, date: date)
+	init(provider: ServiceProviderProtocol, type: String) {
+		self.initialState = State(type: type)
 		self.provider = provider
 		
 		// 뷰가 최초 로드 될 경우

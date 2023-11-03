@@ -376,7 +376,7 @@ extension AddDetailViewController {
                     let mode: CategoryEditViewController.Mode = self.viewModel.type == "01" ? .pay : .earn
                     
                     let vc = CategoryEditViewController(mode: mode)
-                    vc.reactor = CategoryEditReactor(provider: ServiceProvider.shared, type: self.viewModel.type, date: Date())
+                    vc.reactor = CategoryEditReactor(provider: ServiceProvider.shared, type: self.viewModel.type)
 
                     // FIXME: - 의존성 주입 바꿔야함
                     vc.editViewModel = self.viewModel

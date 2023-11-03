@@ -203,7 +203,7 @@ private extension HomeTableViewCell {
 		
 		categoryLabel.snp.makeConstraints {
 			$0.trailing.equalTo(contains3StackView)
-			$0.bottom.equalTo(contains3StackView.snp.top)
+			$0.bottom.equalTo(contains3StackView.snp.top).offset(-4) // UI가 겹치는 있는 문제
 		}
 		
 		separator.snp.makeConstraints {

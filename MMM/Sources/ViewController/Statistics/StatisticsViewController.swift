@@ -145,12 +145,13 @@ extension StatisticsViewController {
 		
 		// Empty case 여부 판별
 		reactor.state
-			.map { $0.activityList }
-			.distinctUntilChanged() // 중복값 무시
-			.map { $0.isEmpty }
-			.subscribe(onNext: { [weak self] isEmpty in
-				guard let self = self else { return }
-				tableView.tableFooterView = isEmpty ? emptyView : nil
+			.map { $0.activityList.isEmpty }
+			.withUnretained(self)
+			.distinctUntilChanged { $0.1 } // 중복값 무시
+			.subscribe(onNext: { this, isEmpty in
+				print("여기야", isEmpty)
+//				this.emptyView.isHidden = !isEmpty
+				this.tableView.tableFooterView = isEmpty ? this.emptyView : nil
 			})
 			.disposed(by: disposeBag)
 		

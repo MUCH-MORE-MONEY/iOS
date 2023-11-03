@@ -26,7 +26,8 @@ final class CategoryDetailViewController: BaseViewControllerWithNav, View {
 	private lazy var titleDescriptionLabel = UILabel()
 	private lazy var tableView = UITableView()
 	private lazy var loadView = LoadingViewController()
-
+	private lazy var emptyView = CategoryEmptyView()
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 	}
@@ -88,6 +89,15 @@ extension CategoryDetailViewController {
 				
 				return cell
 			}.disposed(by: disposeBag)
+		
+		reactor.state
+			.map { $0.list.isEmpty }
+			.withUnretained(self)
+			.distinctUntilChanged { $0.1 } // 중복값 무시
+			.subscribe(onNext: { this, isEmpty in
+				this.emptyView.isHidden = !isEmpty
+			})
+			.disposed(by: disposeBag)
 		
 		reactor.state
 			.map { $0.isPushDetail }
@@ -170,7 +180,7 @@ extension CategoryDetailViewController {
 		super.setHierarchy()
 		
 		titleStackView.addArrangedSubviews(titleLabel, titleDescriptionLabel)
-		view.addSubviews(tableView)
+		view.addSubviews(tableView, emptyView)
 	}
 	
 	override func setLayout() {
@@ -178,6 +188,10 @@ extension CategoryDetailViewController {
 		
 		tableView.snp.makeConstraints {
 			$0.edges.equalToSuperview()
+		}
+		
+		emptyView.snp.makeConstraints {
+			$0.center.equalToSuperview()
 		}
 	}
 }

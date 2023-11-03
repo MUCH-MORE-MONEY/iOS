@@ -248,6 +248,7 @@
 		C4EB8CBA2AC52F52005FBAF1 /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EB8CB92AC52F52005FBAF1 /* APIConstants.swift */; };
 		C4EB8CBC2AC56341005FBAF1 /* CategoryAddBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EB8CBB2AC56341005FBAF1 /* CategoryAddBottomSheetViewController.swift */; };
 		C4F3ABDF2AF4B51300BA7A66 /* Ex+WidgetConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F3ABDE2AF4B51300BA7A66 /* Ex+WidgetConfiguration.swift */; };
+		C4F3ABE12AF4C73D00BA7A66 /* CategoryEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F3ABE02AF4C73C00BA7A66 /* CategoryEmptyView.swift */; };
 		FF7FB61A0AC167F25EB6438F /* Pods_MMM_MMMUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 738AB5686981CA1A28640207 /* Pods_MMM_MMMUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -537,6 +538,7 @@
 		C4EB8CB92AC52F52005FBAF1 /* APIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIConstants.swift; sourceTree = "<group>"; };
 		C4EB8CBB2AC56341005FBAF1 /* CategoryAddBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryAddBottomSheetViewController.swift; sourceTree = "<group>"; };
 		C4F3ABDE2AF4B51300BA7A66 /* Ex+WidgetConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+WidgetConfiguration.swift"; sourceTree = "<group>"; };
+		C4F3ABE02AF4C73C00BA7A66 /* CategoryEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEmptyView.swift; sourceTree = "<group>"; };
 		E1F4C2751A32E5FDB91A657F /* Pods-MMMTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMMTests.release.xcconfig"; path = "Target Support Files/Pods-MMMTests/Pods-MMMTests.release.xcconfig"; sourceTree = "<group>"; };
 		F4482F9A861317CCBA1EDC6B /* Pods-MMM-MMMUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMM-MMMUITests.release.xcconfig"; path = "Target Support Files/Pods-MMM-MMMUITests/Pods-MMM-MMMUITests.release.xcconfig"; sourceTree = "<group>"; };
 		FC275A78FD9B770379D3387D /* Pods-MMM.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMM.debug.xcconfig"; path = "Target Support Files/Pods-MMM/Pods-MMM.debug.xcconfig"; sourceTree = "<group>"; };
@@ -1123,6 +1125,7 @@
 			children = (
 				C46409B52AB5987800A899AD /* CategoryCollectionViewCell.swift */,
 				C433BA042AE95E2D000793CB /* CategoryEmptyCollectionViewCell.swift */,
+				C4F3ABE02AF4C73C00BA7A66 /* CategoryEmptyView.swift */,
 				C4BBD2822AC0172F0055FA65 /* CategorySectionFooter.swift */,
 				C46409BB2AB5B07A00A899AD /* CategorySectionHeader.swift */,
 				C46D5E5A2AD1265100EBE5D7 /* CategorySectionGlobalHeader.swift */,
@@ -1661,6 +1664,7 @@
 				6A08B48029FF74B70080719E /* Ex+Encodable.swift in Sources */,
 				C41193E829D287E6003DBC15 /* Ex+UIView.swift in Sources */,
 				C40E522C2A39A09900775455 /* HomeErrorView.swift in Sources */,
+				C4F3ABE12AF4C73D00BA7A66 /* CategoryEmptyView.swift in Sources */,
 				C40E522A2A39629B00775455 /* ExportResDto.swift in Sources */,
 				6A0379752A2443B9005EE07F /* Ex+UITextView.swift in Sources */,
 				6A08FFDC2A274A22000AD06B /* AddDetailViewController.swift in Sources */,

@@ -149,8 +149,6 @@ extension StatisticsViewController {
 			.withUnretained(self)
 			.distinctUntilChanged { $0.1 } // 중복값 무시
 			.subscribe(onNext: { this, isEmpty in
-				print("여기야", isEmpty)
-//				this.emptyView.isHidden = !isEmpty
 				this.tableView.tableFooterView = isEmpty ? this.emptyView : nil
 			})
 			.disposed(by: disposeBag)
@@ -304,7 +302,6 @@ extension StatisticsViewController {
 			$0.register(HomeTableViewCell.self)
 			$0.refreshControl = refreshControl
 			$0.tableHeaderView = headerView
-			$0.tableFooterView = emptyView
 			$0.backgroundColor = R.Color.gray100
 			$0.showsVerticalScrollIndicator = false
 			$0.separatorStyle = .none

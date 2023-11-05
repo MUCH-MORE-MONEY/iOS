@@ -26,6 +26,7 @@ final class CategoryEditUpperViewController: BaseViewController, View {
 	private lazy var tableView = UITableView()
 	private lazy var footerView = UIView()
 	private lazy var addButton = UIButton()
+	private lazy var emptyView: CategoryEditUpperEmptyView = CategoryEditUpperEmptyView()
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -93,6 +94,18 @@ extension CategoryEditUpperViewController {
 
 				return cell
 			}.disposed(by: disposeBag)
+		
+		// Empty case
+		reactor.state
+			.map { $0.sections.count == 1 }
+			.distinctUntilChanged()
+			.withUnretained(self)
+			.subscribe { this, isEmpty in
+				this.emptyView.isHidden = !isEmpty
+				this.tableView.isHidden = isEmpty
+				this.addButton.isHidden = isEmpty
+			}
+			.disposed(by: disposeBag)
 		
 		// 카테고리 편집
 		reactor.state
@@ -213,13 +226,17 @@ extension CategoryEditUpperViewController {
 			$0.titleLabel?.font = R.Font.body1
 			$0.contentHorizontalAlignment = .center
 		}
+		
+		emptyView = emptyView.then {
+			$0.reactor = reactor
+		}
 	}
 	
 	override func setHierarchy() {
 		super.setHierarchy()
 		
 		footerView.addSubview(addButton)
-		view.addSubviews(tableView)
+		view.addSubviews(tableView, emptyView)
 	}
 	
 	override func setLayout() {
@@ -233,6 +250,10 @@ extension CategoryEditUpperViewController {
 			$0.centerY.centerX.equalToSuperview()
 			$0.horizontalEdges.equalToSuperview().inset(24)
 			$0.height.equalTo(44)
+		}
+		
+		emptyView.snp.makeConstraints {
+			$0.center.equalTo(view.safeAreaLayoutGuide)
 		}
 	}
 }

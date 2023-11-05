@@ -9,33 +9,19 @@ import UIKit
 import Then
 import SnapKit
 
-final class CategoryEmptyView: UIView {
+final class CategoryEmptyView: BaseView {
 	// MARK: - Properties
 	// MARK: - UI Components
 	private lazy var stackView = UIStackView() // imageView, label
 	private lazy var ivEmpty = UIImageView()
 	private lazy var titleLabel = UILabel()
-
-	override init(frame: CGRect) {
-		super.init(frame: frame)
-		setup() // 초기 셋업할 코드들
-	}
-	
-	// Compile time에 error를 발생시키는 코드
-	@available(*, unavailable)
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
-private extension CategoryEmptyView {
+extension CategoryEmptyView {
 	// 초기 셋업할 코드들
-	private func setup() {
-		setAttribute()
-		setLayout()
-	}
-	
-	private func setAttribute() {
+	override func setAttribute() {
+		super.setAttribute()
+		
 		stackView = stackView.then {
 			$0.axis = .vertical
 			$0.alignment = .center
@@ -61,10 +47,16 @@ private extension CategoryEmptyView {
 		}
 	}
 	
-	private func setLayout() {
+	override func setHierarchy() {
+		super.setHierarchy()
+		
 		addSubviews(stackView)
 		stackView.addArrangedSubviews(ivEmpty, titleLabel)
-		
+	}
+	
+	override func setLayout() {
+		super.setLayout()
+				
 		ivEmpty.snp.makeConstraints {
 			$0.width.equalTo(144)
 		}

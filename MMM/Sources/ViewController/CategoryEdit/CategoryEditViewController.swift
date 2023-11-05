@@ -114,7 +114,8 @@ final class CategoryEditViewController: BaseViewController, View {
 	private lazy var loadView = LoadingViewController()
 	private lazy var collectionView: UICollectionView = .init(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
 	private lazy var upperAddButton = UIButton() // 카테고리 유형 추가
-
+	private lazy var emptyView: CategoryEditEmptyView = CategoryEditEmptyView()
+	
 	init(mode: Mode) {
 		self.mode = mode
 		super.init(nibName: nil, bundle: nil)
@@ -180,6 +181,17 @@ extension CategoryEditViewController {
 				this.collectionView.collectionViewLayout = this.makeLayout(sections: sections.0)
 				this.collectionView.reloadData()
 			})
+			.disposed(by: disposeBag)
+		
+		// Empty case
+		reactor.state
+			.map { $0.sections.0.count == 1 }
+			.distinctUntilChanged()
+			.withUnretained(self)
+			.subscribe { this, isEmpty in
+				this.emptyView.isHidden = !isEmpty
+				this.collectionView.isHidden = isEmpty
+			}
 			.disposed(by: disposeBag)
 		
 		reactor.state
@@ -461,7 +473,7 @@ extension CategoryEditViewController {
 		super.setHierarchy()
 		
 		titleStackView.addArrangedSubviews(titleImageView, titleLabel)
-		view.addSubviews(collectionView, upperAddButton)
+		view.addSubviews(collectionView, upperAddButton, emptyView)
 	}
 	
 	override func setLayout() {
@@ -476,6 +488,10 @@ extension CategoryEditViewController {
 			$0.leading.trailing.equalToSuperview().inset(24)
 			$0.bottom.equalToSuperview().inset(34)
 			$0.height.equalTo(56)
+		}
+		
+		emptyView.snp.makeConstraints {
+			$0.center.equalTo(view.safeAreaLayoutGuide)
 		}
 	}
 }

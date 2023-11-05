@@ -72,7 +72,7 @@ extension CategoryEditUpperEmptyView {
 		
 		addButton = addButton.then {
 			$0.setTitle("+ 카테고리 유형 추가하기", for: .normal)
-			$0.titleLabel?.font = R.Font.prtendard(family: .medium, size: 18)
+			$0.titleLabel?.font = R.Font.body1
 			$0.backgroundColor = R.Color.black
 			$0.setTitleColor(R.Color.white.withAlphaComponent(0.7), for: .highlighted)
 			$0.layer.cornerRadius = 4

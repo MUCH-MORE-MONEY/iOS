@@ -120,9 +120,19 @@ extension CategoryEditUpperViewController {
 			.bind(onNext: willPresentAddViewController)
 			.disposed(by: disposeBag)
 		
-		// 카테고리 유형 추가
+		// 카테고리 유형 뒤로가기에 대한 Dismiss
 		reactor.state
 			.compactMap { $0.dismiss }
+			.filter { $0 }
+			.distinctUntilChanged() // 중복값 무시
+			.bind(onNext: { _ in
+				self.navigationController?.popViewController(animated: true)
+			})
+			.disposed(by: disposeBag)
+		
+		// 카테고리 유형 추가
+		reactor.state
+			.compactMap { $0.isSave }
 			.filter { $0 }
 			.distinctUntilChanged() // 중복값 무시
 			.bind(onNext: { _ in
@@ -133,6 +143,7 @@ extension CategoryEditUpperViewController {
 				self.navigationController?.popViewController(animated: true)
 			})
 			.disposed(by: disposeBag)
+
 		
 		// 수정 여부에 따른 Alert present
 		reactor.state

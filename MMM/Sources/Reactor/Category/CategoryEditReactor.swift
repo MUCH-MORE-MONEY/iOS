@@ -193,6 +193,7 @@ extension CategoryEditReactor {
 				let sectionId = section.offset
 				
 				if let removeIndex = newState.sections.0[sectionId].items.firstIndex(where: {$0.identity as! String == categoryEdit.id}) {
+					
 					// 삭제된 카테고리 저장
 					let item = newState.sections.0[sectionId].items[removeIndex]
 					let (id, title) = (item.identity as! String, item.title)
@@ -325,11 +326,6 @@ extension CategoryEditReactor {
 			let model: CategoryEditSectionModel = .init(model: .base(header, categoryitems), items: categoryitems)
 			sections.append(model)
 		}
-		
-		// Global Footer
-		let footerItem: CategoryEditItem = .footer(.init(provider: provider, categoryEdit: CategoryEdit.getDummy()))
-		let footerModel: CategoryEditSectionModel = .init(model: .footer(footerItem), items: [footerItem])
-		sections.append(footerModel)
 		
 		return sections
 	}

@@ -165,7 +165,6 @@
 		C46409D62AB8DB9000A899AD /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46409D52AB8DB8F00A899AD /* BaseTableViewCell.swift */; };
 		C46409DA2AB9625E00A899AD /* BottomSheetViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46409D92AB9625E00A899AD /* BottomSheetViewController2.swift */; };
 		C46791542A539E55005FE1F6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C411939629D2817E003DBC15 /* Assets.xcassets */; };
-		C46D5E512AD06E8400EBE5D7 /* CategoryEditSectionGlobalFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46D5E502AD06E8400EBE5D7 /* CategoryEditSectionGlobalFooter.swift */; };
 		C46D5E532AD074E400EBE5D7 /* CategoryEditUpperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46D5E522AD074E400EBE5D7 /* CategoryEditUpperViewController.swift */; };
 		C46D5E552AD078DA00EBE5D7 /* CategoryEditTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46D5E542AD078DA00EBE5D7 /* CategoryEditTableViewCell.swift */; };
 		C46D5E572AD0799900EBE5D7 /* CategoryEditTableViewCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46D5E562AD0799900EBE5D7 /* CategoryEditTableViewCellReactor.swift */; };
@@ -461,7 +460,6 @@
 		C46409D32AB8CAE600A899AD /* WithdrawReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawReactor.swift; sourceTree = "<group>"; };
 		C46409D52AB8DB8F00A899AD /* BaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
 		C46409D92AB9625E00A899AD /* BottomSheetViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController2.swift; sourceTree = "<group>"; };
-		C46D5E502AD06E8400EBE5D7 /* CategoryEditSectionGlobalFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditSectionGlobalFooter.swift; sourceTree = "<group>"; };
 		C46D5E522AD074E400EBE5D7 /* CategoryEditUpperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditUpperViewController.swift; sourceTree = "<group>"; };
 		C46D5E542AD078DA00EBE5D7 /* CategoryEditTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditTableViewCell.swift; sourceTree = "<group>"; };
 		C46D5E562AD0799900EBE5D7 /* CategoryEditTableViewCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditTableViewCellReactor.swift; sourceTree = "<group>"; };
@@ -1214,7 +1212,6 @@
 				C46D5E542AD078DA00EBE5D7 /* CategoryEditTableViewCell.swift */,
 				C4BBD28C2AC048860055FA65 /* CategoryEditSectionFooter.swift */,
 				C4BBD28A2AC047390055FA65 /* CategoryEditSectionHeader.swift */,
-				C46D5E502AD06E8400EBE5D7 /* CategoryEditSectionGlobalFooter.swift */,
 				C46D5E5C2AD1508B00EBE5D7 /* CategoryEditSectionGlobalHeader.swift */,
 			);
 			path = Views;
@@ -1730,7 +1727,6 @@
 				6A25E44B2AA89CED0055EA29 /* WeekCollectionHeaderView.swift in Sources */,
 				C4170B502A89FD1100CE0A65 /* StatisticsReactor.swift in Sources */,
 				C4BBD28B2AC047390055FA65 /* CategoryEditSectionHeader.swift in Sources */,
-				C46D5E512AD06E8400EBE5D7 /* CategoryEditSectionGlobalFooter.swift in Sources */,
 				C4D03F052A2EAB1800011B41 /* MMMWidget.intentdefinition in Sources */,
 				C411939229D2817C003DBC15 /* ProfileViewController.swift in Sources */,
 				6A2B5D5B2A9735D500CCBFBE /* DetailTimeSettingView.swift in Sources */,

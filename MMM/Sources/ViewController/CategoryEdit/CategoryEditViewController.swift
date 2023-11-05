@@ -90,16 +90,12 @@ final class CategoryEditViewController: BaseViewController, View {
 				
 				// 마지막 섹션은 separator 숨기기
 				// Global Header/Footer로 인한 section수 2개 증가
-				footer.setData(categoryHeader: sectionInfo, isLast: indexPath.section == count - 2)
+				footer.setData(categoryHeader: sectionInfo, isLast: indexPath.section == count - 1)
 				footer.reactor = thisReactor
 				
 				return footer
 			case .footer:
-				guard let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: CategoryEditSectionGlobalFooter.className, for: indexPath) as? CategoryEditSectionGlobalFooter else { return .init() }
-				
-				footer.reactor = thisReactor
-				
-				return footer
+				return .init()
 			}
 		}
 	}
@@ -117,7 +113,8 @@ final class CategoryEditViewController: BaseViewController, View {
 	private lazy var saveButton = UIButton()
 	private lazy var loadView = LoadingViewController()
 	private lazy var collectionView: UICollectionView = .init(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-	
+	private lazy var upperAddButton = UIButton() // 카테고리 유형 추가
+
 	init(mode: Mode) {
 		self.mode = mode
 		super.init(nibName: nil, bundle: nil)
@@ -159,6 +156,12 @@ extension CategoryEditViewController {
 		backButton.rx.tap
 			.withUnretained(self)
 			.map { .didTabBackButton }
+			.bind(to: reactor.action)
+			.disposed(by: disposeBag)
+		
+		upperAddButton.rx.tap
+			.withUnretained(self)
+			.map { .didTapUpperEditButton }
 			.bind(to: reactor.action)
 			.disposed(by: disposeBag)
 	}
@@ -436,12 +439,21 @@ extension CategoryEditViewController {
 			$0.register(CategoryEditSectionFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter)
 			// Global Header
 			$0.register(CategoryEditSectionGlobalHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
-			// Global Footer
-			$0.register(CategoryEditSectionGlobalFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter)
 			$0.showsVerticalScrollIndicator = false
 			$0.backgroundColor = R.Color.gray900
 			$0.dragInteractionEnabled = true
 			$0.reorderingCadence = .fast // drag 정렬 속도
+		}
+		
+		upperAddButton = upperAddButton.then {
+			$0.setTitle("카테고리 유형 편집하기", for: .normal)
+			$0.titleLabel?.font = R.Font.prtendard(family: .medium, size: 18)
+			$0.backgroundColor = R.Color.black
+			$0.layer.cornerRadius = 4
+			$0.layer.shadowColor = UIColor.black.cgColor
+			$0.layer.shadowOpacity = 0.25
+			$0.layer.shadowOffset = CGSize(width: 0, height: 2)
+			$0.layer.shadowRadius = 8
 		}
 	}
 	
@@ -449,7 +461,7 @@ extension CategoryEditViewController {
 		super.setHierarchy()
 		
 		titleStackView.addArrangedSubviews(titleImageView, titleLabel)
-		view.addSubviews(collectionView)
+		view.addSubviews(collectionView, upperAddButton)
 	}
 	
 	override func setLayout() {
@@ -457,6 +469,13 @@ extension CategoryEditViewController {
 		
 		collectionView.snp.makeConstraints {
 			$0.top.leading.trailing.bottom.equalToSuperview()
+		}
+		
+		// 플로팅으로 띄우기
+		upperAddButton.snp.makeConstraints {
+			$0.leading.trailing.equalToSuperview().inset(24)
+			$0.bottom.equalToSuperview().inset(34)
+			$0.height.equalTo(56)
 		}
 	}
 }

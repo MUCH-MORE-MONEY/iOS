@@ -48,7 +48,6 @@ struct MMMAddWidgetEntryView : View {
 
 	var body: some View {
 		let userInfo = UserDefaults(suiteName: "group.labM.project.MMM")
-		
 		let bounds = UIScreen.main.bounds
 		let height = bounds.size.height
 		let isSmall = height <= 667.0 // 4.7 inch
@@ -59,18 +58,29 @@ struct MMMAddWidgetEntryView : View {
 					VStack(alignment: .leading, spacing: 4) {
 						HStack(spacing: 2) {
 							if let today = userInfo?.integer(forKey: "today"), let weekly = userInfo?.integer(forKey: "weekly") {
+								let bool = (weekly >= 100 || isSmall)
+
 								Text("오늘")
-									.font(R.Fonts.body5)
+									.layoutPriority(1)
+									.font(bool ? R.Fonts.body5 : R.Fonts.body3)
 									.foregroundColor(Color(uiColor: R.Color.gray300))
 								Text("\(today)개")
-									.font(R.Fonts.body4)
+									.layoutPriority(2)
+									.font(bool ? R.Fonts.body4 : R.Fonts.body2)
+									.lineLimit(1)
 									.foregroundColor(Color(uiColor: R.Color.gray500))
 								Text("이번주")
-									.font(R.Fonts.body5)
+									.layoutPriority(3)
+									.font(bool ? R.Fonts.body5 : R.Fonts.body3)
+									.lineLimit(1)
 									.foregroundColor(Color(uiColor: R.Color.gray300))
-								Text("\(weekly)개")
-									.font(R.Fonts.body4)
-									.foregroundColor(Color(uiColor: R.Color.orange500))
+								HStack(spacing: 0) {
+									Text("\(weekly)")
+										.lineLimit(1)
+									Text("개")
+								}
+								.font(bool ? R.Fonts.body4 : R.Fonts.body2)
+								.foregroundColor(Color(uiColor: R.Color.orange500))
 							}
 						}
 						
@@ -79,7 +89,7 @@ struct MMMAddWidgetEntryView : View {
 					}
 					.foregroundColor(Color(uiColor: R.Color.white))
 					.font(R.Fonts.title1)
-					.padding(.init(top: 20, leading: 16, bottom: 20, trailing: 16))
+					.padding(.init(top: 16, leading: 16, bottom: 16, trailing: 14))
 					Spacer()
 				}
 				

@@ -93,6 +93,7 @@ extension HomeViewModel {
 				// 이번 달만 위젯에 보여줌
 				if dateYMD == Date().getFormattedYMD() {
 					UserDefaults.shared.set(dailyList.count, forKey: "today")
+					UserDefaults.shared.set(100, forKey: "weekly")
 					WidgetCenter.shared.reloadAllTimelines()
 				}
 			}).store(in: &cancellable)

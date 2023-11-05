@@ -125,7 +125,7 @@ extension SatisfactionBottomSheetViewController {
 			.distinctUntilChanged()
 			.filter { $0 == true }
 			.subscribe(onNext: { [weak self] _ in
-				self?.dismiss(animated: true)
+				self?.dismiss(animated: false)
 			})
 			.disposed(by: disposeBag)
 	}

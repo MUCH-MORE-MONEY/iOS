@@ -68,7 +68,6 @@ private extension LoadingViewController {
 	}
 	
 	private func setAttribute() {
-		view.backgroundColor = R.Color.black.withAlphaComponent(0.6)
 		
 		stackView = stackView.then {
 			$0.axis = .vertical

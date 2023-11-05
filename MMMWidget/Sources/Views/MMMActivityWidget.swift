@@ -109,7 +109,6 @@ struct MMMActivityWidgetEntryView : View {
 }
 
 struct TypeModifier: ViewModifier {
-	
 	func body(content: Content) -> some View {
 		content
 			.foregroundColor(Color(uiColor: R.Color.gray300))

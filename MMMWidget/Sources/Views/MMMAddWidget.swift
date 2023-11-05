@@ -47,10 +47,33 @@ struct MMMAddWidgetEntryView : View {
     var entry: AddProvider.Entry
 
 	var body: some View {
+		let userInfo = UserDefaults(suiteName: "group.labM.project.MMM")
+		
+		let bounds = UIScreen.main.bounds
+		let height = bounds.size.height
+		let isSmall = height <= 667.0 // 4.7 inch
+
 		VStack {
 			ZStack(alignment: .top) {
 				HStack {
 					VStack(alignment: .leading, spacing: 4) {
+						HStack(spacing: 2) {
+							if let today = userInfo?.integer(forKey: "today"), let weekly = userInfo?.integer(forKey: "weekly") {
+								Text("오늘")
+									.font(R.Fonts.body5)
+									.foregroundColor(Color(uiColor: R.Color.gray300))
+								Text("\(today)개")
+									.font(R.Fonts.body4)
+									.foregroundColor(Color(uiColor: R.Color.gray500))
+								Text("이번주")
+									.font(R.Fonts.body5)
+									.foregroundColor(Color(uiColor: R.Color.gray300))
+								Text("\(weekly)개")
+									.font(R.Fonts.body4)
+									.foregroundColor(Color(uiColor: R.Color.orange500))
+							}
+						}
+						
 						Text("새로운 경제활동")
 						Text("추가하기")
 					}
@@ -67,7 +90,7 @@ struct MMMAddWidgetEntryView : View {
 						Image("iconAddWidget")
 							.resizable()
 							.scaledToFit()
-							.frame(width: Screen.maxWidth * 0.22)
+							.frame(width: Screen.maxWidth * 0.19)
 							.padding(8)
 					}
 				}

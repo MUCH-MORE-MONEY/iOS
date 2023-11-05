@@ -51,8 +51,7 @@ struct MMMAddWidgetEntryView : View {
 			ZStack(alignment: .top) {
 				HStack {
 					VStack(alignment: .leading, spacing: 4) {
-						Text("오늘의")
-						Text("경제활동")
+						Text("새로운 경제활동")
 						Text("추가하기")
 					}
 					.foregroundColor(Color(uiColor: R.Color.white))
@@ -65,10 +64,11 @@ struct MMMAddWidgetEntryView : View {
 					Spacer()
 					HStack {
 						Spacer()
-						Image("iconWidget")
+						Image("iconAddWidget")
 							.resizable()
 							.scaledToFit()
 							.frame(width: Screen.maxWidth * 0.22)
+							.padding(8)
 					}
 				}
 			}

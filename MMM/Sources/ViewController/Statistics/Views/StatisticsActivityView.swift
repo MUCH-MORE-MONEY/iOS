@@ -111,7 +111,6 @@ extension StatisticsActivityView {
 				self.cntSatisfaction = count - 1
 				
 				if count != 0 {
-					self.satisfactionTableView.scrollToRow(at: NSIndexPath(item: 0, section: 0) as IndexPath, at: .middle, animated: false) // 해당 인덱스로 이동.
 					satisfactionEmptyTitleLabel.isHidden = true
 					satisfactionEmptyPriceLabel.isHidden = true
 				} else {
@@ -141,16 +140,6 @@ extension StatisticsActivityView {
 				}
 			})
 			.disposed(by: disposeBag)
-		
-		reactor.state
-			.map { $0.isLoading }
-			.distinctUntilChanged() // 중복값 무시
-			.bind(onNext: { [weak self] isLoading in
-				guard let self = self else { return }
-				
-				if !isLoading { // 로딩 끝
-				}
-			}).disposed(by: disposeBag)
 	}
 }
 //MARK: - Action

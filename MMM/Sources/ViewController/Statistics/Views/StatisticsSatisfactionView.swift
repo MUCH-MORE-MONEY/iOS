@@ -45,8 +45,7 @@ extension StatisticsSatisfactionView {
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
-	private func bindState(_ reactor: StatisticsReactor) {
-	}
+	private func bindState(_ reactor: StatisticsReactor) { }
 }
 //MARK: - Action
 extension StatisticsSatisfactionView {
@@ -104,7 +103,7 @@ extension StatisticsSatisfactionView {
 	
 	override func setLayout() {
 		super.setLayout()
-		
+
 		touchAreaView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(12)
 			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)

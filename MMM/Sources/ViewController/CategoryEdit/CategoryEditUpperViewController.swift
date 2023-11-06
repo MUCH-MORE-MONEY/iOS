@@ -26,6 +26,7 @@ final class CategoryEditUpperViewController: BaseViewController, View {
 	private lazy var tableView = UITableView()
 	private lazy var footerView = UIView()
 	private lazy var addButton = UIButton()
+	private lazy var emptyView: CategoryEditUpperEmptyView = CategoryEditUpperEmptyView()
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -73,7 +74,7 @@ extension CategoryEditUpperViewController {
 	private func bindState(_ reactor: CategoryEditUpperReactor) {
 		// 타입 추론이 길어서 반으로 나누기
 		let datasource = reactor.state
-			.map { $0.sections.map { $0.model.header }.filter { $0.id != "header" && $0.id != "footer"} }
+			.map { $0.sections.map { $0.model.header }.filter { $0.id != "header" } }
 			.distinctUntilChanged { $0.count == $1.count } // 순서만 바뀌었을 때에는 변경안함
 		
 		datasource
@@ -82,8 +83,8 @@ extension CategoryEditUpperViewController {
 				let cell = tv.dequeueReusableCell(withIdentifier: CategoryEditTableViewCell.className, for: index) as! CategoryEditTableViewCell
 
 				// 데이터 설정
-				// Grobal Header/Footer가 존재해서 -2
-				cell.setData(last: row == reactor.currentState.sections.count - 3)
+				// Grobal Header가 존재해서 - 1
+				cell.setData(last: row == reactor.currentState.sections.count - 2)
 				cell.reactor = CategoryEditTableViewCellReactor(provider: reactor.provider, categoryHeader: data)
 
 				// Click에 대한 색상
@@ -93,6 +94,18 @@ extension CategoryEditUpperViewController {
 
 				return cell
 			}.disposed(by: disposeBag)
+		
+		// Empty case
+		reactor.state
+			.map { $0.sections.count == 1 }
+			.distinctUntilChanged()
+			.withUnretained(self)
+			.subscribe { this, isEmpty in
+				this.emptyView.isHidden = !isEmpty
+				this.tableView.isHidden = isEmpty
+				this.addButton.isHidden = isEmpty
+			}
+			.disposed(by: disposeBag)
 		
 		// 카테고리 편집
 		reactor.state
@@ -107,14 +120,30 @@ extension CategoryEditUpperViewController {
 			.bind(onNext: willPresentAddViewController)
 			.disposed(by: disposeBag)
 		
-		// 카테고리 유형 추가
+		// 카테고리 유형 뒤로가기에 대한 Dismiss
 		reactor.state
 			.compactMap { $0.dismiss }
+			.filter { $0 }
 			.distinctUntilChanged() // 중복값 무시
 			.bind(onNext: { _ in
 				self.navigationController?.popViewController(animated: true)
 			})
 			.disposed(by: disposeBag)
+		
+		// 카테고리 유형 추가
+		reactor.state
+			.compactMap { $0.isSave }
+			.filter { $0 }
+			.distinctUntilChanged() // 중복값 무시
+			.bind(onNext: { _ in
+				if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+					sceneDelegate.window?.showToast(message: "카테고리 유형이 수정되었습니다")
+				}
+				
+				self.navigationController?.popViewController(animated: true)
+			})
+			.disposed(by: disposeBag)
+
 		
 		// 수정 여부에 따른 Alert present
 		reactor.state
@@ -208,13 +237,17 @@ extension CategoryEditUpperViewController {
 			$0.titleLabel?.font = R.Font.body1
 			$0.contentHorizontalAlignment = .center
 		}
+		
+		emptyView = emptyView.then {
+			$0.reactor = reactor
+		}
 	}
 	
 	override func setHierarchy() {
 		super.setHierarchy()
 		
 		footerView.addSubview(addButton)
-		view.addSubviews(tableView)
+		view.addSubviews(tableView, emptyView)
 	}
 	
 	override func setLayout() {
@@ -229,6 +262,10 @@ extension CategoryEditUpperViewController {
 			$0.horizontalEdges.equalToSuperview().inset(24)
 			$0.height.equalTo(44)
 		}
+		
+		emptyView.snp.makeConstraints {
+			$0.center.equalTo(view.safeAreaLayoutGuide)
+		}
 	}
 }
 // MARK: - UITableView Drag Delegate
@@ -241,8 +278,8 @@ extension CategoryEditUpperViewController: UITableViewDragDelegate {
 		guard let reactor = reactor else { return }
 		
 		// 마지막 아이템의 separator 제거
-		// 3을 빼는 이유 양끝에 Global header, footer가 있음
-		let count = reactor.currentState.sections.count - 3
+		// 2을 빼는 이유 : Global header가 있음
+		let count = reactor.currentState.sections.count - 2
 		
 		for row in stride(from: 0, through: count, by: 1) {
 			let index = IndexPath(row: row, section: 0)

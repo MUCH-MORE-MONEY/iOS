@@ -27,7 +27,7 @@ struct CategoryEdit: Codable, Equatable {
 	}
 	
 	static func getDummy() -> Self {
-		return CategoryEdit(id: "01", title: "덕질비요요요요용덕질비요요요요용", upperId: "01", upperTitle: "보기만 해도 배부른", orderNum: 1, upperOrderNum: 1)
+		return CategoryEdit(id: "01", title: "하위 카테고리", upperId: "01", upperTitle: "상위 카테고리", orderNum: 1, upperOrderNum: 1)
 	}
 }
 

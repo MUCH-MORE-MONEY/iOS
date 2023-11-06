@@ -1,23 +1,28 @@
 //
-//  CategoryEmptyView.swift
+//  CategoryEditEmptyView.swift
 //  MMM
 //
-//  Created by geonhyeong on 11/3/23.
+//  Created by geonhyeong on 11/5/23.
 //
 
 import UIKit
 import Then
 import SnapKit
+import ReactorKit
 
-final class CategoryEmptyView: BaseView {
+final class CategoryEditEmptyView: BaseView {
 	// MARK: - Properties
 	// MARK: - UI Components
 	private lazy var stackView = UIStackView() // imageView, label
 	private lazy var ivEmpty = UIImageView()
 	private lazy var titleLabel = UILabel()
+	private lazy var addButton = UIButton()
+}
+//MARK: - Bind
+extension CategoryEditEmptyView {
 }
 //MARK: - Attribute & Hierarchy & Layouts
-extension CategoryEmptyView {
+extension CategoryEditEmptyView {
 	// 초기 셋업할 코드들
 	override func setAttribute() {
 		super.setAttribute()
@@ -25,7 +30,7 @@ extension CategoryEmptyView {
 		stackView = stackView.then {
 			$0.axis = .vertical
 			$0.alignment = .center
-			$0.spacing = 16
+			$0.spacing = 20
 			$0.distribution = .equalSpacing
 		}
 		
@@ -35,13 +40,13 @@ extension CategoryEmptyView {
 		}
 		
 		titleLabel = titleLabel.then {
-			let attrString = NSMutableAttributedString(string: "선택할 수 있는 카테고리가 없어요.\n관리 페이지에서 추가해주세요!")
+			let attrString = NSMutableAttributedString(string: "카테고리 유형을 편집해\n내 경제활동에 맞춰 카테고리를 정리하세요")
 			let paragraphStyle = NSMutableParagraphStyle()
 			paragraphStyle.lineSpacing = 4
 			attrString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, attrString.length))
 			$0.attributedText = attrString
 			$0.font = R.Font.prtendard(family: .medium, size: 14)
-			$0.textColor = R.Color.gray500
+			$0.textColor = R.Color.gray400
 			$0.textAlignment = .center
 			$0.numberOfLines = 2
 		}
@@ -62,7 +67,8 @@ extension CategoryEmptyView {
 		}
 		
 		stackView.snp.makeConstraints {
-			$0.centerX.centerY.equalToSuperview()
+			$0.verticalEdges.equalToSuperview()
+			$0.horizontalEdges.equalToSuperview().inset(65)
 		}
 	}
 }

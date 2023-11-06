@@ -148,7 +148,7 @@ extension StatisticsReactor {
 			if reset {
 				switch type {
 				case "01": // 아쉬운 활동
-					newState.activityDisappointingList = list.suffix(1) + data
+					newState.activityDisappointingList = [] + data + list.prefix(1)
 				case "03": // 만족스러운 활동
 					newState.activitySatisfactionList = [] + data + list.prefix(1)
 				default:

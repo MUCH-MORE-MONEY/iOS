@@ -22,6 +22,7 @@ final class CategoryEditUpperReactor: Reactor {
 		case addItem(CategoryHeader)
 		case deleteItem(CategoryHeader)
 		case dragAndDrop(IndexPath, IndexPath)
+		case setSave(Bool)
 		case setPresentAlert(Bool)
 		case setNextEditScreen(CategoryHeader?)
 		case setNextAddScreen(Bool)
@@ -38,6 +39,7 @@ final class CategoryEditUpperReactor: Reactor {
 		var isEdit: Bool = false
 		var nextEditScreen: CategoryHeader?
 		var nextAddScreen: Bool = false
+		var isSave: Bool = false
 		var dismiss = false
 		var error = false
 	}
@@ -58,7 +60,7 @@ extension CategoryEditUpperReactor {
 		switch action {
 		case .didTabSaveButton:
 			return Observable.zip(provider.categoryProvider.saveSections(to: currentState.sections), provider.categoryProvider.deleteList(to: currentState.removedUpperCategory))
-				.map { _ in .dismiss }
+				.map { _ in .setSave(true) }
 		case .didTabBackButton:	// 수정이 되었는지 판별
 			return .concat([
 				.just(.setPresentAlert(true)),
@@ -113,12 +115,8 @@ extension CategoryEditUpperReactor {
 		case let .addItem(categoryHeader):
 			let item: CategoryEditItem = .empty // 빈 Cell 넣어주기
 			let model: CategoryEditSectionModel = .init(model: .base(categoryHeader, [item]), items: [item])
-			let grobalFooter = newState.sections.removeLast()
 			newState.sections.append(model)
 			newState.addId -= 1 // 고유값 유지
-			
-			// Footer 입력
-			newState.sections.append(grobalFooter)
 		case let .deleteItem(categoryHeader):
 			if let removeIndex = newState.sections.firstIndex(where: { $0.model.header.id == categoryHeader.id }) {
 				// 삭제된 카테고리 저장
@@ -131,6 +129,8 @@ extension CategoryEditUpperReactor {
 			newState.sections.remove(at: sourceIndexPath.row + 1)
 			newState.sections.insert(sourceItem, at: destinationIndexPath.row + 1)
 			newState.isReloadData = false
+		case let .setSave(isSave):
+			newState.isSave = isSave
 		case let .setPresentAlert(isAlert): // 수정되었는지 판별
 			if isAlert {
 				let isEdit = self.transformData(input: newState.preSections) == self.transformData(input: newState.sections)

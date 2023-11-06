@@ -89,6 +89,12 @@ extension HomeViewModel {
 				guard let self = self, let dailyList = response.selectListDailyOutputDto else { return }
 //				print(#file, #function, #line, dailyList)
 				self.dailyList = dailyList
+				
+				// 이번 달만 위젯에 보여줌
+				if dateYMD == Date().getFormattedYMD() {
+					UserDefaults.shared.set(dailyList.count, forKey: "today")
+					WidgetCenter.shared.reloadAllTimelines()
+				}
 			}).store(in: &cancellable)
 	}
 	

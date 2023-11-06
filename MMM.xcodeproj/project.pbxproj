@@ -239,6 +239,7 @@
 		C4DE94662A9658530069B22B /* StatisticsActivityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DE94652A9658530069B22B /* StatisticsActivityTableViewCell.swift */; };
 		C4E96B782AF7D9A600C59983 /* CategoryEditUpperEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E96B772AF7D9A600C59983 /* CategoryEditUpperEmptyView.swift */; };
 		C4E96B7A2AF7E27100C59983 /* CategoryEditEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E96B792AF7E27100C59983 /* CategoryEditEmptyView.swift */; };
+		C4E96B7E2AF919C300C59983 /* ChallengeReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E96B7D2AF919C300C59983 /* ChallengeReactor.swift */; };
 		C4EA5B4029FA1A40008D1564 /* HomeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EA5B3F29FA1A40008D1564 /* HomeHeaderView.swift */; };
 		C4EA5B4229FA26E0008D1564 /* HomeHeaderStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EA5B4129FA26E0008D1564 /* HomeHeaderStackView.swift */; };
 		C4EA5B4429FA2810008D1564 /* Ex+UIStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EA5B4329FA2810008D1564 /* Ex+UIStackView.swift */; };
@@ -530,6 +531,7 @@
 		C4DE94652A9658530069B22B /* StatisticsActivityTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsActivityTableViewCell.swift; sourceTree = "<group>"; };
 		C4E96B772AF7D9A600C59983 /* CategoryEditUpperEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditUpperEmptyView.swift; sourceTree = "<group>"; };
 		C4E96B792AF7E27100C59983 /* CategoryEditEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditEmptyView.swift; sourceTree = "<group>"; };
+		C4E96B7D2AF919C300C59983 /* ChallengeReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeReactor.swift; sourceTree = "<group>"; };
 		C4EA5B3F29FA1A40008D1564 /* HomeHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeaderView.swift; sourceTree = "<group>"; };
 		C4EA5B4129FA26E0008D1564 /* HomeHeaderStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeaderStackView.swift; sourceTree = "<group>"; };
 		C4EA5B4329FA2810008D1564 /* Ex+UIStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIStackView.swift"; sourceTree = "<group>"; };
@@ -732,6 +734,7 @@
 			children = (
 				C4BBD26F2ABAD8BB0055FA65 /* BottomSheet */,
 				C46D5E6A2AD1890400EBE5D7 /* Category */,
+				C4E96B7D2AF919C300C59983 /* ChallengeReactor.swift */,
 				C4170B4F2A89FD1100CE0A65 /* StatisticsReactor.swift */,
 				C46409D12AB8A6A400A899AD /* ProfileReactor.swift */,
 				6A2B5D582A97217F00CCBFBE /* PushSettingReactor.swift */,
@@ -1745,6 +1748,7 @@
 				C4170B672A95EBFA00CE0A65 /* CategoryMainReactor.swift in Sources */,
 				C433A07329EEE751008B26DF /* Ex+Date.swift in Sources */,
 				C4EA5B4029FA1A40008D1564 /* HomeHeaderView.swift in Sources */,
+				C4E96B7E2AF919C300C59983 /* ChallengeReactor.swift in Sources */,
 				C46D5E632AD174AD00EBE5D7 /* CategoryEditUpperBottomSheetViewController.swift in Sources */,
 				C4EB8CBC2AC56341005FBAF1 /* CategoryAddBottomSheetViewController.swift in Sources */,
 				6A8B776329FF92CC0095ECFC /* Constants.swift in Sources */,

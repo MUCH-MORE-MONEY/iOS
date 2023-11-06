@@ -13,6 +13,7 @@ final class AddCategoryViewModel {
     @Published var categoryList: [Category] = []
     @Published var selectedCategoryID: String = ""
     @Published var selectedCategoryName: String = ""
+    @Published var isLoading = true
     
     // MARK: - Porperties
     private var cancellable: Set<AnyCancellable> = []
@@ -27,11 +28,13 @@ final class AddCategoryViewModel {
                 dvcd: dvcd))
         .sink { data in
             switch data {
-            case .failure(_):
+            case .failure(let error):
+                print(error)
                 break
             case.finished:
                 break
             }
+        self.isLoading = false
         } receiveValue: { [weak self] response in
             guard let self = self else { return }
             self.categoryList = response.data

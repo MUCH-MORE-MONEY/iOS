@@ -23,8 +23,12 @@ final class AddCategoryViewController: UIViewController {
     private lazy var buttonStackView = UIStackView()
     private lazy var manageButton = UIButton()
     private lazy var checkButton = UIButton()
-    
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    
+    // 카테고리 데이터가 없을 경우를 위한 image
+    private lazy var emptyImageView = UIImageView()
+    private lazy var emptyLabel = UILabel()
+    private lazy var emptyStackView = UIStackView()
     
     init(viewModel: AnyObject) {
         self.viewModel = viewModel
@@ -129,9 +133,17 @@ private extension AddCategoryViewController {
             .store(in: &cancellables)
         
         addCategoryViewModel.$categoryList
-            .sink { [weak self] _ in
+            .sink { [weak self] list in
                 guard let self = self else { return }
-                self.collectionView.reloadData()
+                if list.isEmpty {
+                    
+                } else {
+                    self.collectionView.isHidden = false
+                    self.emptyStackView.isHidden = true
+                    self.collectionView.reloadData()
+                }
+                
+
             }
             .store(in: &cancellables)
     }
@@ -183,13 +195,35 @@ private extension AddCategoryViewController {
             $0.register(CategorySelectCell.self, forCellWithReuseIdentifier: "CategorySelectCell")
             $0.register(CategorySelectHeaderCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "CategorySelectHeaderCell")
             $0.isScrollEnabled = true
+            $0.isHidden = true
+        }
+        
+        emptyStackView = emptyStackView.then {
+            $0.axis = .vertical
+            $0.distribution = .fill
+            $0.spacing = 16
+        }
+        
+        emptyImageView = emptyImageView.then {
+            $0.image = R.Icon.iconCharacterEmptyCategory
+            $0.contentMode = .scaleAspectFit
+        }
+        
+        emptyLabel = emptyLabel.then {
+            $0.text = "선택할 수 있는 카테고리가 없어요.\n관리 페이지에서 추가해주세요!"
+            $0.numberOfLines = 0
+            $0.font = R.Font.body1
+            $0.textColor = R.Color.gray400
+            $0.textAlignment = .center
         }
     }
     
     private func setLayout() {
         stackView.addArrangedSubviews(titleLabel, buttonStackView)
         buttonStackView.addArrangedSubviews(manageButton, checkButton)
-        view.addSubviews(stackView, collectionView)
+        emptyStackView.addArrangedSubviews(emptyImageView, emptyLabel)
+        view.addSubviews(stackView, collectionView, emptyStackView)
+        
         
         stackView.snp.makeConstraints {
             $0.top.equalToSuperview()
@@ -202,6 +236,10 @@ private extension AddCategoryViewController {
             $0.left.equalToSuperview().offset(24)
             $0.right.equalToSuperview().offset(-24)
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        emptyStackView.snp.makeConstraints {
+            $0.center.equalToSuperview()
         }
     }
 }

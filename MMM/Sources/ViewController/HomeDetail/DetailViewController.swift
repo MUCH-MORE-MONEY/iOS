@@ -181,6 +181,7 @@ extension DetailViewController {
                 
                 self.satisfactionLabel .setSatisfyingLabelEdit(by: value.star)
                 self.addCategoryView.setTitleAndColor(by: value.categoryName)
+                self.addCategoryView.setViewisHomeDetail()
                 
             }.store(in: &cancellable)
         homeDetailViewModel.pageIndex = index

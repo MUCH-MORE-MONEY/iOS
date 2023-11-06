@@ -121,7 +121,7 @@ extension CategoryAddBottomSheetViewController {
 		reactor.state
 			.map { $0.dismiss }
 			.distinctUntilChanged()
-			.filter { $0 == true }
+			.filter { $0 }
 			.subscribe(onNext: { [weak self] _ in
 				self?.dismiss(animated: true)
 			})
@@ -208,6 +208,7 @@ extension CategoryAddBottomSheetViewController {
 			$0.font = R.Font.h2
 			$0.textColor = R.Color.gray900
 			$0.tintColor = R.Color.gray400 	// cursor color
+			$0.setNumberMode(unit: "")
 			$0.setClearButton(with: R.Icon.cancel, mode: .whileEditing) // clear 버튼
 			$0.becomeFirstResponder()
 		}

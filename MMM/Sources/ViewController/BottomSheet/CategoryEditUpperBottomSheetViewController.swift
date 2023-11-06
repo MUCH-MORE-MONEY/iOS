@@ -125,7 +125,7 @@ extension CategoryEditUpperBottomSheetViewController {
 		reactor.state
 			.map { $0.dismiss }
 			.distinctUntilChanged()
-			.filter { $0 == true }
+			.filter { $0 }
 			.subscribe(onNext: { [weak self] _ in
 				self?.dismiss(animated: true)
 			})

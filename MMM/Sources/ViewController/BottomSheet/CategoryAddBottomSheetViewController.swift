@@ -208,7 +208,6 @@ extension CategoryAddBottomSheetViewController {
 			$0.font = R.Font.h2
 			$0.textColor = R.Color.gray900
 			$0.tintColor = R.Color.gray400 	// cursor color
-			$0.setNumberMode(unit: "")
 			$0.setClearButton(with: R.Icon.cancel, mode: .whileEditing) // clear 버튼
 			$0.becomeFirstResponder()
 		}

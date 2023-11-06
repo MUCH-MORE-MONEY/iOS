@@ -80,7 +80,7 @@ extension AddCategoryViewController {
             
             // 섹션 생성 및 구성
             let section = NSCollectionLayoutSection(group: group)
-            section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary // 수평 스크롤 설정
+            section.orthogonalScrollingBehavior = .none // 수평 스크롤 설정
 
             section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 0, bottom: 20, trailing: 0) // 섹션 간격 설정
             section.interGroupSpacing = 8 // 그룹 간의 간격
@@ -142,8 +142,6 @@ private extension AddCategoryViewController {
                     self.emptyStackView.isHidden = true
                     self.collectionView.reloadData()
                 }
-                
-
             }
             .store(in: &cancellables)
     }
@@ -188,7 +186,11 @@ private extension AddCategoryViewController {
         }
         
         collectionView = collectionView.then {
-            $0.collectionViewLayout = layout()
+//            $0.collectionViewLayout = layout()
+            let layer = UICollectionViewFlowLayout()
+            layer.sectionInset = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
+            
+            $0.collectionViewLayout = layer
             $0.backgroundColor = R.Color.white
             $0.delegate = self
             $0.dataSource = self
@@ -196,6 +198,7 @@ private extension AddCategoryViewController {
             $0.register(CategorySelectHeaderCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "CategorySelectHeaderCell")
             $0.isScrollEnabled = true
             $0.isHidden = true
+            
         }
         
         emptyStackView = emptyStackView.then {
@@ -295,35 +298,59 @@ extension AddCategoryViewController: UICollectionViewDataSource, UICollectionVie
 }
 
 // MARK: - 이거 보면서 바꾸기
-//// MARK: - UICollectionView DelegateFlowLayout
-//extension CategoryContentViewController: UICollectionViewDelegateFlowLayout {
-//    // 지정된 섹션의 헤더뷰의 크기를 반환하는 메서드. 크기를 지정하지 않으면 화면에 보이지 않습니다.
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-//        return CGSize(width: (collectionView.frame.width) / 2, height: UI.headerHeight)
-//    }
-//
-//    // 지정된 섹션의 여백을 반환하는 메서드.
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-//        return UI.sectionMargin
-//    }
-//
-//    // 지정된 섹션의 셀 사이의 최소간격을 반환하는 메서드.
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-//        return UI.cellSpacingMargin
-//    }
-//
-//    // 지정된 섹션의 행 사이 간격 최소 간격을 반환하는 메서드. scrollDirection이 horizontal이면 수직이 행이 되고 vertical이면 수평이 행이 된다.
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-//        return UI.cellSpacingMargin
-//    }
-//
-//    // 지정된 셀의 크기를 반환하는 메서드
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        switch dataSource[indexPath.section].items[indexPath.row] {
-//        case .header:
-//            return CGSize(width: collectionView.frame.width - UI.cellWidthMargin, height: UI.categoryCellHeight)
-//        case .base:
-//            return CGSize(width: collectionView.frame.width - UI.cellWidthMargin, height: UI.categoryCellHeight)
-//        }
-//    }
-//}
+// MARK: - UICollectionView DelegateFlowLayout
+extension AddCategoryViewController: UICollectionViewDelegateFlowLayout {
+    // 지정된 섹션의 헤더뷰의 크기를 반환하는 메서드. 크기를 지정하지 않으면 화면에 보이지 않습니다.
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.frame.width , height: 24)
+    }
+
+    // 지정된 섹션의 여백을 반환하는 메서드.
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
+        
+    }
+
+    // 지정된 섹션의 셀 사이의 최소간격을 반환하는 메서드.
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 8
+    }
+
+    // 지정된 섹션의 행 사이 간격 최소 간격을 반환하는 메서드. scrollDirection이 horizontal이면 수직이 행이 되고 vertical이면 수평이 행이 된다.
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 8
+    }
+
+    // 지정된 셀의 크기를 반환하는 메서드
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        
+        
+        // 셀의 내용이 될 텍스트
+        let text = addCategoryViewModel.categoryList[indexPath.section].lowwer[indexPath.item].title
+
+        // 설정할 최대 너비
+        let maxWidth = collectionView.bounds.width
+        // 여기서는 컬렉션 뷰의 너비를 최대 너비로 사용했지만,
+        // 여러분의 레이아웃에 따라 다를 수 있습니다.
+        
+        // 레이블의 패딩이나 마진을 조정
+        let labelInsets = UIEdgeInsets(top: 6, left: 12, bottom: 6, right: 30)
+        
+        // 텍스트에 기반한 레이블의 크기를 계산합니다.
+        let size = CGSize(width: maxWidth, height: .greatestFiniteMagnitude)
+        let options: NSStringDrawingOptions = [.usesFontLeading, .usesLineFragmentOrigin]
+        let attributes = [NSAttributedString.Key.font: R.Font.body3]
+        
+        let estimatedFrame = NSString(string: text).boundingRect(with: size, options: options, attributes: attributes, context: nil)
+        
+        // 최종 셀의 너비는 레이블의 계산된 너비 + 좌우 패딩
+        let cellWidth = ceil(estimatedFrame.width + labelInsets.left + labelInsets.right)
+        
+        // 최종 셀의 높이는 레이블의 계산된 높이 + 상하 패딩 (여기서는 예시로 셀의 높이를 고정값으로 설정)
+        let cellHeight: CGFloat = 32
+        
+        // 최종 셀 사이즈 반환
+        return CGSize(width: cellWidth + 2, height: cellHeight)
+    }
+}

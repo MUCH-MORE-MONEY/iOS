@@ -84,6 +84,21 @@ extension TabBarController {
         self.tabBar.setTabShadow()
         self.delegate = self
         
+        // 모든 탭 아이템에 대한 기본 속성을 설정합니다.
+        let normalAttributes: [NSAttributedString.Key: Any] = [
+            .font: R.Font.body5, // 변경하고 싶은 폰트 크기
+            .foregroundColor: R.Color.gray500 // 비활성 상태의 컬러
+        ]
+        let selectedAttributes: [NSAttributedString.Key: Any] = [
+            .font: R.Font.body4, // 변경하고 싶은 폰트 크기
+            .foregroundColor: R.Color.gray900 // 활성 상태의 컬러
+        ]
+        
+        // 각 탭에 대해 속성을 설정합니다.
+        UITabBarItem.appearance().setTitleTextAttributes(normalAttributes, for: .normal)
+        UITabBarItem.appearance().setTitleTextAttributes(selectedAttributes, for: .selected)
+        
+        
 		let homeVC = HomeViewController()
         homeVC.tabBarItem = UITabBarItem(title: "소비", image: R.Icon.iconMoneyInActive, selectedImage: R.Icon.iconMoneyActive)
         

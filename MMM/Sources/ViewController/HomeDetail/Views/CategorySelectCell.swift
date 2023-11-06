@@ -72,7 +72,7 @@ extension CategorySelectCell {
             $0.spacing = 2
             $0.layer.cornerRadius = 16
             $0.clipsToBounds = true
-            $0.backgroundColor = R.Color.gray200            
+            $0.backgroundColor = R.Color.gray200
             $0.layoutMargins = UIEdgeInsets(top: 6, left: 12, bottom: 6, right: 12)
             $0.isLayoutMarginsRelativeArrangement = true
         }
@@ -92,7 +92,7 @@ extension CategorySelectCell {
     override func setLayout() {
         super.setLayout()
         stackView.snp.makeConstraints {
-            $0.edges.equalToSuperview().offset(10)
+            $0.edges.equalToSuperview()
         }
     }
 }

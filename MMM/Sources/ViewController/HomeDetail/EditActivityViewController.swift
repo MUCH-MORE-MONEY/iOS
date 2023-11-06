@@ -397,8 +397,10 @@ extension EditActivityViewController {
 		
         editViewModel.$type
             .removeDuplicates() // 값 변경전까지 이벤트 미방출
+            .dropFirst()        // 최초 값이 변경되었을 때 무시
             .sinkOnMainThread { [weak self] _ in
                 guard let self = self else { return }
+                print("drop")
                 self.editViewModel.categoryId = ""
                 self.editViewModel.categoryName = ""
             }
@@ -552,7 +554,6 @@ extension EditActivityViewController {
         editViewModel.$isCategoryManageButtonTapped
             .sinkOnMainThread { [weak self] isTapped in
                 guard let self = self else { return }
-                print(isTapped)
                 if isTapped {
                     let mode: CategoryEditViewController.Mode = self.editViewModel.type == "01" ? .pay : .earn
                     

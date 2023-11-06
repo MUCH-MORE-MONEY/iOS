@@ -31,6 +31,10 @@ extension AddCategoryView {
         titleLabel.text = text == "" ? "카테고리" : text
         titleLabel.textColor = text == "" ? R.Color.gray400 : R.Color.gray800
     }
+    
+    func setViewisHomeDetail() {
+        arrowImageView.isHidden = true
+    }
 }
 
 // MARK: - setup

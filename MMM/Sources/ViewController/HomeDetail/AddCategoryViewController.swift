@@ -187,7 +187,7 @@ private extension AddCategoryViewController {
         
         collectionView = collectionView.then {
 //            $0.collectionViewLayout = layout()
-            let layer = UICollectionViewFlowLayout()
+            let layer = LeftAlignedCollectionViewFlowLayout()
             layer.sectionInset = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
             
             $0.collectionViewLayout = layer
@@ -198,7 +198,6 @@ private extension AddCategoryViewController {
             $0.register(CategorySelectHeaderCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "CategorySelectHeaderCell")
             $0.isScrollEnabled = true
             $0.isHidden = true
-            
         }
         
         emptyStackView = emptyStackView.then {
@@ -307,13 +306,13 @@ extension AddCategoryViewController: UICollectionViewDelegateFlowLayout {
 
     // 지정된 섹션의 여백을 반환하는 메서드.
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
+        return UIEdgeInsets(top: 8, left: 0, bottom: 20, right: 0)
         
     }
 
     // 지정된 섹션의 셀 사이의 최소간격을 반환하는 메서드.
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 8
+        return 0
     }
 
     // 지정된 섹션의 행 사이 간격 최소 간격을 반환하는 메서드. scrollDirection이 horizontal이면 수직이 행이 되고 vertical이면 수평이 행이 된다.

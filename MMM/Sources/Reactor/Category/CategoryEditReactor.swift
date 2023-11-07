@@ -215,17 +215,6 @@ extension CategoryEditReactor {
 			newState.sections.0[sourceIndexPath.section].items.remove(at: sourceIndexPath.row)
 			newState.sections.0[destinationIndexPath.section].items.insert(sourceItem, at: destinationIndexPath.row)
 
-			for section in newState.sections.0 {
-				print(section.model)
-				print(section.items.count)
-				for i in section.items {
-					print(i)
-				}
-				
-				print()
-			}
-			
-			
 			// '출발지'의 카테고리가 비어있을 경우, Empty Cell 추가
 			if newState.sections.0[sourceIndexPath.section].items.isEmpty {
 				newState.sections.0[sourceIndexPath.section].items.append(.empty)
@@ -251,18 +240,6 @@ extension CategoryEditReactor {
 				default: 		break
 				}
 			}
-			
-			print("--------------------")
-			for section in newState.sections.0 {
-				print(section.model)
-				print(section.items.count)
-				for i in section.items {
-					print(i)
-				}
-				
-				print()
-			}
-			
 		case let .addDrag(indexPathList):
 			for indexPath in indexPathList {
 				newState.sections.0[indexPath.section].items.append(.drag)

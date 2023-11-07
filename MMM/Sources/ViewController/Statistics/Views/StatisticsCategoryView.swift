@@ -118,7 +118,7 @@ extension StatisticsCategoryView {
 			let width = cnt == 1 ? barWidth : isSmall ? minimumWidth : info
 			let view = UIView()
 			view.layer.cornerRadius = data[index].ratio < 2.0 ? 1.7 : 2.61
-			view.backgroundColor = color.withAlphaComponent(alphaList[index])
+			view.backgroundColor = color.withAlphaComponent(alphaList[index >= 4 ? 4 : index]) // 범위를 넘어갈 경우
 						
 			barView.insertArrangedSubview(view, at: 0)
 			

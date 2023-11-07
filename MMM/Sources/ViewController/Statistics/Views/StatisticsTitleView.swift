@@ -101,7 +101,7 @@ extension StatisticsTitleView {
 		}
 		
 		imageView.snp.makeConstraints {
-			$0.leading.greaterThanOrEqualTo(titleLabel.snp.trailing)
+			$0.leading.lessThanOrEqualTo(titleLabel.snp.trailing)
 			$0.top.trailing.bottom.equalToSuperview()
 		}
 	}

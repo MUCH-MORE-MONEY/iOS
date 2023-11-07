@@ -112,15 +112,23 @@ extension StatisticsCategoryView {
 		barView.subviews.forEach { $0.removeFromSuperview() } // 기존에 있던 subView 제거
 		let color: UIColor = type == "01" ? R.Color.orange500 : R.Color.blue500
 		let minimumWidth = 3.0
+		var sumSmail = 0
+		var flag = true
 		
 		for (index, info) in data.map({ floor($0.ratio * unit) }).enumerated().reversed() {
 			let isSmall = info < minimumWidth
-			let width = cnt == 1 ? barWidth : isSmall ? minimumWidth : info
+			var width = cnt == 1 ? barWidth : isSmall ? minimumWidth : info
 			let view = UIView()
 			view.layer.cornerRadius = data[index].ratio < 2.0 ? 1.7 : 2.61
 			view.backgroundColor = color.withAlphaComponent(alphaList[index >= 4 ? 4 : index]) // 범위를 넘어갈 경우
 						
 			barView.insertArrangedSubview(view, at: 0)
+
+			sumSmail += isSmall ? 1 : 0
+
+			if flag != isSmall {
+				width -= Double(sumSmail) * minimumWidth
+			}
 			
 			view.snp.makeConstraints {
 				$0.width.equalTo(width)
@@ -200,6 +208,7 @@ extension StatisticsCategoryView {
 			$0.axis = .horizontal
 			$0.spacing = 2
 			$0.isHidden = true
+			$0.distribution = .equalSpacing
 		}
 		
 		earnEmptyLabel = earnEmptyLabel.then {

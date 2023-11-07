@@ -90,12 +90,16 @@ final class CategoryEditViewController: BaseViewController, View {
 				
 				// 마지막 섹션은 separator 숨기기
 				// Global Header/Footer로 인한 section수 2개 증가
-				footer.setData(categoryHeader: sectionInfo, isLast: indexPath.section == count - 1)
+				footer.setData(categoryHeader: sectionInfo, isLast: indexPath.section == count - 2)
 				footer.reactor = thisReactor
 				
 				return footer
 			case .footer:
-				return .init()
+				guard let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: CategoryEditSectionGlobalFooter.className, for: indexPath) as? CategoryEditSectionGlobalFooter else { return .init() }
+				
+				footer.reactor = thisReactor
+				
+				return footer
 			}
 		}
 	}
@@ -172,7 +176,7 @@ extension CategoryEditViewController {
 		// 지출 - Section별 items 전달
 		reactor.state
 			.map { $0.sections }
-			.distinctUntilChanged { $0.1 }
+//			.distinctUntilChanged { $0.1 }
 			.withUnretained(self)
 			.subscribe(onNext: { this, sections in
 				guard !sections.0.isEmpty else { return }
@@ -185,7 +189,7 @@ extension CategoryEditViewController {
 		
 		// Empty case
 		reactor.state
-			.map { $0.sections.0.count == 1 }
+			.map { $0.sections.0.count == 2 } // Default로 Global header/footer가 존재
 			.distinctUntilChanged()
 			.withUnretained(self)
 			.subscribe { this, isEmpty in
@@ -346,6 +350,7 @@ extension CategoryEditViewController {
 	func makeFooterSectionLayout() -> NSCollectionLayoutSection {
 		let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0)), subitems: .init(repeating: .init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(UI.cellHeightMargin))), count: 1))
 		
+		// 플로팅 버튼 높이 : 56
 		let footer = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(56)), elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
 
 		let section: NSCollectionLayoutSection = .init(group: group)
@@ -451,6 +456,8 @@ extension CategoryEditViewController {
 			$0.register(CategoryEditSectionFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter)
 			// Global Header
 			$0.register(CategoryEditSectionGlobalHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
+			// Global Footer
+			$0.register(CategoryEditSectionGlobalFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter)
 			$0.showsVerticalScrollIndicator = false
 			$0.backgroundColor = R.Color.gray900
 			$0.dragInteractionEnabled = true
@@ -527,7 +534,6 @@ extension CategoryEditViewController: UICollectionViewDragDelegate {
 
 		(0..<data.count).forEach { index in
 			if data[index].items.count == 1 {
-				print(dragIndexPath, IndexPath(row: 0, section: index))
 				if dragIndexPath == IndexPath(row: 0, section: index) {
 					let indexPath: IndexPath = .init(item: data[index].items.count, section: index)
 					addItems.append(indexPath)

@@ -222,16 +222,19 @@ extension CategoryEditReactor {
 			}
 			
 			// '목적지'의 카테고리가 비어있을 경우, Empty Cell 삭제
-			if let first = newState.sections.0[destinationIndexPath.section].items.first, let last = newState.sections.0[destinationIndexPath.section].items.last {
+			if let first = newState.sections.0[destinationIndexPath.section].items.first {
 				switch first {
 				case .empty: 	
 					newState.sections.0[destinationIndexPath.section].items.removeFirst()
 					newState.sections.1 -= 1
 				default: 		break
 				}
-				
+			}
+			
+			// '목적지'의 카테고리가 비어있을 경우, Empty Cell 삭제
+			if let last = newState.sections.0[destinationIndexPath.section].items.last {
 				switch last {
-				case .empty: 	
+				case .empty:
 					newState.sections.0[destinationIndexPath.section].items.removeLast()
 					newState.sections.1 -= 1
 				default: 		break
@@ -326,6 +329,11 @@ extension CategoryEditReactor {
 			let model: CategoryEditSectionModel = .init(model: .base(header, categoryitems), items: categoryitems)
 			sections.append(model)
 		}
+		
+		// Global Footer
+		let footerItem: CategoryEditItem = .footer(.init(provider: provider, categoryEdit: CategoryEdit.getDummy()))
+		let footerModel: CategoryEditSectionModel = .init(model: .footer(footerItem), items: [footerItem])
+		sections.append(footerModel)
 		
 		return sections
 	}

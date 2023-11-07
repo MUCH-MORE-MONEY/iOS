@@ -241,6 +241,7 @@
 		C4E96B782AF7D9A600C59983 /* CategoryEditUpperEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E96B772AF7D9A600C59983 /* CategoryEditUpperEmptyView.swift */; };
 		C4E96B7A2AF7E27100C59983 /* CategoryEditEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E96B792AF7E27100C59983 /* CategoryEditEmptyView.swift */; };
 		C4E96B7E2AF919C300C59983 /* ChallengeReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E96B7D2AF919C300C59983 /* ChallengeReactor.swift */; };
+		C4E96B802AFA0E2300C59983 /* CategoryEditSectionGlobalFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E96B7F2AFA0E2300C59983 /* CategoryEditSectionGlobalFooter.swift */; };
 		C4EA5B4029FA1A40008D1564 /* HomeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EA5B3F29FA1A40008D1564 /* HomeHeaderView.swift */; };
 		C4EA5B4229FA26E0008D1564 /* HomeHeaderStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EA5B4129FA26E0008D1564 /* HomeHeaderStackView.swift */; };
 		C4EA5B4429FA2810008D1564 /* Ex+UIStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EA5B4329FA2810008D1564 /* Ex+UIStackView.swift */; };
@@ -534,6 +535,7 @@
 		C4E96B772AF7D9A600C59983 /* CategoryEditUpperEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditUpperEmptyView.swift; sourceTree = "<group>"; };
 		C4E96B792AF7E27100C59983 /* CategoryEditEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditEmptyView.swift; sourceTree = "<group>"; };
 		C4E96B7D2AF919C300C59983 /* ChallengeReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeReactor.swift; sourceTree = "<group>"; };
+		C4E96B7F2AFA0E2300C59983 /* CategoryEditSectionGlobalFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditSectionGlobalFooter.swift; sourceTree = "<group>"; };
 		C4EA5B3F29FA1A40008D1564 /* HomeHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeaderView.swift; sourceTree = "<group>"; };
 		C4EA5B4129FA26E0008D1564 /* HomeHeaderStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeaderStackView.swift; sourceTree = "<group>"; };
 		C4EA5B4329FA2810008D1564 /* Ex+UIStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+UIStackView.swift"; sourceTree = "<group>"; };
@@ -1224,6 +1226,7 @@
 				C46D5E542AD078DA00EBE5D7 /* CategoryEditTableViewCell.swift */,
 				C4BBD28C2AC048860055FA65 /* CategoryEditSectionFooter.swift */,
 				C4BBD28A2AC047390055FA65 /* CategoryEditSectionHeader.swift */,
+				C4E96B7F2AFA0E2300C59983 /* CategoryEditSectionGlobalFooter.swift */,
 				C46D5E5C2AD1508B00EBE5D7 /* CategoryEditSectionGlobalHeader.swift */,
 			);
 			path = Views;
@@ -1734,6 +1737,7 @@
 				6A2B5D5F2A9744E800CCBFBE /* CustomPushTimeSettingView.swift in Sources */,
 				C4E96B782AF7D9A600C59983 /* CategoryEditUpperEmptyView.swift in Sources */,
 				6A14E71C2A9E119C0071805D /* MMMAPIService.swift in Sources */,
+				C4E96B802AFA0E2300C59983 /* CategoryEditSectionGlobalFooter.swift in Sources */,
 				C4EB8CB02AC18E85005FBAF1 /* Ex+UICollectionView.swift in Sources */,
 				6A15B0EC2A15B68D00EADAC5 /* BaseAddActivityViewController.swift in Sources */,
 				C4C8B68D2A3ACDC700FAF931 /* LoadingViewController.swift in Sources */,

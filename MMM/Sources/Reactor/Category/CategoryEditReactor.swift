@@ -327,6 +327,11 @@ extension CategoryEditReactor {
 			sections.append(model)
 		}
 		
+		// Global Footer
+		let footerItem: CategoryEditItem = .footer(.init(provider: provider, categoryEdit: CategoryEdit.getDummy()))
+		let footerModel: CategoryEditSectionModel = .init(model: .footer(footerItem), items: [footerItem])
+		sections.append(footerModel)
+		
 		return sections
 	}
 }

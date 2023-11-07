@@ -74,7 +74,7 @@ extension CategoryEditUpperViewController {
 	private func bindState(_ reactor: CategoryEditUpperReactor) {
 		// 타입 추론이 길어서 반으로 나누기
 		let datasource = reactor.state
-			.map { $0.sections.map { $0.model.header }.filter { $0.id != "header" } }
+			.map { $0.sections.map { $0.model.header }.filter { $0.id != "header" && $0.id != "footer"} }
 			.distinctUntilChanged { $0.count == $1.count } // 순서만 바뀌었을 때에는 변경안함
 		
 		datasource
@@ -83,8 +83,8 @@ extension CategoryEditUpperViewController {
 				let cell = tv.dequeueReusableCell(withIdentifier: CategoryEditTableViewCell.className, for: index) as! CategoryEditTableViewCell
 
 				// 데이터 설정
-				// Grobal Header가 존재해서 - 1
-				cell.setData(last: row == reactor.currentState.sections.count - 2)
+				// Grobal Header가 존재해서 - 2
+				cell.setData(last: row == reactor.currentState.sections.count - 3)
 				cell.reactor = CategoryEditTableViewCellReactor(provider: reactor.provider, categoryHeader: data)
 
 				// Click에 대한 색상
@@ -278,8 +278,8 @@ extension CategoryEditUpperViewController: UITableViewDragDelegate {
 		guard let reactor = reactor else { return }
 		
 		// 마지막 아이템의 separator 제거
-		// 2을 빼는 이유 : Global header가 있음
-		let count = reactor.currentState.sections.count - 2
+		// 3을 빼는 이유 : Global header가 있음
+		let count = reactor.currentState.sections.count - 3
 		
 		for row in stride(from: 0, through: count, by: 1) {
 			let index = IndexPath(row: row, section: 0)

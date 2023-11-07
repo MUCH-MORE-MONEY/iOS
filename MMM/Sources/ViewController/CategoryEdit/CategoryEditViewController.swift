@@ -176,7 +176,7 @@ extension CategoryEditViewController {
 		// 지출 - Section별 items 전달
 		reactor.state
 			.map { $0.sections }
-			.distinctUntilChanged { $0.1 }
+//			.distinctUntilChanged { $0.1 }
 			.withUnretained(self)
 			.subscribe(onNext: { this, sections in
 				guard !sections.0.isEmpty else { return }
@@ -534,7 +534,6 @@ extension CategoryEditViewController: UICollectionViewDragDelegate {
 
 		(0..<data.count).forEach { index in
 			if data[index].items.count == 1 {
-				print(dragIndexPath, IndexPath(row: 0, section: index))
 				if dragIndexPath == IndexPath(row: 0, section: index) {
 					let indexPath: IndexPath = .init(item: data[index].items.count, section: index)
 					addItems.append(indexPath)

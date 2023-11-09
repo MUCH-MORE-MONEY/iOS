@@ -78,6 +78,7 @@ extension HomeViewController {
 		self.calendar.select(date)
 		self.dayLabel.text = date.getFormattedDate(format: "dd일 (EEEEE)") // 선택된 날짜
 		self.viewModel.getDailyList(date.getFormattedYMD())
+		self.viewModel.getWeeklyList(date.getFormattedYMD())
 		self.setMonth(date)
 		self.viewModel.preDate = date
 	}
@@ -97,6 +98,7 @@ extension HomeViewController {
 			}
 		}
 		viewModel.getDailyList(viewModel.preDate.getFormattedYMD())
+		viewModel.getWeeklyList(viewModel.preDate.getFormattedYMD()) // 위젯
 		calendar.reloadData()
 		tableView.reloadData()
 		viewModel.isWillAppear = false

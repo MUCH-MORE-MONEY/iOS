@@ -133,8 +133,6 @@ extension HomeViewModel {
 	func getWeeklyList(_ date1YM: String, _ date2YM: String) {
 		guard let date1 = Int(date1YM), let date2 = Int(date2YM), let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
 		
-		isMonthlyLoading = true // 로딩 시작
-
 		APIClient.dispatch(APIRouter.SelectListMonthlyReqDto(headers: APIHeader.Default(token: token), body: APIParameters.SelectListMonthlyReqDto(dateYM: date1)))
 			.sink(receiveCompletion: { [weak self] error in
 				guard let self = self else { return }
@@ -182,6 +180,33 @@ extension HomeViewModel {
 						}
 						errorMonthly = false // 에러 이미지 제거
 					}).store(in: &self.cancellable)
+			}).store(in: &cancellable)
+	}
+	
+	func getWeeklyList(_ dateYMD: String) {
+		guard let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
+		
+		isMonthlyLoading = true // 로딩 시작
+
+		APIClient.dispatch(APIRouter.WidgetReqDto(headers: APIHeader.Default(token: token), dateYMD: dateYMD))
+			.sink(receiveCompletion: { [weak self] error in
+				guard let self = self else { return }
+				switch error {
+				case .failure(let data):
+					switch data {
+					default:
+						errorMonthly = true // 에러 표시
+					}
+				case .finished:
+					break
+				}
+				isMonthlyLoading = false // 로딩 종료
+			}, receiveValue: { response in
+				// 이번 달만 위젯에 보여줌
+				if dateYMD == Date().getFormattedYMD() {
+					UserDefaults.shared.set(response.data.weekly, forKey: "weekly")
+					WidgetCenter.shared.reloadAllTimelines()
+				}
 			}).store(in: &cancellable)
 	}
     

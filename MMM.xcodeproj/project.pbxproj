@@ -251,6 +251,8 @@
 		C4EB8CB62AC44448005FBAF1 /* CategoryEditBottomSheetReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EB8CB52AC44448005FBAF1 /* CategoryEditBottomSheetReactor.swift */; };
 		C4EB8CBA2AC52F52005FBAF1 /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EB8CB92AC52F52005FBAF1 /* APIConstants.swift */; };
 		C4EB8CBC2AC56341005FBAF1 /* CategoryAddBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EB8CBB2AC56341005FBAF1 /* CategoryAddBottomSheetViewController.swift */; };
+		C4F1A9742AFD2C5800843708 /* WidgetReqDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F1A9732AFD2C5800843708 /* WidgetReqDto.swift */; };
+		C4F1A9762AFD2E4F00843708 /* WidgetResDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F1A9752AFD2E4F00843708 /* WidgetResDto.swift */; };
 		C4F3ABDF2AF4B51300BA7A66 /* Ex+WidgetConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F3ABDE2AF4B51300BA7A66 /* Ex+WidgetConfiguration.swift */; };
 		C4F3ABE12AF4C73D00BA7A66 /* CategoryEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F3ABE02AF4C73C00BA7A66 /* CategoryEmptyView.swift */; };
 		FF7FB61A0AC167F25EB6438F /* Pods_MMM_MMMUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 738AB5686981CA1A28640207 /* Pods_MMM_MMMUITests.framework */; };
@@ -545,6 +547,8 @@
 		C4EB8CB52AC44448005FBAF1 /* CategoryEditBottomSheetReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditBottomSheetReactor.swift; sourceTree = "<group>"; };
 		C4EB8CB92AC52F52005FBAF1 /* APIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIConstants.swift; sourceTree = "<group>"; };
 		C4EB8CBB2AC56341005FBAF1 /* CategoryAddBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryAddBottomSheetViewController.swift; sourceTree = "<group>"; };
+		C4F1A9732AFD2C5800843708 /* WidgetReqDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetReqDto.swift; sourceTree = "<group>"; };
+		C4F1A9752AFD2E4F00843708 /* WidgetResDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetResDto.swift; sourceTree = "<group>"; };
 		C4F3ABDE2AF4B51300BA7A66 /* Ex+WidgetConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+WidgetConfiguration.swift"; sourceTree = "<group>"; };
 		C4F3ABE02AF4C73C00BA7A66 /* CategoryEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEmptyView.swift; sourceTree = "<group>"; };
 		E1F4C2751A32E5FDB91A657F /* Pods-MMMTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMMTests.release.xcconfig"; path = "Target Support Files/Pods-MMMTests/Pods-MMMTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -626,12 +630,13 @@
 				C4199DDC2A001001006E5DA8 /* EconomicActivityResDto.swift */,
 				C40E52292A39629B00775455 /* ExportResDto.swift */,
 				6A0531212A22183D0065DB54 /* InsertResDto.swift */,
+				6A14E70C2A9DCAD00071805D /* PushResDto.swift */,
 				6A626BC02A0C7EE700BDD5C0 /* SelectDetailResDto.swift */,
+				C46409AB2AB328EE00A899AD /* StatisticsResDto.swift */,
 				C4C792A52A358517007FD6AA /* SummaryResDto.swift */,
 				6A8605B52A24C83D00DF68BD /* UpdateResDto.swift */,
 				C4C792A72A35916D007FD6AA /* WithdrawResDto.swift */,
-				6A14E70C2A9DCAD00071805D /* PushResDto.swift */,
-				C46409AB2AB328EE00A899AD /* StatisticsResDto.swift */,
+				C4F1A9752AFD2E4F00843708 /* WidgetResDto.swift */,
 			);
 			path = Responses;
 			sourceTree = "<group>";
@@ -690,6 +695,7 @@
 			children = (
 				6A14E7082A9DCA720071805D /* PushReqDto.swift */,
 				C46409BF2AB5BE7900A899AD /* CategoryEditReqDto.swift */,
+				C4F1A9732AFD2C5800843708 /* WidgetReqDto.swift */,
 			);
 			path = Requests;
 			sourceTree = "<group>";
@@ -1651,6 +1657,7 @@
 				C46409D42AB8CAE600A899AD /* WithdrawReactor.swift in Sources */,
 				C4170B652A95D03500CE0A65 /* CategoryMainViewController.swift in Sources */,
 				C44B61BF2AA9A85B00950226 /* CategorySegmentedControl.swift in Sources */,
+				C4F1A9742AFD2C5800843708 /* WidgetReqDto.swift in Sources */,
 				6A0D5B992A4C0E3300958E72 /* ToastView.swift in Sources */,
 				C46409B02AB590EE00A899AD /* CategoryMainSectionModel.swift in Sources */,
 				C4351B4A2A15C935005F95BE /* HomeFilterViewController.swift in Sources */,
@@ -1727,6 +1734,7 @@
 				6A381E0A29E8F40700E0974F /* AddViewController.swift in Sources */,
 				C4EB8CB62AC44448005FBAF1 /* CategoryEditBottomSheetReactor.swift in Sources */,
 				6A0F234029DBA8AA0063673B /* DataExportViewController.swift in Sources */,
+				C4F1A9762AFD2E4F00843708 /* WidgetResDto.swift in Sources */,
 				C4BBD2642AB9DE8C0055FA65 /* StatisticsProvider.swift in Sources */,
 				6A14E7092A9DCA720071805D /* PushReqDto.swift in Sources */,
 				6A14E7092A9DCA720071805D /* PushReqDto.swift in Sources */,

@@ -228,14 +228,14 @@ extension CategoryEditViewController {
 		reactor.state
 			.compactMap { $0.dismiss }
 			.distinctUntilChanged() // 중복값 무시
-			.bind(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                if let viewModel = self.editViewModel {
+			.withUnretained(self)
+			.bind(onNext: { this, isDismiss in
+                if let viewModel = this.editViewModel {
                     viewModel.isCategoryManageButtonTapped = false
                     viewModel.isViewFromCategoryViewController = true
                 }
                 
-				self.navigationController?.popViewController(animated: true)
+				this.navigationController?.popViewController(animated: true)
 			})
 			.disposed(by: disposeBag)
 		

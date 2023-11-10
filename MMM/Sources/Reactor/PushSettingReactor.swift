@@ -18,22 +18,17 @@ final class PushSettingReactor: Reactor {
         case didTapCustomPushTextSettingView
         case newsPushSwitchToggle(Bool)
         case customPushSwitchToggle(Bool)
+        case willEnterForeground    // 알림을 끄는건 앱을 나갔다가 오는거기 때문에 필요함
     }
     
     enum Mutation {
         case pushSettingAvailable(Bool)
-        
         case setPresentDetailView(Bool)
         case setPresentSheetView(Bool)  // 맞춤 알림 시트
-        
-        //        case setPresentTextDetail(PushResDto, Error?)
         case updatePushAgreeSwitch(PushAgreeUpdateResDto, Error?)
-        
         case setNewsPushSwitch(Bool)
         case setCustomPushSwitch(Bool)
-        
         case setCustomPushText(String)
-        
     }
     
     struct State {
@@ -45,6 +40,7 @@ final class PushSettingReactor: Reactor {
         var isCustomPushSwitchOn = false
         var pushList: [PushAgreeListSelectResDto.SelectedList] = []
         var customPushLabelText: String = ""
+        var isPushAvailable = false
     }
     
     let initialState: State
@@ -60,7 +56,7 @@ extension PushSettingReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
             // FIXME: - 권한 요청 시 화면 로딩이 늦는 문제
-        case .viewAppear:
+        case .viewAppear, .willEnterForeground:
             return Observable.create { observer in
                 UNUserNotificationCenter.current().getNotificationSettings { settings in
                     switch settings.authorizationStatus {
@@ -125,7 +121,7 @@ extension PushSettingReactor {
         switch mutation {
         case .pushSettingAvailable(let isOn):
             newState.isShowPushAlert = isOn
-            
+            newState.isPushAvailable = isOn
             if !isOn {
                 newState.isNewsPushSwitchOn = false
                 newState.isCustomPushSwitchOn = false

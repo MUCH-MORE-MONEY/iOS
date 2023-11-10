@@ -96,6 +96,11 @@ final class PushSettingViewController: BaseViewControllerWithNav, View {
 //MARK: - Bind
 extension PushSettingViewController {
     private func bindAction(_ reactor: PushSettingReactor) {
+        // Foreground 상태 감지(알람 설정은 밖에서 하기 때문에)
+        NotificationCenter.default.rx.notification(UIApplication.willEnterForegroundNotification)
+            .map { .willEnterForeground }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
         
         // FIXME: -
         // 뷰 진입 시 최초 1회 실행 + 최초 진입시 앱 권한을 가져오기 위한 액션
@@ -180,6 +185,17 @@ extension PushSettingViewController {
             }
             .disposed(by: disposeBag)
 
+        reactor.state
+            .subscribe(on: MainScheduler.instance)
+            .map { $0.isPushAvailable }
+            .bind { [weak self] isOn in
+                guard let self = self else { return }
+                DispatchQueue.main.async {
+                    self.newsPushSwitch.isEnabled = isOn ? true : false
+                    self.customPushSwitch.isEnabled = isOn ? true : false
+                }
+            }
+            .disposed(by: disposeBag)
     }
 }
 

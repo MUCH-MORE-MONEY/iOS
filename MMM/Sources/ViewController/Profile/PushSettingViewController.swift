@@ -279,7 +279,7 @@ extension PushSettingViewController {
         }
         
         newsPushSubLabel = newsPushSubLabel.then {
-            $0.text = "MMM가 보내는 다양한 이벤트와 정보를 받는 알림으로 맞춤 정보 알림과는 무관해요"
+            $0.text = "꾸준히 경제 목표를 달성하도록\nMMM이 다양한 이벤트와 정보를 알려드려요"
             $0.numberOfLines = 0
             $0.font = R.Font.body3
             $0.textColor = R.Color.gray800

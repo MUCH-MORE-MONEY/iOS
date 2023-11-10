@@ -86,7 +86,7 @@ extension HomeViewController {
 	// MARK: - Private
 	/// 데이터 얻기
 	private func fetchData() {
-		viewModel.isWillAppear = true // viewWillAppear 일 경우에만 Loading 표시
+//		viewModel.isWillAppear = true // viewWillAppear 일 경우에만 Loading 표시
 		if calendar.scope == .month { // 월 단위
 			viewModel.getMonthlyList(calendar.currentPage.getFormattedYM())
 		} else { // 주 단위
@@ -101,7 +101,7 @@ extension HomeViewController {
 		viewModel.getWeeklyList(viewModel.preDate.getFormattedYMD()) // 위젯
 		calendar.reloadData()
 		tableView.reloadData()
-		viewModel.isWillAppear = false
+//		viewModel.isWillAppear = false
 	}
 	
 	/// 달력 Picker Bottom Sheet

@@ -269,14 +269,14 @@ extension StatisticsActivityView {
 		}
 		
 		satisfactionEmptyPriceLabel = satisfactionEmptyPriceLabel.then {
-			$0.text = "만족한 활동을 적어주세요"
-			$0.font = R.Font.body3
+			$0.text = "활동이 기록되면 보여드려요"
+			$0.font = R.Font.body5
 			$0.textColor = R.Color.gray800
 		}
 		
 		disappointingEmptyPriceLabel = disappointingEmptyPriceLabel.then {
-			$0.text = "아쉬운 활동을 적어주세요"
-			$0.font = R.Font.body3
+			$0.text = "활동이 기록되면 보여드려요"
+			$0.font = R.Font.body5
 			$0.textColor = R.Color.gray800
 		}
 	}

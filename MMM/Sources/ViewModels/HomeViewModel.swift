@@ -133,6 +133,8 @@ extension HomeViewModel {
 	func getWeeklyList(_ date1YM: String, _ date2YM: String) {
 		guard let date1 = Int(date1YM), let date2 = Int(date2YM), let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
 		
+		isMonthlyLoading = true // 로딩 시작
+		
 		APIClient.dispatch(APIRouter.SelectListMonthlyReqDto(headers: APIHeader.Default(token: token), body: APIParameters.SelectListMonthlyReqDto(dateYM: date1)))
 			.sink(receiveCompletion: { [weak self] error in
 				guard let self = self else { return }

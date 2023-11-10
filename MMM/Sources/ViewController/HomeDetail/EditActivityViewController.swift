@@ -467,6 +467,13 @@ extension EditActivityViewController {
 				}
 			}.store(in: &cancellable)
 		
+        titleTextFeild.textReturnPublisher
+            .sinkOnMainThread { [weak self] in
+                guard let self = self else { return }
+                self.titleTextFeild.resignFirstResponder()
+            }
+            .store(in: &cancellable)
+        
 		memoTextView.textPublisher
 			.sink { [weak self] ouput in
 				guard let self = self else { return }

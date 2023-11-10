@@ -222,7 +222,7 @@ extension BaseAddActivityViewController {
 // MARK: - Textfield Delegate
 extension BaseAddActivityViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder() // 키보드 올리기
+        textField.resignFirstResponder() // 키보드 내리기
         return true
     }
 }

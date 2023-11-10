@@ -59,6 +59,12 @@ final class EditActivityViewController: BaseAddActivityViewController, UINavigat
 		super.viewDidLoad()
 	}
 	
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -318,8 +324,10 @@ extension EditActivityViewController: UIImagePickerControllerDelegate {
 			self.editViewModel.binaryFileList.append(APIParameters.BinaryFileList(binaryData: data,fileNm: imageName))
 			self.remakeConstraintsByMainImageView()
 		}
+        self.editViewModel.didTapAddButton = false
 	}
 	func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.editViewModel.didTapAddButton = false
 		dismiss(animated: true, completion: nil)
 	}
 }
@@ -327,27 +335,32 @@ extension EditActivityViewController: UIImagePickerControllerDelegate {
 // MARK: - TextView Func
 extension EditActivityViewController {
 	func textViewDidChange(text: String) {
-		editViewModel.memo = text
+        if self.memoTextView.text == textViewPlaceholder {
+            self.memoTextView.text = nil
+            self.memoTextView.textColor = R.Color.black
+        }
 	}
 	
 	func textViewDidBeginEditing() {
-		let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
-		scrollView.contentInset = contentInsets
-		scrollView.scrollIndicatorInsets = contentInsets
+//		let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+//		scrollView.contentInset = contentInsets
+//		scrollView.scrollIndicatorInsets = contentInsets
+//		
+//		var rect = scrollView.frame
+//		rect.size.height -= keyboardHeight
+//		if !rect.contains(memoTextView.frame.origin) {
+//			scrollView.scrollRectToVisible(memoTextView.frame, animated: true)
+//		}
 		
-		var rect = scrollView.frame
-		rect.size.height -= keyboardHeight
-		if !rect.contains(memoTextView.frame.origin) {
-			scrollView.scrollRectToVisible(memoTextView.frame, animated: true)
-		}
-		
+        
+        
 		if memoTextView.text == textViewPlaceholder {
 			memoTextView.text = nil
 			memoTextView.textColor = R.Color.black
 		}
 	}
 	
-	func textViewDidEndEditing() {
+    func textViewDidEndEditing(text: String) {
 		let contentInsets = UIEdgeInsets.zero
 		scrollView.contentInset = contentInsets
 		scrollView.scrollIndicatorInsets = contentInsets
@@ -356,6 +369,8 @@ extension EditActivityViewController {
 			memoTextView.text = textViewPlaceholder
 			memoTextView.textColor = R.Color.gray400
 		}
+        
+        editViewModel.memo = text
 	}
 }
 // MARK: - Bind
@@ -404,11 +419,13 @@ extension EditActivityViewController {
 			}.store(in: &cancellable)
 		
 		editViewModel.$type
+            .removeDuplicates()
 			.receive(on: DispatchQueue.main)
 			.sink { _ in
 				self.activityType.text = self.editViewModel.type == "01" ? "지출" : "수입"
 				self.activityType.backgroundColor = self.editViewModel.type == "01" ? R.Color.orange500 : R.Color.blue500
-			}.store(in: &cancellable)
+			}
+            .store(in: &cancellable)
 		
         editViewModel.$type
             .removeDuplicates() // 값 변경전까지 이벤트 미방출
@@ -465,6 +482,13 @@ extension EditActivityViewController {
 				}
 			}.store(in: &cancellable)
 		
+        titleTextFeild.textReturnPublisher
+            .sinkOnMainThread { [weak self] in
+                guard let self = self else { return }
+                self.titleTextFeild.resignFirstResponder()
+            }
+            .store(in: &cancellable)
+        
 		memoTextView.textPublisher
 			.sink { [weak self] ouput in
 				guard let self = self else { return }
@@ -477,7 +501,7 @@ extension EditActivityViewController {
 				case 1:
 					self.textViewDidBeginEditing()
 				case 2:
-					self.textViewDidEndEditing()
+                    self.textViewDidEndEditing(text: ouput.0)
 				default:
 					print("unknown error")
 				}
@@ -557,8 +581,9 @@ extension EditActivityViewController {
 				self.editViewModel.createAt = date.getFormattedDate(format: "yyyyMMdd")
 			}).store(in: &cancellable)
         
-        // 카테고리 이름 변경
+        // 최초 진입했을 경우 카테고리 이름 변경
         editViewModel.$categoryName
+            .removeDuplicates()
             .sinkOnMainThread { [weak self] name in
                 guard let self = self else { return }
                 self.addCategoryView.setTitleAndColor(by: name)

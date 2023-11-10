@@ -22,10 +22,12 @@ final class CategorySelectCell: BaseCollectionViewCell {
                 stackView.backgroundColor = backgroundType ? R.Color.orange500 : R.Color.blue500
                 imageView.image = R.Icon.iconCheckWhite16
                 label.textColor = R.Color.white
+                label.font = R.Font.body2
             } else {
                 stackView.backgroundColor = R.Color.gray200
                 imageView.image = R.Icon.iconCheckGray16
                 label.textColor = R.Color.gray600
+                label.font = R.Font.body3
             }
         }
     }

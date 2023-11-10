@@ -96,6 +96,11 @@ final class PushSettingViewController: BaseViewControllerWithNav, View {
 //MARK: - Bind
 extension PushSettingViewController {
     private func bindAction(_ reactor: PushSettingReactor) {
+        // Foreground 상태 감지(알람 설정은 밖에서 하기 때문에)
+        NotificationCenter.default.rx.notification(UIApplication.willEnterForegroundNotification)
+            .map { .willEnterForeground }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
         
         // FIXME: -
         // 뷰 진입 시 최초 1회 실행 + 최초 진입시 앱 권한을 가져오기 위한 액션
@@ -180,6 +185,17 @@ extension PushSettingViewController {
             }
             .disposed(by: disposeBag)
 
+        reactor.state
+            .subscribe(on: MainScheduler.instance)
+            .map { $0.isPushAvailable }
+            .bind { [weak self] isOn in
+                guard let self = self else { return }
+                DispatchQueue.main.async {
+                    self.newsPushSwitch.isEnabled = isOn ? true : false
+                    self.customPushSwitch.isEnabled = isOn ? true : false
+                }
+            }
+            .disposed(by: disposeBag)
     }
 }
 
@@ -279,7 +295,7 @@ extension PushSettingViewController {
         }
         
         newsPushSubLabel = newsPushSubLabel.then {
-            $0.text = "MMM가 보내는 다양한 이벤트와 정보를 받는 알림으로 맞춤 정보 알림과는 무관해요"
+            $0.text = "꾸준히 경제 목표를 달성하도록\nMMM이 다양한 이벤트와 정보를 알려드려요"
             $0.numberOfLines = 0
             $0.font = R.Font.body3
             $0.textColor = R.Color.gray800

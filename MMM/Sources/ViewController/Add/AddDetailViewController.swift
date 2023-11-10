@@ -34,6 +34,13 @@ final class AddDetailViewController: BaseAddActivityViewController, UINavigation
         super.viewDidLoad()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         //        titleTextFeild.becomeFirstResponder() // 키보드 보이기 및 포커스 주기
@@ -147,7 +154,10 @@ extension AddDetailViewController {
     
     // MARK: - TextView
     func textViewDidChange(text: String) {
-        viewModel.memo = text
+        if self.memoTextView.text == textViewPlaceholder {
+            self.memoTextView.text = nil
+            self.memoTextView.textColor = R.Color.black
+        }
     }
     
     func textViewDidBeginEditing() {
@@ -167,7 +177,7 @@ extension AddDetailViewController {
         }
     }
     
-    func textViewDidEndEditing() {
+    func textViewDidEndEditing(text: String) {
         let contentInsets = UIEdgeInsets.zero
         scrollView.contentInset = contentInsets
         scrollView.scrollIndicatorInsets = contentInsets
@@ -176,6 +186,8 @@ extension AddDetailViewController {
             memoTextView.text = textViewPlaceholder
             memoTextView.textColor = R.Color.gray400
         }
+        
+        viewModel.memo = text
     }
     
     private func didTapCategory() {
@@ -261,6 +273,13 @@ extension AddDetailViewController {
                 Tracking.FinActAddPage.inputTitleLogEvent()
             }.store(in: &cancellable)
         
+        titleTextFeild.textReturnPublisher
+            .sinkOnMainThread { [weak self] in
+                guard let self = self else { return }
+                self.titleTextFeild.resignFirstResponder()
+            }
+            .store(in: &cancellable)
+        
         memoTextView.textPublisher
             .sink { [weak self] ouput in
                 guard let self = self else { return }
@@ -273,7 +292,7 @@ extension AddDetailViewController {
                 case 1:
                     self.textViewDidBeginEditing()
                 case 2:
-                    self.textViewDidEndEditing()
+                    self.textViewDidEndEditing(text: ouput.0)
                     Tracking.FinActAddPage.inputMemoLogEvent()
                 default:
                     print("unknown error")
@@ -308,12 +327,15 @@ extension AddDetailViewController {
         
         // MARK: - UI Bind
         viewModel.$type
+            .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .sink {
                 self.activityType.backgroundColor = $0 == "01" ? R.Color.orange500 : R.Color.blue500
+                self.activityType.text = $0 == "01" ? "지출" : "수입"
             }.store(in: &cancellable)
         
         viewModel.$star
+            .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] value in
                 guard let self = self else { return }
@@ -340,6 +362,17 @@ extension AddDetailViewController {
                     self.titleTextFeild.text?.removeLast()
                 }
             }).store(in: &cancellable)
+        
+        viewModel.$memo
+            .sinkOnMainThread { [weak self] text in
+                guard let self = self else { return }
+                if !text.isEmpty {
+                    self.memoTextView.textColor = R.Color.black
+                } else {
+                    self.memoTextView.text = textViewPlaceholder
+                    self.memoTextView.textColor = R.Color.gray400
+                }
+            }.store(in: &cancellable)
         
         // MARK: - CRUD Publisher
         saveButton.tapPublisher

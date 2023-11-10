@@ -252,15 +252,11 @@ extension PushSettingDetailViewController: UICollectionViewDelegateFlowLayout {
     // dummy cell을 이용한 cell 높이 동적 구현
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-//        let width = view.frame.width
-//        let estimatedHeight: CGFloat = 300.0 // 높이가 300 이상이 되지 않을 것이라고 가정
-//        let dummyCell = WeekCollectionViewCell(frame: CGRect(x: 0, y: 0, width: width, height: estimatedHeight))
+        let padding: CGFloat = 16+16+(12*6)
+        // 16 - 양 옆 padding
+        // 12 - cell 간 padding
+        let width = (collectionView.frame.width - padding) / 7
         
-        let width = collectionView.frame.width / 7
-
-        let size = CGSize(width: 32, height: 32)
-        
-        return size
+        return CGSize(width: width, height: width)
     }
-    
 }

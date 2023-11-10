@@ -301,12 +301,15 @@ extension AddDetailViewController {
         
         // MARK: - UI Bind
         viewModel.$type
+            .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .sink {
                 self.activityType.backgroundColor = $0 == "01" ? R.Color.orange500 : R.Color.blue500
+                self.activityType.text = $0 == "01" ? "지출" : "수입"
             }.store(in: &cancellable)
         
         viewModel.$star
+            .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] value in
                 guard let self = self else { return }

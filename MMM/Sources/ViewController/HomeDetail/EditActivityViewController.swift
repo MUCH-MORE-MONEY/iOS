@@ -303,8 +303,10 @@ extension EditActivityViewController: UIImagePickerControllerDelegate {
 			self.editViewModel.binaryFileList.append(APIParameters.BinaryFileList(binaryData: data,fileNm: imageName))
 			self.remakeConstraintsByMainImageView()
 		}
+        self.editViewModel.didTapAddButton = false
 	}
 	func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.editViewModel.didTapAddButton = false
 		dismiss(animated: true, completion: nil)
 	}
 }
@@ -312,7 +314,10 @@ extension EditActivityViewController: UIImagePickerControllerDelegate {
 // MARK: - TextView Func
 extension EditActivityViewController {
 	func textViewDidChange(text: String) {
-		editViewModel.memo = text
+        if self.memoTextView.text == textViewPlaceholder {
+            self.memoTextView.text = nil
+            self.memoTextView.textColor = R.Color.black
+        }
 	}
 	
 	func textViewDidBeginEditing() {
@@ -332,7 +337,7 @@ extension EditActivityViewController {
 		}
 	}
 	
-	func textViewDidEndEditing() {
+    func textViewDidEndEditing(text: String) {
 		let contentInsets = UIEdgeInsets.zero
 		scrollView.contentInset = contentInsets
 		scrollView.scrollIndicatorInsets = contentInsets
@@ -341,6 +346,8 @@ extension EditActivityViewController {
 			memoTextView.text = textViewPlaceholder
 			memoTextView.textColor = R.Color.gray400
 		}
+        
+        editViewModel.memo = text
 	}
 }
 // MARK: - Bind
@@ -464,7 +471,7 @@ extension EditActivityViewController {
 				case 1:
 					self.textViewDidBeginEditing()
 				case 2:
-					self.textViewDidEndEditing()
+                    self.textViewDidEndEditing(text: ouput.0)
 				default:
 					print("unknown error")
 				}

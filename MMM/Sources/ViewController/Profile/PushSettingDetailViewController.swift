@@ -158,7 +158,6 @@ extension PushSettingDetailViewController {
             $0.left.equalToSuperview().offset(24)
             $0.right.equalToSuperview().offset(-24)
             $0.height.equalTo(102)
-//            $0.height.equalTo(mainImageView.image!.size.height * view.frame.width / mainImageView.image!.size.width)
         }
     }
 }

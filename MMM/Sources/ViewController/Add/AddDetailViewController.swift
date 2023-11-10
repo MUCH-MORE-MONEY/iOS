@@ -140,7 +140,10 @@ extension AddDetailViewController {
     
     // MARK: - TextView
     func textViewDidChange(text: String) {
-        viewModel.memo = text
+        if self.memoTextView.text == textViewPlaceholder {
+            self.memoTextView.text = nil
+            self.memoTextView.textColor = R.Color.black
+        }
     }
     
     func textViewDidBeginEditing() {
@@ -160,7 +163,7 @@ extension AddDetailViewController {
         }
     }
     
-    func textViewDidEndEditing() {
+    func textViewDidEndEditing(text: String) {
         let contentInsets = UIEdgeInsets.zero
         scrollView.contentInset = contentInsets
         scrollView.scrollIndicatorInsets = contentInsets
@@ -169,6 +172,8 @@ extension AddDetailViewController {
             memoTextView.text = textViewPlaceholder
             memoTextView.textColor = R.Color.gray400
         }
+        
+        viewModel.memo = text
     }
     
     private func didTapCategory() {
@@ -266,7 +271,7 @@ extension AddDetailViewController {
                 case 1:
                     self.textViewDidBeginEditing()
                 case 2:
-                    self.textViewDidEndEditing()
+                    self.textViewDidEndEditing(text: ouput.0)
                     Tracking.FinActAddPage.inputMemoLogEvent()
                 default:
                     print("unknown error")
@@ -336,6 +341,17 @@ extension AddDetailViewController {
                     self.titleTextFeild.text?.removeLast()
                 }
             }).store(in: &cancellable)
+        
+        viewModel.$memo
+            .sinkOnMainThread { [weak self] text in
+                guard let self = self else { return }
+                if !text.isEmpty {
+                    self.memoTextView.textColor = R.Color.black
+                } else {
+                    self.memoTextView.text = textViewPlaceholder
+                    self.memoTextView.textColor = R.Color.gray400
+                }
+            }.store(in: &cancellable)
         
         // MARK: - CRUD Publisher
         saveButton.tapPublisher

@@ -100,6 +100,18 @@ extension CustomPushTextSettingViewController {
             }
             .disposed(by: disposeBag)
         
+        textField.rx.controlEvent([.editingChanged])
+            .withLatestFrom(textField.rx.text.orEmpty)
+            .subscribe(onNext: { [weak self] text in
+                guard let self = self else { return }
+                if text.hasPrefix(" ") {
+                    self.textField.text = String(text.drop { $0 == " " })
+                    self.checkButton.isEnabled = false
+                    self.checkButton.setTitleColor(isDark ? R.Color.gray200 : R.Color.gray500, for: .normal)
+                }
+            })
+            .disposed(by: disposeBag)
+        
     }
     
     private func bindState(_ reactor: CustomPushTextSettingReactor) {

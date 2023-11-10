@@ -59,6 +59,12 @@ final class EditActivityViewController: BaseAddActivityViewController, UINavigat
 		super.viewDidLoad()
 	}
 	
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -321,16 +327,18 @@ extension EditActivityViewController {
 	}
 	
 	func textViewDidBeginEditing() {
-		let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
-		scrollView.contentInset = contentInsets
-		scrollView.scrollIndicatorInsets = contentInsets
+//		let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+//		scrollView.contentInset = contentInsets
+//		scrollView.scrollIndicatorInsets = contentInsets
+//		
+//		var rect = scrollView.frame
+//		rect.size.height -= keyboardHeight
+//		if !rect.contains(memoTextView.frame.origin) {
+//			scrollView.scrollRectToVisible(memoTextView.frame, animated: true)
+//		}
 		
-		var rect = scrollView.frame
-		rect.size.height -= keyboardHeight
-		if !rect.contains(memoTextView.frame.origin) {
-			scrollView.scrollRectToVisible(memoTextView.frame, animated: true)
-		}
-		
+        
+        
 		if memoTextView.text == textViewPlaceholder {
 			memoTextView.text = nil
 			memoTextView.textColor = R.Color.black

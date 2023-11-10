@@ -258,6 +258,11 @@ extension AddCategoryViewController: UICollectionViewDataSource, UICollectionVie
         
         if let viewModel = viewModel as? EditActivityViewModel {
             cell.setData(title, viewModel.type == "01")
+            
+            if viewModel.categoryName == title {
+                cell.isSelected = true
+                collectionView.selectItem(at: indexPath, animated: false, scrollPosition: .init())
+            }
         }
         
         return cell

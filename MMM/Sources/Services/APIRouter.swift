@@ -158,4 +158,18 @@ final class APIRouter {
             self.path += "/\(dateYM)/\(dvcd)/category/list"
         }
     }
+
+	/// 해당 일자 기준 주간 경제활동 작성 갯수조회
+	struct WidgetReqDto: Request {
+		typealias ReturnType = WidgetResDto
+		var path: String = "/economic_activity"
+		var method: HTTPMethod = .get
+		var headers: [String : String]?
+		var body: [String : Any]?
+		
+		init(headers: APIHeader.Default, dateYMD: String) {
+			self.headers = headers.asDictionary as? [String: String]
+			self.path += "/\(dateYMD)/weekly"
+		}
+	}
 }

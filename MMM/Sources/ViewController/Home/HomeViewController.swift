@@ -78,6 +78,7 @@ extension HomeViewController {
 		self.calendar.select(date)
 		self.dayLabel.text = date.getFormattedDate(format: "dd일 (EEEEE)") // 선택된 날짜
 		self.viewModel.getDailyList(date.getFormattedYMD())
+		self.viewModel.getWeeklyList(date.getFormattedYMD())
 		self.setMonth(date)
 		self.viewModel.preDate = date
 	}
@@ -85,7 +86,7 @@ extension HomeViewController {
 	// MARK: - Private
 	/// 데이터 얻기
 	private func fetchData() {
-		viewModel.isWillAppear = true // viewWillAppear 일 경우에만 Loading 표시
+//		viewModel.isWillAppear = true // viewWillAppear 일 경우에만 Loading 표시
 		if calendar.scope == .month { // 월 단위
 			viewModel.getMonthlyList(calendar.currentPage.getFormattedYM())
 		} else { // 주 단위
@@ -97,9 +98,10 @@ extension HomeViewController {
 			}
 		}
 		viewModel.getDailyList(viewModel.preDate.getFormattedYMD())
+		viewModel.getWeeklyList(viewModel.preDate.getFormattedYMD()) // 위젯
 		calendar.reloadData()
 		tableView.reloadData()
-		viewModel.isWillAppear = false
+//		viewModel.isWillAppear = false
 	}
 	
 	/// 달력 Picker Bottom Sheet

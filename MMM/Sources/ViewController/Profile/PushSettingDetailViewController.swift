@@ -138,6 +138,14 @@ extension PushSettingDetailViewController {
         
         // TODO: - 로직 위치 변경, 초기 설정은 모두 true
         selectedDays = Common.getCustomPushWeekList()
+        
+        // userDefault의 값을 기준으로 현재 cell들의 선택 유무를 결정하는 코드
+        for (offset, day) in selectedDays.enumerated() {
+            if day {
+                var initialIndexPath = IndexPath(item: offset, section: 0)
+                weekCollecitonView.selectItem(at: initialIndexPath, animated: false, scrollPosition: [])
+            }
+        }
     }
     
 	override func setLayout() {
@@ -180,6 +188,15 @@ extension PushSettingDetailViewController: UICollectionViewDelegate {
             cell.setSelectedItem(selectedDays[indexPath.item])
         }
         Common.setCustomPushWeekList(selectedDays)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, shouldDeselectItemAt indexPath: IndexPath) -> Bool {
+        // 이미 선택된 셀이 있는지 확인
+        if let selectedItems = collectionView.indexPathsForSelectedItems, selectedItems.count == 1 {
+            // 이미 하나의 셀이 선택된 경우, 다른 셀의 선택을 막음
+            return false
+        }
+        return true
     }
 }
 

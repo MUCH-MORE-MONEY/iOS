@@ -305,7 +305,6 @@ extension DetailViewController {
 			$0.top.equalTo(starStackView.snp.bottom).offset(16)
 			$0.width.equalTo(view.safeAreaLayoutGuide).offset(-48)
 			$0.height.equalTo(mainImageView.snp.width)
-			//            $0.height.equalTo(mainImageView.image!.size.height * view.frame.width / mainImageView.image!.size.width)
 			$0.left.right.equalToSuperview()
 		}
 		

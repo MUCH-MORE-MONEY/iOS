@@ -48,6 +48,38 @@ class BaseAddActivityViewController: BaseDetailViewController {
 //        titleTextFeild.becomeFirstResponder() // 키보드 보이기 및 포커스 주기
     }
 }
+
+// MARK: - Action
+extension BaseAddActivityViewController {
+
+    /// mainImageView 기준으로 memoLabel의 뷰를 다시 배치하는 메서드
+    func remakeConstraintsByMainImageView() {
+        mainImageView.isHidden = false
+        cameraImageView.isHidden = true
+        
+        mainImageView.snp.updateConstraints {
+            $0.height.equalTo(mainImageView.snp.width)
+        }
+        
+        memoTextView.snp.remakeConstraints {
+            $0.top.equalTo(mainImageView.snp.bottom).offset(16)
+            $0.left.right.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
+    }
+    /// cameraImageView 기준으로 memoLabel의 뷰를 다시 배치하는 메서드
+    func remakeConstraintsByCameraImageView() {
+        cameraImageView.isHidden = false
+        mainImageView.isHidden = true
+        
+        memoTextView.snp.remakeConstraints {
+            $0.top.equalTo(cameraImageView.snp.bottom).offset(16)
+            $0.left.right.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
+    }
+}
+
 //MARK: - Attribute & Hierarchy & Layouts
 extension BaseAddActivityViewController {
 	override func setAttribute() {
@@ -183,7 +215,7 @@ extension BaseAddActivityViewController {
         }
         
         memoTextView.snp.makeConstraints {
-            $0.top.equalTo(cameraImageView.snp.bottom).offset(16)
+            $0.top.equalTo(mainImageView.snp.bottom).offset(16)
             $0.left.right.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
@@ -192,29 +224,6 @@ extension BaseAddActivityViewController {
             $0.left.right.equalToSuperview().inset(24)
             $0.bottom.equalToSuperview().inset(58)
             $0.height.equalTo(56)
-        }
-    }
-    
-    /// mainImageView 기준으로 memoLabel의 뷰를 다시 배치하는 메서드
-    func remakeConstraintsByMainImageView() {
-        mainImageView.isHidden = false
-        cameraImageView.isHidden = true
-        
-        memoTextView.snp.remakeConstraints {
-            $0.top.equalTo(mainImageView.snp.bottom).offset(16)
-            $0.left.right.equalToSuperview()
-            $0.bottom.equalToSuperview()
-        }
-    }
-    /// cameraImageView 기준으로 memoLabel의 뷰를 다시 배치하는 메서드
-    func remakeConstraintsByCameraImageView() {
-        cameraImageView.isHidden = false
-        mainImageView.isHidden = true
-        
-        memoTextView.snp.remakeConstraints {
-            $0.top.equalTo(cameraImageView.snp.bottom).offset(16)
-            $0.left.right.equalToSuperview()
-            $0.bottom.equalToSuperview()
         }
     }
 }

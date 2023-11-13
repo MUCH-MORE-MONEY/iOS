@@ -389,6 +389,7 @@ extension EditActivityViewController {
         editViewModel.categoryName = detailViewModel.detailActivity?.categoryName ?? ""
 		// MARK: - Loading에 대한 처리
 		editViewModel.$isLoading
+            .removeDuplicates()
 			.receive(on: DispatchQueue.main)
 			.sink {
 				if !$0 {
@@ -411,6 +412,7 @@ extension EditActivityViewController {
 		
 		// MARK: - UI Bind
 		editViewModel.$star
+            .removeDuplicates()
 			.receive(on: DispatchQueue.main)
 			.sink { [weak self] value in
 				guard let self = self else { return }
@@ -440,6 +442,7 @@ extension EditActivityViewController {
 
         
 		editViewModel.$amount
+            .removeDuplicates()
 			.receive(on: DispatchQueue.main)
 			.sink { _ in
 				self.totalPrice.text = self.editViewModel.amount.withCommas() + "원"
@@ -482,6 +485,7 @@ extension EditActivityViewController {
 				}
 			}.store(in: &cancellable)
 		
+        // 키보드의 확인/이동 버튼을 눌렀을 경우 키보드 내리기
         titleTextFeild.textReturnPublisher
             .sinkOnMainThread { [weak self] in
                 guard let self = self else { return }
@@ -570,6 +574,7 @@ extension EditActivityViewController {
 		
 		// Date Picker의 값을 받아옴
 		editViewModel.$date
+            .removeDuplicates()
 			.sinkOnMainThread(receiveValue: { [weak self] date in
 				guard let self = self else { return }
 				guard let date = date else { return }

@@ -33,6 +33,9 @@ enum MMMAPI {
 	case exportToExcel
 	case getSummary
 	case withdraw
+	
+	// MARK: - Widget
+	case getWeely(WidgetReqDto)
 }
 
 extension MMMAPI: BaseNetworkService {
@@ -73,6 +76,8 @@ extension MMMAPI: BaseNetworkService {
 			return "/economic_activity/summary/select"
 		case .withdraw:
 			return "/login/delete"
+		case let .getWeely(request):
+			return "economic_activity​/\(request.dateYMD)/weekly"
 		}
 	}
 	
@@ -89,6 +94,8 @@ extension MMMAPI: BaseNetworkService {
 			return .put
 		case .exportToExcel, .getSummary, .withdraw:
 			return .post
+		case .getWeely:
+			return .get
 		}
 	}
 	
@@ -116,6 +123,8 @@ extension MMMAPI: BaseNetworkService {
 			return .requestParameters(parameters: ["economicActivityCategoryCd": request.economicActivityCategoryCd], encoding: URLEncoding.default)
 		case .exportToExcel, .getSummary, .withdraw:
 			return .requestPlain
+		case .getWeely:
+			return .requestPlain // get이지만 따로 필요한 값이 없다.
 		}
 	}
 	

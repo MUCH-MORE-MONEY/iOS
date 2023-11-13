@@ -235,7 +235,7 @@ extension CategoryContentViewController {
 		super.setLayout()
 		
 		collectionView.snp.makeConstraints {
-			$0.top.leading.trailing.bottom.equalToSuperview()
+			$0.edges.equalToSuperview()
 		}
 	}
 }

@@ -137,8 +137,7 @@ final class HomeDetailViewModel {
 				case .finished:
 					break
 				}
-			}, receiveValue: { [weak self] response in
-				guard let self = self else { return }
+			}, receiveValue: { response in
 				// 이번 달만 위젯에 보여줌
 				if dateYM == Date().getFormattedYM() {
 					UserDefaults.shared.set(response.earn, forKey: "earn")
@@ -147,5 +146,51 @@ final class HomeDetailViewModel {
 				}
 			}).store(in: &cancellable)
 	}
+	
+	func getDailyList(_ dateYMD: String) {
+		guard let date = Int(dateYMD), let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
 
+		APIClient.dispatch(APIRouter.SelectListDailyReqDto(headers: APIHeader.Default(token: token), body: APIParameters.SelectListDailyReqDto(dateYMD: date)))
+			.sink(receiveCompletion: { error in
+				switch error {
+				case .failure(let data):
+					switch data {
+					default:
+						break
+					}
+				case .finished:
+					break
+				}
+			}, receiveValue: { response in
+				guard let dailyList = response.selectListDailyOutputDto else { return }
+				// 이번 달만 위젯에 보여줌
+				if dateYMD == Date().getFormattedYMD() {
+					UserDefaults.shared.set(dailyList.count, forKey: "today")
+					WidgetCenter.shared.reloadAllTimelines()
+				}
+			}).store(in: &cancellable)
+	}
+	
+	func getWeeklyList(_ dateYMD: String) {
+		guard let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
+		
+		APIClient.dispatch(APIRouter.WidgetReqDto(headers: APIHeader.Default(token: token), dateYMD: dateYMD))
+			.sink(receiveCompletion: { error in
+				switch error {
+				case .failure(let data):
+					switch data {
+					default:
+						break
+					}
+				case .finished:
+					break
+				}
+			}, receiveValue: { response in
+				// 이번 달만 위젯에 보여줌
+				if dateYMD == Date().getFormattedYMD() {
+					UserDefaults.shared.set(response.data.weekly, forKey: "weekly")
+					WidgetCenter.shared.reloadAllTimelines()
+				}
+			}).store(in: &cancellable)
+	}
 }

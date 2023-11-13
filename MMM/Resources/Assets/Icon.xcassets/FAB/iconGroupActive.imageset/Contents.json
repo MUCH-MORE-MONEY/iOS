@@ -1,8 +1,19 @@
 {
   "images" : [
     {
-      "filename" : "iconGroupActive.pdf",
-      "idiom" : "universal"
+      "filename" : "iconGroupActive.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "iconGroupActive@2x.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "iconGroupActive@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x"
     }
   ],
   "info" : {

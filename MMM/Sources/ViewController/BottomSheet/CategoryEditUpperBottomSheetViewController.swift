@@ -125,7 +125,7 @@ extension CategoryEditUpperBottomSheetViewController {
 		reactor.state
 			.map { $0.dismiss }
 			.distinctUntilChanged()
-			.filter { $0 == true }
+			.filter { $0 }
 			.subscribe(onNext: { [weak self] _ in
 				self?.dismiss(animated: true)
 			})
@@ -233,6 +233,7 @@ extension CategoryEditUpperBottomSheetViewController {
 		}
 		
 		textField = textField.then {
+			$0.delegate = self
 			$0.text = categoryHeader.title
 			$0.placeholder = "카테고리 이름을 입력해주세요"
 			$0.font = R.Font.h2
@@ -282,5 +283,22 @@ extension CategoryEditUpperBottomSheetViewController {
 			$0.top.equalTo(textField.snp.bottom).offset(12)
 			$0.leading.trailing.equalToSuperview().inset(24)
 		}
+	}
+}
+// MARK: - UITextField Delegate
+extension CategoryEditUpperBottomSheetViewController: UITextFieldDelegate {
+	// text가 변경할지에 대한 delegate요청 메소드
+	public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+		// Back Space 감지
+		if let char = string.cString(using: String.Encoding.utf8) {
+			let isBackSpace = strcmp(char, "\\b")
+			if isBackSpace == -92 {
+				return true
+			}
+		}
+		
+		// oldString: 기존에 입력되었던 text
+		guard let oldString = textField.text, oldString.count < 9 else { return false }
+		return true
 	}
 }

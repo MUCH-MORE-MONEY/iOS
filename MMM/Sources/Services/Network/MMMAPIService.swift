@@ -72,6 +72,9 @@ protocol MMMAPIServiceble: BaseAPIService {
     func exportToExcel() -> Observable<(ExportResDto, Error?)>
     func withdraw() -> Observable<(WithdrawResDto, Error?)>
     func getSummary() -> Observable<(SummaryResDto, Error?)>
+	
+	// MARK: - Widget 요청 API
+	func getWeekly(_ request: WidgetReqDto) -> Observable<(WidgetResDto, Error?)>
 }
 
 // MARK:
@@ -149,6 +152,11 @@ struct MMMAPIService: MMMAPIServiceble {
 	
 	func withdraw() -> RxSwift.Observable<(WithdrawResDto, Error?)> {
 		return provider().request(MMMAPI.exportToExcel, type: WithdrawResDto.self).asObservable()
+	}
+	
+	// MARK: - Weekly 요청 API
+	func getWeekly(_ request: WidgetReqDto) -> RxSwift.Observable<(WidgetResDto, Error?)> {
+		return provider().request(MMMAPI.getWeely(request), type: WidgetResDto.self).asObservable()
 	}
 }
 

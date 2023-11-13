@@ -26,7 +26,8 @@ final class CategoryDetailViewController: BaseViewControllerWithNav, View {
 	private lazy var titleDescriptionLabel = UILabel()
 	private lazy var tableView = UITableView()
 	private lazy var loadView = LoadingViewController()
-
+	private lazy var emptyView = CategoryEmptyView()
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 	}
@@ -90,6 +91,15 @@ extension CategoryDetailViewController {
 			}.disposed(by: disposeBag)
 		
 		reactor.state
+			.map { $0.list.isEmpty }
+			.withUnretained(self)
+			.distinctUntilChanged { $0.1 } // 중복값 무시
+			.subscribe(onNext: { this, isEmpty in
+				this.emptyView.isHidden = !isEmpty
+			})
+			.disposed(by: disposeBag)
+		
+		reactor.state
 			.map { $0.isPushDetail }
 			.distinctUntilChanged() // 중복값 무시
 			.filter { $0 } // true일때만 화면 전환
@@ -119,6 +129,7 @@ extension CategoryDetailViewController {
 extension CategoryDetailViewController {
 	private func willPushViewController(isPushDetail: Bool) {
 		guard let reactor = reactor, let data = reactor.currentState.detailData else { return }
+		
 		// 셀 터치시 회색 표시 없애기
 		tableView.deselectRow(at: data.IndexPath, animated: true)
 
@@ -169,7 +180,7 @@ extension CategoryDetailViewController {
 		super.setHierarchy()
 		
 		titleStackView.addArrangedSubviews(titleLabel, titleDescriptionLabel)
-		view.addSubviews(tableView)
+		view.addSubviews(tableView, emptyView)
 	}
 	
 	override func setLayout() {
@@ -177,6 +188,10 @@ extension CategoryDetailViewController {
 		
 		tableView.snp.makeConstraints {
 			$0.edges.equalToSuperview()
+		}
+		
+		emptyView.snp.makeConstraints {
+			$0.center.equalToSuperview()
 		}
 	}
 }

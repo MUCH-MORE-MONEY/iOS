@@ -47,10 +47,9 @@ final class CategoryEditReactor: Reactor {
 	struct State {
 		var addId: Int = 0
 		var type: String
-		var date: Date
 		var headers: [CategoryHeader] = []
 		var preSections: [CategoryEditUpperPut]?
-		var sections: [CategoryEditSectionModel] = []
+		var sectionInfo: (section: [CategoryEditSectionModel], refresh: Bool) = ([], false) // Section List와 refresh 해야하는 타이밍
 		var removedUpperCategory: [String:String] = [:] // id:title
 		var removedCategory: [String:String] = [:] // id:title
 		var nextEditScreen: CategoryEdit?
@@ -68,8 +67,8 @@ final class CategoryEditReactor: Reactor {
 	let initialState: State
 	let provider: ServiceProviderProtocol
 
-	init(provider: ServiceProviderProtocol, type: String, date: Date) {
-		self.initialState = State(type: type, date: date)
+	init(provider: ServiceProviderProtocol, type: String) {
+		self.initialState = State(type: type)
 		self.provider = provider
 		
 		// 뷰가 최초 로드 될 경우
@@ -157,82 +156,127 @@ extension CategoryEditReactor {
 			newState.addId = -headers.count
 			newState.headers = headers
 		case let .setSections(sections):
-			newState.sections = sections
-			
+			newState.sectionInfo.section = sections
+			newState.sectionInfo.refresh = true
+
 			// 편집전 sections 정보 저장
 			if newState.preSections == nil {
 				newState.preSections = self.transformData(input: sections)
 			}
 		case let .addItem(categoryEdit):
-			if let section = newState.sections.enumerated().filter({ $0.element.model.header.id == categoryEdit.upperId }).first {
+			if let section = newState.sectionInfo.section.enumerated().filter({ $0.element.model.header.id == categoryEdit.upperId }).first {
 				let sectionId = section.offset
 				
 				// 데이터를 넣기 전에 Empty Cell이 있는지 확인후 제거
-				if let first = newState.sections[sectionId].items.first {
+				if let first = newState.sectionInfo.section[sectionId].items.first {
 					switch first {
-					case .empty:	newState.sections[sectionId].items.removeAll()
+					case .empty:	newState.sectionInfo.section[sectionId].items.removeAll()
 					default: 		break
 					}
 				}
 				
 				var newItem = categoryEdit
-				newItem.orderNum = newState.sections[sectionId].items.count + 1
+				newItem.orderNum = newState.sectionInfo.section[sectionId].items.count + 1
 				let categoryEditItem: CategoryEditItem = .base(.init(provider: provider, categoryEdit: newItem))
 				
-				newState.sections[sectionId].items.append(categoryEditItem) // 해당 Sections을 찾아서 append
+				newState.sectionInfo.section[sectionId].items.append(categoryEditItem) // 해당 Sections을 찾아서 append
 				newState.addId -= 1 // 1씩 감소 시키면서 고유한 값 유지
+				newState.sectionInfo.refresh = true
 				newState.isAdd = true // Toast Message
 			}
 		case let .deleteItem(categoryEdit):		
-			if let section = newState.sections.enumerated().filter({ !$0.element.items.filter({ $0.identity as! String == categoryEdit.id }).isEmpty}).first {
+			if let section = newState.sectionInfo.section.enumerated().filter({ !$0.element.items.filter({ $0.identity as! String == categoryEdit.id }).isEmpty}).first {
 				let sectionId = section.offset
 				
-				if let removeIndex = newState.sections[sectionId].items.firstIndex(where: {$0.identity as! String == categoryEdit.id}) {
+				if let removeIndex = newState.sectionInfo.section[sectionId].items.firstIndex(where: {$0.identity as! String == categoryEdit.id}) {
+					
 					// 삭제된 카테고리 저장
-					let item = newState.sections[sectionId].items[removeIndex]
+					let item = newState.sectionInfo.section[sectionId].items[removeIndex]
 					let (id, title) = (item.identity as! String, item.title)
 					newState.removedCategory[id] = title
 
-					newState.sections[sectionId].items.remove(at: removeIndex)
+					newState.sectionInfo.section[sectionId].items.remove(at: removeIndex)
 					
 					// 카테고리가 비어있을 경우, Empty Cell 추가
-					if newState.sections[sectionId].items.isEmpty {
-						newState.sections[sectionId].items.append(.empty)
+					if newState.sectionInfo.section[sectionId].items.isEmpty {
+						newState.sectionInfo.section[sectionId].items.append(.empty)
 					}
 					
-					// Toast Message
-					newState.isDelete = true
+					newState.sectionInfo.refresh = true
+					newState.isDelete = true // Toast Message
 				}
 			}
 		case let .dragAndDrop(sourceIndexPath, destinationIndexPath):
-			let sourceItem = newState.sections[sourceIndexPath.section].items[sourceIndexPath.row]
-			newState.sections[sourceIndexPath.section].items.remove(at: sourceIndexPath.row)
-			newState.sections[destinationIndexPath.section].items.insert(sourceItem, at: destinationIndexPath.row)
+			var isRefresh: Bool = false
 			
+			for s in newState.sectionInfo.section {
+				print(s.model.header.title)
+				for i in s.items {
+					print(i.title, i)
+				}
+				print()
+			}
+			
+			let sourceItem = newState.sectionInfo.section[sourceIndexPath.section].items[sourceIndexPath.row]
+			let count = newState.sectionInfo.section[sourceIndexPath.section].items.count
+			
+			// 목적지가 비어있지 않을때, Drag cell일 경우 비어 있음
+			print("여기", sourceIndexPath, newState.sectionInfo.section[destinationIndexPath.section].items.count, destinationIndexPath)
+//			if count == destinationIndexPath.row {
+//				newState.sectionInfo.section[sourceIndexPath.section].items.remove(at: sourceIndexPath.row)
+//				newState.sectionInfo.section[destinationIndexPath.section].items.insert(sourceItem, at: count)
+//				isRefresh = true
+//			} else {
+//				newState.sectionInfo.section[sourceIndexPath.section].items.remove(at: sourceIndexPath.row)
+//				newState.sectionInfo.section[destinationIndexPath.section].items.insert(sourceItem, at: destinationIndexPath.row)
+//			}
+			
+			newState.sectionInfo.section[sourceIndexPath.section].items.remove(at: sourceIndexPath.row)
+			newState.sectionInfo.section[destinationIndexPath.section].items.insert(sourceItem, at: destinationIndexPath.row)
+
 			// '출발지'의 카테고리가 비어있을 경우, Empty Cell 추가
-			if newState.sections[sourceIndexPath.section].items.isEmpty {
-				newState.sections[sourceIndexPath.section].items.append(.empty)
+			if newState.sectionInfo.section[sourceIndexPath.section].items.isEmpty {
+				newState.sectionInfo.section[sourceIndexPath.section].items.append(.empty)
+				isRefresh = true
 			}
 			
 			// '목적지'의 카테고리가 비어있을 경우, Empty Cell 삭제
-			if let first = newState.sections[destinationIndexPath.section].items.first, let last = newState.sections[destinationIndexPath.section].items.last {
+			if let first = newState.sectionInfo.section[destinationIndexPath.section].items.first {
 				switch first {
-				case .empty: 	newState.sections[destinationIndexPath.section].items.removeFirst()
-				default: 		break
-				}
-				
-				switch last {
-				case .empty: 	newState.sections[destinationIndexPath.section].items.removeLast()
+				case .empty: 	
+					newState.sectionInfo.section[destinationIndexPath.section].items.removeFirst()
+					isRefresh = true
 				default: 		break
 				}
 			}
+			
+			// '목적지'의 카테고리가 비어있을 경우, Empty Cell 삭제
+			if let last = newState.sectionInfo.section[destinationIndexPath.section].items.last {
+				switch last {
+				case .empty:
+					newState.sectionInfo.section[destinationIndexPath.section].items.removeLast()
+					isRefresh = true
+				default: 		break
+				}
+			}
+			
+			print("-------------------------")
+			for s in newState.sectionInfo.section {
+				print(s.model.header.title)
+				for i in s.items {
+					print(i.title, i)
+				}
+				print()
+			}
+			
+			newState.sectionInfo.refresh = isRefresh
 		case let .addDrag(indexPathList):
 			for indexPath in indexPathList {
-				newState.sections[indexPath.section].items.append(.drag)
+				newState.sectionInfo.section[indexPath.section].items.append(.drag)
 			}
 		case let .removeEmpty(indexPathList):
 			for indexPath in indexPathList {
-				newState.sections[indexPath.section].items.remove(at: indexPath.row)
+				newState.sectionInfo.section[indexPath.section].items.remove(at: indexPath.row)
 			}
 		case let .setRemovedUpperCategory(removedUpperCategory):
 			for (id, title) in removedUpperCategory {
@@ -247,15 +291,11 @@ extension CategoryEditReactor {
 		case let .setPresentAlert(isAlert): // 수정되었는지 판별
 			if isAlert {
 				if let pre = newState.preSections {
-					let isEdit = pre == self.transformData(input: newState.sections)
+					let isEdit = pre == self.transformData(input: newState.sectionInfo.section)
 					newState.isEdit = !isEdit
-					let com = self.transformData(input: newState.sections)
-					for i in 0..<pre.count {
-						print(pre[i].list, com[i].list)
-					}
-					
-					
+
 					if isEdit { newState.dismiss = true }
+					
 				} else { // 에러가 생겨 데이터를 받아오지 못하면 Dismiss 작동
 					newState.dismiss = true
 				}
@@ -347,7 +387,7 @@ extension CategoryEditReactor {
 	// 변경된 데이터 확인하기
 	private func compareData() -> Observable<Mutation> {
 		var request: PutCategoryEditReqDto = .init(economicActivityDvcd: currentState.type, data: [])
-		let data = currentState.sections
+		let data = currentState.sectionInfo.section
 		let removedUpperCategory = currentState.removedUpperCategory
 
 		for i in stride(from: 1, to: data.count - 1, by: 1) {
@@ -364,6 +404,10 @@ extension CategoryEditReactor {
 						
 			for j in stride(from: 0, to: section.items.count, by: 1) {
 				let id = section.items[j].identity as! String
+				
+				// 빈 Cell에 대한 예외처리
+				if id == "" { continue }
+				
 				let title = section.items[j].title
 				var lowwer: CategoryEditPut = .init(id: id, title: title, useYn: "Y")
 				

@@ -136,7 +136,7 @@ extension BottomSheetViewController2 {
 		dimmedView.rx.tapGesture()
 			.when(.recognized)
 			.subscribe(onNext: { [weak self] _ in
-				self?.dismiss(animated: true)
+				self?.dismiss(animated: false)
 			})
 			.disposed(by: disposeBag)
 		

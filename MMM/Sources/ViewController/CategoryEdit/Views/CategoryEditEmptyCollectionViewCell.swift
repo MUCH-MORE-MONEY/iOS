@@ -19,8 +19,6 @@ final class CategoryEditEmptyCollectionViewCell: BaseCollectionViewCell, View {
 		
 	// MARK: - UI Components
 	private lazy var titleLabel = UILabel()
-	private lazy var editButton = UIButton()
-	private lazy var dragButton = UIButton()
 	
 	override func layoutSubviews() {
 		super.layoutSubviews()
@@ -59,7 +57,7 @@ extension CategoryEditEmptyCollectionViewCell {
 		
 		titleLabel = titleLabel.then {
 			$0.font = R.Font.body1
-			$0.textColor = R.Color.gray500
+			$0.textColor = R.Color.gray800
 			$0.textAlignment = .left
 		}
 	}

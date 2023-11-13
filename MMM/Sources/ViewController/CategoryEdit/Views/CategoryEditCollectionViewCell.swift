@@ -106,7 +106,7 @@ extension CategoryEditCollectionViewCell {
 		
 		dragButton.snp.makeConstraints {
 			$0.centerY.equalTo(titleLabel)
-			$0.trailing.equalToSuperview()
+			$0.trailing.equalToSuperview().inset(24)
 			$0.width.height.equalTo(24)
 		}
 		

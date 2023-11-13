@@ -43,11 +43,17 @@ extension CategorySectionHeader {
 	func setDate(category: Category, type: String) {
 		titleLabel.text = category.title
 		priceLabel.text = category.dateYM.suffix(2) + "월 | " + category.total.withCommas() + " 원"
-		radioButton.backgroundColor = type == "01" ? R.Color.orange500 : R.Color.blue500
 		
 		// 비율 반올림
 		let roundValue = Int(round(category.ratio))
 		radioButton.setTitle("\(roundValue)%", for: .normal)
+		
+		// 0%에 대한 Case 처리
+		if roundValue == 0 {
+			radioButton.backgroundColor = type == "01" ? R.Color.orange800 : R.Color.blue800
+		} else {
+			radioButton.backgroundColor = type == "01" ? R.Color.orange600 : R.Color.blue600
+		}
 		
 		// 버튼 크기 변경
 		radioButton.snp.updateConstraints {

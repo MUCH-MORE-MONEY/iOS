@@ -92,8 +92,8 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
                 }
             }
 			
-			self.homeDetailViewModel.getDailyList(self.date.getFormattedYMD()) // widget
-			self.homeDetailViewModel.getWeeklyList(self.date.getFormattedYMD()) // widget
+			self.homeDetailViewModel.getDailyList(Date().getFormattedYMD()) // widget
+			self.homeDetailViewModel.getWeeklyList(Date().getFormattedYMD()) // widget
         } else {
             self.homeDetailViewModel.fetchDetailActivity(id: self.economicActivityId[homeDetailViewModel.pageIndex])
             self.homeDetailViewModel.getMonthlyList(self.date.getFormattedYM())

@@ -98,7 +98,9 @@ extension HomeViewController {
 			}
 		}
 		viewModel.getDailyList(viewModel.preDate.getFormattedYMD())
-		viewModel.getWeeklyList(viewModel.preDate.getFormattedYMD()) // 위젯
+		// 위젯
+		viewModel.getDailyList(Date().getFormattedYMD())
+		viewModel.getWeeklyList(Date().getFormattedYMD())
 		calendar.reloadData()
 		tableView.reloadData()
 //		viewModel.isWillAppear = false

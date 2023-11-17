@@ -15,6 +15,7 @@ final class PushSettingDetailReactor: Reactor {
         case didTapDetailTimeSettingView
         case viewAppear(String)
         case viewWillDisappear
+        case checkPushTime
     }
     
     enum Mutation {
@@ -22,6 +23,7 @@ final class PushSettingDetailReactor: Reactor {
 		case setDate(Date)
         case setPresentTime(Bool)
         case viewWillDisappear
+        case setPushTime(String)
     }
     
     struct State {
@@ -29,6 +31,7 @@ final class PushSettingDetailReactor: Reactor {
         var time = ""
 		var date = Date()
         var isPresentTime = false
+        var pushTime = ""
     }
     
     let initialState: State
@@ -74,6 +77,10 @@ extension PushSettingDetailReactor {
             }
             
             return .just(.viewWillDisappear)
+            
+        case .checkPushTime:
+            let value = Common.getCustomPushTime()
+            return .just(.setPushTime(value))
         }
     }
 	
@@ -82,6 +89,8 @@ extension PushSettingDetailReactor {
 		let tagEvent = provider.profileProvider.event.flatMap { event -> Observable<Mutation> in
 			switch event {
 			case .updateDate(let date):
+                let dateString = date.getFormattedTime()
+                Common.setCustomPushTime(dateString)    // Picker에서 값을 확인을 누르게 되면 UserDefault에 저장
 				return .just(.setDate(date))
             default:
                 return .empty()
@@ -110,6 +119,9 @@ extension PushSettingDetailReactor {
 			newState.isPresentTime = isPresent
         case .viewWillDisappear:
             print("viewWillAppear")
+            
+        case .setPushTime(let time):
+            newState.pushTime = time
             
         }
         return newState

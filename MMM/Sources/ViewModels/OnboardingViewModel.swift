@@ -73,7 +73,7 @@ final class OnboardingViewModel {
             // 사용자의 이메일 저장
             Constants.setKeychain(email, forKey: Constants.KeychainKey.email)
             // 사용자 token 저장
-            Constants.setKeychain("eyJ0eXBlIjoidG9rZW4iLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTm8iOiIwMDAwMDAwMDAxIiwiZW1haWwiOiJyb3VuZzQxMTlAZ21haWwuY29tIiwic3ViIjoidXNlciIsImV4cCI6MTcyOTc2MzQ4Mn0.gBvSTmsLcM2j0SB37BhOs0bUeKVyghUs7FA4k5PrFNw", forKey: Constants.KeychainKey.token)
+            Constants.setKeychain(value.token, forKey: Constants.KeychainKey.token)
 
             // 최초 로그인 시 일림 시간 및 문구 저장
             Common.setCustomPushTime("매일 09:00 PM")

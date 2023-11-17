@@ -28,4 +28,16 @@ extension String {
 			return nil
 		}
 	}
+    
+    func toTime() -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "hh:mm a"
+        
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX") // 24시간 형식을 피하기 위해 로케일 설정
+        if let date = dateFormatter.date(from: self) {
+            return date
+        } else {
+            return nil
+        }
+    }
 }

@@ -56,19 +56,19 @@ final class PushSettingViewController: BaseViewControllerWithNav, View {
                 if isOn {
                     switch index {
                     case 0:
-                        title += "일 ,"
+                        title += "일, "
                     case 1:
-                        title += "월 ,"
+                        title += "월, "
                     case 2:
-                        title += "화 ,"
+                        title += "화, "
                     case 3:
-                        title += "수 ,"
+                        title += "수, "
                     case 4:
-                        title += "목 ,"
+                        title += "목, "
                     case 5:
-                        title += "금 ,"
+                        title += "금, "
                     case 6:
-                        title += "토 ,"
+                        title += "토, "
                     default:
                         break
                     }

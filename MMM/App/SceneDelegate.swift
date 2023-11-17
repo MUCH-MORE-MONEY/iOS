@@ -82,9 +82,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		// This may occur due to temporary interruptions (ex. an incoming phone call).
 	}
 	
+    // 앱을 들어왔을 경우 badge 초기화
 	func sceneWillEnterForeground(_ scene: UIScene) {
-		// Called as the scene transitions from the background to the foreground.
-		// Use this method to undo the changes made on entering the background.
+        UIApplication.shared.applicationIconBadgeNumber = 0
 	}
 	
 	func sceneDidEnterBackground(_ scene: UIScene) {

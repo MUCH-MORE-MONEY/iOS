@@ -59,9 +59,16 @@ extension PushSettingDetailViewController {
         
         detailTimeSettingView.rx.tapGesture()
             .when(.recognized)
-            .map { _ in .didTapDetailTimeSettingView }
+            .map { .didTapDetailTimeSettingView }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+        // UserDefault의 값을 감지(저장된 시간의 값 변화를 감지)
+        NotificationCenter.default.rx.notification(UserDefaults.didChangeNotification)
+            .map { .checkPushTime }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
     }
     
     private func bindState(_reactor: PushSettingDetailReactor) {
@@ -73,33 +80,25 @@ extension PushSettingDetailViewController {
             .bind(onNext: presentBottomSheet)
             .disposed(by: disposeBag)
         
-		reactor.state
-            .filter { !$0.isViewAppear }
-			.map { $0.date }
-			.distinctUntilChanged() // 중복값 무시
-			.bind(onNext: setTime) //
-			.disposed(by: disposeBag)
+        reactor.state
+            .map { $0.pushTime }
+            .bind(onNext: setTime)
+            .disposed(by: disposeBag)
     }
 }
 
 // MARK: - Actions
 extension PushSettingDetailViewController {
     private func presentBottomSheet(_ isPresent: Bool) {
-		let vc = DateBottomSheetViewController(title: "시간 설정", type: .time, height: 360, mode: .date, sheetMode: .drag, isDark: false)
+        let dateString = Common.getCustomPushTime()
+        
+        let vc = DateBottomSheetViewController(title: "시간 설정", type: .time, date: dateString.toTime() ?? Date(), height: 360, mode: .date, sheetMode: .drag, isDark: false)
 		vc.reactor = DateBottomSheetReactor(provider: reactor.provider)
         self.present(vc, animated: true)
     }
     
-    private func setTime(_ date: Date) {
-        let dd = date.getFormattedTime()
-        Common.setCustomPushTime(dd)
+    private func setTime(_ time: String) {
         detailTimeSettingView.configure(Common.getCustomPushTime())
-    }
-    
-    private func presentBottomSheet1(_ isPresent: Bool) {
-        let vc = CustomPushTimeSettingViewController(title: "시간 설정", height: 360, sheetMode: .drag)
-        vc.reactor = CustomPushTimeSettingReactor(provider: reactor.provider    )
-        self.present(vc, animated: true)
     }
 }
 //MARK: - Attribute & Hierarchy & Layouts & Bind
@@ -138,6 +137,14 @@ extension PushSettingDetailViewController {
         
         // TODO: - 로직 위치 변경, 초기 설정은 모두 true
         selectedDays = Common.getCustomPushWeekList()
+        
+        // userDefault의 값을 기준으로 현재 cell들의 선택 유무를 결정하는 코드
+        for (offset, day) in selectedDays.enumerated() {
+            if day {
+                var initialIndexPath = IndexPath(item: offset, section: 0)
+                weekCollecitonView.selectItem(at: initialIndexPath, animated: false, scrollPosition: [])
+            }
+        }
     }
     
 	override func setLayout() {
@@ -180,6 +187,15 @@ extension PushSettingDetailViewController: UICollectionViewDelegate {
             cell.setSelectedItem(selectedDays[indexPath.item])
         }
         Common.setCustomPushWeekList(selectedDays)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, shouldDeselectItemAt indexPath: IndexPath) -> Bool {
+        // 이미 선택된 셀이 있는지 확인
+        if let selectedItems = collectionView.indexPathsForSelectedItems, selectedItems.count == 1 {
+            // 이미 하나의 셀이 선택된 경우, 다른 셀의 선택을 막음
+            return false
+        }
+        return true
     }
 }
 

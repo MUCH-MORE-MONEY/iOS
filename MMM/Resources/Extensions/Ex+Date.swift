@@ -45,7 +45,7 @@ extension Date {
     
     func getFormattedTime() -> String {
         let dateformat = DateFormatter()
-        dateformat.locale = Locale(identifier: "en_US")
+        dateformat.locale = Locale(identifier: "ko_KR")
         dateformat.timeZone = TimeZone(abbreviation: "KST")
         dateformat.dateFormat = "HH:mm a"
         return dateformat.string(from: self)

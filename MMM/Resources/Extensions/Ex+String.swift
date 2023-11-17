@@ -31,10 +31,11 @@ extension String {
     
     func toTime() -> Date? {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "hh:mm a"
-        
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX") // 24시간 형식을 피하기 위해 로케일 설정
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm a"
+        dateFormatter.timeZone = TimeZone(identifier: "KST")
+//        dateFormatter.locale = Locale(identifier: "ko_KR")
         if let date = dateFormatter.date(from: self) {
+            
             return date
         } else {
             return nil

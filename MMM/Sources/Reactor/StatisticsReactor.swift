@@ -97,7 +97,7 @@ extension StatisticsReactor {
 				.just(.presentSatisfaction(true)),
 				.just(.presentSatisfaction(false))
 			])
-		case .selectCell(let indexPath, let data):
+		case let .selectCell(indexPath, data):
 			return .concat([
 				.just(.pushDetail(indexPath, data, true)),
 				.just(.pushDetail(indexPath, data, false))
@@ -109,7 +109,7 @@ extension StatisticsReactor {
 	func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
 		let event = provider.statisticsProvider.event.flatMap { event -> Observable<Mutation> in
 			switch event {
-			case .updateDate(let date):
+			case let .updateDate(date):
 				return .concat([
 					.just(.setLoading(true)),
 					.just(.setDate(date)),
@@ -121,7 +121,7 @@ extension StatisticsReactor {
 					self.getStatisticsList(date, self.currentState.satisfaction.id, true), // viewWillAppear일때, 현재 만족도를 불러와야한다.
 					.just(.setLoading(false)),
 				])
-			case .updateSatisfaction(let satisfaction):
+			case let .updateSatisfaction(satisfaction):
 				return .concat([
 					.just(.setLoading(true)),
 					.just(.setSatisfaction(satisfaction)),
@@ -139,7 +139,7 @@ extension StatisticsReactor {
 		var newState = state
 		
 		switch mutation {
-		case .fetchList(let list, let type, let reset):
+		case let .fetchList(list, type, reset):
 			let data = list.prefix(3)
 			newState.activityList = list
 			currentPage = 0
@@ -155,31 +155,31 @@ extension StatisticsReactor {
 					break
 				}
 			}
-		case .pagenation(let list, let nextIndex):
+		case let .pagenation(list, nextIndex):
 			if nextIndex == -1 { break }
 			newState.activityList += list
-		case .fetchCategoryBar(let list, let type):
+		case let .fetchCategoryBar(list, type):
 			switch type {
 			case "01": newState.payBarList = list
 			case "02": newState.earnBarList = list
 			default: break
 			}
-		case .setDate(let date):
+		case let .setDate(date):
 			newState.date = date
 
 			// 카테고리 추가할때 사용하기 위해 저장
 			Constants.setKeychain(date.getFormattedYMD(), forKey: Constants.KeychainKey.statisticsDate)
-		case .setAverage(let average):
+		case let .setAverage(average):
 			newState.average = average
-		case .setSatisfaction(let satisfaction):
+		case let .setSatisfaction(satisfaction):
 			newState.satisfaction = satisfaction
-		case .setLoading(let isLoading):
+		case let .setLoading(isLoading):
 			newState.isLoading = isLoading
-		case .presentSatisfaction(let isPresent):
+		case let .presentSatisfaction(isPresent):
 			newState.isPresentSatisfaction = isPresent
-		case .pushMoreCategory(let isPush):
+		case let .pushMoreCategory(isPush):
 			newState.isPushMoreCategory = isPush
-		case .pushDetail(let indexPath, let data, let isPush):
+		case let .pushDetail(indexPath, data, isPush):
 			newState.isPushDetail = isPush
 			newState.detailData = (indexPath, data)
 		case .setError:

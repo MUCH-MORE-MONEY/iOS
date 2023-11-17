@@ -1,14 +1,14 @@
 //
-//  DateBottomSheetReactor.swift
+//  StatisticsDateBottomSheetReactor.swift
 //  MMM
 //
-//  Created by geonhyeong on 2023/09/19.
+//  Created by geonhyeong on 11/17/23.
 //
 
 import RxSwift
 import ReactorKit
 
-final class DateBottomSheetReactor: Reactor {
+final class StatisticsDateBottomSheetReactor: Reactor {
 	// 사용자의 액션
 	enum Action {
 		case setDate(Date)
@@ -36,13 +36,13 @@ final class DateBottomSheetReactor: Reactor {
 	}
 }
 //MARK: - Mutate, Reduce
-extension DateBottomSheetReactor {
+extension StatisticsDateBottomSheetReactor {
 	/// Action이 들어온 경우, 어떤 처리를 할건지 분기
 	func mutate(action: Action) -> Observable<Mutation> {
 		switch action {
 		case .setDate(let date):
 			return .concat([
-				provider.profileProvider.updateDate(to: date).map { _ in .dismiss }
+				provider.statisticsProvider.updateDate(to: date).map { _ in .dismiss },
 			])
 		case .dismiss:
 			return .just(.dismiss)
@@ -61,3 +61,4 @@ extension DateBottomSheetReactor {
 		return newState
 	}
 }
+

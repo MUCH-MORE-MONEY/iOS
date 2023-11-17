@@ -86,22 +86,26 @@ extension HomeViewController {
 	// MARK: - Private
 	/// 데이터 얻기
 	private func fetchData() {
-//		viewModel.isWillAppear = true // viewWillAppear 일 경우에만 Loading 표시
-		if calendar.scope == .month { // 월 단위
-			viewModel.getMonthlyList(calendar.currentPage.getFormattedYM())
-		} else { // 주 단위
-			if let dateAfter = Calendar.current.date(byAdding: .day, value: 6, to: calendar.currentPage) { // 해당 주의 마지막 날짜
-				let date = calendar.currentPage.getFormattedYM()
-				if date != dateAfter.getFormattedYM() { // 마지막 날짜 비교
-					viewModel.getWeeklyList(date, dateAfter.getFormattedYM())
+		DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+			self.viewModel.isWillAppear = true // viewWillAppear 일 경우에만 Loading 표시
+			if self.calendar.scope == .month { // 월 단위
+				self.viewModel.getMonthlyList(self.calendar.currentPage.getFormattedYM())
+			} else { // 주 단위
+				if let dateAfter = Calendar.current.date(byAdding: .day, value: 6, to: self.calendar.currentPage) { // 해당 주의 마지막 날짜
+					let date = self.calendar.currentPage.getFormattedYM()
+					if date != dateAfter.getFormattedYM() { // 마지막 날짜 비교
+						self.viewModel.getWeeklyList(date, dateAfter.getFormattedYM())
+					}
 				}
 			}
+			self.viewModel.getDailyList(self.viewModel.preDate.getFormattedYMD())
+			// 위젯
+			self.viewModel.getDailyList(Date().getFormattedYMD())
+			self.viewModel.getWeeklyList(Date().getFormattedYMD())
+			self.calendar.reloadData()
+			self.tableView.reloadData()
+			self.viewModel.isWillAppear = false
 		}
-		viewModel.getDailyList(viewModel.preDate.getFormattedYMD())
-		viewModel.getWeeklyList(viewModel.preDate.getFormattedYMD()) // 위젯
-		calendar.reloadData()
-		tableView.reloadData()
-//		viewModel.isWillAppear = false
 	}
 	
 	/// 달력 Picker Bottom Sheet

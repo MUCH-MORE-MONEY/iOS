@@ -91,8 +91,29 @@ extension PushSettingDetailViewController {
 extension PushSettingDetailViewController {
     private func presentBottomSheet(_ isPresent: Bool) {
         let dateString = Common.getCustomPushTime()
+        // FIXME: - 수정
+        print("푸시 데이트 : \(dateString)")
         
-        let vc = DateBottomSheetViewController(title: "시간 설정", type: .time, date: dateString.toTime() ?? Date(), height: 360, mode: .date, sheetMode: .drag, isDark: false)
+        let date = Date()
+        let todayDateFormatter = DateFormatter()
+        todayDateFormatter.dateFormat = "yyyy-MM-dd "
+        let todayDate = todayDateFormatter.string(from: date) + dateString
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm a"
+//        dateFormatter.locale = Locale(identifier: "ko_KR")
+//        dateFormatter.timeZone = TimeZone(abbreviation: "KST")
+
+//        
+//        
+//        if let date = dateFormatter.date(from: str) {
+//            print("Converted Date: \(date)")
+//        } else {
+//            print("Invalid date format")
+//        }
+        
+        
+        let vc = DateBottomSheetViewController(title: "시간 설정", type: .time, date: todayDate.toTime() ?? Date(), height: 360, mode: .date, sheetMode: .drag, isDark: false)
 		vc.reactor = DateBottomSheetReactor(provider: reactor.provider)
         self.present(vc, animated: true)
     }

@@ -55,6 +55,10 @@ final class DateBottomSheetViewController: BottomSheetViewController2, View {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
+        // FIXME: - 수정
+        
+        print(" viewdidload \(self.date)")
+        datePicker.date = date
 	}
 	
 	override func touchesBegan(_: Set<UITouch>, with _: UIEvent?) {

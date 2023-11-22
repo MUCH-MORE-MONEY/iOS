@@ -317,13 +317,13 @@ extension StatisticsActivityView {
 		}
 		
 		satisfactionTableView.snp.makeConstraints {
-			$0.top.equalTo(satisfactionLabel.snp.bottom).offset(UI.tableViewMargin.top)
+			$0.top.lessThanOrEqualTo(satisfactionLabel.snp.bottom).offset(UI.tableViewMargin.top)
 			$0.trailing.leading.equalToSuperview()
 			$0.bottom.equalToSuperview().offset(5) // 아래가 잘리는 현상 해결
 		}
 		
 		disappointingTableView.snp.makeConstraints {
-			$0.top.equalTo(disappointingLabel.snp.bottom).offset(UI.tableViewMargin.top)
+			$0.top.lessThanOrEqualTo(disappointingLabel.snp.bottom).offset(UI.tableViewMargin.top)
 			$0.trailing.leading.equalToSuperview()
 			$0.bottom.equalToSuperview().offset(5) // 아래가 잘리는 현상 해결
 		}

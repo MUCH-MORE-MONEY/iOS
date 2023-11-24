@@ -16,6 +16,7 @@ final class CategoryEditReactor: Reactor {
 		case didTapAddButton(CategoryHeader) // 카테고리 추가
 		case didTapUpperEditButton // 카테고리 유형 편집
 		case dragAndDrop(IndexPath, IndexPath)
+		case dragAndDropByEmpty
 		case dragBegin([IndexPath])
 		case dragEnd([IndexPath])
 		case endAddToast
@@ -29,6 +30,7 @@ final class CategoryEditReactor: Reactor {
 		case addItem(CategoryEdit)
 		case deleteItem(CategoryEdit)
 		case dragAndDrop(IndexPath, IndexPath)
+		case dragAndDropByEmpty
 		case addDrag([IndexPath])
 		case removeEmpty([IndexPath])
 		case setRemovedUpperCategory([String:String])
@@ -111,6 +113,8 @@ extension CategoryEditReactor {
 			])
 		case let .dragAndDrop(startIndex, destinationIndexPath):
 			return .just(.dragAndDrop(startIndex, destinationIndexPath))
+		case .dragAndDropByEmpty:
+			return .just(.dragAndDropByEmpty)
 		case let .dragBegin(indexPathList):
 			return .just(.addDrag(indexPathList))
 		case let .dragEnd(indexPathList):
@@ -208,29 +212,8 @@ extension CategoryEditReactor {
 			}
 		case let .dragAndDrop(sourceIndexPath, destinationIndexPath):
 			var isRefresh: Bool = false
-			
-			for s in newState.sectionInfo.section {
-				print(s.model.header.title)
-				for i in s.items {
-					print(i.title, i)
-				}
-				print()
-			}
-			
+
 			let sourceItem = newState.sectionInfo.section[sourceIndexPath.section].items[sourceIndexPath.row]
-			let count = newState.sectionInfo.section[sourceIndexPath.section].items.count
-			
-			// 목적지가 비어있지 않을때, Drag cell일 경우 비어 있음
-			print("여기", sourceIndexPath, newState.sectionInfo.section[destinationIndexPath.section].items.count, destinationIndexPath)
-//			if count == destinationIndexPath.row {
-//				newState.sectionInfo.section[sourceIndexPath.section].items.remove(at: sourceIndexPath.row)
-//				newState.sectionInfo.section[destinationIndexPath.section].items.insert(sourceItem, at: count)
-//				isRefresh = true
-//			} else {
-//				newState.sectionInfo.section[sourceIndexPath.section].items.remove(at: sourceIndexPath.row)
-//				newState.sectionInfo.section[destinationIndexPath.section].items.insert(sourceItem, at: destinationIndexPath.row)
-//			}
-			
 			newState.sectionInfo.section[sourceIndexPath.section].items.remove(at: sourceIndexPath.row)
 			newState.sectionInfo.section[destinationIndexPath.section].items.insert(sourceItem, at: destinationIndexPath.row)
 
@@ -259,20 +242,20 @@ extension CategoryEditReactor {
 				default: 		break
 				}
 			}
-			
-			print("-------------------------")
-			for s in newState.sectionInfo.section {
-				print(s.model.header.title)
-				for i in s.items {
-					print(i.title, i)
-				}
-				print()
-			}
-			
+
 			newState.sectionInfo.refresh = isRefresh
+		case .dragAndDropByEmpty:
+			if newState.sectionInfo.section[0].items.count == 1 {
+				let headerItem: CategoryEditItem = .header(.init(provider: provider, categoryEdit: CategoryEdit.getDummy()))
+				newState.sectionInfo.section[0].items.append(headerItem)
+			} else {
+				newState.sectionInfo.section[0].items.removeLast()
+			}
+			newState.sectionInfo.refresh = true
 		case let .addDrag(indexPathList):
 			for indexPath in indexPathList {
 				newState.sectionInfo.section[indexPath.section].items.append(.drag)
+				newState.sectionInfo.refresh = true
 			}
 		case let .removeEmpty(indexPathList):
 			for indexPath in indexPathList {

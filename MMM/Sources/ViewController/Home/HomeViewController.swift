@@ -12,6 +12,7 @@ import SnapKit
 import FSCalendar
 import Lottie
 import FirebaseAnalytics
+import UserNotifications
 
 final class HomeViewController: UIViewController {
 	// MARK: - Properties
@@ -41,7 +42,15 @@ final class HomeViewController: UIViewController {
 	private lazy var dailyErrorView = HomeErrorView()
 	private lazy var retryButton = UIButton()
 	private lazy var snackView = SnackView(viewModel: viewModel)
-	
+    // Nudge Properties
+    private enum nudgeMessage {
+        static let title = "💸 가계부 작성, 잊지 않도록 알려드려요!"
+        static let content = "원하는 시간대에 알림 받고\n꾸준히 자산을 관리하는 습관을 만들어 보세요"
+        static let confirm = "알림 설정"
+        static let cancel = "닫기"
+    }
+    
+    
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
@@ -59,6 +68,15 @@ final class HomeViewController: UIViewController {
 		}
 		
 		fetchData()
+        
+        // nudge
+//        if !Common.getCustomPuhsNudge() {
+//            showAlert(alertType: .canCancel,
+//                      titleText: nudgeMessage.title,
+//                      contentText: nudgeMessage.content,
+//                      cancelButtonText: nudgeMessage.cancel,
+//                      confirmButtonText: nudgeMessage.confirm)
+//        }
 	}
 	
     override func viewDidAppear(_ animated: Bool) {
@@ -643,4 +661,69 @@ extension HomeViewController: UITableViewDelegate {
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
 	}
+}
+
+extension HomeViewController: CustomAlertDelegate {
+    func didAlertCofirmButton() {
+        print("confirm")
+//        let vc = PushSettingDetailViewController()
+//        vc.reactor = PushSettingDetailReactor(provider: ServiceProvider.shared)
+//        
+//        navigationController?.pushViewController(vc, animated: true)
+        
+        UNUserNotificationCenter.current().getNotificationSettings { [weak self] settings in
+            guard let self = self else { return }
+            if settings.authorizationStatus == .authorized {
+                // 권한 있을 경우
+                DispatchQueue.main.async {
+                    self.moveToPushSettingDetailViewController()
+                }
+
+            } else { // 권한이 없을 경우 다시 권한을 요청함
+                self.showAlertToRedirectToSettings()
+            }
+        }
+    }
+    
+    func didAlertCacelButton() {
+        print("cancel")
+        Common.setCustomPushNudge(false)
+    }
+    
+    func handleTap() {
+        print("handle tap")
+        Common.setCustomPushNudge(false)
+    }
+    
+    func moveToPushSettingDetailViewController() {
+        let vc = PushSettingDetailViewController()
+        vc.reactor = PushSettingDetailReactor(provider: ServiceProvider.shared)
+
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func showAlertToRedirectToSettings() {
+        let alertController = UIAlertController(
+            title: "‘MMM’에서 알림을 보내고자 합니다.",
+            message: "경고, 사운드 및 아이콘 배지가 알림에 포함될 수 있습니다. 설정에서 이를 구성할 수 있습니다.",
+            preferredStyle: .alert
+        )
+
+        let settingsAction = UIAlertAction(title: "허용", style: .default) { [weak self] (_) in
+            // 권한 허용 후 vc 이동
+            guard let self = self else { return }
+            if let url = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url)
+            }
+//            self.moveToPushSettingDetailViewController()
+        }
+
+        let cancelAction = UIAlertAction(title: "허용 안함", style: .cancel, handler: nil)
+        alertController.addAction(settingsAction)
+        alertController.addAction(cancelAction)
+
+        DispatchQueue.main.async {
+            self.present(alertController, animated: true, completion: nil)
+        }
+    }
 }

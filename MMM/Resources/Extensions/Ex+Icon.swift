@@ -72,7 +72,9 @@ public extension MMMResource {
 		public static let iconStarOrange36 = UIImage(named: "iconStarOrange36", in: .main, compatibleWith: nil)
 		public static let iconStarOrange48 = UIImage(named: "iconStarOrange48", in: .main, compatibleWith: nil)
 		public static let iconStarYellow24 = UIImage(named: "iconStarYellow24", in: .main, compatibleWith: nil)
-		
+        
+
+
         // MARK: - TabBar Items
         public static let iconGroupActive = UIImage(named: "iconGroupActive", in: .main, compatibleWith: nil)
         public static let iconGroupInActive = UIImage(named: "iconGroupInActive", in: .main, compatibleWith: nil)
@@ -83,5 +85,7 @@ public extension MMMResource {
         public static let iconSeedActive = UIImage(named: "iconSeedActive", in: .main, compatibleWith: nil)
         public static let iconSeedInActive = UIImage(named: "iconSeedInActive", in: .main, compatibleWith: nil)
         public static let iconPlus = UIImage(named: "iconPlus", in: .main, compatibleWith: nil)
+        public static let iconChallengeActive = UIImage(named: "iconChallengeActive", in: .main, compatibleWith: nil)
+        public static let iconChallengeInactive = UIImage(named: "iconChallengeInactive", in: .main, compatibleWith: nil)
 	}
 }

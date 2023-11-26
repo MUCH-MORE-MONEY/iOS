@@ -440,6 +440,9 @@ extension AddDetailViewController {
     
     override func setAttribute() {
         super.setAttribute()
+        
+        titleTextFeild.becomeFirstResponder() // 키보드 보이기 및 포커스 주기
+        
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         

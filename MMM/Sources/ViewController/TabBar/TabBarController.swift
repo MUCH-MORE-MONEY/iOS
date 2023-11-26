@@ -110,7 +110,7 @@ extension TabBarController {
         plusVC.tabBarItem = UITabBarItem()
         
 		let challengeVC = ChallengeViewController()
-        challengeVC.tabBarItem = UITabBarItem(title: "챌린지", image: R.Icon.iconMoneyInActive, selectedImage: R.Icon.iconMoneyActive)
+        challengeVC.tabBarItem = UITabBarItem(title: "챌린지", image: R.Icon.iconChallengeInactive, selectedImage: R.Icon.iconChallengeActive)
 		challengeVC.reactor = ChallengeReactor()
 		
 		let profileVC = ProfileViewController()

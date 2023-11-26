@@ -30,7 +30,10 @@ final class DetailTimeSettingView: UIView {
 // MARK: - Actions
 extension DetailTimeSettingView {
     func configure(_ dateTitle: String) {
-        timeLabel.text = dateTitle
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.timeLabel.text = dateTitle
+        }
     }
 }
 

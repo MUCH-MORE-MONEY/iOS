@@ -8,9 +8,11 @@
 import UIKit
 
 // Custom Alert의 버튼의 액션을 처리하는 Delegate
+@objc
 protocol CustomAlertDelegate: AnyObject {
 	func didAlertCofirmButton()   // confirm button event
 	func didAlertCacelButton()     // cancel button event
+    @objc optional func handleTap()
 }
 
 extension CustomAlertDelegate where Self: UIViewController {
@@ -147,7 +149,7 @@ extension CustomAlertViewController {
 	
 	// 배경 클릭
 	@objc func handleTap(sender: UITapGestureRecognizer) {
-		self.dismiss(animated: true)
+        self.dismiss(animated: true) { self.delegate?.handleTap?() }
 	}
 }
 //MARK: - Attribute & Hierarchy & Layouts

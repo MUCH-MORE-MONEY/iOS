@@ -41,6 +41,7 @@ extension DateBottomSheetReactor {
 	func mutate(action: Action) -> Observable<Mutation> {
 		switch action {
 		case .setDate(let date):
+            Common.setCustomPusDate(date)
 			return .concat([
 				provider.profileProvider.updateDate(to: date).map { _ in .dismiss }
 			])

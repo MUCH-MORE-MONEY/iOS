@@ -83,7 +83,7 @@ extension ChallengeViewController {
 		}
 		
 		titleLabel = titleLabel.then {
-			let attrString = NSMutableAttributedString(string: "경제목표를 달성할 수 있는 서비스를 고민중이에요\n혹시 mmm에 원하시는 기능이 있으신가요?")
+			let attrString = NSMutableAttributedString(string: "여러분의 경제 습관 개선을 도울\n업데이트를 고민중이에요")
 			let paragraphStyle = NSMutableParagraphStyle()
 			paragraphStyle.lineSpacing = 4
 			attrString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, attrString.length))
@@ -100,7 +100,7 @@ extension ChallengeViewController {
 		}
 		
 		suggestionButton = suggestionButton.then {
-			$0.setTitle("+ 기능 제안하기", for: .normal)
+			$0.setTitle("+ 원하는 기능 제안하기", for: .normal)
 			$0.titleLabel?.font = R.Font.body1
 			$0.backgroundColor = R.Color.black
 			$0.setTitleColor(R.Color.white.withAlphaComponent(0.7), for: .highlighted)

@@ -539,7 +539,7 @@ extension CategoryEditViewController: UICollectionViewDragDelegate {
 		guard let reactor = reactor else { return }
 		var addItems = [IndexPath]()
 		let data = reactor.currentState.sectionInfo.section
-
+		
 		if isDrag {
 			(0..<data.count).forEach { index in
 				if data[index].items.count == 1 {
@@ -621,12 +621,12 @@ extension CategoryEditViewController: UICollectionViewDropDelegate {
 		collectionView.performBatchUpdates { [weak self] in
 			self?.move(sourceIndexPath: sourceIndexPath, destinationIndexPath: destinationIndexPath, collectionView: collectionView)
 		} completion: { finish in
-			coordinator.drop(sourceItem.dragItem, toItemAt: destinationIndexPath)
-			
-			let cell = self.dataSource.sectionModels[destinationIndexPath.section].items[destinationIndexPath.row]
-			if cell != .drag {
-				// 끝난뒤 변경
+			// 같은 Section의 Drag Cell에 넣을 경우
+			if self.dataSource.sectionModels[destinationIndexPath.section].items.count != destinationIndexPath.row {
+				coordinator.drop(sourceItem.dragItem, toItemAt: destinationIndexPath)
 				self.reactor?.action.onNext(.dragAndDrop(sourceIndexPath, destinationIndexPath))
+			} else {
+				self.reactor?.action.onNext(.dragAndDropByEmpty)
 			}
 		}
 	}

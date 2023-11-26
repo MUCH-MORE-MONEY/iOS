@@ -12,6 +12,7 @@ import SnapKit
 import FSCalendar
 import Lottie
 import FirebaseAnalytics
+import UserNotifications
 
 final class HomeViewController: UIViewController {
 	// MARK: - Properties
@@ -665,13 +666,64 @@ extension HomeViewController: UITableViewDelegate {
 extension HomeViewController: CustomAlertDelegate {
     func didAlertCofirmButton() {
         print("confirm")
+//        let vc = PushSettingDetailViewController()
+//        vc.reactor = PushSettingDetailReactor(provider: ServiceProvider.shared)
+//        
+//        navigationController?.pushViewController(vc, animated: true)
+        
+        UNUserNotificationCenter.current().getNotificationSettings { [weak self] settings in
+            guard let self = self else { return }
+            if settings.authorizationStatus == .authorized {
+                // 권한 있을 경우
+                DispatchQueue.main.async {
+                    self.moveToPushSettingDetailViewController()
+                }
+
+            } else { // 권한이 없을 경우 다시 권한을 요청함
+                self.showAlertToRedirectToSettings()
+            }
+        }
     }
     
     func didAlertCacelButton() {
         print("cancel")
+        Common.setCustomPushNudge(false)
     }
     
     func handleTap() {
         print("handle tap")
+        Common.setCustomPushNudge(false)
+    }
+    
+    func moveToPushSettingDetailViewController() {
+        let vc = PushSettingDetailViewController()
+        vc.reactor = PushSettingDetailReactor(provider: ServiceProvider.shared)
+
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func showAlertToRedirectToSettings() {
+        let alertController = UIAlertController(
+            title: "‘MMM’에서 알림을 보내고자 합니다.",
+            message: "경고, 사운드 및 아이콘 배지가 알림에 포함될 수 있습니다. 설정에서 이를 구성할 수 있습니다.",
+            preferredStyle: .alert
+        )
+
+        let settingsAction = UIAlertAction(title: "허용", style: .default) { [weak self] (_) in
+            // 권한 허용 후 vc 이동
+            guard let self = self else { return }
+            if let url = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url)
+            }
+//            self.moveToPushSettingDetailViewController()
+        }
+
+        let cancelAction = UIAlertAction(title: "허용 안함", style: .cancel, handler: nil)
+        alertController.addAction(settingsAction)
+        alertController.addAction(cancelAction)
+
+        DispatchQueue.main.async {
+            self.present(alertController, animated: true, completion: nil)
+        }
     }
 }

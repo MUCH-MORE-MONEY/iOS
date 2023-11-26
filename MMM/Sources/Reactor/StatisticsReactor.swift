@@ -55,6 +55,7 @@ final class StatisticsReactor: Reactor {
 	let initialState: State
 	let provider: ServiceProviderProtocol
 	var currentPage: Int = 0
+	var totalPage: Int = 0
 	
 	init(provider: ServiceProviderProtocol) {
 		self.initialState = State()
@@ -155,8 +156,8 @@ extension StatisticsReactor {
 					break
 				}
 			}
-		case let .pagenation(list, nextIndex):
-			if nextIndex == -1 { break }
+		case let .pagenation(list, totalPage):
+			self.totalPage = totalPage
 			newState.activityList += list
 		case let .fetchCategoryBar(list, type):
 			switch type {
@@ -204,6 +205,7 @@ extension StatisticsReactor {
 	func getStatisticsList(_ date: Date, _ type: String, _ reset: Bool = false) -> Observable<Mutation> {
 		return MMMAPIService().getStatisticsList(dateYM: date.getFormattedYM(), valueScoreDvcd: type, limit: 15, offset: 0)
 			.map { (response, error) -> Mutation in
+				self.totalPage = response.totalPageCnt
 				return .fetchList(response.selectListMonthlyByValueScoreOutputDto, type, reset)
 			}
 			.catchAndReturn(.setError)
@@ -211,13 +213,15 @@ extension StatisticsReactor {
 	
 	// Pagenation
 	func getMoreStatisticsList() -> Observable<Mutation> {
+		guard currentPage < totalPage else { return .empty() }
+		
 		let date = currentState.date.getFormattedYM()
 		let type = currentState.satisfaction.id
 		currentPage += 1
 		
-		return MMMAPIService().getStatisticsList(dateYM: date, valueScoreDvcd: type, limit: 15, offset: currentPage)
+		return MMMAPIService().getStatisticsList(dateYM: date, valueScoreDvcd: type, limit: 15, offset: 15 * currentPage)
 			.map { (response, error) -> Mutation in
-				return .pagenation(response.selectListMonthlyByValueScoreOutputDto, response.nextOffset)
+				return .pagenation(response.selectListMonthlyByValueScoreOutputDto, response.totalPageCnt)
 			}
 			.catchAndReturn(.setError)
 	}

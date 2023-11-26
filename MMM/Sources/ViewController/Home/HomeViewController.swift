@@ -670,4 +670,8 @@ extension HomeViewController: CustomAlertDelegate {
     func didAlertCacelButton() {
         print("cancel")
     }
+    
+    func handleTap() {
+        print("handle tap")
+    }
 }

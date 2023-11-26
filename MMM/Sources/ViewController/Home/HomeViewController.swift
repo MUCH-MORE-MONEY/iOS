@@ -105,7 +105,7 @@ extension HomeViewController {
 	/// 데이터 얻기
 	private func fetchData() {
 		// 3초뒤 변경
-		DispatchQueue.main.asyncAfter(deadline: .now()) {
+		DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
 			self.viewModel.isWillAppear = true // viewWillAppear 일 경우에만 Loading 표시
 			if self.calendar.scope == .month { // 월 단위
 				self.viewModel.getMonthlyList(self.calendar.currentPage.getFormattedYM())

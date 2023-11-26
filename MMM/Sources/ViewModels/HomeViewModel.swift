@@ -66,7 +66,7 @@ final class HomeViewModel {
 }
 //MARK: Action
 extension HomeViewModel {
-	func getDailyList(_ dateYMD: String) {
+	func getDailyList(_ dateYMD: String, isWidget: Bool = false) {
 		guard let date = Int(dateYMD), let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
 		
 		isDailyLoading = true // 로딩 시작
@@ -88,7 +88,7 @@ extension HomeViewModel {
 			}, receiveValue: { [weak self] response in
 				guard let self = self, let dailyList = response.selectListDailyOutputDto else { return }
 //				print(#file, #function, #line, dailyList)
-				self.dailyList = dailyList
+				if !isWidget { self.dailyList = dailyList }
 				
 				// 이번 달만 위젯에 보여줌
 				if dateYMD == Date().getFormattedYMD() {

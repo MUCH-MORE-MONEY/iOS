@@ -95,6 +95,7 @@ enum Common {
         case customPushDate
         case customPushText
         case customPushWeekList
+        case customPushNudge
     }
     
     
@@ -163,6 +164,10 @@ enum Common {
         UserDefaults.standard.setValue(date, forKey: self.keys.customPushDate.rawValue)
     }
     
+    static func setCustomPushNudge(_ isFirst: Bool) {
+        UserDefaults.standard.setValue(isFirst, forKey: self.keys.customPushNudge.rawValue)
+    }
+    
     // MARK: - Get
     static func getNewsPushSwitch() -> Bool {
         UserDefaults.standard.bool(forKey: self.keys.newsPushSwitch.rawValue)
@@ -205,5 +210,9 @@ enum Common {
         guard let defaultDate = calendar.date(from: dateComponents) else { return Date() }
         
         return UserDefaults.standard.object(forKey: self.keys.customPushDate.rawValue) as? Date ?? defaultDate
+    }
+    
+    static func getCustomPuhsNudge() -> Bool {
+        return UserDefaults.standard.bool(forKey: self.keys.customPushNudge.rawValue)
     }
 }

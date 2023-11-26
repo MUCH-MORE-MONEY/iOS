@@ -41,7 +41,15 @@ final class HomeViewController: UIViewController {
 	private lazy var dailyErrorView = HomeErrorView()
 	private lazy var retryButton = UIButton()
 	private lazy var snackView = SnackView(viewModel: viewModel)
-	
+    // Nudge Properties
+    private enum nudgeMessage {
+        static let title = "💸 가계부 작성, 잊지 않도록 알려드려요!"
+        static let content = "원하는 시간대에 알림 받고\n꾸준히 자산을 관리하는 습관을 만들어 보세요"
+        static let confirm = "알림 설정"
+        static let cancel = "닫기"
+    }
+    
+    
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
@@ -59,6 +67,15 @@ final class HomeViewController: UIViewController {
 		}
 		
 		fetchData()
+        
+        // nudge
+        if !Common.getCustomPuhsNudge() {
+            showAlert(alertType: .canCancel,
+                      titleText: nudgeMessage.title,
+                      contentText: nudgeMessage.content,
+                      cancelButtonText: nudgeMessage.cancel,
+                      confirmButtonText: nudgeMessage.confirm)
+        }
 	}
 	
     override func viewDidAppear(_ animated: Bool) {
@@ -643,4 +660,14 @@ extension HomeViewController: UITableViewDelegate {
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
 	}
+}
+
+extension HomeViewController: CustomAlertDelegate {
+    func didAlertCofirmButton() {
+        print("confirm")
+    }
+    
+    func didAlertCacelButton() {
+        print("cancel")
+    }
 }

@@ -48,10 +48,6 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
 	private var index: Int
 	private var cancellable = Set<AnyCancellable>()
 	
-	private var navigationTitle: String {
-		return date.getFormattedDate(format: "M월 dd일 경제활동")
-	}
-	
     init(homeViewModel: HomeViewModel, index: Int) {
 		self.homeViewModel = homeViewModel
         self.index = index
@@ -76,7 +72,6 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
         // 날짜가 변경되었을 경우 다른 dailyList를 보여줘야함
         if homeDetailViewModel.isDateChanged {
             self.date = homeDetailViewModel.changedDate
-            title = date.getFormattedDate(format: "M월 dd일 경제활동")
             
             homeDetailViewModel.fetchDailyList(date.getFormattedYMD()) { [weak self] in
                 guard let self = self else { return }
@@ -149,6 +144,27 @@ extension DetailViewController {
             .sinkOnMainThread { [weak self] value in
                 guard let self = self, let value = value else { return }
                 showLoadingView()
+                
+                let originalString = value.createAt
+
+                // 원본 문자열을 날짜로 변환하기 위한 DateFormatter 설정
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyyMMdd" // 원본 문자열의 형식
+
+                // 문자열을 Date로 변환
+                if let date = dateFormatter.date(from: originalString) {
+                    // 새로운 형식으로 문자열을 변환하기 위한 DateFormatter 설정
+                    dateFormatter.dateFormat = "MM월 dd일"
+                    let newString = dateFormatter.string(from: date) + " 경제활동"
+                    self.title = newString
+                    print(newString) // 결과: "11월 10일 경제활동"
+                } else {
+                    print("날짜 변환 실패")
+                }
+
+                
+//                M월 dd일 경제활동
+                
                 self.titleLabel.text = value.title
                 self.activityType.text = self.homeDetailViewModel.detailActivity?.type == "01" ? "지출" : "수입"
                 self.activityType.backgroundColor = self.homeDetailViewModel.detailActivity?.type == "01" ? R.Color.orange500 : R.Color.blue500
@@ -194,7 +210,6 @@ extension DetailViewController {
     
 	override func setAttribute() {
 		super.setAttribute()
-		title = navigationTitle
 		editActivityButtonItem = editActivityButtonItem.then {
 			$0.customView = editButton
 		}

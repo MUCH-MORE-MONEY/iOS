@@ -56,7 +56,8 @@ final class StatisticsReactor: Reactor {
 	let provider: ServiceProviderProtocol
 	var currentPage: Int = 0
 	var totalPage: Int = 0
-	
+    var totalItem: Int = 0
+    
 	init(provider: ServiceProviderProtocol) {
 		self.initialState = State()
 		self.provider = provider

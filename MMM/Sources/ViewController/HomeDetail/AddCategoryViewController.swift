@@ -24,6 +24,7 @@ final class AddCategoryViewController: UIViewController {
     private lazy var manageButton = UIButton()
     private lazy var checkButton = UIButton()
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private lazy var shadowView = UIView()
     
     // 카테고리 데이터가 없을 경우를 위한 image
     private lazy var emptyImageView = UIImageView()
@@ -51,6 +52,15 @@ final class AddCategoryViewController: UIViewController {
         view.endEditing(true)
 //        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
 //        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        shadowView.addTopShadow(color: R.Color.black,
+                                opacity: 0.5,
+                                offset: CGSize(width: 0, height: 2),
+                                radius: 5)
     }
 }
 
@@ -189,7 +199,7 @@ private extension AddCategoryViewController {
 //            $0.collectionViewLayout = layout()
             let layer = LeftAlignedCollectionViewFlowLayout()
             layer.sectionInset = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
-            
+            $0.showsVerticalScrollIndicator = false
             $0.collectionViewLayout = layer
             $0.backgroundColor = R.Color.white
             $0.delegate = self
@@ -218,13 +228,17 @@ private extension AddCategoryViewController {
             $0.textColor = R.Color.gray400
             $0.textAlignment = .center
         }
+        
+        shadowView = shadowView.then {
+            $0.clipsToBounds = false
+        }
     }
     
     private func setLayout() {
         stackView.addArrangedSubviews(titleLabel, buttonStackView)
         buttonStackView.addArrangedSubviews(manageButton, checkButton)
         emptyStackView.addArrangedSubviews(emptyImageView, emptyLabel)
-        view.addSubviews(stackView, collectionView, emptyStackView)
+        view.addSubviews(stackView, collectionView, shadowView, emptyStackView)
         
         
         stackView.snp.makeConstraints {
@@ -237,7 +251,13 @@ private extension AddCategoryViewController {
             $0.top.equalTo(stackView.snp.bottom).offset(24)
             $0.left.equalToSuperview().offset(24)
             $0.right.equalToSuperview().offset(-24)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide)
+            $0.bottom.equalToSuperview().offset(-58)
+        }
+        
+        shadowView.snp.makeConstraints {
+            $0.top.equalTo(collectionView.snp.bottom)
+            $0.left.right.equalToSuperview()
+            $0.bottom.equalToSuperview()
         }
         
         emptyStackView.snp.makeConstraints {
@@ -298,6 +318,24 @@ extension AddCategoryViewController: UICollectionViewDataSource, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         addCategoryViewModel.selectedCategoryID = addCategoryViewModel.categoryList[indexPath.section].lowwer[indexPath.item].id
         addCategoryViewModel.selectedCategoryName = addCategoryViewModel.categoryList[indexPath.section].lowwer[indexPath.item].title
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard let collectionView = scrollView as? UICollectionView else { return }
+
+        let offsetY = collectionView.contentOffset.y
+        let contentHeight = collectionView.contentSize.height
+        let frameHeight = collectionView.frame.size.height
+        
+        // 하단에 도달했는지 여부 확인
+        if offsetY > contentHeight - frameHeight - 1 {
+            // 스크롤이 거의 끝에 도달했을 때
+            shadowView.isHidden = true
+        } else {
+            // 그렇지 않으면 그림자 제거
+//            gradientLayer.isHidden = true
+            shadowView.isHidden = false
+        }
     }
 }
 

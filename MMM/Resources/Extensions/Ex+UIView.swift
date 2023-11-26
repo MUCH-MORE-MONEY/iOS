@@ -137,4 +137,32 @@ extension UIView {
         self.layer.cornerRadius = 8
         self.clipsToBounds = true
     }
+    
+    func addTopShadow(color: UIColor, opacity: Float, offset: CGSize, radius: CGFloat) {
+        self.layer.shadowColor = color.cgColor
+        self.layer.shadowOpacity = opacity
+        self.layer.shadowOffset = offset
+        self.layer.shadowRadius = radius
+
+        let shadowPath = UIBezierPath()
+        shadowPath.move(to: CGPoint(x: 0, y: 0))
+        shadowPath.addLine(to: CGPoint(x: self.bounds.width, y: 0))
+        shadowPath.addLine(to: CGPoint(x: self.bounds.width, y: -4))
+        shadowPath.addLine(to: CGPoint(x: 0, y: -4))
+        shadowPath.close()
+
+        self.layer.shadowPath = shadowPath.cgPath
+    }
+    
+    func addTopShadow2() {
+        self.layer.shadowOpacity = 0.7
+        self.layer.shadowOffset = CGSize(width: 0, height: -10)
+        self.layer.shadowRadius = 4
+        self.layer.masksToBounds = false
+    }
+    
+    func addTopShawdow3() {
+        self.layer.masksToBounds = false
+        self.layer.applyShadow()
+    }
 }

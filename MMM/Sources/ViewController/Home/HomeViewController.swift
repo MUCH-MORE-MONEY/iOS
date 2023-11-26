@@ -70,13 +70,13 @@ final class HomeViewController: UIViewController {
 		fetchData()
         
         // nudge
-        if !Common.getCustomPuhsNudge() {
-            showAlert(alertType: .canCancel,
-                      titleText: nudgeMessage.title,
-                      contentText: nudgeMessage.content,
-                      cancelButtonText: nudgeMessage.cancel,
-                      confirmButtonText: nudgeMessage.confirm)
-        }
+//        if !Common.getCustomPuhsNudge() {
+//            showAlert(alertType: .canCancel,
+//                      titleText: nudgeMessage.title,
+//                      contentText: nudgeMessage.content,
+//                      cancelButtonText: nudgeMessage.cancel,
+//                      confirmButtonText: nudgeMessage.confirm)
+//        }
 	}
 	
     override func viewDidAppear(_ animated: Bool) {

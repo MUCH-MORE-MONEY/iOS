@@ -54,6 +54,13 @@ extension StatisticsSatisfactionView {
 		self.titleLabel.text = title
 		self.scoreLabel.text = score
 	}
+	
+	func isLoading(_ isLoading: Bool) {
+		titleLabel.isHidden = isLoading
+		starImageView.isHidden = isLoading
+		scoreLabel.isHidden = isLoading
+		arrowImageView.isHidden = isLoading
+	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
 extension StatisticsSatisfactionView {

@@ -71,7 +71,7 @@ extension CategoryDetailViewController {
 		// TableView cell select
 		Observable.zip(
 			tableView.rx.itemSelected,
-			tableView.rx.modelSelected(EconomicActivity.self)
+			tableView.rx.modelSelected(CategoryDetailItem.self)
 		)
 		.map { .selectCell($0, $1) }
 		.bind(to: reactor.action)
@@ -121,8 +121,10 @@ extension CategoryDetailViewController {
 			.subscribe(onNext: { [weak self] loading in
 				guard let self = self else { return }
 				
+				// Loading 중 scroll 금지
+				self.tableView.isUserInteractionEnabled = !loading
+				
 				if loading && !self.loadView.isPresent {
-					self.tableView.isUserInteractionEnabled = false // Loading 중 scroll 금지
 					self.loadView.play()
 					self.loadView.isPresent = true
 					self.loadView.modalPresentationStyle = .overFullScreen

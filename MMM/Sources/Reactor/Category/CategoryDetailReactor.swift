@@ -11,7 +11,7 @@ final class CategoryDetailReactor: Reactor {
 	// 사용자의 액션
 	enum Action {
 		case loadData
-		case selectCell(IndexPath, EconomicActivity)
+		case selectCell(IndexPath, CategoryDetailItem)
 	}
 	
 	// 처리 단위
@@ -28,7 +28,7 @@ final class CategoryDetailReactor: Reactor {
 		var type: String
 		var section: Category
 		var categoryLowwer: CategoryLowwer
-		var list: [CategoryDetailSectionModel] = [.init(model: "", items: [.skeleton]), .init(model: "", items: [.skeleton]), .init(model: "", items: [.skeleton]), .init(model: "", items: [.skeleton])]
+		var list: [CategoryDetailSectionModel] = [.init(model: "", items: CategoryDetailItem.getSkeleton())]
 		var detailData: (IndexPath: IndexPath, info: EconomicActivity)?
 		var isPushDetail = false
 		var isLoading = true // 로딩
@@ -61,10 +61,12 @@ extension CategoryDetailReactor {
 				loadData(CategoryDetailListReqDto(dateYM: currentState.date.getFormattedYM(), economicActivityCategoryCd: category.id, economicActivityDvcd: currentState.type)),
 				.just(.setLoading(false))
 			])
-		case .selectCell(let indexPath, let data):
+		case let .selectCell(indexPath, data):
+			guard let item = data.item else { return .empty() }
+			
 			return .concat([
-				.just(.pushDetail(indexPath, data, true)),
-				.just(.pushDetail(indexPath, data, false))
+				.just(.pushDetail(indexPath, item, true)),
+				.just(.pushDetail(indexPath, item, false))
 			])
 		}
 	}

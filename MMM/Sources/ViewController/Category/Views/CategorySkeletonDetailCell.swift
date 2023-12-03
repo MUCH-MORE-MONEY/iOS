@@ -33,7 +33,7 @@ final class CategorySkeletonDetailCell: BaseTableViewCell {
 		super.layoutSubviews()
 		
 		thumbnailLayer.frame = thumbnailImageView.bounds
-		thumbnailLayer.cornerRadius = thumbnailImageView.bounds.height / 2
+		thumbnailLayer.cornerRadius = 4
 		
 		starLayer.frame = starView.bounds
 		starLayer.cornerRadius = 4
@@ -70,12 +70,12 @@ extension CategorySkeletonDetailCell: SkeletonLoadable {
 	override func setAttribute() {
 		super.setAttribute()
 		
-		let thumbnailGroup = makeAnimationGroup()
-		thumbnailGroup.beginTime = 0.0
+		let firstGroup = makeAnimationGroup()
+		firstGroup.beginTime = 0.0
 		thumbnailLayer = thumbnailLayer.then {
 			$0.startPoint = CGPoint(x: 0, y: 0.5)
 			$0.endPoint = CGPoint(x: 1, y: 0.5)
-			$0.add(thumbnailGroup, forKey: "backgroundColor")
+			$0.add(firstGroup, forKey: "backgroundColor")
 		}
 		
 		thumbnailImageView = thumbnailImageView.then {
@@ -87,7 +87,7 @@ extension CategorySkeletonDetailCell: SkeletonLoadable {
 			$0.layer.addSublayer(thumbnailLayer)
 		}
 
-		let secondGroup = makeAnimationGroup(previousGroup: thumbnailGroup)
+		let secondGroup = makeAnimationGroup(previousGroup: firstGroup)
 		starLayer = starLayer.then {
 			$0.startPoint = CGPoint(x: 0, y: 0.5)
 			$0.endPoint = CGPoint(x: 1, y: 0.5)

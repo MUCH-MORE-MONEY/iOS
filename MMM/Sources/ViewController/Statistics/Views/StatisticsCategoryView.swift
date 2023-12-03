@@ -40,16 +40,41 @@ final class StatisticsCategoryView: BaseView, View {
 	private lazy var moreLabel = UILabel() 			 // 더보기
 	private lazy var payLabel = UILabel() 			 // 지출
 	private lazy var payRankLabel = MarqueeLabel() 	 // 지출 랭킹
-	private lazy var payBarView = UIView() 			 // 지출 Bar
 	private lazy var payBarStackView = UIStackView() // 지출 Bar
 	private lazy var payEmptyLabel = UILabel() 		 // 지출 Empty
 	
 	private lazy var earnLabel = UILabel() 			 // 수입
 	private lazy var earnRankLabel = MarqueeLabel()  // 수입 랭킹
-	private lazy var earnBarView = UIView() 		 // 수입 Bar
 	private lazy var earnBarStackView = UIStackView()// 지출 Bar
 	private lazy var earnEmptyLabel = UILabel() 	 // 수입 Empty
 
+	// 스켈레톤 UI
+	private lazy var payView = UIView()
+	private lazy var payLayer = CAGradientLayer()
+	private lazy var payBarView = UIView()
+	private lazy var payBarLayer = CAGradientLayer()
+
+	private lazy var earnView = UIView()
+	private lazy var earnLayer = CAGradientLayer()
+	private lazy var earnBarView = UIView()
+	private lazy var earnBarLayer = CAGradientLayer()
+
+	override func layoutSubviews() {
+		super.layoutSubviews()
+		
+		payLayer.frame = payView.bounds
+		payLayer.cornerRadius = 4
+		
+		payBarLayer.frame = payBarView.bounds
+		payBarLayer.cornerRadius = 4
+		
+		earnLayer.frame = earnView.bounds
+		earnLayer.cornerRadius = 4
+		
+		earnBarLayer.frame = earnBarView.bounds
+		earnBarLayer.cornerRadius = 4
+	}
+	
 	func bind(reactor: StatisticsReactor) {
 		bindState(reactor)
 		bindAction(reactor)
@@ -103,6 +128,16 @@ extension StatisticsCategoryView {
 		convertBar(data, type)
 	}
 	
+	func isLoading(_ isLoading: Bool) {
+		titleLabel.isHidden = isLoading
+		moreLabel.isHidden = isLoading
+		
+		payView.isHidden = !isLoading
+		payBarView.isHidden = !isLoading
+		earnView.isHidden = !isLoading
+		earnBarView.isHidden = !isLoading
+	}
+	
 	func convertBar(_ data: [CategoryBar], _ type: String) {
 		guard !data.isEmpty else { return }
 
@@ -117,6 +152,7 @@ extension StatisticsCategoryView {
 		
 		for (index, info) in data.map({ floor($0.ratio * unit) }).enumerated().reversed() {
 			let isSmall = info < minimumWidth
+			flag = flag || isSmall
 			var width = cnt == 1 ? barWidth : isSmall ? minimumWidth : info
 			let view = UIView()
 			view.layer.cornerRadius = data[index].ratio < 2.0 ? 1.7 : 2.61
@@ -137,7 +173,7 @@ extension StatisticsCategoryView {
 	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
-extension StatisticsCategoryView {
+extension StatisticsCategoryView: SkeletonLoadable {
 	// 초기 셋업할 코드들
 	override func setAttribute() {
 		super.setAttribute()
@@ -145,6 +181,55 @@ extension StatisticsCategoryView {
 		backgroundColor = R.Color.black
 		layer.cornerRadius = 10
 
+		let firstGroup = makeAnimationGroup(startColor: R.Color.gray900, endColor: R.Color.gray700)
+		firstGroup.beginTime = 0.0
+		let secondGroup = makeAnimationGroup(previousGroup: firstGroup, startColor: R.Color.gray900, endColor: R.Color.gray700)
+
+		payLayer = payLayer.then {
+			$0.startPoint = CGPoint(x: 0, y: 0.5)
+			$0.endPoint = CGPoint(x: 1, y: 0.5)
+			$0.add(firstGroup, forKey: "backgroundColor")
+		}
+		
+		earnLayer = earnLayer.then {
+			$0.startPoint = CGPoint(x: 0, y: 0.5)
+			$0.endPoint = CGPoint(x: 1, y: 0.5)
+			$0.add(firstGroup, forKey: "backgroundColor")
+		}
+		
+		payView = payView.then {
+			$0.frame = .init(origin: .zero, size: .init(width: 28, height: 24))
+			$0.layer.addSublayer(payLayer)
+		}
+		
+		earnView = earnView.then {
+			$0.frame = .init(origin: .zero, size: .init(width: 28, height: 24))
+			$0.layer.addSublayer(earnLayer)
+		}
+		
+		let width = UIScreen.width
+		payBarView = payBarView.then {
+			$0.frame = .init(origin: .zero, size: .init(width: width - 80 - 41, height: 20))
+			$0.layer.addSublayer(payBarLayer)
+		}
+		
+		earnBarView = earnBarView.then {
+			$0.frame = .init(origin: .zero, size: .init(width: width - 80 - 41, height: 20))
+			$0.layer.addSublayer(earnBarLayer)
+		}
+		
+		payBarLayer = payBarLayer.then {
+			$0.startPoint = CGPoint(x: 0, y: 0.5)
+			$0.endPoint = CGPoint(x: 1, y: 0.5)
+			$0.add(secondGroup, forKey: "backgroundColor")
+		}
+		
+		earnBarLayer = earnBarLayer.then {
+			$0.startPoint = CGPoint(x: 0, y: 0.5)
+			$0.endPoint = CGPoint(x: 1, y: 0.5)
+			$0.add(secondGroup, forKey: "backgroundColor")
+		}
+				
 		titleLabel = titleLabel.then {
 			$0.text = "카테고리"
 			$0.font = R.Font.body3
@@ -222,7 +307,7 @@ extension StatisticsCategoryView {
 	override func setHierarchy() {
 		super.setHierarchy()
 		
-		addSubviews(titleLabel, moreLabel, payLabel, payRankLabel, payBarStackView, payEmptyLabel, earnLabel, earnRankLabel, earnBarStackView, earnEmptyLabel)
+		addSubviews(titleLabel, moreLabel, payLabel, payRankLabel, payBarStackView, payEmptyLabel, earnLabel, earnRankLabel, earnBarStackView, earnEmptyLabel, payView, earnView, payBarView, earnBarView)
 	}
 	
 	override func setLayout() {
@@ -285,6 +370,36 @@ extension StatisticsCategoryView {
 			$0.leading.equalTo(earnLabel.snp.trailing).offset(12)
 			$0.trailing.equalToSuperview().inset(20)
 			$0.centerY.equalTo(earnLabel)
+		}
+		
+		// 스켈레톤 Layer
+		payView.snp.makeConstraints {
+			$0.top.equalToSuperview().inset(48)
+			$0.leading.equalToSuperview().inset(20)
+			$0.width.equalTo(28)
+			$0.height.equalTo(24)
+		}
+		
+		earnView.snp.makeConstraints {
+			$0.top.equalToSuperview().inset(96)
+			$0.leading.equalToSuperview().inset(20)
+			$0.width.equalTo(28)
+			$0.height.equalTo(24)
+		}
+		
+		let width = UIScreen.width
+		payBarView.snp.makeConstraints {
+			$0.top.equalToSuperview().inset(48)
+			$0.leading.equalToSuperview().inset(60)
+			$0.width.equalTo(width - 80 - 41)
+			$0.height.equalTo(20)
+		}
+		
+		earnBarView.snp.makeConstraints {
+			$0.top.equalToSuperview().inset(96)
+			$0.leading.equalToSuperview().inset(60)
+			$0.width.equalTo(width - 80 - 41)
+			$0.height.equalTo(20)
 		}
 	}
 }

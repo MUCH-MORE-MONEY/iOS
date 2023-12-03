@@ -1,17 +1,17 @@
 //
-//  CategoryDetailSectionModel.swift
+//  StatisticsSectionModel.swift
 //  MMM
 //
-//  Created by geonhyeong on 11/30/23.
+//  Created by geonhyeong on 12/3/23.
 //
 
 import Foundation
 import RxDataSources
 
 // AnimatableSectionModel: 자동으로 셀 애니메이션 관리
-typealias CategoryDetailSectionModel = AnimatableSectionModel<String, CategoryDetailItem>
+typealias StatisticsSectionModel = AnimatableSectionModel<String, StatisticsItem>
 
-enum CategoryDetailItem: IdentifiableType, Equatable {
+enum StatisticsItem: IdentifiableType, Equatable {
 	case base(EconomicActivity)
 	case skeleton
 
@@ -36,7 +36,7 @@ enum CategoryDetailItem: IdentifiableType, Equatable {
 	}
 	
 	// 비교를 위한 함수
-	static func == (lhs: CategoryDetailItem, rhs: CategoryDetailItem) -> Bool {
+	static func == (lhs: StatisticsItem, rhs: StatisticsItem) -> Bool {
 		lhs.identity == rhs.identity
 	}
 	

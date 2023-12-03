@@ -123,10 +123,8 @@ extension StatisticsReactor {
 				])
 			case let .updateSatisfaction(satisfaction):
 				return .concat([
-					.just(.setLoading(true)),
 					.just(.setSatisfaction(satisfaction)),
 					self.getStatisticsList(self.currentState.date, satisfaction.id),
-					.just(.setLoading(false))
 				])
 			}
 		}
@@ -142,14 +140,12 @@ extension StatisticsReactor {
 		case let .setList(list, type, reset):
 			newState.isInit = false
 			
-			// 비어 있지 않을 경우에만 처리
-			guard !list.isEmpty else {
-				newState.activityList = []
-				return newState
+			// 현재의 만족도에 대한 데이터를 호출 할때만 Update
+			if type == currentState.satisfaction.id {
+				newState.activityList = convertSectionModel(list)
 			}
-			
+
 			let data = list.prefix(3)
-			newState.activityList = convertSectionModel(list)
 			currentPage = 0
 			
 			// 월 변경인지 판별
@@ -243,6 +239,10 @@ extension StatisticsReactor {
 	}
 	
 	private func convertSectionModel(_ list: [EconomicActivity]) -> [StatisticsSectionModel] {
+		guard !list.isEmpty else  {
+			return []
+		}
+		
 		// Section Model로 변경
 		let items = list.map { category -> StatisticsItem in
 			return .base(category)

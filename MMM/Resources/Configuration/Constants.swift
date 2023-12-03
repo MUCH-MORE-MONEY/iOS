@@ -23,6 +23,7 @@ final class Constants {
 		case earnStandard // 수입
 		case payStandard // 지출
 		case statisticsDate // 현재 통계 날짜
+		case isInit // 첫 진입인지
     }
     
     /**

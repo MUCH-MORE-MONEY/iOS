@@ -10,10 +10,12 @@ import SnapKit
 import RxSwift
 import RxCocoa
 import ReactorKit
+import RxDataSources
 
 // 상속하지 않으려면 final 꼭 붙이기
 final class StatisticsViewController: BaseViewController, View {
 	typealias Reactor = StatisticsReactor
+	typealias DataSource = RxTableViewSectionedReloadDataSource<StatisticsSectionModel> // SectionModelType 채택
 
 	// MARK: - Constants
 	private enum UI {
@@ -24,27 +26,58 @@ final class StatisticsViewController: BaseViewController, View {
 	private var month: Date = Date()
 	private var satisfaction: Satisfaction = .low
 	private var timer: DispatchSourceTimer? // rank(순위)를 변경하는 시간
+	private lazy var dataSource: DataSource = RxTableViewSectionedReloadDataSource<StatisticsSectionModel>(configureCell: { dataSource, tv, indexPath, item -> UITableViewCell in
+		guard let reactor = self.reactor else { return .init() }
+		switch item {
+		case let .base(economicActivity):
+			let cell = tv.dequeueReusableCell(withIdentifier: HomeTableViewCell.className, for: indexPath) as! HomeTableViewCell
+
+			// 데이터 설정
+			cell.setData(data: economicActivity, last: indexPath.row == reactor.currentState.activityList.count - 1)
+			cell.backgroundColor = R.Color.gray100
+
+			let backgroundView = UIView()
+			backgroundView.backgroundColor = R.Color.gray400.withAlphaComponent(0.3)
+			cell.selectedBackgroundView = backgroundView
+			
+			return cell
+		case .skeleton:
+			let cell = tv.dequeueReusableCell(withIdentifier: CategorySkeletonDetailCell.className, for: indexPath) as! CategorySkeletonDetailCell
+			cell.backgroundColor = R.Color.gray100
+			cell.setData(last: indexPath.row == CategoryDetailItem.getSkeleton().count - 1)
+
+			cell.isUserInteractionEnabled = false
+
+			return cell
+		}
+	})
+
 
 	// MARK: - UI Components
 	private lazy var monthButtonItem = UIBarButtonItem()
 	private lazy var monthButton = SemanticContentAttributeButton()
 	private lazy var headerView = UIView()
 	private lazy var titleView = StatisticsTitleView()
-	private lazy var satisfactionView = StatisticsAverageView()
+	private lazy var averageView = StatisticsAverageView()
 	private lazy var categoryView = StatisticsCategoryView()
 	private lazy var activityView = StatisticsActivityView(timer: timer)
-	private lazy var selectView = StatisticsSatisfactionView() // 만족도 선택
+	private lazy var satisfactionView = StatisticsSatisfactionView() // 만족도 선택
 	private lazy var tableView = UITableView()
 	private lazy var refreshControl = RefreshControl()
 
 	// Empty & Error UI
 	private lazy var emptyView = HomeEmptyView()
 	
+	// Skeloton View
+	private lazy var monthLayer = CAGradientLayer()
+
     override func viewDidLoad() {
         super.viewDidLoad()
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
+		guard let reactor = reactor else { return }
+
 		super.viewWillAppear(animated)
 		// Root View인 NavigationView에 item 수정하기
 		if let navigationController = self.navigationController {
@@ -55,11 +88,25 @@ final class StatisticsViewController: BaseViewController, View {
 		}
 		
 		timer?.resume() // 타이머 재시작
+		
+		// 최초 진입시에만, 스켈레톤 Animation 동작
+		if reactor.currentState.isInit {
+			DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+				reactor.action.onNext(.loadData)
+			}
+		}
 	}
 	
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
 		timer?.suspend() // 일시정지
+	}
+	
+	override func viewDidLayoutSubviews() {
+		super.viewDidLayoutSubviews()
+		
+		monthLayer.frame = monthButton.bounds
+		monthLayer.cornerRadius = 4
 	}
 
 	func bind(reactor: StatisticsReactor) {
@@ -80,7 +127,7 @@ extension StatisticsViewController {
 		// TableView cell select
 		Observable.zip(
 			tableView.rx.itemSelected,
-			tableView.rx.modelSelected(EconomicActivity.self)
+			tableView.rx.modelSelected(StatisticsItem.self)
 		)
 		.map { .selectCell($0, $1) }
 		.bind(to: reactor.action)
@@ -116,7 +163,7 @@ extension StatisticsViewController {
 		reactor.state
 			.map { $0.average }
 			.distinctUntilChanged() // 중복값 무시
-			.bind(onNext: satisfactionView.setData) // 평균 변경
+			.bind(onNext: averageView.setData) // 평균 변경
 			.disposed(by: disposeBag)
 		
 		reactor.state
@@ -128,20 +175,8 @@ extension StatisticsViewController {
 		reactor.state
 			.map { $0.activityList }
 			.distinctUntilChanged() // 중복값 무시
-			.bind(to: tableView.rx.items) { tv, row, data in
-				let index = IndexPath(row: row, section: 0)
-				let cell = tv.dequeueReusableCell(withIdentifier: HomeTableViewCell.className, for: index) as! HomeTableViewCell
-				
-				// 데이터 설정
-				cell.setData(data: data, last: row == reactor.currentState.activityList.count - 1)
-				cell.backgroundColor = R.Color.gray100
-
-				let backgroundView = UIView()
-				backgroundView.backgroundColor = R.Color.gray400.withAlphaComponent(0.3)
-				cell.selectedBackgroundView = backgroundView
-				
-				return cell
-			}.disposed(by: disposeBag)
+			.bind(to: tableView.rx.items(dataSource: dataSource))
+			.disposed(by: disposeBag)
 		
 		// Empty case 여부 판별
 		reactor.state
@@ -150,6 +185,23 @@ extension StatisticsViewController {
 			.distinctUntilChanged { $0.1 } // 중복값 무시
 			.subscribe(onNext: { this, isEmpty in
 				this.tableView.tableFooterView = isEmpty ? this.emptyView : nil
+			})
+			.disposed(by: disposeBag)
+		
+		// 로딩 발생
+		reactor.state
+			.map { $0.isLoading }
+			.distinctUntilChanged() // 중복값 무시
+			.withUnretained(self)
+			.subscribe(onNext: { this, loading in
+				this.tableView.isUserInteractionEnabled = !loading
+				this.monthButton.isEnabled = !loading
+				this.monthLayer.isHidden = !loading
+				this.titleView.isLoading(loading)
+				this.averageView.isLoading(loading)
+				this.categoryView.isLoading(loading)
+				this.activityView.isLoading(loading)
+				this.satisfactionView.isLoading(loading)
 			})
 			.disposed(by: disposeBag)
 		
@@ -207,7 +259,7 @@ extension StatisticsViewController {
 
 		let index = data.IndexPath.row
 		let vc = DetailViewController(homeViewModel: HomeViewModel(), index: index) // 임시: HomeViewModel 생성
-		let economicActivityId = reactor.currentState.activityList.map { $0.id }
+		let economicActivityId = reactor.currentState.activityList[0].items.map { $0.identity as! String }
 		vc.setData(economicActivityId: economicActivityId, index: index, date: data.info.createAt.toDate() ?? Date())
 		
 		navigationController?.pushViewController(vc, animated: true)
@@ -247,12 +299,12 @@ extension StatisticsViewController {
 	
 	/// 만족도  변경
 	private func setSatisfaction(_ satisfaction: Satisfaction) {
-		selectView.setData(title: satisfaction.title, score: satisfaction.score)
+		satisfactionView.setData(title: satisfaction.title, score: satisfaction.score)
 		self.satisfaction = satisfaction
 	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
-extension StatisticsViewController {
+extension StatisticsViewController: SkeletonLoadable {
 	// 초기 셋업할 코드들
 	override func setup() {
 		setTimer()
@@ -272,11 +324,19 @@ extension StatisticsViewController {
 		headerView.backgroundColor = R.Color.gray900
 		categoryView.reactor = self.reactor // reactor 주입
 		activityView.reactor = self.reactor // reactor 주입
-		selectView.reactor = self.reactor // reactor 주입
+		satisfactionView.reactor = self.reactor // reactor 주입
+		
+		let firstGroup = makeAnimationGroup(startColor: R.Color.gray800, endColor: R.Color.gray600)
+		firstGroup.beginTime = 0.0
+		monthLayer = monthLayer.then {
+			$0.startPoint = CGPoint(x: 0, y: 0.5)
+			$0.endPoint = CGPoint(x: 1, y: 0.5)
+			$0.add(firstGroup, forKey: "backgroundColor")
+		}
 		
 		let view = UIView(frame: .init(origin: .zero, size: .init(width: 150, height: 30)))
 		monthButton = monthButton.then {
-			$0.frame = .init(origin: .init(x: 8, y: 0), size: .init(width: 150, height: 30))
+			$0.frame = .init(origin: .init(x: 8, y: 0), size: .init(width: 70, height: 30))
 			$0.setTitle(month.getFormattedDate(format: "M월"), for: .normal)
 			$0.setImage(R.Icon.arrowExpandMore16, for: .normal)
 			$0.setTitleColor(R.Color.white, for: .normal)
@@ -285,6 +345,7 @@ extension StatisticsViewController {
 			$0.titleLabel?.font = R.Font.h5
 			$0.contentHorizontalAlignment = .left
 			$0.imageEdgeInsets = .init(top: 0, left: 8, bottom: 0, right: 0) // 이미지 여백
+			$0.layer.addSublayer(monthLayer)
 		}
 		view.addSubview(monthButton)
 
@@ -300,6 +361,7 @@ extension StatisticsViewController {
 		
 		tableView = tableView.then {
 			$0.register(HomeTableViewCell.self)
+			$0.register(CategorySkeletonDetailCell.self)
 			$0.refreshControl = refreshControl
 			$0.tableHeaderView = headerView
 			$0.backgroundColor = R.Color.gray100
@@ -321,7 +383,7 @@ extension StatisticsViewController {
 		super.setHierarchy()
 		
 		view.addSubviews(tableView)
-		headerView.addSubviews(titleView, satisfactionView, categoryView, activityView, selectView)
+		headerView.addSubviews(titleView, averageView, categoryView, activityView, satisfactionView)
 	}
 	
 	override func setLayout() {
@@ -333,14 +395,14 @@ extension StatisticsViewController {
 			$0.trailing.equalToSuperview().inset(UI.sideMargin)
 		}
 		
-		satisfactionView.snp.makeConstraints {
+		averageView.snp.makeConstraints {
 			$0.top.equalTo(titleView.snp.bottom)
 			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 			$0.height.equalTo(64)
 		}
 
 		categoryView.snp.makeConstraints {
-			$0.top.equalTo(satisfactionView.snp.bottom).offset(16)
+			$0.top.equalTo(averageView.snp.bottom).offset(16)
 			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 			$0.height.equalTo(146)
 		}
@@ -351,7 +413,7 @@ extension StatisticsViewController {
 			$0.height.equalTo(100)
 		}
 
-		selectView.snp.makeConstraints {
+		satisfactionView.snp.makeConstraints {
 			$0.top.equalTo(activityView.snp.bottom).offset(58)
 			$0.leading.trailing.equalToSuperview()
 			$0.bottom.equalToSuperview()

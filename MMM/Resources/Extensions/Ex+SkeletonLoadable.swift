@@ -10,17 +10,17 @@ import UIKit
 protocol SkeletonLoadable {}
 
 extension SkeletonLoadable {
-	func makeAnimationGroup(previousGroup: CAAnimationGroup? = nil) -> CAAnimationGroup {
+	func makeAnimationGroup(previousGroup: CAAnimationGroup? = nil, startColor: UIColor = R.Color.gray200, endColor: UIColor = R.Color.gray400) -> CAAnimationGroup {
 		let animDuration: CFTimeInterval = 1.5
 		let anim1 = CABasicAnimation(keyPath: #keyPath(CAGradientLayer.backgroundColor))
-		anim1.fromValue = R.Color.gray200.cgColor
-		anim1.toValue = R.Color.gray400.cgColor
+		anim1.fromValue = startColor.cgColor
+		anim1.toValue = endColor.cgColor
 		anim1.duration = animDuration
 		anim1.beginTime = 0.0
 
 		let anim2 = CABasicAnimation(keyPath: #keyPath(CAGradientLayer.backgroundColor))
-		anim2.fromValue = R.Color.gray400.cgColor
-		anim2.toValue = R.Color.gray200.cgColor
+		anim2.fromValue = endColor.cgColor
+		anim2.toValue = startColor.cgColor
 		anim2.duration = animDuration
 		anim2.beginTime = anim1.beginTime + anim1.duration
 

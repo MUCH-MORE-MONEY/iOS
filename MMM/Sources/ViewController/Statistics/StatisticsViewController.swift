@@ -300,6 +300,7 @@ extension StatisticsViewController {
 		
 		tableView = tableView.then {
 			$0.register(HomeTableViewCell.self)
+			$0.register(StatisticsSkeletonTableViewCell.self)
 			$0.refreshControl = refreshControl
 			$0.tableHeaderView = headerView
 			$0.backgroundColor = R.Color.gray100

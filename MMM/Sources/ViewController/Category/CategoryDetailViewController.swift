@@ -39,7 +39,7 @@ final class CategoryDetailViewController: BaseViewControllerWithNav, View {
 		case .skeleton:
 			let cell = tv.dequeueReusableCell(withIdentifier: CategorySkeletonDetailCell.className, for: indexPath) as! CategorySkeletonDetailCell
 			cell.backgroundColor = R.Color.gray100
-			cell.setData(last: indexPath.section == reactor.currentState.list.count - 1)
+			cell.setData(last: indexPath.row == CategoryDetailItem.getSkeleton().count - 1)
 
 			cell.isUserInteractionEnabled = false
 
@@ -80,6 +80,7 @@ extension CategoryDetailViewController {
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: CategoryDetailReactor) {
+		
 		reactor.state
 			.map { $0.categoryLowwer }
 			.distinctUntilChanged() // 중복값 무시

@@ -140,6 +140,20 @@ extension DetailViewController {
             .sinkOnMainThread(receiveValue: didTapEditButton)
             .store(in: &cancellable)
         
+        let s = UISwipeGestureRecognizer.Direction.up
+        
+        view.gesturePublisher(.swipe(.init(), .left))
+            .sinkOnMainThread { _ in
+                print("swipe Left")
+            }
+            .store(in: &cancellable)
+        
+        view.gesturePublisher(.swipe(.init(), .right))
+            .sinkOnMainThread { _ in
+                print("swipe right")
+            }
+            .store(in: &cancellable)
+        
         homeDetailViewModel.$detailActivity
             .sinkOnMainThread { [weak self] value in
                 guard let self = self, let value = value else { return }

@@ -18,8 +18,16 @@ extension UIView {
     }
     
     enum GestureType {
+        enum SwipeDirection {
+            case up
+            case down
+            case left
+            case right
+        }
+        
+        
         case tap(UITapGestureRecognizer = .init())
-        case swipe(UISwipeGestureRecognizer = .init())
+        case swipe(UISwipeGestureRecognizer = .init(), SwipeDirection = .up)
         case longPress(UILongPressGestureRecognizer = .init())
         case pan(UIPanGestureRecognizer = .init())
         case pinch(UIPinchGestureRecognizer = .init())
@@ -28,7 +36,18 @@ extension UIView {
             switch self {
             case let .tap(tapGesture):
                 return tapGesture
-            case let .swipe(swipeGesture):
+            case let .swipe(swipeGesture, direction):
+                switch direction {
+                case .up:
+                    swipeGesture.direction = .up
+                case .down:
+                    swipeGesture.direction = .down
+                case .left:
+                    swipeGesture.direction = .left
+                case .right:
+                    swipeGesture.direction = .right
+                }
+                
                 return swipeGesture
             case let .longPress(longPressGesture):
                 return longPressGesture

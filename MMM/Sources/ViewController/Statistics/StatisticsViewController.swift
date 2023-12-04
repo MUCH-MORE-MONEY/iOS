@@ -131,7 +131,9 @@ extension StatisticsViewController {
 			.bind(to: tableView.rx.items) { tv, row, data in
 				let index = IndexPath(row: row, section: 0)
 				let cell = tv.dequeueReusableCell(withIdentifier: HomeTableViewCell.className, for: index) as! HomeTableViewCell
-				
+                
+                // MARK: - 여기서 data.rowNum을 추출할 수 있음
+//                print(data.rowNum)
 				// 데이터 설정
 				cell.setData(data: data, last: row == reactor.currentState.activityList.count - 1)
 				cell.backgroundColor = R.Color.gray100

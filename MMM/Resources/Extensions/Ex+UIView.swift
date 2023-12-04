@@ -173,15 +173,20 @@ extension UIView {
         self.layer.shadowPath = shadowPath.cgPath
     }
     
-    func addTopShadow2() {
-        self.layer.shadowOpacity = 0.7
-        self.layer.shadowOffset = CGSize(width: 0, height: -10)
-        self.layer.shadowRadius = 4
+    func addTopShadow() {
         self.layer.masksToBounds = false
+        self.addTopBorder(with: .black, andWidth: 0.5)
+        self.layer.applyShadow(alpha: 1, x: 0, y: 0, blur: 20)
+//        self.layer.shadowOffset = .init(width: 20, height: 20)
+//        self.layer.shadowOpacity = 0.5
     }
     
-    func addTopShawdow3() {
-        self.layer.masksToBounds = false
-        self.layer.applyShadow()
+    func addTopBorder(with color: UIColor?, andWidth borderWidth: CGFloat) {
+        let border = UIView()
+        border.backgroundColor = color
+        border.autoresizingMask = [.flexibleWidth, .flexibleBottomMargin]
+        border.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: borderWidth)
+        
+        self.addSubview(border)
     }
 }

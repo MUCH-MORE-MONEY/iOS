@@ -57,10 +57,11 @@ final class AddCategoryViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        shadowView.addTopShadow(color: R.Color.black,
-                                opacity: 0.5,
-                                offset: CGSize(width: 0, height: 2),
-                                radius: 5)
+        shadowView.addTopShadow()
+//        shadowView.addTopShadow(color: R.Color.black,
+//                                opacity: 0.5,
+//                                offset: CGSize(width: 0, height: 2),
+//                                radius: 5)
     }
 }
 
@@ -73,39 +74,6 @@ extension AddCategoryViewController {
             editViewModel.categoryName = addCategoryViewModel.selectedCategoryName
             editViewModel.categoryId = addCategoryViewModel.selectedCategoryID
         }
-    }
-    
-    private func layout() -> UICollectionViewCompositionalLayout {
-        let layout = UICollectionViewCompositionalLayout { (sectionIndex, environment) -> NSCollectionLayoutSection? in
-            // 아이템의 크기 정의
-            let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(100),
-                                                  heightDimension: .estimated(30))
-            let item = NSCollectionLayoutItem(layoutSize: itemSize)
-            
-            // 수평 그룹 생성
-            let groupSize = NSCollectionLayoutSize(widthDimension: .estimated(100),
-                                                   heightDimension: .estimated(30))
-            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-            group.interItemSpacing = NSCollectionLayoutSpacing.fixed(8) // 아이템 간의 간격
-            
-            // 섹션 생성 및 구성
-            let section = NSCollectionLayoutSection(group: group)
-            section.orthogonalScrollingBehavior = .none // 수평 스크롤 설정
-
-            section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 0, bottom: 20, trailing: 0) // 섹션 간격 설정
-            section.interGroupSpacing = 8 // 그룹 간의 간격
-            
-            // 섹션의 헤더 (제목) 설정
-            let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(24))
-            let headerElement = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize,
-                                                                            elementKind: UICollectionView.elementKindSectionHeader,
-                                                                            alignment: .top)
-            section.boundarySupplementaryItems = [headerElement]
-            
-            return section
-        }
-        
-        return layout
     }
 }
 
@@ -196,7 +164,6 @@ private extension AddCategoryViewController {
         }
         
         collectionView = collectionView.then {
-//            $0.collectionViewLayout = layout()
             let layer = LeftAlignedCollectionViewFlowLayout()
             layer.sectionInset = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
             $0.showsVerticalScrollIndicator = false
@@ -227,10 +194,6 @@ private extension AddCategoryViewController {
             $0.font = R.Font.body1
             $0.textColor = R.Color.gray400
             $0.textAlignment = .center
-        }
-        
-        shadowView = shadowView.then {
-            $0.clipsToBounds = false
         }
     }
     
@@ -339,7 +302,6 @@ extension AddCategoryViewController: UICollectionViewDataSource, UICollectionVie
     }
 }
 
-// MARK: - 이거 보면서 바꾸기
 // MARK: - UICollectionView DelegateFlowLayout
 extension AddCategoryViewController: UICollectionViewDelegateFlowLayout {
     // 지정된 섹션의 헤더뷰의 크기를 반환하는 메서드. 크기를 지정하지 않으면 화면에 보이지 않습니다.
@@ -350,7 +312,6 @@ extension AddCategoryViewController: UICollectionViewDelegateFlowLayout {
     // 지정된 섹션의 여백을 반환하는 메서드.
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 8, left: 0, bottom: 20, right: 0)
-        
     }
 
     // 지정된 섹션의 셀 사이의 최소간격을 반환하는 메서드.
@@ -365,9 +326,6 @@ extension AddCategoryViewController: UICollectionViewDelegateFlowLayout {
 
     // 지정된 셀의 크기를 반환하는 메서드
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        
-        
         // 셀의 내용이 될 텍스트
         let text = addCategoryViewModel.categoryList[indexPath.section].lowwer[indexPath.item].title
 

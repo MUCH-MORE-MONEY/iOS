@@ -108,12 +108,14 @@ extension PushSettingViewController {
         
         // 소식 일림 switch
         newsPushSwitch.rx.value
+            .distinctUntilChanged()
             .map { .newsPushSwitchToggle($0) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
         // 맞춤 알림 switch
         customPushSwitch.rx.value
+            .distinctUntilChanged()
             .map { .customPushSwitchToggle($0) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -131,6 +133,15 @@ extension PushSettingViewController {
             .map { _ in .didTapCustomPushTextSettingView }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+        // UserDefaults rx test
+//        UserDefaults.standard.observe(key: Common.keys.customPushSwitch.rawValue, defaultValue: false)
+//            .distinctUntilChanged()
+//            .subscribe { [weak self] _ in
+//                guard let self = self else { return }
+//                self.reactor.action.onNext(.checkNewsPush)
+//            }
+//            .disposed(by: disposeBag)
     }
     
     private func bindState(_ reactor: PushSettingReactor) {
@@ -196,6 +207,15 @@ extension PushSettingViewController {
                 }
             }
             .disposed(by: disposeBag)
+        
+        // userdeafult rxtest
+//        reactor.state
+//            .map { $0.newsPush }
+//            .distinctUntilChanged()
+//            .subscribe { value in
+//                print("변경됨")
+//            }
+//            .disposed(by: disposeBag)
     }
 }
 

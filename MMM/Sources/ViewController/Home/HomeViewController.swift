@@ -160,17 +160,24 @@ extension HomeViewController {
         // nudge
         // 최초한번 눌렀을 경우 && 넛징이 아직 표시안된경우
         
-        if Common.getSaveButtonTapped() && !Common.getCustomPuhsNudge() {
-            
-            Common.setCustomPushNudge(true)
-            
+//        if Common.getSaveButtonTapped() && !Common.getCustomPuhsNudge() {
+//            
+//            Common.setCustomPushNudge(true)
+//            
+//            showAlert(alertType: .canCancel,
+//                      titleText: nudgeMessage.title,
+//                      contentText: nudgeMessage.content,
+//                      cancelButtonText: nudgeMessage.cancel,
+//                      confirmButtonText: nudgeMessage.confirm)
+//                    
+//        }
+        
+        // test용 alert
             showAlert(alertType: .canCancel,
                       titleText: nudgeMessage.title,
                       contentText: nudgeMessage.content,
                       cancelButtonText: nudgeMessage.cancel,
                       confirmButtonText: nudgeMessage.confirm)
-                    
-        }
     }
 }
 //MARK: - Attribute & Hierarchy & Layouts
@@ -691,19 +698,35 @@ extension HomeViewController: CustomAlertDelegate {
                     self.moveToPushSettingDetailViewController()
                 }
 
-            } else { // 권한이 없을 경우 다시 권한을 요청함
+            } else { // 권한이 없을 경우 setting 앱으로 이동 -> 딥링크
+                
+                // 16 이상 부터 알림 설정 딥링크 이동 가능
+                if #available(iOS 16.0, *) {
+                    if let url = URL(string: UIApplication.openNotificationSettingsURLString) {
+                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                    }
+                    else { } // 딥링크 이동 실패
+                } else { // 16미만 버전은 앱 설정 까지만 이동 가능
+                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                    }
+                    else {  } // 딥링크 이동 실패
+                }
+                
+                
+                
                 self.showAlertToRedirectToSettings()
             }
         }
     }
     
     func didAlertCacelButton() {
-        print("cancel")
+//        print("cancel")
 //        Common.setCustomPushNudge(false)
     }
     
     func handleTap() {
-        print("handle tap")
+//        print("handle tap")
 //        Common.setCustomPushNudge(false)
     }
     

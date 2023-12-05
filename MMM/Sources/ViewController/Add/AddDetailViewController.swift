@@ -74,6 +74,11 @@ extension AddDetailViewController {
         self.loadView.modalPresentationStyle = .overFullScreen
         self.present(self.loadView, animated: false)
         
+        // 최초 한번 true로 바꿔줌 - nudge 용 로직
+        if !Common.getSaveButtonTapped() {
+            Common.setSaveButtonTapped(true)
+        }
+        
         Tracking.FinActAddPage.completeLogEvent()
     }
     

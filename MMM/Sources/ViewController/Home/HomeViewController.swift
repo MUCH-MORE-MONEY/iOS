@@ -59,6 +59,10 @@ final class HomeViewController: UIViewController {
 
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
+        
+        // nudge action
+        checkNudgeAction()
+        
 		// FIXME: - 네비게이션 아이템 노출 우류
 		if let navigationController = self.navigationController {
 			if let rootVC = navigationController.viewControllers.first {
@@ -68,15 +72,6 @@ final class HomeViewController: UIViewController {
 		}
 		
 		fetchData()
-        
-        // nudge
-//        if !Common.getCustomPuhsNudge() {
-//            showAlert(alertType: .canCancel,
-//                      titleText: nudgeMessage.title,
-//                      contentText: nudgeMessage.content,
-//                      cancelButtonText: nudgeMessage.cancel,
-//                      confirmButtonText: nudgeMessage.confirm)
-//        }
 	}
 	
     override func viewDidAppear(_ animated: Bool) {
@@ -160,6 +155,23 @@ extension HomeViewController {
 			self.snackView.alpha = 0.0
 		}
 	}
+    
+    private func checkNudgeAction() {
+        // nudge
+        // 최초한번 눌렀을 경우 && 넛징이 아직 표시안된경우
+        
+        if Common.getSaveButtonTapped() && !Common.getCustomPuhsNudge() {
+            
+            Common.setCustomPushNudge(true)
+            
+            showAlert(alertType: .canCancel,
+                      titleText: nudgeMessage.title,
+                      contentText: nudgeMessage.content,
+                      cancelButtonText: nudgeMessage.cancel,
+                      confirmButtonText: nudgeMessage.confirm)
+                    
+        }
+    }
 }
 //MARK: - Attribute & Hierarchy & Layouts
 private extension HomeViewController {
@@ -687,12 +699,12 @@ extension HomeViewController: CustomAlertDelegate {
     
     func didAlertCacelButton() {
         print("cancel")
-        Common.setCustomPushNudge(false)
+//        Common.setCustomPushNudge(false)
     }
     
     func handleTap() {
         print("handle tap")
-        Common.setCustomPushNudge(false)
+//        Common.setCustomPushNudge(false)
     }
     
     func moveToPushSettingDetailViewController() {

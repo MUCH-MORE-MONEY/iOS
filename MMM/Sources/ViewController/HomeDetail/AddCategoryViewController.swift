@@ -50,18 +50,17 @@ final class AddCategoryViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         view.endEditing(true)
-//        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-//        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
         shadowView.addTopShadow()
+//        shadowView.layer.applyShadow()
 //        shadowView.addTopShadow(color: R.Color.black,
-//                                opacity: 0.5,
-//                                offset: CGSize(width: 0, height: 2),
-//                                radius: 5)
+//                                opacity: 0.8,
+//                                offset: CGSize(width: 0, height: 1),
+//                                radius: 1)
     }
 }
 
@@ -194,6 +193,11 @@ private extension AddCategoryViewController {
             $0.font = R.Font.body1
             $0.textColor = R.Color.gray400
             $0.textAlignment = .center
+        }
+        
+        shadowView = shadowView.then {
+            $0.clipsToBounds = false
+            $0.addTopShadow()
         }
     }
     

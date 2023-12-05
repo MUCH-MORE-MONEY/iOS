@@ -160,14 +160,14 @@ extension UIView {
     func addTopShadow(color: UIColor, opacity: Float, offset: CGSize, radius: CGFloat) {
         self.layer.shadowColor = color.cgColor
         self.layer.shadowOpacity = opacity
-        self.layer.shadowOffset = offset
+//        self.layer.shadowOffset = offset
         self.layer.shadowRadius = radius
 
         let shadowPath = UIBezierPath()
         shadowPath.move(to: CGPoint(x: 0, y: 0))
         shadowPath.addLine(to: CGPoint(x: self.bounds.width, y: 0))
-        shadowPath.addLine(to: CGPoint(x: self.bounds.width, y: -4))
-        shadowPath.addLine(to: CGPoint(x: 0, y: -4))
+        shadowPath.addLine(to: CGPoint(x: self.bounds.width, y: -2))
+        shadowPath.addLine(to: CGPoint(x: 0, y: -2))
         shadowPath.close()
 
         self.layer.shadowPath = shadowPath.cgPath
@@ -175,8 +175,9 @@ extension UIView {
     
     func addTopShadow() {
         self.layer.masksToBounds = false
-        self.addTopBorder(with: .black, andWidth: 0.5)
-        self.layer.applyShadow(alpha: 1, x: 0, y: 0, blur: 20)
+        self.addTopBorder(with: .white, andWidth: 0.5)
+        self.layer.applyShadow()
+//        self.layer.applyShadow(alpha: 1, x: 0, y: 0, blur: 20)
 //        self.layer.shadowOffset = .init(width: 20, height: 20)
 //        self.layer.shadowOpacity = 0.5
     }

@@ -38,7 +38,7 @@ final class StatisticsReactor: Reactor {
 		var date = Date() // 월
 		var average: Double = 0.0 // 평균값
 		var satisfaction: Satisfaction = .low // 만족도
-		var activityList: [StatisticsSectionModel] = [.init(model: "", items: StatisticsItem.getSkeleton())]
+		var activityList: [StatisticsSectionModel] = []
 		var payBarList: [CategoryBar] = []		// 지출 카테고리
 		var earnBarList: [CategoryBar] = []	// 수입 카테고리
 		var activitySatisfactionList: [EconomicActivity] = []
@@ -62,6 +62,9 @@ final class StatisticsReactor: Reactor {
 	init(provider: ServiceProviderProtocol) {
 		self.initialState = State()
 		self.provider = provider
+		
+		// 뷰가 최초 로드 될 경우
+		action.onNext(.loadData)
 	}
 }
 //MARK: - Mutate, Transform, Reduce

@@ -92,9 +92,11 @@ final class StatisticsViewController: BaseViewController, View {
 		// 최초 진입시에만, 스켈레톤 Animation 동작
 		if reactor.currentState.isInit {
 			DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-				reactor.action.onNext(.loadData)
 			}
 		}
+		
+		// Home Loading을 보여줄지 판단
+		Constants.setKeychain(false, forKey: Constants.KeychainKey.isHomeLoading)
 	}
 	
 	override func viewWillDisappear(_ animated: Bool) {
@@ -189,21 +191,22 @@ extension StatisticsViewController {
 			.disposed(by: disposeBag)
 		
 		// 로딩 발생
-		reactor.state
-			.map { $0.isLoading }
-			.distinctUntilChanged() // 중복값 무시
-			.withUnretained(self)
-			.subscribe(onNext: { this, loading in
-				this.tableView.isUserInteractionEnabled = !loading
-				this.monthButton.isEnabled = !loading
-				this.monthLayer.isHidden = !loading
-				this.titleView.isLoading(loading)
-				this.averageView.isLoading(loading)
-				this.categoryView.isLoading(loading)
-				this.activityView.isLoading(loading)
-				this.satisfactionView.isLoading(loading)
-			})
-			.disposed(by: disposeBag)
+		// 다음 배포때, 스켈레톤 처리
+//		reactor.state
+//			.map { $0.isLoading }
+//			.distinctUntilChanged() // 중복값 무시
+//			.withUnretained(self)
+//			.subscribe(onNext: { this, loading in
+//				this.tableView.isUserInteractionEnabled = !loading
+//				this.monthButton.isEnabled = !loading
+//				this.monthLayer.isHidden = !loading
+//				this.titleView.isLoading(loading)
+//				this.averageView.isLoading(loading)
+//				this.categoryView.isLoading(loading)
+//				this.activityView.isLoading(loading)
+//				this.satisfactionView.isLoading(loading)
+//			})
+//			.disposed(by: disposeBag)
 		
 		// 카테고리 더보기 클릭시, push
 		reactor.state
@@ -329,6 +332,7 @@ extension StatisticsViewController: SkeletonLoadable {
 		let firstGroup = makeAnimationGroup(startColor: R.Color.gray800, endColor: R.Color.gray600)
 		firstGroup.beginTime = 0.0
 		monthLayer = monthLayer.then {
+			$0.isHidden = true // 임시: 다음 배포
 			$0.startPoint = CGPoint(x: 0, y: 0.5)
 			$0.endPoint = CGPoint(x: 1, y: 0.5)
 			$0.add(firstGroup, forKey: "backgroundColor")
@@ -345,7 +349,7 @@ extension StatisticsViewController: SkeletonLoadable {
 			$0.titleLabel?.font = R.Font.h5
 			$0.contentHorizontalAlignment = .left
 			$0.imageEdgeInsets = .init(top: 0, left: 8, bottom: 0, right: 0) // 이미지 여백
-			$0.layer.addSublayer(monthLayer)
+//			$0.layer.addSublayer(monthLayer) // 임시: 다음 배포
 		}
 		view.addSubview(monthButton)
 

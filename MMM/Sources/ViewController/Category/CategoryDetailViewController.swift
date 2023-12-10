@@ -28,7 +28,7 @@ final class CategoryDetailViewController: BaseViewControllerWithNav, View {
 			let cell = tv.dequeueReusableCell(withIdentifier: HomeTableViewCell.className, for: indexPath) as! HomeTableViewCell
 
 			// 데이터 설정
-			cell.setData(data: economicActivity, last: indexPath.row == reactor.currentState.list.count - 1)
+			cell.setData(data: economicActivity, last: indexPath.section == reactor.currentState.list.count - 1)
 			cell.backgroundColor = R.Color.gray100
 
 			let backgroundView = UIView()

@@ -49,6 +49,9 @@ final class ProfileViewController: BaseViewController, View {
 				rootVC.navigationItem.rightBarButtonItem = nil
 			}
 		}
+		
+		// Home Loading을 보여줄지 판단
+		Constants.setKeychain(false, forKey: Constants.KeychainKey.isHomeLoading)
 	}
 	
 	func bind(reactor: ProfileReactor) {

@@ -90,18 +90,21 @@ extension StatisticsTitleView: SkeletonLoadable {
 		let firstGroup = makeAnimationGroup(startColor: R.Color.gray800, endColor: R.Color.gray600)
 		firstGroup.beginTime = 0.0
 		rangeLayer = rangeLayer.then {
+			$0.isHidden = true // 임시: 다음 배포
 			$0.startPoint = CGPoint(x: 0, y: 0.5)
 			$0.endPoint = CGPoint(x: 1, y: 0.5)
 			$0.add(firstGroup, forKey: "backgroundColor")
 		}
 		
 		titleLayer = titleLayer.then {
+			$0.isHidden = true // 임시: 다음 배포
 			$0.startPoint = CGPoint(x: 0, y: 0.5)
 			$0.endPoint = CGPoint(x: 1, y: 0.5)
 			$0.add(firstGroup, forKey: "backgroundColor")
 		}
 		
 		skTitleView = skTitleView.then {
+			$0.isHidden = true // 임시: 다음 배포
 			$0.frame = .init(origin: .zero, size: .init(width: 164, height: 24))
 			$0.layer.addSublayer(titleLayer)
 		}

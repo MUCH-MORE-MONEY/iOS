@@ -28,7 +28,7 @@ final class CategoryDetailReactor: Reactor {
 		var type: String
 		var section: Category
 		var categoryLowwer: CategoryLowwer
-		var list: [CategoryDetailSectionModel] = [.init(model: "", items: CategoryDetailItem.getSkeleton())]
+		var list: [CategoryDetailSectionModel] = []
 		var detailData: (IndexPath: IndexPath, info: EconomicActivity)?
 		var isPushDetail = false
 		var isLoading = true // 로딩
@@ -43,10 +43,7 @@ final class CategoryDetailReactor: Reactor {
 		initialState = State(date: date, type: type, section: section, categoryLowwer: categoryLowwer)
 		
 		// 뷰가 최초 로드 될 경우
-		DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
-			guard let self = self else { return }
-			action.onNext(.loadData)
-		}
+		action.onNext(.loadData)
 	}
 }
 //MARK: - Mutate, Reduce

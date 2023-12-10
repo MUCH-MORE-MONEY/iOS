@@ -227,7 +227,6 @@ private extension HomeViewController {
 		viewModel.isLoading
 			.sinkOnMainThread(receiveValue: { [weak self] loading in
 				guard let self = self else { return }
-				print("loading", loading)
 				if loading && !self.loadView.isPresent {
 					self.loadView.play()
 					self.loadView.isPresent = true

@@ -63,6 +63,9 @@ final class AddViewController: BaseViewControllerWithNav {
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+		
+		// Home Loading을 보여줄지 판단
+		Constants.setKeychain(false, forKey: Constants.KeychainKey.isHomeLoading)
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {

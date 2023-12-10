@@ -92,9 +92,11 @@ final class StatisticsViewController: BaseViewController, View {
 		// 최초 진입시에만, 스켈레톤 Animation 동작
 		if reactor.currentState.isInit {
 			DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-				reactor.action.onNext(.loadData)
 			}
 		}
+		
+		// Home Loading을 보여줄지 판단
+		Constants.setKeychain(false, forKey: Constants.KeychainKey.isHomeLoading)
 	}
 	
 	override func viewWillDisappear(_ animated: Bool) {

@@ -62,6 +62,9 @@ final class StatisticsReactor: Reactor {
 	init(provider: ServiceProviderProtocol) {
 		self.initialState = State()
 		self.provider = provider
+		
+		// 뷰가 최초 로드 될 경우
+		action.onNext(.loadData)
 	}
 }
 //MARK: - Mutate, Transform, Reduce

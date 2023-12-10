@@ -89,6 +89,9 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
 			
 			self.homeDetailViewModel.getDailyList(Date().getFormattedYMD()) // widget
 			self.homeDetailViewModel.getWeeklyList(Date().getFormattedYMD()) // widget
+			
+			// Home Loading을 보여줄지 판단
+			Constants.setKeychain(true, forKey: Constants.KeychainKey.isHomeLoading)
         } else {
             self.homeDetailViewModel.fetchDetailActivity(id: self.economicActivityId[homeDetailViewModel.pageIndex])
             self.homeDetailViewModel.getMonthlyList(self.date.getFormattedYM())

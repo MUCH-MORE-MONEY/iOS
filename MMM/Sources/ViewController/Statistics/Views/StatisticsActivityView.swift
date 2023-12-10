@@ -303,11 +303,13 @@ extension StatisticsActivityView: SkeletonLoadable {
 		}
 		
 		satisfactionLabelView = satisfactionLabelView.then {
+			$0.isHidden = true // 임시: 다음 배포
 			$0.frame = .init(origin: .zero, size: .init(width: 77, height: 20))
 			$0.layer.addSublayer(satisfactionLabelLayer)
 		}
 		
 		disappointingLabelView = disappointingLabelView.then {
+			$0.isHidden = true // 임시: 다음 배포
 			$0.frame = .init(origin: .zero, size: .init(width: 77, height: 20))
 			$0.layer.addSublayer(disappointingLabelLayer)
 		}
@@ -316,21 +318,25 @@ extension StatisticsActivityView: SkeletonLoadable {
 		let leftMargin = 40, rightMargin = 195
 		let totalWidth = Int(width) - leftMargin - rightMargin
 		satisfactionTitleView = satisfactionTitleView.then {
+			$0.isHidden = true // 임시: 다음 배포
 			$0.frame = .init(origin: .zero, size: .init(width: totalWidth, height: 20))
 			$0.layer.addSublayer(satisfactionTitleLayer)
 		}
 		
 		disappointingTitleView = disappointingTitleView.then {
+			$0.isHidden = true // 임시: 다음 배포
 			$0.frame = .init(origin: .zero, size: .init(width: totalWidth, height: 20))
 			$0.layer.addSublayer(disappointingTitleLayer)
 		}
 		
 		satisfactionPriceView = satisfactionPriceView.then {
+			$0.isHidden = true // 임시: 다음 배포
 			$0.frame = .init(origin: .zero, size: .init(width: totalWidth, height: 20))
 			$0.layer.addSublayer(satisfactionPriceLayer)
 		}
 		
 		disappointingPriceView = disappointingPriceView.then {
+			$0.isHidden = true // 임시: 다음 배포
 			$0.frame = .init(origin: .zero, size: .init(width: totalWidth, height: 20))
 			$0.layer.addSublayer(disappointingPriceLayer)
 		}

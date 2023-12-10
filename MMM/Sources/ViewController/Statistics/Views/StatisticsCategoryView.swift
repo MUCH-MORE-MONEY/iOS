@@ -198,33 +198,39 @@ extension StatisticsCategoryView: SkeletonLoadable {
 		}
 		
 		payView = payView.then {
+			$0.isHidden = true // 임시: 다음 배포
 			$0.frame = .init(origin: .zero, size: .init(width: 28, height: 24))
 			$0.layer.addSublayer(payLayer)
 		}
 		
 		earnView = earnView.then {
+			$0.isHidden = true // 임시: 다음 배포
 			$0.frame = .init(origin: .zero, size: .init(width: 28, height: 24))
 			$0.layer.addSublayer(earnLayer)
 		}
 		
 		let width = UIScreen.width
 		payBarView = payBarView.then {
+			$0.isHidden = true // 임시: 다음 배포
 			$0.frame = .init(origin: .zero, size: .init(width: width - 80 - 41, height: 20))
 			$0.layer.addSublayer(payBarLayer)
 		}
 		
 		earnBarView = earnBarView.then {
+			$0.isHidden = true // 임시: 다음 배포
 			$0.frame = .init(origin: .zero, size: .init(width: width - 80 - 41, height: 20))
 			$0.layer.addSublayer(earnBarLayer)
 		}
 		
 		payBarLayer = payBarLayer.then {
+			$0.isHidden = true // 임시: 다음 배포
 			$0.startPoint = CGPoint(x: 0, y: 0.5)
 			$0.endPoint = CGPoint(x: 1, y: 0.5)
 			$0.add(secondGroup, forKey: "backgroundColor")
 		}
 		
 		earnBarLayer = earnBarLayer.then {
+			$0.isHidden = true // 임시: 다음 배포
 			$0.startPoint = CGPoint(x: 0, y: 0.5)
 			$0.endPoint = CGPoint(x: 1, y: 0.5)
 			$0.add(secondGroup, forKey: "backgroundColor")

@@ -97,6 +97,7 @@ enum Common {
         case customPushWeekList
         case customPushNudge
         case saveButtonTapped
+        case nudgeIfPushRestricted
     }
     
     
@@ -173,6 +174,10 @@ enum Common {
         UserDefaults.standard.setValue(isFirst, forKey: self.keys.saveButtonTapped.rawValue)
     }
     
+    static func setNudgeIfPushRestricted(_ isRestricted: Bool) {
+        UserDefaults.standard.setValue(isRestricted, forKey: self.keys.nudgeIfPushRestricted.rawValue)
+    }
+    
     // MARK: - Get
     static func getNewsPushSwitch() -> Bool {
         UserDefaults.standard.bool(forKey: self.keys.newsPushSwitch.rawValue)
@@ -223,5 +228,9 @@ enum Common {
     
     static func getSaveButtonTapped() -> Bool {
         return UserDefaults.standard.bool(forKey: self.keys.saveButtonTapped.rawValue)
+    }
+    
+    static func getNudgeIfPushRestricted() -> Bool {
+        return UserDefaults.standard.bool(forKey: self.keys.nudgeIfPushRestricted.rawValue)
     }
 }

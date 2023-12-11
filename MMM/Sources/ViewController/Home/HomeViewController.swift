@@ -13,12 +13,14 @@ import FSCalendar
 import Lottie
 import FirebaseAnalytics
 import UserNotifications
+import RxSwift
 
 final class HomeViewController: UIViewController {
 	// MARK: - Properties
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 	private let viewModel = HomeViewModel()
-
+    var disposeBag = DisposeBag()
+    
 	// MARK: - UI Components
 	private lazy var monthButtonItem = UIBarButtonItem()
 	private lazy var monthButton = SemanticContentAttributeButton()
@@ -55,6 +57,17 @@ final class HomeViewController: UIViewController {
 		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
 //        viewModel.showTrackingPermissionAlert()
+        
+//        Common.setSaveButtonTapped(false)
+//        Common.setCustomPushNudge(false)
+//        Common.setNudgeIfPushRestricted(false)
+//        
+//        print("getSaveButtonTapped : \(Common.getSaveButtonTapped())")
+//        print("getCustomPuhsNudge : \(Common.getCustomPuhsNudge())")
+//        print("getNudgeIfPushRestricted : \(Common.getNudgeIfPushRestricted())")
+//        
+
+        
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -160,24 +173,24 @@ extension HomeViewController {
         // nudge
         // 최초한번 눌렀을 경우 && 넛징이 아직 표시안된경우
         
-//        if Common.getSaveButtonTapped() && !Common.getCustomPuhsNudge() {
-//            
-//            Common.setCustomPushNudge(true)
-//            
-//            showAlert(alertType: .canCancel,
-//                      titleText: nudgeMessage.title,
-//                      contentText: nudgeMessage.content,
-//                      cancelButtonText: nudgeMessage.cancel,
-//                      confirmButtonText: nudgeMessage.confirm)
-//                    
-//        }
-        
-        // test용 alert
+        if Common.getSaveButtonTapped() && !Common.getCustomPuhsNudge() {
+            
+            Common.setCustomPushNudge(true)
+            
             showAlert(alertType: .canCancel,
                       titleText: nudgeMessage.title,
                       contentText: nudgeMessage.content,
                       cancelButtonText: nudgeMessage.cancel,
                       confirmButtonText: nudgeMessage.confirm)
+//                    
+        }
+        
+        // test용 alert
+//            showAlert(alertType: .canCancel,
+//                      titleText: nudgeMessage.title,
+//                      contentText: nudgeMessage.content,
+//                      cancelButtonText: nudgeMessage.cancel,
+//                      confirmButtonText: nudgeMessage.confirm)
     }
 }
 //MARK: - Attribute & Hierarchy & Layouts
@@ -190,6 +203,29 @@ private extension HomeViewController {
 	}
 	
 	private func bind() {
+        // Foreground 상태 감지(알람 설정은 밖에서 하기 때문에)
+        // 귀찮아서 그냥 rxswift 써버림 -> 나중에 바꿔야함 23/12/11 - pjw
+        NotificationCenter.default.rx.notification(UIApplication.willEnterForegroundNotification)
+            .filter { _ in Common.getSaveButtonTapped() && Common.getCustomPuhsNudge() && !Common.getNudgeIfPushRestricted() }
+            .bind { [weak self] _ in
+                guard let self = self else { return }
+                // 밖에서 나갔다가 왔을 경우 현재 알람을 on/off 상태 판단해야함
+                UNUserNotificationCenter.current().getNotificationSettings { [weak self] settings in
+                    // 알람창 갔다 왔을 때 알람을 키고 온 경우 요일설정 페이지 전환
+                    if settings.authorizationStatus == .authorized {
+                        DispatchQueue.main.async {
+                            self?.moveToPushSettingDetailViewController()
+                            Common.setNudgeIfPushRestricted(true)
+                        }
+                    } else {
+                        print("이놈은 끝까지 푸시 설정 안하네")
+                    }
+                }
+                print("밖에 나갔다가 들어옴")
+                
+            }
+            .disposed(by: disposeBag)
+        
 		// MARK: input
 		todayButton.tapPublisher
 			.sinkOnMainThread(receiveValue: didTapTodayButton)
@@ -702,20 +738,25 @@ extension HomeViewController: CustomAlertDelegate {
                 
                 // 16 이상 부터 알림 설정 딥링크 이동 가능
                 if #available(iOS 16.0, *) {
-                    if let url = URL(string: UIApplication.openNotificationSettingsURLString) {
-                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                    DispatchQueue.main.async {
+                        if let url = URL(string: UIApplication.openNotificationSettingsURLString) {
+                            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                        } else {
+                            print("이동 실패")
+                        } // 딥링크 이동 실패
                     }
-                    else { } // 딥링크 이동 실패
+                    
+                    
                 } else { // 16미만 버전은 앱 설정 까지만 이동 가능
-                    if let url = URL(string: UIApplication.openSettingsURLString) {
-                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                    DispatchQueue.main.async {
+                        if let url = URL(string: UIApplication.openSettingsURLString) {
+                            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                        } else {
+                            print("이동 실패")
+                        } // 딥링크 이동 실패
                     }
-                    else {  } // 딥링크 이동 실패
                 }
-                
-                
-                
-                self.showAlertToRedirectToSettings()
+//                self.showAlertToRedirectToSettings()
             }
         }
     }

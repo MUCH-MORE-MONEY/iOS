@@ -58,6 +58,7 @@ final class HomeViewController: UIViewController {
 		setup()		// 초기 셋업할 코드들
 //        viewModel.showTrackingPermissionAlert()
         
+        // nudge test
 //        Common.setSaveButtonTapped(false)
 //        Common.setCustomPushNudge(false)
 //        Common.setNudgeIfPushRestricted(false)
@@ -219,6 +220,7 @@ private extension HomeViewController {
                         }
                     } else {
                         print("이놈은 끝까지 푸시 설정 안하네")
+                        Common.setNudgeIfPushRestricted(true)
                     }
                 }
                 print("밖에 나갔다가 들어옴")

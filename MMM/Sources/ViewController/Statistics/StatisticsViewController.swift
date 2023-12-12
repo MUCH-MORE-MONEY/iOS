@@ -27,13 +27,14 @@ final class StatisticsViewController: BaseViewController, View {
 	private var satisfaction: Satisfaction = .low
 	private var timer: DispatchSourceTimer? // rank(순위)를 변경하는 시간
 	private lazy var dataSource: DataSource = RxTableViewSectionedReloadDataSource<StatisticsSectionModel>(configureCell: { dataSource, tv, indexPath, item -> UITableViewCell in
+		
 		guard let reactor = self.reactor else { return .init() }
 		switch item {
 		case let .base(economicActivity):
 			let cell = tv.dequeueReusableCell(withIdentifier: HomeTableViewCell.className, for: indexPath) as! HomeTableViewCell
 
 			// 데이터 설정
-			cell.setData(data: economicActivity, last: indexPath.row == reactor.currentState.activityList.count - 1)
+			cell.setData(data: economicActivity, last: indexPath.row == dataSource.sectionModels[0].items.count - 1)
 			cell.backgroundColor = R.Color.gray100
 
 			let backgroundView = UIView()
@@ -88,12 +89,6 @@ final class StatisticsViewController: BaseViewController, View {
 		}
 		
 		timer?.resume() // 타이머 재시작
-		
-		// 최초 진입시에만, 스켈레톤 Animation 동작
-		if reactor.currentState.isInit {
-			DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-			}
-		}
 		
 		// Home Loading을 보여줄지 판단
 		Constants.setKeychain(false, forKey: Constants.KeychainKey.isHomeLoading)

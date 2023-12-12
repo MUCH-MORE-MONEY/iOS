@@ -318,7 +318,7 @@ extension StatisticsViewController: SkeletonLoadable {
 	
 	private func setTimer() {
 		timer = DispatchSource.makeTimerSource(flags: [], queue: DispatchQueue.main)
-		timer?.schedule(deadline: .now(), repeating: 1)
+		timer?.schedule(deadline: .now(), repeating: 3) // 3초뒤 변경
 	}
 	
 	override func setAttribute() {

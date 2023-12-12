@@ -19,7 +19,7 @@ final class StatisticsActivityView: BaseView, View {
 		static let stackViewMargin: UIEdgeInsets = .init(top: 12, left: 20, bottom: 0, right: 0)
 		static let ivSatisfactionMargin: UIEdgeInsets = .init(top: 0, left: 2, bottom: 0, right: 0)
 		static let tableViewMargin: UIEdgeInsets = .init(top: 8, left: 0, bottom: 0, right: 0)
-
+		
 		static let titleHeight: CGFloat = 44
 		static let headerHeight: CGFloat = 170
 		static let dummyCellHeight: CGFloat = 16
@@ -32,7 +32,7 @@ final class StatisticsActivityView: BaseView, View {
 	private var cntSatisfaction = 0 // Rank List 갯수
 	private var indexDisappointing = 1 // 처음 Delay 때문에 0이 아닌 1로 초기화
 	private var cntDisappointing = 0 // Rank List 갯수
-
+	
 	// MARK: - UI Components
 	private lazy var stackView = UIStackView()
 	private lazy var satisfactionView = UIView()	// 만족스러운 활동 영역
@@ -41,17 +41,54 @@ final class StatisticsActivityView: BaseView, View {
 	private lazy var satisfactionImageView = UIImageView()	// ✨
 	private lazy var satisfactionEmptyTitleLabel = UILabel()
 	private lazy var satisfactionEmptyPriceLabel = UILabel()
-
+	
 	private lazy var disappointingView = UIView()			// 아쉬운 활동 영역
 	private lazy var disappointingTableView = UITableView()
 	private lazy var disappointingLabel = UILabel()			// 아쉬운 활동
 	private lazy var disappointingImageView = UIImageView() // 💦
 	private lazy var disappointingEmptyTitleLabel = UILabel()
 	private lazy var disappointingEmptyPriceLabel = UILabel()
+	
+	// 스켈레톤 UI
+	private lazy var satisfactionLabelView = UIView()
+	private lazy var satisfactionTitleView = UIView()
+	private lazy var satisfactionPriceView = UIView()
+	private lazy var satisfactionLabelLayer = CAGradientLayer()
+	private lazy var satisfactionTitleLayer = CAGradientLayer()
+	private lazy var satisfactionPriceLayer = CAGradientLayer()
+	
+	private lazy var disappointingLabelView = UIView()
+	private lazy var disappointingTitleView = UIView()
+	private lazy var disappointingPriceView = UIView()
+	private lazy var disappointingLabelLayer = CAGradientLayer()
+	private lazy var disappointingTitleLayer = CAGradientLayer()
+	private lazy var disappointingPriceLayer = CAGradientLayer()
 
 	init(timer: DispatchSourceTimer?) {
 		self.timer = timer
 		super.init(frame: .zero)
+	}
+	
+	override func layoutSubviews() {
+		super.layoutSubviews()
+		
+		satisfactionLabelLayer.frame = satisfactionLabelView.bounds
+		satisfactionLabelLayer.cornerRadius = 4
+		
+		satisfactionTitleLayer.frame = satisfactionTitleView.bounds
+		satisfactionTitleLayer.cornerRadius = 4
+		
+		satisfactionPriceLayer.frame = satisfactionPriceView.bounds
+		satisfactionPriceLayer.cornerRadius = 4
+		
+		disappointingLabelLayer.frame = disappointingLabelView.bounds
+		disappointingLabelLayer.cornerRadius = 4
+		
+		disappointingTitleLayer.frame = disappointingTitleView.bounds
+		disappointingTitleLayer.cornerRadius = 4
+		
+		disappointingPriceLayer.frame = disappointingPriceView.bounds
+		disappointingPriceLayer.cornerRadius = 4
 	}
 	
 	func bind(reactor: StatisticsReactor) {
@@ -144,6 +181,21 @@ extension StatisticsActivityView {
 }
 //MARK: - Action
 extension StatisticsActivityView {
+	func isLoading(_ isLoading: Bool) {
+		satisfactionLabel.isHidden = isLoading
+		disappointingLabel.isHidden = isLoading
+		satisfactionImageView.isHidden = isLoading
+		disappointingImageView.isHidden = isLoading
+		
+		satisfactionLabelView.isHidden = !isLoading
+		satisfactionTitleView.isHidden = !isLoading
+		satisfactionPriceView.isHidden = !isLoading
+		
+		disappointingLabelView.isHidden = !isLoading
+		disappointingTitleView.isHidden = !isLoading
+		disappointingPriceView.isHidden = !isLoading
+	}
+	
 	private func moveToIndex() {
 		guard let reactor = reactor else { return }
 		
@@ -192,7 +244,7 @@ extension StatisticsActivityView {
 	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
-extension StatisticsActivityView {
+extension StatisticsActivityView: SkeletonLoadable {
 	// 초기 셋업할 코드들
 	override func setup() {
 		super.setup()
@@ -210,6 +262,85 @@ extension StatisticsActivityView {
 		backgroundColor = R.Color.black
 		layer.cornerRadius = 10
 
+		let firstGroup = makeAnimationGroup(startColor: R.Color.gray900, endColor: R.Color.gray700)
+		firstGroup.beginTime = 0.0
+		let secondGroup = makeAnimationGroup(previousGroup: firstGroup, startColor: R.Color.gray900, endColor: R.Color.gray700)
+
+		satisfactionLabelLayer = satisfactionLabelLayer.then {
+			$0.startPoint = CGPoint(x: 0, y: 0.5)
+			$0.endPoint = CGPoint(x: 1, y: 0.5)
+			$0.add(firstGroup, forKey: "backgroundColor")
+		}
+		
+		satisfactionTitleLayer = satisfactionTitleLayer.then {
+			$0.startPoint = CGPoint(x: 0, y: 0.5)
+			$0.endPoint = CGPoint(x: 1, y: 0.5)
+			$0.add(firstGroup, forKey: "backgroundColor")
+		}
+		
+		satisfactionPriceLayer = satisfactionPriceLayer.then {
+			$0.startPoint = CGPoint(x: 0, y: 0.5)
+			$0.endPoint = CGPoint(x: 1, y: 0.5)
+			$0.add(firstGroup, forKey: "backgroundColor")
+		}
+		
+		disappointingLabelLayer = disappointingLabelLayer.then {
+			$0.startPoint = CGPoint(x: 0, y: 0.5)
+			$0.endPoint = CGPoint(x: 1, y: 0.5)
+			$0.add(secondGroup, forKey: "backgroundColor")
+		}
+		
+		disappointingTitleLayer = disappointingTitleLayer.then {
+			$0.startPoint = CGPoint(x: 0, y: 0.5)
+			$0.endPoint = CGPoint(x: 1, y: 0.5)
+			$0.add(secondGroup, forKey: "backgroundColor")
+		}
+		
+		disappointingPriceLayer = disappointingPriceLayer.then {
+			$0.startPoint = CGPoint(x: 0, y: 0.5)
+			$0.endPoint = CGPoint(x: 1, y: 0.5)
+			$0.add(secondGroup, forKey: "backgroundColor")
+		}
+		
+		satisfactionLabelView = satisfactionLabelView.then {
+			$0.isHidden = true // 임시: 다음 배포
+			$0.frame = .init(origin: .zero, size: .init(width: 77, height: 20))
+			$0.layer.addSublayer(satisfactionLabelLayer)
+		}
+		
+		disappointingLabelView = disappointingLabelView.then {
+			$0.isHidden = true // 임시: 다음 배포
+			$0.frame = .init(origin: .zero, size: .init(width: 77, height: 20))
+			$0.layer.addSublayer(disappointingLabelLayer)
+		}
+		
+		let width = UIScreen.width
+		let leftMargin = 40, rightMargin = 195
+		let totalWidth = Int(width) - leftMargin - rightMargin
+		satisfactionTitleView = satisfactionTitleView.then {
+			$0.isHidden = true // 임시: 다음 배포
+			$0.frame = .init(origin: .zero, size: .init(width: totalWidth, height: 20))
+			$0.layer.addSublayer(satisfactionTitleLayer)
+		}
+		
+		disappointingTitleView = disappointingTitleView.then {
+			$0.isHidden = true // 임시: 다음 배포
+			$0.frame = .init(origin: .zero, size: .init(width: totalWidth, height: 20))
+			$0.layer.addSublayer(disappointingTitleLayer)
+		}
+		
+		satisfactionPriceView = satisfactionPriceView.then {
+			$0.isHidden = true // 임시: 다음 배포
+			$0.frame = .init(origin: .zero, size: .init(width: totalWidth, height: 20))
+			$0.layer.addSublayer(satisfactionPriceLayer)
+		}
+		
+		disappointingPriceView = disappointingPriceView.then {
+			$0.isHidden = true // 임시: 다음 배포
+			$0.frame = .init(origin: .zero, size: .init(width: totalWidth, height: 20))
+			$0.layer.addSublayer(disappointingPriceLayer)
+		}
+		
 		stackView = stackView.then {
 			$0.axis = .horizontal
 			$0.spacing = 12
@@ -284,7 +415,7 @@ extension StatisticsActivityView {
 	override func setHierarchy() {
 		super.setHierarchy()
 		
-		addSubview(stackView)
+		addSubviews(stackView, satisfactionLabelView, disappointingLabelView, satisfactionTitleView, disappointingTitleView, satisfactionPriceView, disappointingPriceView)
 		stackView.addArrangedSubviews(satisfactionView, disappointingView)
 		satisfactionView.addSubviews(satisfactionLabel, satisfactionImageView, satisfactionTableView, satisfactionEmptyTitleLabel, satisfactionEmptyPriceLabel)
 		disappointingView.addSubviews(disappointingLabel, disappointingImageView, disappointingTableView, disappointingEmptyTitleLabel, disappointingEmptyPriceLabel)
@@ -347,6 +478,53 @@ extension StatisticsActivityView {
 		disappointingEmptyPriceLabel.snp.makeConstraints {
 			$0.top.equalTo(disappointingEmptyTitleLabel.snp.bottom).offset(UI.tableViewMargin.top)
 			$0.trailing.leading.bottom.equalToSuperview()
+		}
+		
+		// 스켈레톤 Layer
+		satisfactionLabelView.snp.makeConstraints {
+			$0.top.equalToSuperview().inset(12)
+			$0.leading.equalToSuperview().inset(20)
+			$0.width.equalTo(77)
+			$0.height.equalTo(20)
+		}
+		
+		disappointingLabelView.snp.makeConstraints {
+			$0.top.equalToSuperview().inset(12)
+			$0.leading.equalToSuperview().inset(170)
+			$0.width.equalTo(77)
+			$0.height.equalTo(20)
+		}
+		
+		let width = UIScreen.width
+		let leftMargin = 40, rightMargin = 195
+		let totalWidth = Int(width) - leftMargin - rightMargin
+
+		satisfactionTitleView.snp.makeConstraints {
+			$0.top.equalToSuperview().inset(40)
+			$0.leading.equalToSuperview().inset(20)
+			$0.width.equalTo(totalWidth)
+			$0.height.equalTo(24)
+		}
+		
+		disappointingTitleView.snp.makeConstraints {
+			$0.top.equalToSuperview().inset(40)
+			$0.leading.equalToSuperview().inset(170)
+			$0.width.equalTo(totalWidth)
+			$0.height.equalTo(24)
+		}
+		
+		satisfactionPriceView.snp.makeConstraints {
+			$0.top.equalToSuperview().inset(72)
+			$0.leading.equalToSuperview().inset(20)
+			$0.width.equalTo(totalWidth)
+			$0.height.equalTo(20)
+		}
+		
+		disappointingPriceView.snp.makeConstraints {
+			$0.top.equalToSuperview().inset(72)
+			$0.leading.equalToSuperview().inset(170)
+			$0.width.equalTo(totalWidth)
+			$0.height.equalTo(20)
 		}
 	}
 }

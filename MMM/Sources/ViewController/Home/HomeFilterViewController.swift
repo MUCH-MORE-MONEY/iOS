@@ -42,6 +42,13 @@ final class HomeFilterViewController: BaseViewControllerWithNav {
         super.viewDidLoad()
     }
 	
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		
+		// Home Loading을 보여줄지 판단
+		Constants.setKeychain(true, forKey: Constants.KeychainKey.isHomeLoading)
+	}
+	
 	override func viewWillDisappear(_ animated: Bool) {
 		// 한번 click되면 nil이 아니라 modal 되는 문제 해결
 		viewModel.didTapHighlightButton = nil

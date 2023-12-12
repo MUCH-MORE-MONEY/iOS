@@ -69,6 +69,9 @@ extension AddDetailViewController {
 			ServiceProvider.shared.statisticsProvider.updateDate(to: Date())
 		}
 		
+		// Home Loading을 보여줄지 판단
+		Constants.setKeychain(true, forKey: Constants.KeychainKey.isHomeLoading)
+		
         self.loadView.play()
         self.loadView.isPresent = true
         self.loadView.modalPresentationStyle = .overFullScreen

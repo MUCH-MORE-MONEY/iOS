@@ -73,11 +73,10 @@ final class HomeViewController: UIViewController {
 
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-        
-        // nudge action
-        checkNudgeAction()
-        
-		// FIXME: - 네비게이션 아이템 노출 우류
+
+    checkNudgeAction()
+
+		// FIXME: - 네비게이션 아이템 노출 유무
 		if let navigationController = self.navigationController {
 			if let rootVC = navigationController.viewControllers.first {
 				rootVC.navigationItem.leftBarButtonItem = monthButtonItem
@@ -113,26 +112,30 @@ extension HomeViewController {
 	// MARK: - Private
 	/// 데이터 얻기
 	private func fetchData() {
-		// 3초뒤 변경
-		DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-			self.viewModel.isWillAppear = true // viewWillAppear 일 경우에만 Loading 표시
-			if self.calendar.scope == .month { // 월 단위
-				self.viewModel.getMonthlyList(self.calendar.currentPage.getFormattedYM())
-			} else { // 주 단위
-				if let dateAfter = Calendar.current.date(byAdding: .day, value: 6, to: self.calendar.currentPage) { // 해당 주의 마지막 날짜
-					let date = self.calendar.currentPage.getFormattedYM()
-					if date != dateAfter.getFormattedYM() { // 마지막 날짜 비교
-						self.viewModel.getWeeklyList(date, dateAfter.getFormattedYM())
-					}
+		guard let isHomeLoading = Constants.getKeychainValueByBool(forKey: Constants.KeychainKey.isHomeLoading), isHomeLoading else {
+			// 값이 nil일 경우Home Loading을 보여줄지 판단
+			Constants.setKeychain(true, forKey: Constants.KeychainKey.isHomeLoading)
+			return
+		}
+		self.viewModel.isWillAppear = true // viewWillAppear 일 경우에만 Loading 표시
+		if self.calendar.scope == .month { // 월 단위
+			self.viewModel.getMonthlyList(self.calendar.currentPage.getFormattedYM())
+		} else { // 주 단위
+			if let dateAfter = Calendar.current.date(byAdding: .day, value: 6, to: self.calendar.currentPage) { // 해당 주의 마지막 날짜
+				let date = self.calendar.currentPage.getFormattedYM()
+				if date != dateAfter.getFormattedYM() { // 마지막 날짜 비교
+					self.viewModel.getWeeklyList(date, dateAfter.getFormattedYM())
 				}
+	
 			}
-			// 위젯
-			self.viewModel.getDailyList(Date().getFormattedYMD(), isWidget: true)
-			self.viewModel.getWeeklyList(Date().getFormattedYMD())
-			self.viewModel.isWillAppear = false
-			
-			self.viewModel.getDailyList(self.viewModel.preDate.getFormattedYMD())
-		} 
+
+		}
+		// 위젯
+		self.viewModel.getDailyList(Date().getFormattedYMD(), isWidget: true)
+		self.viewModel.getWeeklyList(Date().getFormattedYMD())
+		self.viewModel.isWillAppear = false
+		
+		self.viewModel.getDailyList(self.viewModel.preDate.getFormattedYMD())
 	}
 	
 	/// 달력 Picker Bottom Sheet
@@ -281,7 +284,6 @@ private extension HomeViewController {
 		viewModel.isLoading
 			.sinkOnMainThread(receiveValue: { [weak self] loading in
 				guard let self = self else { return }
-				
 				if loading && !self.loadView.isPresent {
 					self.loadView.play()
 					self.loadView.isPresent = true

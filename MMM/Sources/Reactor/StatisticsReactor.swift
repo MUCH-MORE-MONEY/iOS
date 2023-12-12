@@ -15,7 +15,7 @@ final class StatisticsReactor: Reactor {
 		case pagination(contentHeight: CGFloat, contentOffsetY: CGFloat, scrollViewHeight: CGFloat) // pagination
 		case didTapMoreButton // 카테고리 더보기
 		case didTapSatisfactionButton // 만족도 선택
-		case selectCell(IndexPath, EconomicActivity)
+		case selectCell(IndexPath, StatisticsItem)
 	}
 	
 	// 처리 단위
@@ -38,18 +38,19 @@ final class StatisticsReactor: Reactor {
 		var date = Date() // 월
 		var average: Double = 0.0 // 평균값
 		var satisfaction: Satisfaction = .low // 만족도
-		var activityList: [EconomicActivity] = []
+		var activityList: [StatisticsSectionModel] = []
 		var payBarList: [CategoryBar] = []		// 지출 카테고리
 		var earnBarList: [CategoryBar] = []	// 수입 카테고리
 		var activitySatisfactionList: [EconomicActivity] = []
 		var activityDisappointingList: [EconomicActivity] = []
-		var isLoading = false // 로딩
+		var isLoading = true // 로딩
 		var isPushMoreCategory = false
 		var isPresentSatisfaction = false
 		var isPushDetail = false
 		var detailData: (IndexPath: IndexPath, info: EconomicActivity)?
 		var curSatisfaction: Satisfaction = .low
-        var totalItem: Int = 0  // item의 총 갯수
+    var totalItem: Int = 0  // item의 총 갯수
+		var isInit = true // 최초진입
 	}
 	
 	// MARK: Properties
@@ -62,7 +63,7 @@ final class StatisticsReactor: Reactor {
 	init(provider: ServiceProviderProtocol) {
 		self.initialState = State()
 		self.provider = provider
-
+		
 		// 뷰가 최초 로드 될 경우
 		action.onNext(.loadData)
 	}
@@ -101,9 +102,11 @@ extension StatisticsReactor {
 				.just(.presentSatisfaction(false))
 			])
 		case let .selectCell(indexPath, data):
+			guard let item = data.item else { return .empty() }
+			
 			return .concat([
-				.just(.pushDetail(indexPath, data, true)),
-				.just(.pushDetail(indexPath, data, false))
+				.just(.pushDetail(indexPath, item, true)),
+				.just(.pushDetail(indexPath, item, false))
 			])
 		}
 	}
@@ -114,22 +117,18 @@ extension StatisticsReactor {
 			switch event {
 			case let .updateDate(date):
 				return .concat([
-					.just(.setLoading(true)),
 					.just(.setDate(date)),
 					self.getStatisticsAverage(date),
 					self.getCategory(date, "02"),
 					self.getCategory(date, "01"),
 					self.getStatisticsList(date, "01", true),
 					self.getStatisticsList(date, "03", true),
-					self.getStatisticsList(date, self.currentState.satisfaction.id, true), // viewWillAppear일때, 현재 만족도를 불러와야한다.
-					.just(.setLoading(false)),
+					self.getStatisticsList(date, self.currentState.satisfaction.id, true) // viewWillAppear일때, 현재 만족도를 불러와야한다.
 				])
 			case let .updateSatisfaction(satisfaction):
 				return .concat([
-					.just(.setLoading(true)),
 					.just(.setSatisfaction(satisfaction)),
 					self.getStatisticsList(self.currentState.date, satisfaction.id),
-					.just(.setLoading(false))
 				])
 			}
 		}
@@ -142,9 +141,15 @@ extension StatisticsReactor {
 		var newState = state
 		
 		switch mutation {
-		case let .fetchList(list, type, reset, totalItem):
+		case let .setList(list, type, reset, totalItem):
+			newState.isInit = false
+			
+			// 현재의 만족도에 대한 데이터를 호출 할때만 Update
+			if type == currentState.satisfaction.id {
+				newState.activityList = convertSectionModel(list)
+			}
+
 			let data = list.prefix(3)
-			newState.activityList = list
 			currentPage = 0
             newState.totalItem = totalItem
 			// 월 변경인지 판별
@@ -160,7 +165,7 @@ extension StatisticsReactor {
 			}
 		case let .pagenation(list, totalPage):
 			self.totalPage = totalPage
-			newState.activityList += list
+			newState.activityList += convertSectionModel(list)
 		case let .fetchCategoryBar(list, type):
 			switch type {
 			case "01": newState.payBarList = list
@@ -208,7 +213,8 @@ extension StatisticsReactor {
 		return MMMAPIService().getStatisticsList(dateYM: date.getFormattedYM(), valueScoreDvcd: type, limit: 15, offset: 0)
 			.map { (response, error) -> Mutation in
 				self.totalPage = response.totalPageCnt
-                return .fetchList(response.selectListMonthlyByValueScoreOutputDto, type, reset, response.totalItemCnt)
+
+				return .setList(response.selectListMonthlyByValueScoreOutputDto, type, reset, response.totalItemCnt)
 			}
 			.catchAndReturn(.setError)
 	}
@@ -235,5 +241,18 @@ extension StatisticsReactor {
 				return .fetchCategoryBar(response.data.setSelectListMonthlyByUpperCategoryOutputDto, type)
 			}
 			.catchAndReturn(.setError)
+	}
+	
+	private func convertSectionModel(_ list: [EconomicActivity]) -> [StatisticsSectionModel] {
+		guard !list.isEmpty else  {
+			return []
+		}
+		
+		// Section Model로 변경
+		let items = list.map { category -> StatisticsItem in
+			return .base(category)
+		}
+		let model: StatisticsSectionModel = .init(model: "", items: items)
+		return [model]
 	}
 }

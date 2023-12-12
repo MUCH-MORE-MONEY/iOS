@@ -9,17 +9,44 @@ import Then
 import SnapKit
 import RxSwift
 import ReactorKit
+import RxDataSources
 
 // 상속하지 않으려면 final 꼭 붙이기
 final class CategoryDetailViewController: BaseViewControllerWithNav, View {
 	typealias Reactor = CategoryDetailReactor
+	typealias DataSource = RxTableViewSectionedReloadDataSource<CategoryDetailSectionModel> // SectionModelType 채택
 
 	// MARK: - Constants
 	private enum UI {
 	}
 	
 	// MARK: - Properties
-	
+	private lazy var dataSource: DataSource = RxTableViewSectionedReloadDataSource<CategoryDetailSectionModel>(configureCell: { dataSource, tv, indexPath, item -> UITableViewCell in
+		guard let reactor = self.reactor else { return .init() }
+		switch item {
+		case let .base(economicActivity):
+			let cell = tv.dequeueReusableCell(withIdentifier: HomeTableViewCell.className, for: indexPath) as! HomeTableViewCell
+
+			// 데이터 설정
+			cell.setData(data: economicActivity, last: indexPath.section == reactor.currentState.list.count - 1)
+			cell.backgroundColor = R.Color.gray100
+
+			let backgroundView = UIView()
+			backgroundView.backgroundColor = R.Color.gray400.withAlphaComponent(0.3)
+			cell.selectedBackgroundView = backgroundView
+			
+			return cell
+		case .skeleton:
+			let cell = tv.dequeueReusableCell(withIdentifier: CategorySkeletonDetailCell.className, for: indexPath) as! CategorySkeletonDetailCell
+			cell.backgroundColor = R.Color.gray100
+			cell.setData(last: indexPath.row == CategoryDetailItem.getSkeleton().count - 1)
+
+			cell.isUserInteractionEnabled = false
+
+			return cell
+		}
+	})
+
 	// MARK: - UI Components
 	private lazy var titleStackView = UIStackView()
 	private lazy var titleLabel = UILabel()
@@ -31,15 +58,7 @@ final class CategoryDetailViewController: BaseViewControllerWithNav, View {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 	}
-	
-	override func viewWillAppear(_ animated: Bool) {
-		guard let reactor = reactor else { return }
-		super.viewWillAppear(animated)
-		
-		// 뷰가 최초 로드 될 경우
-		reactor.action.onNext(.loadData)
-	}
-	
+
 	func bind(reactor: CategoryDetailReactor) {
 		bindState(reactor)
 		bindAction(reactor)
@@ -52,7 +71,7 @@ extension CategoryDetailViewController {
 		// TableView cell select
 		Observable.zip(
 			tableView.rx.itemSelected,
-			tableView.rx.modelSelected(EconomicActivity.self)
+			tableView.rx.modelSelected(CategoryDetailItem.self)
 		)
 		.map { .selectCell($0, $1) }
 		.bind(to: reactor.action)
@@ -61,6 +80,7 @@ extension CategoryDetailViewController {
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: CategoryDetailReactor) {
+		
 		reactor.state
 			.map { $0.categoryLowwer }
 			.distinctUntilChanged() // 중복값 무시
@@ -75,20 +95,8 @@ extension CategoryDetailViewController {
 		reactor.state
 			.map { $0.list }
 			.distinctUntilChanged() // 중복값 무시
-			.bind(to: tableView.rx.items) { tv, row, data in
-				let index = IndexPath(row: row, section: 0)
-				let cell = tv.dequeueReusableCell(withIdentifier: HomeTableViewCell.className, for: index) as! HomeTableViewCell
-				
-				// 데이터 설정
-				cell.setData(data: data, last: row == reactor.currentState.list.count - 1)
-				cell.backgroundColor = R.Color.gray100
-
-				let backgroundView = UIView()
-				backgroundView.backgroundColor = R.Color.gray400.withAlphaComponent(0.3)
-				cell.selectedBackgroundView = backgroundView
-				
-				return cell
-			}.disposed(by: disposeBag)
+			.bind(to: tableView.rx.items(dataSource: dataSource))
+			.disposed(by: disposeBag)
 		
 		reactor.state
 			.map { $0.list.isEmpty }
@@ -113,6 +121,9 @@ extension CategoryDetailViewController {
 			.subscribe(onNext: { [weak self] loading in
 				guard let self = self else { return }
 				
+				// Loading 중 scroll 금지
+				self.tableView.isUserInteractionEnabled = !loading
+				
 				if loading && !self.loadView.isPresent {
 					self.loadView.play()
 					self.loadView.isPresent = true
@@ -135,7 +146,7 @@ extension CategoryDetailViewController {
 
 		let index = data.IndexPath.row
 		let vc = DetailViewController(homeViewModel: HomeViewModel(), index: index) // 임시: HomeViewModel 생성
-		let economicActivityId = reactor.currentState.list.map { $0.id }
+		let economicActivityId = reactor.currentState.list[0].items.map { $0.identity as! String }
 		vc.setData(economicActivityId: economicActivityId, index: index, date: data.info.createAt.toDate() ?? Date())
 		
 		navigationController?.pushViewController(vc, animated: true)
@@ -169,6 +180,7 @@ extension CategoryDetailViewController {
 		
 		tableView = tableView.then {
 			$0.register(HomeTableViewCell.self)
+			$0.register(CategorySkeletonDetailCell.self)
 			$0.backgroundColor = R.Color.gray100
 			$0.showsVerticalScrollIndicator = false
 			$0.separatorStyle = .none

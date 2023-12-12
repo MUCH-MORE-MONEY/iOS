@@ -55,7 +55,6 @@ private extension HomeHeaderStackView {
 		}
 		
 		titleLabel = titleLabel.then {
-			$0.text = "지출" // 지출/수익
 			$0.font = R.Font.body3
 			$0.textColor = R.Color.orange500 // orange500/blue500
 			$0.textAlignment = .left

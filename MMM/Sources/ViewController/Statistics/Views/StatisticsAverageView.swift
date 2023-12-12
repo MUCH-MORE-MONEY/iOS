@@ -29,6 +29,12 @@ extension StatisticsAverageView {
 	func setData(average: Double) {
 		satisfactionLabel.text = String(average)
 	}
+	
+	func isLoading(_ isLoading: Bool) {
+		titleLabel.isHidden = isLoading
+		satisfactionLabel.isHidden = isLoading
+		starImageView.isHidden = isLoading
+	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
 extension StatisticsAverageView {

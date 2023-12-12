@@ -11,7 +11,7 @@ final class CategoryDetailReactor: Reactor {
 	// 사용자의 액션
 	enum Action {
 		case loadData
-		case selectCell(IndexPath, EconomicActivity)
+		case selectCell(IndexPath, CategoryDetailItem)
 	}
 	
 	// 처리 단위
@@ -28,10 +28,10 @@ final class CategoryDetailReactor: Reactor {
 		var type: String
 		var section: Category
 		var categoryLowwer: CategoryLowwer
-		var list: [EconomicActivity] = []
+		var list: [CategoryDetailSectionModel] = []
 		var detailData: (IndexPath: IndexPath, info: EconomicActivity)?
 		var isPushDetail = false
-		var isLoading = false // 로딩
+		var isLoading = true // 로딩
 		var error = false
 	}
 	
@@ -41,6 +41,9 @@ final class CategoryDetailReactor: Reactor {
 	init(date: Date, type: String, section: Category, categoryLowwer: CategoryLowwer) {
 		
 		initialState = State(date: date, type: type, section: section, categoryLowwer: categoryLowwer)
+		
+		// 뷰가 최초 로드 될 경우
+		action.onNext(.loadData)
 	}
 }
 //MARK: - Mutate, Reduce
@@ -55,10 +58,12 @@ extension CategoryDetailReactor {
 				loadData(CategoryDetailListReqDto(dateYM: currentState.date.getFormattedYM(), economicActivityCategoryCd: category.id, economicActivityDvcd: currentState.type)),
 				.just(.setLoading(false))
 			])
-		case .selectCell(let indexPath, let data):
+		case let .selectCell(indexPath, data):
+			guard let item = data.item else { return .empty() }
+			
 			return .concat([
-				.just(.pushDetail(indexPath, data, true)),
-				.just(.pushDetail(indexPath, data, false))
+				.just(.pushDetail(indexPath, item, true)),
+				.just(.pushDetail(indexPath, item, false))
 			])
 		}
 	}
@@ -69,7 +74,18 @@ extension CategoryDetailReactor {
 		
 		switch mutation {
 		case .setList(let economicActivityList):
-			newState.list = economicActivityList
+			// 비어 있지 않을 경우에만 처리
+			guard !economicActivityList.isEmpty else {
+				newState.list = []
+				return newState
+			}
+			
+			let items = economicActivityList.map { category -> CategoryDetailItem in
+				return .base(category)
+			}
+			let model: CategoryDetailSectionModel = .init(model: "", items: items)
+			
+			newState.list = [model]
 		case .pushDetail(let indexPath, let data, let isPush):
 			newState.detailData = (indexPath, data)
 			newState.isPushDetail = isPush

@@ -51,17 +51,6 @@ final class AddCategoryViewController: UIViewController {
         super.viewWillAppear(animated)
         view.endEditing(true)
     }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        shadowView.addTopShadow()
-//        shadowView.layer.applyShadow()
-//        shadowView.addTopShadow(color: R.Color.black,
-//                                opacity: 0.8,
-//                                offset: CGSize(width: 0, height: 1),
-//                                radius: 1)
-    }
 }
 
 // MARK: - Action
@@ -197,7 +186,8 @@ private extension AddCategoryViewController {
         
         shadowView = shadowView.then {
             $0.clipsToBounds = false
-            $0.addTopShadow()
+            $0.backgroundColor = R.Color.white
+            $0.layer.applyShadow()
         }
     }
     

@@ -156,38 +156,4 @@ extension UIView {
         self.layer.cornerRadius = 8
         self.clipsToBounds = true
     }
-    
-    func addTopShadow(color: UIColor, opacity: Float, offset: CGSize, radius: CGFloat) {
-        self.layer.shadowColor = color.cgColor
-        self.layer.shadowOpacity = opacity
-//        self.layer.shadowOffset = offset
-        self.layer.shadowRadius = radius
-
-        let shadowPath = UIBezierPath()
-        shadowPath.move(to: CGPoint(x: 0, y: 0))
-        shadowPath.addLine(to: CGPoint(x: self.bounds.width, y: 0))
-        shadowPath.addLine(to: CGPoint(x: self.bounds.width, y: -2))
-        shadowPath.addLine(to: CGPoint(x: 0, y: -2))
-        shadowPath.close()
-
-        self.layer.shadowPath = shadowPath.cgPath
-    }
-    
-    func addTopShadow() {
-        self.layer.masksToBounds = false
-        self.addTopBorder(with: .white, andWidth: 0.5)
-        self.layer.applyShadow()
-//        self.layer.applyShadow(alpha: 1, x: 0, y: 0, blur: 20)
-//        self.layer.shadowOffset = .init(width: 20, height: 20)
-//        self.layer.shadowOpacity = 0.5
-    }
-    
-    func addTopBorder(with color: UIColor?, andWidth borderWidth: CGFloat) {
-        let border = UIView()
-        border.backgroundColor = color
-        border.autoresizingMask = [.flexibleWidth, .flexibleBottomMargin]
-        border.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: borderWidth)
-        
-        self.addSubview(border)
-    }
 }

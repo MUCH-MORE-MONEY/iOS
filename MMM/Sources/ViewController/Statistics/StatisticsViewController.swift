@@ -377,7 +377,7 @@ extension StatisticsViewController: SkeletonLoadable {
 		}
 		
 		headerView = headerView.then {
-			$0.frame = .init(x: 0, y: 0, width: view.bounds.width, height: 590)
+			$0.frame = .init(x: 0, y: 0, width: view.bounds.width, height: 551)
 		}
 		
 		emptyView = emptyView.then {
@@ -420,7 +420,7 @@ extension StatisticsViewController: SkeletonLoadable {
 		}
 
 		satisfactionView.snp.makeConstraints {
-			$0.top.equalTo(activityView.snp.bottom).offset(58)
+			$0.top.equalTo(activityView.snp.bottom).offset(24)
 			$0.leading.trailing.equalToSuperview()
 			$0.bottom.equalToSuperview()
 		}

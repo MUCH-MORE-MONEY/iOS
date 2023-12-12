@@ -207,8 +207,9 @@ extension StatisticsViewController {
 		// 셀 터치시 회색 표시 없애기
 		tableView.deselectRow(at: data.IndexPath, animated: true)
 
+        print("total item : \(reactor.totalItem)")
 		let index = data.IndexPath.row
-		let vc = DetailViewController(homeViewModel: HomeViewModel(), index: index) // 임시: HomeViewModel 생성
+		let vc = DetailViewController(homeViewModel: HomeViewModel(), index: index, isStatisticsVC: true) // 임시: HomeViewModel 생성
 		let economicActivityId = reactor.currentState.activityList.map { $0.id }
 		vc.setData(economicActivityId: economicActivityId, index: index, date: data.info.createAt.toDate() ?? Date())
 		

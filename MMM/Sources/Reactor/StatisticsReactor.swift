@@ -20,7 +20,7 @@ final class StatisticsReactor: Reactor {
 	
 	// 처리 단위
 	enum Mutation {
-		case fetchList([EconomicActivity], String, Bool) // list, type("01" or "03"), rank reset 여부
+		case fetchList([EconomicActivity], String, Bool, Int) // list, type("01" or "03"), rank reset 여부, 아이템의 총 갯수
 		case pagenation([EconomicActivity], Int)
 		case fetchCategoryBar([CategoryBar], String)
 		case setDate(Date)
@@ -49,6 +49,7 @@ final class StatisticsReactor: Reactor {
 		var isPushDetail = false
 		var detailData: (IndexPath: IndexPath, info: EconomicActivity)?
 		var curSatisfaction: Satisfaction = .low
+        var totalItem: Int = 0  // item의 총 갯수
 	}
 	
 	// MARK: Properties
@@ -141,11 +142,11 @@ extension StatisticsReactor {
 		var newState = state
 		
 		switch mutation {
-		case let .fetchList(list, type, reset):
+		case let .fetchList(list, type, reset, totalItem):
 			let data = list.prefix(3)
 			newState.activityList = list
 			currentPage = 0
-			
+            newState.totalItem = totalItem
 			// 월 변경인지 판별
 			if reset {
 				switch type {
@@ -207,7 +208,7 @@ extension StatisticsReactor {
 		return MMMAPIService().getStatisticsList(dateYM: date.getFormattedYM(), valueScoreDvcd: type, limit: 15, offset: 0)
 			.map { (response, error) -> Mutation in
 				self.totalPage = response.totalPageCnt
-				return .fetchList(response.selectListMonthlyByValueScoreOutputDto, type, reset)
+                return .fetchList(response.selectListMonthlyByValueScoreOutputDto, type, reset, response.totalItemCnt)
 			}
 			.catchAndReturn(.setError)
 	}

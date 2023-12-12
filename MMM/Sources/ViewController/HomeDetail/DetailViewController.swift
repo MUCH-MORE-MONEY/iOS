@@ -42,15 +42,19 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
 	private var homeDetailViewModel = HomeDetailViewModel()
 	private var homeViewModel: HomeViewModel
     private var editViewModel = EditActivityViewModel(isAddModel: false)
+    
+    // 통계로 들어온 경우 api를 다르게 호출해야함
+    private var isStatisticsVC = false
 	/// cell에 보여지게 되는 id의 배열
 	private var economicActivityId: [String] = []
 	/// 현재 보여지고 있는 indexPath.row
 	private var index: Int
 	private var cancellable = Set<AnyCancellable>()
 	
-    init(homeViewModel: HomeViewModel, index: Int) {
+    init(homeViewModel: HomeViewModel, index: Int, isStatisticsVC: Bool = false) {
 		self.homeViewModel = homeViewModel
         self.index = index
+        self.isStatisticsVC = isStatisticsVC
 		super.init(nibName: nil, bundle: nil)
 	}
 	
@@ -141,6 +145,20 @@ extension DetailViewController {
         
         editButton.tapPublisher
             .sinkOnMainThread(receiveValue: didTapEditButton)
+            .store(in: &cancellable)
+        
+        let s = UISwipeGestureRecognizer.Direction.up
+        
+        view.gesturePublisher(.swipe(.init(), .left))
+            .sinkOnMainThread { _ in
+                print("swipe Left")
+            }
+            .store(in: &cancellable)
+        
+        view.gesturePublisher(.swipe(.init(), .right))
+            .sinkOnMainThread { _ in
+                print("swipe right")
+            }
             .store(in: &cancellable)
         
         homeDetailViewModel.$detailActivity

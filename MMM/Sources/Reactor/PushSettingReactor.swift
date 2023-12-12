@@ -19,6 +19,7 @@ final class PushSettingReactor: Reactor {
         case newsPushSwitchToggle(Bool)
         case customPushSwitchToggle(Bool)
         case willEnterForeground    // 알림을 끄는건 앱을 나갔다가 오는거기 때문에 필요함
+        case checkNewsPush
     }
     
     enum Mutation {
@@ -29,6 +30,7 @@ final class PushSettingReactor: Reactor {
         case setNewsPushSwitch(Bool)
         case setCustomPushSwitch(Bool)
         case setCustomPushText(String)
+        case setNewsPushValue(Bool)
     }
     
     struct State {
@@ -41,6 +43,7 @@ final class PushSettingReactor: Reactor {
         var pushList: [PushAgreeListSelectResDto.SelectedList] = []
         var customPushLabelText: String = ""
         var isPushAvailable = false
+        var newsPush = false
     }
     
     let initialState: State
@@ -95,6 +98,10 @@ extension PushSettingReactor {
             }
             
             return .just(.setCustomPushSwitch(isOn))
+            
+        case .checkNewsPush:
+            let value = Common.getCustomPushSwitch()
+            return Observable.just(.setNewsPushValue(value))
         }
     }
     
@@ -151,6 +158,9 @@ extension PushSettingReactor {
         case .setCustomPushText(let text):
             Common.setCustomPushText(text)
             newState.customPushLabelText = text
+            
+        case .setNewsPushValue(let value):
+            newState.newsPush = value
         }
 
         return newState

@@ -18,8 +18,16 @@ extension UIView {
     }
     
     enum GestureType {
+        enum SwipeDirection {
+            case up
+            case down
+            case left
+            case right
+        }
+        
+        
         case tap(UITapGestureRecognizer = .init())
-        case swipe(UISwipeGestureRecognizer = .init())
+        case swipe(UISwipeGestureRecognizer = .init(), SwipeDirection = .up)
         case longPress(UILongPressGestureRecognizer = .init())
         case pan(UIPanGestureRecognizer = .init())
         case pinch(UIPinchGestureRecognizer = .init())
@@ -28,7 +36,18 @@ extension UIView {
             switch self {
             case let .tap(tapGesture):
                 return tapGesture
-            case let .swipe(swipeGesture):
+            case let .swipe(swipeGesture, direction):
+                switch direction {
+                case .up:
+                    swipeGesture.direction = .up
+                case .down:
+                    swipeGesture.direction = .down
+                case .left:
+                    swipeGesture.direction = .left
+                case .right:
+                    swipeGesture.direction = .right
+                }
+                
                 return swipeGesture
             case let .longPress(longPressGesture):
                 return longPressGesture
@@ -141,28 +160,34 @@ extension UIView {
     func addTopShadow(color: UIColor, opacity: Float, offset: CGSize, radius: CGFloat) {
         self.layer.shadowColor = color.cgColor
         self.layer.shadowOpacity = opacity
-        self.layer.shadowOffset = offset
+//        self.layer.shadowOffset = offset
         self.layer.shadowRadius = radius
 
         let shadowPath = UIBezierPath()
         shadowPath.move(to: CGPoint(x: 0, y: 0))
         shadowPath.addLine(to: CGPoint(x: self.bounds.width, y: 0))
-        shadowPath.addLine(to: CGPoint(x: self.bounds.width, y: -4))
-        shadowPath.addLine(to: CGPoint(x: 0, y: -4))
+        shadowPath.addLine(to: CGPoint(x: self.bounds.width, y: -2))
+        shadowPath.addLine(to: CGPoint(x: 0, y: -2))
         shadowPath.close()
 
         self.layer.shadowPath = shadowPath.cgPath
     }
     
-    func addTopShadow2() {
-        self.layer.shadowOpacity = 0.7
-        self.layer.shadowOffset = CGSize(width: 0, height: -10)
-        self.layer.shadowRadius = 4
+    func addTopShadow() {
         self.layer.masksToBounds = false
+        self.addTopBorder(with: .white, andWidth: 0.5)
+        self.layer.applyShadow()
+//        self.layer.applyShadow(alpha: 1, x: 0, y: 0, blur: 20)
+//        self.layer.shadowOffset = .init(width: 20, height: 20)
+//        self.layer.shadowOpacity = 0.5
     }
     
-    func addTopShawdow3() {
-        self.layer.masksToBounds = false
-        self.layer.applyShadow()
+    func addTopBorder(with color: UIColor?, andWidth borderWidth: CGFloat) {
+        let border = UIView()
+        border.backgroundColor = color
+        border.autoresizingMask = [.flexibleWidth, .flexibleBottomMargin]
+        border.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: borderWidth)
+        
+        self.addSubview(border)
     }
 }

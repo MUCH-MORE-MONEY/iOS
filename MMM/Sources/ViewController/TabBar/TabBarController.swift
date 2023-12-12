@@ -103,7 +103,7 @@ extension TabBarController {
         
         let statisticsVC = StatisticsViewController()
 		statisticsVC.reactor = StatisticsReactor(provider: ServiceProvider.shared)
-		statisticsVC.tabBarItem = UITabBarItem(title: "예산", image: R.Icon.iconGroupInActive, selectedImage: R.Icon.iconGroupActive)
+		statisticsVC.tabBarItem = UITabBarItem(title: "통계", image: R.Icon.iconGroupInActive, selectedImage: R.Icon.iconGroupActive)
 
         let plusVC = UIViewController()
         plusVC.tabBarItem = UITabBarItem()

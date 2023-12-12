@@ -20,7 +20,7 @@ final class StatisticsReactor: Reactor {
 	
 	// 처리 단위
 	enum Mutation {
-		case fetchList([EconomicActivity], String, Bool, Int) // list, type("01" or "03"), rank reset 여부, 아이템의 총 갯수
+		case setList([EconomicActivity], String, Bool, Int) // list, type("01" or "03"), rank reset 여부, 아이템의 총 갯수
 		case pagenation([EconomicActivity], Int)
 		case fetchCategoryBar([CategoryBar], String)
 		case setDate(Date)

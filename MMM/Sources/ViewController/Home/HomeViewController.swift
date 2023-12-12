@@ -131,7 +131,7 @@ extension HomeViewController {
 			self.viewModel.isWillAppear = false
 			
 			self.viewModel.getDailyList(self.viewModel.preDate.getFormattedYMD())
-		}
+		} 
 	}
 	
 	/// 달력 Picker Bottom Sheet

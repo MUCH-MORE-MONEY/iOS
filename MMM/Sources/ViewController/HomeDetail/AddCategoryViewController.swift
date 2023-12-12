@@ -187,7 +187,7 @@ private extension AddCategoryViewController {
         shadowView = shadowView.then {
             $0.clipsToBounds = false
             $0.backgroundColor = R.Color.white
-            $0.layer.applyShadow()
+            $0.layer.applyShadow(alpha: 0.2, y: 4, blur: 20)
         }
     }
     

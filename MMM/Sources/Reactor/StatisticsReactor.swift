@@ -49,7 +49,7 @@ final class StatisticsReactor: Reactor {
 		var isPushDetail = false
 		var detailData: (IndexPath: IndexPath, info: EconomicActivity)?
 		var curSatisfaction: Satisfaction = .low
-    var totalItem: Int = 0  // item의 총 갯수
+		var totalItem: Int = 0  // item의 총 갯수
 		var isInit = true // 최초진입
 	}
 	
@@ -63,9 +63,6 @@ final class StatisticsReactor: Reactor {
 	init(provider: ServiceProviderProtocol) {
 		self.initialState = State()
 		self.provider = provider
-		
-		// 뷰가 최초 로드 될 경우
-		action.onNext(.loadData)
 	}
 }
 //MARK: - Mutate, Transform, Reduce
@@ -123,7 +120,7 @@ extension StatisticsReactor {
 					self.getCategory(date, "01"),
 					self.getStatisticsList(date, "01", true),
 					self.getStatisticsList(date, "03", true),
-					self.getStatisticsList(date, self.currentState.satisfaction.id, true) // viewWillAppear일때, 현재 만족도를 불러와야한다.
+					self.getStatisticsList(date, self.currentState.satisfaction.id) // viewWillAppear일때, 현재 만족도를 불러와야한다.
 				])
 			case let .updateSatisfaction(satisfaction):
 				return .concat([

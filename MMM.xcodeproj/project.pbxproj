@@ -12,6 +12,7 @@
 		45AFC2AB2AC2A564004DF76E /* CustomPushTextSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AFC2AA2AC2A564004DF76E /* CustomPushTextSettingViewController.swift */; };
 		45B878C52B341A3400EF27FB /* BottomPageControlView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B878C42B341A3400EF27FB /* BottomPageControlView2.swift */; };
 		45B878C72B341E8300EF27FB /* BottomPageControlReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B878C62B341E8300EF27FB /* BottomPageControlReactor.swift */; };
+		45B878C92B342B0600EF27FB /* DetailProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B878C82B342B0600EF27FB /* DetailProvider.swift */; };
 		45D07CCF2AC4071A001C08AB /* CustomPushTimeSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D07CCE2AC4071A001C08AB /* CustomPushTimeSettingViewController.swift */; };
 		45D07CD32AC4078A001C08AB /* CustomPushTimeSettingReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D07CD22AC4078A001C08AB /* CustomPushTimeSettingReactor.swift */; };
 		45D401212B33CF6200CE0351 /* DetailViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D401202B33CF6200CE0351 /* DetailViewController2.swift */; };
@@ -315,6 +316,7 @@
 		45AFC2AA2AC2A564004DF76E /* CustomPushTextSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPushTextSettingViewController.swift; sourceTree = "<group>"; };
 		45B878C42B341A3400EF27FB /* BottomPageControlView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomPageControlView2.swift; sourceTree = "<group>"; };
 		45B878C62B341E8300EF27FB /* BottomPageControlReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomPageControlReactor.swift; sourceTree = "<group>"; };
+		45B878C82B342B0600EF27FB /* DetailProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailProvider.swift; sourceTree = "<group>"; };
 		45D07CCE2AC4071A001C08AB /* CustomPushTimeSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPushTimeSettingViewController.swift; sourceTree = "<group>"; };
 		45D07CD22AC4078A001C08AB /* CustomPushTimeSettingReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPushTimeSettingReactor.swift; sourceTree = "<group>"; };
 		45D401202B33CF6200CE0351 /* DetailViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController2.swift; sourceTree = "<group>"; };
@@ -1048,6 +1050,7 @@
 				C4EB8CB12AC4325C005FBAF1 /* CategoryProvider.swift */,
 				C4BBD2632AB9DE8C0055FA65 /* StatisticsProvider.swift */,
 				C4BBD2702ABADA8B0055FA65 /* ProfileProvider.swift */,
+				45B878C82B342B0600EF27FB /* DetailProvider.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1844,6 +1847,7 @@
 				C4BBD27D2ABEBFB70055FA65 /* CategoryHeader.swift in Sources */,
 				C41193E529D287E6003DBC15 /* Ex+UIDevice.swift in Sources */,
 				C4C0CB092A2474F900C41FF4 /* Ex+UILabel.swift in Sources */,
+				45B878C92B342B0600EF27FB /* DetailProvider.swift in Sources */,
 				6A1322F12A089B2900CEEC81 /* BasePaddingLabel.swift in Sources */,
 				C4D7FC872A08942E00565291 /* Monthly.swift in Sources */,
 				C46D5E552AD078DA00EBE5D7 /* CategoryEditTableViewCell.swift in Sources */,

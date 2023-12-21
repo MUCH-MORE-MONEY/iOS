@@ -11,6 +11,7 @@ protocol ServiceProviderProtocol: AnyObject {
 	var categoryProvider: CategoryServiceProtocol { get }
 	var statisticsProvider: StatisticsServiceProtocol { get }
 	var profileProvider: ProfileServiceProtocol { get }
+    var detailProvider: DetailServiceProtocol { get }
 }
 
 final class ServiceProvider: ServiceProviderProtocol {
@@ -19,6 +20,7 @@ final class ServiceProvider: ServiceProviderProtocol {
 	lazy var categoryProvider: CategoryServiceProtocol = CategoryProvider()
 	lazy var statisticsProvider: StatisticsServiceProtocol = StatisticsProvider()
 	lazy var profileProvider: ProfileServiceProtocol = ProfileProvider()
-
+    lazy var detailProvider: DetailServiceProtocol = DetailProvider()
+    
 	private init() { }
 }

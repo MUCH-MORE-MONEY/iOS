@@ -41,6 +41,22 @@ final class DetailViewController2: BaseDetailViewController, UIScrollViewDelegat
     // MARK: - LoadingView
     private lazy var loadView = LoadingViewController()
     
+    // MARK: - Properties
+    private let rowNum: Int
+    private let totalItem: Int
+    
+    init(rowNum: Int, totalItem: Int) {
+        self.rowNum = rowNum
+        self.totalItem = totalItem
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+        //super.init(coder: coder) 이것도 됨
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }

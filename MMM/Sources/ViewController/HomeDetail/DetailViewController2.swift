@@ -9,10 +9,12 @@ import UIKit
 import Then
 import SnapKit
 import RxSwift
+import RxCocoa
 import Lottie
 import ReactorKit
 
-final class DetailViewController2: BaseDetailViewController, UIScrollViewDelegate {
+final class DetailViewController2: BaseDetailViewController, UIScrollViewDelegate, View {
+    typealias Reactor = DetailReactor
     
     // MARK: - UI Components
     private lazy var starStackView = UIStackView()
@@ -41,38 +43,41 @@ final class DetailViewController2: BaseDetailViewController, UIScrollViewDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func bind(reactor: DetailReactor) {
+        bindAction(reactor)
+        bindState(reactor)
     }
-    */
+}
 
+// MARK: - Bind
+extension DetailViewController2 {
+    private func bindAction(_ reactor: DetailReactor) {
+        editButton.rx.tap
+            .map {.didTapEditButton }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindState(_ reactor: DetailReactor) {
+        reactor.state
+            .map { $0.isPushEditVC }
+            .distinctUntilChanged()
+            .filter { $0 }
+            .bind(onNext: pushEditVC)
+            .disposed(by: disposeBag)
+    }
 }
 
 
 // MARK: - Action
 private extension DetailViewController2 {
-//    func didTapEditButton() {
-//        if cameraImageView.isHidden {
-//            let mainImage = mainImageView.image
-//            homeDetailViewModel.mainImage = mainImage
-//        } else {
-//            homeDetailViewModel.mainImage = nil
-//        }
-//        
-//        let vc = EditActivityViewController(detailViewModel: homeDetailViewModel, editViewModel: editViewModel, date: date)
-//        
-//        navigationController?.pushViewController(vc, animated: true)
-//    }
+    func pushEditVC(_ isPush: Bool) {
+        let vc = EditActivityViewController(detailViewModel: HomeDetailViewModel(), editViewModel: EditActivityViewModel(isAddModel: false), date: Date())
+        
+        navigationController?.pushViewController(vc, animated: true)
+    }
 }
 
 // MARK: - Loading Func
@@ -96,4 +101,164 @@ extension DetailViewController2 {
 //        self.loadView.modalPresentationStyle = .overFullScreen
 //        self.present(self.loadView, animated: false)
 //    }
+}
+
+//MARK: - Attribute & Hierarchy & Layouts
+extension DetailViewController2 {
+    override func setAttribute() {
+        super.setAttribute()
+        
+        editActivityButtonItem = editActivityButtonItem.then {
+            $0.customView = editButton
+        }
+        
+        starList.forEach {
+            $0.contentMode = .scaleAspectFit
+            starStackView.addArrangedSubview($0) }
+        
+        
+        starStackView = starStackView.then {
+            $0.axis = .horizontal
+            $0.distribution = .fillEqually
+            $0.spacing = 7.54
+        }
+        
+        editButton = editButton.then {
+            $0.setTitle("편집", for: .normal)
+        }
+        
+        titleLabel = titleLabel.then {
+            $0.font = R.Font.body0
+            $0.textColor = R.Color.gray200
+        }
+        
+        scrollView = scrollView.then {
+            $0.delegate = self
+            $0.showsVerticalScrollIndicator = false
+            $0.showsHorizontalScrollIndicator = false
+            $0.isScrollEnabled = true
+        }
+        
+        satisfactionLabel = satisfactionLabel.then {
+            $0.backgroundColor = R.Color.gray700
+            $0.layer.cornerRadius = 12
+            $0.clipsToBounds = true
+            $0.textColor = R.Color.gray100
+            $0.font = R.Font.body4
+        }
+        
+        mainImageView = mainImageView.then {
+            $0.image = R.Icon.camera48
+            $0.backgroundColor = R.Color.gray100
+            $0.contentMode = .scaleToFill
+            $0.isHidden = true
+        }
+        
+        cameraImageView = cameraImageView.then {
+            $0.isHidden = true
+            $0.layer.zPosition = 1000
+        }
+        
+        memoLabel = memoLabel.then {
+            $0.text = "이 활동은 어떤 활동이었는지 기록해봐요"
+            $0.textColor = R.Color.gray400
+            $0.font = R.Font.body3
+
+            $0.numberOfLines = 0
+        }
+    }
+    
+    override func setHierarchy() {
+        super.setHierarchy()
+        
+        navigationItem.rightBarButtonItem = editActivityButtonItem
+        
+        view.addSubviews(titleLabel, scrollView, bottomPageControlView)
+        
+        contentView.addSubviews(addCategoryView, separatorView, starStackView, mainImageView, cameraImageView, memoLabel, satisfactionLabel)
+        scrollView.addSubviews(contentView)
+    }
+    
+    override func setLayout() {
+        super.setLayout()
+        
+        titleLabel.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(24)
+            $0.left.equalToSuperview().inset(24)
+        }
+        
+        scrollView.snp.makeConstraints {
+            $0.top.equalTo(headerView.snp.bottom)
+            $0.left.right.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(90)
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.edges.equalToSuperview().inset(24)
+        }
+        
+        addCategoryView.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.left.right.equalToSuperview()
+        }
+        
+        separatorView.snp.makeConstraints {
+            $0.top.equalTo(addCategoryView.snp.bottom).offset(40)
+            $0.left.right.equalToSuperview()
+        }
+        
+        starStackView.snp.makeConstraints {
+            $0.top.equalTo(separatorView.snp.bottom).offset(16)
+            $0.left.equalToSuperview()
+            $0.height.equalTo(24)
+            $0.width.equalTo(120)
+        }
+        
+        satisfactionLabel.snp.makeConstraints {
+            $0.left.equalTo(starStackView.snp.right).offset(8)
+            $0.centerY.equalTo(starStackView)
+        }
+        
+        mainImageView.snp.makeConstraints {
+            $0.top.equalTo(starStackView.snp.bottom).offset(16)
+            $0.width.equalTo(view.safeAreaLayoutGuide).offset(-48)
+            $0.height.equalTo(mainImageView.snp.width)
+            $0.left.right.equalToSuperview()
+        }
+        
+        cameraImageView.snp.makeConstraints {
+            $0.top.equalTo(starStackView.snp.bottom).offset(16)
+            $0.left.right.equalToSuperview()
+            $0.height.equalTo(144)
+        }
+        
+        memoLabel.snp.makeConstraints {
+            $0.top.equalTo(cameraImageView.snp.bottom).offset(16)
+            $0.left.right.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
+        
+        bottomPageControlView.snp.makeConstraints {
+            $0.height.equalTo(55)
+            $0.left.right.equalToSuperview().inset(24)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(UIDevice.hasNotch ? 0 : 20)
+        }
+    }
+    
+    /// mainImageView 기준으로 memoLabel의 뷰를 다시 배치하는 메서드
+    private func remakeConstraintsByMainImageView() {
+        memoLabel.snp.remakeConstraints {
+            $0.top.equalTo(mainImageView.snp.bottom).offset(16)
+            $0.left.right.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
+    }
+    /// cameraImageView 기준으로 memoLabel의 뷰를 다시 배치하는 메서드
+    private func remakeConstraintsByCameraImageView() {
+        memoLabel.snp.remakeConstraints {
+            $0.top.equalTo(cameraImageView.snp.bottom).offset(16)
+            $0.left.right.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
+    }
 }

@@ -773,10 +773,10 @@
 				C46D5E6A2AD1890400EBE5D7 /* Category */,
 				45D401222B33D0F600CE0351 /* PushSetting */,
 				C4E96B7D2AF919C300C59983 /* ChallengeReactor.swift */,
+				45D401232B33D11500CE0351 /* DetailReactor.swift */,
 				C4170B4F2A89FD1100CE0A65 /* StatisticsReactor.swift */,
 				C46409D12AB8A6A400A899AD /* ProfileReactor.swift */,
 				C46409D32AB8CAE600A899AD /* WithdrawReactor.swift */,
-				45D401232B33D11500CE0351 /* DetailReactor.swift */,
 			);
 			path = Reactor;
 			sourceTree = "<group>";

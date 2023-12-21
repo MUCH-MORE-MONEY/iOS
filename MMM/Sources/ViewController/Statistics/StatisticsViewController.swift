@@ -258,10 +258,13 @@ extension StatisticsViewController {
         print("total item : \(reactor.totalItem)")
 		let index = data.IndexPath.row
 
-		let vc = DetailViewController(homeViewModel: HomeViewModel(), index: index, isStatisticsVC: true) // 임시: HomeViewModel 생성
-		let economicActivityId = reactor.currentState.activityList[0].items.map { $0.identity as! String }
-		vc.setData(economicActivityId: economicActivityId, index: index, date: data.info.createAt.toDate() ?? Date())
+//		let vc = DetailViewController(homeViewModel: HomeViewModel(), index: index, isStatisticsVC: true) // 임시: HomeViewModel 생성
+//		let economicActivityId = reactor.currentState.activityList[0].items.map { $0.identity as! String }
+//		vc.setData(economicActivityId: economicActivityId, index: index, date: data.info.createAt.toDate() ?? Date())
 		
+        let vc = DetailViewController2()
+        vc.reactor = DetailReactor()
+        
 		navigationController?.pushViewController(vc, animated: true)
 	}
 	

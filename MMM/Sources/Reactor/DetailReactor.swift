@@ -10,15 +10,15 @@ import ReactorKit
 
 final class DetailReactor: Reactor {
     enum Action {
-        
+        case didTapEditButton
     }
     
     enum Mutation {
-        
+        case pushEditVC(Bool)
     }
     
     struct State {
-        
+        var isPushEditVC = false
     }
     
     let initialState: State
@@ -32,7 +32,11 @@ final class DetailReactor: Reactor {
 extension DetailReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-            
+        case .didTapEditButton:
+            return .concat([
+                .just(.pushEditVC(true)),
+                .just(.pushEditVC(false))
+            ])
         }
     }
     
@@ -40,8 +44,11 @@ extension DetailReactor {
         var newState = state
         
         switch mutation {
-            
+        case let .pushEditVC(isPush):
+            newState.isPushEditVC = isPush
         }
+        
+        return newState
     }
 }
 

@@ -39,15 +39,19 @@ final class DetailViewController2: BaseDetailViewController, UIScrollViewDelegat
     private lazy var separatorView = SeparatorView()
     
     // MARK: - LoadingView
-    private lazy var loadView = LoadingViewController()
+    private lazy var loadingView = LoadingViewController()
     
     // MARK: - Properties
+    private let dateYM: String
     private let rowNum: Int
     private let totalItem: Int
+    private let valueScoreDvcd: String
     
-    init(rowNum: Int, totalItem: Int) {
+    init(dateYM: String, rowNum: Int, totalItem: Int, valueScoreDvcd: String) {
+        self.dateYM = dateYM
         self.rowNum = rowNum
         self.totalItem = totalItem
+        self.valueScoreDvcd = valueScoreDvcd
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -83,6 +87,18 @@ extension DetailViewController2 {
             .filter { $0 }
             .bind(onNext: pushEditVC)
             .disposed(by: disposeBag)
+        
+        reactor.state
+            .map { $0.list }
+            .distinctUntilChanged()
+            .bind(onNext: updateUI)
+            .disposed(by: disposeBag)
+        
+        reactor.state
+            .map { $0.isLoading }
+            .distinctUntilChanged()
+            .bind(onNext: showLoadingView)
+            .disposed(by: disposeBag)
     }
 }
 
@@ -93,6 +109,63 @@ private extension DetailViewController2 {
         let vc = EditActivityViewController(detailViewModel: HomeDetailViewModel(), editViewModel: EditActivityViewModel(isAddModel: false), date: Date())
         
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func updateUI(_ list: [EconomicActivity]) {
+        guard let activity = list.first else { return }
+
+        let originalString = activity.createAt
+
+        // 원본 문자열을 날짜로 변환하기 위한 DateFormatter 설정
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyyMMdd" // 원본 문자열의 형식
+
+        // 문자열을 Date로 변환
+        if let date = dateFormatter.date(from: originalString) {
+            // 새로운 형식으로 문자열을 변환하기 위한 DateFormatter 설정
+            dateFormatter.dateFormat = "MM월 dd일"
+            let newString = dateFormatter.string(from: date) + " 경제활동"
+            self.title = newString
+//            print(newString) // 결과: "11월 10일 경제활동"
+        } else {
+            print("날짜 변환 실패")
+        }
+        
+        self.titleLabel.text = activity.title
+        self.activityType.text = activity.type == "01" ? "지출" : "수입"
+        self.activityType.backgroundColor = activity.type == "01" ? R.Color.orange500 : R.Color.blue500
+        self.starList.forEach {
+            $0.image = R.Icon.iconStarGray16
+        }
+        
+        for i in 0..<activity.star {
+            self.starList[i].image = R.Icon.iconStarBlack16
+        }
+        
+        if URL(string: activity.imageUrl) != nil {
+            self.mainImageView.isHidden = false
+            self.cameraImageView.isHidden = true
+            self.mainImageView.setImage(urlStr: activity.imageUrl, defaultImage: R.Icon.camera48)
+            self.remakeConstraintsByMainImageView()
+        } else {
+            self.mainImageView.isHidden = true
+            self.cameraImageView.isHidden = false
+            self.remakeConstraintsByCameraImageView()
+        }
+        
+        
+        self.totalPrice.text = "\(activity.amount.withCommas())원"
+        if !activity.memo.isEmpty {
+            self.memoLabel.text = activity.memo
+            memoLabel.textColor = R.Color.black
+        } else {
+            memoLabel.textColor = R.Color.gray400
+            self.memoLabel.text = "이 활동은 어떤 활동이었는지 기록해봐요"
+        }
+        
+        self.satisfactionLabel.setSatisfyingLabelEdit(by: activity.star)
+        self.addCategoryView.setTitleAndColor(by: activity.categoryTitle ?? "기타")
+        self.addCategoryView.setViewisHomeDetail()
     }
 }
 
@@ -111,12 +184,16 @@ extension DetailViewController2 {
 //        snackView.toastAnimation(duration: 1.0, delay: 3.0, option: .curveEaseOut)
 //    }
 //    
-//    func showLoadingView() {
-//        self.loadView.play()
-//        self.loadView.isPresent = true
-//        self.loadView.modalPresentationStyle = .overFullScreen
-//        self.present(self.loadView, animated: false)
-//    }
+    func showLoadingView(_ isLoading: Bool) {
+        if isLoading {
+            self.loadingView.play()
+            self.loadingView.isPresent = true
+            self.loadingView.modalPresentationStyle = .overFullScreen
+            self.present(self.loadingView, animated: false)
+        } else {
+            self.loadingView.dismiss(animated: false)
+        }
+    }
 }
 
 //MARK: - Attribute & Hierarchy & Layouts

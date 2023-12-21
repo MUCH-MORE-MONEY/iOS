@@ -258,11 +258,15 @@ extension StatisticsViewController {
 //		let vc = DetailViewController(homeViewModel: HomeViewModel(), index: index, isStatisticsVC: true) // 임시: HomeViewModel 생성
 //		let economicActivityId = reactor.currentState.activityList[0].items.map { $0.identity as! String }
 //		vc.setData(economicActivityId: economicActivityId, index: index, date: data.info.createAt.toDate() ?? Date())
-        let rowNum = data.info.rowNum ?? 0
+        // dateYM ex)20231219 이런식으로 넘어와서 뒤에 두개 지워줌
+        var dateYM = data.info.createAt
+        dateYM.removeLast(2)
         let totalItem = reactor.totalItem
+        let rowNum = data.info.rowNum ?? 0
+        let valueScoreDvcd = reactor.currentState.satisfaction.id
         
-        let vc = DetailViewController2(rowNum: rowNum, totalItem: totalItem)
-        vc.reactor = DetailReactor()
+        let vc = DetailViewController2(dateYM: dateYM, rowNum: rowNum, totalItem: totalItem, valueScoreDvcd: valueScoreDvcd)
+        vc.reactor = DetailReactor(dateYM: dateYM, rowNum: rowNum, totalItem: totalItem, valueScoreDvcd: valueScoreDvcd)
         
 		navigationController?.pushViewController(vc, animated: true)
 	}

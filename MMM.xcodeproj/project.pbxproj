@@ -10,6 +10,8 @@
 		003B832595A61A7EA6CCC014 /* Pods_MMM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A564931308C77DE145181BBF /* Pods_MMM.framework */; };
 		45AFC2A92AC296E1004DF76E /* CustomPushTextSettingReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AFC2A82AC296E1004DF76E /* CustomPushTextSettingReactor.swift */; };
 		45AFC2AB2AC2A564004DF76E /* CustomPushTextSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AFC2AA2AC2A564004DF76E /* CustomPushTextSettingViewController.swift */; };
+		45B878C52B341A3400EF27FB /* BottomPageControlView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B878C42B341A3400EF27FB /* BottomPageControlView2.swift */; };
+		45B878C72B341E8300EF27FB /* BottomPageControlReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B878C62B341E8300EF27FB /* BottomPageControlReactor.swift */; };
 		45D07CCF2AC4071A001C08AB /* CustomPushTimeSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D07CCE2AC4071A001C08AB /* CustomPushTimeSettingViewController.swift */; };
 		45D07CD32AC4078A001C08AB /* CustomPushTimeSettingReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D07CD22AC4078A001C08AB /* CustomPushTimeSettingReactor.swift */; };
 		45D401212B33CF6200CE0351 /* DetailViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D401202B33CF6200CE0351 /* DetailViewController2.swift */; };
@@ -311,6 +313,8 @@
 		451805DC2AC112C0005C9155 /* APIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIConstants.swift; sourceTree = "<group>"; };
 		45AFC2A82AC296E1004DF76E /* CustomPushTextSettingReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPushTextSettingReactor.swift; sourceTree = "<group>"; };
 		45AFC2AA2AC2A564004DF76E /* CustomPushTextSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPushTextSettingViewController.swift; sourceTree = "<group>"; };
+		45B878C42B341A3400EF27FB /* BottomPageControlView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomPageControlView2.swift; sourceTree = "<group>"; };
+		45B878C62B341E8300EF27FB /* BottomPageControlReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomPageControlReactor.swift; sourceTree = "<group>"; };
 		45D07CCE2AC4071A001C08AB /* CustomPushTimeSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPushTimeSettingViewController.swift; sourceTree = "<group>"; };
 		45D07CD22AC4078A001C08AB /* CustomPushTimeSettingReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPushTimeSettingReactor.swift; sourceTree = "<group>"; };
 		45D401202B33CF6200CE0351 /* DetailViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController2.swift; sourceTree = "<group>"; };
@@ -777,6 +781,7 @@
 				C4170B4F2A89FD1100CE0A65 /* StatisticsReactor.swift */,
 				C46409D12AB8A6A400A899AD /* ProfileReactor.swift */,
 				C46409D32AB8CAE600A899AD /* WithdrawReactor.swift */,
+				45B878C62B341E8300EF27FB /* BottomPageControlReactor.swift */,
 			);
 			path = Reactor;
 			sourceTree = "<group>";
@@ -1212,6 +1217,7 @@
 				6A0D5B982A4C0E3300958E72 /* ToastView.swift */,
 				6A03FEE22ADBDB7300DA3D15 /* AddCategoryView.swift */,
 				6A03FEE42ADBE90500DA3D15 /* SeparatorView.swift */,
+				45B878C42B341A3400EF27FB /* BottomPageControlView2.swift */,
 			);
 			path = ETC.;
 			sourceTree = "<group>";
@@ -1720,6 +1726,7 @@
 				C40E522C2A39A09900775455 /* HomeErrorView.swift in Sources */,
 				C4F3ABE12AF4C73D00BA7A66 /* CategoryEmptyView.swift in Sources */,
 				C40E522A2A39629B00775455 /* ExportResDto.swift in Sources */,
+				45B878C72B341E8300EF27FB /* BottomPageControlReactor.swift in Sources */,
 				6A0379752A2443B9005EE07F /* Ex+UITextView.swift in Sources */,
 				6A08FFDC2A274A22000AD06B /* AddDetailViewController.swift in Sources */,
 				6A14E7172A9DDD060071805D /* RxOperation.swift in Sources */,
@@ -1794,6 +1801,7 @@
 				C4D03F052A2EAB1800011B41 /* MMMWidget.intentdefinition in Sources */,
 				C4C84FED2B07440300F7757B /* StatisticsDateBottomSheetReactor.swift in Sources */,
 				C411939229D2817C003DBC15 /* ProfileViewController.swift in Sources */,
+				45B878C52B341A3400EF27FB /* BottomPageControlView2.swift in Sources */,
 				6A2B5D5B2A9735D500CCBFBE /* DetailTimeSettingView.swift in Sources */,
 				6AF40EC72AF10B1F00388EDC /* CategorySelectHeaderCell.swift in Sources */,
 				6A03BB4C2ADD555D00F86756 /* AddCategoryViewController.swift in Sources */,

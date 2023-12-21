@@ -42,23 +42,23 @@ final class DetailViewController2: BaseDetailViewController, UIScrollViewDelegat
     private lazy var loadingView = LoadingViewController()
     
     // MARK: - Properties
-    private let dateYM: String
-    private let rowNum: Int
-    private let totalItem: Int
-    private let valueScoreDvcd: String
-    
-    init(dateYM: String, rowNum: Int, totalItem: Int, valueScoreDvcd: String) {
-        self.dateYM = dateYM
-        self.rowNum = rowNum
-        self.totalItem = totalItem
-        self.valueScoreDvcd = valueScoreDvcd
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-        //super.init(coder: coder) 이것도 됨
-    }
+//    private let dateYM: String
+//    private let rowNum: Int
+//    private let totalItem: Int
+//    private let valueScoreDvcd: String
+//    
+//    init(dateYM: String, rowNum: Int, totalItem: Int, valueScoreDvcd: String) {
+//        self.dateYM = dateYM
+//        self.rowNum = rowNum
+//        self.totalItem = totalItem
+//        self.valueScoreDvcd = valueScoreDvcd
+//        super.init(nibName: nil, bundle: nil)
+//    }
+//
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//        //super.init(coder: coder) 이것도 됨
+//    }
     
     
     override func viewDidLoad() {

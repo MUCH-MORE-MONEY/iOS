@@ -28,9 +28,11 @@ final class DetailReactor: Reactor {
     }
     
     let initialState: State
+    let provider: ServiceProviderProtocol
     
-    init(dateYM: String, rowNum: Int, totalItem: Int, valueScoreDvcd: String) {
+    init(provider: ServiceProviderProtocol, dateYM: String, rowNum: Int, totalItem: Int, valueScoreDvcd: String) {
         self.initialState = State()
+        self.provider = provider
         action.onNext(.loadData(dateYM: dateYM, rowNum: rowNum, valueScoreDvcd: valueScoreDvcd))
     }
 }

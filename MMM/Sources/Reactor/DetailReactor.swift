@@ -11,13 +11,14 @@ import ReactorKit
 final class DetailReactor: Reactor {
     enum Action {
         case didTapEditButton
-        case loadData(dateYM: String, rowNum: Int, valueScoreDvcd: String)
+        case loadData(dateYM: String, rowNum: Int, valueScoreDvcd: String, id: String)
         case didTapPreviousButton
         case didTapNextButton
     }
     
     enum Mutation {
         case pushEditVC(Bool)
+        case fetchSelectedActivity(SelectDetailResDto)
         case fetchActivity([EconomicActivity])
         case setLoading(Bool)
         case setError
@@ -33,13 +34,17 @@ final class DetailReactor: Reactor {
         var rowNum: Int
         var totalItem: Int
         var valueScoreDvcd: String
+        var id: String
+        // detail이랑 edit이랑 response 타입이 달라서 한번 더 fetch를 해줘야함
+        var editActivity: SelectDetailResDto?
+        
     }
     
     let initialState: State
     
-    init(dateYM: String, rowNum: Int, totalItem: Int, valueScoreDvcd: String) {
-        self.initialState = State(dateYM: dateYM, rowNum: rowNum, totalItem: totalItem, valueScoreDvcd: valueScoreDvcd)
-        action.onNext(.loadData(dateYM: dateYM, rowNum: rowNum, valueScoreDvcd: valueScoreDvcd))
+    init(dateYM: String, rowNum: Int, totalItem: Int, valueScoreDvcd: String, id: String) {
+        self.initialState = State(dateYM: dateYM, rowNum: rowNum, totalItem: totalItem, valueScoreDvcd: valueScoreDvcd, id: id)
+        action.onNext(.loadData(dateYM: dateYM, rowNum: rowNum, valueScoreDvcd: valueScoreDvcd, id: id))
     }
 }
 
@@ -57,10 +62,11 @@ extension DetailReactor {
                 .just(.pushEditVC(false))
             ])
             
-        case .loadData(let dateYM, let rowNum, let valueScoreDvcd):
+        case .loadData(let dateYM, let rowNum, let valueScoreDvcd, let id):
             return .concat([
                 .just(.setLoading(true)),
                 self.getStatisticsList(dateYM, rowNum, valueScoreDvcd, true),
+                self.getSelectedActivity(by: id),
                 .just(.setLoading(false))
             ])
             
@@ -100,6 +106,10 @@ extension DetailReactor {
         
         case let .updateIndex(index):
             newState.rowNum += index
+            
+        case let .fetchSelectedActivity(activity):
+            print(activity)
+            newState.editActivity = activity
         }
         
         return newState
@@ -108,11 +118,19 @@ extension DetailReactor {
 
 // MARK: - Action
 extension DetailReactor {
-    // 경제활동 만족도에 따른 List 불러오기
+    // 경제활동 만족도에 따른 List 불러오기 (사실 pagenation을 위한 api이지만 하나씩만 호출해서 사용함)
     func getStatisticsList(_ dateYM: String,_ rowNum: Int, _ type: String, _ reset: Bool = false) -> Observable<Mutation> {
         return MMMAPIService().getStatisticsList(dateYM: dateYM, valueScoreDvcd: type, limit: 1, offset: rowNum - 1)
             .map { (response, error) -> Mutation in
                 return .fetchActivity(response.selectListMonthlyByValueScoreOutputDto)
+            }
+            .catchAndReturn(.setError)
+    }
+    // 경제활동 편집 기능도 수행하기 위해 selectedActivity 타입이 필요
+    func getSelectedActivity(by id: String) -> Observable<Mutation> {
+        return MMMAPIService().getSelectedActivity(id)
+            .map { (response, error) -> Mutation in
+                return .fetchSelectedActivity(response)
             }
             .catchAndReturn(.setError)
     }

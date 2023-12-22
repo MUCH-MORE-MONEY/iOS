@@ -42,27 +42,15 @@ final class DetailViewController2: BaseDetailViewController, UIScrollViewDelegat
     private lazy var loadingView = LoadingViewController()
     
     // MARK: - Properties
-//    private let dateYM: String
-//    private let rowNum: Int
-//    private let totalItem: Int
-//    private let valueScoreDvcd: String
-//    
-//    init(dateYM: String, rowNum: Int, totalItem: Int, valueScoreDvcd: String) {
-//        self.dateYM = dateYM
-//        self.rowNum = rowNum
-//        self.totalItem = totalItem
-//        self.valueScoreDvcd = valueScoreDvcd
-//        super.init(nibName: nil, bundle: nil)
-//    }
-//
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//        //super.init(coder: coder) 이것도 됨
-//    }
+    private var hasImage = false
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+  
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
     
     func bind(reactor: DetailReactor) {
@@ -106,7 +94,28 @@ extension DetailViewController2 {
 // MARK: - Action
 private extension DetailViewController2 {
     func pushEditVC(_ isPush: Bool) {
-        let vc = EditActivityViewController(detailViewModel: HomeDetailViewModel(), editViewModel: EditActivityViewModel(isAddModel: false), date: Date())
+        // FIXME: - Editactivity도 reactor로 바꿔야함
+        let detailVM = HomeDetailViewModel()
+        let editVM = EditActivityViewModel(isAddModel: false)
+        
+        guard let reactor = reactor else { return }
+        guard let activity = reactor.currentState.list.first else { return }
+        
+        detailVM.detailActivity?.title = activity.title
+        detailVM.detailActivity?.memo = activity.memo
+        detailVM.detailActivity?.amount = activity.amount
+        detailVM.detailActivity?.createAt = activity.createAt
+        detailVM.detailActivity?.star = activity.star
+        detailVM.detailActivity?.type = activity.type
+//        detailVM.detailActivity?.fileNo = activity.
+        
+
+
+
+
+        detailVM.hasImage = self.hasImage
+
+        let vc = EditActivityViewController(detailViewModel: detailVM, editViewModel: editVM, date: Date())
         
         navigationController?.pushViewController(vc, animated: true)
     }
@@ -147,10 +156,12 @@ private extension DetailViewController2 {
             self.cameraImageView.isHidden = true
             self.mainImageView.setImage(urlStr: activity.imageUrl, defaultImage: R.Icon.camera48)
             self.remakeConstraintsByMainImageView()
+            self.hasImage = true
         } else {
             self.mainImageView.isHidden = true
             self.cameraImageView.isHidden = false
             self.remakeConstraintsByCameraImageView()
+            self.hasImage = false
         }
         
         

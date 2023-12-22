@@ -264,10 +264,10 @@ extension StatisticsViewController {
         let totalItem = reactor.totalItem
         let rowNum = data.info.rowNum ?? 0
         let valueScoreDvcd = reactor.currentState.satisfaction.id
-        
+        let id = data.info.id
 //        let vc = DetailViewController2(dateYM: dateYM, rowNum: rowNum, totalItem: totalItem, valueScoreDvcd: valueScoreDvcd)
         let vc = DetailViewController2()
-        vc.reactor = DetailReactor(dateYM: dateYM, rowNum: rowNum, totalItem: totalItem, valueScoreDvcd: valueScoreDvcd)
+        vc.reactor = DetailReactor(dateYM: dateYM, rowNum: rowNum, totalItem: totalItem, valueScoreDvcd: valueScoreDvcd, id: id)
         
 		navigationController?.pushViewController(vc, animated: true)
 	}

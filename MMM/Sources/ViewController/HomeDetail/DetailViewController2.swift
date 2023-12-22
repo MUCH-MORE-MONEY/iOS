@@ -51,6 +51,14 @@ final class DetailViewController2: BaseDetailViewController, UIScrollViewDelegat
   
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        guard let reactor = self.reactor else { return }
+        
+        let dateYM = reactor.currentState.dateYM
+        let rowNum = reactor.currentState.rowNum
+        let valueScoreDvcd = reactor.currentState.valueScoreDvcd
+        let id = reactor.currentState.id
+        
+        reactor.action.onNext(.loadData(dateYM: dateYM, rowNum: rowNum, valueScoreDvcd: valueScoreDvcd, id: id))
     }
     
     func bind(reactor: DetailReactor) {

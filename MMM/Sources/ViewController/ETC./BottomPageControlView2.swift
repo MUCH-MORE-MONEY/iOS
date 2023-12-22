@@ -11,14 +11,14 @@ import Then
 import ReactorKit
 
 final class BottomPageControlView2: BaseView, View {
-    typealias Reactor = BottomPageControlReactor
+    typealias Reactor = DetailReactor
     
     private lazy var previousButton = UIButton()
     private lazy var nextButton = UIButton()
     private lazy var indexLabel = UILabel()
     private lazy var stackView = UIStackView()
     
-    var totalItem = 0
+    var totalItem: Int = 0
     
     var index: Int = 0 {
         didSet {
@@ -27,7 +27,7 @@ final class BottomPageControlView2: BaseView, View {
         }
     }
     
-    func bind(reactor: BottomPageControlReactor) {
+    func bind(reactor: DetailReactor) {
         bindAction(reactor)
         bindState(reactor)
     }
@@ -35,12 +35,23 @@ final class BottomPageControlView2: BaseView, View {
 
 // MARK: - Bind
 extension BottomPageControlView2 {
-    private func bindAction(_ reactor: BottomPageControlReactor) {
+    private func bindAction(_ reactor: DetailReactor) {
+        nextButton.rx.tap
+            .map { .didTapNextButton }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
         
+        previousButton.rx.tap
+            .map { .didTapPreviousButton }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
     
-    private func bindState(_ reactor: BottomPageControlReactor) {
-        
+    private func bindState(_ reactor: DetailReactor) {
+        reactor.state
+            .map { ($0.rowNum, $0.totalItem) }
+            .bind(onNext: updateIndexLabel)
+            .disposed(by: disposeBag)
     }
 }
 
@@ -54,12 +65,11 @@ extension BottomPageControlView2 {
 
     }
     
-    func updateView() {
-
-    }
-    
-    func setViewModel(_ viewModel: HomeDetailViewModel, _ economicActivityId: [String]) {
-
+    private func updateIndexLabel(_ rowNum: Int, _ totalItem: Int) {
+        guard let reactor = reactor else { return }
+        self.index = rowNum
+        self.totalItem = totalItem
+        indexLabel.text = "\(index) / \(totalItem)"
     }
 }
 
@@ -68,10 +78,34 @@ extension BottomPageControlView2 {
 extension BottomPageControlView2 {
     override func setAttribute() {
         super.setAttribute()
+        
+        previousButton = previousButton.then {
+            $0.setImage(R.Icon.arrowBackBlack24, for: .normal)
+            $0.setImage(R.Icon.arrowBackBlack24?.withTintColor(R.Color.gray200), for: .disabled)
+        }
+        
+        nextButton = nextButton.then {
+            $0.setImage(R.Icon.arrowNextBlack24, for: .normal)
+            $0.setImage(R.Icon.arrowNextBlack24?.withTintColor(R.Color.gray200), for: .disabled)
+        }
+        
+        indexLabel = indexLabel.then {
+            $0.textColor = R.Color.black
+            $0.font = R.Font.body1
+            $0.text = "0 / 0"
+        }
+        
+        stackView = stackView.then {
+            $0.axis = .horizontal
+            $0.distribution = .equalCentering
+            $0.alignment = .center
+        }
     }
     
     override func setHierarchy() {
         super.setHierarchy()
+        addSubviews(stackView)
+        stackView.addArrangedSubviews(previousButton, indexLabel, nextButton)
     }
     
     override func setLayout() {

@@ -26,7 +26,7 @@ final class DetailViewController2: BaseDetailViewController, UIScrollViewDelegat
     private lazy var satisfactionLabel = BasePaddingLabel(padding: UIEdgeInsets(top: 3, left: 12, bottom: 3, right: 12))
     private lazy var mainImageView = UIImageView()
     private lazy var cameraImageView = CameraImageView()
-    private lazy var bottomPageControlView = BottomPageControlView()
+    private lazy var bottomPageControlView = BottomPageControlView2()
     private lazy var memoLabel = UILabel()
     private lazy var starList: [UIImageView] = [
         UIImageView(image: R.Icon.iconStarDisabled16),
@@ -200,6 +200,8 @@ extension DetailViewController2 {
 extension DetailViewController2 {
     override func setAttribute() {
         super.setAttribute()
+
+        bottomPageControlView.reactor = self.reactor
         
         editActivityButtonItem = editActivityButtonItem.then {
             $0.customView = editButton

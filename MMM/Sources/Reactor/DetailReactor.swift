@@ -12,6 +12,8 @@ final class DetailReactor: Reactor {
     enum Action {
         case didTapEditButton
         case loadData(dateYM: String, rowNum: Int, valueScoreDvcd: String)
+        case didTapPreviousButton
+        case didTapNextButton
     }
     
     enum Mutation {
@@ -19,20 +21,24 @@ final class DetailReactor: Reactor {
         case fetchActivity([EconomicActivity])
         case setLoading(Bool)
         case setError
+        case updateIndex(Int)
     }
     
     struct State {
         var isPushEditVC = false
         var list: [EconomicActivity] = []
         var isLoading = true
+        var index = 0
+        var dateYM: String
+        var rowNum: Int
+        var totalItem: Int
+        var valueScoreDvcd: String
     }
     
     let initialState: State
-    let provider: ServiceProviderProtocol
     
-    init(provider: ServiceProviderProtocol, dateYM: String, rowNum: Int, totalItem: Int, valueScoreDvcd: String) {
-        self.initialState = State()
-        self.provider = provider
+    init(dateYM: String, rowNum: Int, totalItem: Int, valueScoreDvcd: String) {
+        self.initialState = State(dateYM: dateYM, rowNum: rowNum, totalItem: totalItem, valueScoreDvcd: valueScoreDvcd)
         action.onNext(.loadData(dateYM: dateYM, rowNum: rowNum, valueScoreDvcd: valueScoreDvcd))
     }
 }
@@ -53,6 +59,12 @@ extension DetailReactor {
                 self.getStatisticsList(dateYM, rowNum, valueScoreDvcd, true),
                 .just(.setLoading(false))
             ])
+            
+        case .didTapNextButton:
+            return .just(.updateIndex(1))
+            
+        case .didTapPreviousButton:
+            return .just(.updateIndex(-1))
         }
     }
     
@@ -72,8 +84,10 @@ extension DetailReactor {
         case .setError:
             newState.isLoading = false
         
+        case let .updateIndex(index):
+            newState.rowNum += index
         }
-
+        
         return newState
     }
 }

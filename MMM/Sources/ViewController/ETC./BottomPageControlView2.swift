@@ -57,16 +57,7 @@ extension BottomPageControlView2 {
 
 // MARK: - Action
 extension BottomPageControlView2 {
-    func didTapPreviousButton() {
-
-    }
-    
-    func didTapNextButton() {
-
-    }
-    
     private func updateIndexLabel(_ rowNum: Int, _ totalItem: Int) {
-        guard let reactor = reactor else { return }
         self.index = rowNum
         self.totalItem = totalItem
         indexLabel.text = "\(index) / \(totalItem)"

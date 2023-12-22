@@ -46,6 +46,10 @@ final class DetailReactor: Reactor {
 //MARK: - Mutate, Transform, Reduce
 extension DetailReactor {
     func mutate(action: Action) -> Observable<Mutation> {
+        let dateYM = self.currentState.dateYM
+        let rowNum = self.currentState.rowNum
+        let valueScoreDvcd = self.currentState.valueScoreDvcd
+        
         switch action {
         case .didTapEditButton:
             return .concat([
@@ -61,10 +65,20 @@ extension DetailReactor {
             ])
             
         case .didTapNextButton:
-            return .just(.updateIndex(1))
+            return .concat([
+                .just(.updateIndex(1)),
+                .just(.setLoading(true)),
+                self.getStatisticsList(dateYM, rowNum + 1, valueScoreDvcd),
+                .just(.setLoading(false))
+            ])
             
         case .didTapPreviousButton:
-            return .just(.updateIndex(-1))
+            return .concat([
+                .just(.updateIndex(-1)),
+                .just(.setLoading(true)),
+                self.getStatisticsList(dateYM, rowNum - 1, valueScoreDvcd),
+                .just(.setLoading(false))
+            ])
         }
     }
     
@@ -96,7 +110,7 @@ extension DetailReactor {
 extension DetailReactor {
     // 경제활동 만족도에 따른 List 불러오기
     func getStatisticsList(_ dateYM: String,_ rowNum: Int, _ type: String, _ reset: Bool = false) -> Observable<Mutation> {
-        return MMMAPIService().getStatisticsList(dateYM: dateYM, valueScoreDvcd: type, limit: 1, offset: rowNum)
+        return MMMAPIService().getStatisticsList(dateYM: dateYM, valueScoreDvcd: type, limit: 1, offset: rowNum - 1)
             .map { (response, error) -> Mutation in
                 return .fetchActivity(response.selectListMonthlyByValueScoreOutputDto)
             }

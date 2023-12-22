@@ -99,20 +99,10 @@ private extension DetailViewController2 {
         let editVM = EditActivityViewModel(isAddModel: false)
         
         guard let reactor = reactor else { return }
-        guard let activity = reactor.currentState.list.first else { return }
+        guard let activity = reactor.currentState.editActivity else { return }
         
-        detailVM.detailActivity?.title = activity.title
-        detailVM.detailActivity?.memo = activity.memo
-        detailVM.detailActivity?.amount = activity.amount
-        detailVM.detailActivity?.createAt = activity.createAt
-        detailVM.detailActivity?.star = activity.star
-        detailVM.detailActivity?.type = activity.type
-//        detailVM.detailActivity?.fileNo = activity.
+        detailVM.detailActivity = activity
         
-
-
-
-
         detailVM.hasImage = self.hasImage
 
         let vc = EditActivityViewController(detailViewModel: detailVM, editViewModel: editVM, date: Date())

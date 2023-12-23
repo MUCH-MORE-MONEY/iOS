@@ -113,6 +113,13 @@ private extension DetailViewController2 {
         
         detailVM.hasImage = self.hasImage
 
+        if cameraImageView.isHidden {
+            let mainImage = mainImageView.image
+            detailVM.mainImage = mainImage
+        } else {
+            detailVM.mainImage = nil
+        }
+        
         let vc = EditActivityViewController(detailViewModel: detailVM, editViewModel: editVM, date: Date())
         
         navigationController?.pushViewController(vc, animated: true)

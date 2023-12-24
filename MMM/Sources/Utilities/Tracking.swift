@@ -231,4 +231,18 @@ enum Tracking {
             Analytics.logEvent(self.text, parameters: nil)
         }
     }
+    
+    enum Widget {
+        static let btnMonth = "Widget_btn_month"
+        static let btnFinActAdd = "Widget_btn_FinActAdd"
+        
+        /// 이번 달 경제활동 위젯 클릭 시
+        static func btnMonthLogEvent() {
+            Analytics.logEvent(self.btnMonth, parameters: nil)
+        }
+        /// 새로운 경제활동 추가하기 위젯 클릭 시
+        static func btnFinActAddLogEvent() {
+            Analytics.logEvent(self.btnFinActAdd, parameters: nil)
+        }
+    }
 }

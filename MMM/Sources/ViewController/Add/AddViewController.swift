@@ -132,7 +132,7 @@ extension AddViewController {
 	
 	// 두번째 버튼에 대한 Animation
 	private func setLayoutDateView() {
-        Tracking.FinActAddPage.inputCategoryLogEvent("01")
+        Tracking.FinActAddPage.inputTypeLogEvent("01")
         
 		typeView.isHidden = false
 		nextSecondButton.isHidden = false
@@ -186,7 +186,7 @@ extension AddViewController {
 		
 		isEarn = tag == 0 ? true : false
         
-        Tracking.FinActAddPage.inputCategoryLogEvent(tag == 0 ? "01" : "02")
+        Tracking.FinActAddPage.inputTypeLogEvent(tag == 0 ? "01" : "02")
 
 	}
 	

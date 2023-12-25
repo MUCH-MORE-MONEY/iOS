@@ -46,6 +46,7 @@ final class CategoryMainViewController: BaseViewControllerWithNav, View {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
+        Tracking.Category.mainPayLogEvent()
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -79,9 +80,16 @@ extension CategoryMainViewController {
 			.disposed(by: disposeBag)
 		
 		segmentedControl.rx.selectedSegmentIndex
+            .skip(1)
 			.map { $0 == 0 ? 0 : 1 }
 			.subscribe(onNext: {
 				self.currentPage = $0 // page 변경
+                switch self.currentPage {
+                case 0:
+                    Tracking.Category.mainPayLogEvent()
+                default:
+                    Tracking.Category.mainEarnLogEvent()
+                }
 			})
 			.disposed(by: disposeBag)
 	}

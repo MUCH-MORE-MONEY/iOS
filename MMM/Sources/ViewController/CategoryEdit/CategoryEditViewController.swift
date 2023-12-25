@@ -138,6 +138,12 @@ final class CategoryEditViewController: BaseViewController, View {
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
+        switch mode {
+        case .earn:
+            Tracking.Category.categoryEditEarnLogEvent()
+        case .pay:
+            Tracking.Category.categoryEditPayLogEvent()
+        }
 	}
 	
 	override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -388,7 +394,7 @@ extension CategoryEditViewController {
 	private func willPushUpperEditViewController(isPush: Bool) {
 		guard let reactor = self.reactor else { return }
 		
-		let vc = CategoryEditUpperViewController()
+        let vc = CategoryEditUpperViewController(mode: mode)
 		vc.reactor = CategoryEditUpperReactor(provider: reactor.provider, sections: reactor.currentState.sectionInfo.section)
 		
 		navigationController?.pushViewController(vc, animated: true)

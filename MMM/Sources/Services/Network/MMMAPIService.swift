@@ -58,7 +58,10 @@ protocol MMMAPIServiceble: BaseAPIService {
     func getStatisticsAverage(_ dateYM: String) -> Observable<(StatisticsAvgResDto, Error?)>
 	func getStatisticsList(dateYM: String, valueScoreDvcd: String, limit: Int, offset: Int) -> Observable<(StatisticsListResDto, Error?)>
 	func getStatisticsCategory(dateYM: String, economicActivityDvcd: String) -> Observable<(StatisticsCategoryResDto, Error?)>
-	
+    
+    // MARK: - Statistics Detail
+    func getSelectedActivity(_ activityId: String) -> Observable<(SelectDetailResDto, Error?)>
+    
 	// MARK: - Category Main 요청 API
 	func getCategoryList(_ request: CategoryDetailListReqDto) -> Observable<(CategoryListResDto, Error?)>
 	func getCategoryDetailList(_ request: CategoryDetailListReqDto) -> Observable<(CategoryDetailListResDto, Error?)>
@@ -67,7 +70,7 @@ protocol MMMAPIServiceble: BaseAPIService {
     func getCategoryEdit(_ request: CategoryEditReqDto) -> Observable<(CategoryEditResDto, Error?)>
 	func getCategoryEditHeader(_ request: CategoryEditReqDto) -> Observable<(CategoryEditHeaderResDto, Error?)>
 	func putCategoryEdit(_ request: PutCategoryEditReqDto) -> Observable<(CategoryEditResDto, Error?)>
-
+    
     // MARK: - Profile 요청 API
     func exportToExcel() -> Observable<(ExportResDto, Error?)>
     func withdraw() -> Observable<(WithdrawResDto, Error?)>
@@ -113,6 +116,11 @@ struct MMMAPIService: MMMAPIServiceble {
 	func getStatisticsCategory(dateYM: String, economicActivityDvcd: String) -> RxSwift.Observable<(StatisticsCategoryResDto, Error?)> {
 		return provider().request(MMMAPI.getStatisticsCategory(dateYM: dateYM, economicActivityDvcd: economicActivityDvcd), type: StatisticsCategoryResDto.self).asObservable()
 	}
+    
+    // 통계에서 detail cell을 선택했을 경우 activityId를 가지고 fetch
+    func getSelectedActivity(_ activityId: String) -> Observable<(SelectDetailResDto, Error?)> {
+        return provider().request(MMMAPI.getSelectedActivity(activityId: activityId), type: SelectDetailResDto.self).asObservable()
+    }
 	
 	// MARK: - Category Main 요청 API
 	// 경제활동구분 코드 기준 카테고리별 월간 경제활동 목록 전체 조회

@@ -16,9 +16,13 @@ final class CategoryEditUpperViewController: BaseViewController, View {
 
 	// MARK: - Constants
 	private enum UI {}
-	
+    enum Mode: String {
+        case pay = "01"
+        case earn = "02"
+    }
 	// MARK: - Properties
-	
+    private let mode: CategoryEditViewController.Mode
+    
 	// MARK: - UI Components
 	private lazy var backButtonItem = UIBarButtonItem()
 	private lazy var backButton = UIButton()
@@ -28,10 +32,31 @@ final class CategoryEditUpperViewController: BaseViewController, View {
 	private lazy var addButton = UIButton()
 	private lazy var emptyView: CategoryEditUpperEmptyView = CategoryEditUpperEmptyView()
 	
+    init(mode: CategoryEditViewController.Mode) {
+        self.mode = mode
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    // Compile time에 error를 발생시키는 코드
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
 	override func viewDidLoad() {
 		super.viewDidLoad()
 	}
 	
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        switch mode {
+        case .pay:
+            Tracking.Category.categoryTypeEditPayLogEvent()
+        case .earn:
+            Tracking.Category.categoryTypeEditEarnLogEvent()
+        }
+    }
+    
 	func bind(reactor: CategoryEditUpperReactor) {
 		bindState(reactor)
 		bindAction(reactor)

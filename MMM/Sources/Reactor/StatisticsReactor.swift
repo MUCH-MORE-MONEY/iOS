@@ -20,7 +20,7 @@ final class StatisticsReactor: Reactor {
 	
 	// 처리 단위
 	enum Mutation {
-		case setList([EconomicActivity], String, Bool, Int) // list, type("01" or "03"), rank reset 여부, 아이템의 총 갯수
+		case setList([EconomicActivity], String, Bool) // list, type("01" or "03"), rank reset 여부
 		case pagenation([EconomicActivity], Int)
 		case fetchCategoryBar([CategoryBar], String)
 		case setDate(Date)
@@ -138,7 +138,7 @@ extension StatisticsReactor {
 		var newState = state
 		
 		switch mutation {
-		case let .setList(list, type, reset, totalItem):
+		case let .setList(list, type, reset):
 			newState.isInit = false
 			
 			// 현재의 만족도에 대한 데이터를 호출 할때만 Update
@@ -148,7 +148,6 @@ extension StatisticsReactor {
 
 			let data = list.prefix(3)
 			currentPage = 0
-            newState.totalItem = totalItem
 			// 월 변경인지 판별
 			if reset {
 				switch type {
@@ -177,6 +176,14 @@ extension StatisticsReactor {
 		case let .setAverage(average):
 			newState.average = average
 		case let .setSatisfaction(satisfaction):
+            switch satisfaction {
+            case .hight:
+                Tracking.StatiBudget.rating45LogEvent()
+            case .middle:
+                Tracking.StatiBudget.rating3LogEvent()
+            case .low:
+                Tracking.StatiBudget.rating12LogEvent()
+            }
 			newState.satisfaction = satisfaction
 		case let .setLoading(isLoading):
 			newState.isLoading = isLoading
@@ -210,8 +217,8 @@ extension StatisticsReactor {
 		return MMMAPIService().getStatisticsList(dateYM: date.getFormattedYM(), valueScoreDvcd: type, limit: 15, offset: 0)
 			.map { (response, error) -> Mutation in
 				self.totalPage = response.totalPageCnt
-
-				return .setList(response.selectListMonthlyByValueScoreOutputDto, type, reset, response.totalItemCnt)
+                self.totalItem = response.totalItemCnt
+				return .setList(response.selectListMonthlyByValueScoreOutputDto, type, reset)
 			}
 			.catchAndReturn(.setError)
 	}

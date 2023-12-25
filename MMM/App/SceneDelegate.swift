@@ -26,12 +26,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		// 로그인이 되어 있을 경우
         
 		if let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) {
-            Tracking.setUser(token)
+            if let email = Constants.getKeychainValue(forKey: Constants.KeychainKey.email) {
+                Tracking.setUser(email)
+            }
 			if let url = connectionOptions.urlContexts.first?.url { // 위젯
 				switch url.absoluteString {
 				case "myApp://Add": // 추가 위젯
+                    Tracking.Widget.btnFinActAddLogEvent()
 					mainViewController = NavigationController(rootViewController: TabBarController(widgetIndex: 1))
 				default: // widgetURL을 설정한 다른 위젯
+                    Tracking.Widget.btnMonthLogEvent()
 					mainViewController = NavigationController(rootViewController: TabBarController(widgetIndex: 0))
 				}
 			} else { // 일반 진입
@@ -57,9 +61,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		guard let url = URLContexts.first?.url else { return }
 		
 		if "myApp://Home" == url.absoluteString {
+            Tracking.Widget.btnMonthLogEvent()
 			let mainViewController = NavigationController(rootViewController: TabBarController(widgetIndex: 0))
 			window?.rootViewController = mainViewController
 		} else if "myApp://Add" == url.absoluteString {
+            Tracking.Widget.btnFinActAddLogEvent()
 			let mainViewController = NavigationController(rootViewController: TabBarController(widgetIndex: 1))
 			window?.rootViewController = mainViewController
 		}

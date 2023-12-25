@@ -77,6 +77,8 @@ final class StatisticsViewController: BaseViewController, View {
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
+        Tracking.StatiBudget.pageViewLogEvent()
+        
 		guard let reactor = reactor else { return }
 
 		super.viewWillAppear(animated)
@@ -244,6 +246,8 @@ extension StatisticsViewController {
 	
 	// 카테고리 더보기
 	private func pushCategoryViewController(_ isPush: Bool) {
+        Tracking.StatiBudget.btnCategoryLogEvent()
+        
 		guard let reactor = self.reactor else { return }
 
 		let vc = CategoryMainViewController()
@@ -257,14 +261,21 @@ extension StatisticsViewController {
 		
 		// 셀 터치시 회색 표시 없애기
 		tableView.deselectRow(at: data.IndexPath, animated: true)
-
-        print("total item : \(reactor.totalItem)")
-		let index = data.IndexPath.row
-
-		let vc = DetailViewController(homeViewModel: HomeViewModel(), index: index, isStatisticsVC: true) // 임시: HomeViewModel 생성
-		let economicActivityId = reactor.currentState.activityList[0].items.map { $0.identity as! String }
-		vc.setData(economicActivityId: economicActivityId, index: index, date: data.info.createAt.toDate() ?? Date())
-		
+        
+//		let vc = DetailViewController(homeViewModel: HomeViewModel(), index: index, isStatisticsVC: true) // 임시: HomeViewModel 생성
+//		let economicActivityId = reactor.currentState.activityList[0].items.map { $0.identity as! String }
+//		vc.setData(economicActivityId: economicActivityId, index: index, date: data.info.createAt.toDate() ?? Date())
+        // dateYM ex)20231219 이런식으로 넘어와서 뒤에 두개 지워줌
+        var dateYM = data.info.createAt
+        dateYM.removeLast(2)
+        let totalItem = reactor.totalItem
+        let rowNum = data.info.rowNum ?? 0
+        let valueScoreDvcd = reactor.currentState.satisfaction.id
+        let id = data.info.id
+//        let vc = DetailViewController2(dateYM: dateYM, rowNum: rowNum, totalItem: totalItem, valueScoreDvcd: valueScoreDvcd)
+        let vc = DetailViewController2()
+        vc.reactor = DetailReactor(dateYM: dateYM, rowNum: rowNum, totalItem: totalItem, valueScoreDvcd: valueScoreDvcd, id: id)
+        
 		navigationController?.pushViewController(vc, animated: true)
 	}
 	

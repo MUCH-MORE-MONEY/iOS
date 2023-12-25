@@ -120,7 +120,9 @@ extension CustomPushTextSettingViewController {
             .distinctUntilChanged()
             .filter { $0 }
             .subscribe { [weak self] _ in
-                self?.dismiss(animated: true)
+                guard let self = self else { return }
+                Tracking.NotiSetting.textLogEvent(self.textFieldText)
+                self.dismiss(animated: true)
             }
             .disposed(by: disposeBag)
     }

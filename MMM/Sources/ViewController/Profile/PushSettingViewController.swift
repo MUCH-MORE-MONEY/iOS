@@ -142,6 +142,14 @@ extension PushSettingViewController {
 //                self.reactor.action.onNext(.checkNewsPush)
 //            }
 //            .disposed(by: disposeBag)
+        
+        // FIXME: - reactor쪽 로직 꼬여서 나중에 수정해야함
+        // GA 용
+        customPushSwitch.rx.value
+            .subscribe { isOn in
+                Tracking.NotiSetting.toggleCustomLogEvent(isOn)
+            }
+            .disposed(by: disposeBag)
     }
     
     private func bindState(_ reactor: PushSettingReactor) {

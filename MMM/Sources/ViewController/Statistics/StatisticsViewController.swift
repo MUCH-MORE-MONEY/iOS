@@ -94,6 +94,9 @@ final class StatisticsViewController: BaseViewController, View {
 		
 		// Home Loading을 보여줄지 판단
 		Constants.setKeychain(false, forKey: Constants.KeychainKey.isHomeLoading)
+		
+		// 뷰가 최초 로드 될 경우
+		reactor.action.onNext(.loadData)
 	}
 	
 	override func viewWillDisappear(_ animated: Bool) {
@@ -174,7 +177,7 @@ extension StatisticsViewController {
 		reactor.state
 			.map { $0.activityList }
 			.distinctUntilChanged() // 중복값 무시
-			.bind(to: tableView.rx.items(dataSource: dataSource))
+ 			.bind(to: tableView.rx.items(dataSource: dataSource))
 			.disposed(by: disposeBag)
 		
 		// Empty case 여부 판별

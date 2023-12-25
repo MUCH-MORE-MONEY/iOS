@@ -37,7 +37,7 @@ enum StatisticsItem: IdentifiableType, Equatable {
 	
 	// 비교를 위한 함수
 	static func == (lhs: StatisticsItem, rhs: StatisticsItem) -> Bool {
-		lhs.identity == rhs.identity
+		return lhs.identity == rhs.identity && lhs.item == rhs.item
 	}
 	
 	static func getSkeleton() -> [Self] {

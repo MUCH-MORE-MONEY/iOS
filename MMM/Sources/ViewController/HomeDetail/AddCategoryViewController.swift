@@ -56,6 +56,8 @@ final class AddCategoryViewController: UIViewController {
 // MARK: - Action
 extension AddCategoryViewController {
     private func willDismiss() {
+        Tracking.FinActAddPage.inputCategorySettingLogEvent()
+        
         delegate?.willDismiss()
         
         if let editViewModel = viewModel as? EditActivityViewModel {

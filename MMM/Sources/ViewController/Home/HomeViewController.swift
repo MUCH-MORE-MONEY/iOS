@@ -73,9 +73,10 @@ final class HomeViewController: UIViewController {
 
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-
-    checkNudgeAction()
-
+        Tracking.AccountBook.pageViewLogEvent()
+        
+        checkNudgeAction()
+        
 		// FIXME: - 네비게이션 아이템 노출 유무
 		if let navigationController = self.navigationController {
 			if let rootVC = navigationController.viewControllers.first {

@@ -248,6 +248,7 @@ private extension PushSettingViewController {
     
     // 스위치 상태에 따른 버튼 비/활성화
     private func configureCustomPushSwitch(_ isOn: Bool) {
+        print("siOn????? \(isOn)")
         self.customPushTextSettingView.configure(isOn)
         self.customPushTimeSettingView.configure(isOn)
         // UserDefaults에 현재 스위치 상태 값 저장

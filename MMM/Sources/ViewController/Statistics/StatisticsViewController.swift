@@ -77,6 +77,8 @@ final class StatisticsViewController: BaseViewController, View {
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
+        Tracking.StatiBudget.pageViewLogEvent()
+        
 		guard let reactor = reactor else { return }
 
 		super.viewWillAppear(animated)
@@ -241,6 +243,8 @@ extension StatisticsViewController {
 	
 	// 카테고리 더보기
 	private func pushCategoryViewController(_ isPush: Bool) {
+        Tracking.StatiBudget.btnCategoryLogEvent()
+        
 		guard let reactor = self.reactor else { return }
 
 		let vc = CategoryMainViewController()

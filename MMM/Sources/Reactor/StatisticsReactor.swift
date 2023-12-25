@@ -179,6 +179,14 @@ extension StatisticsReactor {
 		case let .setAverage(average):
 			newState.average = average
 		case let .setSatisfaction(satisfaction):
+            switch satisfaction {
+            case .hight:
+                Tracking.StatiBudget.rating45LogEvent()
+            case .middle:
+                Tracking.StatiBudget.rating3LogEvent()
+            case .low:
+                Tracking.StatiBudget.rating12LogEvent()
+            }
 			newState.satisfaction = satisfaction
 		case let .setLoading(isLoading):
 			newState.isLoading = isLoading

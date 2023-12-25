@@ -200,7 +200,7 @@ enum Tracking {
             Analytics.logEvent(self.categoryEditEarn, parameters: nil)
         }
         /// 카테고리 유형 편집 페이지(수입) 오픈 시
-        static func categoryTypeEditEarnEvent() {
+        static func categoryTypeEditEarnLogEvent() {
             Analytics.logEvent(self.categoryTypeEditEarn, parameters: nil)
         }
     }
@@ -223,12 +223,12 @@ enum Tracking {
             Analytics.logEvent(self.toggleCustom, parameters: ["isOn": isOn])
         }
         /// 알림 시간 지정
-        static func timeLogEvent() {
-            Analytics.logEvent(self.time, parameters: nil)
+        static func timeLogEvent(_ num: Int) {
+            Analytics.logEvent(self.time, parameters: ["Num": num])
         }
         /// 알람 문구 지정
-        static func textLogEvent() {
-            Analytics.logEvent(self.text, parameters: nil)
+        static func textLogEvent(_ text: String) {
+            Analytics.logEvent(self.text, parameters: ["Text": text])
         }
     }
     

@@ -198,6 +198,8 @@ extension EditActivityViewController {
 	}
     
     private func didTapCategory() {
+        Tracking.FinActAddPage.inputCategoryLogEvent()
+        
         let picker = AddCategoryViewController(viewModel: editViewModel)
         let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
         bottomSheetVC.setSetting(percentHeight: 0.65)

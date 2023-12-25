@@ -41,4 +41,12 @@ extension String {
             return nil
         }
     }
+    
+    func stringToInt() -> Int? {
+        var str = self
+        str.removeLast(3)
+        str = str.replacingOccurrences(of: ":", with: "")
+        
+        return Int(str) ?? nil
+    }
 }

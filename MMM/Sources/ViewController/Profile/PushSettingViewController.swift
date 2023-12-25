@@ -142,6 +142,14 @@ extension PushSettingViewController {
 //                self.reactor.action.onNext(.checkNewsPush)
 //            }
 //            .disposed(by: disposeBag)
+        
+        // FIXME: - reactor쪽 로직 꼬여서 나중에 수정해야함
+        // GA 용
+        customPushSwitch.rx.value
+            .subscribe { isOn in
+                Tracking.NotiSetting.toggleCustomLogEvent(isOn)
+            }
+            .disposed(by: disposeBag)
     }
     
     private func bindState(_ reactor: PushSettingReactor) {
@@ -248,7 +256,6 @@ private extension PushSettingViewController {
     
     // 스위치 상태에 따른 버튼 비/활성화
     private func configureCustomPushSwitch(_ isOn: Bool) {
-        print("siOn????? \(isOn)")
         self.customPushTextSettingView.configure(isOn)
         self.customPushTimeSettingView.configure(isOn)
         // UserDefaults에 현재 스위치 상태 값 저장

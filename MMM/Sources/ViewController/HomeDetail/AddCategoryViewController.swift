@@ -310,12 +310,13 @@ extension AddCategoryViewController: UICollectionViewDelegateFlowLayout {
         return UIEdgeInsets(top: 8, left: 0, bottom: 20, right: 0)
     }
 
+    // FIXME: - flowlayout이 동작안할 경우 이쪽 부분 다시 ㄱㄱ, Cell의 실제 넓이가 안맞는 거 같음
     // 지정된 섹션의 셀 사이의 최소간격을 반환하는 메서드.
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
+        return 8
     }
 
-    // 지정된 섹션의 행 사이 간격 최소 간격을 반환하는 메서드. scrollDirection이 horizontal이면 수직이 행이 되고 vertical이면 수평이 행이 된다.
+    // 지정된 섹션의 열 사이 간격 최소 간격을 반환하는 메서드. scrollDirection이 horizontal이면 수직이 행이 되고 vertical이면 수평이 행이 된다.
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 8
     }

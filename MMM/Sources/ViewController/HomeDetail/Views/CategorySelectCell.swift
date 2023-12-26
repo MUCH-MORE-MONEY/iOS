@@ -12,19 +12,18 @@ import SnapKit
 final class CategorySelectCell: BaseCollectionViewCell {
     private lazy var label = UILabel()
     private lazy var imageView = UIImageView()
-    private lazy var stackView = UIStackView()
     
     var backgroundType = true
     
     override var isSelected: Bool {
         didSet {
             if isSelected {
-                stackView.backgroundColor = backgroundType ? R.Color.orange500 : R.Color.blue500
+                contentView.backgroundColor = backgroundType ? R.Color.orange500 : R.Color.blue500
                 imageView.image = R.Icon.iconCheckWhite16
                 label.textColor = R.Color.white
                 label.font = R.Font.body2
             } else {
-                stackView.backgroundColor = R.Color.gray200
+                contentView.backgroundColor = R.Color.gray200
                 imageView.image = R.Icon.iconCheckGray16
                 label.textColor = R.Color.gray600
                 label.font = R.Font.body3
@@ -62,23 +61,15 @@ extension CategorySelectCell {
 extension CategorySelectCell {
     override func setHierarchy() {
         super.setHierarchy()
-        contentView.addSubviews(stackView)
-        stackView.addArrangedSubviews(label, imageView)
+        contentView.addSubviews(label, imageView)
     }
     
     override func setAttribute() {
         super.setAttribute()
         
-        stackView = stackView.then {
-            $0.axis = .horizontal
-            $0.spacing = 2
-            $0.layer.cornerRadius = 16
-            $0.clipsToBounds = true
-            $0.backgroundColor = R.Color.gray200
-            $0.layoutMargins = UIEdgeInsets(top: 6, left: 12, bottom: 6, right: 12)
-            $0.isLayoutMarginsRelativeArrangement = true
-        }
-        
+        contentView.layer.cornerRadius = 16
+        contentView.backgroundColor = R.Color.gray200
+
         label = label.then {
             $0.text = "덕질 비용"
             $0.textColor = R.Color.gray600
@@ -93,8 +84,15 @@ extension CategorySelectCell {
     
     override func setLayout() {
         super.setLayout()
-        stackView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+
+        label.snp.makeConstraints {
+            $0.left.equalToSuperview().offset(12)
+            $0.centerY.equalToSuperview()
+        }
+        
+        imageView.snp.makeConstraints {
+            $0.left.equalTo(label.snp.right).offset(2)
+            $0.centerY.equalToSuperview()
         }
     }
 }

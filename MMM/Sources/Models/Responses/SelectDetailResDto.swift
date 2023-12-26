@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct SelectDetailResDto: Codable {
+struct SelectDetailResDto: Codable, Equatable {
     var id: String              // 고유 id
     var amount: Int          // 수입/지출에 대한 양
     var categoryID: String      // 카테고리 id

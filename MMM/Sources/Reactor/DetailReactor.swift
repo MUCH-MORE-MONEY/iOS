@@ -108,7 +108,6 @@ extension DetailReactor {
             newState.rowNum += index
             
         case let .fetchSelectedActivity(activity):
-            print(activity)
             newState.editActivity = activity
         }
         

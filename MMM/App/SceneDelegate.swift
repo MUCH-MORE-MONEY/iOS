@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseRemoteConfig
+import StoreKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	
@@ -131,6 +132,8 @@ extension SceneDelegate {
         
         if currentVersionString.compare(minimumVersionString, options: .numeric) == .orderedAscending {
             // 현재 버전이 서버에 설정된 최소 버전보다 낮은 경우
+            print("alert On")
+
             DispatchQueue.main.async {
                 self.promptForUpdate()
             }
@@ -141,10 +144,38 @@ extension SceneDelegate {
     
     private func promptForUpdate() {
         let alert = UIAlertController(title: "Update Available", message: "A new version of the app is available. Please update to continue.", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Update", style: .default, handler: { _ in
+        alert.addAction(UIAlertAction(title: "Update", style: .default, handler: { [weak self] _ in
+            guard let self = self else { return }
+            guard let window = self.window else { return }
             // 앱스토어로 리디렉션하거나 업데이트 관련 처리
             print("Redirection to appstore")
+            self.presentAppStore(forAppId: "6450030412")
         }))
         window?.rootViewController?.present(alert, animated: true, completion: nil)
+    }
+    
+    func presentAppStore(forAppId appId: String) {
+        guard let window = self.window else { return }
+        let storeViewController = SKStoreProductViewController()
+        storeViewController.delegate = self
+
+        let parameters = [SKStoreProductParameterITunesItemIdentifier: appId]
+        storeViewController.loadProduct(withParameters: parameters) { (loaded, error) in
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
+                return
+            }
+            if loaded {
+                if let rootViewController = window.rootViewController {
+                    rootViewController.present(storeViewController, animated: true, completion: nil)
+                }
+            }
+        }
+    }
+}
+
+extension SceneDelegate: SKStoreProductViewControllerDelegate {
+    func productViewControllerDidFinish(_ viewController: SKStoreProductViewController) {
+        viewController.dismiss(animated: true, completion: nil)
     }
 }

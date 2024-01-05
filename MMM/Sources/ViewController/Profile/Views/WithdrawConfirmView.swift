@@ -6,25 +6,24 @@
 //
 
 import UIKit
+import Then
+import SnapKit
 
-final class WithdrawConfirmView: UIView {
+// 상속하지 않으려면 final 꼭 붙이기
+final class WithdrawConfirmView: BaseView {
+	// MARK: - Constants
+	private enum UI {
+		static let numberLabelWidth: CGFloat = 20
+		static let stackViewMargin: UIEdgeInsets = .init(top: 0, left: 8, bottom: 0, right: 0)
+	}
+	
 	// MARK: - Properties
+	
 	// MARK: - UI Components
 	private lazy var numberLabel = UILabel()
 	private lazy var containerStackView = UIStackView()
 	private lazy var titleLabel = UILabel()
 	private lazy var contentLabel = UILabel()
-	
-	override init(frame: CGRect) {
-		super.init(frame: frame)
-		setup()		// 초기 셋업할 코드들
-	}
-	
-	// Compile time에 error를 발생시키는 코드
-	@available(*, unavailable)
-	required init(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
 }
 //MARK: - Action
 extension WithdrawConfirmView {
@@ -48,15 +47,11 @@ extension WithdrawConfirmView {
 		contentLabel.attributedText = attributedString
 	}
 }
-//MARK: - Style & Layouts
-private extension WithdrawConfirmView {
+//MARK: - Attribute & Hierarchy & Layouts
+extension WithdrawConfirmView {
 	// 초기 셋업할 코드들
-	private func setup() {
-		setAttribute()
-		setLayout()
-	}
-	
-	private func setAttribute() {
+	override func setAttribute() {
+		super.setAttribute()
 		
 		numberLabel = numberLabel.then {
 			$0.font = R.Font.body4
@@ -87,19 +82,25 @@ private extension WithdrawConfirmView {
 		}
 	}
 	
-	private func setLayout() {
+	override func setHierarchy() {
+		super.setHierarchy()
+		
 		addSubviews(numberLabel, containerStackView)
 		containerStackView.addArrangedSubviews(titleLabel, contentLabel)
+	}
+	
+	override func setLayout() {
+		super.setLayout()
 		
 		numberLabel.snp.makeConstraints {
-			$0.top.left.equalToSuperview()
-			$0.width.height.equalTo(20)
+			$0.top.leading.equalToSuperview()
+			$0.width.height.equalTo(UI.numberLabelWidth)
 		}
 		
 		containerStackView.snp.makeConstraints {
-			$0.left.equalTo(numberLabel.snp.right).offset(8)
 			$0.top.equalToSuperview()
-			$0.right.equalToSuperview()
+			$0.leading.equalTo(numberLabel.snp.trailing).offset(UI.stackViewMargin.left)
+			$0.trailing.equalToSuperview()
 		}
 	}
 }

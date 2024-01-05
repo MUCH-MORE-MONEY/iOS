@@ -6,9 +6,13 @@
 //
 
 import UIKit
+import Then
+import SnapKit
 
-class CountAnimationStackView: UIView {
+// 상속하지 않으려면 final 꼭 붙이기
+final class CountAnimationStackView: BaseView {
 	// MARK: - Properties
+	
 	// MARK: - UI Components
 	private lazy var containerStackView = UIStackView()
 	private lazy var firstLabel = UILabel()
@@ -16,17 +20,6 @@ class CountAnimationStackView: UIView {
 	private lazy var middleLabel = CountScrollLabel()
 	private lazy var unitLabel = UILabel()
 	private lazy var secondLabel = UILabel()
-	
-	override init(frame: CGRect) {
-		super.init(frame: frame)
-		setup()		// 초기 셋업할 코드들
-	}
-	
-	// Compile time에 error를 발생시키는 코드
-	@available(*, unavailable)
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
 }
 //MARK: - Action
 extension CountAnimationStackView {
@@ -45,15 +38,12 @@ extension CountAnimationStackView {
 		}
 	}
 }
-//MARK: - Style & Layouts
-private extension CountAnimationStackView {
+//MARK: - Attribute & Hierarchy & Layouts
+extension CountAnimationStackView {
 	// 초기 셋업할 코드들
-	private func setup() {
-		setAttribute()
-		setLayout()
-	}
-	
-	private func setAttribute() {
+	override func setAttribute() {
+		super.setAttribute()
+		
 		containerStackView = containerStackView.then {
 			$0.axis = .horizontal
 			$0.spacing = 0
@@ -85,9 +75,15 @@ private extension CountAnimationStackView {
 		}
 	}
 	
-	private func setLayout() {
+	override func setHierarchy() {
+		super.setHierarchy()
+		
 		addSubview(containerStackView)
 		containerStackView.addArrangedSubviews(firstLabel, signLabel, middleLabel, unitLabel, secondLabel)
+	}
+	
+	override func setLayout() {
+		super.setLayout()
 		
 		containerStackView.snp.makeConstraints {
 			$0.edges.equalToSuperview()

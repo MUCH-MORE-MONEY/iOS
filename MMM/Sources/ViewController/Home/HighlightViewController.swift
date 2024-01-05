@@ -67,22 +67,22 @@ extension HighlightViewController {
 	private func willDismiss() {
 		guard let value = Int(viewModel.priceInput) else { return }
 		if isEarn { // 수입
-            Tracking.CalSetting.incomeLogEvent(value*10_000)
+            Tracking.CalSetting.incomeLogEvent(value * 10_000)
 			homeViewModel.earnStandard = value * 10_000 // 만 단위
 		} else { // 지출
-            Tracking.CalSetting.expenseLogEvent(value*10_000)
+            Tracking.CalSetting.expenseLogEvent(value * 10_000)
 			homeViewModel.payStandard = value * 10_000
 		}
 		delegate?.willDismiss()
 	}
 	
 	// 유무에 따른 attribute 변경
-	private func setValid(_ isVaild: Bool) {
-		checkButton.setTitleColor(!viewModel.priceInput.isEmpty && isVaild ? R.Color.black : R.Color.gray500, for: .normal)
-		checkButton.isEnabled = !viewModel.priceInput.isEmpty && isVaild
+	private func setValid(_ isValid: Bool) {
+		checkButton.setTitleColor(!viewModel.priceInput.isEmpty && isValid ? R.Color.black : R.Color.gray500, for: .normal)
+		checkButton.isEnabled = !viewModel.priceInput.isEmpty && isValid
 		
 		// shake 에니메이션
-		if !viewModel.priceInput.isEmpty && !isVaild {
+		if !viewModel.priceInput.isEmpty && !isValid {
 			priceTextField.shake()
 			warningLabel.isHidden = false
 		} else {
@@ -90,7 +90,7 @@ extension HighlightViewController {
 		}
 	}
 }
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 private extension HighlightViewController {
 	// 초기 셋업할 코드들
 	func setup() {
@@ -111,7 +111,7 @@ private extension HighlightViewController {
 			.store(in: &cancellable)
 		
 		//MARK: output
-		viewModel.isVaild
+		viewModel.isValid
 			.sinkOnMainThread(receiveValue: setValid)
 			.store(in: &cancellable)
 	}

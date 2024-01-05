@@ -31,6 +31,8 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
 		UIImageView(image: R.Icon.iconStarDisabled16),
 		UIImageView(image: R.Icon.iconStarDisabled16)
 	]
+    lazy var addCategoryView = AddCategoryView()
+    private lazy var separatorView = SeparatorView()
 	
 	// MARK: - LoadingView
 	private lazy var loadView = LoadingViewController()
@@ -40,19 +42,19 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
 	private var homeDetailViewModel = HomeDetailViewModel()
 	private var homeViewModel: HomeViewModel
     private var editViewModel = EditActivityViewModel(isAddModel: false)
+    
+    // 통계로 들어온 경우 api를 다르게 호출해야함
+    private var isStatisticsVC = false
 	/// cell에 보여지게 되는 id의 배열
 	private var economicActivityId: [String] = []
 	/// 현재 보여지고 있는 indexPath.row
 	private var index: Int
 	private var cancellable = Set<AnyCancellable>()
 	
-	private var navigationTitle: String {
-		return date.getFormattedDate(format: "M월 dd일 경제활동")
-	}
-	
-    init(homeViewModel: HomeViewModel, index: Int) {
+    init(homeViewModel: HomeViewModel, index: Int, isStatisticsVC: Bool = false) {
 		self.homeViewModel = homeViewModel
         self.index = index
+        self.isStatisticsVC = isStatisticsVC
 		super.init(nibName: nil, bundle: nil)
 	}
 	
@@ -64,7 +66,6 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		setup()
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -75,7 +76,6 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
         // 날짜가 변경되었을 경우 다른 dailyList를 보여줘야함
         if homeDetailViewModel.isDateChanged {
             self.date = homeDetailViewModel.changedDate
-            title = date.getFormattedDate(format: "M월 dd일 경제활동")
             
             homeDetailViewModel.fetchDailyList(date.getFormattedYMD()) { [weak self] in
                 guard let self = self else { return }
@@ -90,6 +90,12 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
                     self.bottomPageControlView.setViewModel(self.homeDetailViewModel, list)
                 }
             }
+			
+			self.homeDetailViewModel.getDailyList(Date().getFormattedYMD()) // widget
+			self.homeDetailViewModel.getWeeklyList(Date().getFormattedYMD()) // widget
+			
+			// Home Loading을 보여줄지 판단
+			Constants.setKeychain(true, forKey: Constants.KeychainKey.isHomeLoading)
         } else {
             self.homeDetailViewModel.fetchDetailActivity(id: self.economicActivityId[homeDetailViewModel.pageIndex])
             self.homeDetailViewModel.getMonthlyList(self.date.getFormattedYM())
@@ -101,26 +107,21 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
 		homeViewModel.date = date // 날짜가 변경되었을 경우
 	}
 }
-
+//MARK: - Actions
 extension DetailViewController {
 	func setData(economicActivityId: [String], index: Int, date: Date) {
 		self.economicActivityId = economicActivityId
 		self.index = index
 		self.date = date
 	}
-	
-	private func setup() {
-        bind()
-		setAttribute()
-		setLayout()
-	}
-	
-    // MARK: - Bind
-    private func bind() {
+}
+//MARK: - Attribute & Hierarchy & Layouts
+extension DetailViewController {
+	// MARK: - Bind
+	override func setBind() {
+		super.setBind()
         homeDetailViewModel.fetchDetailActivity(id: economicActivityId[index])
-        
 
-        
         // MARK: - Loading
         homeDetailViewModel.$isLoading
             .receive(on: DispatchQueue.main)
@@ -146,10 +147,45 @@ extension DetailViewController {
             .sinkOnMainThread(receiveValue: didTapEditButton)
             .store(in: &cancellable)
         
+        let s = UISwipeGestureRecognizer.Direction.up
+        
+        view.gesturePublisher(.swipe(.init(), .left))
+            .sinkOnMainThread { _ in
+                print("swipe Left")
+            }
+            .store(in: &cancellable)
+        
+        view.gesturePublisher(.swipe(.init(), .right))
+            .sinkOnMainThread { _ in
+                print("swipe right")
+            }
+            .store(in: &cancellable)
+        
         homeDetailViewModel.$detailActivity
             .sinkOnMainThread { [weak self] value in
                 guard let self = self, let value = value else { return }
                 showLoadingView()
+                
+                let originalString = value.createAt
+
+                // 원본 문자열을 날짜로 변환하기 위한 DateFormatter 설정
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyyMMdd" // 원본 문자열의 형식
+
+                // 문자열을 Date로 변환
+                if let date = dateFormatter.date(from: originalString) {
+                    // 새로운 형식으로 문자열을 변환하기 위한 DateFormatter 설정
+                    dateFormatter.dateFormat = "MM월 dd일"
+                    let newString = dateFormatter.string(from: date) + " 경제활동"
+                    self.title = newString
+                    print(newString) // 결과: "11월 10일 경제활동"
+                } else {
+                    print("날짜 변환 실패")
+                }
+
+                
+//                M월 dd일 경제활동
+                
                 self.titleLabel.text = value.title
                 self.activityType.text = self.homeDetailViewModel.detailActivity?.type == "01" ? "지출" : "수입"
                 self.activityType.backgroundColor = self.homeDetailViewModel.detailActivity?.type == "01" ? R.Color.orange500 : R.Color.blue500
@@ -184,14 +220,17 @@ extension DetailViewController {
                 }
                 
                 self.satisfactionLabel .setSatisfyingLabelEdit(by: value.star)
+                self.addCategoryView.setTitleAndColor(by: value.categoryName)
+                self.addCategoryView.setViewisHomeDetail()
+                
             }.store(in: &cancellable)
         homeDetailViewModel.pageIndex = index
         bottomPageControlView.setViewModel(homeDetailViewModel, economicActivityId)
 
     }
     
-	private func setAttribute() {
-		title = navigationTitle
+	override func setAttribute() {
+		super.setAttribute()
 		editActivityButtonItem = editActivityButtonItem.then {
 			$0.customView = editButton
 		}
@@ -200,7 +239,7 @@ extension DetailViewController {
 		
 		view.addSubviews(titleLabel, scrollView, bottomPageControlView)
 		
-		contentView.addSubviews(starStackView, mainImageView, cameraImageView, memoLabel, satisfactionLabel)
+		contentView.addSubviews(addCategoryView, separatorView, starStackView, mainImageView, cameraImageView, memoLabel, satisfactionLabel)
 		scrollView.addSubviews(contentView)
 		starList.forEach {
 			$0.contentMode = .scaleAspectFit
@@ -259,7 +298,8 @@ extension DetailViewController {
         
 	}
 	
-	private func setLayout() {
+	override func setLayout() {
+		super.setLayout()
 		titleLabel.snp.makeConstraints {
 			$0.top.equalTo(view.safeAreaLayoutGuide).offset(24)
 			$0.left.equalToSuperview().inset(24)
@@ -275,9 +315,19 @@ extension DetailViewController {
 			$0.edges.equalToSuperview().inset(24)
 		}
 		
+        addCategoryView.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.left.right.equalToSuperview()
+        }
+        
+        separatorView.snp.makeConstraints {
+            $0.top.equalTo(addCategoryView.snp.bottom).offset(40)
+            $0.left.right.equalToSuperview()
+        }
+        
 		starStackView.snp.makeConstraints {
-			$0.left.equalToSuperview()
-			$0.top.equalToSuperview()
+            $0.top.equalTo(separatorView.snp.bottom).offset(16)
+            $0.left.equalToSuperview()
 			$0.height.equalTo(24)
 			$0.width.equalTo(120)
 		}
@@ -291,7 +341,6 @@ extension DetailViewController {
 			$0.top.equalTo(starStackView.snp.bottom).offset(16)
 			$0.width.equalTo(view.safeAreaLayoutGuide).offset(-48)
 			$0.height.equalTo(mainImageView.snp.width)
-			//            $0.height.equalTo(mainImageView.image!.size.height * view.frame.width / mainImageView.image!.size.width)
 			$0.left.right.equalToSuperview()
 		}
 		

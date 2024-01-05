@@ -23,6 +23,9 @@ class BaseAddActivityViewController: BaseDetailViewController {
     lazy var memoTextView = UITextView()
     lazy var saveButton = UIButton()
     lazy var satisfyingLabel = BasePaddingLabel(padding: UIEdgeInsets(top: 3, left: 12, bottom: 3, right: 12))
+    lazy var addCategoryView = AddCategoryView()
+    private lazy var separatorView = SeparatorView()
+    
     // MARK: - Properties
     lazy var starList: [UIImageView] = [
         UIImageView(image: R.Icon.iconStarDisabled16),
@@ -37,29 +40,55 @@ class BaseAddActivityViewController: BaseDetailViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setup()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        titleTextFeild.becomeFirstResponder() // 키보드 보이기 및 포커스 주기
+//        titleTextFeild.becomeFirstResponder() // 키보드 보이기 및 포커스 주기
     }
 }
 
-// MARK: - Style & Layout
+// MARK: - Action
 extension BaseAddActivityViewController {
-    private func setup() {
-        setAttribute()
-        setLayout()
+
+    /// mainImageView 기준으로 memoLabel의 뷰를 다시 배치하는 메서드
+    func remakeConstraintsByMainImageView() {
+        mainImageView.isHidden = false
+        cameraImageView.isHidden = true
+        
+        mainImageView.snp.updateConstraints {
+            $0.height.equalTo(mainImageView.snp.width)
+        }
+        
+        memoTextView.snp.remakeConstraints {
+            $0.top.equalTo(mainImageView.snp.bottom).offset(16)
+            $0.left.right.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
     }
-    
-    private func setAttribute() {
+    /// cameraImageView 기준으로 memoLabel의 뷰를 다시 배치하는 메서드
+    func remakeConstraintsByCameraImageView() {
+        cameraImageView.isHidden = false
+        mainImageView.isHidden = true
+        
+        memoTextView.snp.remakeConstraints {
+            $0.top.equalTo(cameraImageView.snp.bottom).offset(16)
+            $0.left.right.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
+    }
+}
+
+//MARK: - Attribute & Hierarchy & Layouts
+extension BaseAddActivityViewController {
+	override func setAttribute() {
+		super.setAttribute()
         // titleTextField 헤더뷰에 넣기
         
         view.addSubviews(titleTextFeild, scrollView, saveButton)
         
-        contentView.addSubviews(starStackView, satisfyingLabel, mainImageView, cameraImageView, memoTextView)
+        contentView.addSubviews(addCategoryView, separatorView, starStackView, satisfyingLabel, mainImageView, cameraImageView, memoTextView)
         
         starList.forEach {
             $0.contentMode = .scaleAspectFit
@@ -78,7 +107,7 @@ extension BaseAddActivityViewController {
             $0.textColor = R.Color.gray200
             $0.attributedPlaceholder = NSAttributedString(string: "경제활동의 제목을 입력해주세요.", attributes: [NSAttributedString.Key.foregroundColor : R.Color.gray400])
             $0.keyboardType = .webSearch
-            $0.delegate = self
+//            $0.delegate = self
         }
         
         starStackView = starStackView.then {
@@ -129,7 +158,8 @@ extension BaseAddActivityViewController {
         }
     }
     
-    private func setLayout() {
+	override func setLayout() {
+		super.setLayout()
         // FIXME: -title Text의 위치를 대충 잡아버림
         titleTextFeild.snp.makeConstraints {
             $0.left.right.equalToSuperview().inset(24)
@@ -146,8 +176,21 @@ extension BaseAddActivityViewController {
             $0.edges.equalToSuperview()
         }
         
+        addCategoryView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(24)
+            $0.left.right.equalToSuperview()
+            $0.height.equalTo(24)
+        }
+        
+        separatorView.snp.makeConstraints {
+            $0.top.equalTo(addCategoryView.snp.bottom).offset(16)
+            $0.left.right.equalToSuperview()
+            $0.height.equalTo(1)
+        }
+        
         starStackView.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(24)
+            $0.top.equalTo(separatorView.snp.bottom).offset(16)
+            $0.left.equalToSuperview()
             $0.width.equalTo(120)
             $0.height.equalTo(24)
         }
@@ -172,7 +215,7 @@ extension BaseAddActivityViewController {
         }
         
         memoTextView.snp.makeConstraints {
-            $0.top.equalTo(cameraImageView.snp.bottom).offset(16)
+            $0.top.equalTo(mainImageView.snp.bottom).offset(16)
             $0.left.right.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
@@ -181,29 +224,6 @@ extension BaseAddActivityViewController {
             $0.left.right.equalToSuperview().inset(24)
             $0.bottom.equalToSuperview().inset(58)
             $0.height.equalTo(56)
-        }
-    }
-    
-    /// mainImageView 기준으로 memoLabel의 뷰를 다시 배치하는 메서드
-    func remakeConstraintsByMainImageView() {
-        mainImageView.isHidden = false
-        cameraImageView.isHidden = true
-        
-        memoTextView.snp.remakeConstraints {
-            $0.top.equalTo(mainImageView.snp.bottom).offset(16)
-            $0.left.right.equalToSuperview()
-            $0.bottom.equalToSuperview()
-        }
-    }
-    /// cameraImageView 기준으로 memoLabel의 뷰를 다시 배치하는 메서드
-    func remakeConstraintsByCameraImageView() {
-        cameraImageView.isHidden = false
-        mainImageView.isHidden = true
-        
-        memoTextView.snp.remakeConstraints {
-            $0.top.equalTo(cameraImageView.snp.bottom).offset(16)
-            $0.left.right.equalToSuperview()
-            $0.bottom.equalToSuperview()
         }
     }
 }

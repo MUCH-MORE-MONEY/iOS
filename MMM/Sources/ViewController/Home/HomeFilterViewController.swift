@@ -10,7 +10,7 @@ import Combine
 import Then
 import SnapKit
 
-final class HomeFilterViewController: BaseViewController {
+final class HomeFilterViewController: BaseViewControllerWithNav {
 	// MARK: - Properties
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 	private let viewModel: HomeViewModel
@@ -40,8 +40,14 @@ final class HomeFilterViewController: BaseViewController {
 	
     override func viewDidLoad() {
         super.viewDidLoad()
-		setup()		// 초기 셋업할 코드들
     }
+	
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		
+		// Home Loading을 보여줄지 판단
+		Constants.setKeychain(true, forKey: Constants.KeychainKey.isHomeLoading)
+	}
 	
 	override func viewWillDisappear(_ animated: Bool) {
 		// 한번 click되면 nil이 아니라 modal 되는 문제 해결
@@ -77,16 +83,9 @@ private extension HomeFilterViewController {
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
 	}
 }
-//MARK: - Style & Layouts
-private extension HomeFilterViewController {
-	// 초기 셋업할 코드들
-	private func setup() {
-		bind()
-		setAttribute()
-		setLayout()
-	}
-	
-	private func bind() {
+//MARK: - Attribute & Hierarchy & Layouts
+extension HomeFilterViewController {
+	override func setBind() {
 		//MARK: input
 		highlightSwitch.statePublisher
 			.sinkOnMainThread(receiveValue: toggleHighlightSwitch)
@@ -116,7 +115,7 @@ private extension HomeFilterViewController {
 			}).store(in: &cancellable)
 	}
 	
-	private func setAttribute() {
+	override func setAttribute() {
 		// [view]
 		view.backgroundColor = R.Color.gray100
 		title = "달력 관리"
@@ -178,7 +177,7 @@ private extension HomeFilterViewController {
 		}
 	}
 	
-	private func setLayout() {
+	override func setLayout() {
 		view.addSubviews(highlightLabel, highlightSwitch, highlightDescriptionLabel, earnView, payView, dailyTotalLabel, dailyTotalSwitch, dailyTotalDescriptionLabel)
 		
 		highlightLabel.snp.makeConstraints {

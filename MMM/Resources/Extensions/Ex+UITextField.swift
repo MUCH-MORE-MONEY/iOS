@@ -30,6 +30,7 @@ extension UITextField {
 		switch unit {
 		case " 원": self.tag = 1
 		case "만원": self.tag = 2
+		case "원": self.tag = 3
 		default: self.tag = 0
 		}
 	}
@@ -39,7 +40,7 @@ extension UITextField {
 	}
 	
 	@objc func clear(sender: AnyObject) {
-		if tag == 0 {
+		if tag == 3 {
 			self.text = "원"
 			self.textColor = R.Color.white
 			
@@ -63,9 +64,11 @@ extension UITextField: UITextFieldDelegate {
             break
         case 2: // Home 설정
             break
+		case 3:
+			let text = textField.text?.filter{ $0.isNumber } ?? "0"
+			Tracking.FinActAddPage.inputAmountLogEvent(text)
         default: // Add 추가
-            let text = textField.text?.filter{ $0.isNumber } ?? "0"
-            Tracking.FinActAddPage.inputAmountLogEvent(text)
+			break
         }
     }
     
@@ -84,8 +87,10 @@ extension UITextField: UITextFieldDelegate {
 			unit = 2 // " 원"의 길이
 		case 2: // Home 설정
 			unit = 3 // " 만원"의 길이
-		default: // Add 추가
+		case 3: // Add 추가
 			unit = 2 // " 원"의 길이
+		default:
+			return
 		}
 
 		if start > len - unit { // 범위 시작이 단위 넘어가지 않도록
@@ -121,8 +126,8 @@ extension UITextField: UITextFieldDelegate {
 		numberFormatter.numberStyle = .decimal // 콤마 생성
 		
 		guard let price = Int(newStringOnlyNumber), let result = numberFormatter.string(from: NSNumber(value: price)) else {
-			self.text = tag == 0 ? "원" : ""
-			self.textColor = tag == 0 ? R.Color.white : R.Color.gray900 // 빈배열로 만든후
+			self.text = tag == 3 ? "원" : ""
+			self.textColor = tag == 3 ? R.Color.white : R.Color.gray900 // 빈배열로 만든후
 			sendActions(for: .editingChanged)
 			return false
 		}
@@ -137,13 +142,15 @@ extension UITextField: UITextFieldDelegate {
 		case 2: // Home 설정
 			unit = " 만원"
 			limit = 10_000
-		default: // Add 추가
+		case 3: // Add 추가
 			unit = " 원"
 			limit = 100_000_000
+		default:
+			break
 		}
 
 		// 단위에 따른 color 변경
-		self.textColor = price > limit ? R.Color.red500 : self.tag == 0 ? R.Color.white : R.Color.gray900
+		self.textColor = price > limit ? R.Color.red500 : self.tag == 3 ? R.Color.white : R.Color.gray900
 		
 		// 범위가 넘어갈 경우
 		if price > limit {

@@ -36,7 +36,7 @@ extension HomeHeaderStackView {
 		moneyLabel.text = money.withCommas()
 	}
 }
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 private extension HomeHeaderStackView {
 	// 초기 셋업할 코드들
 	private func setup() {
@@ -55,7 +55,6 @@ private extension HomeHeaderStackView {
 		}
 		
 		titleLabel = titleLabel.then {
-			$0.text = "지출" // 지출/수익
 			$0.font = R.Font.body3
 			$0.textColor = R.Color.orange500 // orange500/blue500
 			$0.textAlignment = .left

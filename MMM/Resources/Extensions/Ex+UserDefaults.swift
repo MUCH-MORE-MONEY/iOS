@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RxSwift
 
 extension UserDefaults {
 	static var shared: UserDefaults {
@@ -17,4 +18,22 @@ extension UserDefaults {
 		// 4. suitename : The domain identifier of the search list.
 		return UserDefaults(suiteName: appGroupID)!
 	}
+    
+    func observe<T>(key: String, defaultValue: T) -> Observable<T> {
+        return Observable.create { observer in
+            let defaults = UserDefaults.standard
+            observer.onNext(defaults.object(forKey: key) as? T ?? defaultValue)
+            
+            let notificationCenter = NotificationCenter.default
+            let observer = notificationCenter.addObserver(forName: UserDefaults.didChangeNotification, object: nil, queue: nil) { notification in
+                if let defaults = notification.object as? UserDefaults {
+                    observer.onNext(defaults.object(forKey: key) as? T ?? defaultValue)
+                }
+            }
+            
+            return Disposables.create {
+                notificationCenter.removeObserver(observer)
+            }
+        }
+    }
 }

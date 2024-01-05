@@ -11,11 +11,10 @@ import Then
 import SnapKit
 import FirebaseAnalytics
 
-final class AddViewController: BaseViewController {
+final class AddViewController: BaseViewControllerWithNav {
 	// MARK: - Properties
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 	private var viewModel = EditActivityViewModel(isAddModel: true)
-	private var parentVC: AnyObject
 	private var bottomConstraint: Constraint!
 	private var isFirst: Bool = true
 	private var bottomPadding: CGFloat {
@@ -45,18 +44,8 @@ final class AddViewController: BaseViewController {
 	private lazy var nextFirstButton = UIButton()
 	private lazy var nextSecondButton = UIButton()
 	
-	init(parentVC: AnyObject) {
-		self.parentVC = parentVC
-		super.init(nibName: nil, bundle: nil)
-	}
-	
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
-	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		setup()		// 초기 셋업할 코드들
 	}
 	
 	override func viewDidLayoutSubviews() {
@@ -69,16 +58,14 @@ final class AddViewController: BaseViewController {
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-		if let navigationController = self.navigationController {
-			if let rootVC = navigationController.viewControllers.first {
-				rootVC.navigationController?.setNavigationBarHidden(false, animated: false)	// navigation bar 노출
-			}
-		}
-		
+
 		UIApplication.shared.windows.first?.overrideUserInterfaceStyle = .dark
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+		
+		// Home Loading을 보여줄지 판단
+		Constants.setKeychain(false, forKey: Constants.KeychainKey.isHomeLoading)
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
@@ -103,28 +90,21 @@ final class AddViewController: BaseViewController {
 		
 		NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
 		NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-		
-		if parentVC is ProfileViewController {
-			if let navigationController = self.navigationController {
-				if let rootVC = navigationController.viewControllers.first {
-					rootVC.navigationController?.setNavigationBarHidden(true, animated: false)	// navigation bar 노출
-				}
-			}
-		}
 	}
+    
 }
 //MARK: - Action
 extension AddViewController {
 	// MARK: - Private
 	// 유무에 따른 attribute 변경
-	private func setValid(_ isVaild: Bool) {
-		nextFirstButton.setTitleColor(!viewModel.priceInput.isEmpty && isVaild ? R.Color.white : R.Color.gray400, for: .normal)
-		nextFirstButton.isEnabled = !viewModel.priceInput.isEmpty && isVaild
-		nextSecondButton.isEnabled = !viewModel.priceInput.isEmpty && isVaild
-		warningLabel.isHidden = !viewModel.priceInput.isEmpty && isVaild
+	private func setValid(_ isValid: Bool) {
+		nextFirstButton.setTitleColor(!viewModel.priceInput.isEmpty && isValid ? R.Color.white : R.Color.gray400, for: .normal)
+		nextFirstButton.isEnabled = !viewModel.priceInput.isEmpty && isValid
+		nextSecondButton.isEnabled = !viewModel.priceInput.isEmpty && isValid
+		warningLabel.isHidden = !viewModel.priceInput.isEmpty && isValid
 		
 		// shake 에니메이션
-		if !viewModel.priceInput.isEmpty && !isVaild {
+		if !viewModel.priceInput.isEmpty && !isValid {
 			priceTextField.shake()
 			warningLabel.isHidden = false
 		} else {
@@ -143,7 +123,7 @@ extension AddViewController {
 		
 		priceView.snp.remakeConstraints {
 			$0.top.equalTo(dateButton.snp.bottom).offset(46)
-			$0.leading.trailing.equalToSuperview()
+			$0.leading.trailing.equalToSuperview().inset(24)
 			$0.height.equalTo(70)
 		}
 		
@@ -152,14 +132,14 @@ extension AddViewController {
 	
 	// 두번째 버튼에 대한 Animation
 	private func setLayoutDateView() {
-        Tracking.FinActAddPage.inputCategoryLogEvent("01")
+        Tracking.FinActAddPage.inputTypeLogEvent("01")
         
 		typeView.isHidden = false
 		nextSecondButton.isHidden = false
 		
 		dateView.snp.remakeConstraints {
 			$0.top.equalTo(typeView.snp.bottom).offset(40)
-			$0.leading.trailing.equalToSuperview()
+			$0.leading.trailing.equalToSuperview().inset(24)
 			$0.height.equalTo(70)
 		}
 		
@@ -206,7 +186,7 @@ extension AddViewController {
 		
 		isEarn = tag == 0 ? true : false
         
-        Tracking.FinActAddPage.inputCategoryLogEvent(tag == 0 ? "01" : "02")
+        Tracking.FinActAddPage.inputTypeLogEvent(tag == 0 ? "01" : "02")
 
 	}
 	
@@ -267,17 +247,9 @@ extension AddViewController {
         Tracking.FinActAddPage.nextBtnDateLogEvent()
 	}
 }
-
-//MARK: - Style & Layouts
-private extension AddViewController {
-	// 초기 셋업할 코드들
-	private func setup() {
-		bind()
-		setAttribute()
-		setLayout()
-	}
-	
-	private func bind() {
+//MARK: - Attribute & Hierarchy & Layouts
+extension AddViewController {
+	override func setBind() {
 		//MARK: input
 		view.gesturePublisher()
 			.sinkOnMainThread(receiveValue: { _ in
@@ -320,7 +292,7 @@ private extension AddViewController {
 			.store(in: &cancellable)
 		
 		//MARK: output
-		viewModel.isVaildByWon
+		viewModel.isValidByWon
 			.sinkOnMainThread(receiveValue: setValid)
 			.store(in: &cancellable)
 		
@@ -334,13 +306,14 @@ private extension AddViewController {
 			}).store(in: &cancellable)
 	}
 	
-	private func setAttribute() {
+	override func setAttribute() {
 		// [view]
 		view.backgroundColor = R.Color.gray900
 		navigationItem.title = "경제활동 추가"
 		
 		scrollView = scrollView.then {
 			$0.showsVerticalScrollIndicator = false
+			$0.isScrollEnabled = false
 		}
 		
 		contentView = contentView.then {
@@ -455,7 +428,7 @@ private extension AddViewController {
 		}
 	}
 	
-	private func setLayout() {
+	override func setLayout() {
 		view.addSubviews(scrollView, nextFirstButton, nextSecondButton)
 		scrollView.addSubview(contentView)
 		contentView.addSubviews(priceView, dateView, typeView)
@@ -466,8 +439,8 @@ private extension AddViewController {
 		
 		scrollView.snp.makeConstraints {
 			$0.top.equalTo(view.safeAreaLayoutGuide)
-			$0.leading.trailing.equalToSuperview().inset(24)
-			$0.bottom.equalTo(view.safeAreaLayoutGuide)
+			$0.leading.trailing.equalToSuperview()
+			$0.bottom.equalTo(view)
 		}
 		
 		contentView.snp.makeConstraints {
@@ -478,7 +451,7 @@ private extension AddViewController {
 		
 		priceView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(40)
-			$0.leading.trailing.equalToSuperview()
+			$0.leading.trailing.equalToSuperview().inset(24)
 			$0.bottom.lessThanOrEqualTo(nextFirstButton.snp.top).offset(16)
 			$0.height.equalTo(70)
 		}
@@ -500,7 +473,7 @@ private extension AddViewController {
 		
 		dateView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(40)
-			$0.leading.trailing.equalToSuperview()
+			$0.leading.trailing.equalToSuperview().inset(24)
 			$0.height.equalTo(70)
 		}
 		
@@ -516,7 +489,7 @@ private extension AddViewController {
 		
 		typeView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(40)
-			$0.leading.trailing.equalToSuperview()
+			$0.leading.trailing.equalToSuperview().inset(24)
 			$0.height.equalTo(70)
 		}
 		

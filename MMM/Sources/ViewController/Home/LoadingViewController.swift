@@ -59,7 +59,7 @@ extension LoadingViewController {
 		return isPresent
 	}
 }
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 private extension LoadingViewController {
 	// 초기 셋업할 코드들
 	private func setup() {
@@ -68,7 +68,6 @@ private extension LoadingViewController {
 	}
 	
 	private func setAttribute() {
-		view.backgroundColor = R.Color.black.withAlphaComponent(0.6)
 		
 		stackView = stackView.then {
 			$0.axis = .vertical

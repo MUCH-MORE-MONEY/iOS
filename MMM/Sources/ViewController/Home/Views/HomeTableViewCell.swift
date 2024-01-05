@@ -23,6 +23,7 @@ final class HomeTableViewCell: UITableViewCell {
 	private lazy var starStackView = UIStackView()
 	private lazy var titleLabel = UILabel()
 	private lazy var memoLabel = UILabel()
+	private lazy var categoryLabel = UILabel()
 	private lazy var plusMinusImage = UIImageView()
 	private lazy var priceLabel = UILabel()
 	private lazy var separator = UIView()
@@ -63,14 +64,21 @@ extension HomeTableViewCell {
 		for i in 0..<data.star {
 			startList[i].image = R.Icon.iconStarBlack8
 		}
-
+		
 		titleLabel.text = data.title
 		memoLabel.text = data.memo
+		categoryLabel.text = data.categoryTitle
 		plusMinusImage.image = data.type == "01" ? R.Icon.minus16 : R.Icon.plus16
 		priceLabel.text = data.amount.withCommas()
+		
+		let padding: CGFloat = 24
+		contentView.snp.updateConstraints {
+			$0.height.equalTo(data.memo.isEmpty ? 42 + padding : 64 + padding)
+			$0.width.equalToSuperview()
+		}
 	}
 }
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 private extension HomeTableViewCell {
 	// 초기 셋업할 코드들
 	private func setup() {
@@ -126,10 +134,18 @@ private extension HomeTableViewCell {
 			$0.textAlignment = .left
 			$0.numberOfLines = 1
 		}
+		
 		memoLabel = memoLabel.then {
 			$0.font = R.Font.body5
 			$0.textColor = R.Color.gray600
 			$0.textAlignment = .left
+			$0.numberOfLines = 1
+		}
+		
+		categoryLabel = categoryLabel.then {
+			$0.font = R.Font.body5
+			$0.textColor = R.Color.gray900
+			$0.textAlignment = .right
 			$0.numberOfLines = 1
 		}
 		
@@ -150,7 +166,7 @@ private extension HomeTableViewCell {
 	}
 	
 	private func setLayout() {
-		contentView.addSubviews(thumbnailImageView, containsStackView, contains3StackView, separator)
+		contentView.addSubviews(thumbnailImageView, containsStackView, contains3StackView, categoryLabel, separator)
 		startList.forEach { imageView in
 			starStackView.addArrangedSubview(imageView)
 		}
@@ -183,6 +199,11 @@ private extension HomeTableViewCell {
 			$0.leading.greaterThanOrEqualTo(titleLabel.snp.trailing).offset(11)
 			$0.trailing.equalToSuperview().inset(20)
 			$0.centerY.equalTo(titleLabel.snp.centerY)
+		}
+		
+		categoryLabel.snp.makeConstraints {
+			$0.trailing.equalTo(contains3StackView)
+			$0.bottom.equalTo(contains3StackView.snp.top).offset(-4) // UI가 겹치는 있는 문제
 		}
 		
 		separator.snp.makeConstraints {

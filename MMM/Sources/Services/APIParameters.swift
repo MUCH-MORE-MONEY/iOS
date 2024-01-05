@@ -17,6 +17,7 @@ struct APIParameters{
         var authorizationCode: String?
         var email: String?
         var identityToken: String?
+        var pushToken: String?
         var userIdentifier: String?
     }
     
@@ -36,6 +37,7 @@ struct APIParameters{
     struct InsertEconomicActivityReqDto: Encodable {
         var binaryFileList: [BinaryFileList]
         var amount: Int
+        var category: String?
         var type: String
         var title: String
         var memo: String
@@ -44,6 +46,7 @@ struct APIParameters{
         
         enum CodingKeys: String, CodingKey {
             case binaryFileList
+            case category = "economicActivityCategoryCd"
             case type = "economicActivityDvcd"
             case amount = "economicActivityAmt"
             case title = "economicActivityNm"
@@ -57,6 +60,7 @@ struct APIParameters{
     struct UpdateReqDto: Encodable {
         var binaryFileList: [BinaryFileList]
         var amount: Int
+        var category: String?
         var type: String
         var title: String
         var memo: String
@@ -68,6 +72,7 @@ struct APIParameters{
         enum CodingKeys: String, CodingKey {
             case binaryFileList
             case fileNo
+            case category = "economicActivityCategoryCd"
             case type = "economicActivityDvcd"
             case amount = "economicActivityAmt"
             case title = "economicActivityNm"
@@ -103,6 +108,10 @@ struct APIParameters{
 	/// 탈퇴를 위한 Request
 	struct WithdrawReqDto: Encodable {
 	}
+    
+    /// 카테고리 조회
+    struct CategoryListReqDto: Encodable {
+    }
 }
 
 struct APIHeader {

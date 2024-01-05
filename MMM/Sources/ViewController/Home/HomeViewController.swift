@@ -12,13 +12,15 @@ import SnapKit
 import FSCalendar
 import Lottie
 import FirebaseAnalytics
+import UserNotifications
+import RxSwift
 
 final class HomeViewController: UIViewController {
 	// MARK: - Properties
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 	private let viewModel = HomeViewModel()
-    private var tabBarViewModel: TabBarViewModel
-
+    var disposeBag = DisposeBag()
+    
 	// MARK: - UI Components
 	private lazy var monthButtonItem = UIBarButtonItem()
 	private lazy var monthButton = SemanticContentAttributeButton()
@@ -41,34 +43,51 @@ final class HomeViewController: UIViewController {
 	private lazy var monthlyErrorView = HomeErrorView()
 	private lazy var dailyErrorView = HomeErrorView()
 	private lazy var retryButton = UIButton()
-	
-    init(tabBarViewModel: TabBarViewModel) {
-        self.tabBarViewModel = tabBarViewModel
-        super.init(nibName: nil, bundle: nil)
+	private lazy var snackView = SnackView(viewModel: viewModel)
+    // Nudge Properties
+    private enum nudgeMessage {
+        static let title = "💸 가계부 작성, 잊지 않도록 알려드려요!"
+        static let content = "원하는 시간대에 알림 받고\n꾸준히 자산을 관리하는 습관을 만들어 보세요"
+        static let confirm = "알림 설정"
+        static let cancel = "닫기"
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setup()		// 초기 셋업할 코드들
-        
 //        viewModel.showTrackingPermissionAlert()
         
+        // nudge test
+//        Common.setSaveButtonTapped(false)
+//        Common.setCustomPushNudge(false)
+//        Common.setNudgeIfPushRestricted(false)
+//        
+//        print("getSaveButtonTapped : \(Common.getSaveButtonTapped())")
+//        print("getCustomPuhsNudge : \(Common.getCustomPuhsNudge())")
+//        print("getNudgeIfPushRestricted : \(Common.getNudgeIfPushRestricted())")
+//        
+
         
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
+        Tracking.AccountBook.pageViewLogEvent()
+        
+        checkNudgeAction()
+        
+		// FIXME: - 네비게이션 아이템 노출 유무
+		if let navigationController = self.navigationController {
+			if let rootVC = navigationController.viewControllers.first {
+				rootVC.navigationItem.leftBarButtonItem = monthButtonItem
+				rootVC.navigationItem.rightBarButtonItem = rightBarItem
+			}
+		}
+		
 		fetchData()
 	}
 	
-	override func viewWillDisappear(_ animated: Bool) {
-		super.viewWillDisappear(animated)
-	}
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
             self.viewModel.requestTrackingAuthorization()
@@ -86,6 +105,7 @@ extension HomeViewController {
 		self.calendar.select(date)
 		self.dayLabel.text = date.getFormattedDate(format: "dd일 (EEEEE)") // 선택된 날짜
 		self.viewModel.getDailyList(date.getFormattedYMD())
+		self.viewModel.getWeeklyList(date.getFormattedYMD())
 		self.setMonth(date)
 		self.viewModel.preDate = date
 	}
@@ -93,21 +113,30 @@ extension HomeViewController {
 	// MARK: - Private
 	/// 데이터 얻기
 	private func fetchData() {
-		viewModel.isWillAppear = true // viewWillAppear 일 경우에만 Loading 표시
-		if calendar.scope == .month { // 월 단위
-			viewModel.getMonthlyList(calendar.currentPage.getFormattedYM())
-		} else { // 주 단위
-			if let dateAfter = Calendar.current.date(byAdding: .day, value: 6, to: calendar.currentPage) { // 해당 주의 마지막 날짜
-				let date = calendar.currentPage.getFormattedYM()
-				if date != dateAfter.getFormattedYM() { // 마지막 날짜 비교
-					viewModel.getWeeklyList(date, dateAfter.getFormattedYM())
-				}
-			}
+		guard let isHomeLoading = Constants.getKeychainValueByBool(forKey: Constants.KeychainKey.isHomeLoading), isHomeLoading else {
+			// 값이 nil일 경우Home Loading을 보여줄지 판단
+			Constants.setKeychain(true, forKey: Constants.KeychainKey.isHomeLoading)
+			return
 		}
-		viewModel.getDailyList(viewModel.preDate.getFormattedYMD())
-		calendar.reloadData()
-		tableView.reloadData()
-		viewModel.isWillAppear = false
+		self.viewModel.isWillAppear = true // viewWillAppear 일 경우에만 Loading 표시
+		if self.calendar.scope == .month { // 월 단위
+			self.viewModel.getMonthlyList(self.calendar.currentPage.getFormattedYM())
+		} else { // 주 단위
+			if let dateAfter = Calendar.current.date(byAdding: .day, value: 6, to: self.calendar.currentPage) { // 해당 주의 마지막 날짜
+				let date = self.calendar.currentPage.getFormattedYM()
+				if date != dateAfter.getFormattedYM() { // 마지막 날짜 비교
+					self.viewModel.getWeeklyList(date, dateAfter.getFormattedYM())
+				}
+	
+			}
+
+		}
+		// 위젯
+		self.viewModel.getDailyList(Date().getFormattedYMD(), isWidget: true)
+		self.viewModel.getWeeklyList(Date().getFormattedYMD())
+		self.viewModel.isWillAppear = false
+		
+		self.viewModel.getDailyList(self.viewModel.preDate.getFormattedYMD())
 	}
 	
 	/// 달력 Picker Bottom Sheet
@@ -138,21 +167,38 @@ extension HomeViewController {
 	
 	/// 네트워크 오류시 스낵바 노출
 	func showSnack() {
-		let snackView = SnackView(viewModel: viewModel)
-		snackView.setSnackAttribute()
+		self.snackView.alpha = 1.0
 		
-		self.view.addSubview(snackView)
-		
-		snackView.snp.makeConstraints {
-			$0.left.right.equalTo(view.safeAreaLayoutGuide).inset(24)
-			$0.bottom.equalTo(view.snp.bottom).offset(-16 - (82+24)) // tabBar 높이 + Plus 버튼 윗부분
-			$0.height.equalTo(40)
+		UIView.animate(withDuration: 1.0, delay: 3.0, options: [.curveEaseInOut, .allowUserInteraction]) {
+			self.snackView.alpha = 0.0
 		}
-		
-		snackView.toastAnimation(duration: 1.0, delay: 3.0, option: .curveEaseOut)
 	}
+    
+    private func checkNudgeAction() {
+        // nudge
+        // 최초한번 눌렀을 경우 && 넛징이 아직 표시안된경우
+        
+        if Common.getSaveButtonTapped() && !Common.getCustomPuhsNudge() {
+            
+            Common.setCustomPushNudge(true)
+            
+            showAlert(alertType: .canCancel,
+                      titleText: nudgeMessage.title,
+                      contentText: nudgeMessage.content,
+                      cancelButtonText: nudgeMessage.cancel,
+                      confirmButtonText: nudgeMessage.confirm)
+//                    
+        }
+        
+        // test용 alert
+//            showAlert(alertType: .canCancel,
+//                      titleText: nudgeMessage.title,
+//                      contentText: nudgeMessage.content,
+//                      cancelButtonText: nudgeMessage.cancel,
+//                      confirmButtonText: nudgeMessage.confirm)
+    }
 }
-//MARK: - Style & Layouts
+//MARK: - Attribute & Hierarchy & Layouts
 private extension HomeViewController {
 	// 초기 셋업할 코드들
 	private func setup() {
@@ -162,6 +208,30 @@ private extension HomeViewController {
 	}
 	
 	private func bind() {
+        // Foreground 상태 감지(알람 설정은 밖에서 하기 때문에)
+        // 귀찮아서 그냥 rxswift 써버림 -> 나중에 바꿔야함 23/12/11 - pjw
+        NotificationCenter.default.rx.notification(UIApplication.willEnterForegroundNotification)
+            .filter { _ in Common.getSaveButtonTapped() && Common.getCustomPuhsNudge() && !Common.getNudgeIfPushRestricted() }
+            .bind { [weak self] _ in
+                guard let self = self else { return }
+                // 밖에서 나갔다가 왔을 경우 현재 알람을 on/off 상태 판단해야함
+                UNUserNotificationCenter.current().getNotificationSettings { [weak self] settings in
+                    // 알람창 갔다 왔을 때 알람을 키고 온 경우 요일설정 페이지 전환
+                    if settings.authorizationStatus == .authorized {
+                        DispatchQueue.main.async {
+                            self?.moveToPushSettingDetailViewController()
+                            Common.setNudgeIfPushRestricted(true)
+                        }
+                    } else {
+                        print("이놈은 끝까지 푸시 설정 안하네")
+                        Common.setNudgeIfPushRestricted(true)
+                    }
+                }
+                print("밖에 나갔다가 들어옴")
+                
+            }
+            .disposed(by: disposeBag)
+        
 		// MARK: input
 		todayButton.tapPublisher
 			.sinkOnMainThread(receiveValue: didTapTodayButton)
@@ -215,7 +285,6 @@ private extension HomeViewController {
 		viewModel.isLoading
 			.sinkOnMainThread(receiveValue: { [weak self] loading in
 				guard let self = self else { return }
-				
 				if loading && !self.loadView.isPresent {
 					self.loadView.play()
 					self.loadView.isPresent = true
@@ -223,6 +292,12 @@ private extension HomeViewController {
 					self.present(self.loadView, animated: false)
 				} else {
 					self.loadView.dismiss(animated: false)
+					
+					// 로딩이 끝나고, Snack Message 처리
+					if viewModel.errorMonthly == false && viewModel.errorDaily == true {
+						// 에러 Snack Message 띄우기
+						showSnack()
+					}
 				}
 			}).store(in: &cancellable)
 		
@@ -253,51 +328,21 @@ private extension HomeViewController {
 
 				dailyErrorView.isHidden = !isError
 			}).store(in: &cancellable)
-		
-		viewModel.isError
-			.sinkOnMainThread(receiveValue: { [weak self] isError in
-				guard let self = self else { return }
-				
-				if isError { showSnack() } // 네트워크 오류
-			}).store(in: &cancellable)
-
-//		viewModel
-//			.transform(input: viewModel.input.eraseToAnyPublisher())
-//			.sinkOnMainThread(receiveValue: { [weak self] state in
-//				switch state {
-//				case .errorMessage(_):
-//					break
-//				case .toggleButton(isEnabled: let isEnabled):
-//					self?.toggleCheckButton(isEnabled)
-//				}
-//			}).store(in: &cancellables)
 	}
 	
 	private func setAttribute() {
-		// [view]
-		view.backgroundColor = R.Color.gray100
-		view.addGestureRecognizer(self.scopeGesture)
-		
-		if let navigationController = self.navigationController {
-			if let rootVC = navigationController.viewControllers.first {
-				rootVC.navigationItem.leftBarButtonItem = monthButtonItem
-				rootVC.navigationItem.rightBarButtonItem = rightBarItem
-			}
+		// 토큰 출력
+		if let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) {
+			print(#file, "Header Token : \(token)")
 		}
 		
-        // tabbar
-        tabBarViewModel.$isPlusButtonTappedInHome
-            .receive(on: DispatchQueue.main)
-            .sink {
-                if $0 {
-					let vc = AddViewController(parentVC: self)
-                    self.navigationController?.pushViewController(vc, animated: true)
-                    self.tabBarViewModel.isPlusButtonTappedInHome = false
-                }
-            }.store(in: &cancellable)
+		// [view]
+		view.backgroundColor = R.Color.gray900
+		view.addGestureRecognizer(self.scopeGesture)
         
+		let view = UIView(frame: .init(origin: .zero, size: .init(width: 150, height: 30)))
 		monthButton = monthButton.then {
-			$0.frame = .init(origin: .zero, size: .init(width: 150, height: 24))
+			$0.frame = .init(origin: .init(x: 8, y: 0), size: .init(width: 150, height: 30))
 			$0.setTitle(Date().getFormattedDate(format: "M월"), for: .normal)
 			$0.setImage(R.Icon.arrowExpandMore16, for: .normal)
 			$0.setTitleColor(R.Color.white, for: .normal)
@@ -305,23 +350,24 @@ private extension HomeViewController {
 			$0.imageView?.contentMode = .scaleAspectFit
 			$0.titleLabel?.font = R.Font.h5
 			$0.contentHorizontalAlignment = .left
-			$0.imageEdgeInsets = .init(top: 0, left: 11, bottom: 0, right: 0) // 이미지 여백
+			$0.imageEdgeInsets = .init(top: 0, left: 8, bottom: 0, right: 0) // 이미지 여백
+		}
+		view.addSubview(monthButton)
+
+		monthButtonItem = monthButtonItem.then {
+			$0.customView = view
 		}
 		
-		monthButtonItem = monthButtonItem.then {
-			$0.customView = monthButton
+		let rightView = UIView(frame: .init(origin: .zero, size: .init(width: 92, height: 30)))
+		righthStackView = righthStackView.then {
+			$0.axis = .horizontal
+			$0.spacing = 16
+			$0.addArrangedSubviews(todayButton, filterButton)
 		}
+		rightView.addSubview(righthStackView)
 		
 		rightBarItem = rightBarItem.then {
-			$0.customView = righthStackView
-		}
-		
-		righthStackView = righthStackView.then {
-			$0.distribution = .equalSpacing
-			$0.axis = .horizontal
-			$0.alignment = .center
-			$0.spacing = 18.66
-			$0.addArrangedSubviews(todayButton, filterButton)
+			$0.customView = rightView
 		}
 		
 		todayButton = todayButton.then {
@@ -418,16 +464,25 @@ private extension HomeViewController {
 		dailyErrorView = dailyErrorView.then {
 			$0.isHidden = true
 		}
+		
+		snackView = snackView.then {
+			$0.setSnackAttribute()
+			$0.alpha = 0.0
+		}
 	}
 	
 	private func setLayout() {
 		headerView.addSubview(dayLabel)
 		errorBgView.addSubviews(monthlyErrorView, retryButton)
-		view.addSubviews(calendarHeaderView, calendar, separator, tableView, emptyView, dailyErrorView, errorBgView)
+		view.addSubviews(calendarHeaderView, calendar, separator, tableView, emptyView, dailyErrorView, errorBgView, snackView)
 
 		todayButton.snp.makeConstraints {
 			$0.width.equalTo(49)
 			$0.height.equalTo(24)
+		}
+		
+		righthStackView.snp.makeConstraints {
+			$0.width.equalTo(90)
 		}
 		
 		separator.snp.makeConstraints {
@@ -437,23 +492,25 @@ private extension HomeViewController {
 		}
 		
 		calendarHeaderView.snp.makeConstraints {
-			$0.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+			$0.top.equalTo(view.safeAreaLayoutGuide)
+			$0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(8)
 			$0.height.equalTo(46)
 		}
 				
 		calendar.snp.makeConstraints {
 			$0.top.equalTo(calendarHeaderView.snp.bottom)
-			$0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+			$0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(8)
 			$0.height.equalTo(300) // 기기 대응 - UIScreen.height * 0.37
 		}
 
 		dayLabel.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(16)
-			$0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(20)
+			$0.leading.equalToSuperview().inset(24)
 		}
 		
 		tableView.snp.makeConstraints {
-			$0.bottom.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+			$0.leading.trailing.equalToSuperview()
+			$0.bottom.equalTo(view.safeAreaLayoutGuide)
 			$0.top.equalTo(calendar.snp.bottom)
 		}
 		
@@ -481,6 +538,12 @@ private extension HomeViewController {
 			$0.centerX.equalTo(tableView.snp.centerX)
 			$0.centerY.equalTo(tableView.snp.centerY)
 			$0.width.equalTo(tableView)
+		}
+				
+		snackView.snp.makeConstraints {
+			$0.leading.trailing.equalToSuperview().inset(24)
+			$0.bottom.equalTo(view.snp.bottom).offset(-24) // Plus 버튼 윗부분과의 거리
+			$0.height.equalTo(40)
 		}
 	}
 }
@@ -626,8 +689,7 @@ extension HomeViewController: UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		let padding: CGFloat = 24
-		return viewModel.dailyList[indexPath.row].memo.isEmpty ? 42 + padding : 64 + padding
+		return UITableView.automaticDimension
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -659,4 +721,90 @@ extension HomeViewController: UITableViewDelegate {
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
 	}
+}
+
+extension HomeViewController: CustomAlertDelegate {
+    func didAlertCofirmButton() {
+        print("confirm")
+//        let vc = PushSettingDetailViewController()
+//        vc.reactor = PushSettingDetailReactor(provider: ServiceProvider.shared)
+//        
+//        navigationController?.pushViewController(vc, animated: true)
+        
+        UNUserNotificationCenter.current().getNotificationSettings { [weak self] settings in
+            guard let self = self else { return }
+            if settings.authorizationStatus == .authorized {
+                // 권한 있을 경우
+                DispatchQueue.main.async {
+                    self.moveToPushSettingDetailViewController()
+                }
+
+            } else { // 권한이 없을 경우 setting 앱으로 이동 -> 딥링크
+                
+                // 16 이상 부터 알림 설정 딥링크 이동 가능
+                if #available(iOS 16.0, *) {
+                    DispatchQueue.main.async {
+                        if let url = URL(string: UIApplication.openNotificationSettingsURLString) {
+                            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                        } else {
+                            print("이동 실패")
+                        } // 딥링크 이동 실패
+                    }
+                    
+                    
+                } else { // 16미만 버전은 앱 설정 까지만 이동 가능
+                    DispatchQueue.main.async {
+                        if let url = URL(string: UIApplication.openSettingsURLString) {
+                            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                        } else {
+                            print("이동 실패")
+                        } // 딥링크 이동 실패
+                    }
+                }
+//                self.showAlertToRedirectToSettings()
+            }
+        }
+    }
+    
+    func didAlertCacelButton() {
+//        print("cancel")
+//        Common.setCustomPushNudge(false)
+    }
+    
+    func handleTap() {
+//        print("handle tap")
+//        Common.setCustomPushNudge(false)
+    }
+    
+    func moveToPushSettingDetailViewController() {
+        let vc = PushSettingDetailViewController()
+        vc.reactor = PushSettingDetailReactor(provider: ServiceProvider.shared)
+
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func showAlertToRedirectToSettings() {
+        let alertController = UIAlertController(
+            title: "‘MMM’에서 알림을 보내고자 합니다.",
+            message: "경고, 사운드 및 아이콘 배지가 알림에 포함될 수 있습니다. 설정에서 이를 구성할 수 있습니다.",
+            preferredStyle: .alert
+        )
+
+        let settingsAction = UIAlertAction(title: "허용", style: .default) { [weak self] (_) in
+            // 권한 허용 후 vc 이동
+            guard let self = self else { return }
+            if let url = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url)
+            }
+//            self.moveToPushSettingDetailViewController()
+        }
+
+        let cancelAction = UIAlertAction(title: "허용 안함", style: .cancel, handler: nil)
+        alertController.addAction(settingsAction)
+        alertController.addAction(cancelAction)
+
+        DispatchQueue.main.async {
+            self.present(alertController, animated: true, completion: nil)
+        }
+    }
 }

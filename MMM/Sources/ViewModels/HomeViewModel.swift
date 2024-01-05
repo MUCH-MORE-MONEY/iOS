@@ -63,15 +63,10 @@ final class HomeViewModel {
 	lazy var isLoading: AnyPublisher<Bool, Never> = Publishers.CombineLatest3($isWillAppear, $isDailyLoading, $isMonthlyLoading)
 		.map { $0 && ($1 || $2) }
 		.eraseToAnyPublisher()
-	
-	// 월별 데이터는 정상동작, 일별 데이터가 비정상 동작할 경우
-	lazy var isError: AnyPublisher<Bool, Never> = Publishers.CombineLatest($errorMonthly, $errorDaily)
-		.compactMap { $0 == false && $1 ?? false }
-		.eraseToAnyPublisher()
 }
 //MARK: Action
 extension HomeViewModel {
-	func getDailyList(_ dateYMD: String) {
+	func getDailyList(_ dateYMD: String, isWidget: Bool = false) {
 		guard let date = Int(dateYMD), let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
 		
 		isDailyLoading = true // 로딩 시작
@@ -93,7 +88,13 @@ extension HomeViewModel {
 			}, receiveValue: { [weak self] response in
 				guard let self = self, let dailyList = response.selectListDailyOutputDto else { return }
 //				print(#file, #function, #line, dailyList)
-				self.dailyList = dailyList
+				if !isWidget { self.dailyList = dailyList }
+				
+				// 이번 달만 위젯에 보여줌
+				if dateYMD == Date().getFormattedYMD() {
+					UserDefaults.shared.set(dailyList.count, forKey: "today")
+					WidgetCenter.shared.reloadAllTimelines()
+				}
 			}).store(in: &cancellable)
 	}
 	
@@ -133,7 +134,7 @@ extension HomeViewModel {
 		guard let date1 = Int(date1YM), let date2 = Int(date2YM), let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
 		
 		isMonthlyLoading = true // 로딩 시작
-
+		
 		APIClient.dispatch(APIRouter.SelectListMonthlyReqDto(headers: APIHeader.Default(token: token), body: APIParameters.SelectListMonthlyReqDto(dateYM: date1)))
 			.sink(receiveCompletion: { [weak self] error in
 				guard let self = self else { return }
@@ -181,6 +182,33 @@ extension HomeViewModel {
 						}
 						errorMonthly = false // 에러 이미지 제거
 					}).store(in: &self.cancellable)
+			}).store(in: &cancellable)
+	}
+	
+	func getWeeklyList(_ dateYMD: String) {
+		guard let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
+		
+		isMonthlyLoading = true // 로딩 시작
+
+		APIClient.dispatch(APIRouter.WidgetReqDto(headers: APIHeader.Default(token: token), dateYMD: dateYMD))
+			.sink(receiveCompletion: { [weak self] error in
+				guard let self = self else { return }
+				switch error {
+				case .failure(let data):
+					switch data {
+					default:
+						errorMonthly = true // 에러 표시
+					}
+				case .finished:
+					break
+				}
+				isMonthlyLoading = false // 로딩 종료
+			}, receiveValue: { response in
+				// 이번 달만 위젯에 보여줌
+				if dateYMD == Date().getFormattedYMD() {
+					UserDefaults.shared.set(response.data.weekly, forKey: "weekly")
+					WidgetCenter.shared.reloadAllTimelines()
+				}
 			}).store(in: &cancellable)
 	}
     

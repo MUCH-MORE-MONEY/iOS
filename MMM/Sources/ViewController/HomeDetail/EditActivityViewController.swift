@@ -57,9 +57,20 @@ final class EditActivityViewController: BaseAddActivityViewController, UINavigat
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		setup()
 	}
 	
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+//        titleTextFeild.becomeFirstResponder() // 키보드 보이기 및 포커스 주기
+    }
+    
 	override func didTapBackButton() {
 		//FIXME: - showAlert에서 super.didTapBackButton()호출하면 문제생김
 		isDeleteButton = false
@@ -123,6 +134,13 @@ extension EditActivityViewController {
             self.detailViewModel.changedId = self.editViewModel.changedId
         }
 		
+		// 저장후, 통계 Refresh
+		if let str = Constants.getKeychainValue(forKey: Constants.KeychainKey.statisticsDate), let date = str.toDate() {
+			ServiceProvider.shared.statisticsProvider.updateDate(to: date)
+		} else {
+			ServiceProvider.shared.statisticsProvider.updateDate(to: Date())
+		}
+		
 		self.loadView.play()
 		self.loadView.isPresent = true
 		self.loadView.modalPresentationStyle = .overFullScreen
@@ -178,6 +196,17 @@ extension EditActivityViewController {
 		}
 		return text
 	}
+    
+    private func didTapCategory() {
+        Tracking.FinActAddPage.inputCategoryLogEvent()
+        
+        let picker = AddCategoryViewController(viewModel: editViewModel)
+        let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
+        bottomSheetVC.setSetting(percentHeight: 0.65)
+        picker.delegate = bottomSheetVC
+        bottomSheetVC.modalPresentationStyle = .overFullScreen
+        self.present(bottomSheetVC, animated: false, completion: nil)
+    }
 }
 
 
@@ -245,6 +274,14 @@ extension EditActivityViewController: CustomAlertDelegate {
 	func didAlertCofirmButton() {
 		if isDeleteButton {
 			editViewModel.deleteDetailActivity()
+			
+			// 삭제시, 통계 Refresh
+			if let str = Constants.getKeychainValue(forKey: Constants.KeychainKey.statisticsDate), let date = str.toDate() {
+				ServiceProvider.shared.statisticsProvider.updateDate(to: date)
+			} else {
+				ServiceProvider.shared.statisticsProvider.updateDate(to: Date())
+			}
+			
 			self.loadView.play()
 			self.loadView.isPresent = true
 			self.loadView.modalPresentationStyle = .overFullScreen
@@ -289,8 +326,10 @@ extension EditActivityViewController: UIImagePickerControllerDelegate {
 			self.editViewModel.binaryFileList.append(APIParameters.BinaryFileList(binaryData: data,fileNm: imageName))
 			self.remakeConstraintsByMainImageView()
 		}
+        self.editViewModel.didTapAddButton = false
 	}
 	func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.editViewModel.didTapAddButton = false
 		dismiss(animated: true, completion: nil)
 	}
 }
@@ -298,27 +337,32 @@ extension EditActivityViewController: UIImagePickerControllerDelegate {
 // MARK: - TextView Func
 extension EditActivityViewController {
 	func textViewDidChange(text: String) {
-		editViewModel.memo = text
+        if self.memoTextView.text == textViewPlaceholder {
+            self.memoTextView.text = nil
+            self.memoTextView.textColor = R.Color.black
+        }
 	}
 	
 	func textViewDidBeginEditing() {
-		let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
-		scrollView.contentInset = contentInsets
-		scrollView.scrollIndicatorInsets = contentInsets
+//		let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+//		scrollView.contentInset = contentInsets
+//		scrollView.scrollIndicatorInsets = contentInsets
+//		
+//		var rect = scrollView.frame
+//		rect.size.height -= keyboardHeight
+//		if !rect.contains(memoTextView.frame.origin) {
+//			scrollView.scrollRectToVisible(memoTextView.frame, animated: true)
+//		}
 		
-		var rect = scrollView.frame
-		rect.size.height -= keyboardHeight
-		if !rect.contains(memoTextView.frame.origin) {
-			scrollView.scrollRectToVisible(memoTextView.frame, animated: true)
-		}
-		
+        
+        
 		if memoTextView.text == textViewPlaceholder {
 			memoTextView.text = nil
 			memoTextView.textColor = R.Color.black
 		}
 	}
 	
-	func textViewDidEndEditing() {
+    func textViewDidEndEditing(text: String) {
 		let contentInsets = UIEdgeInsets.zero
 		scrollView.contentInset = contentInsets
 		scrollView.scrollIndicatorInsets = contentInsets
@@ -327,203 +371,270 @@ extension EditActivityViewController {
 			memoTextView.text = textViewPlaceholder
 			memoTextView.textColor = R.Color.gray400
 		}
+        
+        editViewModel.memo = text
 	}
 }
-
-
-// MARK: - Style & Layout
+// MARK: - Bind
 extension EditActivityViewController {
-    private func setup() {
-        bind()
-        setAttribute()
-        setLayout()
-    }
-    
-    // MARK: - Bind
-    private func bind() {
-        // MARK: - detailVM -> editVM 데이터 주입
-        editViewModel.title = detailViewModel.detailActivity?.title ?? ""
-        editViewModel.memo = detailViewModel.detailActivity?.memo ?? ""
-        editViewModel.amount = detailViewModel.detailActivity?.amount ?? 0
-        editViewModel.createAt = detailViewModel.detailActivity?.createAt ?? ""
-        editViewModel.star = detailViewModel.detailActivity?.star ?? 0
-        editViewModel.type = detailViewModel.detailActivity?.type ?? ""
-        editViewModel.fileNo = detailViewModel.detailActivity?.fileNo ?? ""
-        editViewModel.id = detailViewModel.detailActivity?.id ?? ""
-        
-        // MARK: - Loading에 대한 처리
-        editViewModel.$isLoading
-            .receive(on: DispatchQueue.main)
-            .sink {
-                if !$0 {
-                    self.loadView.dismiss(animated: false)
-                    
-                    if self.isDeleteButton {
-                        if let navigationController = self.navigationController {
-                            if let rootVC = navigationController.viewControllers.first {
-                                navigationController.setViewControllers([rootVC], animated: true)
-                            }
-                        }
-                    } else {
-                        super.didTapBackButton()
-                    }
-                } else {
-                    
-                }
-            }.store(in: &cancellable)
-        
-        
-        // MARK: - UI Bind
-        editViewModel.$star
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] value in
-                guard let self = self else { return }
-                self.satisfyingLabel.setSatisfyingLabelEdit(by: value)
-                self.setStarImage(Int(value))
-            }.store(in: &cancellable)
-        
+	override func setBind() {
+		// MARK: - detailVM -> editVM 데이터 주입
+		editViewModel.title = detailViewModel.detailActivity?.title ?? ""
+		editViewModel.memo = detailViewModel.detailActivity?.memo ?? ""
+		editViewModel.amount = detailViewModel.detailActivity?.amount ?? 0
+		editViewModel.createAt = detailViewModel.detailActivity?.createAt ?? ""
+		editViewModel.star = detailViewModel.detailActivity?.star ?? 0
+		editViewModel.type = detailViewModel.detailActivity?.type ?? ""
+		editViewModel.fileNo = detailViewModel.detailActivity?.fileNo ?? ""
+		editViewModel.id = detailViewModel.detailActivity?.id ?? ""
+        editViewModel.categoryId = detailViewModel.detailActivity?.categoryID ?? ""
+        editViewModel.categoryName = detailViewModel.detailActivity?.categoryName ?? ""
+		// MARK: - Loading에 대한 처리
+		editViewModel.$isLoading
+            .removeDuplicates()
+			.receive(on: DispatchQueue.main)
+			.sink {
+				if !$0 {
+					self.loadView.dismiss(animated: false)
+					
+					if self.isDeleteButton {
+						if let navigationController = self.navigationController {
+							if let rootVC = navigationController.viewControllers.first {
+								navigationController.setViewControllers([rootVC], animated: true)
+							}
+						}
+					} else {
+						super.didTapBackButton()
+					}
+				} else {
+					
+				}
+			}.store(in: &cancellable)
+		
+		
+		// MARK: - UI Bind
+		editViewModel.$star
+            .removeDuplicates()
+			.receive(on: DispatchQueue.main)
+			.sink { [weak self] value in
+				guard let self = self else { return }
+				self.satisfyingLabel.setSatisfyingLabelEdit(by: value)
+				self.setStarImage(Int(value))
+			}.store(in: &cancellable)
+		
+		editViewModel.$type
+            .removeDuplicates()
+			.receive(on: DispatchQueue.main)
+			.sink { _ in
+				self.activityType.text = self.editViewModel.type == "01" ? "지출" : "수입"
+				self.activityType.backgroundColor = self.editViewModel.type == "01" ? R.Color.orange500 : R.Color.blue500
+			}
+            .store(in: &cancellable)
+		
         editViewModel.$type
-            .receive(on: DispatchQueue.main)
-            .sink { _ in
-                self.activityType.text = self.editViewModel.type == "01" ? "지출" : "수입"
-                self.activityType.backgroundColor = self.editViewModel.type == "01" ? R.Color.orange500 : R.Color.blue500
-            }.store(in: &cancellable)
-        
-        editViewModel.$amount
-            .receive(on: DispatchQueue.main)
-            .sink { _ in
-                self.totalPrice.text = self.editViewModel.amount.withCommas() + "원"
-            }.store(in: &cancellable)
-        
-        editViewModel.isTitleVaild
-            .sinkOnMainThread(receiveValue: {
-                if !$0 {
-                    self.titleTextFeild.text?.removeLast()
-                }
-            }).store(in: &cancellable)
-        
-        editViewModel.$memo
-            .sinkOnMainThread { [weak self] text in
+            .removeDuplicates() // 값 변경전까지 이벤트 미방출
+            .dropFirst()        // 최초 값이 변경되었을 때 무시
+            .sinkOnMainThread { [weak self] _ in
                 guard let self = self else { return }
-                if !text.isEmpty {
-                    self.memoTextView.textColor = R.Color.black
-                } else {
-                    self.memoTextView.text = textViewPlaceholder
-                    self.memoTextView.textColor = R.Color.gray400
-                }
-            }.store(in: &cancellable)
+                print("drop")
+                self.editViewModel.categoryId = ""
+                self.editViewModel.categoryName = ""
+            }
+            .store(in: &cancellable)
+
         
-        titleTextFeild.textPublisher
-            .receive(on: RunLoop.main)
-            .assign(to: \.title, on: editViewModel)
+		editViewModel.$amount
+            .removeDuplicates()
+			.receive(on: DispatchQueue.main)
+			.sink { _ in
+				self.totalPrice.text = self.editViewModel.amount.withCommas() + "원"
+			}.store(in: &cancellable)
+		
+		editViewModel.isTitleVaild
+			.sinkOnMainThread(receiveValue: {
+				if !$0 {
+					self.titleTextFeild.text?.removeLast()
+				}
+			}).store(in: &cancellable)
+		
+		editViewModel.$memo
+			.sinkOnMainThread { [weak self] text in
+				guard let self = self else { return }
+				if !text.isEmpty {
+					self.memoTextView.textColor = R.Color.black
+				} else {
+					self.memoTextView.text = textViewPlaceholder
+					self.memoTextView.textColor = R.Color.gray400
+				}
+			}.store(in: &cancellable)
+		
+		titleTextFeild.textPublisher
+			.receive(on: RunLoop.main)
+			.assign(to: \.title, on: editViewModel)
+			.store(in: &cancellable)
+		
+		
+		// textfield가 없을 때 버튼 비활성화
+		titleTextFeild.textPublisher
+			.sinkOnMainThread { [weak self] text in
+				guard let self = self else { return }
+				if text.isEmpty {
+					self.saveButton.isEnabled = false
+					self.saveButton.setBackgroundColor(R.Color.gray400, for: .disabled)
+				} else {
+					self.saveButton.isEnabled = true
+					self.saveButton.setBackgroundColor(R.Color.gray800, for: .normal)
+				}
+			}.store(in: &cancellable)
+		
+        // 키보드의 확인/이동 버튼을 눌렀을 경우 키보드 내리기
+        titleTextFeild.textReturnPublisher
+            .sinkOnMainThread { [weak self] in
+                guard let self = self else { return }
+                self.titleTextFeild.resignFirstResponder()
+            }
+            .store(in: &cancellable)
+        
+		memoTextView.textPublisher
+			.sink { [weak self] ouput in
+				guard let self = self else { return }
+				// 0 : textViewDidChange
+				// 1 : textViewDidBeginEditing
+				// 2 : textViewDidEndEditing
+				switch ouput.1 {
+				case 0:
+					self.textViewDidChange(text: ouput.0)
+				case 1:
+					self.textViewDidBeginEditing()
+				case 2:
+                    self.textViewDidEndEditing(text: ouput.0)
+				default:
+					print("unknown error")
+				}
+			}.store(in: &cancellable)
+		
+		cameraImageView.setData(viewModel: editViewModel)
+		editViewModel.$didTapAddButton
+			.sinkOnMainThread(receiveValue: { [weak self] in
+				guard let self = self else { return }
+				if $0 {
+					self.editViewModel.requestPHPhotoLibraryAuthorization {
+						DispatchQueue.main.async {
+							self.didTapAlbumButton()
+						}
+					}
+				}
+			})
+			.store(in: &cancellable)
+		
+		// MARK: - Gesture Publisher
+		titleStackView.gesturePublisher()
+			.receive(on: DispatchQueue.main)
+			.sink { _ in
+				self.didTapDateTitle()
+			}.store(in: &cancellable)
+		
+		containerStackView.gesturePublisher()
+			.receive(on: DispatchQueue.main)
+			.sink { _ in
+				self.didTapMoneyLabel()
+			}.store(in: &cancellable)
+		
+		starStackView.gesturePublisher()
+			.receive(on: DispatchQueue.main)
+			.sink { _ in
+				self.didTapStarLabel()
+			}.store(in: &cancellable)
+		
+		satisfyingLabel.gesturePublisher()
+			.receive(on: DispatchQueue.main)
+			.sink { _ in
+				self.didTapStarLabel()
+			}.store(in: &cancellable)
+		
+		mainImageView.gesturePublisher()
+			.receive(on: DispatchQueue.main)
+			.sink { _ in
+				self.didTapImageView()
+			}.store(in: &cancellable)
+		
+        
+        addCategoryView.gesturePublisher()
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+                self.didTapCategory()
+            }.store(in: &cancellable)
+		
+		// MARK: - CRUD Publisher
+		saveButton.tapPublisher
+			.sinkOnMainThread(receiveValue: didTapSaveButton)
+			.store(in: &cancellable)
+		
+		deleteButton.tapPublisher
+			.sinkOnMainThread(receiveValue: didTapDeleteButton)
+			.store(in: &cancellable)
+		
+		// Date Picker의 값을 받아옴
+		editViewModel.$date
+            .removeDuplicates()
+			.sinkOnMainThread(receiveValue: { [weak self] date in
+				guard let self = self else { return }
+				guard let date = date else { return }
+				// 날짜 변경 감지 및 변경된 날짜 캡처
+				self.detailViewModel.isDateChanged = true
+				self.detailViewModel.changedDate = date
+				self.date = date
+				self.titleText.text = self.navigationTitle
+				self.editViewModel.createAt = date.getFormattedDate(format: "yyyyMMdd")
+			}).store(in: &cancellable)
+        
+        // 최초 진입했을 경우 카테고리 이름 변경
+        editViewModel.$categoryName
+            .removeDuplicates()
+            .sinkOnMainThread { [weak self] name in
+                guard let self = self else { return }
+                self.addCategoryView.setTitleAndColor(by: name)
+            }
             .store(in: &cancellable)
         
         
-        // textfield가 없을 때 버튼 비활성화
-        titleTextFeild.textPublisher
-            .sinkOnMainThread { [weak self] text in
+        editViewModel.$isCategoryManageButtonTapped
+            .sinkOnMainThread { [weak self] isTapped in
                 guard let self = self else { return }
-                if text.isEmpty {
-                    self.saveButton.isEnabled = false
-                    self.saveButton.setBackgroundColor(R.Color.gray400, for: .disabled)
-                } else {
-                    self.saveButton.isEnabled = true
-                    self.saveButton.setBackgroundColor(R.Color.gray800, for: .normal)
+                if isTapped {
+                    let mode: CategoryEditViewController.Mode = self.editViewModel.type == "01" ? .pay : .earn
+                    
+                    let vc = CategoryEditViewController(mode: mode)
+                    vc.reactor = CategoryEditReactor(provider: ServiceProvider.shared, type: self.editViewModel.type)
+
+                    // FIXME: - 의존성 주입 바꿔야함
+                    vc.editViewModel = self.editViewModel
+                    self.navigationController?.pushViewController(vc, animated: true)
                 }
-            }.store(in: &cancellable)
-        
-        memoTextView.textPublisher
-            .sink { [weak self] ouput in
-                guard let self = self else { return }
-                // 0 : textViewDidChange
-                // 1 : textViewDidBeginEditing
-                // 2 : textViewDidEndEditing
-                switch ouput.1 {
-                case 0:
-                    self.textViewDidChange(text: ouput.0)
-                case 1:
-                    self.textViewDidBeginEditing()
-                case 2:
-                    self.textViewDidEndEditing()
-                default:
-                    print("unknown error")
-                }
-            }.store(in: &cancellable)
-        
-        cameraImageView.setData(viewModel: editViewModel)
-        editViewModel.$didTapAddButton
-            .sinkOnMainThread(receiveValue: { [weak self] in
-                guard let self = self else { return }
-                if $0 {
-                    self.editViewModel.requestPHPhotoLibraryAuthorization {
-                        DispatchQueue.main.async {
-                            self.didTapAlbumButton()
-                        }
-                    }
-                }
-            })
+            }
             .store(in: &cancellable)
         
-        // MARK: - Gesture Publisher
-        titleStackView.gesturePublisher()
-            .receive(on: DispatchQueue.main)
-            .sink { _ in
-                self.didTapDateTitle()
-            }.store(in: &cancellable)
-        
-        containerStackView.gesturePublisher()
-            .receive(on: DispatchQueue.main)
-            .sink { _ in
-                self.didTapMoneyLabel()
-            }.store(in: &cancellable)
-        
-        starStackView.gesturePublisher()
-            .receive(on: DispatchQueue.main)
-            .sink { _ in
-                self.didTapStarLabel()
-            }.store(in: &cancellable)
-        
-        satisfyingLabel.gesturePublisher()
-            .receive(on: DispatchQueue.main)
-            .sink { _ in
-                self.didTapStarLabel()
-            }.store(in: &cancellable)
-        
-        mainImageView.gesturePublisher()
-            .receive(on: DispatchQueue.main)
-            .sink { _ in
-                self.didTapImageView()
-            }.store(in: &cancellable)
-        
-        
-        // MARK: - CRUD Publisher
-        saveButton.tapPublisher
-            .sinkOnMainThread(receiveValue: didTapSaveButton)
-            .store(in: &cancellable)
-        
-        deleteButton.tapPublisher
-            .sinkOnMainThread(receiveValue: didTapDeleteButton)
-            .store(in: &cancellable)
-        
-        // Date Picker의 값을 받아옴
-        editViewModel.$date
-            .sinkOnMainThread(receiveValue: { [weak self] date in
+        editViewModel.$isViewFromCategoryViewController
+            .sinkOnMainThread { [weak self] isFromView in
                 guard let self = self else { return }
-                guard let date = date else { return }
-                // 날짜 변경 감지 및 변경된 날짜 캡처
-                self.detailViewModel.isDateChanged = true
-                self.detailViewModel.changedDate = date
-                self.date = date
-                self.titleText.text = self.navigationTitle
-                self.editViewModel.createAt = date.getFormattedDate(format: "yyyyMMdd")
-            }).store(in: &cancellable)
-    }
-    
-    private func setAttribute() {
+                if isFromView {
+                    view.endEditing(true)
+                    self.didTapCategory()
+                }
+            }
+            .store(in: &cancellable)
+	}
+
+}
+//MARK: - Attribute & Hierarchy & Layouts
+extension EditActivityViewController {
+    override func setAttribute() {
+		super.setAttribute()
         self.hideKeyboardWhenTappedAround()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        titleTextFeild.becomeFirstResponder() // 키보드 보이기 및 포커스 주기
+
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         
         navigationItem.rightBarButtonItem = deleteActivityButtonItem
@@ -545,7 +656,8 @@ extension EditActivityViewController {
         setUIByViewModel()
     }
     
-    private func setLayout() {
+	override func setHierarchy() {
+		super.setHierarchy()
         containerStackView.addArrangedSubview(editIconImage)
     }
 }

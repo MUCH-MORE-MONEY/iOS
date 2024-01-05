@@ -9,25 +9,21 @@ import UIKit
 import Then
 import SnapKit
 
-final class ProfileHeaderView: UIView {
+// 상속하지 않으려면 final 꼭 붙이기
+final class ProfileHeaderView: BaseView {
+	// MARK: - Constants
+	private enum UI {
+		static let contentMargin: UIEdgeInsets = .init(top: 4, left: 24, bottom: 24, right: 24)
+		static let emailLabelMargin: UIEdgeInsets = .init(top: 4, left: 24, bottom: 24, right: 24)
+	}
+	
 	// MARK: - Properties
+	
 	// MARK: - UI Components
 	private lazy var imageView = UIImageView()
-	private lazy var navigationLabel = UILabel()
 	private lazy var phrasesLabel = UILabel()
 	private lazy var emailLabel = UILabel()
 	private lazy var bottomArea = UIView()
-	
-	override init(frame: CGRect) {
-		super.init(frame: frame)
-		setup()		// 초기 셋업할 코드들
-	}
-	
-	// Compile time에 error를 발생시키는 코드
-	@available(*, unavailable)
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
 }
 //MARK: - Action
 extension ProfileHeaderView {
@@ -37,29 +33,19 @@ extension ProfileHeaderView {
 		emailLabel.text = email
 	}
 }
-//MARK: - Style & Layouts
-private extension ProfileHeaderView {
+//MARK: - Attribute & Hierarchy & Layouts
+extension ProfileHeaderView {
 	// 초기 셋업할 코드들
-	private func setup() {
-		setAttribute()
-		setLayout()
-	}
-	
-	private func setAttribute() {
+	override func setAttribute() {
+		super.setAttribute()
+		
 		// [view]
 		backgroundColor = R.Color.gray900
 
 		imageView = imageView.then {
-			$0.contentMode = .scaleAspectFill
+			$0.contentMode = .scaleAspectFit
 			$0.layer.masksToBounds = true
 			$0.image = R.Icon.mypageBg
-		}
-		
-		navigationLabel = navigationLabel.then {
-			$0.text = "마이페이지"
-			$0.font = R.Font.h2
-			$0.textColor = R.Color.gray200
-			$0.textAlignment = .center
 		}
 		
 		phrasesLabel = phrasesLabel.then {
@@ -81,29 +67,28 @@ private extension ProfileHeaderView {
 		}
 	}
 	
-	private func setLayout() {
+	override func setHierarchy() {
+		super.setHierarchy()
+		
 		addSubviews(imageView, bottomArea)
-		imageView.addSubviews(navigationLabel, phrasesLabel, emailLabel)
+		imageView.addSubviews(phrasesLabel, emailLabel)
+	}
+	
+	override func setLayout() {
+		super.setLayout()
 		
 		imageView.snp.makeConstraints {
-			$0.top.equalToSuperview()
-			$0.left.right.equalToSuperview()
-			$0.height.width.equalToSuperview()
-		}
-		
-		navigationLabel.snp.makeConstraints {
-			$0.top.equalToSuperview().inset(19)
-			$0.left.equalToSuperview().inset(24)
+			$0.leading.bottom.equalToSuperview()
 		}
 		
 		phrasesLabel.snp.makeConstraints {
-			$0.left.equalToSuperview().inset(24)
+			$0.leading.equalToSuperview().inset(UI.contentMargin.left)
 		}
 		
 		emailLabel.snp.makeConstraints {
-			$0.top.equalTo(phrasesLabel.snp.bottom).offset(4)
-			$0.left.equalToSuperview().inset(24)
-			$0.bottom.equalToSuperview().inset(24)
+			$0.top.equalTo(phrasesLabel.snp.bottom).offset(UI.emailLabelMargin.top)
+			$0.leading.equalToSuperview().inset(UI.contentMargin.left)
+			$0.bottom.equalToSuperview().inset(UI.contentMargin.bottom)
 		}
 	}
 }

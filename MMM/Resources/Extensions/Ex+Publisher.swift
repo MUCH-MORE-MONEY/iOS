@@ -66,6 +66,12 @@ extension UITextField {
             .map{ $0.text! }
             .eraseToAnyPublisher()
     }
+    
+    var textReturnPublisher: AnyPublisher<Void, Never> {
+        controlPublisher(for: .editingDidEndOnExit)
+            .compactMap{ $0 as? UITextField }
+            .eraseToAnyPublisher()
+    }
 }
 
 extension UIPageControl {

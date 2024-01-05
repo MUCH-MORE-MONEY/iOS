@@ -25,12 +25,21 @@ final class OnboardingViewModel {
     }
     
     func appleLogin(_ authorizationCode: String, _ email: String, _ identityToken: String, _ userIdentifier: String) {
+        guard let pushToken = Constants.getKeychainValue(forKey: Constants.KeychainKey.pushToken) else { return }
+        
+//        debugPrint(authorizationCode)
+//        debugPrint(email)
+//        debugPrint(identityToken)
+//        debugPrint(pushToken)
+//        debugPrint(userIdentifier)
+        
         APIClient.dispatch(
             APIRouter.AppleLoginReqDto(body:
                                         APIParameters.LoginReqDto(
                                             authorizationCode: authorizationCode,
                                             email: email,
                                             identityToken: identityToken,
+                                            pushToken: pushToken,
                                             userIdentifier: userIdentifier)))
         .sink(receiveCompletion: { error in
             switch error {
@@ -66,6 +75,11 @@ final class OnboardingViewModel {
             // 사용자 token 저장
             Constants.setKeychain(value.token, forKey: Constants.KeychainKey.token)
 
+            // 최초 로그인 시 일림 시간 및 문구 저장
+            Common.setCustomPushTime("매일 09:00 PM")
+            Common.setCustomPushText("💸 오늘은 어떤 경제활동을 했나요?")
+            
+            
             // 로그인 성공 시 tabbar로 메인 뷰 전환
             if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
                 let tabBarController = NavigationController(rootViewController: TabBarController(widgetIndex: 0))

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseRemoteConfig
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	
@@ -53,9 +54,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		// 둘중 하나 미설정시 검은화면만 보입니다.
 		window?.backgroundColor = .systemBackground
 
+        
+        checkAppVersion()
+        
 		window?.makeKeyAndVisible()
 	}
 	
+    
+    
+    
 	// background 에서 foreground 로 진입
 	func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
 		guard let url = URLContexts.first?.url else { return }
@@ -100,3 +107,44 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	}
 }
 
+extension SceneDelegate {
+    // remoteConfig를 이용하여 앱 버전 체크 및 업데이트 유무를 결정하는 함수
+    private func checkAppVersion() {
+        let remoteConfig = RemoteConfig.remoteConfig()
+        remoteConfig.fetch { status, error in
+            if status == .success {
+                remoteConfig.activate { changed, error in
+                    self.compareVersion(remoteConfig: remoteConfig)
+                }
+            } else if let error = error {
+                print("Error fetching remote config: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    private func compareVersion(remoteConfig: RemoteConfig) {
+        let minimumVersionString = remoteConfig["minimum_version"].stringValue ?? "1.0.0"
+        let currentVersionString = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0.0"
+        print("서버 버전 : \(minimumVersionString)")
+        print("현재 버전 : \(currentVersionString)")
+        
+        
+        if currentVersionString.compare(minimumVersionString, options: .numeric) == .orderedAscending {
+            // 현재 버전이 서버에 설정된 최소 버전보다 낮은 경우
+            DispatchQueue.main.async {
+                self.promptForUpdate()
+            }
+        } else {
+            print("버전 같음")
+        }
+    }
+    
+    private func promptForUpdate() {
+        let alert = UIAlertController(title: "Update Available", message: "A new version of the app is available. Please update to continue.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Update", style: .default, handler: { _ in
+            // 앱스토어로 리디렉션하거나 업데이트 관련 처리
+            print("Redirection to appstore")
+        }))
+        window?.rootViewController?.present(alert, animated: true, completion: nil)
+    }
+}

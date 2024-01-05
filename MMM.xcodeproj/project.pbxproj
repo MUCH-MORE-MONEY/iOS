@@ -948,6 +948,7 @@
 		C41193C329D28334003DBC15 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				6A08B47729FF5C7E0080719E /* APIParameters.swift */,
 				C41193C529D2838E003DBC15 /* Color.xcassets */,
 				C41193C429D2838D003DBC15 /* Icon.xcassets */,
 				C411939629D2817E003DBC15 /* Assets.xcassets */,
@@ -1041,7 +1042,6 @@
 			children = (
 				6A14E7182A9E0BC20071805D /* Network */,
 				6A08B47929FF5CA90080719E /* APIClient.swift */,
-				6A08B47729FF5C7E0080719E /* APIParameters.swift */,
 				6A08B47529FF5B150080719E /* APIRouter.swift */,
 				C4BBD2722ABADB610055FA65 /* ServiceProvider.swift */,
 				C4EB8CB12AC4325C005FBAF1 /* CategoryProvider.swift */,

@@ -9,6 +9,7 @@ import UIKit
 import FirebaseCore
 import FirebaseMessaging
 import UserNotifications
+import FirebaseRemoteConfig
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,6 +18,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Firebase 초기화 세팅.
         FirebaseApp.configure()
+        
+        // 앱 버전 관리를 위한 RemoteConfig
+        let remoteConfig = RemoteConfig.remoteConfig()
+        
+        remoteConfig.fetch(withExpirationDuration: 3600) { status, error in
+            
+            switch status {
+            case .success:
+                print("Config fetched!")
+                remoteConfig.activate { changed, error in
+                    print(changed)
+                }
+                print(remoteConfig["lastest_version"].stringValue ?? "")
+            default:
+                print("Config not fetched!")
+            }
+        }
+        
         
         UNUserNotificationCenter.current().delegate = self
         

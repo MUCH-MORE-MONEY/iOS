@@ -22,6 +22,7 @@ target 'MMM' do
   pod 'Moya/RxSwift', '~> 15.0'
   pod 'Alamofire'
   pod 'MarqueeLabel'
+  pod 'Firebase/RemoteConfig'
 
   target 'MMMTests' do
     inherit! :search_paths

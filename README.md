@@ -4,6 +4,8 @@
 ![Xcode](https://img.shields.io/badge/Xcode-007ACC?style=for-the-badge&logo=Xcode&logoColor=white)
 ![Firebase](https://img.shields.io/badge/Firebase-039BE5?style=for-the-badge&logo=Firebase&logoColor=white)
 
+## 앱 버전 : 2.0.1
+
 ## 👋 앱 소개
 
 <div align="center">

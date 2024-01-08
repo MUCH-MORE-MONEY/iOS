@@ -11,11 +11,11 @@ import FirebaseRemoteConfig
 final class AppstoreCheck {
     // 앱 자체 버전
     static let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
-    static let appStoreopenUrlString = "itms-apps://itunes.apple.com/app/apple-store/6450030412"
+    static let appStoreopenUrlString = "itms-apps://itunes.apple.com/app/apple-store/\(APIConstants.appleID)"
     
     // 앱스토어의 버전 체크
     func latestVersion() -> String? {
-        let appleID = "6450030412"
+        let appleID = APIConstants.appleID
         guard let url = URL(string: "http://itunes.apple.com/lookup?id=\(appleID)&country=kr"),
               let data = try? Data(contentsOf: url),
               let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any],

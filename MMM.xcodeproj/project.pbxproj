@@ -648,7 +648,6 @@
 				6A08B47C29FF5D530080719E /* Log.swift */,
 				6A15D5362A5138D800B60CC8 /* Tracking.swift */,
 				6A14E7162A9DDD060071805D /* RxOperation.swift */,
-				45D80FCE2B4B7DDA00697EDC /* AppstoreCheck.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -736,6 +735,7 @@
 		6A14E7182A9E0BC20071805D /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				45D80FCE2B4B7DDA00697EDC /* AppstoreCheck.swift */,
 				C4EB8CB92AC52F52005FBAF1 /* APIConstants.swift */,
 				6A14E7192A9E0C140071805D /* APIType.swift */,
 				6A14E71B2A9E119C0071805D /* MMMAPIService.swift */,

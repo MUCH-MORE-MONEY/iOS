@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import FirebaseRemoteConfig
+import StoreKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	
@@ -55,7 +57,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 		window?.makeKeyAndVisible()
 	}
-	
+    
 	// background 에서 foreground 로 진입
 	func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
 		guard let url = URLContexts.first?.url else { return }
@@ -90,6 +92,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	
     // 앱을 들어왔을 경우 badge 초기화
 	func sceneWillEnterForeground(_ scene: UIScene) {
+        checkAndUpdateIfNeeded()
         UIApplication.shared.applicationIconBadgeNumber = 0
 	}
 	
@@ -100,3 +103,64 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	}
 }
 
+extension SceneDelegate {
+    // 업데이트가 필요한지 확인하는 함수
+     func checkAndUpdateIfNeeded() {
+         // 현재 앱스토어에 있는 버전
+         DispatchQueue.main.async { [weak self] in
+             guard let self = self else { return }
+             Task {
+                 do {
+                     let data = try await AppstoreCheck().latestVersionByFirebase()
+                     guard let version = data.0, let forceUpdate = data.1 else { return }
+                     
+                     print("remote config version : \(version)")
+                     print("forceUpdate : \(forceUpdate)")
+                     let marketingVersion = version
+                     
+            //          현재 프로젝트의 버전
+                     let currentProjectVersion = AppstoreCheck.appVersion ?? ""
+                     
+                     // 앱스토어에 있는 버전을 .마다 나눈 것 (예: 1.2.1 버전이라면 [1, 2, 1])
+                     let splitMarketingVersion = marketingVersion.split(separator: ".").map { $0 }
+                     
+                     // 현재 프로젝트 버전을 .마다 나눈 것
+                     let splitCurrentProjectVersion = currentProjectVersion.split(separator: ".").map { $0 }
+                     
+                     // [Major].[Minor].[Patch] 중 [Major]을 비교하여 앱스토어에 있는 버전이 높을 경우 알럿 띄우기
+                     if splitCurrentProjectVersion[0] < splitMarketingVersion[0] {
+                         self.showUpdateAlert(version: marketingVersion)
+                         
+                     // [Major].[Minor].[Patch] 중 [Minor]을 비교하여 앱스토어에 있는 버전이 높을 경우 알럿 띄우기
+                     } else if splitCurrentProjectVersion[1] < splitMarketingVersion[1] {
+                         self.showUpdateAlert(version: marketingVersion)
+                         
+                     // 나머지 상황에서는 업데이트 알럿을 띄우지 않음
+                     } else {
+                         print("현재 최신 버젼입니다.")
+                     }
+                     
+                 } catch {
+                     print("Error \(error)")
+                 }
+             }
+         }
+     }
+     
+    // 알럿을 띄우는 함수
+    func showUpdateAlert(version: String) {
+        let alert = UIAlertController(
+            title: "업데이트 알림",
+            message: "\(version)으로의 업데이트 사항이 있습니다. 앱스토어에서 앱을 업데이트 해주세요.",
+            preferredStyle: .alert
+        )
+        
+        // 업데이트 버튼을 누르면 앱스토어로 이동
+        let updateAction = UIAlertAction(title: "업데이트", style: .default) { _ in
+            AppstoreCheck().openAppStore()
+        }
+        
+        alert.addAction(updateAction)
+        self.window?.rootViewController?.present(alert, animated: true, completion: nil)
+    }
+}

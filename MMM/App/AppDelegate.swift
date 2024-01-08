@@ -19,24 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Firebase 초기화 세팅.
         FirebaseApp.configure()
         
-        // 앱 버전 관리를 위한 RemoteConfig
-        let remoteConfig = RemoteConfig.remoteConfig()
-        
-        remoteConfig.fetch(withExpirationDuration: 3600) { status, error in
-            
-            switch status {
-            case .success:
-                print("Config fetched!")
-                remoteConfig.activate { changed, error in
-                    print(changed)
-                }
-                print(remoteConfig["lastest_version"].stringValue ?? "")
-            default:
-                print("Config not fetched!")
-            }
-        }
-        
-        
         UNUserNotificationCenter.current().delegate = self
         
         // 사용자의 권한 요청

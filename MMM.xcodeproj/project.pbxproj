@@ -16,6 +16,7 @@
 		45D07CD32AC4078A001C08AB /* CustomPushTimeSettingReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D07CD22AC4078A001C08AB /* CustomPushTimeSettingReactor.swift */; };
 		45D401212B33CF6200CE0351 /* DetailViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D401202B33CF6200CE0351 /* DetailViewController2.swift */; };
 		45D401242B33D11500CE0351 /* DetailReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D401232B33D11500CE0351 /* DetailReactor.swift */; };
+		45D80FCF2B4B7DDA00697EDC /* AppstoreCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D80FCE2B4B7DDA00697EDC /* AppstoreCheck.swift */; };
 		62AC9C989058B479AA52D81F /* Pods_MMMTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BC1A763E0587F6517C3A5E7 /* Pods_MMMTests.framework */; };
 		6A0379752A2443B9005EE07F /* Ex+UITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0379742A2443B9005EE07F /* Ex+UITextView.swift */; };
 		6A03BB4C2ADD555D00F86756 /* AddCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A03BB4B2ADD555D00F86756 /* AddCategoryViewController.swift */; };
@@ -319,6 +320,7 @@
 		45D07CD22AC4078A001C08AB /* CustomPushTimeSettingReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPushTimeSettingReactor.swift; sourceTree = "<group>"; };
 		45D401202B33CF6200CE0351 /* DetailViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController2.swift; sourceTree = "<group>"; };
 		45D401232B33D11500CE0351 /* DetailReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailReactor.swift; sourceTree = "<group>"; };
+		45D80FCE2B4B7DDA00697EDC /* AppstoreCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppstoreCheck.swift; sourceTree = "<group>"; };
 		58A4D4522CDE75108D91C22E /* Pods-MMM-MMMUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MMM-MMMUITests.debug.xcconfig"; path = "Target Support Files/Pods-MMM-MMMUITests/Pods-MMM-MMMUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		6A0379742A2443B9005EE07F /* Ex+UITextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UITextView.swift"; sourceTree = "<group>"; };
 		6A03BB4B2ADD555D00F86756 /* AddCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryViewController.swift; sourceTree = "<group>"; };
@@ -733,6 +735,7 @@
 		6A14E7182A9E0BC20071805D /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				45D80FCE2B4B7DDA00697EDC /* AppstoreCheck.swift */,
 				C4EB8CB92AC52F52005FBAF1 /* APIConstants.swift */,
 				6A14E7192A9E0C140071805D /* APIType.swift */,
 				6A14E71B2A9E119C0071805D /* MMMAPIService.swift */,
@@ -1705,6 +1708,7 @@
 				C46D5E532AD074E400EBE5D7 /* CategoryEditUpperViewController.swift in Sources */,
 				6A1322E92A088DD700CEEC81 /* BaseDetailViewController.swift in Sources */,
 				C4170B5D2A94BA9000CE0A65 /* StatisticsSatisfactionView.swift in Sources */,
+				45D80FCF2B4B7DDA00697EDC /* AppstoreCheck.swift in Sources */,
 				C4170B532A937AAC00CE0A65 /* StatisticsTitleView.swift in Sources */,
 				C41193E329D287E6003DBC15 /* Ex+KeychainWrapper.swift in Sources */,
 				C494A2512A9B8A0A00980A71 /* TabBarViewModel.swift in Sources */,
@@ -2089,7 +2093,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = labM.project.MMM;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2131,7 +2135,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = labM.project.MMM;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

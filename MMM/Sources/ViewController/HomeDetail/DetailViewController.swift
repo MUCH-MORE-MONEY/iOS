@@ -147,8 +147,6 @@ extension DetailViewController {
             .sinkOnMainThread(receiveValue: didTapEditButton)
             .store(in: &cancellable)
         
-        let s = UISwipeGestureRecognizer.Direction.up
-        
         view.gesturePublisher(.swipe(.init(), .left))
             .sinkOnMainThread { _ in
                 print("swipe Left")

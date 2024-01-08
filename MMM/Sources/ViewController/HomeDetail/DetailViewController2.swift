@@ -74,6 +74,18 @@ extension DetailViewController2 {
             .map {.didTapEditButton }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+        view.rx.swipeGesture(.left)
+            .filter{ _ in self.bottomPageControlView.index < self.bottomPageControlView.totalItem }
+            .map { .didTapNextButton }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        view.rx.swipeGesture(.right)
+            .filter{ _ in self.bottomPageControlView.index >= 0 }
+            .map { .didTapPreviousButton }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
     
     private func bindState(_ reactor: DetailReactor) {

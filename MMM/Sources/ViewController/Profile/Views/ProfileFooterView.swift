@@ -42,7 +42,7 @@ extension ProfileFooterView {
 			$0.font = R.Font.body3
 			$0.textColor = R.Color.gray500
 			$0.textAlignment = .right
-			$0.text = "현재 1.0.0"
+            $0.text = AppstoreCheck.appVersion
 		}
 	}
 	

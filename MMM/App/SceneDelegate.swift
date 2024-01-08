@@ -55,14 +55,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		// 둘중 하나 미설정시 검은화면만 보입니다.
 		window?.backgroundColor = .systemBackground
 
-        
-        checkAppVersion()
-        
 		window?.makeKeyAndVisible()
+        
+        checkAndUpdateIfNeeded()
 	}
-	
-    
-    
     
 	// background 에서 foreground 로 진입
 	func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
@@ -98,6 +94,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	
     // 앱을 들어왔을 경우 badge 초기화
 	func sceneWillEnterForeground(_ scene: UIScene) {
+        checkAndUpdateIfNeeded()
         UIApplication.shared.applicationIconBadgeNumber = 0
 	}
 	
@@ -109,73 +106,62 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 }
 
 extension SceneDelegate {
-    // remoteConfig를 이용하여 앱 버전 체크 및 업데이트 유무를 결정하는 함수
-    private func checkAppVersion() {
-        let remoteConfig = RemoteConfig.remoteConfig()
-        remoteConfig.fetch { status, error in
-            if status == .success {
-                remoteConfig.activate { changed, error in
-                    self.compareVersion(remoteConfig: remoteConfig)
-                }
-            } else if let error = error {
-                print("Error fetching remote config: \(error.localizedDescription)")
-            }
-        }
-    }
-    
-    private func compareVersion(remoteConfig: RemoteConfig) {
-        let minimumVersionString = remoteConfig["minimum_version"].stringValue ?? "1.0.0"
-        let currentVersionString = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0.0"
-        print("서버 버전 : \(minimumVersionString)")
-        print("현재 버전 : \(currentVersionString)")
+    // 업데이트가 필요한지 확인하는 함수
+     func checkAndUpdateIfNeeded() {
+         // 현재 앱스토어에 있는 버전
+         DispatchQueue.main.async { [weak self] in
+             guard let self = self else { return }
+             Task {
+                 do {
+                     if let version = try await AppstoreCheck().latestVersionByFirebase() {
+                         print("remote config version : \(version)")
+                         
+                         let marketingVersion = version
+                         
+                //          현재 프로젝트의 버전
+                         let currentProjectVersion = AppstoreCheck.appVersion ?? ""
+                         
+                         // 앱스토어에 있는 버전을 .마다 나눈 것 (예: 1.2.1 버전이라면 [1, 2, 1])
+                         let splitMarketingVersion = marketingVersion.split(separator: ".").map { $0 }
+                         
+                         // 현재 프로젝트 버전을 .마다 나눈 것
+                         let splitCurrentProjectVersion = currentProjectVersion.split(separator: ".").map { $0 }
+                         
+                         // [Major].[Minor].[Patch] 중 [Major]을 비교하여 앱스토어에 있는 버전이 높을 경우 알럿 띄우기
+                         if splitCurrentProjectVersion[0] < splitMarketingVersion[0] {
+                             self.showUpdateAlert(version: marketingVersion)
+                             
+                         // [Major].[Minor].[Patch] 중 [Minor]을 비교하여 앱스토어에 있는 버전이 높을 경우 알럿 띄우기
+                         } else if splitCurrentProjectVersion[1] < splitMarketingVersion[1] {
+                             self.showUpdateAlert(version: marketingVersion)
+                             
+                         // 나머지 상황에서는 업데이트 알럿을 띄우지 않음
+                         } else {
+                             print("현재 최신 버젼입니다.")
+                         }
+                         
+                     }
+                 } catch {
+                     print("Error \(error)")
+                 }
+             }
+         }
+     }
+     
+    // 알럿을 띄우는 함수
+    func showUpdateAlert(version: String) {
+        let alert = UIAlertController(
+            title: "업데이트 알림",
+            message: "\(version)으로의 업데이트 사항이 있습니다. 앱스토어에서 앱을 업데이트 해주세요.",
+            preferredStyle: .alert
+        )
         
+        // 업데이트 버튼을 누르면 앱스토어로 이동
+        let updateAction = UIAlertAction(title: "업데이트", style: .default) { _ in
+            AppstoreCheck().openAppStore()
+        }
         
-        if currentVersionString.compare(minimumVersionString, options: .numeric) == .orderedAscending {
-            // 현재 버전이 서버에 설정된 최소 버전보다 낮은 경우
-            print("alert On")
-
-            DispatchQueue.main.async {
-                self.promptForUpdate()
-            }
-        } else {
-            print("버전 같음")
-        }
-    }
-    
-    private func promptForUpdate() {
-        let alert = UIAlertController(title: "Update Available", message: "A new version of the app is available. Please update to continue.", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Update", style: .default, handler: { [weak self] _ in
-            guard let self = self else { return }
-            guard let window = self.window else { return }
-            // 앱스토어로 리디렉션하거나 업데이트 관련 처리
-            print("Redirection to appstore")
-            self.presentAppStore(forAppId: "6450030412")
-        }))
-        window?.rootViewController?.present(alert, animated: true, completion: nil)
-    }
-    
-    func presentAppStore(forAppId appId: String) {
-        guard let window = self.window else { return }
-        let storeViewController = SKStoreProductViewController()
-        storeViewController.delegate = self
-
-        let parameters = [SKStoreProductParameterITunesItemIdentifier: appId]
-        storeViewController.loadProduct(withParameters: parameters) { (loaded, error) in
-            if let error = error {
-                print("Error: \(error.localizedDescription)")
-                return
-            }
-            if loaded {
-                if let rootViewController = window.rootViewController {
-                    rootViewController.present(storeViewController, animated: true, completion: nil)
-                }
-            }
-        }
-    }
-}
-
-extension SceneDelegate: SKStoreProductViewControllerDelegate {
-    func productViewControllerDidFinish(_ viewController: SKStoreProductViewController) {
-        viewController.dismiss(animated: true, completion: nil)
+        alert.addAction(updateAction)
+        self.window?.rootViewController?.present(alert, animated: true, completion: nil)
     }
 }

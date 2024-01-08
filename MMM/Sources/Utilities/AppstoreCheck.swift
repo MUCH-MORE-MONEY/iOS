@@ -27,16 +27,16 @@ final class AppstoreCheck {
     }
     
     // remoteConfig의 버전
-    func latestVersionByFirebase() async throws -> String? {
+    func latestVersionByFirebase() async throws -> (String?, Bool?) {
         let remoteConfig = RemoteConfig.remoteConfig()
         
         do {
             let status = try await remoteConfig.fetch()
             if status == .success {
                 _ = try await remoteConfig.activate()
-                return remoteConfig["minimum_version"].stringValue
+                return (remoteConfig["minimum_version"].stringValue, remoteConfig["force_update"].boolValue)
             } else {
-                return nil
+                return (nil, nil)
             }
         } catch {
             throw error

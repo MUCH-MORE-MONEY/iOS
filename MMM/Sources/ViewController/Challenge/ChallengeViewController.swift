@@ -10,6 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 import ReactorKit
+import UIKit
 
 // 상속하지 않으려면 final 꼭 붙이기
 final class ChallengeViewController: BaseViewController, View {

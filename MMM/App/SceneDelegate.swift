@@ -128,7 +128,12 @@ extension SceneDelegate {
                      let splitCurrentProjectVersion = currentProjectVersion.split(separator: ".").map { $0 }
                      
                      // [Major].[Minor].[Patch] 중 [Major]을 비교하여 앱스토어에 있는 버전이 높을 경우 알럿 띄우기
-                     if splitCurrentProjectVersion[0] < splitMarketingVersion[0] {
+                     
+                     if forceUpdate {
+                         self.showUpdateAlert(version: marketingVersion)
+                     }
+                     
+                     else if splitCurrentProjectVersion[0] < splitMarketingVersion[0] {
                          self.showUpdateAlert(version: marketingVersion)
                          
                      // [Major].[Minor].[Patch] 중 [Minor]을 비교하여 앱스토어에 있는 버전이 높을 경우 알럿 띄우기

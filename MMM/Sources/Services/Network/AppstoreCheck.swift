@@ -29,7 +29,9 @@ final class AppstoreCheck {
     // remoteConfig의 버전
     func latestVersionByFirebase() async throws -> (String?, Bool?) {
         let remoteConfig = RemoteConfig.remoteConfig()
-        
+        let settings = RemoteConfigSettings()
+        settings.minimumFetchInterval = 0
+        remoteConfig.configSettings = settings
         do {
             let status = try await remoteConfig.fetch()
             if status == .success {

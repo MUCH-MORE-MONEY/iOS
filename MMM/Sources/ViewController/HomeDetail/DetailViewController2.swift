@@ -132,7 +132,10 @@ private extension DetailViewController2 {
             detailVM.mainImage = nil
         }
         
-        let vc = EditActivityViewController(detailViewModel: detailVM, editViewModel: editVM, date: Date())
+//        let vc = EditActivityViewController(detailViewModel: detailVM, editViewModel: editVM, date: Date())
+        
+        let vc = EditActivityViewController2()
+        vc.reactor = EditActivityReactor(activity: activity)
         
         navigationController?.pushViewController(vc, animated: true)
     }

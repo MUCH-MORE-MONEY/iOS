@@ -89,36 +89,106 @@ final class EditActivityViewController2: BaseAddActivityViewController, View {
 extension EditActivityViewController2 {
     private func bindAction(_ reactor: EditActivityReactor) {
         reactor.action.onNext(.loadData)
+        
+        titleTextFeild.rx.text.orEmpty
+            .map { .titleTextFieldChanged($0) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        addCategoryView.rx.tapGesture()
+            .when(.recognized)
+            .map { _ in .didTapCategoryView }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        starStackView.rx.tapGesture()
+            .when(.recognized)
+            .map { _ in .didTapStarStackView }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
     
     private func bindState(_ reactor: EditActivityReactor) {
+        
         reactor.state
-            .compactMap { $0.activity?.star}
-            .bind(onNext: setStar)
+            .compactMap { $0.activity?.createAt }
+            .distinctUntilChanged()
+            .observe(on: MainScheduler.instance)
+            .bind(onNext: setTitle)
             .disposed(by: disposeBag)
         
         reactor.state
+            .compactMap { $0.activity?.star}
+            .distinctUntilChanged()
+            .observe(on: MainScheduler.instance)
+            .bind(onNext: setStar)
+            .disposed(by: disposeBag)
+        //2023.12.13
+        reactor.state
             .observe(on: MainScheduler.instance)
             .compactMap { $0.activity?.amount}
+            .distinctUntilChanged()
             .bind(onNext: setPrice)
             .disposed(by: disposeBag)
         
         reactor.state
             .observe(on: MainScheduler.instance)
             .compactMap { $0.activity?.type }
+            .distinctUntilChanged()
             .bind(onNext: setType)
             .disposed(by: disposeBag)
         
         reactor.state
             .observe(on: MainScheduler.instance)
             .compactMap { $0.activity?.memo }
+            .distinctUntilChanged()
             .bind(onNext: setMemo)
+            .disposed(by: disposeBag)
+        
+        reactor.state
+            .compactMap { $0.activity }
+            .distinctUntilChanged()
+            .observe(on: MainScheduler.instance)
+            .bind { activity in
+                print(activity)
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state
+            .compactMap { $0.activity?.title }
+            .distinctUntilChanged()
+            .bind(onNext: setTitleTextField)
+            .disposed(by: disposeBag)
+
+        reactor.state
+            .map{ $0.isShowCategory }
+            .filter { $0 }
+            .bind(onNext: presentAddCategorySheetViewController)
+            .disposed(by: disposeBag)
+        
+        reactor.state
+            .map { $0.isShowStarPicker }
+            .filter { $0 }
+            .bind(onNext: presentStarPickerSheetViewController)
             .disposed(by: disposeBag)
     }
 }
 
 // MARK: - Actions
 extension EditActivityViewController2 {
+    private func setTitle(_ date: String?) {
+        guard let date = date else { return }
+        let year = date.prefix(4)
+        let month = date.dropFirst(4).prefix(2)
+        let day = date.suffix(2)
+        self.titleText.text = "\(year).\(month).\(day)"
+    }
+    
+    private func setTitleTextField(_ title: String?) {
+        guard let title = title else { return }
+        self.titleTextFeild.text = title
+    }
+    
     private func setStar(_ count: Int?) {
         guard let count = count else { return }
         satisfyingLabel.setSatisfyingLabel(by: count)
@@ -157,6 +227,16 @@ extension EditActivityViewController2 {
             memoTextView.textColor = R.Color.black
         }
     }
+    
+    private func presentAddCategorySheetViewController(_ isShow: Bool) {
+        debugPrint("show category")
+    }
+    
+    private func presentStarPickerSheetViewController(_ isShow: Bool) {
+        let vc = StarPickerSheetViewController(title: "만족도 설정", height: 288)
+        vc.reactor = StarPickerSheetReactor(provider: ServiceProvider.shared)
+        self.present(vc, animated: true)
+    }
 }
 
 //MARK: - Attribute & Hierarchy & Layouts
@@ -164,7 +244,7 @@ extension EditActivityViewController2 {
     override func setAttribute() {
         super.setAttribute()
         self.hideKeyboardWhenTappedAround()
-        titleTextFeild.becomeFirstResponder() // 키보드 보이기 및 포커스 주기
+//        titleTextFeild.becomeFirstResponder() // 키보드 보이기 및 포커스 주기
         
         
         
@@ -178,7 +258,6 @@ extension EditActivityViewController2 {
             $0.distribution = .fillProportionally
         }
         titleText = titleText.then {
-            $0.text = "navigationTitle"
             $0.font = R.Font.title3
             $0.textColor = .white
         }

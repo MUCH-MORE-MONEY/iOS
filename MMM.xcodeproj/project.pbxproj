@@ -39,6 +39,8 @@
 		45D810042B4BDB1100697EDC /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 45D810032B4BDB1100697EDC /* SnapKit */; };
 		45D810062B4BDBE400697EDC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45D810052B4BDBE400697EDC /* UIKit.framework */; };
 		45D810082B4BDCB200697EDC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45D810072B4BDCB200697EDC /* Foundation.framework */; };
+		45D878A22B5A56380098F30B /* StarPickerSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D878A12B5A56380098F30B /* StarPickerSheetViewController.swift */; };
+		45D878A42B5A5B550098F30B /* StarPickerSheetReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D878A32B5A5B550098F30B /* StarPickerSheetReactor.swift */; };
 		6A0379752A2443B9005EE07F /* Ex+UITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0379742A2443B9005EE07F /* Ex+UITextView.swift */; };
 		6A03BB4C2ADD555D00F86756 /* AddCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A03BB4B2ADD555D00F86756 /* AddCategoryViewController.swift */; };
 		6A03FEE32ADBDB7300DA3D15 /* AddCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A03FEE22ADBDB7300DA3D15 /* AddCategoryView.swift */; };
@@ -341,6 +343,8 @@
 		45D80FCE2B4B7DDA00697EDC /* AppstoreCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppstoreCheck.swift; sourceTree = "<group>"; };
 		45D810052B4BDBE400697EDC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		45D810072B4BDCB200697EDC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		45D878A12B5A56380098F30B /* StarPickerSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarPickerSheetViewController.swift; sourceTree = "<group>"; };
+		45D878A32B5A5B550098F30B /* StarPickerSheetReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarPickerSheetReactor.swift; sourceTree = "<group>"; };
 		6A0379742A2443B9005EE07F /* Ex+UITextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UITextView.swift"; sourceTree = "<group>"; };
 		6A03BB4B2ADD555D00F86756 /* AddCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryViewController.swift; sourceTree = "<group>"; };
 		6A03FEE22ADBDB7300DA3D15 /* AddCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryView.swift; sourceTree = "<group>"; };
@@ -734,6 +738,7 @@
 				6AF653572AF92B0700035AEE /* LeftAlignedCollectionViewFlowLayout.swift */,
 				45D401202B33CF6200CE0351 /* DetailViewController2.swift */,
 				45D3C2322B4CD74E004ECC0A /* EditActivityViewController2.swift */,
+				45D878A12B5A56380098F30B /* StarPickerSheetViewController.swift */,
 			);
 			path = HomeDetail;
 			sourceTree = "<group>";
@@ -1259,6 +1264,7 @@
 				C4BBD2692AB9E1DA0055FA65 /* DateBottomSheetReactor.swift */,
 				C4C84FEC2B07440300F7757B /* StatisticsDateBottomSheetReactor.swift */,
 				C4BBD26D2ABAD6140055FA65 /* SatisfactionBottomSheetReactor.swift */,
+				45D878A32B5A5B550098F30B /* StarPickerSheetReactor.swift */,
 			);
 			path = BottomSheet;
 			sourceTree = "<group>";
@@ -1589,6 +1595,7 @@
 			files = (
 				C411940429D53DDF003DBC15 /* ManagementViewController.swift in Sources */,
 				C41193F529D3D7FB003DBC15 /* Ex+NSObject.swift in Sources */,
+				45D878A42B5A5B550098F30B /* StarPickerSheetReactor.swift in Sources */,
 				6A08B47D29FF5D530080719E /* Log.swift in Sources */,
 				45CA1E9D2B4CE7EF002019E6 /* EditActivityReactor.swift in Sources */,
 				C4170B572A93A58A00CE0A65 /* StatisticsCategoryView.swift in Sources */,
@@ -1764,6 +1771,7 @@
 				C4BBD2792ABDC8870055FA65 /* CategoryBar.swift in Sources */,
 				6A1479632A0DE0690045B8C1 /* CameraImageView.swift in Sources */,
 				C41193E629D287E6003DBC15 /* Ex+Color.swift in Sources */,
+				45D878A22B5A56380098F30B /* StarPickerSheetViewController.swift in Sources */,
 				C46409BA2AB5996D00A899AD /* BaseView.swift in Sources */,
 				6A1322ED2A088F7F00CEEC81 /* DetailViewController.swift in Sources */,
 				C4DBAA2C29DBCB8B00D1BB97 /* Ex+Button.swift in Sources */,

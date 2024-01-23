@@ -22,6 +22,7 @@
 		45D401242B33D11500CE0351 /* DetailReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D401232B33D11500CE0351 /* DetailReactor.swift */; };
 		45D606C62B5F3E61008E6624 /* CategorySheetCollectionViewCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D606C52B5F3E61008E6624 /* CategorySheetCollectionViewCellReactor.swift */; };
 		45D606C82B5F4FAE008E6624 /* CategorySelectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D606C72B5F4FAE008E6624 /* CategorySelectCell.swift */; };
+		45D606D02B5F5264008E6624 /* CategorySheetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D606CF2B5F5264008E6624 /* CategorySheetCell.swift */; };
 		45D80FCF2B4B7DDA00697EDC /* AppstoreCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D80FCE2B4B7DDA00697EDC /* AppstoreCheck.swift */; };
 		45D80FE02B4BDAAC00697EDC /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 45D80FDF2B4BDAAC00697EDC /* RxCocoa */; };
 		45D80FE22B4BDAC200697EDC /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 45D80FE12B4BDAC200697EDC /* FSCalendar */; };
@@ -349,6 +350,7 @@
 		45D401232B33D11500CE0351 /* DetailReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailReactor.swift; sourceTree = "<group>"; };
 		45D606C52B5F3E61008E6624 /* CategorySheetCollectionViewCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySheetCollectionViewCellReactor.swift; sourceTree = "<group>"; };
 		45D606C72B5F4FAE008E6624 /* CategorySelectCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategorySelectCell.swift; sourceTree = "<group>"; };
+		45D606CF2B5F5264008E6624 /* CategorySheetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySheetCell.swift; sourceTree = "<group>"; };
 		45D80FCE2B4B7DDA00697EDC /* AppstoreCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppstoreCheck.swift; sourceTree = "<group>"; };
 		45D810052B4BDBE400697EDC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		45D810072B4BDCB200697EDC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -695,6 +697,7 @@
 				45D606C72B5F4FAE008E6624 /* CategorySelectCell.swift */,
 				6AF40EC62AF10B1F00388EDC /* CategorySelectHeaderCell.swift */,
 				6AF653572AF92B0700035AEE /* LeftAlignedCollectionViewFlowLayout.swift */,
+				45D606CF2B5F5264008E6624 /* CategorySheetCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1822,6 +1825,7 @@
 				6A1BAD4529E6550100818086 /* OnboardingViewModel.swift in Sources */,
 				6A14E7152A9DD4600071805D /* Ex+String.swift in Sources */,
 				C46D5E5B2AD1265100EBE5D7 /* CategorySectionGlobalHeader.swift in Sources */,
+				45D606D02B5F5264008E6624 /* CategorySheetCell.swift in Sources */,
 				C46D5E6E2AD9798800EBE5D7 /* CategoryEditDragCollectionViewCell.swift in Sources */,
 				45AFC2AB2AC2A564004DF76E /* CustomPushTextSettingViewController.swift in Sources */,
 				6A08B47A29FF5CA90080719E /* APIClient.swift in Sources */,

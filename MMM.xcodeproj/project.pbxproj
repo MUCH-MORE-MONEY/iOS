@@ -679,6 +679,62 @@
 			path = PushSetting;
 			sourceTree = "<group>";
 		};
+		45D606C92B5F50A0008E6624 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				45D606CA2B5F50B7008E6624 /* Views */,
+				6A03BB4B2ADD555D00F86756 /* AddCategoryViewController.swift */,
+				45D2FA472B5E094F00DADA5B /* CategorySheetViewController.swift */,
+			);
+			path = Category;
+			sourceTree = "<group>";
+		};
+		45D606CA2B5F50B7008E6624 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				45D606C72B5F4FAE008E6624 /* CategorySelectCell.swift */,
+				6AF40EC62AF10B1F00388EDC /* CategorySelectHeaderCell.swift */,
+				6AF653572AF92B0700035AEE /* LeftAlignedCollectionViewFlowLayout.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		45D606CB2B5F5152008E6624 /* Sheets */ = {
+			isa = PBXGroup;
+			children = (
+				45D606C92B5F50A0008E6624 /* Category */,
+				45D606CE2B5F521A008E6624 /* Price */,
+				45D606CC2B5F5168008E6624 /* StarPicker */,
+			);
+			path = Sheets;
+			sourceTree = "<group>";
+		};
+		45D606CC2B5F5168008E6624 /* StarPicker */ = {
+			isa = PBXGroup;
+			children = (
+				45D878A12B5A56380098F30B /* StarPickerSheetViewController.swift */,
+			);
+			path = StarPicker;
+			sourceTree = "<group>";
+		};
+		45D606CD2B5F518F008E6624 /* Edit */ = {
+			isa = PBXGroup;
+			children = (
+				45D606CB2B5F5152008E6624 /* Sheets */,
+				45D3C2322B4CD74E004ECC0A /* EditActivityViewController2.swift */,
+				6A223FFB2A1B3D590058C877 /* EditActivityViewController.swift */,
+			);
+			path = Edit;
+			sourceTree = "<group>";
+		};
+		45D606CE2B5F521A008E6624 /* Price */ = {
+			isa = PBXGroup;
+			children = (
+				C4C0CB012A23A06F00C41FF4 /* EditPriceViewController.swift */,
+			);
+			path = Price;
+			sourceTree = "<group>";
+		};
 		6A08B47B29FF5D3D0080719E /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
@@ -738,16 +794,10 @@
 		6A1322EA2A088F5400CEEC81 /* HomeDetail */ = {
 			isa = PBXGroup;
 			children = (
+				45D606CD2B5F518F008E6624 /* Edit */,
 				6A1322EB2A088F6E00CEEC81 /* Views */,
-				6A03BB4B2ADD555D00F86756 /* AddCategoryViewController.swift */,
 				6A1322EC2A088F7F00CEEC81 /* DetailViewController.swift */,
-				6A223FFB2A1B3D590058C877 /* EditActivityViewController.swift */,
-				C4C0CB012A23A06F00C41FF4 /* EditPriceViewController.swift */,
-				6AF653572AF92B0700035AEE /* LeftAlignedCollectionViewFlowLayout.swift */,
 				45D401202B33CF6200CE0351 /* DetailViewController2.swift */,
-				45D3C2322B4CD74E004ECC0A /* EditActivityViewController2.swift */,
-				45D878A12B5A56380098F30B /* StarPickerSheetViewController.swift */,
-				45D2FA472B5E094F00DADA5B /* CategorySheetViewController.swift */,
 			);
 			path = HomeDetail;
 			sourceTree = "<group>";
@@ -756,8 +806,6 @@
 			isa = PBXGroup;
 			children = (
 				6A4313E12A13046E00095041 /* BottomPageControlView.swift */,
-				45D606C72B5F4FAE008E6624 /* CategorySelectCell.swift */,
-				6AF40EC62AF10B1F00388EDC /* CategorySelectHeaderCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";

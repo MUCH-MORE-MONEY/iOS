@@ -22,7 +22,8 @@ enum MMMAPI {
     case getSelectedActivity(activityId: String)
 	
 	// MARK: - Category Main
-	case getCategoryList(CategoryDetailListReqDto) // 경제활동구분 코드 기준 카테고리별 월간 경제활동 목록 전체 조회
+//    case getAddCategoryList(CategoryListReqDto) //경제활동구분 코드 기준 카테고리별 월간 경제활동 목록 전체 조회
+	case getCategoryList(CategoryListReqDto) // 경제활동구분 코드 기준 카테고리별 월간 경제활동 목록 전체 조회
 	case getCategoryDetailList(CategoryDetailListReqDto) // 카테고리 코드별 월간 경제활동 목록 조회
 
 	// MARK: - Category Edit

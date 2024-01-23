@@ -60,8 +60,8 @@ extension CategoryMainReactor {
 			
 			return .concat([
 				.just(.setLoading(true)),
-				loadData(CategoryDetailListReqDto(dateYM: dateYM, economicActivityCategoryCd: "", economicActivityDvcd: "01")),
-				loadData(CategoryDetailListReqDto(dateYM: dateYM, economicActivityCategoryCd: "", economicActivityDvcd: "02")),
+                loadData(CategoryListReqDto(dateYM: dateYM, economicActivityDvcd: "01")),
+                loadData(CategoryListReqDto(dateYM: dateYM, economicActivityDvcd: "02")),
 				.just(.setLoading(false))
 			])
 		case .refresh:
@@ -71,8 +71,8 @@ extension CategoryMainReactor {
 
 				return .concat([
 					.just(.setLoading(true)),
-					loadData(CategoryDetailListReqDto(dateYM: dateYM, economicActivityCategoryCd: "", economicActivityDvcd: "01")),
-					loadData(CategoryDetailListReqDto(dateYM: dateYM, economicActivityCategoryCd: "", economicActivityDvcd: "02")),
+                    loadData(CategoryListReqDto(dateYM: dateYM, economicActivityDvcd: "01")),
+                    loadData(CategoryListReqDto(dateYM: dateYM, economicActivityDvcd: "02")),
 					.just(.setRefresh(false)), // 다시 refresh 돌리기
 					.just(.setLoading(false))
 				])
@@ -130,7 +130,7 @@ extension CategoryMainReactor {
 //MARK: - Action
 extension CategoryMainReactor {
 	// 데이터 가져오기
-	private func loadData(_ request: CategoryDetailListReqDto) -> Observable<Mutation> {
+	private func loadData(_ request: CategoryListReqDto) -> Observable<Mutation> {
 		return MMMAPIService().getCategoryList(request)
 			.map { (response, error) -> Mutation in
 				if request.economicActivityDvcd == "01" { // 지출

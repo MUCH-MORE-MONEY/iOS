@@ -229,8 +229,8 @@ extension EditActivityViewController2 {
     }
     
     private func presentAddCategorySheetViewController(_ isShow: Bool) {
-        let vc = AddCategorySheetViewController(title: "카테고리 선택", height: 532)
-        vc.reactor = AddCategorySheetViewReactor()
+        let vc = CategorySheetViewController(title: "카테고리 선택", height: 532)
+        vc.reactor = CategorySheetViewReactor()
         self.present(vc, animated: true)
     }
     

@@ -12,6 +12,7 @@ import RxCocoa
 import ReactorKit
 import RxDataSources
 import RxGesture
+import UIKit
 
 // 상속하지 않으려면 final 꼭 붙이기
 final class CategoryEditViewController: BaseViewController, View {

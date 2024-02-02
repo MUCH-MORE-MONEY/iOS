@@ -6,6 +6,7 @@
 //
 
 import ReactorKit
+import Foundation
 
 final class CategoryDetailReactor: Reactor {
 	// 사용자의 액션

@@ -134,6 +134,10 @@ private extension DetailViewController2 {
         
         let vc = EditActivityViewController(detailViewModel: detailVM, editViewModel: editVM, date: Date())
         
+        // 24.02.02 reactorkit으로 변경중 잠깐 스톱함
+//        let vc = EditActivityViewController2()
+//        vc.reactor = EditActivityReactor(activity: activity)
+        
         navigationController?.pushViewController(vc, animated: true)
     }
     

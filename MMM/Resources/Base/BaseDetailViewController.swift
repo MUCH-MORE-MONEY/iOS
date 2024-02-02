@@ -51,9 +51,6 @@ extension BaseDetailViewController {
     
     override func setAttribute() {
 		super.setAttribute()
-        totalPrice.text = "11원"
-        activityType.text = "지출"
-        
         view.addSubviews(headerView, containerStackView)
         
         [totalPrice, activityType].forEach {

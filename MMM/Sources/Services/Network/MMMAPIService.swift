@@ -63,7 +63,7 @@ protocol MMMAPIServiceble: BaseAPIService {
     func getSelectedActivity(_ activityId: String) -> Observable<(SelectDetailResDto, Error?)>
     
 	// MARK: - Category Main 요청 API
-	func getCategoryList(_ request: CategoryDetailListReqDto) -> Observable<(CategoryListResDto, Error?)>
+	func getCategoryList(_ request: CategoryListReqDto) -> Observable<(CategoryListResDto, Error?)>
 	func getCategoryDetailList(_ request: CategoryDetailListReqDto) -> Observable<(CategoryDetailListResDto, Error?)>
 
 	// MARK: - Category Edit 요청 API
@@ -124,7 +124,7 @@ struct MMMAPIService: MMMAPIServiceble {
 	
 	// MARK: - Category Main 요청 API
 	// 경제활동구분 코드 기준 카테고리별 월간 경제활동 목록 전체 조회
-	func getCategoryList(_ request: CategoryDetailListReqDto) -> RxSwift.Observable<(CategoryListResDto, Error?)> {
+	func getCategoryList(_ request: CategoryListReqDto) -> RxSwift.Observable<(CategoryListResDto, Error?)> {
 		return provider().request(MMMAPI.getCategoryList(request), type: CategoryListResDto.self).asObservable()
 	}
 	

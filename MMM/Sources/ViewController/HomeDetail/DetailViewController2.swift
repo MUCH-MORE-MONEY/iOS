@@ -132,10 +132,11 @@ private extension DetailViewController2 {
             detailVM.mainImage = nil
         }
         
-//        let vc = EditActivityViewController(detailViewModel: detailVM, editViewModel: editVM, date: Date())
+        let vc = EditActivityViewController(detailViewModel: detailVM, editViewModel: editVM, date: Date())
         
-        let vc = EditActivityViewController2()
-        vc.reactor = EditActivityReactor(activity: activity)
+        // 24.02.02 reactorkit으로 변경중 잠깐 스톱함
+//        let vc = EditActivityViewController2()
+//        vc.reactor = EditActivityReactor(activity: activity)
         
         navigationController?.pushViewController(vc, animated: true)
     }

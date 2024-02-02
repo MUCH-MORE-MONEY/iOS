@@ -11,17 +11,20 @@ import ReactorKit
 final class CategorySheetViewReactor: Reactor {
     enum Action {
         case loadData
+        case selectCell(IndexPath, CategorySheetItem)
     }
     
     enum Mutation {
         case fetchCategoryList(CategoryListResDto)
         case setError
         case setLoading(Bool)
+        case setSections([CategorySheetSectionModel])
     }
     
     struct State {
         @Pulse var categoryList: [Category] = []
         @Pulse var isLoading = true
+        @Pulse var sections: [CategorySheetSectionModel] = [CategorySheetSectionModel(model: .init(original: .header(.header), items: []), items: [])]
     }
     
     var initialState: State
@@ -41,6 +44,11 @@ extension CategorySheetViewReactor {
                 getCategoryList(CategoryListReqDto(dateYM: "202312", economicActivityDvcd: "01")),
                 .just(.setLoading(false))
             ])
+            
+        case let .selectCell(indexPath, categoryItem):
+            return .concat([
+                .empty()
+            ])
         }
     }
     
@@ -58,7 +66,11 @@ extension CategorySheetViewReactor {
             
         case let .setLoading(isLoading):
             newState.isLoading = isLoading
+            
+        case let .setSections(sections):
+            newState.sections = sections
         }
+        
         
         return newState
     }
@@ -66,11 +78,29 @@ extension CategorySheetViewReactor {
 
 // MARK: - Action
 extension CategorySheetViewReactor {
-    func getCategoryList(_ request: CategoryListReqDto) -> Observable<Mutation> {
+    private func getCategoryList(_ request: CategoryListReqDto) -> Observable<Mutation> {
         return MMMAPIService().getCategoryList(request)
             .map { (response, error) -> Mutation in
-                return .fetchCategoryList(response)
+                return .setSections(self.makeSections(response: response, type: "01"))
             }
             .catchAndReturn(.setError)
+    }
+    
+    private func makeSections(response: CategoryListResDto, type: String) -> [CategorySheetSectionModel] {
+        let categoryList = response.data
+        var sections: [CategorySheetSectionModel] = []
+        
+        for category in categoryList {
+            var categoryItems: [CategorySheetItem] = category.lowwer.map { categoryLowwer -> CategorySheetItem in
+                return .base(.init(categoryLowwer: categoryLowwer))
+            }
+            
+//            if categoryItems.isEmpty { categoryItems.append(.empty) }
+            
+            let model: CategorySheetSectionModel = .init(model: .base(category, categoryItems), items: categoryItems)
+            sections.append(model)
+        }
+        
+        return sections
     }
 }

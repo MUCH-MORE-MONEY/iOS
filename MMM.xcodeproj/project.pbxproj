@@ -1566,21 +1566,21 @@
 			);
 			mainGroup = C411938129D2817C003DBC15;
 			packageReferences = (
-				45D80FD02B4BD97000697EDC /* XCRemoteSwiftPackageReference "MarqueeLabel" */,
-				45D80FD12B4BD97B00697EDC /* XCRemoteSwiftPackageReference "Alamofire" */,
-				45D80FD22B4BD98500697EDC /* XCRemoteSwiftPackageReference "Moya" */,
-				45D80FD32B4BD9A800697EDC /* XCRemoteSwiftPackageReference "ReactorKit" */,
-				45D80FD42B4BD9B200697EDC /* XCRemoteSwiftPackageReference "RxDataSources" */,
-				45D80FD52B4BD9BB00697EDC /* XCRemoteSwiftPackageReference "RxGesture" */,
-				45D80FD62B4BD9C500697EDC /* XCRemoteSwiftPackageReference "RxSwift" */,
-				45D80FD72B4BDA0300697EDC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-				45D80FD82B4BDA1100697EDC /* XCRemoteSwiftPackageReference "lottie-ios" */,
-				45D80FD92B4BDA1A00697EDC /* XCRemoteSwiftPackageReference "Cosmos" */,
-				45D80FDA2B4BDA2700697EDC /* XCRemoteSwiftPackageReference "Kingfisher" */,
-				45D80FDB2B4BDA3C00697EDC /* XCRemoteSwiftPackageReference "FSCalendar" */,
-				45D80FDC2B4BDA4800697EDC /* XCRemoteSwiftPackageReference "Then" */,
-				45D80FDD2B4BDA5600697EDC /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */,
-				45D80FDE2B4BDA6900697EDC /* XCRemoteSwiftPackageReference "SnapKit" */,
+				45D80FD02B4BD97000697EDC /* XCRemoteSwiftPackageReference "MarqueeLabel.git" */,
+				45D80FD12B4BD97B00697EDC /* XCRemoteSwiftPackageReference "Alamofire.git" */,
+				45D80FD22B4BD98500697EDC /* XCRemoteSwiftPackageReference "Moya.git" */,
+				45D80FD32B4BD9A800697EDC /* XCRemoteSwiftPackageReference "ReactorKit.git" */,
+				45D80FD42B4BD9B200697EDC /* XCRemoteSwiftPackageReference "RxDataSources.git" */,
+				45D80FD52B4BD9BB00697EDC /* XCRemoteSwiftPackageReference "RxGesture.git" */,
+				45D80FD62B4BD9C500697EDC /* XCRemoteSwiftPackageReference "RxSwift.git" */,
+				45D80FD72B4BDA0300697EDC /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */,
+				45D80FD82B4BDA1100697EDC /* XCRemoteSwiftPackageReference "lottie-ios.git" */,
+				45D80FD92B4BDA1A00697EDC /* XCRemoteSwiftPackageReference "Cosmos.git" */,
+				45D80FDA2B4BDA2700697EDC /* XCRemoteSwiftPackageReference "Kingfisher.git" */,
+				45D80FDB2B4BDA3C00697EDC /* XCRemoteSwiftPackageReference "FSCalendar.git" */,
+				45D80FDC2B4BDA4800697EDC /* XCRemoteSwiftPackageReference "Then.git" */,
+				45D80FDD2B4BDA5600697EDC /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper.git" */,
+				45D80FDE2B4BDA6900697EDC /* XCRemoteSwiftPackageReference "SnapKit.git" */,
 			);
 			productRefGroup = C411938B29D2817C003DBC15 /* Products */;
 			projectDirPath = "";
@@ -2331,7 +2331,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		45D80FD02B4BD97000697EDC /* XCRemoteSwiftPackageReference "MarqueeLabel" */ = {
+		45D80FD02B4BD97000697EDC /* XCRemoteSwiftPackageReference "MarqueeLabel.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/cbpowell/MarqueeLabel.git";
 			requirement = {
@@ -2339,7 +2339,7 @@
 				minimumVersion = 4.4.0;
 			};
 		};
-		45D80FD12B4BD97B00697EDC /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+		45D80FD12B4BD97B00697EDC /* XCRemoteSwiftPackageReference "Alamofire.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
 			requirement = {
@@ -2347,7 +2347,7 @@
 				minimumVersion = 5.8.1;
 			};
 		};
-		45D80FD22B4BD98500697EDC /* XCRemoteSwiftPackageReference "Moya" */ = {
+		45D80FD22B4BD98500697EDC /* XCRemoteSwiftPackageReference "Moya.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Moya/Moya.git";
 			requirement = {
@@ -2355,7 +2355,7 @@
 				minimumVersion = 15.0.3;
 			};
 		};
-		45D80FD32B4BD9A800697EDC /* XCRemoteSwiftPackageReference "ReactorKit" */ = {
+		45D80FD32B4BD9A800697EDC /* XCRemoteSwiftPackageReference "ReactorKit.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ReactorKit/ReactorKit.git";
 			requirement = {
@@ -2363,7 +2363,7 @@
 				minimumVersion = 3.2.0;
 			};
 		};
-		45D80FD42B4BD9B200697EDC /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
+		45D80FD42B4BD9B200697EDC /* XCRemoteSwiftPackageReference "RxDataSources.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RxSwiftCommunity/RxDataSources.git";
 			requirement = {
@@ -2371,7 +2371,7 @@
 				minimumVersion = 5.0.2;
 			};
 		};
-		45D80FD52B4BD9BB00697EDC /* XCRemoteSwiftPackageReference "RxGesture" */ = {
+		45D80FD52B4BD9BB00697EDC /* XCRemoteSwiftPackageReference "RxGesture.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RxSwiftCommunity/RxGesture.git";
 			requirement = {
@@ -2379,7 +2379,7 @@
 				minimumVersion = 4.0.4;
 			};
 		};
-		45D80FD62B4BD9C500697EDC /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+		45D80FD62B4BD9C500697EDC /* XCRemoteSwiftPackageReference "RxSwift.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
 			requirement = {
@@ -2387,7 +2387,7 @@
 				minimumVersion = 6.6.0;
 			};
 		};
-		45D80FD72B4BDA0300697EDC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+		45D80FD72B4BDA0300697EDC /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
 			requirement = {
@@ -2395,7 +2395,7 @@
 				minimumVersion = 10.19.1;
 			};
 		};
-		45D80FD82B4BDA1100697EDC /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+		45D80FD82B4BDA1100697EDC /* XCRemoteSwiftPackageReference "lottie-ios.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
 			requirement = {
@@ -2403,7 +2403,7 @@
 				minimumVersion = 4.3.4;
 			};
 		};
-		45D80FD92B4BDA1A00697EDC /* XCRemoteSwiftPackageReference "Cosmos" */ = {
+		45D80FD92B4BDA1A00697EDC /* XCRemoteSwiftPackageReference "Cosmos.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/evgenyneu/Cosmos.git";
 			requirement = {
@@ -2411,7 +2411,7 @@
 				minimumVersion = 24.0.0;
 			};
 		};
-		45D80FDA2B4BDA2700697EDC /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+		45D80FDA2B4BDA2700697EDC /* XCRemoteSwiftPackageReference "Kingfisher.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
 			requirement = {
@@ -2419,7 +2419,7 @@
 				minimumVersion = 7.10.1;
 			};
 		};
-		45D80FDB2B4BDA3C00697EDC /* XCRemoteSwiftPackageReference "FSCalendar" */ = {
+		45D80FDB2B4BDA3C00697EDC /* XCRemoteSwiftPackageReference "FSCalendar.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/WenchaoD/FSCalendar.git";
 			requirement = {
@@ -2427,7 +2427,7 @@
 				minimumVersion = 2.8.4;
 			};
 		};
-		45D80FDC2B4BDA4800697EDC /* XCRemoteSwiftPackageReference "Then" */ = {
+		45D80FDC2B4BDA4800697EDC /* XCRemoteSwiftPackageReference "Then.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/devxoul/Then.git";
 			requirement = {
@@ -2435,7 +2435,7 @@
 				minimumVersion = 3.0.0;
 			};
 		};
-		45D80FDD2B4BDA5600697EDC /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */ = {
+		45D80FDD2B4BDA5600697EDC /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/jrendel/SwiftKeychainWrapper.git";
 			requirement = {
@@ -2443,7 +2443,7 @@
 				minimumVersion = 4.0.1;
 			};
 		};
-		45D80FDE2B4BDA6900697EDC /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+		45D80FDE2B4BDA6900697EDC /* XCRemoteSwiftPackageReference "SnapKit.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
 			requirement = {
@@ -2456,97 +2456,97 @@
 /* Begin XCSwiftPackageProductDependency section */
 		45D80FDF2B4BDAAC00697EDC /* RxCocoa */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 45D80FD62B4BD9C500697EDC /* XCRemoteSwiftPackageReference "RxSwift" */;
+			package = 45D80FD62B4BD9C500697EDC /* XCRemoteSwiftPackageReference "RxSwift.git" */;
 			productName = RxCocoa;
 		};
 		45D80FE12B4BDAC200697EDC /* FSCalendar */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 45D80FDB2B4BDA3C00697EDC /* XCRemoteSwiftPackageReference "FSCalendar" */;
+			package = 45D80FDB2B4BDA3C00697EDC /* XCRemoteSwiftPackageReference "FSCalendar.git" */;
 			productName = FSCalendar;
 		};
 		45D80FE32B4BDB1100697EDC /* MarqueeLabel */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 45D80FD02B4BD97000697EDC /* XCRemoteSwiftPackageReference "MarqueeLabel" */;
+			package = 45D80FD02B4BD97000697EDC /* XCRemoteSwiftPackageReference "MarqueeLabel.git" */;
 			productName = MarqueeLabel;
 		};
 		45D80FE52B4BDB1100697EDC /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 45D80FD12B4BD97B00697EDC /* XCRemoteSwiftPackageReference "Alamofire" */;
+			package = 45D80FD12B4BD97B00697EDC /* XCRemoteSwiftPackageReference "Alamofire.git" */;
 			productName = Alamofire;
 		};
 		45D80FE72B4BDB1100697EDC /* Moya */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 45D80FD22B4BD98500697EDC /* XCRemoteSwiftPackageReference "Moya" */;
+			package = 45D80FD22B4BD98500697EDC /* XCRemoteSwiftPackageReference "Moya.git" */;
 			productName = Moya;
 		};
 		45D80FE92B4BDB1100697EDC /* ReactorKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 45D80FD32B4BD9A800697EDC /* XCRemoteSwiftPackageReference "ReactorKit" */;
+			package = 45D80FD32B4BD9A800697EDC /* XCRemoteSwiftPackageReference "ReactorKit.git" */;
 			productName = ReactorKit;
 		};
 		45D80FEB2B4BDB1100697EDC /* Differentiator */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 45D80FD42B4BD9B200697EDC /* XCRemoteSwiftPackageReference "RxDataSources" */;
+			package = 45D80FD42B4BD9B200697EDC /* XCRemoteSwiftPackageReference "RxDataSources.git" */;
 			productName = Differentiator;
 		};
 		45D80FED2B4BDB1100697EDC /* RxDataSources */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 45D80FD42B4BD9B200697EDC /* XCRemoteSwiftPackageReference "RxDataSources" */;
+			package = 45D80FD42B4BD9B200697EDC /* XCRemoteSwiftPackageReference "RxDataSources.git" */;
 			productName = RxDataSources;
 		};
 		45D80FEF2B4BDB1100697EDC /* RxGesture */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 45D80FD52B4BD9BB00697EDC /* XCRemoteSwiftPackageReference "RxGesture" */;
+			package = 45D80FD52B4BD9BB00697EDC /* XCRemoteSwiftPackageReference "RxGesture.git" */;
 			productName = RxGesture;
 		};
 		45D80FF12B4BDB1100697EDC /* RxSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 45D80FD62B4BD9C500697EDC /* XCRemoteSwiftPackageReference "RxSwift" */;
+			package = 45D80FD62B4BD9C500697EDC /* XCRemoteSwiftPackageReference "RxSwift.git" */;
 			productName = RxSwift;
 		};
 		45D80FF32B4BDB1100697EDC /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 45D80FD72B4BDA0300697EDC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = 45D80FD72B4BDA0300697EDC /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */;
 			productName = FirebaseAnalytics;
 		};
 		45D80FF52B4BDB1100697EDC /* FirebaseMessaging */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 45D80FD72B4BDA0300697EDC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = 45D80FD72B4BDA0300697EDC /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */;
 			productName = FirebaseMessaging;
 		};
 		45D80FF72B4BDB1100697EDC /* FirebaseRemoteConfig */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 45D80FD72B4BDA0300697EDC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = 45D80FD72B4BDA0300697EDC /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */;
 			productName = FirebaseRemoteConfig;
 		};
 		45D80FF92B4BDB1100697EDC /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 45D80FD82B4BDA1100697EDC /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			package = 45D80FD82B4BDA1100697EDC /* XCRemoteSwiftPackageReference "lottie-ios.git" */;
 			productName = Lottie;
 		};
 		45D80FFB2B4BDB1100697EDC /* Cosmos */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 45D80FD92B4BDA1A00697EDC /* XCRemoteSwiftPackageReference "Cosmos" */;
+			package = 45D80FD92B4BDA1A00697EDC /* XCRemoteSwiftPackageReference "Cosmos.git" */;
 			productName = Cosmos;
 		};
 		45D80FFD2B4BDB1100697EDC /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 45D80FDA2B4BDA2700697EDC /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			package = 45D80FDA2B4BDA2700697EDC /* XCRemoteSwiftPackageReference "Kingfisher.git" */;
 			productName = Kingfisher;
 		};
 		45D80FFF2B4BDB1100697EDC /* Then */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 45D80FDC2B4BDA4800697EDC /* XCRemoteSwiftPackageReference "Then" */;
+			package = 45D80FDC2B4BDA4800697EDC /* XCRemoteSwiftPackageReference "Then.git" */;
 			productName = Then;
 		};
 		45D810012B4BDB1100697EDC /* SwiftKeychainWrapper */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 45D80FDD2B4BDA5600697EDC /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			package = 45D80FDD2B4BDA5600697EDC /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper.git" */;
 			productName = SwiftKeychainWrapper;
 		};
 		45D810032B4BDB1100697EDC /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 45D80FDE2B4BDA6900697EDC /* XCRemoteSwiftPackageReference "SnapKit" */;
+			package = 45D80FDE2B4BDA6900697EDC /* XCRemoteSwiftPackageReference "SnapKit.git" */;
 			productName = SnapKit;
 		};
 /* End XCSwiftPackageProductDependency section */

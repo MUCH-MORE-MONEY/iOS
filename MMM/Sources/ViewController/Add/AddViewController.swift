@@ -151,7 +151,7 @@ extension AddViewController {
 		view.endEditing(true)
 		
 		setLayoutPriceView()
-		let picker = DatePickerViewController(viewModel: viewModel, date: viewModel.date ?? Date())
+        let picker = DatePickerViewController(viewModel: viewModel, date: viewModel.date ?? Common.getCalendarSelectedDate())
 		
 		let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
 		picker.delegate = bottomSheetVC

@@ -76,12 +76,14 @@ extension DetailViewController2 {
             .disposed(by: disposeBag)
         
         view.rx.swipeGesture(.left)
+            .when(.recognized)
             .filter{ _ in self.bottomPageControlView.index < self.bottomPageControlView.totalItem }
             .map { .didTapNextButton }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+//        
         view.rx.swipeGesture(.right)
+            .when(.recognized)
             .filter{ _ in self.bottomPageControlView.index >= 0 }
             .map { .didTapPreviousButton }
             .bind(to: reactor.action)

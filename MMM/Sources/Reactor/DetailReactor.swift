@@ -31,8 +31,8 @@ final class DetailReactor: Reactor {
         var isLoading = true
         var index = 0
         var dateYM: String
-        var rowNum: Int
-        var totalItem: Int
+        @Pulse var rowNum: Int
+        @Pulse var totalItem: Int
         var valueScoreDvcd: String
         var id: String
         // detail이랑 edit이랑 response 타입이 달라서 한번 더 fetch를 해줘야함
@@ -44,7 +44,7 @@ final class DetailReactor: Reactor {
     
     init(dateYM: String, rowNum: Int, totalItem: Int, valueScoreDvcd: String, id: String) {
         self.initialState = State(dateYM: dateYM, rowNum: rowNum, totalItem: totalItem, valueScoreDvcd: valueScoreDvcd, id: id)
-        action.onNext(.loadData(dateYM: dateYM, rowNum: rowNum, valueScoreDvcd: valueScoreDvcd, id: id))
+//        action.onNext(.loadData(dateYM: dateYM, rowNum: rowNum, valueScoreDvcd: valueScoreDvcd, id: id))
     }
 }
 

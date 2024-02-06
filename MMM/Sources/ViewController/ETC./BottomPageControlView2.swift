@@ -50,8 +50,10 @@ extension BottomPageControlView2 {
     private func bindState(_ reactor: DetailReactor) {
         reactor.state
             .map { ($0.rowNum, $0.totalItem) }
+            .distinctUntilChanged { $0.0 == $1.0 }
             .bind(onNext: updateIndexLabel)
             .disposed(by: disposeBag)
+
     }
 }
 

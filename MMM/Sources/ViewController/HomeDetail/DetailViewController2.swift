@@ -98,6 +98,7 @@ extension DetailViewController2 {
         
         reactor.state
             .map { $0.list }
+            .filter { !$0.isEmpty }
             .distinctUntilChanged()
             .bind(onNext: updateUI)
             .disposed(by: disposeBag)

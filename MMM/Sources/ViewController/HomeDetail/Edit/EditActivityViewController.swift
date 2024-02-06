@@ -72,6 +72,9 @@ final class EditActivityViewController: BaseAddActivityViewController, UINavigat
     }
     
 	override func didTapBackButton() {
+        // 키보드 내리기
+        self.titleTextFeild.resignFirstResponder()
+        
 		//FIXME: - showAlert에서 super.didTapBackButton()호출하면 문제생김
 		isDeleteButton = false
 		showAlert(alertType: .canCancel, titleText: editAlertTitle, contentText: editAlertContentText, cancelButtonText: "닫기", confirmButtonText: "편집 취소하기")
@@ -102,6 +105,9 @@ final class EditActivityViewController: BaseAddActivityViewController, UINavigat
 // MARK: - Action
 extension EditActivityViewController {
 	func didTapDateTitle() {
+        // 키보드 내리기
+        self.titleTextFeild.resignFirstResponder()
+        
 		let picker = DatePickerViewController(viewModel: editViewModel, date: date)
 		let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
 		picker.delegate = bottomSheetVC
@@ -111,6 +117,9 @@ extension EditActivityViewController {
 	}
 	
 	func didTapMoneyLabel() {
+        // 키보드 내리기
+        self.titleTextFeild.resignFirstResponder()
+        
 		let picker = EditPriceViewController(editViewModel: editViewModel)
 		let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
 		picker.delegate = bottomSheetVC
@@ -120,6 +129,9 @@ extension EditActivityViewController {
 	}
 	
 	func didTapStarLabel() {
+        // 키보드 내리기
+        self.titleTextFeild.resignFirstResponder()
+        
 		let picker = StarPickerViewController()
 		let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
 		picker.delegate = bottomSheetVC
@@ -148,11 +160,17 @@ extension EditActivityViewController {
 	}
 	
 	func didTapDeleteButton() {
+        // 키보드 내리기
+        self.titleTextFeild.resignFirstResponder()
+        
 		isDeleteButton = true
 		showAlert(alertType: .canCancel, titleText: deleteAlertTitle, contentText: deleteAlertContentText, cancelButtonText: "닫기", confirmButtonText: "삭제하기")
 	}
 	
 	func didTapAlbumButton() {
+        // 키보드 내리기
+        self.titleTextFeild.resignFirstResponder()
+        
 		let picker = UIImagePickerController().then {
 			$0.sourceType = .photoLibrary
 			$0.allowsEditing = true
@@ -163,7 +181,9 @@ extension EditActivityViewController {
 	}
 	
 	func didTapImageView() {
-		
+        // 키보드 내리기
+        self.titleTextFeild.resignFirstResponder()
+        
 		let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 		
 		//앨범 선택 - 스타일(default)
@@ -198,6 +218,9 @@ extension EditActivityViewController {
 	}
     
     private func didTapCategory() {
+        // 키보드 내리기
+        self.titleTextFeild.resignFirstResponder()
+        
         Tracking.FinActAddPage.inputCategoryLogEvent()
         
         let picker = AddCategoryViewController(viewModel: editViewModel)

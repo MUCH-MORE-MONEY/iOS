@@ -151,6 +151,9 @@ extension AddViewController {
 		view.endEditing(true)
 		
 		setLayoutPriceView()
+        
+        // 캘린더에서 선택된 날짜를 경제활동 추가에서 디폴트로 설정하기 위해서 추가
+        viewModel.date = Common.getCalendarSelectedDate()
         let picker = DatePickerViewController(viewModel: viewModel, date: viewModel.date ?? Common.getCalendarSelectedDate())
 		
 		let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
@@ -361,7 +364,7 @@ extension AddViewController {
 		}
 		
 		dateButton = dateButton.then {
-			setTitle(Date())
+			setTitle(Common.getCalendarSelectedDate())
 			$0.setTitleColor(R.Color.gray100, for: .normal)
 			$0.setTitleColor(R.Color.gray100.withAlphaComponent(0.7), for: .highlighted)
 			$0.backgroundColor = R.Color.gray900

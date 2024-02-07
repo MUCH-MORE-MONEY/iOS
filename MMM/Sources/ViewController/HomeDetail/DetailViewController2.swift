@@ -74,17 +74,19 @@ extension DetailViewController2 {
             .map {.didTapEditButton }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
+        // 최종 손가락 위치 오른쪽
         view.rx.swipeGesture(.left)
             .when(.recognized)
             .filter{ _ in self.bottomPageControlView.index < self.bottomPageControlView.totalItem }
             .map { .didTapNextButton }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-//        
+
+        // 최종 손가락 위치 왼쪽
         view.rx.swipeGesture(.right)
             .when(.recognized)
-            .filter{ _ in self.bottomPageControlView.index >= 0 }
+            .filter{ _ in self.bottomPageControlView.index > 1 }
             .map { .didTapPreviousButton }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)

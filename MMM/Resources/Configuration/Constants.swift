@@ -100,6 +100,8 @@ enum Common {
         case customPushNudge
         case saveButtonTapped
         case nudgeIfPushRestricted
+        case calendarSelectedDate
+        case deferredVersion
     }
     
     
@@ -180,6 +182,14 @@ enum Common {
         UserDefaults.standard.setValue(isRestricted, forKey: self.keys.nudgeIfPushRestricted.rawValue)
     }
     
+    static func setCalendarSelectedDate(_ date: Date) {
+        UserDefaults.standard.setValue(date, forKey: self.keys.calendarSelectedDate.rawValue)
+    }
+    
+    static func setDeferredVersion(_ version: String) {
+        UserDefaults.standard.set(version, forKey: self.keys.deferredVersion.rawValue)
+    }
+    
     // MARK: - Get
     static func getNewsPushSwitch() -> Bool {
         UserDefaults.standard.bool(forKey: self.keys.newsPushSwitch.rawValue)
@@ -234,5 +244,13 @@ enum Common {
     
     static func getNudgeIfPushRestricted() -> Bool {
         return UserDefaults.standard.bool(forKey: self.keys.nudgeIfPushRestricted.rawValue)
+    }
+    
+    static func getCalendarSelectedDate() -> Date {
+        return UserDefaults.standard.object(forKey: self.keys.calendarSelectedDate.rawValue) as? Date ?? Date()
+    }
+    
+    static func getDefferedVersion() -> String {
+        return UserDefaults.standard.string(forKey: self.keys.deferredVersion.rawValue) ?? "0.0.0"
     }
 }

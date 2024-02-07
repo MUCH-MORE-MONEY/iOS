@@ -50,6 +50,9 @@ final class AddDetailViewController: BaseAddActivityViewController, UINavigation
 // MARK: - Action
 extension AddDetailViewController {
     func didTapStarLabel() {
+        // 키보드 내리기
+        self.titleTextFeild.resignFirstResponder()
+        
         let picker = StarPickerViewController()
         let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
         picker.delegate = bottomSheetVC
@@ -86,6 +89,9 @@ extension AddDetailViewController {
     }
     
     func didTapAlbumButton() {
+        // 키보드 내리기
+        self.titleTextFeild.resignFirstResponder()
+        
         Tracking.FinActAddPage.inputPhotoLogEvent()
         let picker = UIImagePickerController().then {
             $0.sourceType = .photoLibrary
@@ -97,7 +103,8 @@ extension AddDetailViewController {
     }
     
     func didTapImageView() {
-        
+        // 키보드 내리기
+        self.titleTextFeild.resignFirstResponder()
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         //앨범 선택 - 스타일(default)
@@ -199,6 +206,9 @@ extension AddDetailViewController {
     }
     
     private func didTapCategory() {
+        // 키보드 내리기
+        self.titleTextFeild.resignFirstResponder()
+        
         let picker = AddCategoryViewController(viewModel: viewModel)
         let bottomSheetVC = BottomSheetViewController(contentViewController: picker)
         bottomSheetVC.setSetting(percentHeight: 0.65)

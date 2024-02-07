@@ -52,6 +52,7 @@ extension BottomPageControlView2 {
             .map { ($0.rowNum, $0.totalItem) }
             .bind(onNext: updateIndexLabel)
             .disposed(by: disposeBag)
+
     }
 }
 

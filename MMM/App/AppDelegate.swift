@@ -29,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         )
         
         application.registerForRemoteNotifications()
-        
+        // A B C
         Messaging.messaging().delegate = self
         
         

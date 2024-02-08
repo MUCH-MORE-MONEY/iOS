@@ -182,24 +182,24 @@ extension HomeViewController {
         // nudge
         // 최초한번 눌렀을 경우 && 넛징이 아직 표시안된경우
         
-        if Common.getSaveButtonTapped() && !Common.getCustomPuhsNudge() {
-            
-            Common.setCustomPushNudge(true)
-            
-            showAlert(alertType: .canCancel,
-                      titleText: nudgeMessage.title,
-                      contentText: nudgeMessage.content,
-                      cancelButtonText: nudgeMessage.cancel,
-                      confirmButtonText: nudgeMessage.confirm)
-//                    
-        }
-        
-        // test용 alert
+//        if Common.getSaveButtonTapped() && !Common.getCustomPuhsNudge() {
+//            
+//            Common.setCustomPushNudge(true)
+//            
 //            showAlert(alertType: .canCancel,
 //                      titleText: nudgeMessage.title,
 //                      contentText: nudgeMessage.content,
 //                      cancelButtonText: nudgeMessage.cancel,
 //                      confirmButtonText: nudgeMessage.confirm)
+////                    
+//        }
+        
+        // test용 alert
+            showAlert(alertType: .canCancel,
+                      titleText: nudgeMessage.title,
+                      contentText: nudgeMessage.content,
+                      cancelButtonText: nudgeMessage.cancel,
+                      confirmButtonText: nudgeMessage.confirm)
     }
 }
 //MARK: - Attribute & Hierarchy & Layouts
@@ -781,10 +781,22 @@ extension HomeViewController: CustomAlertDelegate {
     }
     
     func moveToPushSettingDetailViewController() {
-        let vc = PushSettingViewController()
-        vc.reactor = PushSettingReactor(provider: ServiceProvider.shared)
-
-        self.navigationController?.pushViewController(vc, animated: true)
+        let pushVC = PushSettingViewController()
+        pushVC.reactor = PushSettingReactor(provider: ServiceProvider.shared)
+        
+        let pushDetailVC = PushSettingDetailViewController()
+        pushDetailVC.reactor = PushSettingDetailReactor(provider: ServiceProvider.shared)
+        
+        if var viewControllers = self.navigationController?.viewControllers {
+            // 현재 스택에 첫 번째 뷰 컨트롤러 추가
+            viewControllers.append(pushVC)
+            // 첫 번째 뷰 컨트롤러 위에 두 번째 뷰 컨트롤러 추가
+            viewControllers.append(pushDetailVC)
+            
+            // 네비게이션 컨트롤러에 업데이트된 뷰 컨트롤러 배열을 설정하여 푸시
+            self.navigationController?.setViewControllers(viewControllers, animated: true)
+        }
+//        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func showAlertToRedirectToSettings() {

@@ -182,24 +182,24 @@ extension HomeViewController {
         // nudge
         // 최초한번 눌렀을 경우 && 넛징이 아직 표시안된경우
         
-//        if Common.getSaveButtonTapped() && !Common.getCustomPuhsNudge() {
-//            
-//            Common.setCustomPushNudge(true)
-//            
-//            showAlert(alertType: .canCancel,
-//                      titleText: nudgeMessage.title,
-//                      contentText: nudgeMessage.content,
-//                      cancelButtonText: nudgeMessage.cancel,
-//                      confirmButtonText: nudgeMessage.confirm)
-////                    
-//        }
-        
-        // test용 alert
+        if Common.getSaveButtonTapped() && !Common.getCustomPuhsNudge() {
+            
+            Common.setCustomPushNudge(true)
+            
             showAlert(alertType: .canCancel,
                       titleText: nudgeMessage.title,
                       contentText: nudgeMessage.content,
                       cancelButtonText: nudgeMessage.cancel,
                       confirmButtonText: nudgeMessage.confirm)
+//                    
+        }
+        
+        // test용 alert
+//            showAlert(alertType: .canCancel,
+//                      titleText: nudgeMessage.title,
+//                      contentText: nudgeMessage.content,
+//                      cancelButtonText: nudgeMessage.cancel,
+//                      confirmButtonText: nudgeMessage.confirm)
     }
 }
 //MARK: - Attribute & Hierarchy & Layouts

@@ -781,8 +781,8 @@ extension HomeViewController: CustomAlertDelegate {
     }
     
     func moveToPushSettingDetailViewController() {
-        let vc = PushSettingDetailViewController()
-        vc.reactor = PushSettingDetailReactor(provider: ServiceProvider.shared)
+        let vc = PushSettingViewController()
+        vc.reactor = PushSettingReactor(provider: ServiceProvider.shared)
 
         self.navigationController?.pushViewController(vc, animated: true)
     }

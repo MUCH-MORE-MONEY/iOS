@@ -781,6 +781,10 @@ extension HomeViewController: CustomAlertDelegate {
     }
     
     func moveToPushSettingDetailViewController() {
+        // 시스템 알림을 모두 설정했으므로 pushVC의 switch를 모두 on으로 설정
+        Common.setNewsPushSwitch(true)
+        Common.setCustomPushSwitch(true)
+        
         let pushVC = PushSettingViewController()
         pushVC.reactor = PushSettingReactor(provider: ServiceProvider.shared)
         

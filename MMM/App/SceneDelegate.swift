@@ -163,8 +163,11 @@ extension SceneDelegate {
     // 알럿을 띄우는 함수
     func showUpdateAlert(version: String) {
         let alert = UIAlertController(
-            title: "업데이트 알림",
-            message: "\(version)으로의 업데이트 사항이 있습니다. 앱스토어에서 앱을 업데이트 해주세요.",
+            title: "신규 업데이트 알림 📢",
+            message: """
+            mmm이 여러분의 원활한 가계부 작성을 위해 앱에서 발생하던 문제들을 개선했어요.
+            업데이트하여 더 쾌적한 mmm을 경험하세요.
+            """,
             preferredStyle: .alert
         )
         
@@ -173,12 +176,14 @@ extension SceneDelegate {
             AppstoreCheck().openAppStore()
         }
         // "나중에" 버튼을 누를 경우 현재 remoteConfig version을 저장
-        let laterAction = UIAlertAction(title: "나중에", style: .default) { _ in
+        let laterAction = UIAlertAction(title: "나중에", style: .cancel) { _ in
             Common.setDeferredVersion(version)
         }
         
         alert.addAction(updateAction)
         alert.addAction(laterAction)
+        
+        alert.preferredAction = updateAction
         self.window?.rootViewController?.present(alert, animated: true, completion: nil)
     }
 }

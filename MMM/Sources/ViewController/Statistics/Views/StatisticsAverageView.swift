@@ -28,7 +28,8 @@ final class StatisticsAverageView: BaseView {
 extension StatisticsAverageView {
 	// 외부에서 설정
 	func setData(average: Double) {
-		satisfactionLabel.text = String(average)
+		let floor = floor(average) // 소수점 버림
+		satisfactionLabel.text = floor == average ? "\(Int(floor)) 점" : "\(average) 점"
 	}
 	
 	func isLoading(_ isLoading: Bool) {

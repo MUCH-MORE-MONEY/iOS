@@ -16,7 +16,7 @@ final class StatisticsAverageView: BaseView {
 	// MARK: - Constants
 	private enum UI {
 		static let sideMargin: CGFloat = 20
-		static let starLeading: CGFloat = 8
+		static let starLeading: CGFloat = 4
 	}
 	
 	// MARK: - UI Components
@@ -46,46 +46,46 @@ extension StatisticsAverageView {
 		backgroundColor = R.Color.black
 		layer.cornerRadius = 10
 		
-		titleLabel = titleLabel.then {
-			$0.text = "이번 달 경제활동 만족도"
-			$0.font = R.Font.prtendard(family: .medium, size: 20)
-			$0.textColor = R.Color.white
-		}
-		
-		satisfactionLabel = satisfactionLabel.then {
-			$0.text = "0.0"
-			$0.font = R.Font.prtendard(family: .bold, size: 36)
-			$0.textColor = R.Color.orange500
-		}
-		
 		starImageView = starImageView.then {
 			$0.image = R.Icon.iconStarYellow24
 			$0.contentMode = .scaleAspectFit
+		}
+		
+		satisfactionLabel = satisfactionLabel.then {
+			$0.text = "0.0점"
+			$0.font = R.Font.prtendard(family: .bold, size: 18)
+			$0.textColor = R.Color.white
+		}
+		
+		titleLabel = titleLabel.then {
+			$0.text = "경제활동 만족도"
+			$0.font = R.Font.body3
+			$0.textColor = R.Color.white
 		}
 	}
 	
 	override func setHierarchy() {
 		super.setHierarchy()
 		
-		addSubviews(titleLabel, satisfactionLabel, starImageView)
+		addSubviews(starImageView, satisfactionLabel, titleLabel)
 	}
 	
 	override func setLayout() {
 		super.setLayout()
 		
-		titleLabel.snp.makeConstraints {
+		starImageView.snp.makeConstraints {
 			$0.centerY.equalToSuperview()
 			$0.leading.equalToSuperview().inset(UI.sideMargin)
 		}
 		
 		satisfactionLabel.snp.makeConstraints {
 			$0.centerY.equalToSuperview()
+			$0.leading.equalTo(starImageView.snp.trailing).offset(8)
 		}
 		
-		starImageView.snp.makeConstraints {
+		titleLabel.snp.makeConstraints {
 			$0.centerY.equalToSuperview()
-			$0.leading.equalTo(satisfactionLabel.snp.trailing).offset(UI.starLeading)
-			$0.trailing.equalToSuperview().inset(UI.sideMargin)
+			$0.leading.equalTo(satisfactionLabel.snp.trailing).offset(8)
 		}
 	}
 }

@@ -388,7 +388,7 @@ extension StatisticsViewController: SkeletonLoadable {
 		}
 		
 		headerView = headerView.then {
-			$0.frame = .init(x: 0, y: 0, width: view.bounds.width, height: 551)
+			$0.frame = .init(x: 0, y: 0, width: view.bounds.width, height: 420)
 		}
 		
 		emptyView = emptyView.then {
@@ -400,7 +400,7 @@ extension StatisticsViewController: SkeletonLoadable {
 		super.setHierarchy()
 		
 		view.addSubviews(tableView)
-		headerView.addSubviews(newTitleView, averageView, categoryView, activityView, satisfactionView)
+		headerView.addSubviews(newTitleView, categoryView, averageView, activityView, satisfactionView)
 	}
 	
 	override func setLayout() {
@@ -410,19 +410,20 @@ extension StatisticsViewController: SkeletonLoadable {
 			$0.top.equalToSuperview().inset(24)
 			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 		}
-		
-		averageView.snp.makeConstraints {
-			$0.top.equalTo(newTitleView.snp.bottom).offset(12)
-			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
-			$0.height.equalTo(64)
-		}
 
 		categoryView.snp.makeConstraints {
-			$0.top.equalTo(averageView.snp.bottom).offset(12)
+			$0.top.equalTo(newTitleView.snp.bottom).offset(12)
 			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 			$0.height.equalTo(146)
 		}
+		
+		averageView.snp.makeConstraints {
+			$0.top.equalTo(categoryView.snp.bottom).offset(12)
+			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
+			$0.height.equalTo(50)
+		}
 
+		activityView.isHidden = true
 		activityView.snp.makeConstraints {
 			$0.top.equalTo(categoryView.snp.bottom).offset(12)
 			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
@@ -430,7 +431,7 @@ extension StatisticsViewController: SkeletonLoadable {
 		}
 
 		satisfactionView.snp.makeConstraints {
-			$0.top.equalTo(activityView.snp.bottom).offset(26)
+			$0.top.equalTo(averageView.snp.bottom).offset(26)
 			$0.leading.trailing.equalToSuperview()
 			$0.bottom.equalToSuperview()
 		}

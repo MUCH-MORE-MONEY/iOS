@@ -60,6 +60,7 @@ final class StatisticsViewController: BaseViewController, View {
 	private lazy var monthButton = SemanticContentAttributeButton()
 	private lazy var headerView = UIView()
 	private lazy var titleView = StatisticsTitleView()
+	private lazy var newTitleView = StatisticsNewTitleSettingView()
 	private lazy var averageView = StatisticsAverageView()
 	private lazy var categoryView = StatisticsCategoryView()
 	private lazy var activityView = StatisticsActivityView(timer: timer)
@@ -399,38 +400,37 @@ extension StatisticsViewController: SkeletonLoadable {
 		super.setHierarchy()
 		
 		view.addSubviews(tableView)
-		headerView.addSubviews(titleView, averageView, categoryView, activityView, satisfactionView)
+		headerView.addSubviews(newTitleView, averageView, categoryView, activityView, satisfactionView)
 	}
 	
 	override func setLayout() {
 		super.setLayout()
 		
-		titleView.snp.makeConstraints {
-			$0.top.equalToSuperview().inset(32)
-			$0.leading.equalToSuperview().inset(24)
-			$0.trailing.equalToSuperview().inset(UI.sideMargin)
+		newTitleView.snp.makeConstraints {
+			$0.top.equalToSuperview().inset(24)
+			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 		}
 		
 		averageView.snp.makeConstraints {
-			$0.top.equalTo(titleView.snp.bottom)
+			$0.top.equalTo(newTitleView.snp.bottom).offset(12)
 			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 			$0.height.equalTo(64)
 		}
 
 		categoryView.snp.makeConstraints {
-			$0.top.equalTo(averageView.snp.bottom).offset(16)
+			$0.top.equalTo(averageView.snp.bottom).offset(12)
 			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 			$0.height.equalTo(146)
 		}
 
 		activityView.snp.makeConstraints {
-			$0.top.equalTo(categoryView.snp.bottom).offset(16)
+			$0.top.equalTo(categoryView.snp.bottom).offset(12)
 			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 			$0.height.equalTo(100)
 		}
 
 		satisfactionView.snp.makeConstraints {
-			$0.top.equalTo(activityView.snp.bottom).offset(24)
+			$0.top.equalTo(activityView.snp.bottom).offset(26)
 			$0.leading.trailing.equalToSuperview()
 			$0.bottom.equalToSuperview()
 		}

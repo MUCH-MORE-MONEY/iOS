@@ -147,17 +147,23 @@ extension DetailViewController {
             .sinkOnMainThread(receiveValue: didTapEditButton)
             .store(in: &cancellable)
         
-        let s = UISwipeGestureRecognizer.Direction.up
-        
         view.gesturePublisher(.swipe(.init(), .left))
-            .sinkOnMainThread { _ in
-                print("swipe Left")
+            .filter { _ in self.bottomPageControlView.index < self.economicActivityId.count - 1 }
+            .sinkOnMainThread { [weak self] _ in
+                guard let self = self else { return }
+                self.bottomPageControlView.index += 1
+                homeDetailViewModel.pageIndex = self.bottomPageControlView.index
+                self.bottomPageControlView.updateView()
             }
             .store(in: &cancellable)
         
         view.gesturePublisher(.swipe(.init(), .right))
-            .sinkOnMainThread { _ in
-                print("swipe right")
+            .filter { _ in self.bottomPageControlView.index > 0 }
+            .sinkOnMainThread { [weak self] _ in
+                guard let self = self else { return }
+                self.bottomPageControlView.index -= 1
+                homeDetailViewModel.pageIndex = self.bottomPageControlView.index
+                self.bottomPageControlView.updateView()
             }
             .store(in: &cancellable)
         

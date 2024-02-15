@@ -9,6 +9,7 @@ import UIKit
 import FirebaseCore
 import FirebaseMessaging
 import UserNotifications
+import FirebaseRemoteConfig
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -28,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         )
         
         application.registerForRemoteNotifications()
-        
+        // A B C
         Messaging.messaging().delegate = self
         
         

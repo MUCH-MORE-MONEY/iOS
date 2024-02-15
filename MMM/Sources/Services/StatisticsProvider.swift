@@ -6,6 +6,7 @@
 //
 
 import RxSwift
+import Foundation
 
 enum StatisticsEvent {
 	case updateDate(Date)

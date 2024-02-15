@@ -124,8 +124,6 @@ extension TabBarController: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         if let index = tabBarController.viewControllers?.firstIndex(of: viewController), index == (tabBarController.viewControllers?.count ?? 0) / 2 {
             // 가운데 탭을 선택하려면 커스텀 아이템을 터치한 것으로 처리
-            print("가운데 버튼 tapped")
-            
             let vc = AddViewController()
             
             navigationController?.pushViewController(vc, animated: true)

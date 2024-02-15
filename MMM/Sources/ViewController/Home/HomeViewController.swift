@@ -102,6 +102,10 @@ extension HomeViewController {
 	
 	// 날짜 선택
 	func didSelectDate(_ date: Date) {
+        // 경제활동 추가뷰에서 현재 캘린더에서 선택된 날짜의 Date를 datepicker에 보여주기 위해 저장
+        // UserDefualt에 저장해도 해당 함수는 최초 한번 실행되기 때문에 앱을 다시 켜도 초기값은 현재 Date로 됨.
+        Common.setCalendarSelectedDate(date)
+        debugPrint("캘린더 didSelected : \(date)")
 		self.calendar.select(date)
 		self.dayLabel.text = date.getFormattedDate(format: "dd일 (EEEEE)") // 선택된 날짜
 		self.viewModel.getDailyList(date.getFormattedYMD())
@@ -777,10 +781,26 @@ extension HomeViewController: CustomAlertDelegate {
     }
     
     func moveToPushSettingDetailViewController() {
-        let vc = PushSettingDetailViewController()
-        vc.reactor = PushSettingDetailReactor(provider: ServiceProvider.shared)
-
-        self.navigationController?.pushViewController(vc, animated: true)
+        // 시스템 알림을 모두 설정했으므로 pushVC의 switch를 모두 on으로 설정
+        Common.setNewsPushSwitch(true)
+        Common.setCustomPushSwitch(true)
+        
+        let pushVC = PushSettingViewController()
+        pushVC.reactor = PushSettingReactor(provider: ServiceProvider.shared)
+        
+        let pushDetailVC = PushSettingDetailViewController()
+        pushDetailVC.reactor = PushSettingDetailReactor(provider: ServiceProvider.shared)
+        
+        if var viewControllers = self.navigationController?.viewControllers {
+            // 현재 스택에 첫 번째 뷰 컨트롤러 추가
+            viewControllers.append(pushVC)
+            // 첫 번째 뷰 컨트롤러 위에 두 번째 뷰 컨트롤러 추가
+            viewControllers.append(pushDetailVC)
+            
+            // 네비게이션 컨트롤러에 업데이트된 뷰 컨트롤러 배열을 설정하여 푸시
+            self.navigationController?.setViewControllers(viewControllers, animated: true)
+        }
+//        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func showAlertToRedirectToSettings() {

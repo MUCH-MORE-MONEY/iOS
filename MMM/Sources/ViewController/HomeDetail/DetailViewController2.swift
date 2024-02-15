@@ -74,6 +74,22 @@ extension DetailViewController2 {
             .map {.didTapEditButton }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+
+        // 최종 손가락 위치 오른쪽
+        view.rx.swipeGesture(.left)
+            .when(.recognized)
+            .filter{ _ in self.bottomPageControlView.index < self.bottomPageControlView.totalItem }
+            .map { .didTapNextButton }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
+        // 최종 손가락 위치 왼쪽
+        view.rx.swipeGesture(.right)
+            .when(.recognized)
+            .filter{ _ in self.bottomPageControlView.index > 1 }
+            .map { .didTapPreviousButton }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
     
     private func bindState(_ reactor: DetailReactor) {
@@ -86,6 +102,7 @@ extension DetailViewController2 {
         
         reactor.state
             .map { $0.list }
+            .filter { !$0.isEmpty }
             .distinctUntilChanged()
             .bind(onNext: updateUI)
             .disposed(by: disposeBag)
@@ -121,6 +138,10 @@ private extension DetailViewController2 {
         }
         
         let vc = EditActivityViewController(detailViewModel: detailVM, editViewModel: editVM, date: Date())
+        
+        // 24.02.02 reactorkit으로 변경중 잠깐 스톱함
+//        let vc = EditActivityViewController2()
+//        vc.reactor = EditActivityReactor(activity: activity)
         
         navigationController?.pushViewController(vc, animated: true)
     }

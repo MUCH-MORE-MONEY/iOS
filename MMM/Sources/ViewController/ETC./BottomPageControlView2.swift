@@ -22,7 +22,7 @@ final class BottomPageControlView2: BaseView, View {
     
     var index: Int = 0 {
         didSet {
-            previousButton.isEnabled = index == 0 ? false : true
+            previousButton.isEnabled = index == 1 ? false : true
             nextButton.isEnabled = index == totalItem ? false : true
         }
     }
@@ -52,6 +52,7 @@ extension BottomPageControlView2 {
             .map { ($0.rowNum, $0.totalItem) }
             .bind(onNext: updateIndexLabel)
             .disposed(by: disposeBag)
+
     }
 }
 

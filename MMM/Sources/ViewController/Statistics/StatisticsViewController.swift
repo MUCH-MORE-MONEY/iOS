@@ -11,6 +11,7 @@ import RxSwift
 import RxCocoa
 import ReactorKit
 import RxDataSources
+import UIKit
 
 // 상속하지 않으려면 final 꼭 붙이기
 final class StatisticsViewController: BaseViewController, View {
@@ -349,9 +350,9 @@ extension StatisticsViewController: SkeletonLoadable {
 			$0.add(firstGroup, forKey: "backgroundColor")
 		}
 		
-		let view = UIView(frame: .init(origin: .zero, size: .init(width: 150, height: 30)))
+		let view = UIView(frame: .init(origin: .zero, size: .init(width: 230, height: 30)))
 		monthButton = monthButton.then {
-			$0.frame = .init(origin: .init(x: 8, y: 0), size: .init(width: 70, height: 30))
+			$0.frame = .init(origin: .init(x: 8, y: 0), size: .init(width: 230, height: 30))
 			$0.setTitle(month.getFormattedDate(format: "M월"), for: .normal)
 			$0.setImage(R.Icon.arrowExpandMore16, for: .normal)
 			$0.setTitleColor(R.Color.white, for: .normal)

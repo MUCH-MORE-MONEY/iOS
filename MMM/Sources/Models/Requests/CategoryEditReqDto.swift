@@ -24,3 +24,10 @@ struct CategoryDetailListReqDto: Encodable {
 	var economicActivityCategoryCd: String
 	var economicActivityDvcd: String
 }
+
+/// 경제활동구분 코드 기준 카테고리별 월간 경제활동 목록 전체 조회
+/// 01: 지출, 02: 수입
+struct CategoryListReqDto: Encodable {
+    var dateYM: String
+    var economicActivityDvcd: String
+}

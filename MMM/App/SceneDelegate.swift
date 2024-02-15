@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import FirebaseRemoteConfig
+import StoreKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	
@@ -55,7 +57,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 		window?.makeKeyAndVisible()
 	}
-	
+    
 	// background 에서 foreground 로 진입
 	func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
 		guard let url = URLContexts.first?.url else { return }
@@ -90,6 +92,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	
     // 앱을 들어왔을 경우 badge 초기화
 	func sceneWillEnterForeground(_ scene: UIScene) {
+        checkAndUpdateIfNeeded()
         UIApplication.shared.applicationIconBadgeNumber = 0
 	}
 	
@@ -100,3 +103,87 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	}
 }
 
+extension SceneDelegate {
+    // 업데이트가 필요한지 확인하는 함수
+     func checkAndUpdateIfNeeded() {
+         // 현재 앱스토어에 있는 버전
+         DispatchQueue.main.async { [weak self] in
+             guard let self = self else { return }
+             Task {
+                 do {
+                     let data = try await AppstoreCheck().latestVersionByFirebase()
+                     guard let version = data.0, let forceUpdate = data.1 else { return }
+                     
+                     let deferredVersion = Common.getDefferedVersion()
+                     
+                     print("remote config version : \(version)")
+                     print("forceUpdate : \(forceUpdate)")
+                     let remoteVersion = version
+                     
+            //          현재 프로젝트의 버전
+                     let currentProjectVersion = AppstoreCheck.appVersion ?? ""
+                     
+                     // 앱스토어에 있는 버전을 .마다 나눈 것 (예: 1.2.1 버전이라면 [1, 2, 1])
+                     let splitMarketingVersion = remoteVersion.split(separator: ".").map { $0 }
+                     
+                     // 현재 프로젝트 버전을 .마다 나눈 것
+                     let splitCurrentProjectVersion = currentProjectVersion.split(separator: ".").map { $0 }
+                     
+                     // 강제 업데이트 유무
+                     if forceUpdate {
+                         self.showUpdateAlert(version: remoteVersion)
+                     }
+                     // Major 버전 비교
+                     else if splitCurrentProjectVersion[0] < splitMarketingVersion[0] {
+                         let splitDeferredVersion = deferredVersion.split(separator: ".").map { $0 }
+                         if splitDeferredVersion[0] < splitMarketingVersion[0] {
+                             self.showUpdateAlert(version: remoteVersion)
+                         }
+                         
+                     // Minor 비전 비교
+                     } else if splitCurrentProjectVersion[1] < splitMarketingVersion[1] {
+                         let splitDeferredVersion = deferredVersion.split(separator: ".").map { $0 }
+                         if splitDeferredVersion[1] < splitMarketingVersion[1] {
+                             self.showUpdateAlert(version: remoteVersion)
+                         }
+                         
+                     // 나머지 상황에서는 업데이트 알럿을 띄우지 않음(patch)
+                     } else {
+                         Common.setDeferredVersion(version)
+                         debugPrint("현재 최신 버전입니다.")
+                     }
+                     
+                 } catch {
+                     debugPrint("Error \(error)")
+                 }
+             }
+         }
+     }
+     
+    // 알럿을 띄우는 함수
+    func showUpdateAlert(version: String) {
+        let alert = UIAlertController(
+            title: "신규 업데이트 알림 📢",
+            message: """
+            mmm이 여러분의 원활한 가계부 작성을 위해 앱에서 발생하던 문제들을 개선했어요.
+            업데이트하여 더 쾌적한 mmm을 경험하세요.
+            """,
+            preferredStyle: .alert
+        )
+        
+        // 업데이트 버튼을 누르면 앱스토어로 이동
+        let updateAction = UIAlertAction(title: "업데이트", style: .default) { _ in
+            AppstoreCheck().openAppStore()
+        }
+        // "나중에" 버튼을 누를 경우 현재 remoteConfig version을 저장
+        let laterAction = UIAlertAction(title: "나중에", style: .cancel) { _ in
+            Common.setDeferredVersion(version)
+        }
+        
+        alert.addAction(updateAction)
+        alert.addAction(laterAction)
+        
+        alert.preferredAction = updateAction
+        self.window?.rootViewController?.present(alert, animated: true, completion: nil)
+    }
+}

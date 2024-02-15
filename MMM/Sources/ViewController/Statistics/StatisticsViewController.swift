@@ -61,8 +61,8 @@ final class StatisticsViewController: BaseViewController, View {
 	private lazy var headerView = UIView()
 	private lazy var titleView = StatisticsTitleView()
 	private lazy var newTitleView = StatisticsNewTitleSettingView()
-	private lazy var averageView = StatisticsAverageView()
 	private lazy var categoryView = StatisticsCategoryView()
+	private lazy var averageView = StatisticsAverageView()
 	private lazy var activityView = StatisticsActivityView(timer: timer)
 	private lazy var satisfactionView = StatisticsSatisfactionView() // 만족도 선택
 	private lazy var tableView = UITableView()
@@ -340,6 +340,7 @@ extension StatisticsViewController: SkeletonLoadable {
 		headerView.backgroundColor = R.Color.gray900
 		categoryView.reactor = self.reactor // reactor 주입
 		activityView.reactor = self.reactor // reactor 주입
+		averageView.reactor = self.reactor // reactor 주입
 		satisfactionView.reactor = self.reactor // reactor 주입
 		
 		let firstGroup = makeAnimationGroup(startColor: R.Color.gray800, endColor: R.Color.gray600)

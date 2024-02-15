@@ -5,12 +5,14 @@
 //  Created by geonhyeong on 2023/08/21.
 //
 
+import UIKit
 import Then
 import SnapKit
-import UIKit
+import RxCocoa
+import ReactorKit
 
 // 상속하지 않으려면 final 꼭 붙이기
-final class StatisticsAverageView: BaseView {
+final class StatisticsAverageView: BaseView, View {
 	typealias Reactor = StatisticsReactor
 
 	// MARK: - Constants
@@ -23,7 +25,37 @@ final class StatisticsAverageView: BaseView {
 	private lazy var titleLabel = UILabel() // 이번 달 경제활동 만족도
 	private lazy var satisfactionLabel = UILabel()
 	private lazy var starImageView = UIImageView() // ⭐️
+	private lazy var sumurryButton = UIButton() // 요약보기
+	
+	func bind(reactor: StatisticsReactor) {
+		bindState(reactor)
+		bindAction(reactor)
+	}
 }
+//MARK: - Bind
+extension StatisticsAverageView {
+	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
+	private func bindAction(_ reactor: StatisticsReactor) {
+		// 요약보기/닫기
+		sumurryButton.rx.tap
+			.withUnretained(self)
+			.subscribe(onNext: { this, _ in
+				this.sumurryButton.isSelected.toggle()
+				
+				// 요약하기
+				if this.sumurryButton.isSelected {
+					this.sumurryButton.setTitle("요약보기", for: .normal)
+				} else { // 닫기
+					this.sumurryButton.setTitle("닫기", for: .normal)
+				}
+			}).disposed(by: disposeBag)
+	}
+	
+	// MARK: 데이터 바인딩 처리 (Reactor -> View)
+	private func bindState(_ reactor: StatisticsReactor) {
+	}
+}
+
 //MARK: - Action
 extension StatisticsAverageView {
 	// 외부에서 설정
@@ -63,12 +95,18 @@ extension StatisticsAverageView {
 			$0.font = R.Font.body3
 			$0.textColor = R.Color.white
 		}
+		
+		sumurryButton = sumurryButton.then {
+			$0.setTitle("요약보기", for: .normal)
+			$0.setTitleColor(R.Color.gray500, for: .normal)
+			$0.titleLabel?.font = R.Font.body4
+		}
 	}
 	
 	override func setHierarchy() {
 		super.setHierarchy()
 		
-		addSubviews(starImageView, satisfactionLabel, titleLabel)
+		addSubviews(starImageView, satisfactionLabel, titleLabel, sumurryButton)
 	}
 	
 	override func setLayout() {
@@ -87,6 +125,12 @@ extension StatisticsAverageView {
 		titleLabel.snp.makeConstraints {
 			$0.centerY.equalToSuperview()
 			$0.leading.equalTo(satisfactionLabel.snp.trailing).offset(8)
+		}
+		
+		sumurryButton.snp.makeConstraints {
+			$0.centerY.equalToSuperview()
+			$0.height.equalToSuperview()
+			$0.trailing.equalToSuperview().inset(UI.sideMargin)
 		}
 	}
 }

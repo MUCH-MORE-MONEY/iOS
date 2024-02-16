@@ -12,6 +12,7 @@ struct AddScheduleRepetitionView: View {
     let times = [1,2,3,4,5]
     @State private var selectedID = "횟수"
     @State private var timeSelected = 1
+    @State private var date = Date()
     
     var body: some View {
         VStack {
@@ -38,27 +39,25 @@ struct AddScheduleRepetitionView: View {
                     
                     if selectedID == items[0] {
                         Picker("selected student", selection: $timeSelected) {
-                                    ForEach(0 ..< times.count) {
-                                        Text("\(self.times[$0])")
-                                    }
+                            ForEach(0 ..< times.count) {
+                                Text("\(self.times[$0])")
+                            }
                         }.pickerStyle(.inline)
-
+                        
                     }
                     RadioButton(items[1], callback: { id in
                         selectedID = id
                     }, selectedID: selectedID)
                     
                     if selectedID == items[1] {
-                        Picker("selected student", selection: $timeSelected) {
-                                    ForEach(0 ..< times.count) {
-                                        Text("\(self.times[$0])")
-                                    }
-                        }.pickerStyle(.inline)
+                        
+                        
+                        DatePicker(selection: $date) {
 
+                        }
+                        .datePickerStyle(.wheel)
                     }
                 }
-                
-
             }
             .padding([.leading, .trailing], 24)
             

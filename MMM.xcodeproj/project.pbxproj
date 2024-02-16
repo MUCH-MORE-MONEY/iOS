@@ -47,7 +47,8 @@
 		45D810082B4BDCB200697EDC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45D810072B4BDCB200697EDC /* Foundation.framework */; };
 		45D878A22B5A56380098F30B /* StarPickerSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D878A12B5A56380098F30B /* StarPickerSheetViewController.swift */; };
 		45D878A42B5A5B550098F30B /* StarPickerSheetReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D878A32B5A5B550098F30B /* StarPickerSheetReactor.swift */; };
-		45F393252B7E2298007AB11B /* ScheduleRepetitionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F393242B7E2298007AB11B /* ScheduleRepetitionView.swift */; };
+		45F393252B7E2298007AB11B /* AddScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F393242B7E2298007AB11B /* AddScheduleView.swift */; };
+		45FA74C22B7F33FD0002C038 /* AddScheduleRepetitionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FA74C12B7F33FD0002C038 /* AddScheduleRepetitionView.swift */; };
 		6A0379752A2443B9005EE07F /* Ex+UITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0379742A2443B9005EE07F /* Ex+UITextView.swift */; };
 		6A03BB4C2ADD555D00F86756 /* AddCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A03BB4B2ADD555D00F86756 /* AddCategoryViewController.swift */; };
 		6A03FEE32ADBDB7300DA3D15 /* AddCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A03FEE22ADBDB7300DA3D15 /* AddCategoryView.swift */; };
@@ -357,7 +358,8 @@
 		45D810072B4BDCB200697EDC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		45D878A12B5A56380098F30B /* StarPickerSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarPickerSheetViewController.swift; sourceTree = "<group>"; };
 		45D878A32B5A5B550098F30B /* StarPickerSheetReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarPickerSheetReactor.swift; sourceTree = "<group>"; };
-		45F393242B7E2298007AB11B /* ScheduleRepetitionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleRepetitionView.swift; sourceTree = "<group>"; };
+		45F393242B7E2298007AB11B /* AddScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddScheduleView.swift; sourceTree = "<group>"; };
+		45FA74C12B7F33FD0002C038 /* AddScheduleRepetitionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddScheduleRepetitionView.swift; sourceTree = "<group>"; };
 		6A0379742A2443B9005EE07F /* Ex+UITextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UITextView.swift"; sourceTree = "<group>"; };
 		6A03BB4B2ADD555D00F86756 /* AddCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryViewController.swift; sourceTree = "<group>"; };
 		6A03FEE22ADBDB7300DA3D15 /* AddCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryView.swift; sourceTree = "<group>"; };
@@ -738,6 +740,15 @@
 				C4C0CB012A23A06F00C41FF4 /* EditPriceViewController.swift */,
 			);
 			path = Price;
+			sourceTree = "<group>";
+		};
+		45FA74C32B7F35270002C038 /* AddSchedule */ = {
+			isa = PBXGroup;
+			children = (
+				45FA74C12B7F33FD0002C038 /* AddScheduleRepetitionView.swift */,
+				45F393242B7E2298007AB11B /* AddScheduleView.swift */,
+			);
+			path = AddSchedule;
 			sourceTree = "<group>";
 		};
 		6A08B47B29FF5D3D0080719E /* Utilities */ = {
@@ -1270,6 +1281,7 @@
 		C46409C82AB8805500A899AD /* BottomSheet */ = {
 			isa = PBXGroup;
 			children = (
+				45FA74C32B7F35270002C038 /* AddSchedule */,
 				45D07CD02AC4071F001C08AB /* CustomPush */,
 				C4199DD229FE3051006E5DA8 /* BottomSheetViewController.swift */,
 				C46409D92AB9625E00A899AD /* BottomSheetViewController2.swift */,
@@ -1279,7 +1291,6 @@
 				C46D5E622AD174AD00EBE5D7 /* CategoryEditUpperBottomSheetViewController.swift */,
 				C4BBD2652AB9E16D0055FA65 /* DateBottomSheetViewController.swift */,
 				C4BBD26B2ABAD4A60055FA65 /* SatisfactionBottomSheetViewController.swift */,
-				45F393242B7E2298007AB11B /* ScheduleRepetitionView.swift */,
 				C4C84FEE2B0744F500F7757B /* StatisticsDateBottomSheetViewController.swift */,
 			);
 			path = BottomSheet;
@@ -1663,6 +1674,7 @@
 				C41193F529D3D7FB003DBC15 /* Ex+NSObject.swift in Sources */,
 				45D878A42B5A5B550098F30B /* StarPickerSheetReactor.swift in Sources */,
 				6A08B47D29FF5D530080719E /* Log.swift in Sources */,
+				45FA74C22B7F33FD0002C038 /* AddScheduleRepetitionView.swift in Sources */,
 				45CA1E9D2B4CE7EF002019E6 /* EditActivityReactor.swift in Sources */,
 				C4170B572A93A58A00CE0A65 /* StatisticsCategoryView.swift in Sources */,
 				C460DBAA2A96056100530351 /* StatisticsSatisfactionTableViewCell.swift in Sources */,
@@ -1783,7 +1795,7 @@
 				6A381E0A29E8F40700E0974F /* AddViewController.swift in Sources */,
 				C4EB8CB62AC44448005FBAF1 /* CategoryEditBottomSheetReactor.swift in Sources */,
 				6A0F234029DBA8AA0063673B /* DataExportViewController.swift in Sources */,
-				45F393252B7E2298007AB11B /* ScheduleRepetitionView.swift in Sources */,
+				45F393252B7E2298007AB11B /* AddScheduleView.swift in Sources */,
 				C4F1A9762AFD2E4F00843708 /* WidgetResDto.swift in Sources */,
 				C4BBD2642AB9DE8C0055FA65 /* StatisticsProvider.swift in Sources */,
 				6A14E7092A9DCA720071805D /* PushReqDto.swift in Sources */,

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ScheduleRepetitionView: View {
+struct AddScheduleView: View {
     let items = ["반복 안함", "매일", "매주 {월}요일", "매월 {15}일", "매월 {3}번째 {월}요일", "주중 매일 (월-금)"]
     
     var body: some View {
@@ -116,5 +116,5 @@ struct RadioButtonGroup: View {
 }
 
 #Preview {
-    ScheduleRepetitionView()
+    AddScheduleView()
 }

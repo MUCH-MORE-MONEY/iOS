@@ -49,6 +49,7 @@
 		45D878A42B5A5B550098F30B /* StarPickerSheetReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D878A32B5A5B550098F30B /* StarPickerSheetReactor.swift */; };
 		45F393252B7E2298007AB11B /* AddScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F393242B7E2298007AB11B /* AddScheduleView.swift */; };
 		45FA74C22B7F33FD0002C038 /* AddScheduleRepetitionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FA74C12B7F33FD0002C038 /* AddScheduleRepetitionView.swift */; };
+		45FA74C72B7F35EB0002C038 /* AddScheduleTapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FA74C62B7F35EB0002C038 /* AddScheduleTapView.swift */; };
 		6A0379752A2443B9005EE07F /* Ex+UITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0379742A2443B9005EE07F /* Ex+UITextView.swift */; };
 		6A03BB4C2ADD555D00F86756 /* AddCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A03BB4B2ADD555D00F86756 /* AddCategoryViewController.swift */; };
 		6A03FEE32ADBDB7300DA3D15 /* AddCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A03FEE22ADBDB7300DA3D15 /* AddCategoryView.swift */; };
@@ -360,6 +361,7 @@
 		45D878A32B5A5B550098F30B /* StarPickerSheetReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarPickerSheetReactor.swift; sourceTree = "<group>"; };
 		45F393242B7E2298007AB11B /* AddScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddScheduleView.swift; sourceTree = "<group>"; };
 		45FA74C12B7F33FD0002C038 /* AddScheduleRepetitionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddScheduleRepetitionView.swift; sourceTree = "<group>"; };
+		45FA74C62B7F35EB0002C038 /* AddScheduleTapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddScheduleTapView.swift; sourceTree = "<group>"; };
 		6A0379742A2443B9005EE07F /* Ex+UITextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UITextView.swift"; sourceTree = "<group>"; };
 		6A03BB4B2ADD555D00F86756 /* AddCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryViewController.swift; sourceTree = "<group>"; };
 		6A03FEE22ADBDB7300DA3D15 /* AddCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryView.swift; sourceTree = "<group>"; };
@@ -1300,6 +1302,7 @@
 			isa = PBXGroup;
 			children = (
 				6A04FA042A1C4BB00034C114 /* AddImageView.swift */,
+				45FA74C62B7F35EB0002C038 /* AddScheduleTapView.swift */,
 				6A1322F02A089B2900CEEC81 /* BasePaddingLabel.swift */,
 				6A1479622A0DE0690045B8C1 /* CameraImageView.swift */,
 				C4DBAA3629DD7B2600D1BB97 /* CountPushLabel.swift */,
@@ -1763,6 +1766,7 @@
 				C4E96B7A2AF7E27100C59983 /* CategoryEditEmptyView.swift in Sources */,
 				6A8605B62A24C83D00DF68BD /* UpdateResDto.swift in Sources */,
 				45D401212B33CF6200CE0351 /* DetailViewController2.swift in Sources */,
+				45FA74C72B7F35EB0002C038 /* AddScheduleTapView.swift in Sources */,
 				6AF653582AF92B0700035AEE /* LeftAlignedCollectionViewFlowLayout.swift in Sources */,
 				6A0531222A22183D0065DB54 /* InsertResDto.swift in Sources */,
 				6A27E6952A205338001A7F04 /* Ex+UITextField.swift in Sources */,

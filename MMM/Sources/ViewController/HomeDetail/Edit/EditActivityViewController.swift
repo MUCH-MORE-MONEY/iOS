@@ -12,6 +12,7 @@ import SnapKit
 import Photos
 import Lottie
 import FirebaseAnalytics
+import SwiftUI
 
 protocol StarPickerViewProtocol: AnyObject {
 	func willPickerDismiss(_ rate: Double)
@@ -229,6 +230,19 @@ extension EditActivityViewController {
         picker.delegate = bottomSheetVC
         bottomSheetVC.modalPresentationStyle = .overFullScreen
         self.present(bottomSheetVC, animated: false, completion: nil)
+    }
+    
+    private func didTapAddScheduleTapView(_ type: UIView.GestureType) {
+        // 키보드 내리기
+        self.titleTextFeild.resignFirstResponder()
+        
+        
+        let vc = UIHostingController(rootView: AddScheduleView())
+        let bottomSheetVC = BottomSheetViewController(contentViewController: vc)
+        bottomSheetVC.setSetting(percentHeight: 542/812)
+        
+        bottomSheetVC.modalPresentationStyle = .overFullScreen
+        self.present(bottomSheetVC, animated: false)
     }
 }
 
@@ -588,6 +602,10 @@ extension EditActivityViewController {
                 self.didTapCategory()
             }.store(in: &cancellable)
 		
+        addScheduleTapView.gesturePublisher()
+            .sinkOnMainThread(receiveValue: didTapAddScheduleTapView)
+            .store(in: &cancellable)
+        
 		// MARK: - CRUD Publisher
 		saveButton.tapPublisher
 			.sinkOnMainThread(receiveValue: didTapSaveButton)

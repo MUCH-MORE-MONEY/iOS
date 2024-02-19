@@ -45,6 +45,9 @@ public extension MMMResource {
 		// MARK: - h5
 		/// Weight : bold, Size : 20
 		public static let h5 = prtendard(family: .bold, size: 20)
+        // MARK: - h6
+        /// Weight : medium, Size : 20
+        public static let h6 = prtendard(family: .medium, size: 20)
         // MARK: - title1
         /// Weight : bold, Size : 18
 		public static let title1 = prtendard(family: .bold, size: 18)

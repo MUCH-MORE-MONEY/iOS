@@ -14,7 +14,6 @@ extension View {
         
         // why we using overlay
         // bcz it will automatically user the SwiftUI frame size only
-
         return self
             .background {
                 HalfSheetHelper(sheetView: sheetView(), showSheet: showSheet, onEnd: onEnd)
@@ -40,14 +39,14 @@ struct HalfSheetHelper<SheetView: View>: UIViewControllerRepresentable {
     }
     
     func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+        let sheetController = CustomHostingController(rootView: sheetView)
+        sheetController.presentationController?.delegate = context.coordinator
         if showSheet {
             // presenting Modal View
-            let sheetController = CustomHostingController(rootView: sheetView)
-            sheetController.presentationController?.delegate = context.coordinator
             uiViewController.present(sheetController, animated: true)
         } else {
             // closing view when showSheet toggled again
-            uiViewController.dismiss(animated: true )
+            sheetController.dismiss(animated: true)
         }
     }
     
@@ -73,12 +72,8 @@ final class CustomHostingController<Content: View>: UIHostingController<Content>
                 .medium(),
                 .large()
             ]
-            
             // grab protion
             presentationController.prefersGrabberVisible = true
-            
         }
-        
-        
     }
 }

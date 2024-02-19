@@ -237,12 +237,16 @@ extension EditActivityViewController {
         self.titleTextFeild.resignFirstResponder()
         
         
-        let vc = UIHostingController(rootView: AddScheduleView())
-        let bottomSheetVC = BottomSheetViewController(contentViewController: vc)
-        bottomSheetVC.setSetting(percentHeight: 542/812)
-        
-        bottomSheetVC.modalPresentationStyle = .overFullScreen
-        self.present(bottomSheetVC, animated: false)
+        let vc = UIHostingController(rootView: VStack {
+            AddScheduleView()
+            Spacer()
+        })
+//        let bottomSheetVC = BottomSheetViewController(contentViewController: vc)
+//        bottomSheetVC.setSetting(percentHeight: 542/812)
+//        
+//        bottomSheetVC.modalPresentationStyle = .overFullScreen
+//        self.present(bottomSheetVC, animated: false)
+        self.present(vc, animated: true)
     }
 }
 

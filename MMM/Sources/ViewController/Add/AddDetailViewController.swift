@@ -223,12 +223,15 @@ extension AddDetailViewController {
         self.titleTextFeild.resignFirstResponder()
         
         
-        let vc = UIHostingController(rootView: AddScheduleView())
-        let bottomSheetVC = BottomSheetViewController(contentViewController: vc)
-        bottomSheetVC.setSetting(percentHeight: 542/812)
+        let vc = UIHostingController(rootView: VStack {
+            AddScheduleView()
+            Spacer()
+        })
+//        let bottomSheetVC = BottomSheetViewController(contentViewController: vc)
+//        bottomSheetVC.setSetting(percentHeight: 542/812)
         
-        bottomSheetVC.modalPresentationStyle = .overFullScreen
-        self.present(bottomSheetVC, animated: false)
+        vc.modalPresentationStyle = .overFullScreen
+        self.present(vc, animated: false)
     }
 }
 

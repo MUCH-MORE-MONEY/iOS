@@ -1,15 +1,17 @@
 //
-//  AddCategoryView.swift
+//  AddScheduleTapView.swift
 //  MMM
 //
-//  Created by Park Jungwoo on 10/15/23.
+//  Created by yuraMacBookPro on 2/16/24.
 //
+
+import UIKit
 
 import UIKit
 import SnapKit
 import Then
 
-final class AddCategoryView: BaseView {
+final class AddScheduleTapView: BaseView {
     // MARK: - UI Components
     private lazy var titleLabel = UILabel()
     private lazy var categoryImageView = UIImageView()
@@ -26,7 +28,7 @@ final class AddCategoryView: BaseView {
 }
 
 // MARK: - Action
-extension AddCategoryView {
+extension AddScheduleTapView {
     func setTitleAndColor(by text: String) {
         titleLabel.text = text == "" ? "카테고리" : text
         titleLabel.textColor = text == "" ? R.Color.gray400 : R.Color.gray800
@@ -38,7 +40,7 @@ extension AddCategoryView {
 }
 
 // MARK: - setup
-extension AddCategoryView {
+extension AddScheduleTapView {
     override func setup() {
         setAttribute()
         setHierarchy()
@@ -47,13 +49,13 @@ extension AddCategoryView {
     
     override func setAttribute() {
         titleLabel = titleLabel.then {
-            $0.text = "카테고리"
+            $0.text = "일정반복"
             $0.font = R.Font.body1
             $0.textColor = R.Color.gray400
         }
         
         categoryImageView = categoryImageView.then {
-            $0.image = R.Icon.iconCategory24
+            $0.image = R.Icon.iconRepeat24
             $0.contentMode = .scaleAspectFit
         }
         

@@ -11,6 +11,7 @@ import SnapKit
 import Then
 import Photos
 import Lottie
+import SwiftUI
 
 final class AddDetailViewController: BaseAddActivityViewController, UINavigationControllerDelegate {
     // MARK: - UI Components
@@ -216,6 +217,24 @@ extension AddDetailViewController {
         bottomSheetVC.modalPresentationStyle = .overFullScreen
         self.present(bottomSheetVC, animated: false, completion: nil)
     }
+    
+    private func didTapAddScheduleTapView(_ type: UIView.GestureType) {
+        // 키보드 내리기
+        self.titleTextFeild.resignFirstResponder()
+        
+        
+        let vc = UIHostingController(rootView: VStack {
+            AddScheduleView()
+            Spacer()
+        })
+//        let bottomSheetVC = BottomSheetViewController(contentViewController: vc)
+//        bottomSheetVC.setSetting(percentHeight: 542/812)
+        
+        vc.modalPresentationStyle = .overFullScreen
+        self.present(vc, animated: false) {
+            debugPrint("뷰 올라간다")
+        }
+    }
 }
 
 // MARK: - Star Picker의 확인을 눌렀을 때
@@ -342,6 +361,10 @@ extension AddDetailViewController {
             .sink { _ in
                 self.didTapCategory()
             }.store(in: &cancellable)
+        
+        addScheduleTapView.gesturePublisher()
+            .sinkOnMainThread(receiveValue: didTapAddScheduleTapView)
+            .store(in: &cancellable)
         
         // MARK: - UI Bind
         viewModel.$type

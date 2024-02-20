@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		451B2B8B2B8449430028A335 /* BudgetSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451B2B8A2B8449430028A335 /* BudgetSettingView.swift */; };
+		451B2B8D2B846F280028A335 /* BudgetSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451B2B8C2B846F280028A335 /* BudgetSettingViewModel.swift */; };
 		454B64752B8312B70091B78A /* Ex+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454B64742B8312B70091B78A /* Ex+View.swift */; };
 		45AFC2A92AC296E1004DF76E /* CustomPushTextSettingReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AFC2A82AC296E1004DF76E /* CustomPushTextSettingReactor.swift */; };
 		45AFC2AB2AC2A564004DF76E /* CustomPushTextSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AFC2AA2AC2A564004DF76E /* CustomPushTextSettingViewController.swift */; };
@@ -342,6 +343,7 @@
 
 /* Begin PBXFileReference section */
 		451B2B8A2B8449430028A335 /* BudgetSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetSettingView.swift; sourceTree = "<group>"; };
+		451B2B8C2B846F280028A335 /* BudgetSettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetSettingViewModel.swift; sourceTree = "<group>"; };
 		454B64742B8312B70091B78A /* Ex+View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+View.swift"; sourceTree = "<group>"; };
 		45AFC2A82AC296E1004DF76E /* CustomPushTextSettingReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPushTextSettingReactor.swift; sourceTree = "<group>"; };
 		45AFC2AA2AC2A564004DF76E /* CustomPushTextSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPushTextSettingViewController.swift; sourceTree = "<group>"; };
@@ -670,6 +672,7 @@
 			isa = PBXGroup;
 			children = (
 				451B2B8A2B8449430028A335 /* BudgetSettingView.swift */,
+				451B2B8C2B846F280028A335 /* BudgetSettingViewModel.swift */,
 			);
 			path = Budget;
 			sourceTree = "<group>";
@@ -1815,6 +1818,7 @@
 				C4EA5B4229FA26E0008D1564 /* HomeHeaderStackView.swift in Sources */,
 				C4BBD2932AC04C550055FA65 /* CategoryEditSectionModel.swift in Sources */,
 				6A4313E22A13046E00095041 /* BottomPageControlView.swift in Sources */,
+				451B2B8D2B846F280028A335 /* BudgetSettingViewModel.swift in Sources */,
 				C4BBD27F2ABEF6360055FA65 /* CategoryDetailReactor.swift in Sources */,
 				C4C792A62A358517007FD6AA /* SummaryResDto.swift in Sources */,
 				6AF9A14D2AA9BD640069981A /* PushSettingDetailReactor.swift in Sources */,

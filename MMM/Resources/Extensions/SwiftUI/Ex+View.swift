@@ -67,11 +67,17 @@ struct HalfSheetHelper<SheetView: View>: UIViewControllerRepresentable {
 // Custom UIHostingController for halfSheet
 final class CustomHostingController<Content: View>: UIHostingController<Content> {
     override func viewDidLoad() {
+        
+        var detents: [UISheetPresentationController.Detent] = []
+        
+        if #available(iOS 16.0, *) {
+            detents = [.custom { _ in return UIScreen.height * 0.5 },
+                       .custom { _ in return UIScreen.height * 0.8 }]
+        } else {
+            detents = [.medium(), .large()]
+        }
         if let presentationController = presentationController as? UISheetPresentationController {
-            presentationController.detents = [
-                .medium(),
-                .large()
-            ]
+            presentationController.detents = detents
             // grab protion
             presentationController.prefersGrabberVisible = true
         }

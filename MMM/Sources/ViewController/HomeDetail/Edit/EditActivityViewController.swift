@@ -236,17 +236,31 @@ extension EditActivityViewController {
         // 키보드 내리기
         self.titleTextFeild.resignFirstResponder()
         
-        
-        let vc = UIHostingController(rootView: VStack {
+        let swiftUIView = VStack {
             AddScheduleView()
             Spacer()
-        })
-//        let bottomSheetVC = BottomSheetViewController(contentViewController: vc)
-//        bottomSheetVC.setSetting(percentHeight: 542/812)
-//        
-//        bottomSheetVC.modalPresentationStyle = .overFullScreen
-//        self.present(bottomSheetVC, animated: false)
-        self.present(vc, animated: true)
+        }
+        
+        let hostingController = UIHostingController(rootView: swiftUIView)
+        
+        if #available(iOS 16.0, *) {
+            if let sheetController =  hostingController.sheetPresentationController {
+                sheetController.detents = [
+                        .custom { _ in
+                            return UIScreen.height * 0.6
+                        }
+                    ]
+                
+                sheetController.prefersGrabberVisible = true
+                self.present(hostingController, animated: true)
+            }
+        } else {
+            let bottomSheetVC = BottomSheetViewController(contentViewController: hostingController)
+            bottomSheetVC.setSetting(percentHeight: 542/812)
+
+            bottomSheetVC.modalPresentationStyle = .overFullScreen
+            self.present(bottomSheetVC, animated: false)
+        }
     }
 }
 

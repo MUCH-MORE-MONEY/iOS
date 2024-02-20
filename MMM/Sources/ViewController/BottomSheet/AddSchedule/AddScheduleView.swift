@@ -61,9 +61,6 @@ struct AddScheduleView: View {
             .padding([.leading, .trailing], 24)
             Spacer()
         }
-//        .sheet(isPresented: $isShowingSheet, content: {
-//            AddScheduleRepetitionView()
-//        })
         .halfSheet(showSheet: $isShowingSheet) {
             VStack {
                 AddScheduleRepetitionView()

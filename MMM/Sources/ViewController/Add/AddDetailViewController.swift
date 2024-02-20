@@ -231,7 +231,9 @@ extension AddDetailViewController {
 //        bottomSheetVC.setSetting(percentHeight: 542/812)
         
         vc.modalPresentationStyle = .overFullScreen
-        self.present(vc, animated: false)
+        self.present(vc, animated: false) {
+            debugPrint("뷰 올라간다")
+        }
     }
 }
 

@@ -105,7 +105,6 @@ extension HomeViewController {
         // 경제활동 추가뷰에서 현재 캘린더에서 선택된 날짜의 Date를 datepicker에 보여주기 위해 저장
         // UserDefualt에 저장해도 해당 함수는 최초 한번 실행되기 때문에 앱을 다시 켜도 초기값은 현재 Date로 됨.
         Common.setCalendarSelectedDate(date)
-        debugPrint("캘린더 didSelected : \(date)")
 		self.calendar.select(date)
 		self.dayLabel.text = date.getFormattedDate(format: "dd일 (EEEEE)") // 선택된 날짜
 		self.viewModel.getDailyList(date.getFormattedYMD())

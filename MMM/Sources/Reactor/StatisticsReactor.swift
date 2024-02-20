@@ -42,7 +42,7 @@ final class StatisticsReactor: Reactor {
 		var satisfaction: Satisfaction = .low // 만족도
 		var activityList: [StatisticsSectionModel] = []
 		var payBarList: [CategoryBar] = []		// 지출 카테고리
-		var earnBarList: [CategoryBar] = []	// 수입 카테고리
+		var earnBarList: [CategoryBar] = []		// 수입 카테고리
 		var activitySatisfactionList: [EconomicActivity] = []
 		var activityDisappointingList: [EconomicActivity] = []
 		var isLoading = true // 로딩

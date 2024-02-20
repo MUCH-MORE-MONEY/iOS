@@ -12,6 +12,7 @@ import RxCocoa
 import ReactorKit
 import RxDataSources
 import UIKit
+import RxGesture
 
 // 상속하지 않으려면 final 꼭 붙이기
 final class StatisticsViewController: BaseViewController, View {
@@ -152,6 +153,12 @@ extension StatisticsViewController {
 			}
 			.bind(to: reactor.action)
 			.disposed(by: disposeBag)
+        
+        averageView.rx.tapGesture()
+            .when(.recognized)
+            .map { _ in .didTapAverageView }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
@@ -232,6 +239,13 @@ extension StatisticsViewController {
 			.filter { $0 } // true일때만 화면 전환
 			.bind(onNext: pushDetail)
 			.disposed(by: disposeBag)
+        
+        reactor.state
+            .map { $0.isPushBudgetSetting }
+            .distinctUntilChanged()
+            .filter { $0 }
+            .bind(onNext: pushBudgetSettingViewController)
+            .disposed(by: disposeBag)
 	}
 }
 //MARK: - Action
@@ -317,6 +331,15 @@ extension StatisticsViewController {
 		satisfactionView.setData(title: satisfaction.title, score: satisfaction.score)
 		self.satisfaction = satisfaction
 	}
+    
+    
+    /// 에산설정 뷰
+    private func pushBudgetSettingViewController(_ isPush: Bool) {
+        let interface = BudgetSettingViewInterface()
+        let vc = interface.budgetSettingViewUI()
+        
+        navigationController?.pushViewController(vc, animated: true)
+    }
 }
 //MARK: - Attribute & Hierarchy & Layouts
 extension StatisticsViewController: SkeletonLoadable {

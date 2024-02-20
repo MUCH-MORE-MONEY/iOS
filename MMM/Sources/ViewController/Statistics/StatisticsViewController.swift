@@ -155,9 +155,9 @@ extension StatisticsViewController {
 			.bind(to: reactor.action)
 			.disposed(by: disposeBag)
         
-        averageView.rx.tapGesture()
+        newTitleView.rx.tapGesture()
             .when(.recognized)
-            .map { _ in .didTapAverageView }
+            .map { _ in .didTapNewTitleView }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 	}

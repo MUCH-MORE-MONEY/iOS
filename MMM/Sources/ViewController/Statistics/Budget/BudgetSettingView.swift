@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct BudgetSettingView: View {
-    @State var currentStep: String = "1"
+    @State var currentStep: String = "2"
+    @StateObject var budgetSettingViewModel = BudgetSettingViewModel()
     
     var body: some View {
         NavigationView {
@@ -19,7 +20,9 @@ struct BudgetSettingView: View {
                 VStack {
                     switch currentStep {
                     case "1":
-                        BudgetDetail01View()
+                        BudgetDetail01View(budgetSettingViewModel: budgetSettingViewModel)
+                    case "2":
+                        BudgetDetail02View(budgetSettingViewModel: budgetSettingViewModel)
                     default:
                         EmptyView()
                     }

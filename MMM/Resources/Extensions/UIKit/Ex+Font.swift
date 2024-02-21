@@ -84,6 +84,9 @@ public extension MMMResource {
         // MARK: - caption2
         /// Weight : regular, Size : 11
 		public static let caption2 = prtendard(family: .regular, size: 11)
+        // MARK: - regular20
+        /// Weight : regular, Size : 20
+        public static let regular20 = prtendard(family: .regular, size: 20)
 	}
 }
 

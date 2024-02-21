@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct BudgetDetail01View: View {
-//    private let content =
+    @ObservedObject var budgetSettingViewModel: BudgetSettingViewModel
     
     var body: some View {
         VStack {
@@ -30,5 +30,5 @@ struct BudgetDetail01View: View {
 }
 
 #Preview {
-    BudgetDetail01View()
+    BudgetDetail01View(budgetSettingViewModel: BudgetSettingViewModel())
 }

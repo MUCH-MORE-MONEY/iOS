@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		451876CB2B8573CD005EFF6D /* BudgetDetail01View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451876CA2B8573CD005EFF6D /* BudgetDetail01View.swift */; };
+		451876CF2B857EA2005EFF6D /* BudgetDetail02View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451876CE2B857EA2005EFF6D /* BudgetDetail02View.swift */; };
+		451876D12B85BDEB005EFF6D /* PriceTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451876D02B85BDEB005EFF6D /* PriceTextFieldView.swift */; };
 		451B2B8B2B8449430028A335 /* BudgetSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451B2B8A2B8449430028A335 /* BudgetSettingView.swift */; };
 		451B2B8D2B846F280028A335 /* BudgetSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451B2B8C2B846F280028A335 /* BudgetSettingViewModel.swift */; };
 		454B64752B8312B70091B78A /* Ex+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454B64742B8312B70091B78A /* Ex+View.swift */; };
@@ -345,6 +347,8 @@
 
 /* Begin PBXFileReference section */
 		451876CA2B8573CD005EFF6D /* BudgetDetail01View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetDetail01View.swift; sourceTree = "<group>"; };
+		451876CE2B857EA2005EFF6D /* BudgetDetail02View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetDetail02View.swift; sourceTree = "<group>"; };
+		451876D02B85BDEB005EFF6D /* PriceTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceTextFieldView.swift; sourceTree = "<group>"; };
 		451B2B8A2B8449430028A335 /* BudgetSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetSettingView.swift; sourceTree = "<group>"; };
 		451B2B8C2B846F280028A335 /* BudgetSettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetSettingViewModel.swift; sourceTree = "<group>"; };
 		454B64742B8312B70091B78A /* Ex+View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+View.swift"; sourceTree = "<group>"; };
@@ -672,12 +676,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		451876CD2B857E85005EFF6D /* BudgetDetail */ = {
+			isa = PBXGroup;
+			children = (
+				451876CA2B8573CD005EFF6D /* BudgetDetail01View.swift */,
+				451876CE2B857EA2005EFF6D /* BudgetDetail02View.swift */,
+				451876D02B85BDEB005EFF6D /* PriceTextFieldView.swift */,
+			);
+			path = BudgetDetail;
+			sourceTree = "<group>";
+		};
 		451B2B892B84492D0028A335 /* Budget */ = {
 			isa = PBXGroup;
 			children = (
+				451876CD2B857E85005EFF6D /* BudgetDetail */,
 				451B2B8A2B8449430028A335 /* BudgetSettingView.swift */,
 				451B2B8C2B846F280028A335 /* BudgetSettingViewModel.swift */,
-				451876CA2B8573CD005EFF6D /* BudgetDetail01View.swift */,
 			);
 			path = Budget;
 			sourceTree = "<group>";
@@ -1815,8 +1829,10 @@
 				6A27E6952A205338001A7F04 /* Ex+UITextField.swift in Sources */,
 				6A8605B82A24D0B000DF68BD /* DeleteResDto.swift in Sources */,
 				451B2B8B2B8449430028A335 /* BudgetSettingView.swift in Sources */,
+				451876D12B85BDEB005EFF6D /* PriceTextFieldView.swift in Sources */,
 				6AB1151329EE6D9E00D3B813 /* Ex+UITabBar.swift in Sources */,
 				C4DE94662A9658530069B22B /* StatisticsActivityTableViewCell.swift in Sources */,
+				451876CF2B857EA2005EFF6D /* BudgetDetail02View.swift in Sources */,
 				C46D5E672AD1826800EBE5D7 /* CategoryAddUpperBottomSheetViewController.swift in Sources */,
 				C4351B502A1691FB005F95BE /* HighlightViewController.swift in Sources */,
 				6A04FA092A1C7EE80034C114 /* EditActivityViewModel.swift in Sources */,

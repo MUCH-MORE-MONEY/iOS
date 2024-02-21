@@ -145,7 +145,6 @@ extension BaseAddActivityViewController {
             $0.backgroundColor = R.Color.gray800
             $0.setTitleColor(R.Color.gray100, for: .normal)
             $0.titleLabel?.font = R.Font.title1
-            $0.setButtonLayer()
         }
         // CameraImageView와 ViewModel 공유
         

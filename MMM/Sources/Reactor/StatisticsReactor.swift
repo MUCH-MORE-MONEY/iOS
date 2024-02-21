@@ -16,7 +16,7 @@ final class StatisticsReactor: Reactor {
 		case didTapMoreButton // 카테고리 더보기
 		case didTapSatisfactionButton // 만족도 선택
 		case selectCell(IndexPath, StatisticsItem)
-        case didTapAverageView      // 예산 설정하기 탭(임시로 averageView에 넣음)
+        case didTapNewTitleView      // 예산 설정하기 탭(임시로 averageView에 넣음)
 	}
 	
 	// 처리 단위
@@ -42,7 +42,7 @@ final class StatisticsReactor: Reactor {
 		var satisfaction: Satisfaction = .low // 만족도
 		var activityList: [StatisticsSectionModel] = []
 		var payBarList: [CategoryBar] = []		// 지출 카테고리
-		var earnBarList: [CategoryBar] = []	// 수입 카테고리
+		var earnBarList: [CategoryBar] = []		// 수입 카테고리
 		var activitySatisfactionList: [EconomicActivity] = []
 		var activityDisappointingList: [EconomicActivity] = []
 		var isLoading = true // 로딩
@@ -108,7 +108,7 @@ extension StatisticsReactor {
 				.just(.pushDetail(indexPath, item, true)),
 				.just(.pushDetail(indexPath, item, false))
 			])
-        case .didTapAverageView:
+        case .didTapNewTitleView:
             return .concat([
                 .just(.pushBudgetSetting(true)),
                 .just(.pushBudgetSetting(false))

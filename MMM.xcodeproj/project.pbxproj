@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		451876CB2B8573CD005EFF6D /* BudgetDetail01View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451876CA2B8573CD005EFF6D /* BudgetDetail01View.swift */; };
 		451B2B8B2B8449430028A335 /* BudgetSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451B2B8A2B8449430028A335 /* BudgetSettingView.swift */; };
 		451B2B8D2B846F280028A335 /* BudgetSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451B2B8C2B846F280028A335 /* BudgetSettingViewModel.swift */; };
 		454B64752B8312B70091B78A /* Ex+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454B64742B8312B70091B78A /* Ex+View.swift */; };
@@ -343,6 +344,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		451876CA2B8573CD005EFF6D /* BudgetDetail01View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetDetail01View.swift; sourceTree = "<group>"; };
 		451B2B8A2B8449430028A335 /* BudgetSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetSettingView.swift; sourceTree = "<group>"; };
 		451B2B8C2B846F280028A335 /* BudgetSettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetSettingViewModel.swift; sourceTree = "<group>"; };
 		454B64742B8312B70091B78A /* Ex+View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+View.swift"; sourceTree = "<group>"; };
@@ -675,6 +677,7 @@
 			children = (
 				451B2B8A2B8449430028A335 /* BudgetSettingView.swift */,
 				451B2B8C2B846F280028A335 /* BudgetSettingViewModel.swift */,
+				451876CA2B8573CD005EFF6D /* BudgetDetail01View.swift */,
 			);
 			path = Budget;
 			sourceTree = "<group>";
@@ -1712,6 +1715,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				451876CB2B8573CD005EFF6D /* BudgetDetail01View.swift in Sources */,
 				C411940429D53DDF003DBC15 /* ManagementViewController.swift in Sources */,
 				C41193F529D3D7FB003DBC15 /* Ex+NSObject.swift in Sources */,
 				45D878A42B5A5B550098F30B /* StarPickerSheetReactor.swift in Sources */,

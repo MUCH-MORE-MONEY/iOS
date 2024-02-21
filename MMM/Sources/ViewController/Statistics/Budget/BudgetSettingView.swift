@@ -8,14 +8,41 @@
 import SwiftUI
 
 struct BudgetSettingView: View {
+    @State var currentStep: String = "1"
+    
     var body: some View {
-        VStack {
-            SegmentedView()
-                .padding(.top, 16)
-                .padding([.leading, .trailing], 24)
-            Spacer()
+        NavigationView {
+            VStack {
+                SegmentedView(selected: $currentStep)
+                    .padding(.top, 16)
+                    .padding([.leading, .trailing], 24)
+                VStack {
+                    switch currentStep {
+                    case "1":
+                        BudgetDetail01View()
+                    default:
+                        EmptyView()
+                    }
+                    
+
+                }
+                .padding(.top, 48)
+
+                Spacer()
+                Button {
+                    debugPrint("다음버튼 tapped")
+                } label: {
+                    Text("다음")
+                        .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, minHeight: 56)
+
+                        .font(Font(R.Font.title1))
+                        .foregroundStyle(Color(R.Color.gray100))
+                        .background(Color(R.Color.gray800))
+                }
+                .padding([.leading, .trailing, .bottom], 24)
+            }
+            .background(Color(R.Color.gray900))
         }
-        .background(Color(R.Color.gray900))
     }
 }
 
@@ -25,8 +52,8 @@ struct BudgetSettingView: View {
 
 struct SegmentedView: View {
 
-    let segments: [String] = ["OPEN", "COMPLETED", "CANCELLED", "ALL", "Last"]
-    @State private var selected: String = "OPEN"
+    let segments: [String] = ["1", "2", "3", "4", "5"]
+    @Binding var selected: String
     @Namespace var name
 
     var body: some View {

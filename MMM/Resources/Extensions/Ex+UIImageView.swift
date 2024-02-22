@@ -20,9 +20,6 @@ extension UIImageView {
 				if let image = value.image {
 					//캐시가 존재하는 경우
 					self.image = image
-                    
-                    print("width : \(self.image?.size.width)")
-                    print("height : \(self.image?.size.height)")
 				} else {
 					//캐시가 존재하지 않는 경우
 					guard let url = URL(string: urlStr) else {

@@ -168,6 +168,7 @@ extension DetailViewController {
             .store(in: &cancellable)
         
         homeDetailViewModel.$detailActivity
+            .removeDuplicates()
             .sinkOnMainThread { [weak self] value in
                 guard let self = self, let value = value else { return }
                 showLoadingView()

@@ -94,7 +94,8 @@ extension CategoryEditSectionFooter {
 		
 		separatorView.snp.makeConstraints {
 			$0.top.equalTo(categoryAddButton.snp.bottom).offset(16)
-			$0.horizontalEdges.bottom.equalToSuperview()
+			$0.leading.bottom.equalToSuperview()
+			$0.trailing.equalToSuperview().inset(24)
 			$0.height.equalTo(1)
 		}
 	}

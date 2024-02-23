@@ -286,8 +286,9 @@ extension DetailViewController {
 		mainImageView = mainImageView.then {
 			$0.image = R.Icon.camera48
 			$0.backgroundColor = R.Color.gray100
-			$0.contentMode = .scaleToFill
+			$0.contentMode = .scaleAspectFill
 			$0.isHidden = true
+            $0.clipsToBounds = true
 		}
 		
 		cameraImageView = cameraImageView.then {

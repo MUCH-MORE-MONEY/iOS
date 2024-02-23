@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct BudgetSettingView: View {
-    @State var currentStep: String = "2"
+    @State var currentStep: String = "3"
     @StateObject var budgetSettingViewModel = BudgetSettingViewModel()
     
     var body: some View {
@@ -23,7 +23,12 @@ struct BudgetSettingView: View {
                         BudgetDetail01View(budgetSettingViewModel: budgetSettingViewModel)
                     case "2":
                         BudgetDetail02View(budgetSettingViewModel: budgetSettingViewModel)
-                        
+                    case "3":
+                        BudgetDetail03View(budgetSettingViewModel: budgetSettingViewModel)
+                    case "4":
+                        BudgetDetail04View(budgetSettingViewModel: budgetSettingViewModel)
+                    case "5":
+                        EmptyView()
                     default:
                         EmptyView()
                     }

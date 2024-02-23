@@ -57,6 +57,9 @@
 		45FA74C22B7F33FD0002C038 /* AddScheduleRepetitionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FA74C12B7F33FD0002C038 /* AddScheduleRepetitionView.swift */; };
 		45FA74C72B7F35EB0002C038 /* AddScheduleTapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FA74C62B7F35EB0002C038 /* AddScheduleTapView.swift */; };
 		45FA74C92B7F495A0002C038 /* RadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FA74C82B7F495A0002C038 /* RadioButton.swift */; };
+		45FD3C7B2B882DD600C14A49 /* BudgetDetail03View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FD3C7A2B882DD600C14A49 /* BudgetDetail03View.swift */; };
+		45FD3C7E2B8865FE00C14A49 /* BudgetSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FD3C7D2B8865FE00C14A49 /* BudgetSlider.swift */; };
+		45FD3C802B88675D00C14A49 /* BudgetDetail04View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FD3C7F2B88675D00C14A49 /* BudgetDetail04View.swift */; };
 		6A0379752A2443B9005EE07F /* Ex+UITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0379742A2443B9005EE07F /* Ex+UITextView.swift */; };
 		6A03BB4C2ADD555D00F86756 /* AddCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A03BB4B2ADD555D00F86756 /* AddCategoryViewController.swift */; };
 		6A03FEE32ADBDB7300DA3D15 /* AddCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A03FEE22ADBDB7300DA3D15 /* AddCategoryView.swift */; };
@@ -377,6 +380,9 @@
 		45FA74C12B7F33FD0002C038 /* AddScheduleRepetitionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddScheduleRepetitionView.swift; sourceTree = "<group>"; };
 		45FA74C62B7F35EB0002C038 /* AddScheduleTapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddScheduleTapView.swift; sourceTree = "<group>"; };
 		45FA74C82B7F495A0002C038 /* RadioButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButton.swift; sourceTree = "<group>"; };
+		45FD3C7A2B882DD600C14A49 /* BudgetDetail03View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetDetail03View.swift; sourceTree = "<group>"; };
+		45FD3C7D2B8865FE00C14A49 /* BudgetSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetSlider.swift; sourceTree = "<group>"; };
+		45FD3C7F2B88675D00C14A49 /* BudgetDetail04View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetDetail04View.swift; sourceTree = "<group>"; };
 		6A0379742A2443B9005EE07F /* Ex+UITextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UITextView.swift"; sourceTree = "<group>"; };
 		6A03BB4B2ADD555D00F86756 /* AddCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryViewController.swift; sourceTree = "<group>"; };
 		6A03FEE22ADBDB7300DA3D15 /* AddCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryView.swift; sourceTree = "<group>"; };
@@ -679,9 +685,11 @@
 		451876CD2B857E85005EFF6D /* BudgetDetail */ = {
 			isa = PBXGroup;
 			children = (
+				45FD3C7C2B8865E100C14A49 /* Views */,
 				451876CA2B8573CD005EFF6D /* BudgetDetail01View.swift */,
 				451876CE2B857EA2005EFF6D /* BudgetDetail02View.swift */,
-				451876D02B85BDEB005EFF6D /* PriceTextFieldView.swift */,
+				45FD3C7A2B882DD600C14A49 /* BudgetDetail03View.swift */,
+				45FD3C7F2B88675D00C14A49 /* BudgetDetail04View.swift */,
 			);
 			path = BudgetDetail;
 			sourceTree = "<group>";
@@ -831,6 +839,15 @@
 				45FA74C82B7F495A0002C038 /* RadioButton.swift */,
 			);
 			path = AddSchedule;
+			sourceTree = "<group>";
+		};
+		45FD3C7C2B8865E100C14A49 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				451876D02B85BDEB005EFF6D /* PriceTextFieldView.swift */,
+				45FD3C7D2B8865FE00C14A49 /* BudgetSlider.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		6A08B47B29FF5D3D0080719E /* Utilities */ = {
@@ -1740,6 +1757,7 @@
 				C460DBAA2A96056100530351 /* StatisticsSatisfactionTableViewCell.swift in Sources */,
 				C4C792AD2A388486007FD6AA /* Ex+UIScreen.swift in Sources */,
 				C411940B29DAEDF9003DBC15 /* CustomAlertViewController.swift in Sources */,
+				45FD3C7B2B882DD600C14A49 /* BudgetDetail03View.swift in Sources */,
 				C4170B4E2A89FCA800CE0A65 /* StatisticsViewController.swift in Sources */,
 				C4DBAA3029DD459100D1BB97 /* WithdrawConfirmView.swift in Sources */,
 				45D07CD32AC4078A001C08AB /* CustomPushTimeSettingReactor.swift in Sources */,
@@ -1848,6 +1866,7 @@
 				C4351B4C2A1601D3005F95BE /* HomeFilterView.swift in Sources */,
 				C4DBAA3229DD763D00D1BB97 /* Ex+Int.swift in Sources */,
 				C46409D22AB8A6A400A899AD /* ProfileReactor.swift in Sources */,
+				45FD3C802B88675D00C14A49 /* BudgetDetail04View.swift in Sources */,
 				6A03FEE52ADBE90500DA3D15 /* SeparatorView.swift in Sources */,
 				6A0531242A22220D0065DB54 /* StarPickerViewController.swift in Sources */,
 				C4351B4E2A166DB0005F95BE /* SemanticContentAttributeButton.swift in Sources */,
@@ -1896,6 +1915,7 @@
 				45D2FA482B5E094F00DADA5B /* CategorySheetViewController.swift in Sources */,
 				C433A07329EEE751008B26DF /* Ex+Date.swift in Sources */,
 				C4EA5B4029FA1A40008D1564 /* HomeHeaderView.swift in Sources */,
+				45FD3C7E2B8865FE00C14A49 /* BudgetSlider.swift in Sources */,
 				C4E96B7E2AF919C300C59983 /* ChallengeReactor.swift in Sources */,
 				C46D5E632AD174AD00EBE5D7 /* CategoryEditUpperBottomSheetViewController.swift in Sources */,
 				C4EB8CBC2AC56341005FBAF1 /* CategoryAddBottomSheetViewController.swift in Sources */,

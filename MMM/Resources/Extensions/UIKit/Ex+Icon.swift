@@ -61,6 +61,7 @@ public extension MMMResource {
         public static let iconRadiobuttonEnable = UIImage(named: "iconRadiobuttonEnable", in: .main, compatibleWith: nil)
         public static let iconRepeat24 = UIImage(named: "iconRepeat24", in: .main, compatibleWith: nil)
         public static let iconBudgetSettingCalendar = UIImage(named: "iconBudgetSettingCalendar", in: .main, compatibleWith: nil)!
+        public static let iconSliderThumb = UIImage(named: "iconSliderThumb", in: .main, compatibleWith: nil)!
         
 		// MARK: - FAB
 		public static let onboarding1 = UIImage(named: "iconOnboarding1", in: .main, compatibleWith: nil)

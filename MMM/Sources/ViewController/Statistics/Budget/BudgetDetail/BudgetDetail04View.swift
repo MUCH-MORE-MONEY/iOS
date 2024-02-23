@@ -49,17 +49,8 @@ struct BudgetDetail04View: View {
                     .foregroundColor(Color(R.Color.white))
                 Spacer()
             }
-            .font(Font(R.Font.title3))
-
-            .frame(width: .infinity)
-            .padding(EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16))
-            .background(Color(R.Color.gray800))
-
-
-            .cornerRadius(4.0)
+            .modifier(BudgetSettingSubTitleModifier())
         }
-        .padding([.leading, .trailing], 24)
-        .background(Color(R.Color.gray900))
     }
 }
 

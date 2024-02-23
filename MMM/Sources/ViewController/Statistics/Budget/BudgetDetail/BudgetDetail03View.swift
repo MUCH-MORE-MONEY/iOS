@@ -71,8 +71,6 @@ struct BudgetDetail03View: View {
             BudgetSlider(value: $price, range: 0...200)
 
         }
-        .padding([.leading, .trailing], 24)
-        .background(Color(R.Color.gray900))
     }
 }
 

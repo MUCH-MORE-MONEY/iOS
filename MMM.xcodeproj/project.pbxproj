@@ -60,6 +60,8 @@
 		45FD3C7B2B882DD600C14A49 /* BudgetDetail03View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FD3C7A2B882DD600C14A49 /* BudgetDetail03View.swift */; };
 		45FD3C7E2B8865FE00C14A49 /* BudgetSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FD3C7D2B8865FE00C14A49 /* BudgetSlider.swift */; };
 		45FD3C802B88675D00C14A49 /* BudgetDetail04View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FD3C7F2B88675D00C14A49 /* BudgetDetail04View.swift */; };
+		45FD3C822B8876FC00C14A49 /* BudgetDetail05View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FD3C812B8876FC00C14A49 /* BudgetDetail05View.swift */; };
+		45FD3C852B887E1500C14A49 /* BudgetSettingSubTitleModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FD3C842B887E1500C14A49 /* BudgetSettingSubTitleModifier.swift */; };
 		6A0379752A2443B9005EE07F /* Ex+UITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0379742A2443B9005EE07F /* Ex+UITextView.swift */; };
 		6A03BB4C2ADD555D00F86756 /* AddCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A03BB4B2ADD555D00F86756 /* AddCategoryViewController.swift */; };
 		6A03FEE32ADBDB7300DA3D15 /* AddCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A03FEE22ADBDB7300DA3D15 /* AddCategoryView.swift */; };
@@ -383,6 +385,8 @@
 		45FD3C7A2B882DD600C14A49 /* BudgetDetail03View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetDetail03View.swift; sourceTree = "<group>"; };
 		45FD3C7D2B8865FE00C14A49 /* BudgetSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetSlider.swift; sourceTree = "<group>"; };
 		45FD3C7F2B88675D00C14A49 /* BudgetDetail04View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetDetail04View.swift; sourceTree = "<group>"; };
+		45FD3C812B8876FC00C14A49 /* BudgetDetail05View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetDetail05View.swift; sourceTree = "<group>"; };
+		45FD3C842B887E1500C14A49 /* BudgetSettingSubTitleModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetSettingSubTitleModifier.swift; sourceTree = "<group>"; };
 		6A0379742A2443B9005EE07F /* Ex+UITextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UITextView.swift"; sourceTree = "<group>"; };
 		6A03BB4B2ADD555D00F86756 /* AddCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryViewController.swift; sourceTree = "<group>"; };
 		6A03FEE22ADBDB7300DA3D15 /* AddCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryView.swift; sourceTree = "<group>"; };
@@ -690,6 +694,7 @@
 				451876CE2B857EA2005EFF6D /* BudgetDetail02View.swift */,
 				45FD3C7A2B882DD600C14A49 /* BudgetDetail03View.swift */,
 				45FD3C7F2B88675D00C14A49 /* BudgetDetail04View.swift */,
+				45FD3C812B8876FC00C14A49 /* BudgetDetail05View.swift */,
 			);
 			path = BudgetDetail;
 			sourceTree = "<group>";
@@ -850,6 +855,14 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		45FD3C832B887DEB00C14A49 /* Modifiers */ = {
+			isa = PBXGroup;
+			children = (
+				45FD3C842B887E1500C14A49 /* BudgetSettingSubTitleModifier.swift */,
+			);
+			path = Modifiers;
+			sourceTree = "<group>";
+		};
 		6A08B47B29FF5D3D0080719E /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
@@ -995,6 +1008,7 @@
 		6A7DE6B829F771F8009354EF /* Configuration */ = {
 			isa = PBXGroup;
 			children = (
+				45FD3C832B887DEB00C14A49 /* Modifiers */,
 				6A8B776229FF92CC0095ECFC /* Constants.swift */,
 			);
 			path = Configuration;
@@ -1766,6 +1780,7 @@
 				C41193FD29D42BD9003DBC15 /* ProfileFooterView.swift in Sources */,
 				C44807E129E648D300D4B090 /* HomeViewController.swift in Sources */,
 				C4BBD2662AB9E16D0055FA65 /* DateBottomSheetViewController.swift in Sources */,
+				45FD3C822B8876FC00C14A49 /* BudgetDetail05View.swift in Sources */,
 				C46409BE2AB5B0A000A899AD /* BaseCollectionReusableView.swift in Sources */,
 				45D3C2332B4CD74E004ECC0A /* EditActivityViewController2.swift in Sources */,
 				6A2B5D5D2A97415000CCBFBE /* CustomPushTextSettingView.swift in Sources */,
@@ -1811,6 +1826,7 @@
 				C44807E529E7E76800D4B090 /* Ex+UIControl.swift in Sources */,
 				6A08B47829FF5C7E0080719E /* APIParameters.swift in Sources */,
 				45D07CCF2AC4071A001C08AB /* CustomPushTimeSettingViewController.swift in Sources */,
+				45FD3C852B887E1500C14A49 /* BudgetSettingSubTitleModifier.swift in Sources */,
 				C46409DA2AB9625E00A899AD /* BottomSheetViewController2.swift in Sources */,
 				C433BA052AE95E2D000793CB /* CategoryEmptyCollectionViewCell.swift in Sources */,
 				C4BBD2912AC0498E0055FA65 /* CategoryEditReactor.swift in Sources */,

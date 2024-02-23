@@ -28,7 +28,7 @@ struct BudgetSettingView: View {
                     case "4":
                         BudgetDetail04View(budgetSettingViewModel: budgetSettingViewModel)
                     case "5":
-                        EmptyView()
+                        BudgetDetail05View(budgetSettingViewModel: budgetSettingViewModel)
                     default:
                         EmptyView()
                     }
@@ -36,8 +36,10 @@ struct BudgetSettingView: View {
 
                 }
                 .padding(.top, 48)
-
+                .padding([.leading, .trailing], 24)
+                
                 Spacer()
+                
                 Button {
                     debugPrint("다음버튼 tapped")
                 } label: {

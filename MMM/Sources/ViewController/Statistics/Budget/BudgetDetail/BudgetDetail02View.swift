@@ -33,8 +33,6 @@ struct BudgetDetail02View: View {
 
             Spacer()
         }
-        .padding([.leading, .trailing], 24)
-        .background(Color(R.Color.gray900))
     }
 }
 

@@ -23,6 +23,7 @@ struct BudgetSettingView: View {
                         BudgetDetail01View(budgetSettingViewModel: budgetSettingViewModel)
                     case "2":
                         BudgetDetail02View(budgetSettingViewModel: budgetSettingViewModel)
+                        
                     default:
                         EmptyView()
                     }

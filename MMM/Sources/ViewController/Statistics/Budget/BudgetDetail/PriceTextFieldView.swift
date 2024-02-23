@@ -31,8 +31,9 @@ final class PriceTextFieldView: BaseView {
 extension PriceTextFieldView {
     override func setAttribute() {
         priceTextField = priceTextField.then {
-            $0.text = "원"
-            $0.placeholder = "원 단위로 입력"
+//            $0.text = "원"
+//            $0.placeholder = "만원 단위로 입력"
+            $0.attributedPlaceholder = NSAttributedString(string: "만원 단위로 입력", attributes: [NSAttributedString.Key.foregroundColor : R.Color.gray500])
             $0.font = R.Font.h2
             $0.textColor = R.Color.white
             $0.keyboardType = .numberPad     // 숫자 키보드
@@ -57,8 +58,7 @@ extension PriceTextFieldView {
     
     override func setLayout() {
         priceTextField.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.leading.trailing.equalToSuperview().offset(24)
+            $0.leading.trailing.top.equalToSuperview()
         }
         
         warningLabel.snp.makeConstraints {

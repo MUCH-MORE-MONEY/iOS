@@ -57,8 +57,18 @@ extension BaseAddActivityViewController {
         mainImageView.isHidden = false
         cameraImageView.isHidden = true
         
-        mainImageView.snp.updateConstraints {
-            $0.height.equalTo(mainImageView.snp.width)
+        guard let image = mainImageView.image else { return }
+        
+        let aspectRatio = image.size.width / image.size.height
+
+//            $0.height.equalTo(mainImageView.snp.width)
+
+        // 높이 제약 조건을 업데이트하여 원본 비율 유지
+        self.mainImageView.snp.remakeConstraints {
+            $0.top.equalTo(self.starStackView.snp.bottom).offset(16)
+            $0.width.equalTo(self.view.safeAreaLayoutGuide).offset(-48)
+            $0.left.right.equalToSuperview()
+            $0.height.equalTo(self.mainImageView.snp.width).dividedBy(aspectRatio)
         }
         
         memoTextView.snp.remakeConstraints {
@@ -76,6 +86,23 @@ extension BaseAddActivityViewController {
             $0.top.equalTo(cameraImageView.snp.bottom).offset(16)
             $0.left.right.equalToSuperview()
             $0.bottom.equalToSuperview()
+        }
+    }
+    
+    func setMainImageViewLayout() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self, let image = self.mainImageView.image else { return }
+            let aspectRatio = image.size.width / image.size.height
+
+//            $0.height.equalTo(mainImageView.snp.width)
+
+            // 높이 제약 조건을 업데이트하여 원본 비율 유지
+            self.mainImageView.snp.remakeConstraints {
+                $0.top.equalTo(self.starStackView.snp.bottom).offset(16)
+                $0.width.equalTo(self.view.safeAreaLayoutGuide).offset(-48)
+                $0.left.right.equalToSuperview()
+                $0.height.equalTo(self.mainImageView.snp.width).dividedBy(aspectRatio)
+            }
         }
     }
 }
@@ -204,8 +231,7 @@ extension BaseAddActivityViewController {
         mainImageView.snp.makeConstraints {
             $0.top.equalTo(starStackView.snp.bottom).offset(16)
             $0.width.equalTo(view.safeAreaLayoutGuide).offset(-48)
-            $0.height.equalTo(mainImageView.snp.width)
-            //            $0.height.equalTo(mainImageView.image!.size.height * view.frame.width / mainImageView.image!.size.width)
+//            $0.height.equalTo(mainImageView.snp.width)
             $0.left.right.equalToSuperview()
         }
         

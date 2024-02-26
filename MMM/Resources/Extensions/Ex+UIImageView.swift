@@ -62,7 +62,10 @@ extension UIImageView {
                     // 이미지를 가져오는 1.2동안 애니메이션 (.fade) 제거
                     self.kf.setImage(with: resource, options: [.retryStrategy(retryStrategy), .transition(.none), .forceTransition], completionHandler: { res in
                         switch res {
-                        case .success(_): break
+                        case .success(_):
+                            completion()
+                            break
+                            
                         case .failure: self.image = defaultImage
                         }
                     })

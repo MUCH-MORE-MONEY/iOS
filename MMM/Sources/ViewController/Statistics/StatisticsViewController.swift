@@ -25,6 +25,7 @@ final class StatisticsViewController: BaseViewController, View {
 	}
 	
 	// MARK: - Properties
+	private var isFirst: Bool = false
 	private var month: Date = Date()
 	private var satisfaction: Satisfaction = .low
 	private var timer: DispatchSourceTimer? // rank(순위)를 변경하는 시간
@@ -205,17 +206,16 @@ extension StatisticsViewController {
 			.distinctUntilChanged() // 중복값 무시
 			.withUnretained(self)
 			.bind { (this, isSummary) in
-				this.activityView.isHidden = isSummary
-				this.headerView.frame.size.height = isSummary ? 420 : 510
-				
-				if this.tableView.tableFooterView != nil {
-					this.tableView.tableFooterView = this.emptyView
-				}
-				
-				if this.headerView.contains(this.satisfactionView) {
+				if this.isFirst { // 처음 화면에 접근했을 경우
+					this.activityView.isHidden = isSummary
+					this.headerView.frame.size.height = isSummary ? 420 : 510
 					this.satisfactionView.snp.updateConstraints {
 						$0.top.equalTo(this.averageView.snp.bottom).offset(isSummary ? 26 : 112)
 					}
+					
+					this.tableView.reloadData()
+				} else {
+					this.isFirst = true
 				}
 			}.disposed(by: disposeBag)
 		

@@ -38,21 +38,21 @@ extension StatisticsAverageView {
 	private func bindAction(_ reactor: StatisticsReactor) {
 		// 요약보기/닫기
 		sumurryButton.rx.tap
-			.withUnretained(self)
-			.subscribe(onNext: { this, _ in
-				this.sumurryButton.isSelected.toggle()
-				
-				// 요약하기
-				if this.sumurryButton.isSelected {
-					this.sumurryButton.setTitle("요약보기", for: .normal)
-				} else { // 닫기
-					this.sumurryButton.setTitle("닫기", for: .normal)
-				}
-			}).disposed(by: disposeBag)
+			.map { .isSummary }
+			.bind(to: reactor.action)
+			.disposed(by: disposeBag)
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: StatisticsReactor) {
+		// 요약하기
+		reactor.state
+			.map { $0.isSummary }
+			.distinctUntilChanged() // 중복값 무시
+			.withUnretained(self)
+			.bind { (this, isSummary) in
+				this.sumurryButton.setTitle(isSummary ? "요약보기" : "닫기", for: .normal)
+			}.disposed(by: disposeBag)
 	}
 }
 
@@ -60,8 +60,7 @@ extension StatisticsAverageView {
 extension StatisticsAverageView {
 	// 외부에서 설정
 	func setData(average: Double) {
-		let floor = floor(average) // 소수점 버림
-		satisfactionLabel.text = floor == average ? "\(Int(floor)) 점" : "\(average) 점"
+		satisfactionLabel.text = "\(average) 점"
 	}
 	
 	func isLoading(_ isLoading: Bool) {

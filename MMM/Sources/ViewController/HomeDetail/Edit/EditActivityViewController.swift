@@ -12,6 +12,7 @@ import SnapKit
 import Photos
 import Lottie
 import FirebaseAnalytics
+import PhotosUI
 import SwiftUI
 
 protocol StarPickerViewProtocol: AnyObject {
@@ -172,13 +173,24 @@ extension EditActivityViewController {
         // 키보드 내리기
         self.titleTextFeild.resignFirstResponder()
         
-		let picker = UIImagePickerController().then {
-			$0.sourceType = .photoLibrary
-			$0.allowsEditing = true
-			$0.delegate = self
-		}
-	
-		present(picker, animated: true)
+        var config = PHPickerConfiguration()
+        config.selectionLimit = 1 // 사용자가 한 번에 선택할 수 있는 사진의 수
+        config.filter = .images // 사진만 선택
+        
+        let picker = PHPickerViewController(configuration: config)
+        picker.delegate = self
+        present(picker, animated: true)
+        
+//		let picker = UIImagePickerController().then {
+//			$0.sourceType = .photoLibrary
+//			$0.allowsEditing = true
+//			$0.delegate = self
+//		}
+//	
+//		present(picker, animated: true)
+        
+        
+        
 	}
 	
 	func didTapImageView() {
@@ -191,7 +203,6 @@ extension EditActivityViewController {
 		actionSheet.addAction(UIAlertAction(title: "앨범선택", style: .default, handler: { [weak self] (ACTION:UIAlertAction) in
 			guard let self = self else { return }
 			self.didTapAlbumButton()
-			print("앨범선택")
 		}))
 		
 		//사진삭제 - 스타일(destructive)
@@ -359,6 +370,37 @@ extension EditActivityViewController: StarPickerViewProtocol {
             self.editViewModel.star = rate
 		}
 	}
+}
+
+// MARK: - PHPicker Delegate
+extension EditActivityViewController: PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true) { [weak self] in
+            guard let self = self else { return }
+            self.editViewModel.binaryFileList.removeAll()
+            
+            let itemProvider = results.first?.itemProvider
+            if let itemProvider = itemProvider, itemProvider.canLoadObject(ofClass: UIImage.self) {
+                itemProvider.loadObject(ofClass: UIImage.self) { image, error in
+                    DispatchQueue.main.async {
+                        if let image = image as? UIImage {
+                            self.mainImageView.image = image
+                            self.editViewModel.fileNo = ""
+                            guard let data = image.jpegData(compressionQuality: 0)?.base64EncodedString() else { return }
+                            
+                            let identifier = results.compactMap(\.assetIdentifier)
+                            let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: identifier, options: nil)
+                            let fileName = fetchResult.firstObject?.value(forKey: "filename") as? String ?? "defaultName"
+                            
+                            self.editViewModel.binaryFileList.append(APIParameters.BinaryFileList(binaryData: data, fileNm: fileName))
+                            self.remakeConstraintsByMainImageView()
+                        }
+                    }
+                }
+            }
+            self.editViewModel.didTapAddButton = false
+        }
+    }
 }
 
 // MARK: - ImagePicker Delegate

@@ -168,6 +168,7 @@ extension DetailViewController {
             .store(in: &cancellable)
         
         homeDetailViewModel.$detailActivity
+            .removeDuplicates()
             .sinkOnMainThread { [weak self] value in
                 guard let self = self, let value = value else { return }
                 showLoadingView()
@@ -184,7 +185,7 @@ extension DetailViewController {
                     dateFormatter.dateFormat = "MM월 dd일"
                     let newString = dateFormatter.string(from: date) + " 경제활동"
                     self.title = newString
-                    print(newString) // 결과: "11월 10일 경제활동"
+                    debugPrint(newString) // 결과: "11월 10일 경제활동"
                 } else {
                     print("날짜 변환 실패")
                 }
@@ -206,9 +207,12 @@ extension DetailViewController {
                 if URL(string: value.imageUrl) != nil {
                     self.mainImageView.isHidden = false
                     self.cameraImageView.isHidden = true
-                    self.mainImageView.setImage(urlStr: value.imageUrl, defaultImage: R.Icon.camera48)
-                    self.remakeConstraintsByMainImageView()
-                    self.homeDetailViewModel.hasImage = true
+                    self.mainImageView.setImage(urlStr: value.imageUrl, defaultImage: R.Icon.camera48) {
+                        self.setMainImageViewLayout()
+                        self.remakeConstraintsByMainImageView()
+                        self.homeDetailViewModel.hasImage = true
+                    }
+
                 } else {
                     self.mainImageView.isHidden = true
                     self.cameraImageView.isHidden = false
@@ -285,8 +289,9 @@ extension DetailViewController {
 		mainImageView = mainImageView.then {
 			$0.image = R.Icon.camera48
 			$0.backgroundColor = R.Color.gray100
-			$0.contentMode = .scaleToFill
+			$0.contentMode = .scaleAspectFill
 			$0.isHidden = true
+            $0.clipsToBounds = true
 		}
 		
 		cameraImageView = cameraImageView.then {
@@ -346,7 +351,6 @@ extension DetailViewController {
 		mainImageView.snp.makeConstraints {
 			$0.top.equalTo(starStackView.snp.bottom).offset(16)
 			$0.width.equalTo(view.safeAreaLayoutGuide).offset(-48)
-			$0.height.equalTo(mainImageView.snp.width)
 			$0.left.right.equalToSuperview()
 		}
 		
@@ -401,6 +405,23 @@ private extension DetailViewController {
 		
 		navigationController?.pushViewController(vc, animated: true)
 	}
+    
+    func setMainImageViewLayout() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self, let image = self.mainImageView.image else { return }
+            let aspectRatio = image.size.width / image.size.height
+
+//            $0.height.equalTo(mainImageView.snp.width)
+
+            // 높이 제약 조건을 업데이트하여 원본 비율 유지
+            self.mainImageView.snp.remakeConstraints {
+                $0.top.equalTo(self.starStackView.snp.bottom).offset(16)
+                $0.width.equalTo(self.view.safeAreaLayoutGuide).offset(-48)
+                $0.left.right.equalToSuperview()
+                $0.height.equalTo(self.mainImageView.snp.width).dividedBy(aspectRatio)
+            }
+        }
+    }
 }
 
 // MARK: - Loading Func

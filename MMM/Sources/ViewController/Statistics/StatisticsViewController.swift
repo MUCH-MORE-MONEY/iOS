@@ -12,6 +12,7 @@ import RxCocoa
 import ReactorKit
 import RxDataSources
 import UIKit
+import RxGesture
 
 // 상속하지 않으려면 final 꼭 붙이기
 final class StatisticsViewController: BaseViewController, View {
@@ -24,6 +25,7 @@ final class StatisticsViewController: BaseViewController, View {
 	}
 	
 	// MARK: - Properties
+	private var isFirst: Bool = false
 	private var month: Date = Date()
 	private var satisfaction: Satisfaction = .low
 	private var timer: DispatchSourceTimer? // rank(순위)를 변경하는 시간
@@ -60,8 +62,9 @@ final class StatisticsViewController: BaseViewController, View {
 	private lazy var monthButton = SemanticContentAttributeButton()
 	private lazy var headerView = UIView()
 	private lazy var titleView = StatisticsTitleView()
-	private lazy var averageView = StatisticsAverageView()
+	private lazy var newTitleView = StatisticsNewTitleSettingView()
 	private lazy var categoryView = StatisticsCategoryView()
+	private lazy var averageView = StatisticsAverageView()
 	private lazy var activityView = StatisticsActivityView(timer: timer)
 	private lazy var satisfactionView = StatisticsSatisfactionView() // 만족도 선택
 	private lazy var tableView = UITableView()
@@ -152,6 +155,12 @@ extension StatisticsViewController {
 			}
 			.bind(to: reactor.action)
 			.disposed(by: disposeBag)
+        
+        newTitleView.rx.tapGesture()
+            .when(.recognized)
+            .map { _ in .didTapNewTitleView }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
@@ -190,6 +199,25 @@ extension StatisticsViewController {
 				this.tableView.tableFooterView = isEmpty ? this.emptyView : nil
 			})
 			.disposed(by: disposeBag)
+		
+		// 요약하기
+		reactor.state
+			.map { $0.isSummary }
+			.distinctUntilChanged() // 중복값 무시
+			.withUnretained(self)
+			.bind { (this, isSummary) in
+				if this.isFirst { // 처음 화면에 접근했을 경우
+					this.activityView.isHidden = isSummary
+					this.headerView.frame.size.height = isSummary ? 420 : 510
+					this.satisfactionView.snp.updateConstraints {
+						$0.top.equalTo(this.averageView.snp.bottom).offset(isSummary ? 26 : 112)
+					}
+					
+					this.tableView.reloadData()
+				} else {
+					this.isFirst = true
+				}
+			}.disposed(by: disposeBag)
 		
 		// 로딩 발생
 		// 다음 배포때, 스켈레톤 처리
@@ -232,6 +260,13 @@ extension StatisticsViewController {
 			.filter { $0 } // true일때만 화면 전환
 			.bind(onNext: pushDetail)
 			.disposed(by: disposeBag)
+        
+        reactor.state
+            .map { $0.isPushBudgetSetting }
+            .distinctUntilChanged()
+            .filter { $0 }
+            .bind(onNext: pushBudgetSettingViewController)
+            .disposed(by: disposeBag)
 	}
 }
 //MARK: - Action
@@ -317,6 +352,15 @@ extension StatisticsViewController {
 		satisfactionView.setData(title: satisfaction.title, score: satisfaction.score)
 		self.satisfaction = satisfaction
 	}
+    
+    
+    /// 에산설정 뷰
+    private func pushBudgetSettingViewController(_ isPush: Bool) {
+        let interface = BudgetSettingViewInterface()
+        let vc = interface.budgetSettingViewUI()
+        
+        navigationController?.pushViewController(vc, animated: true)
+    }
 }
 //MARK: - Attribute & Hierarchy & Layouts
 extension StatisticsViewController: SkeletonLoadable {
@@ -339,6 +383,7 @@ extension StatisticsViewController: SkeletonLoadable {
 		headerView.backgroundColor = R.Color.gray900
 		categoryView.reactor = self.reactor // reactor 주입
 		activityView.reactor = self.reactor // reactor 주입
+		averageView.reactor = self.reactor // reactor 주입
 		satisfactionView.reactor = self.reactor // reactor 주입
 		
 		let firstGroup = makeAnimationGroup(startColor: R.Color.gray800, endColor: R.Color.gray600)
@@ -387,7 +432,8 @@ extension StatisticsViewController: SkeletonLoadable {
 		}
 		
 		headerView = headerView.then {
-			$0.frame = .init(x: 0, y: 0, width: view.bounds.width, height: 551)
+			// 420 <-> 520
+			$0.frame = .init(x: 0, y: 0, width: view.bounds.width, height: 510)
 		}
 		
 		emptyView = emptyView.then {
@@ -399,38 +445,37 @@ extension StatisticsViewController: SkeletonLoadable {
 		super.setHierarchy()
 		
 		view.addSubviews(tableView)
-		headerView.addSubviews(titleView, averageView, categoryView, activityView, satisfactionView)
+		headerView.addSubviews(newTitleView, categoryView, averageView, activityView, satisfactionView)
 	}
 	
 	override func setLayout() {
 		super.setLayout()
 		
-		titleView.snp.makeConstraints {
-			$0.top.equalToSuperview().inset(32)
-			$0.leading.equalToSuperview().inset(24)
-			$0.trailing.equalToSuperview().inset(UI.sideMargin)
-		}
-		
-		averageView.snp.makeConstraints {
-			$0.top.equalTo(titleView.snp.bottom)
+		newTitleView.snp.makeConstraints {
+			$0.top.equalToSuperview().inset(24)
 			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
-			$0.height.equalTo(64)
 		}
 
 		categoryView.snp.makeConstraints {
-			$0.top.equalTo(averageView.snp.bottom).offset(16)
+			$0.top.equalTo(newTitleView.snp.bottom).offset(12)
 			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 			$0.height.equalTo(146)
 		}
+		
+		averageView.snp.makeConstraints {
+			$0.top.equalTo(categoryView.snp.bottom).offset(12)
+			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
+			$0.height.equalTo(50)
+		}
 
 		activityView.snp.makeConstraints {
-			$0.top.equalTo(categoryView.snp.bottom).offset(16)
+			$0.top.equalTo(averageView.snp.bottom).offset(-14)
 			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 			$0.height.equalTo(100)
 		}
 
 		satisfactionView.snp.makeConstraints {
-			$0.top.equalTo(activityView.snp.bottom).offset(24)
+			$0.top.equalTo(averageView.snp.bottom).offset(112)
 			$0.leading.trailing.equalToSuperview()
 			$0.bottom.equalToSuperview()
 		}

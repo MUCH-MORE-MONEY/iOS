@@ -24,6 +24,7 @@ class BaseAddActivityViewController: BaseDetailViewController {
     lazy var saveButton = UIButton()
     lazy var satisfyingLabel = BasePaddingLabel(padding: UIEdgeInsets(top: 3, left: 12, bottom: 3, right: 12))
     lazy var addCategoryView = AddCategoryView()
+    lazy var addScheduleTapView = AddScheduleTapView()
     private lazy var separatorView = SeparatorView()
     
     // MARK: - Properties
@@ -115,7 +116,7 @@ extension BaseAddActivityViewController {
         
         view.addSubviews(titleTextFeild, scrollView, saveButton)
         
-        contentView.addSubviews(addCategoryView, separatorView, starStackView, satisfyingLabel, mainImageView, cameraImageView, memoTextView)
+        contentView.addSubviews(addScheduleTapView, addCategoryView, separatorView, starStackView, satisfyingLabel, mainImageView, cameraImageView, memoTextView)
         
         starList.forEach {
             $0.contentMode = .scaleAspectFit
@@ -172,7 +173,6 @@ extension BaseAddActivityViewController {
             $0.backgroundColor = R.Color.gray800
             $0.setTitleColor(R.Color.gray100, for: .normal)
             $0.titleLabel?.font = R.Font.title1
-            $0.setButtonLayer()
         }
         // CameraImageView와 ViewModel 공유
         
@@ -210,8 +210,14 @@ extension BaseAddActivityViewController {
             $0.height.equalTo(24)
         }
         
+        addScheduleTapView.snp.makeConstraints {
+            $0.top.equalTo(addCategoryView.snp.bottom).offset(12)
+            $0.left.right.equalToSuperview()
+            $0.height.equalTo(24)
+        }
+        
         separatorView.snp.makeConstraints {
-            $0.top.equalTo(addCategoryView.snp.bottom).offset(16)
+            $0.top.equalTo(addScheduleTapView.snp.bottom).offset(16)
             $0.left.right.equalToSuperview()
             $0.height.equalTo(1)
         }

@@ -23,7 +23,6 @@ public extension MMMResource {
 		public static let arrowUp32 = UIImage(named: "iconArrowUp32", in: .main, compatibleWith: nil)
 		public static let camera48 = UIImage(named: "iconCamera48", in: .main, compatibleWith: nil)
 		public static let cancel = UIImage(named: "iconCancel", in: .main, compatibleWith: nil)
-		public static let characterBudget = UIImage(named: "iconCharacterBudget", in: .main, compatibleWith: nil)
 		public static let characterHappy = UIImage(named: "iconCharacterHappy", in: .main, compatibleWith: nil)
 		public static let checkActive = UIImage(named: "iconCheckActive", in: .main, compatibleWith: nil)
 		public static let checkGray24 = UIImage(named: "iconCheckGray24", in: .main, compatibleWith: nil)
@@ -53,13 +52,10 @@ public extension MMMResource {
         public static let iconEditBlack24 = UIImage(named: "iconEditBlack24", in: .main, compatibleWith: nil)
         public static let iconEditGray24 = UIImage(named: "iconEditGray24", in: .main, compatibleWith: nil)
         public static let iconCategory24 = UIImage(named: "iconCategory24", in: .main, compatibleWith: nil)
-        public static let iconArrowNextGray16 = UIImage(named: "iconArrowNextGray16", in: .main, compatibleWith: nil)!
+        public static let iconArrowNextGray24 = UIImage(named: "iconArrowNextGray16", in: .main, compatibleWith: nil)
         public static let iconCheckGray16 = UIImage(named: "iconCheckGray16", in: .main, compatibleWith: nil)
         public static let iconCheckWhite16 = UIImage(named: "iconCheckWhite16", in: .main, compatibleWith: nil)
         public static let iconCharacterEmptyCategory = UIImage(named: "iconCharacterEmptyCategory", in: .main, compatibleWith: nil)
-        public static let iconRadiobuttonActive = UIImage(named: "iconRadiobuttonActive", in: .main, compatibleWith: nil)
-        public static let iconRadiobuttonEnable = UIImage(named: "iconRadiobuttonEnable", in: .main, compatibleWith: nil)
-        public static let iconRepeat24 = UIImage(named: "iconRepeat24", in: .main, compatibleWith: nil)
         
 		// MARK: - FAB
 		public static let onboarding1 = UIImage(named: "iconOnboarding1", in: .main, compatibleWith: nil)

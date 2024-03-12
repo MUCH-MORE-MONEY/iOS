@@ -224,7 +224,7 @@ extension AddDetailViewController {
         
         
         let hostingController = UIHostingController(rootView: VStack {
-            AddScheduleView(viewModel: viewModel)
+            AddScheduleView(editViewModel: viewModel)
             Spacer()
         })
         

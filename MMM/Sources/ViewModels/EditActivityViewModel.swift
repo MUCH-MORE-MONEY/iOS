@@ -41,28 +41,6 @@ final class EditActivityViewModel: ObservableObject {
     @Published var recurrenceYN = "N"
     @Published var recurrenceInfo: [APIParameters.RecurrenceInfo] = []
     
-    var dateComponent: DateComponents {
-        let calendar = Calendar.current
-        
-        return calendar.dateComponents([.year, .month, .day, .weekday, .weekOfMonth], from: self.date ?? Date())
-    }
-    
-    var recurrenceWeekday: String {
-        return date?.getFormattedDate(format: "E") ?? ""
-    }
-    
-    var recurrenceMonth: String {
-        return date?.getFormattedDate(format: "MMMM") ?? ""
-    }
-    
-    var recurrenceDayofMonth: String {
-        return "\(self.dateComponent.day ?? 1)"
-    }
-    
-    var recurrenceWeekOfMonth: String {
-        return "\(self.dateComponent.weekOfMonth ?? 1)"
-    }
-    
     @Published var editResponse: UpdateResDto?
     @Published var deleteResponse: DeleteResDto?
     @Published var insertResponse: InsertResDto?

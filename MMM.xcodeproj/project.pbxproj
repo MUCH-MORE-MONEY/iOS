@@ -53,6 +53,7 @@
 		45D810082B4BDCB200697EDC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45D810072B4BDCB200697EDC /* Foundation.framework */; };
 		45D878A22B5A56380098F30B /* StarPickerSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D878A12B5A56380098F30B /* StarPickerSheetViewController.swift */; };
 		45D878A42B5A5B550098F30B /* StarPickerSheetReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D878A32B5A5B550098F30B /* StarPickerSheetReactor.swift */; };
+		45DAFDA52B9FE7BE00270BC9 /* AddScheduleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45DAFDA42B9FE7BE00270BC9 /* AddScheduleViewModel.swift */; };
 		45F393252B7E2298007AB11B /* AddScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F393242B7E2298007AB11B /* AddScheduleView.swift */; };
 		45FA74C22B7F33FD0002C038 /* AddScheduleRepetitionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FA74C12B7F33FD0002C038 /* AddScheduleRepetitionView.swift */; };
 		45FA74C72B7F35EB0002C038 /* AddScheduleTapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FA74C62B7F35EB0002C038 /* AddScheduleTapView.swift */; };
@@ -378,6 +379,7 @@
 		45D810072B4BDCB200697EDC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		45D878A12B5A56380098F30B /* StarPickerSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarPickerSheetViewController.swift; sourceTree = "<group>"; };
 		45D878A32B5A5B550098F30B /* StarPickerSheetReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarPickerSheetReactor.swift; sourceTree = "<group>"; };
+		45DAFDA42B9FE7BE00270BC9 /* AddScheduleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddScheduleViewModel.swift; sourceTree = "<group>"; };
 		45F393242B7E2298007AB11B /* AddScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddScheduleView.swift; sourceTree = "<group>"; };
 		45FA74C12B7F33FD0002C038 /* AddScheduleRepetitionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddScheduleRepetitionView.swift; sourceTree = "<group>"; };
 		45FA74C62B7F35EB0002C038 /* AddScheduleTapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddScheduleTapView.swift; sourceTree = "<group>"; };
@@ -1241,6 +1243,7 @@
 				6A1BAD4429E6550100818086 /* OnboardingViewModel.swift */,
 				C4C0CAF42A1C88DC00C41FF4 /* PriceViewModel.swift */,
 				6AFF26012ADFF0F300192147 /* AddCategoryViewModel.swift */,
+				45DAFDA42B9FE7BE00270BC9 /* AddScheduleViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1843,6 +1846,7 @@
 				6A0F234229DBA92D0063673B /* ServiceViewController.swift in Sources */,
 				C4DBAA3729DD7B2600D1BB97 /* CountPushLabel.swift in Sources */,
 				45AFC2A92AC296E1004DF76E /* CustomPushTextSettingReactor.swift in Sources */,
+				45DAFDA52B9FE7BE00270BC9 /* AddScheduleViewModel.swift in Sources */,
 				45D2FA4C2B5E5D8A00DADA5B /* CategorySheetSectionModel.swift in Sources */,
 				C41193E729D287E6003DBC15 /* Ex+Icon.swift in Sources */,
 				45D606C82B5F4FAE008E6624 /* CategorySelectCell.swift in Sources */,

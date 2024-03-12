@@ -10,7 +10,7 @@ import Photos
 import Combine
 import FirebaseAnalytics
 
-final class EditActivityViewModel {
+final class EditActivityViewModel: ObservableObject {
     // MARK: - Property Wrapper
     @Published var didTapAddButton: Bool = false
     @Published var isTitleEmpty = false
@@ -25,7 +25,7 @@ final class EditActivityViewModel {
     @Published var star = 0
     @Published var type = "01"
     @Published var fileNo = ""
-    @Published var binaryFileList:  [APIParameters.BinaryFileList] = []
+    @Published var binaryFileList: [APIParameters.BinaryFileList] = []
   	@Published var date: Date? // picker
     // UI용 카테고리
     @Published var categoryName = ""
@@ -36,6 +36,32 @@ final class EditActivityViewModel {
     // 카테고리 시트 뷰에서 관리 버튼을 눌렀을 때를 나타내는 flag
     @Published var isCategoryManageButtonTapped = false
     @Published var isViewFromCategoryViewController = false
+    
+    // 경제활동 반복
+    @Published var recurrenceYN = "N"
+    @Published var recurrenceInfo: [APIParameters.RecurrenceInfo] = []
+    
+    var dateComponent: DateComponents {
+        let calendar = Calendar.current
+        
+        return calendar.dateComponents([.year, .month, .day, .weekday, .weekOfMonth], from: self.date ?? Date())
+    }
+    
+    var recurrenceWeekday: String {
+        return date?.getFormattedDate(format: "E") ?? ""
+    }
+    
+    var recurrenceMonth: String {
+        return date?.getFormattedDate(format: "MMMM") ?? ""
+    }
+    
+    var recurrenceDayofMonth: String {
+        return "\(self.dateComponent.day ?? 1)"
+    }
+    
+    var recurrenceWeekOfMonth: String {
+        return "\(self.dateComponent.weekOfMonth ?? 1)"
+    }
     
     @Published var editResponse: UpdateResDto?
     @Published var deleteResponse: DeleteResDto?

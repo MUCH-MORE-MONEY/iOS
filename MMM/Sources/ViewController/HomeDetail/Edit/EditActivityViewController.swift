@@ -237,7 +237,7 @@ extension EditActivityViewController {
         self.titleTextFeild.resignFirstResponder()
         
         let swiftUIView = VStack {
-            AddScheduleView()
+            AddScheduleView(viewModel: editViewModel)
             Spacer()
         }
         

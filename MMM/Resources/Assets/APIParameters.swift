@@ -88,6 +88,14 @@ struct APIParameters{
         let fileNm: String
     }
     
+    struct RecurrenceInfo: Encodable {
+        let endYMD: String //"endYMD": "20240510",
+        let recurrenceCnt: Int //"recurrenceCnt": 3,
+        let recurrenceEndDvcd: String   // "recurrenceEndDvcd": "01",
+        let recurrencePattern: String   // "recurrencePattern": "none",
+        let startYMD: String            //  "startYMD": "20240510"
+    }
+    
     /// 경제활동 삭제를 위한 Request
     struct DeleteReqDto: Encodable {
         var id: String

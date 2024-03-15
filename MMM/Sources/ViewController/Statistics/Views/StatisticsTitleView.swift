@@ -8,9 +8,10 @@
 import Then
 import SnapKit
 import UIKit
+import ReactorKit
 
 // 상속하지 않으려면 final 꼭 붙이기
-final class StatisticsTitleView: BaseView {
+final class StatisticsTitleView: BaseView, View {
 	// MARK: - Constants
 	private enum UI {
 		static let titleLabelTop: CGFloat = 6
@@ -42,6 +43,26 @@ final class StatisticsTitleView: BaseView {
 		
 		titleLayer.frame = skTitleView.bounds
 		titleLayer.cornerRadius = 4
+	}
+	
+	func bind(reactor: StatisticsReactor) {
+		bindState(reactor)
+		bindAction(reactor)
+	}
+}
+//MARK: - Bind
+extension StatisticsTitleView {
+	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
+	private func bindAction(_ reactor: StatisticsReactor) {
+		
+		settingButton.rx.tap
+			.map { .didTapNewTitleView }
+			.bind(to: reactor.action)
+			.disposed(by: disposeBag)
+	}
+	
+	// MARK: 데이터 바인딩 처리 (Reactor -> View)
+	private func bindState(_ reactor: StatisticsReactor) {
 	}
 }
 //MARK: - Action
@@ -171,8 +192,8 @@ extension StatisticsTitleView: SkeletonLoadable {
 		settingButton = settingButton.then {
 			$0.setTitle("설정", for: .normal)
 			$0.setTitleColor(R.Color.gray500, for: .normal)
-			$0.setTitleColor(R.Color.gray400, for: .highlighted)
 			$0.titleLabel?.font = R.Font.body3
+			$0.configuration?.contentInsets = .init(top: 10, leading: 10, bottom: 10, trailing: 10) // touch 영역 늘리기
 		}
 	}
 	
@@ -197,7 +218,7 @@ extension StatisticsTitleView: SkeletonLoadable {
 		
 		imageView.snp.makeConstraints {
 			$0.leading.lessThanOrEqualTo(titleLabel.snp.trailing)
-			$0.top.trailing.bottom.equalToSuperview()
+			$0.top.trailing.equalToSuperview()
 		}
 		
 		skTitleView.snp.makeConstraints {

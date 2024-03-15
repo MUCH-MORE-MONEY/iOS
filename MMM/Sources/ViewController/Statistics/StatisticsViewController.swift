@@ -371,6 +371,7 @@ extension StatisticsViewController: SkeletonLoadable {
 		view.backgroundColor = R.Color.gray900
 		
 		headerView.backgroundColor = R.Color.gray900
+		titleView.reactor = self.reactor
 		categoryView.reactor = self.reactor // reactor 주입
 		activityView.reactor = self.reactor // reactor 주입
 		averageView.reactor = self.reactor // reactor 주입
@@ -441,9 +442,11 @@ extension StatisticsViewController: SkeletonLoadable {
 	override func setLayout() {
 		super.setLayout()
 		
+//		titleView.isHidden = true
 		titleView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(12)
 			$0.leading.trailing.equalToSuperview().inset(24)
+			$0.height.equalTo(135)
 		}
 		
 		newTitleView.isHidden = true
@@ -453,7 +456,7 @@ extension StatisticsViewController: SkeletonLoadable {
 		}
 
 		categoryView.snp.makeConstraints {
-			$0.top.equalTo(titleView.snp.bottom).offset(55)
+			$0.top.equalTo(titleView.snp.bottom).offset(12)
 			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 			$0.height.equalTo(146)
 		}

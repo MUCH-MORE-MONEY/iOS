@@ -343,7 +343,6 @@ extension StatisticsViewController {
 			end = Date().getFormattedDate(format: "dd")
 		}
 		
-		self.titleView.setData(startDate: "\(month).01", endDate: "\(month).\(end)")
 		self.month = date
 	}
 	
@@ -445,12 +444,18 @@ extension StatisticsViewController: SkeletonLoadable {
 		super.setHierarchy()
 		
 		view.addSubviews(tableView)
-		headerView.addSubviews(newTitleView, categoryView, averageView, activityView, satisfactionView)
+		headerView.addSubviews(titleView, newTitleView, categoryView, averageView, activityView, satisfactionView)
 	}
 	
 	override func setLayout() {
 		super.setLayout()
 		
+		titleView.snp.makeConstraints {
+			$0.top.equalToSuperview().inset(22)
+			$0.leading.trailing.equalToSuperview().inset(24)
+		}
+		
+		newTitleView.isHidden = true
 		newTitleView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(24)
 			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)

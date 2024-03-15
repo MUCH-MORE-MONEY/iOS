@@ -18,8 +18,8 @@ final class StatisticsTitleView: BaseView {
 	}
 	
 	// MARK: - UI Components
-	private lazy var rangeLabel = UILabel() // 통계 범위
 	private lazy var titleLabel = UILabel()
+	private lazy var subTitleLabel = UILabel()
 	private lazy var imageView = UIImageView() // Boost 아이콘
 	// 스켈레톤 UI
 	private lazy var skTitleView = UIView()
@@ -29,7 +29,7 @@ final class StatisticsTitleView: BaseView {
 	override func layoutSubviews() {
 		super.layoutSubviews()
 		
-		rangeLayer.frame = rangeLabel.bounds
+		rangeLayer.frame = subTitleLabel.bounds
 		rangeLayer.cornerRadius = 4
 		
 		titleLayer.frame = skTitleView.bounds
@@ -40,7 +40,7 @@ final class StatisticsTitleView: BaseView {
 extension StatisticsTitleView {
 	// 외부에서 설정
 	func setData(startDate: String, endDate: String) {
-		rangeLabel.text = startDate + " ~ " + endDate
+		
 	}
 	
 	func isLoading(_ isLoading: Bool) {
@@ -52,35 +52,35 @@ extension StatisticsTitleView {
 		titleLayer.isHidden = !isLoading
 	}
 	
-	// Text 부분적으로 Bold 처리
-	private func setSubTextBold() -> NSMutableAttributedString {
-		let attributedText1 = NSMutableAttributedString(string: "부스트와 함께\n")
-		let attributedText2 = NSMutableAttributedString(string: "만족하는 경제습관 ")
-		let attributedText3 = NSMutableAttributedString(string: "만들기!")
-		
-		// 일반 Text 속성
-		let paragraphStyle = NSMutableParagraphStyle()
-		paragraphStyle.lineSpacing = 4
-		let textAttributes1: [NSAttributedString.Key : Any] = [
-			.font: R.Font.body1,
-			.foregroundColor: R.Color.white,
-			.paragraphStyle: paragraphStyle
-		]
-		
-		// Bold Text 속성
-		let textAttributes2: [NSAttributedString.Key : Any] = [
-			.font: R.Font.title3,
-			.foregroundColor: R.Color.white
-		]
-		
-		attributedText1.addAttributes(textAttributes1, range: NSMakeRange(0, attributedText1.length))
-		attributedText2.addAttributes(textAttributes2, range: NSMakeRange(0, attributedText2.length))
-		attributedText3.addAttributes(textAttributes1, range: NSMakeRange(0, attributedText3.length))
-		
-		attributedText1.append(attributedText2)
-		attributedText1.append(attributedText3)
-		return attributedText1
-	}
+	//MARK: 임시 주석 (예산 업데이트로 인해 빠짐) - Text 부분적으로 Bold 처리
+//	private func setSubTextBold() -> NSMutableAttributedString {
+//		let attributedText1 = NSMutableAttributedString(string: "부스트와 함께\n")
+//		let attributedText2 = NSMutableAttributedString(string: "만족하는 경제습관 ")
+//		let attributedText3 = NSMutableAttributedString(string: "만들기!")
+//		
+//		// 일반 Text 속성
+//		let paragraphStyle = NSMutableParagraphStyle()
+//		paragraphStyle.lineSpacing = 4
+//		let textAttributes1: [NSAttributedString.Key : Any] = [
+//			.font: R.Font.body1,
+//			.foregroundColor: R.Color.white,
+//			.paragraphStyle: paragraphStyle
+//		]
+//		
+//		// Bold Text 속성
+//		let textAttributes2: [NSAttributedString.Key : Any] = [
+//			.font: R.Font.title3,
+//			.foregroundColor: R.Color.white
+//		]
+//		
+//		attributedText1.addAttributes(textAttributes1, range: NSMakeRange(0, attributedText1.length))
+//		attributedText2.addAttributes(textAttributes2, range: NSMakeRange(0, attributedText2.length))
+//		attributedText3.addAttributes(textAttributes1, range: NSMakeRange(0, attributedText3.length))
+//		
+//		attributedText1.append(attributedText2)
+//		attributedText1.append(attributedText3)
+//		return attributedText1
+//	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
 extension StatisticsTitleView: SkeletonLoadable {
@@ -110,18 +110,17 @@ extension StatisticsTitleView: SkeletonLoadable {
 			$0.layer.addSublayer(titleLayer)
 		}
 		
-		rangeLabel = rangeLabel.then {
-			let month = Date().getFormattedDate(format: "MM") // 이번달
-			let today = Date().getFormattedDate(format: "dd") // 오늘날짜
-			$0.text = "\(month).01 ~ \(month).\(today)"
-			$0.font = R.Font.prtendard(family: .medium, size: 12)
-			$0.textColor = R.Color.gray500
-			$0.layer.addSublayer(rangeLayer)
+		titleLabel = titleLabel.then {
+			$0.text = "예산보다 적게 지출하고 있어요"
+			$0.font = R.Font.prtendard(family: .bold, size: 16)
+			$0.textColor = R.Color.gray200
 		}
 		
-		titleLabel = titleLabel.then {
-			$0.attributedText = setSubTextBold()
-			$0.numberOfLines = 2
+		subTitleLabel = subTitleLabel.then {
+			$0.text = "이렇게만 지출하면 당신도 저축왕!"
+			$0.font = R.Font.body5
+			$0.textColor = R.Color.gray300
+			$0.layer.addSublayer(rangeLayer)
 		}
 		
 		imageView = imageView.then {
@@ -133,18 +132,19 @@ extension StatisticsTitleView: SkeletonLoadable {
 	override func setHierarchy() {
 		super.setHierarchy()
 		
-		addSubviews(rangeLabel, titleLabel, imageView, skTitleView)
+		addSubviews(titleLabel, subTitleLabel, imageView, skTitleView)
 	}
 	
 	override func setLayout() {
 		super.setLayout()
 		
-		rangeLabel.snp.makeConstraints {
-			$0.top.leading.equalToSuperview()
+		titleLabel.snp.makeConstraints {
+			$0.top.equalToSuperview().inset(10)
+			$0.leading.equalToSuperview()
 		}
 		
-		titleLabel.snp.makeConstraints {
-			$0.top.equalTo(rangeLabel.snp.bottom).offset(UI.titleLabelTop)
+		subTitleLabel.snp.makeConstraints {
+			$0.top.equalTo(titleLabel.snp.bottom).offset(4)
 			$0.leading.equalToSuperview()
 		}
 		

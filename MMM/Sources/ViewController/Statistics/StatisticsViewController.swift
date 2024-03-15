@@ -442,7 +442,7 @@ extension StatisticsViewController: SkeletonLoadable {
 		super.setLayout()
 		
 		titleView.snp.makeConstraints {
-			$0.top.equalToSuperview().inset(22)
+			$0.top.equalToSuperview().inset(12)
 			$0.leading.trailing.equalToSuperview().inset(24)
 		}
 		
@@ -453,7 +453,7 @@ extension StatisticsViewController: SkeletonLoadable {
 		}
 
 		categoryView.snp.makeConstraints {
-			$0.top.equalTo(newTitleView.snp.bottom).offset(12)
+			$0.top.equalTo(titleView.snp.bottom).offset(55)
 			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 			$0.height.equalTo(146)
 		}

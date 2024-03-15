@@ -21,6 +21,14 @@ final class StatisticsTitleView: BaseView {
 	private lazy var titleLabel = UILabel()
 	private lazy var subTitleLabel = UILabel()
 	private lazy var imageView = UIImageView() // Boost 아이콘
+	private lazy var totalBarView = UIView()
+	private lazy var currentBarView = UIView()
+	private lazy var percentLabel = UILabel()
+	private lazy var currentPayLabel = UILabel()	// 현재 지출
+	private lazy var separatorView = UIView()
+	private lazy var settingBudgetLabel = UILabel()	// 예산
+	private lazy var settingButton = UIButton()		// 설정
+
 	// 스켈레톤 UI
 	private lazy var skTitleView = UIView()
 	private lazy var rangeLayer = CAGradientLayer()
@@ -127,12 +135,51 @@ extension StatisticsTitleView: SkeletonLoadable {
 			$0.image = R.Icon.characterHappy
 			$0.contentMode = .scaleAspectFit
 		}
+		
+		totalBarView = totalBarView.then {
+			$0.layer.cornerRadius = 4
+			$0.backgroundColor = R.Color.yellow100
+		}
+		
+		currentBarView = currentBarView.then {
+			$0.layer.cornerRadius = 4
+			$0.backgroundColor = R.Color.yellow600
+		}
+		
+		percentLabel = percentLabel.then {
+			$0.text = "80%"
+			$0.textColor = R.Color.black
+			$0.font = R.Font.body4
+		}
+		
+		currentPayLabel = currentPayLabel.then {
+			$0.text = "현재 지출 0원"
+			$0.textColor = R.Color.yellow300
+			$0.font = R.Font.body3
+		}
+		
+		separatorView = separatorView.then {
+			$0.backgroundColor = R.Color.gray700
+		}
+		
+		settingBudgetLabel = settingBudgetLabel.then {
+			$0.text = "예산 0원"
+			$0.textColor = R.Color.yellow050
+			$0.font = R.Font.body3
+		}
+		
+		settingButton = settingButton.then {
+			$0.setTitle("설정", for: .normal)
+			$0.setTitleColor(R.Color.gray500, for: .normal)
+			$0.setTitleColor(R.Color.gray400, for: .highlighted)
+			$0.titleLabel?.font = R.Font.body3
+		}
 	}
 	
 	override func setHierarchy() {
 		super.setHierarchy()
 		
-		addSubviews(titleLabel, subTitleLabel, imageView, skTitleView)
+		addSubviews(titleLabel, subTitleLabel, imageView, skTitleView, totalBarView, currentBarView, percentLabel, currentPayLabel, separatorView, settingBudgetLabel, settingButton)
 	}
 	
 	override func setLayout() {
@@ -158,6 +205,46 @@ extension StatisticsTitleView: SkeletonLoadable {
 			$0.leading.equalToSuperview()
 			$0.width.equalTo(164)
 			$0.height.equalTo(24)
+		}
+		
+		totalBarView.snp.makeConstraints {
+			$0.top.equalTo(subTitleLabel.snp.bottom).offset(30)
+			$0.horizontalEdges.equalToSuperview()
+			$0.height.equalTo(22)
+		}
+		
+		currentBarView.snp.makeConstraints {
+			$0.top.leading.equalTo(totalBarView)
+			$0.width.equalTo(100)
+			$0.height.equalTo(22)
+		}
+		
+		percentLabel.snp.makeConstraints {
+			$0.centerY.equalTo(currentBarView)
+			$0.trailing.equalTo(currentBarView).offset(-6)
+		}
+		
+		currentPayLabel.snp.makeConstraints {
+			$0.top.equalTo(percentLabel.snp.bottom).offset(13)
+			$0.leading.equalToSuperview()
+		}
+		
+		separatorView.snp.makeConstraints {
+			$0.centerY.equalTo(currentPayLabel)
+			$0.leading.equalTo(currentPayLabel.snp.trailing).offset(10)
+			$0.width.equalTo(1)
+			$0.height.equalTo(9)
+		}
+		
+		settingBudgetLabel.snp.makeConstraints {
+			$0.top.equalTo(currentPayLabel)
+			$0.leading.equalTo(separatorView.snp.trailing).offset(10)
+		}
+		
+		settingButton.snp.makeConstraints {
+			$0.centerY.equalTo(currentPayLabel)
+			$0.trailing.equalToSuperview()
+			$0.leading.greaterThanOrEqualTo(settingBudgetLabel.snp.trailing).offset(10)
 		}
 	}
 }

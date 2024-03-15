@@ -334,11 +334,6 @@ extension StatisticsViewController {
 			monthButton.setTitle(date.getFormattedDate(format: "M월"), for: .normal)
 		}
 		
-		// 이번달 인지 판별
-		if date.getFormattedYM() == Date().getFormattedYM() {
-			end = Date().getFormattedDate(format: "dd")
-		}
-		
 		self.month = date
 	}
 	

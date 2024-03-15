@@ -29,6 +29,7 @@ final class StatisticsViewController: BaseViewController, View {
 	private var month: Date = Date()
 	private var satisfaction: Satisfaction = .low
 	private var timer: DispatchSourceTimer? // rank(순위)를 변경하는 시간
+	private var isBudget: Bool = false
 	private lazy var dataSource: DataSource = RxTableViewSectionedReloadDataSource<StatisticsSectionModel>(configureCell: { dataSource, tv, indexPath, item -> UITableViewCell in
 		
 		guard let reactor = self.reactor else { return .init() }
@@ -175,7 +176,38 @@ extension StatisticsViewController {
 		reactor.state
 			.map { $0.average }
 			.distinctUntilChanged() // 중복값 무시
-			.bind(onNext: averageView.setData) // 평균 변경
+			.withUnretained(self)
+			.subscribe(onNext: { this, average in // 평균 변경
+				// 예산 설정 유무
+				if average == 0.0 { // 설정 X
+					this.isBudget = false
+					this.titleView.isHidden = true
+					this.newTitleView.isHidden = false
+					this.headerView.frame.size.height = 510
+					
+					if this.headerView.subviews.contains(this.categoryView) {
+						this.categoryView.snp.remakeConstraints {
+							$0.top.equalTo(this.newTitleView.snp.bottom).offset(12)
+							$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
+							$0.height.equalTo(146)
+						}
+					}
+				} else {
+					this.isBudget = true
+					this.titleView.isHidden = false
+					this.newTitleView.isHidden = true
+					this.headerView.frame.size.height = 550
+					
+					if this.headerView.subviews.contains(this.categoryView) {
+						this.categoryView.snp.remakeConstraints {
+							$0.top.equalTo(this.titleView.snp.bottom).offset(12)
+							$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
+							$0.height.equalTo(146)
+						}
+					}
+				}
+				this.averageView.setData(average: average)
+			})
 			.disposed(by: disposeBag)
 		
 		reactor.state
@@ -208,7 +240,8 @@ extension StatisticsViewController {
 			.bind { (this, isSummary) in
 				if this.isFirst { // 처음 화면에 접근했을 경우
 					this.activityView.isHidden = isSummary
-					this.headerView.frame.size.height = isSummary ? 420 : 510
+					
+					this.headerView.frame.size.height = isSummary ? this.headerView.frame.height - 90 : this.headerView.frame.height + 90
 					this.satisfactionView.snp.updateConstraints {
 						$0.top.equalTo(this.averageView.snp.bottom).offset(isSummary ? 26 : 112)
 					}
@@ -423,7 +456,7 @@ extension StatisticsViewController: SkeletonLoadable {
 		}
 		
 		headerView = headerView.then {
-			// 420 <-> 520
+			// 420 <-> 510
 			$0.frame = .init(x: 0, y: 0, width: view.bounds.width, height: 510)
 		}
 		
@@ -442,21 +475,19 @@ extension StatisticsViewController: SkeletonLoadable {
 	override func setLayout() {
 		super.setLayout()
 		
-//		titleView.isHidden = true
 		titleView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(12)
 			$0.leading.trailing.equalToSuperview().inset(24)
 			$0.height.equalTo(135)
 		}
 		
-		newTitleView.isHidden = true
 		newTitleView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(24)
 			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 		}
 
 		categoryView.snp.makeConstraints {
-			$0.top.equalTo(titleView.snp.bottom).offset(12)
+			$0.top.equalTo(isBudget ? titleView.snp.bottom : newTitleView.snp.bottom).offset(12)
 			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 			$0.height.equalTo(146)
 		}

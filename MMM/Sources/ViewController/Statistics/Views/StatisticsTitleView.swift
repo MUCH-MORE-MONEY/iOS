@@ -56,7 +56,7 @@ final class StatisticsTitleView: BaseView, View {
 		}
 	}
 	// MARK: - Properties
-	private lazy var state: State = .over
+	private lazy var state: State = .less
 	
 	// MARK: - UI Components
 	private lazy var titleLabel = UILabel()

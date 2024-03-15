@@ -334,10 +334,6 @@ extension StatisticsViewController {
 			monthButton.setTitle(date.getFormattedDate(format: "M월"), for: .normal)
 		}
 		
-		// 범위 변경
-		let month = date.getFormattedDate(format: "MM")
-		var end = date.lastDay() ?? "01"
-		
 		// 이번달 인지 판별
 		if date.getFormattedYM() == Date().getFormattedYM() {
 			end = Date().getFormattedDate(format: "dd")

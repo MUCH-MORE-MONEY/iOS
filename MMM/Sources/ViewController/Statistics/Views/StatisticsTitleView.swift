@@ -248,6 +248,7 @@ extension StatisticsTitleView: SkeletonLoadable {
 		currentPayLabel.snp.makeConstraints {
 			$0.top.equalTo(percentLabel.snp.bottom).offset(13)
 			$0.leading.equalToSuperview()
+			$0.trailing.lessThanOrEqualTo(separatorView.snp.leading).offset(10)
 		}
 		
 		separatorView.snp.makeConstraints {

@@ -18,6 +18,12 @@ final class StatisticsTitleView: BaseView, View {
 		static let skTitleBottom: CGFloat = 16
 	}
 	
+	enum Mode {
+		case date
+		case onlyMonthly
+	}
+	// MARK: - Properties
+	
 	// MARK: - UI Components
 	private lazy var titleLabel = UILabel()
 	private lazy var subTitleLabel = UILabel()
@@ -248,7 +254,6 @@ extension StatisticsTitleView: SkeletonLoadable {
 		currentPayLabel.snp.makeConstraints {
 			$0.top.equalTo(percentLabel.snp.bottom).offset(13)
 			$0.leading.equalToSuperview()
-			$0.trailing.lessThanOrEqualTo(separatorView.snp.leading).offset(10)
 		}
 		
 		separatorView.snp.makeConstraints {

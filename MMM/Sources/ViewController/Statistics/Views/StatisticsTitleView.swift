@@ -18,11 +18,45 @@ final class StatisticsTitleView: BaseView, View {
 		static let skTitleBottom: CGFloat = 16
 	}
 	
-	enum Mode {
-		case date
-		case onlyMonthly
+	enum State {
+		case less	// 더 적음
+		case more	// 더 많음
+		case over	// 매우 많음
+		
+		var title: String {
+			switch self {
+			case .less: return "예산보다 적게 지출하고 있어요 "
+			case .more: return "적정소비보다 더 지출하고 있어요 "
+			case .over: return "예산보다 많이 지출하고 있어요"
+			}
+		}
+		
+		var subTitle: String {
+			switch self {
+			case .less: return "이렇게만 지출하면 당신도 저축왕!"
+			case .more: return "예산을 위해 오늘의 지출을 줄여봐요"
+			case .over: return "다음 달은 조금 더 힘내볼까요? "
+			}
+		}
+		
+		var textColor: UIColor {
+			switch self {
+			case .less: return R.Color.black
+			case .more: return R.Color.white
+			case .over: return R.Color.white
+			}
+		}
+		
+		var barColor: UIColor {
+			switch self {
+			case .less: return R.Color.yellow600
+			case .more: return R.Color.yellow800
+			case .over: return R.Color.black
+			}
+		}
 	}
 	// MARK: - Properties
+	private lazy var state: State = .over
 	
 	// MARK: - UI Components
 	private lazy var titleLabel = UILabel()
@@ -146,13 +180,13 @@ extension StatisticsTitleView: SkeletonLoadable {
 		}
 		
 		titleLabel = titleLabel.then {
-			$0.text = "예산보다 적게 지출하고 있어요"
+			$0.text = state.title
 			$0.font = R.Font.prtendard(family: .bold, size: 16)
 			$0.textColor = R.Color.gray200
 		}
 		
 		subTitleLabel = subTitleLabel.then {
-			$0.text = "이렇게만 지출하면 당신도 저축왕!"
+			$0.text = state.subTitle
 			$0.font = R.Font.body5
 			$0.textColor = R.Color.gray300
 			$0.layer.addSublayer(rangeLayer)
@@ -170,12 +204,12 @@ extension StatisticsTitleView: SkeletonLoadable {
 		
 		currentBarView = currentBarView.then {
 			$0.layer.cornerRadius = 4
-			$0.backgroundColor = R.Color.yellow600
+			$0.backgroundColor = state.barColor
 		}
 		
 		percentLabel = percentLabel.then {
-			$0.text = "80%"
-			$0.textColor = R.Color.black
+			$0.text = "0%"
+			$0.textColor = state.textColor
 			$0.font = R.Font.body4
 		}
 		
@@ -260,7 +294,7 @@ extension StatisticsTitleView: SkeletonLoadable {
 			$0.centerY.equalTo(currentPayLabel)
 			$0.leading.equalTo(currentPayLabel.snp.trailing).offset(10)
 			$0.width.equalTo(1)
-			$0.height.equalTo(9)
+			$0.height.equalTo(9 )
 		}
 		
 		settingBudgetLabel.snp.makeConstraints {

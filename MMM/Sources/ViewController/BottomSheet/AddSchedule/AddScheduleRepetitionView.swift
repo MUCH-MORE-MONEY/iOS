@@ -8,11 +8,34 @@
 import SwiftUI
 
 struct AddScheduleRepetitionView: View {
+    @ObservedObject var addScheduleViewModel: AddScheduleViewModel
+    @State private var timeSelected = 1
+    @State private var isFirst = true
+    @Binding var isShowingSheet: Bool
     let items = ["횟수", "날짜"]
     let times = [1,2,3,4,5]
-    @State private var selectedID = "날짜"
-    @State private var timeSelected = 1
-    @State private var date = Date()
+    
+    @State private var selectedYear: Int = Calendar.current.component(.year, from: Date())
+    @State private var selectedMonth: Int = Calendar.current.component(.month, from: Date())
+    @State private var selectedDay: Int = Calendar.current.component(.day, from: Date())
+    @Environment(\.presentationMode) var presentationMode
+    
+    // 년도, 월, 일 범위 설정
+    let years: [Int] = Array(2020...2024)
+    let months: [Int] = Array(1...12)
+    var days: [Int] {
+        let selectedMonthIndex = selectedMonth - 1
+        let daysInMonth = Calendar.current.range(of: .day, in: .month, for: Calendar.current.date(from: DateComponents(year: selectedYear, month: selectedMonthIndex))!)!
+        return Array(daysInMonth)
+    }
+    
+    private var isTimeRadioButtonOn: Bool {
+        addScheduleViewModel.recurrenceTime == items[0]
+    }
+    
+    private var nextYear: Date {
+        Calendar.current.date(byAdding: .year, value: 1, to: addScheduleViewModel.date)!
+    }
     
     var body: some View {
         VStack {
@@ -22,7 +45,18 @@ struct AddScheduleRepetitionView: View {
                         .font(Font(R.Font.h5))
                     Spacer()
                     Button {
-                        print("확인")
+                        if isTimeRadioButtonOn {
+                            addScheduleViewModel.recurrenceInfo.recurrenceEndDvcd = "01"
+                            
+                        } else {
+                            addScheduleViewModel.recurrenceInfo.recurrenceEndDvcd = "02"
+                            addScheduleViewModel.recurrenceInfo.startYMD = addScheduleViewModel.date.getFormattedYMD()
+                            addScheduleViewModel.recurrenceInfo.endYMD = addScheduleViewModel.endDate.getFormattedYMD()
+                            addScheduleViewModel.recurrenceInfo.recurrenceCnt = 0
+                        }
+
+                        presentationMode.wrappedValue.dismiss()
+                        isShowingSheet = false
                     } label: {
                         Text("확인")
                             .font(Font(R.Font.title3))
@@ -34,15 +68,20 @@ struct AddScheduleRepetitionView: View {
                 .padding(.bottom, 10)
                 .padding([.leading, .trailing], 24)
                 
-                RadioButton(items[0], callback: { id in
-                    selectedID = id
-                }, selectedID: selectedID)
-                .padding([.leading, .trailing], 24)
                 
-                if selectedID == items[0] {
+                RadioButton(items[0],
+                            selectedID: addScheduleViewModel.recurrenceTime,
+                            subLabel: isTimeRadioButtonOn ? "\(addScheduleViewModel.recurrenceInfo.recurrenceCnt + 1)회 반복" : nil,
+                            callback: { id in
+                    addScheduleViewModel.recurrenceTime = id
+                    isFirst = false
+                })
+                
+                .padding([.leading, .trailing], 24)
+
+                if !isFirst && addScheduleViewModel.recurrenceTime == items[0] {
                     HStack {
-                        Picker(selection: $timeSelected, label: Text("회").fixedSize()) {
-                            
+                        Picker(selection: $addScheduleViewModel.recurrenceInfo.recurrenceCnt, label: Text("회").fixedSize()) {
                             ForEach(0 ..< times.count) {
                                 Text("\(self.times[$0])")
                             }
@@ -55,15 +94,20 @@ struct AddScheduleRepetitionView: View {
                     .background(Color(R.Color.gray100))
                     
                 }
-                RadioButton(items[1], callback: { id in
-                    selectedID = id
-                }, selectedID: selectedID)
+                RadioButton(items[1],
+                            selectedID: addScheduleViewModel.recurrenceTime,
+                            subLabel: isTimeRadioButtonOn ? nil : "\(addScheduleViewModel.endDate.getFormattedYMDByCalendar())까지",
+                            callback: { id in
+                    addScheduleViewModel.recurrenceTime = id
+                    isFirst = false
+                })
                 .padding([.leading, .trailing], 24)
                 
-                if selectedID == items[1] {
-                    
+                if addScheduleViewModel.recurrenceTime == items[1] {
                     VStack {
-                        DatePicker(selection: $date, displayedComponents: .date) {
+                        DatePicker(selection: $addScheduleViewModel.endDate,
+                                   in: addScheduleViewModel.date...nextYear,
+                                   displayedComponents: .date) {
                             
                         }
                         .labelsHidden()
@@ -75,12 +119,15 @@ struct AddScheduleRepetitionView: View {
                 }
             }
         }
+        .onAppear {
+            addScheduleViewModel.endDate = addScheduleViewModel.date
+        }
         .ignoresSafeArea()
         Spacer()
     }
 }
 
 
-#Preview {
-    AddScheduleRepetitionView()
-}
+//#Preview {
+//    AddScheduleRepetitionView(addScheduleViewModel: AddScheduleViewModel(), isShowingSheet: $isShowingSheet)
+//}

@@ -39,7 +39,8 @@ final class EditActivityViewModel: ObservableObject {
     
     // 경제활동 반복
     @Published var recurrenceYN = "N"
-    @Published var recurrenceInfo: [APIParameters.RecurrenceInfo] = []
+    @Published var recurrenceInfo: APIParameters.RecurrenceInfo?
+    @Published var recurrenceTitle: String = "반복 안함"
     
     @Published var editResponse: UpdateResDto?
     @Published var deleteResponse: DeleteResDto?

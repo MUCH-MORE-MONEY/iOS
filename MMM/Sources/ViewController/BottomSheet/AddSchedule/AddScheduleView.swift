@@ -11,20 +11,45 @@ struct AddScheduleView: View {
     @State private var isShowingSheet: Bool = false
     @ObservedObject var editViewModel: EditActivityViewModel
     @StateObject var addScheduleViewModel = AddScheduleViewModel()
+    @Environment(\.presentationMode) var presentationMode
     
-    private var items: [String] {
-        [
-            "반복 안함",
-            "매일",
-            "매주 \(addScheduleViewModel.recurrenceWeekday)요일",
-            "매월 \(addScheduleViewModel.recurrenceDayofMonth)일",
-            "매월 \(addScheduleViewModel.recurrenceWeekOfMonth)번째 \(addScheduleViewModel.recurrenceWeekday)요일",
-            "주중 매일 (월-금)"
-        ]
+//    private var items: [(String, RecurrencePattern)] {
+//        [
+//            ("반복 안함", .none),
+//            ("매일", .daily),
+//            ("매주 \(addScheduleViewModel.recurrenceWeekday)요일", .weekly),
+//            ("매월 \(addScheduleViewModel.recurrenceDayofMonth)일", .monthlyDate),
+//            ("매월 \(addScheduleViewModel.recurrenceWeekOfMonth)번째 \(addScheduleViewModel.recurrenceWeekday)요일", .monthlyNthWeek),
+//            ("주중 매일 (월-금)", .weekday)
+//        ]
+//    }
+//    
+    enum RecurrencePattern {
+        case none
+        case daily
+        case weekly
+        case monthlyDate
+        case monthlyNthWeek
+        case weekday
     }
+    
     
     private var isTypeButtonOn: Bool {
         addScheduleViewModel.recurrenceRadioOption != "반복 안함"
+    }
+    
+    private var recurrenceTypeText: String {
+        if addScheduleViewModel.recurrenceInfo.recurrenceEndDvcd == "01" {
+            return "\(addScheduleViewModel.recurrenceInfo.recurrenceCnt + 1)회 반복"
+        } else {
+            let date = addScheduleViewModel.recurrenceInfo.endYMD
+            
+            let year = date.prefix(4)
+            let month = date.dropFirst(4).prefix(2)
+            let day = date.suffix(2)
+            
+            return "\(year).\(month).\(day)까지"
+        }
     }
     
     var body: some View {
@@ -35,8 +60,12 @@ struct AddScheduleView: View {
                         .font(Font(R.Font.h5))
                     Spacer()
                     Button {
-                        // 여기서 데이터 바인딩 및 dismiss
-                        print("확인")
+//                        // 여기서 데이터 바인딩
+                        addScheduleViewModel.getCurrentRadioButtonItem()
+                        editViewModel.recurrenceTitle = addScheduleViewModel.addScheduleTapViewLabel
+                        editViewModel.recurrenceInfo = addScheduleViewModel.recurrenceInfo
+                        presentationMode.wrappedValue.dismiss()
+                        print("확인 \(addScheduleViewModel.recurrenceInfo)")
                     } label: {
                         Text("확인")
                             .font(Font(R.Font.title3))
@@ -48,7 +77,7 @@ struct AddScheduleView: View {
                 
                 Group {
                     // 초기값을 "반복 안함"으로 설정
-                    RadioButtonGroup(items: items, selectedId: "반복 안함") { selected in
+                    RadioButtonGroup(items: addScheduleViewModel.radioButtonItems.map { $0.0 }, selectedId: "반복 안함") { selected in
                         addScheduleViewModel.recurrenceRadioOption = selected
                     }
                 }.padding(.top, 12)
@@ -62,11 +91,10 @@ struct AddScheduleView: View {
                         .foregroundStyle(isTypeButtonOn ? Color(R.Color.gray900) : Color(R.Color.gray400))
                     Spacer()
                     Button {
-                        isShowingSheet.toggle()
-                        print("반복 종류 버튼 tapped")
+                        isShowingSheet = true
                     } label: {
                         HStack(spacing: 8) {
-                            Text(isTypeButtonOn ? addScheduleViewModel.recurrenceType : "없음")
+                            Text(isTypeButtonOn ? recurrenceTypeText : "없음")
                                 .font(Font(R.Font.body0))
                                 .foregroundStyle(isTypeButtonOn ? Color(R.Color.gray500) : Color(R.Color.gray300))
                             Image(uiImage: R.Icon.iconArrowNextGray16)
@@ -81,7 +109,7 @@ struct AddScheduleView: View {
         }
         .halfSheet(showSheet: $isShowingSheet) {
             VStack {
-                AddScheduleRepetitionView()
+                AddScheduleRepetitionView(addScheduleViewModel: addScheduleViewModel, isShowingSheet: $isShowingSheet)
                 Spacer()
             }
         }

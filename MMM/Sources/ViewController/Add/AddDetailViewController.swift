@@ -495,6 +495,13 @@ extension AddDetailViewController {
                 self.viewModel.categoryName = ""
             }
             .store(in: &cancellable)
+        
+        viewModel.$recurrenceTitle
+            .sinkOnMainThread { [weak self] text in
+                guard let self = self else { return }
+                self.addScheduleTapView.setTitleAndColor(by: text)
+            }
+            .store(in: &cancellable)
     }
     
     override func setAttribute() {

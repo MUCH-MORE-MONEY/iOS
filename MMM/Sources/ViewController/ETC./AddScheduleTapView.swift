@@ -30,8 +30,11 @@ final class AddScheduleTapView: BaseView {
 // MARK: - Action
 extension AddScheduleTapView {
     func setTitleAndColor(by text: String) {
-        titleLabel.text = text == "" ? "카테고리" : text
-        titleLabel.textColor = text == "" ? R.Color.gray400 : R.Color.gray800
+        let split = text.components(separatedBy: ",")
+        guard let type = split.first else { return }
+        guard let period = split.last else { return }
+        titleLabel.text = type == "반복 안함" ? "일정반복" : "\(type), \(period)"
+        titleLabel.textColor = text == "반복 안함" ? R.Color.gray400 : R.Color.gray800
     }
     
     func setViewisHomeDetail() {

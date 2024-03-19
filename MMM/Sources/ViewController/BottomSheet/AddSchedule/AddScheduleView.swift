@@ -13,43 +13,8 @@ struct AddScheduleView: View {
     @StateObject var addScheduleViewModel = AddScheduleViewModel()
     @Environment(\.presentationMode) var presentationMode
     
-//    private var items: [(String, RecurrencePattern)] {
-//        [
-//            ("반복 안함", .none),
-//            ("매일", .daily),
-//            ("매주 \(addScheduleViewModel.recurrenceWeekday)요일", .weekly),
-//            ("매월 \(addScheduleViewModel.recurrenceDayofMonth)일", .monthlyDate),
-//            ("매월 \(addScheduleViewModel.recurrenceWeekOfMonth)번째 \(addScheduleViewModel.recurrenceWeekday)요일", .monthlyNthWeek),
-//            ("주중 매일 (월-금)", .weekday)
-//        ]
-//    }
-//    
-    enum RecurrencePattern {
-        case none
-        case daily
-        case weekly
-        case monthlyDate
-        case monthlyNthWeek
-        case weekday
-    }
-    
-    
     private var isTypeButtonOn: Bool {
         addScheduleViewModel.recurrenceRadioOption != "반복 안함"
-    }
-    
-    private var recurrenceTypeText: String {
-        if addScheduleViewModel.recurrenceInfo.recurrenceEndDvcd == "01" {
-            return "\(addScheduleViewModel.recurrenceInfo.recurrenceCnt + 1)회 반복"
-        } else {
-            let date = addScheduleViewModel.recurrenceInfo.endYMD
-            
-            let year = date.prefix(4)
-            let month = date.dropFirst(4).prefix(2)
-            let day = date.suffix(2)
-            
-            return "\(year).\(month).\(day)까지"
-        }
     }
     
     var body: some View {
@@ -94,7 +59,7 @@ struct AddScheduleView: View {
                         isShowingSheet = true
                     } label: {
                         HStack(spacing: 8) {
-                            Text(isTypeButtonOn ? recurrenceTypeText : "없음")
+                            Text(isTypeButtonOn ? addScheduleViewModel.recurrenceTypeText : "없음")
                                 .font(Font(R.Font.body0))
                                 .foregroundStyle(isTypeButtonOn ? Color(R.Color.gray500) : Color(R.Color.gray300))
                             Image(uiImage: R.Icon.iconArrowNextGray16)

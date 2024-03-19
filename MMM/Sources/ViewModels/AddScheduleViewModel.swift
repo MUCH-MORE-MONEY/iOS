@@ -27,7 +27,6 @@ final class AddScheduleViewModel: ObservableObject {
         recurrencePattern: "none",      // 초기 세팅 none
         startYMD: "")
     @Published var recurrenceRadioOption = "반복 안함"
-    @Published var recurrenceType = "4회 반복"
     @Published var recurrenceTime = "횟수"
     @Published var endDate = Date()
     
@@ -68,10 +67,24 @@ final class AddScheduleViewModel: ObservableObject {
         ]
     }
     
+    var recurrenceTypeText: String {
+        if recurrenceInfo.recurrenceEndDvcd == "01" {
+            return "\(recurrenceInfo.recurrenceCnt + 1)회 반복"
+        } else {
+            let date = recurrenceInfo.endYMD
+            
+            let year = date.prefix(4)
+            let month = date.dropFirst(4).prefix(2)
+            let day = date.suffix(2)
+            
+            return "\(year).\(month).\(day)까지"
+        }
+    }
+    
     var addScheduleTapViewLabel: String {
         let item = radioButtonItems.filter { $0.0 == recurrenceRadioOption }.first ?? radioButtonItems[0]
 
-        return item.0 + ", \(recurrenceType)"
+        return item.0 + ", \(recurrenceTypeText)"
     }
     
     func getCurrentRadioButtonItem() {

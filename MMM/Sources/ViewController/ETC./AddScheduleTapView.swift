@@ -6,8 +6,6 @@
 //
 
 import UIKit
-
-import UIKit
 import SnapKit
 import Then
 
@@ -32,9 +30,8 @@ extension AddScheduleTapView {
     func setTitleAndColor(by text: String) {
         let split = text.components(separatedBy: ",")
         guard let type = split.first else { return }
-        guard let period = split.last else { return }
-        titleLabel.text = type == "반복 안함" ? "일정반복" : "\(type), \(period)"
-        titleLabel.textColor = text == "반복 안함" ? R.Color.gray400 : R.Color.gray800
+        titleLabel.text = type == "반복 안함" ? "일정반복" : text
+        titleLabel.textColor = type == "반복 안함" ? R.Color.gray400 : R.Color.gray800
     }
     
     func setViewisHomeDetail() {

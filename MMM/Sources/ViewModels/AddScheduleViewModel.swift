@@ -27,7 +27,6 @@ final class AddScheduleViewModel: ObservableObject {
         recurrencePattern: "none",      // 초기 세팅 none
         startYMD: "")
     @Published var recurrenceRadioOption = "반복 안함"
-    @Published var recurrenceTime = "횟수"
     @Published var endDate = Date()
     
     var dateComponent: DateComponents {

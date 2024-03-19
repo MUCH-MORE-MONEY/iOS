@@ -63,7 +63,7 @@ final class HomeDetailViewModel {
 		APIClient.dispatch(
 			APIRouter.SelectDetailReqDto(
 				headers: APIHeader.Default(token: token),
-				body: APIParameters.SelectDetailReqDto(economicActivityNo: id)))
+				queryParams: APIParameters.SelectDetailReqDto(economicActivityNo: id)))
 		.sink { error in
 			switch error {
 			case .failure:
@@ -76,7 +76,7 @@ final class HomeDetailViewModel {
 			guard let self = self else { return }
             isError = false
 			self.detailActivity = response
-//            print(self.detailActivity)
+            print(self.detailActivity)
 		}.store(in: &cancellable)
 	}
 	
@@ -86,7 +86,7 @@ final class HomeDetailViewModel {
         APIClient.dispatch(
             APIRouter.SelectDetailReqDto(
                 headers: APIHeader.Default(token: token),
-                body: APIParameters.SelectDetailReqDto(economicActivityNo: id)))
+                queryParams: APIParameters.SelectDetailReqDto(economicActivityNo: id)))
         .sink { error in
             switch error {
             case .failure(let data):

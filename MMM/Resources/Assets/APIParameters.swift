@@ -56,7 +56,7 @@ struct APIParameters{
             case createAt = "economicActivityYMD"
             case star = "valueScore"
             case recurrenceInfo
-            case recurrenceYN 
+            case recurrenceYN
         }
     }
     

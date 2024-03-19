@@ -13,14 +13,14 @@ struct SelectDetailResDto: Codable, Equatable {
     var categoryID: String      // 카테고리 id
     var categoryName: String    // 카테고리 이름
     var type: String            // 수입(01)/지출(02)
-//    let groupName: String       // 속해 있는 그룹 이름
-//    let groupNo: String         // 속해 있는 그룹 number
     var title: String           // 제목
     var memo: String            // subtitle
     var createAt: String        // 생성일
     var fileNo: String
     var imageUrl: String        // image url
     var star: Int               // 별 개수
+    var recurrenceYN: String?
+    var recurrenceInfo: RecurrenceInfo?
     
     enum CodingKeys: String, CodingKey {
         case id = "economicActivityNo"
@@ -36,5 +36,15 @@ struct SelectDetailResDto: Codable, Equatable {
         case imageUrl = "fileUrl"
         case fileNo
         case star = "valueScore"
+        case recurrenceInfo
+        case recurrenceYN
+    }
+    
+    struct RecurrenceInfo: Codable, Equatable {
+        var endYMD: String //"endYMD": "20240510",
+        var recurrenceCnt: Int //"recurrenceCnt": 3,
+        var recurrenceEndDvcd: String   // "recurrenceEndDvcd": "01",
+        var recurrencePattern: String   // "recurrencePattern": "none",
+        var startYMD: String            //  "startYMD": "20240510"
     }
 }

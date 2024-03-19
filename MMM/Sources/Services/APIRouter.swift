@@ -36,14 +36,14 @@ final class APIRouter {
     /// 일별 세부 경제활동을 위한 Router
     struct SelectDetailReqDto: Request {
         typealias ReturnType = SelectDetailResDto
-        var path: String = "/economic_activity/detail/select"
-        var method: HTTPMethod = .post
+        var path: String = "/v2/economic_activity/detail"
+        var method: HTTPMethod = .get
+        var queryParams: [String : Any]?
         var headers: [String : String]?
-        var body: [String: Any]?
         
-        init(headers: APIHeader.Default, body: APIParameters.SelectDetailReqDto) {
+        init(headers: APIHeader.Default, queryParams: APIParameters.SelectDetailReqDto) {
             self.headers = headers.asDictionary as? [String: String]
-            self.body = body.asDictionary
+            self.queryParams = queryParams.asDictionary
         }
     }
 	

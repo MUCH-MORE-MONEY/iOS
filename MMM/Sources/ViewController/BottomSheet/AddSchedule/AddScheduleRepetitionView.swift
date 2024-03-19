@@ -72,8 +72,8 @@ struct AddScheduleRepetitionView: View {
                 
                 
                 RadioButton(radioButtonItems[0],
-                            selectedID: "",
-                            subLabel: isTimeRadioButtonOn ? "\(addScheduleViewModel.recurrenceInfo.recurrenceCnt + 1)회 반복" : nil,
+                            selectedID: selectedID,
+                            subLabel: isTimeRadioButtonOn ? "\(addScheduleViewModel.recurrenceInfo.recurrenceCnt)회 반복" : nil,
                             callback: { id in
                     selectedID = id
                     isFirst = false
@@ -84,8 +84,8 @@ struct AddScheduleRepetitionView: View {
                 if !isFirst && selectedID == radioButtonItems[0] {
                     HStack {
                         Picker(selection: $addScheduleViewModel.recurrenceInfo.recurrenceCnt, label: Text("회").fixedSize()) {
-                            ForEach(0 ..< times.count) {
-                                Text("\(self.times[$0])")
+                            ForEach(times, id: \.self) {
+                                Text("\($0)")
                             }
                         }
                         .pickerStyle(.wheel)
@@ -97,7 +97,7 @@ struct AddScheduleRepetitionView: View {
                     
                 }
                 RadioButton(radioButtonItems[1],
-                            selectedID: "",
+                            selectedID: selectedID,
                             subLabel: isTimeRadioButtonOn ? nil : "\(addScheduleViewModel.endDate.getFormattedYMDByCalendar())까지",
                             callback: { id in
                     selectedID = id
@@ -129,7 +129,9 @@ struct AddScheduleRepetitionView: View {
     }
 }
 
-
-//#Preview {
-//    AddScheduleRepetitionView(addScheduleViewModel: AddScheduleViewModel(), isShowingSheet: $isShowingSheet)
-//}
+struct AddScheduleRepetitionView_Previews: PreviewProvider {
+    @State static var isShowingSheet = true
+    static var previews: some View {
+        AddScheduleRepetitionView(addScheduleViewModel: AddScheduleViewModel(), isShowingSheet: $isShowingSheet)
+    }
+}

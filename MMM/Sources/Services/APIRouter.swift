@@ -64,7 +64,7 @@ final class APIRouter {
     /// 신규 경제활동 등록을 위한 Router
     struct InsertReqDto: Request {
         typealias ReturnType = InsertResDto
-        var path: String = "/economic_activity/insert"
+        var path: String = "/v2/economic_activity"
         var method: HTTPMethod = .post
         var headers: [String : String]?
         var body: [String : Any]?

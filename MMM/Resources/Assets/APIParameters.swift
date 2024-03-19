@@ -43,6 +43,8 @@ struct APIParameters{
         var memo: String
         var createAt: String
         var star: Int
+        var recurrenceInfo: RecurrenceInfo?
+        var recurrenceYN: String
         
         enum CodingKeys: String, CodingKey {
             case binaryFileList
@@ -53,6 +55,8 @@ struct APIParameters{
             case memo = "economicActivityMm"
             case createAt = "economicActivityYMD"
             case star = "valueScore"
+            case recurrenceInfo
+            case recurrenceYN 
         }
     }
     

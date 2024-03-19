@@ -38,9 +38,12 @@ final class EditActivityViewModel: ObservableObject {
     @Published var isViewFromCategoryViewController = false
     
     // 경제활동 반복
-    @Published var recurrenceYN = "N"
     @Published var recurrenceInfo: APIParameters.RecurrenceInfo?
     @Published var recurrenceTitle: String = "반복 안함"
+    private var recurrenceYN: String {
+        guard let info = recurrenceInfo else { return "N" }
+        return info.recurrencePattern == "none" ? "N" : "Y"
+    }
     
     @Published var editResponse: UpdateResDto?
     @Published var deleteResponse: DeleteResDto?
@@ -104,7 +107,9 @@ final class EditActivityViewModel: ObservableObject {
                     title: title,
                     memo: memo,
                     createAt: createAt,
-                    star: star)))
+                    star: star,
+                    recurrenceInfo: recurrenceInfo,
+                    recurrenceYN: recurrenceYN)))
         .sink { data in
             switch data {
             case .failure(_):

@@ -22,7 +22,7 @@ final class AddScheduleViewModel: ObservableObject {
     // 경제활동 반복
     @Published var recurrenceInfo: APIParameters.RecurrenceInfo = .init(
         endYMD: "",
-        recurrenceCnt: 3,
+        recurrenceCnt: 4,
         recurrenceEndDvcd: "01",        // 초기 세팅은 횟수반복이기 때문에 "01" 로 설정
         recurrencePattern: "none",      // 초기 세팅 none
         startYMD: "")
@@ -68,7 +68,7 @@ final class AddScheduleViewModel: ObservableObject {
     
     var recurrenceTypeText: String {
         if recurrenceInfo.recurrenceEndDvcd == "01" {
-            return "\(recurrenceInfo.recurrenceCnt + 1)회 반복"
+            return "\(recurrenceInfo.recurrenceCnt)회 반복"
         } else {
             let date = recurrenceInfo.endYMD
             

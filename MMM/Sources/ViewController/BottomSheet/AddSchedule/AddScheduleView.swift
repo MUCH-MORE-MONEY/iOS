@@ -82,6 +82,7 @@ struct AddScheduleView: View {
             // 최초 date 값을 가져옴
             guard let date = editViewModel.date else { return }
             addScheduleViewModel.date = date
+            addScheduleViewModel.recurrenceInfo.startYMD = date.getFormattedYMD()
         }
     }
 }

@@ -37,6 +37,19 @@ extension AddScheduleTapView {
     func setViewisHomeDetail() {
         arrowImageView.isHidden = true
     }
+    
+    func arrowImageHidden() {
+        arrowImageView.isHidden = true
+    }
+    
+    func setTitle(by recurrenceInfo: SelectDetailResDto.RecurrenceInfo) {
+        // 패턴 먼저 입력
+        let pattern = recurrenceInfo.recurrencePattern.recurrenceTitleByPattern()
+        let deadline = recurrenceInfo.recurrenceEndDvcd == "01" ? "\(recurrenceInfo.recurrenceCnt)회 반복" : "\(recurrenceInfo.endYMD.insertDatePeriod())까지"
+        
+        titleLabel.text = "\(pattern), \(deadline)"
+        titleLabel.textColor = R.Color.gray800
+    }
 }
 
 // MARK: - setup

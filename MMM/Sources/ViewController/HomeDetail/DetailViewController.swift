@@ -31,7 +31,11 @@ class DetailViewController: BaseDetailViewController, UIScrollViewDelegate {
 		UIImageView(image: R.Icon.iconStarDisabled16),
 		UIImageView(image: R.Icon.iconStarDisabled16)
 	]
+    
+    // MARK: - Category
     lazy var addCategoryView = AddCategoryView()
+    // MARK: - Schedule
+    private lazy var addScheduleTapView = AddScheduleTapView()
     private lazy var separatorView = SeparatorView()
 	
 	// MARK: - LoadingView
@@ -229,6 +233,21 @@ extension DetailViewController {
                 self.addCategoryView.setTitleAndColor(by: value.categoryName)
                 self.addCategoryView.setViewisHomeDetail()
                 
+                // 경제활동 반복
+                // 기존의 recurrence가 없던 녀석들도 고려해야함
+                if let recurrenceInfo = value.recurrenceInfo, let recurrenceYN = value.recurrenceYN {
+                    if recurrenceYN == "Y" {
+                        addScheduleTapView.setTitle(by: recurrenceInfo)
+                        remakeConstraintsByAddCScheduleTapView()
+                    } else {    // 반복이 아닌 경우
+                        addScheduleTapView.isHidden = true
+                        remakeConstraintsByAddCategoryView()
+                    }
+                } else {        // 기존에 있던 경제활동은 반복을 response하지 않으므로 hidden 처리
+                    addScheduleTapView.isHidden = true
+                    remakeConstraintsByAddCategoryView()
+                }
+                
             }.store(in: &cancellable)
         homeDetailViewModel.pageIndex = index
         bottomPageControlView.setViewModel(homeDetailViewModel, economicActivityId)
@@ -245,7 +264,7 @@ extension DetailViewController {
 		
 		view.addSubviews(titleLabel, scrollView, bottomPageControlView)
 		
-		contentView.addSubviews(addCategoryView, separatorView, starStackView, mainImageView, cameraImageView, memoLabel, satisfactionLabel)
+		contentView.addSubviews(addScheduleTapView, addCategoryView, separatorView, starStackView, mainImageView, cameraImageView, memoLabel, satisfactionLabel)
 		scrollView.addSubviews(contentView)
 		starList.forEach {
 			$0.contentMode = .scaleAspectFit
@@ -302,6 +321,9 @@ extension DetailViewController {
 			$0.numberOfLines = 0
 		}
         
+        addScheduleTapView = addScheduleTapView.then {
+            $0.arrowImageHidden()
+        }
 	}
 	
 	override func setLayout() {
@@ -324,10 +346,16 @@ extension DetailViewController {
         addCategoryView.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.left.right.equalToSuperview()
+            $0.height.equalTo(24)
+        }
+        
+        addScheduleTapView.snp.makeConstraints {
+            $0.top.equalTo(addCategoryView.snp.bottom).offset(12)
+            $0.left.right.equalToSuperview()
         }
         
         separatorView.snp.makeConstraints {
-            $0.top.equalTo(addCategoryView.snp.bottom).offset(40)
+            $0.top.equalTo(addScheduleTapView.snp.bottom).offset(40)
             $0.left.right.equalToSuperview()
         }
         
@@ -385,6 +413,20 @@ extension DetailViewController {
 			$0.bottom.equalToSuperview()
 		}
 	}
+    
+    private func remakeConstraintsByAddCategoryView() {
+        separatorView.snp.remakeConstraints {
+            $0.top.equalTo(addCategoryView.snp.bottom).offset(40)
+            $0.left.right.equalToSuperview()
+        }
+    }
+    
+    private func remakeConstraintsByAddCScheduleTapView() {
+        separatorView.snp.remakeConstraints {
+            $0.top.equalTo(addScheduleTapView.snp.bottom).offset(40)
+            $0.left.right.equalToSuperview()
+        }
+    }
 }
 
 // MARK: - Action

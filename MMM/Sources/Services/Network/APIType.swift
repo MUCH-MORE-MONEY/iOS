@@ -21,7 +21,6 @@ enum MMMAPI {
 	case getStaticsticsAverage(dateYM: String) // 월간 만족도 평균값
 	case getStatisticsList(dateYM: String, valueScoreDvcd: String, limit: Int = 15, offset: Int = 0) // 만족도별 목록
 	case getStatisticsCategory(dateYM: String, economicActivityDvcd: String)
-    case getSelectedActivity(activityId: String)
 
 	// MARK: - Category Main
 //    case getAddCategoryList(CategoryListReqDto) //경제활동구분 코드 기준 카테고리별 월간 경제활동 목록 전체 조회
@@ -70,8 +69,6 @@ extension MMMAPI: BaseNetworkService {
 			return "/economic_activity/\(dateYM)/\(valueScoreDvcd)/list"
 		case let .getStatisticsCategory(dateYM, economicActivityDvcd):
 			return "/economic_activity/\(dateYM)/\(economicActivityDvcd)/upper-category/list"
-        case .getSelectedActivity:
-            return "/economic_activity/detail/select"
 		case let .getCategoryList(request):
 			return "/economic_activity/\(request.dateYM)/\(request.economicActivityDvcd)/category/list"
 		case let .getCategoryDetailList(request):
@@ -101,7 +98,7 @@ extension MMMAPI: BaseNetworkService {
 	var method: Moya.Method {
 		switch self {
         // MARK: - V1 API
-        case .push, .pushAgreeListSelect, .pushAgreeUpdate, .getSelectedActivity:
+        case .push, .pushAgreeListSelect, .pushAgreeUpdate:
 			return .post
 		case .getStaticsticsAverage, .getStatisticsList, .getStatisticsCategory:
 			return .get
@@ -147,8 +144,6 @@ extension MMMAPI: BaseNetworkService {
 			return .requestPlain
 		case .getWeely:
 			return .requestPlain // get이지만 따로 필요한 값이 없다.
-        case .getSelectedActivity(activityId: let activityId):
-            return .requestParameters(parameters: ["economicActivityNo" : activityId], encoding: JSONEncoding.default)
             
         // MARK: - V2 API
         case let .getDetailActivity(activityId):

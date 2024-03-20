@@ -18,7 +18,6 @@ final class DetailReactor: Reactor {
     
     enum Mutation {
         case pushEditVC(Bool)
-        case fetchSelectedActivity(SelectDetailResDto)
         case fetchDetailActivity(SelectDetailResDto)
         case fetchActivity([EconomicActivity])
         case setLoading(Bool)
@@ -46,7 +45,6 @@ final class DetailReactor: Reactor {
     
     init(dateYM: String, rowNum: Int, totalItem: Int, valueScoreDvcd: String, id: String) {
         self.initialState = State(dateYM: dateYM, rowNum: rowNum, totalItem: totalItem, valueScoreDvcd: valueScoreDvcd, id: id)
-//        action.onNext(.loadData(dateYM: dateYM, rowNum: rowNum, valueScoreDvcd: valueScoreDvcd, id: id))
     }
 }
 
@@ -68,7 +66,6 @@ extension DetailReactor {
             return .concat([
                 .just(.setLoading(true)),
                 self.getStatisticsList(dateYM, rowNum, valueScoreDvcd, true),
-//                self.getSelectedActivity(by: id),
                 self.getDetailActivity(by: id),
                 .just(.setLoading(false))
             ])
@@ -77,8 +74,6 @@ extension DetailReactor {
             return .concat([
                 .just(.updateIndex(1)),
                 .just(.setLoading(true)),
-//                self.getStatisticsList(dateYM, rowNum + 1, valueScoreDvcd),
-//                self.getDetailActivity(by: currentState.id),
                 fetchStatisticsAndSelectedActivity(dateYM, rowNum + 1, valueScoreDvcd),
                 .just(.setLoading(false))
             ])
@@ -87,8 +82,6 @@ extension DetailReactor {
             return .concat([
                 .just(.updateIndex(-1)),
                 .just(.setLoading(true)),
-//                self.getStatisticsList(dateYM, rowNum - 1, valueScoreDvcd),
-//                self.getDetailActivity(by: currentState.id),
                 fetchStatisticsAndSelectedActivity(dateYM, rowNum - 1, valueScoreDvcd),
                 .just(.setLoading(false))
             ])
@@ -114,11 +107,7 @@ extension DetailReactor {
         case let .updateIndex(index):
             newState.rowNum += index
             
-        case let .fetchSelectedActivity(activity):
-            newState.editActivity = activity
-            
         case let .fetchDetailActivity(activity):
-            print(activity)
             newState.editActivity = activity
             
         case let .updateID(id):
@@ -139,15 +128,8 @@ extension DetailReactor {
             }
             .catchAndReturn(.setError)
     }
+
     // 경제활동 편집 기능도 수행하기 위해 selectedActivity 타입이 필요
-    func getSelectedActivity(by id: String) -> Observable<Mutation> {
-        return MMMAPIService().getSelectedActivity(id)
-            .map { (response, error) -> Mutation in
-                return .fetchSelectedActivity(response)
-            }
-            .catchAndReturn(.setError)
-    }
-    
     func getDetailActivity(by id: String) -> Observable<Mutation> {
         return MMMAPIService().getDetailActivity(id)
             .map { (response, error) -> Mutation in

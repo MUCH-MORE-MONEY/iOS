@@ -101,17 +101,10 @@ extension DetailViewController2 {
             .bind(onNext: pushEditVC)
             .disposed(by: disposeBag)
         
-//        reactor.state
-//            .map { $0.list }
-//            .filter { !$0.isEmpty }
-//            .distinctUntilChanged()
-//            .bind(onNext: updateUI)
-//            .disposed(by: disposeBag)
-        
         reactor.state
             .compactMap { $0.editActivity }
             .distinctUntilChanged()
-            .bind(onNext: updateUI1)
+            .bind(onNext: updateUI)
             .disposed(by: disposeBag)
         
         reactor.state
@@ -153,66 +146,7 @@ private extension DetailViewController2 {
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    func updateUI(_ list: [EconomicActivity]) {
-        guard let activity = list.first else { return }
-
-        let originalString = activity.createAt
-
-        // 원본 문자열을 날짜로 변환하기 위한 DateFormatter 설정
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyyMMdd" // 원본 문자열의 형식
-
-        // 문자열을 Date로 변환
-        if let date = dateFormatter.date(from: originalString) {
-            // 새로운 형식으로 문자열을 변환하기 위한 DateFormatter 설정
-            dateFormatter.dateFormat = "MM월 dd일"
-            let newString = dateFormatter.string(from: date) + " 경제활동"
-            self.title = newString
-//            print(newString) // 결과: "11월 10일 경제활동"
-        } else {
-            print("날짜 변환 실패")
-        }
-        
-        self.titleLabel.text = activity.title
-        self.activityType.text = activity.type == "01" ? "지출" : "수입"
-        self.activityType.backgroundColor = activity.type == "01" ? R.Color.orange500 : R.Color.blue500
-        self.starList.forEach {
-            $0.image = R.Icon.iconStarGray16
-        }
-        
-        for i in 0..<activity.star {
-            self.starList[i].image = R.Icon.iconStarBlack16
-        }
-        
-        if URL(string: activity.imageUrl) != nil {
-            self.mainImageView.isHidden = false
-            self.cameraImageView.isHidden = true
-            self.mainImageView.setImage(urlStr: activity.imageUrl, defaultImage: R.Icon.camera48)
-            self.remakeConstraintsByMainImageView()
-            self.hasImage = true
-        } else {
-            self.mainImageView.isHidden = true
-            self.cameraImageView.isHidden = false
-            self.remakeConstraintsByCameraImageView()
-            self.hasImage = false
-        }
-        
-        
-        self.totalPrice.text = "\(activity.amount.withCommas())원"
-        if !activity.memo.isEmpty {
-            self.memoLabel.text = activity.memo
-            memoLabel.textColor = R.Color.black
-        } else {
-            memoLabel.textColor = R.Color.gray400
-            self.memoLabel.text = "이 활동은 어떤 활동이었는지 기록해봐요"
-        }
-        
-        self.satisfactionLabel.setSatisfyingLabelEdit(by: activity.star)
-        self.addCategoryView.setTitleAndColor(by: activity.categoryTitle ?? "기타")
-        self.addCategoryView.setViewisHomeDetail()
-    }
-    
-    func updateUI1(_ activity: SelectDetailResDto) {
+    func updateUI(_ activity: SelectDetailResDto) {
 
 
         let originalString = activity.createAt

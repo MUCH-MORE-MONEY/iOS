@@ -61,6 +61,7 @@ protocol MMMAPIServiceble: BaseAPIService {
     
     // MARK: - Statistics Detail
     func getSelectedActivity(_ activityId: String) -> Observable<(SelectDetailResDto, Error?)>
+    func getDetailActivity(_ aactivityIdc: String) -> Observable<(SelectDetailResDto, Error?)>
     
 	// MARK: - Category Main 요청 API
 	func getCategoryList(_ request: CategoryListReqDto) -> Observable<(CategoryListResDto, Error?)>
@@ -120,6 +121,11 @@ struct MMMAPIService: MMMAPIServiceble {
     // 통계에서 detail cell을 선택했을 경우 activityId를 가지고 fetch
     func getSelectedActivity(_ activityId: String) -> Observable<(SelectDetailResDto, Error?)> {
         return provider().request(MMMAPI.getSelectedActivity(activityId: activityId), type: SelectDetailResDto.self).asObservable()
+    }
+    
+    // v2 통계에서 detail cell을 선택했을 경우 activityId를 가지고 fetch
+    func getDetailActivity(_ activityId: String) -> Observable<(SelectDetailResDto, Error?)> {
+        return provider().request(MMMAPI.getDetailActivity(activityId: activityId), type: SelectDetailResDto.self).asObservable()
     }
 	
 	// MARK: - Category Main 요청 API

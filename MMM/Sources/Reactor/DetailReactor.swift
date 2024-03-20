@@ -19,10 +19,12 @@ final class DetailReactor: Reactor {
     enum Mutation {
         case pushEditVC(Bool)
         case fetchSelectedActivity(SelectDetailResDto)
+        case fetchDetailActivity(SelectDetailResDto)
         case fetchActivity([EconomicActivity])
         case setLoading(Bool)
         case setError
         case updateIndex(Int)
+        case updateID(String)
     }
     
     struct State {
@@ -66,7 +68,8 @@ extension DetailReactor {
             return .concat([
                 .just(.setLoading(true)),
                 self.getStatisticsList(dateYM, rowNum, valueScoreDvcd, true),
-                self.getSelectedActivity(by: id),
+//                self.getSelectedActivity(by: id),
+                self.getDetailActivity(by: id),
                 .just(.setLoading(false))
             ])
             
@@ -74,7 +77,9 @@ extension DetailReactor {
             return .concat([
                 .just(.updateIndex(1)),
                 .just(.setLoading(true)),
-                self.getStatisticsList(dateYM, rowNum + 1, valueScoreDvcd),
+//                self.getStatisticsList(dateYM, rowNum + 1, valueScoreDvcd),
+//                self.getDetailActivity(by: currentState.id),
+                fetchStatisticsAndSelectedActivity(dateYM, rowNum + 1, valueScoreDvcd),
                 .just(.setLoading(false))
             ])
             
@@ -82,7 +87,9 @@ extension DetailReactor {
             return .concat([
                 .just(.updateIndex(-1)),
                 .just(.setLoading(true)),
-                self.getStatisticsList(dateYM, rowNum - 1, valueScoreDvcd),
+//                self.getStatisticsList(dateYM, rowNum - 1, valueScoreDvcd),
+//                self.getDetailActivity(by: currentState.id),
+                fetchStatisticsAndSelectedActivity(dateYM, rowNum - 1, valueScoreDvcd),
                 .just(.setLoading(false))
             ])
         }
@@ -109,6 +116,13 @@ extension DetailReactor {
             
         case let .fetchSelectedActivity(activity):
             newState.editActivity = activity
+            
+        case let .fetchDetailActivity(activity):
+            print(activity)
+            newState.editActivity = activity
+            
+        case let .updateID(id):
+            newState.id = id
         }
         
         return newState
@@ -133,4 +147,29 @@ extension DetailReactor {
             }
             .catchAndReturn(.setError)
     }
+    
+    func getDetailActivity(by id: String) -> Observable<Mutation> {
+        return MMMAPIService().getDetailActivity(id)
+            .map { (response, error) -> Mutation in
+                return .fetchDetailActivity(response)
+            }
+    }
+    
+    func fetchStatisticsAndSelectedActivity(_ dateYM: String, _ rowNum: Int, _ type: String, _ reset: Bool = false) -> Observable<Mutation> {
+        return getStatisticsList(dateYM, rowNum, type, reset)
+            .flatMap { mutation -> Observable<Mutation> in
+                switch mutation {
+                case .fetchActivity(let activities):
+                    guard let activity = activities.first else {
+                        // 활동 목록이 비어있는 경우, 적절한 처리를 하거나 에러를 방출할 수 있습니다.
+                        return .just(.setError)
+                    }
+                    return self.getDetailActivity(by: activity.id)
+                default:
+                    // .setError 또는 다른 Mutation 처리
+                    return .just(.setError)
+                }
+            }
+    }
+
 }

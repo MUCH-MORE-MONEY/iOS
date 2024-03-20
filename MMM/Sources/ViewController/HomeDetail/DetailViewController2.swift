@@ -36,6 +36,7 @@ final class DetailViewController2: BaseDetailViewController, UIScrollViewDelegat
         UIImageView(image: R.Icon.iconStarDisabled16)
     ]
     lazy var addCategoryView = AddCategoryView()
+    private lazy var addScheduleTapView = AddScheduleTapView()
     private lazy var separatorView = SeparatorView()
     
     // MARK: - LoadingView
@@ -100,11 +101,17 @@ extension DetailViewController2 {
             .bind(onNext: pushEditVC)
             .disposed(by: disposeBag)
         
+//        reactor.state
+//            .map { $0.list }
+//            .filter { !$0.isEmpty }
+//            .distinctUntilChanged()
+//            .bind(onNext: updateUI)
+//            .disposed(by: disposeBag)
+        
         reactor.state
-            .map { $0.list }
-            .filter { !$0.isEmpty }
+            .compactMap { $0.editActivity }
             .distinctUntilChanged()
-            .bind(onNext: updateUI)
+            .bind(onNext: updateUI1)
             .disposed(by: disposeBag)
         
         reactor.state
@@ -203,6 +210,81 @@ private extension DetailViewController2 {
         self.satisfactionLabel.setSatisfyingLabelEdit(by: activity.star)
         self.addCategoryView.setTitleAndColor(by: activity.categoryTitle ?? "기타")
         self.addCategoryView.setViewisHomeDetail()
+    }
+    
+    func updateUI1(_ activity: SelectDetailResDto) {
+
+
+        let originalString = activity.createAt
+
+        // 원본 문자열을 날짜로 변환하기 위한 DateFormatter 설정
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyyMMdd" // 원본 문자열의 형식
+
+        // 문자열을 Date로 변환
+        if let date = dateFormatter.date(from: originalString) {
+            // 새로운 형식으로 문자열을 변환하기 위한 DateFormatter 설정
+            dateFormatter.dateFormat = "MM월 dd일"
+            let newString = dateFormatter.string(from: date) + " 경제활동"
+            self.title = newString
+//            print(newString) // 결과: "11월 10일 경제활동"
+        } else {
+            print("날짜 변환 실패")
+        }
+        
+        self.titleLabel.text = activity.title
+        self.activityType.text = activity.type == "01" ? "지출" : "수입"
+        self.activityType.backgroundColor = activity.type == "01" ? R.Color.orange500 : R.Color.blue500
+        self.starList.forEach {
+            $0.image = R.Icon.iconStarGray16
+        }
+        
+        for i in 0..<activity.star {
+            self.starList[i].image = R.Icon.iconStarBlack16
+        }
+        
+        if URL(string: activity.imageUrl) != nil {
+            self.mainImageView.isHidden = false
+            self.cameraImageView.isHidden = true
+            self.mainImageView.setImage(urlStr: activity.imageUrl, defaultImage: R.Icon.camera48)
+            self.remakeConstraintsByMainImageView()
+            self.hasImage = true
+        } else {
+            self.mainImageView.isHidden = true
+            self.cameraImageView.isHidden = false
+            self.remakeConstraintsByCameraImageView()
+            self.hasImage = false
+        }
+        
+        
+        self.totalPrice.text = "\(activity.amount.withCommas())원"
+        if !activity.memo.isEmpty {
+            self.memoLabel.text = activity.memo
+            memoLabel.textColor = R.Color.black
+        } else {
+            memoLabel.textColor = R.Color.gray400
+            self.memoLabel.text = "이 활동은 어떤 활동이었는지 기록해봐요"
+        }
+        
+        self.satisfactionLabel.setSatisfyingLabelEdit(by: activity.star)
+        self.addCategoryView.setTitleAndColor(by: activity.categoryName)
+        self.addCategoryView.setViewisHomeDetail()
+        
+        // 경제활동 반복
+        // 기존의 recurrence가 없던 녀석들도 고려해야함
+        if let recurrenceInfo = activity.recurrenceInfo, let recurrenceYN = activity.recurrenceYN {
+            if recurrenceYN == "Y" {
+                addScheduleTapView.setTitle(by: recurrenceInfo)
+                remakeConstraintsByAddCScheduleTapView()
+                addScheduleTapView.isHidden = false
+            } else {    // 반복이 아닌 경우
+                addScheduleTapView.isHidden = true
+                remakeConstraintsByAddCategoryView()
+            }
+        } else {        // 기존에 있던 경제활동은 반복을 response하지 않으므로 hidden 처리
+            addScheduleTapView.isHidden = true
+            remakeConstraintsByAddCategoryView()
+        }
     }
 }
 
@@ -307,7 +389,7 @@ extension DetailViewController2 {
         
         view.addSubviews(titleLabel, scrollView, bottomPageControlView)
         
-        contentView.addSubviews(addCategoryView, separatorView, starStackView, mainImageView, cameraImageView, memoLabel, satisfactionLabel)
+        contentView.addSubviews(addScheduleTapView, addCategoryView, separatorView, starStackView, mainImageView, cameraImageView, memoLabel, satisfactionLabel)
         scrollView.addSubviews(contentView)
     }
     
@@ -332,10 +414,17 @@ extension DetailViewController2 {
         addCategoryView.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.left.right.equalToSuperview()
+            $0.height.equalTo(24)
+        }
+        
+        addScheduleTapView.snp.makeConstraints {
+            $0.top.equalTo(addCategoryView.snp.bottom).offset(12)
+            $0.left.right.equalToSuperview()
+            $0.height.equalTo(24)
         }
         
         separatorView.snp.makeConstraints {
-            $0.top.equalTo(addCategoryView.snp.bottom).offset(40)
+            $0.top.equalTo(addScheduleTapView.snp.bottom).offset(16)
             $0.left.right.equalToSuperview()
         }
         
@@ -376,7 +465,10 @@ extension DetailViewController2 {
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(UIDevice.hasNotch ? 0 : 20)
         }
     }
-    
+}
+
+// MARK: - remakeConstraints
+extension DetailViewController2 {
     /// mainImageView 기준으로 memoLabel의 뷰를 다시 배치하는 메서드
     private func remakeConstraintsByMainImageView() {
         memoLabel.snp.remakeConstraints {
@@ -391,6 +483,20 @@ extension DetailViewController2 {
             $0.top.equalTo(cameraImageView.snp.bottom).offset(16)
             $0.left.right.equalToSuperview()
             $0.bottom.equalToSuperview()
+        }
+    }
+    
+    private func remakeConstraintsByAddCategoryView() {
+        separatorView.snp.remakeConstraints {
+            $0.top.equalTo(addCategoryView.snp.bottom).offset(16)
+            $0.left.right.equalToSuperview()
+        }
+    }
+    
+    private func remakeConstraintsByAddCScheduleTapView() {
+        separatorView.snp.remakeConstraints {
+            $0.top.equalTo(addScheduleTapView.snp.bottom).offset(16)
+            $0.left.right.equalToSuperview()
         }
     }
 }

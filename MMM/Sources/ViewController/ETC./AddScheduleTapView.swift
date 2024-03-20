@@ -46,9 +46,8 @@ extension AddScheduleTapView {
         // 패턴 먼저 입력
         let pattern = recurrenceInfo.recurrencePattern.recurrenceTitleByPattern()
         let deadline = recurrenceInfo.recurrenceEndDvcd == "01" ? "\(recurrenceInfo.recurrenceCnt)회 반복" : "\(recurrenceInfo.endYMD.insertDatePeriod())까지"
-        
-        titleLabel.text = "\(pattern), \(deadline)"
-        titleLabel.textColor = R.Color.gray800
+        self.titleLabel.text = "\(pattern), \(deadline)"
+        self.titleLabel.textColor = R.Color.gray800
     }
 }
 

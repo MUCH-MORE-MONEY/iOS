@@ -239,6 +239,7 @@ extension DetailViewController {
                     if recurrenceYN == "Y" {
                         addScheduleTapView.setTitle(by: recurrenceInfo)
                         remakeConstraintsByAddCScheduleTapView()
+                        addScheduleTapView.isHidden = false
                     } else {    // 반복이 아닌 경우
                         addScheduleTapView.isHidden = true
                         remakeConstraintsByAddCategoryView()
@@ -352,10 +353,11 @@ extension DetailViewController {
         addScheduleTapView.snp.makeConstraints {
             $0.top.equalTo(addCategoryView.snp.bottom).offset(12)
             $0.left.right.equalToSuperview()
+            $0.height.equalTo(24)
         }
         
         separatorView.snp.makeConstraints {
-            $0.top.equalTo(addScheduleTapView.snp.bottom).offset(40)
+            $0.top.equalTo(addScheduleTapView.snp.bottom).offset(16)
             $0.left.right.equalToSuperview()
         }
         
@@ -416,14 +418,14 @@ extension DetailViewController {
     
     private func remakeConstraintsByAddCategoryView() {
         separatorView.snp.remakeConstraints {
-            $0.top.equalTo(addCategoryView.snp.bottom).offset(40)
+            $0.top.equalTo(addCategoryView.snp.bottom).offset(16)
             $0.left.right.equalToSuperview()
         }
     }
     
     private func remakeConstraintsByAddCScheduleTapView() {
         separatorView.snp.remakeConstraints {
-            $0.top.equalTo(addScheduleTapView.snp.bottom).offset(40)
+            $0.top.equalTo(addScheduleTapView.snp.bottom).offset(16)
             $0.left.right.equalToSuperview()
         }
     }

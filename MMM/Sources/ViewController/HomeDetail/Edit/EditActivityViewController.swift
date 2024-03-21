@@ -334,22 +334,25 @@ extension EditActivityViewController: CustomAlertDelegate {
                 let recurrenceDeleteMessage = "편집 사항을 다른 일정에도 적용하시겠습니까?"
                 
                 let alert = UIAlertController(title: recurrenceDeleteTitle, message: recurrenceDeleteMessage, preferredStyle: .actionSheet)
-                let delRecurrenceN = UIAlertAction(title: "이 경제활동에만 적용", style: .default) { [weak self] _ in
+                let delRecurrenceNAction = UIAlertAction(title: "이 경제활동에만 적용", style: .default) { [weak self] _ in
                     guard let self = self else { return }
                     // 삭제시, 통계 Refresh
                     editViewModel.deleteDetailActivity(delRecurrenceYn: "Y")
                     self.refreshStatistics()
                 }
                 
-                let delRecurrenceY = UIAlertAction(title: "이후 경제활동에도 적용", style: .default) { [weak self] _ in
+                let delRecurrenceYAction = UIAlertAction(title: "이후 경제활동에도 적용", style: .default) { [weak self] _ in
                     guard let self = self else { return }
                     // 삭제시, 통계 Refresh
                     editViewModel.deleteDetailActivity(delRecurrenceYn: "N")
                     self.refreshStatistics()
                 }
                 
-                alert.addAction(delRecurrenceN)
-                alert.addAction(delRecurrenceY)
+                let cancelAction = UIAlertAction(title: "취소", style: .cancel)
+                
+                alert.addAction(delRecurrenceNAction)
+                alert.addAction(delRecurrenceYAction)
+                alert.addAction(cancelAction)
                 self.present(alert, animated: true)
             } else {
                 editViewModel.deleteDetailActivity(delRecurrenceYn: "N")

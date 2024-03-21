@@ -328,25 +328,56 @@ extension EditActivityViewController {
 extension EditActivityViewController: CustomAlertDelegate {
 	func didAlertCofirmButton() {
 		if isDeleteButton {
-			editViewModel.deleteDetailActivity()
+            
+            if detailViewModel.detailActivity?.recurrenceYN == "Y" {
+                let recurrenceDeleteTitle = "이 경제활동은 반복 설정되어있어요."
+                let recurrenceDeleteMessage = "편집 사항을 다른 일정에도 적용하시겠습니까?"
+                
+                let alert = UIAlertController(title: recurrenceDeleteTitle, message: recurrenceDeleteMessage, preferredStyle: .actionSheet)
+                let delRecurrenceN = UIAlertAction(title: "이 경제활동에만 적용", style: .default) { [weak self] _ in
+                    guard let self = self else { return }
+                    // 삭제시, 통계 Refresh
+                    editViewModel.deleteDetailActivity(delRecurrenceYn: "Y")
+                    self.refreshStatistics()
+                }
+                
+                let delRecurrenceY = UIAlertAction(title: "이후 경제활동에도 적용", style: .default) { [weak self] _ in
+                    guard let self = self else { return }
+                    // 삭제시, 통계 Refresh
+                    editViewModel.deleteDetailActivity(delRecurrenceYn: "N")
+                    self.refreshStatistics()
+                }
+                
+                alert.addAction(delRecurrenceN)
+                alert.addAction(delRecurrenceY)
+                self.present(alert, animated: true)
+            } else {
+                editViewModel.deleteDetailActivity(delRecurrenceYn: "N")
+                self.refreshStatistics()
+            }
 			
-			// 삭제시, 통계 Refresh
-			if let str = Constants.getKeychainValue(forKey: Constants.KeychainKey.statisticsDate), let date = str.toDate() {
-				ServiceProvider.shared.statisticsProvider.updateDate(to: date)
-			} else {
-				ServiceProvider.shared.statisticsProvider.updateDate(to: Date())
-			}
-			
-			self.loadView.play()
-			self.loadView.isPresent = true
-			self.loadView.modalPresentationStyle = .overFullScreen
-			self.present(self.loadView, animated: false)
+
+
 		} else {
 			super.didTapBackButton()
 		}
 	}
 	
 	func didAlertCacelButton() { }
+    
+    private func refreshStatistics() {
+        // 삭제시, 통계 Refresh
+        if let str = Constants.getKeychainValue(forKey: Constants.KeychainKey.statisticsDate), let date = str.toDate() {
+            ServiceProvider.shared.statisticsProvider.updateDate(to: date)
+        } else {
+            ServiceProvider.shared.statisticsProvider.updateDate(to: Date())
+        }
+        
+        self.loadView.play()
+        self.loadView.isPresent = true
+        self.loadView.modalPresentationStyle = .overFullScreen
+        self.present(self.loadView, animated: false)
+    }
 }
 
 // MARK: - Star Picker의 확인을 눌렀을 때

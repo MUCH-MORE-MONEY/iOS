@@ -102,10 +102,11 @@ struct APIParameters{
     
     /// 경제활동 삭제를 위한 Request
     struct DeleteReqDto: Encodable {
-        var id: String
-        
+        let id: String
+        let delRecurrenceYn: String
         enum CodingKeys: String, CodingKey {
             case id = "economicActivityNo"
+            case delRecurrenceYn
         }
     }
 	

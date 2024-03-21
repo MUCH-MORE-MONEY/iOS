@@ -205,14 +205,14 @@ final class EditActivityViewModel: ObservableObject {
         }.store(in: &cancellable)
     }
     
-    func deleteDetailActivity() {
+    func deleteDetailActivity(delRecurrenceYn: String) {
 		guard let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
         self.isLoading = true
         APIClient.dispatch(
             APIRouter.DeleteReqDto(
                 headers: APIHeader.Default(
                     token: token),
-                body: APIParameters.DeleteReqDto(id: id)))
+                queryParams: APIParameters.DeleteReqDto(id: id, delRecurrenceYn: delRecurrenceYn)))
         .sink { data in
             switch data {
             case .failure(_):

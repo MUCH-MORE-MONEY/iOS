@@ -92,14 +92,14 @@ final class APIRouter {
     /// 경제활동 삭제를 위한 Router
     struct DeleteReqDto: Request {
         typealias ReturnType = DeleteResDto
-        var path: String = "/economic_activity/delete"
-        var method: HTTPMethod = .post
+        var path: String = "/v2/economic_activity"
+        var method: HTTPMethod = .delete
         var headers: [String : String]?
-        var body: [String : Any]?
+        var queryParams: [String : Any]?
         
-        init(headers: APIHeader.Default, body: APIParameters.DeleteReqDto) {
+        init(headers: APIHeader.Default, queryParams: APIParameters.DeleteReqDto) {
             self.headers = headers.asDictionary as? [String: String]
-            self.body = body.asDictionary
+            self.queryParams = queryParams.asDictionary
         }
     }
 	

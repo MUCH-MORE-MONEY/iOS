@@ -71,6 +71,7 @@ public extension MMMResource {
 		public static let iconStarBlack16 = UIImage(named: "iconStarBlack16", in: .main, compatibleWith: nil)
 		public static let iconStarDisabled16 = UIImage(named: "iconStarDisabled16", in: .main, compatibleWith: nil)
         public static let iconStarGray16 = UIImage(named: "iconStarGray16", in: .main, compatibleWith: nil)
+		public static let iconStarGray24 = UIImage(named: "iconStarGray24", in: .main, compatibleWith: nil)
         public static let iconStarBlack48 = UIImage(named: "iconStarBlack48", in: .main, compatibleWith: nil)
         public static let iconStarGray48 = UIImage(named: "iconStarGray48", in: .main, compatibleWith: nil)
 		public static let iconStarOrange36 = UIImage(named: "iconStarOrange36", in: .main, compatibleWith: nil)

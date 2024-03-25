@@ -34,4 +34,26 @@ struct CategoryBar: Codable, Equatable {
 			CategoryBar(title: "높은 안모오오옥", price: "가격", ratio: 2.0)
 		]
 	}
+	
+	static func getPayList() -> [Self] {
+		return [
+			CategoryBar(title: "", price: "", ratio: 38.2),
+			CategoryBar(title: "", price: "", ratio: 31),
+			CategoryBar(title: "", price: "", ratio: 15),
+			CategoryBar(title: "", price: "", ratio: 6),
+			CategoryBar(title: "", price: "", ratio: 5),
+			CategoryBar(title: "", price: "", ratio: 2)
+		]
+	}
+	
+	static func getEarnList() -> [Self] {
+		return [
+			CategoryBar(title: "", price: "", ratio: 65.2),
+			CategoryBar(title: "", price: "", ratio: 15),
+			CategoryBar(title: "", price: "", ratio: 8),
+			CategoryBar(title: "", price: "", ratio: 3),
+			CategoryBar(title: "", price: "", ratio: 4),
+			CategoryBar(title: "", price: "", ratio: 2)
+		]
+	}
 }

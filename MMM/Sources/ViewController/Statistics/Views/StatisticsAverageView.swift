@@ -60,7 +60,21 @@ extension StatisticsAverageView {
 extension StatisticsAverageView {
 	// 외부에서 설정
 	func setData(average: Double) {
-		satisfactionLabel.text = "\(average) 점"
+		if average == 0.0 {
+			starImageView.image = R.Icon.iconStarGray24
+			titleLabel.text = "경제활동에 만족도를 설정해주세요"
+			titleLabel.textColor = R.Color.gray700
+			satisfactionLabel.text = "0 점"
+			satisfactionLabel.textColor = R.Color.gray500
+			sumurryButton.isHidden = true
+		} else {
+			starImageView.image = R.Icon.iconStarYellow24
+			titleLabel.text = "경제활동 만족도"
+			titleLabel.textColor = R.Color.gray200
+			satisfactionLabel.text = "\(average) 점"
+			satisfactionLabel.textColor = R.Color.white
+			sumurryButton.isHidden = false
+		}
 	}
 	
 	func isLoading(_ isLoading: Bool) {
@@ -92,7 +106,7 @@ extension StatisticsAverageView {
 		titleLabel = titleLabel.then {
 			$0.text = "경제활동 만족도"
 			$0.font = R.Font.body3
-			$0.textColor = R.Color.white
+			$0.textColor = R.Color.gray200
 		}
 		
 		sumurryButton = sumurryButton.then {

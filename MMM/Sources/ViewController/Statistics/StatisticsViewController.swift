@@ -178,35 +178,55 @@ extension StatisticsViewController {
 			.distinctUntilChanged() // 중복값 무시
 			.withUnretained(self)
 			.subscribe(onNext: { this, average in // 평균 변경
-				// 예산 설정 유무
-				if average == 0.0 { // 설정 X
-					this.isBudget = false
-					this.titleView.isHidden = true
-					this.newTitleView.isHidden = false
-					this.headerView.frame.size.height = 510
+				if average == 0.0 {
+					this.activityView.isHidden = true
+					this.headerView.frame.size.height = 420
 					
-					if this.headerView.subviews.contains(this.categoryView) {
-						this.categoryView.snp.remakeConstraints {
-							$0.top.equalTo(this.newTitleView.snp.bottom).offset(12)
-							$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
-							$0.height.equalTo(146)
+					if this.headerView.subviews.contains(this.satisfactionView) {
+						this.satisfactionView.snp.updateConstraints {
+							$0.top.equalTo(this.averageView.snp.bottom).offset(26)
 						}
 					}
 				} else {
-					this.isBudget = true
-					this.titleView.isHidden = false
-					this.newTitleView.isHidden = true
-					this.headerView.frame.size.height = 550
+					this.activityView.isHidden = false
+					this.headerView.frame.size.height = 510
 					
-					if this.headerView.subviews.contains(this.categoryView) {
-						this.categoryView.snp.remakeConstraints {
-							$0.top.equalTo(this.titleView.snp.bottom).offset(12)
-							$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
-							$0.height.equalTo(146)
+					if this.headerView.subviews.contains(this.satisfactionView) {
+						this.satisfactionView.snp.updateConstraints {
+							$0.top.equalTo(this.averageView.snp.bottom).offset(112)
 						}
 					}
 				}
+//				// 예산 설정 유무
+//				if average == 0.0 { // 설정 X
+//					this.isBudget = false
+//					this.titleView.isHidden = true
+//					this.newTitleView.isHidden = false
+//					this.headerView.frame.size.height = 510
+//					
+//					if this.headerView.subviews.contains(this.categoryView) {
+//						this.categoryView.snp.remakeConstraints {
+//							$0.top.equalTo(this.newTitleView.snp.bottom).offset(12)
+//							$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
+//							$0.height.equalTo(146)
+//						}
+//					}
+//				} else {
+//					this.isBudget = true
+//					this.titleView.isHidden = false
+//					this.newTitleView.isHidden = true
+//					this.headerView.frame.size.height = 550
+//					
+//					if this.headerView.subviews.contains(this.categoryView) {
+//						this.categoryView.snp.remakeConstraints {
+//							$0.top.equalTo(this.titleView.snp.bottom).offset(12)
+//							$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
+//							$0.height.equalTo(146)
+//						}
+//					}
+//				}
 				this.averageView.setData(average: average)
+				this.tableView.reloadData()
 			})
 			.disposed(by: disposeBag)
 		
@@ -475,6 +495,7 @@ extension StatisticsViewController: SkeletonLoadable {
 	override func setLayout() {
 		super.setLayout()
 		
+		titleView.isHidden = true
 		titleView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(12)
 			$0.leading.trailing.equalToSuperview().inset(24)

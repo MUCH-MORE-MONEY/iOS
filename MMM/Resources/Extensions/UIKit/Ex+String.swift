@@ -53,7 +53,7 @@ extension String {
     func recurrenceTitleByPattern() -> Self {
         switch self {
         case "none":
-            return "반복안함"
+            return "반복 안함"
         case "daily":
             return "매일"
         case let str where str.starts(with: "weekly"):
@@ -64,7 +64,7 @@ extension String {
             return "매월 \(date)일"
         case let str where str.starts(with: "monthly:nth_week"):
             let parts = str.components(separatedBy: ":")
-            let nthWeek = parts.count >= 2 ? parts[1] : ""
+            let nthWeek = parts.count >= 2 ? parts[2] : ""
             let day = parts.last?.weekEngToKor() ?? ""
             return "매월 \(nthWeek)번째 \(day)요일"
         case "weekday":

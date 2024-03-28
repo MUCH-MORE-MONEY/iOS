@@ -53,7 +53,7 @@ struct RadioButton: View {
 
 struct RadioButtonGroup: View {
     let items: [String]
-    @State var selectedId: String = ""
+    @Binding var selectedId: String
     let callback: (String) -> ()
     
     var body: some View {

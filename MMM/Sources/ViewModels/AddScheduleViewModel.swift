@@ -18,7 +18,9 @@ final class AddScheduleViewModel: ObservableObject {
         case weekday
     }
     
-    @Published var date = Date()
+    @Published var date = Date()    // date picker의 시작 날짜를 정의 (현재 날짜 기준으로 start)
+    @Published var endDate = Date() // date picker가 보여줄 마지막 날짜(최대 1년까지만 보여줌)
+    @Published var selectedId = ""
     // 경제활동 반복
     @Published var recurrenceInfo: APIParameters.RecurrenceInfo = .init(
         endYMD: "",
@@ -26,9 +28,7 @@ final class AddScheduleViewModel: ObservableObject {
         recurrenceEndDvcd: "01",        // 초기 세팅은 횟수반복이기 때문에 "01" 로 설정
         recurrencePattern: "none",      // 초기 세팅 none
         startYMD: "")
-    @Published var recurrenceRadioOption = "반복 안함"
-    @Published var endDate = Date()
-    
+
     var dateComponent: DateComponents {
         let calendar = Calendar.current
         
@@ -62,7 +62,7 @@ final class AddScheduleViewModel: ObservableObject {
             ("매주 \(recurrenceWeekday)요일", .weekly),
             ("매월 \(recurrenceDayofMonth)일", .monthlyDate),
             ("매월 \(recurrenceWeekOfMonth)번째 \(recurrenceWeekday)요일", .monthlyNthWeek),
-            ("주중 매일 (월-금)", .weekday)
+            ("평일마다(월-금)", .weekday)
         ]
     }
     
@@ -75,14 +75,14 @@ final class AddScheduleViewModel: ObservableObject {
     }
     
     var addScheduleTapViewLabel: String {
-        let item = radioButtonItems.filter { $0.0 == recurrenceRadioOption }.first ?? radioButtonItems[0]
+        let item = radioButtonItems.filter { $0.0 == selectedId }.first ?? radioButtonItems[0]
 
         return item.0 + ", \(recurrenceTypeText)"
     }
     
     func getCurrentRadioButtonItem() {
         // 여기서 데이터 바인딩
-        let item = radioButtonItems.filter { $0.0 == recurrenceRadioOption }.first ?? radioButtonItems[0]
+        let item = radioButtonItems.filter { $0.0 == selectedId }.first ?? radioButtonItems[0]
         switch item.1 {
         case .none:
             recurrenceInfo.recurrencePattern = "none"

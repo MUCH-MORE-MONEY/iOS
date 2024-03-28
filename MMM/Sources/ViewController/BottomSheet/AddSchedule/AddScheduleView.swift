@@ -13,8 +13,9 @@ struct AddScheduleView: View {
     @StateObject var addScheduleViewModel = AddScheduleViewModel()
     @Environment(\.presentationMode) var presentationMode
     
+    // 반복 안함일 경우에는 detail Sheet로 넘어가면 안되기 때문에 처리해줌
     private var isTypeButtonOn: Bool {
-        addScheduleViewModel.recurrenceRadioOption != "반복 안함"
+        addScheduleViewModel.selectedId != "반복 안함"
     }
     
     var body: some View {
@@ -25,7 +26,7 @@ struct AddScheduleView: View {
                         .font(Font(R.Font.h5))
                     Spacer()
                     Button {
-//                        // 여기서 데이터 바인딩
+//                        // 확인 버튼을 눌렀을 경우에만 editVM에 데이터를 넣어줘야함
                         addScheduleViewModel.getCurrentRadioButtonItem()
                         editViewModel.recurrenceTitle = addScheduleViewModel.addScheduleTapViewLabel
                         editViewModel.recurrenceInfo = addScheduleViewModel.recurrenceInfo
@@ -42,8 +43,8 @@ struct AddScheduleView: View {
                 
                 Group {
                     // 초기값을 "반복 안함"으로 설정
-                    RadioButtonGroup(items: addScheduleViewModel.radioButtonItems.map { $0.0 }, selectedId: "반복 안함") { selected in
-                        addScheduleViewModel.recurrenceRadioOption = selected
+                    RadioButtonGroup(items: addScheduleViewModel.radioButtonItems.map { $0.0 }, selectedId: $addScheduleViewModel.selectedId) { selected in
+                        // 확인 버튼을 눌렀을 경우에만 editVM에 데이터를 넣어줘야하기 떄문에 radio를 선택했을 경우 이벤트 처리 ㄴㄴ
                     }
                 }.padding(.top, 12)
 
@@ -79,10 +80,18 @@ struct AddScheduleView: View {
             }
         }
         .onAppear {
-            // 최초 date 값을 가져옴
-            guard let date = editViewModel.date else { return }
-            addScheduleViewModel.date = date
-            addScheduleViewModel.recurrenceInfo.startYMD = date.getFormattedYMD()
+            // recurrenceInfo가 있을 경우 그대로 addScheduleViewModel에 넣어줌
+            if let recurrenceInfo = editViewModel.recurrenceInfo {
+                addScheduleViewModel.recurrenceInfo = recurrenceInfo
+                addScheduleViewModel.selectedId = recurrenceInfo.recurrencePattern.recurrenceTitleByPattern()
+            } else {
+                // recurrenceInfo가 없을 경우(최초 진입) 데이터 직접 넣어줌, date값을 초기세팅해줌
+                guard let date = editViewModel.date else { return }
+                addScheduleViewModel.date = date
+                addScheduleViewModel.recurrenceInfo.startYMD = date.getFormattedYMD()
+                addScheduleViewModel.selectedId = "반복 안함"
+            }
+
         }
     }
 }

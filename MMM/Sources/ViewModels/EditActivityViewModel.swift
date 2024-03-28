@@ -82,6 +82,15 @@ final class EditActivityViewModel: ObservableObject {
         .map { 0 <= Int($0) ?? 0 && Int($0) ?? 0 <= 100_000_000 } // 1억(1,000만원)보다 작을 경우
         .eraseToAnyPublisher()
 	
+    // 경제활동 편집저장할 경우 저장 type을 지정
+    enum EditActivityType {
+        case content
+        case date
+        case contentAndDate
+        case deleteRecurrence
+    }
+    
+    
 	init(isAddModel: Bool) {
 		self.isAddModel = isAddModel
 	}
@@ -247,5 +256,12 @@ final class EditActivityViewModel: ObservableObject {
         }.store(in: &cancellable)
 
     }
+    
+    func checkSaveType(by activity: SelectDetailResDto) -> EditActivityType {
+        
+        
+        
+        
+        return .deleteRecurrence
+    }
 }
-

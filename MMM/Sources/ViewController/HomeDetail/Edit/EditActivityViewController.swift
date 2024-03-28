@@ -143,6 +143,22 @@ extension EditActivityViewController {
 	}
 	
 	func didTapSaveButton() {
+        guard let detailActvity = detailViewModel.detailActivity else { return }
+        
+        let saveType = editViewModel.checkSaveType(by: detailActvity)
+        
+        switch saveType {
+        case .content:          // case 1 : 제목, 금액 ,별점, 카테고리, 사진, 내용 수정
+            break
+        case .date:             // case 2 : 날짜 수정
+            break
+        case .contentAndDate:   // case 3 : case 1 && case 2 수정
+            break
+        case .deleteRecurrence: // case 4 : 반복 없애기
+            break
+        }
+
+        
         editViewModel.updateDetailActivity {
             self.detailViewModel.changedId = self.editViewModel.changedId
         }

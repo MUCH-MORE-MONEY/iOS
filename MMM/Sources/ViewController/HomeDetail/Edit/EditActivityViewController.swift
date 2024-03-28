@@ -468,16 +468,19 @@ extension EditActivityViewController {
 extension EditActivityViewController {
 	override func setBind() {
 		// MARK: - detailVM -> editVM 데이터 주입
-		editViewModel.title = detailViewModel.detailActivity?.title ?? ""
-		editViewModel.memo = detailViewModel.detailActivity?.memo ?? ""
-		editViewModel.amount = detailViewModel.detailActivity?.amount ?? 0
-		editViewModel.createAt = detailViewModel.detailActivity?.createAt ?? ""
-		editViewModel.star = detailViewModel.detailActivity?.star ?? 0
-		editViewModel.type = detailViewModel.detailActivity?.type ?? ""
-		editViewModel.fileNo = detailViewModel.detailActivity?.fileNo ?? ""
-		editViewModel.id = detailViewModel.detailActivity?.id ?? ""
-        editViewModel.categoryId = detailViewModel.detailActivity?.categoryID ?? ""
-        editViewModel.categoryName = detailViewModel.detailActivity?.categoryName ?? ""
+        
+        guard let detailActivity = detailViewModel.detailActivity else { return }
+		editViewModel.title = detailActivity.title
+        editViewModel.memo = detailActivity.memo
+		editViewModel.amount = detailActivity.amount
+		editViewModel.createAt = detailActivity.createAt
+		editViewModel.star = detailActivity.star
+		editViewModel.type = detailActivity.type
+		editViewModel.fileNo = detailActivity.fileNo
+		editViewModel.id = detailActivity.id
+        editViewModel.categoryId = detailActivity.categoryID
+        editViewModel.categoryName = detailActivity.categoryName
+        editViewModel.recurrenceInfo = detailActivity.recurrenceInfo
 		// MARK: - Loading에 대한 처리
 		editViewModel.$isLoading
             .removeDuplicates()
@@ -716,6 +719,11 @@ extension EditActivityViewController {
                 }
             }
             .store(in: &cancellable)
+        
+        editViewModel.$recurrenceInfo
+            .sinkCompactMapOnMainThread(receiveValue: addScheduleTapView.setTitle(by:))
+            .store(in: &cancellable)
+            
 	}
 
 }

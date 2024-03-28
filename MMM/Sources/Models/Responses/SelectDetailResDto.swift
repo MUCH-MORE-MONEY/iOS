@@ -20,7 +20,7 @@ struct SelectDetailResDto: Codable, Equatable {
     var imageUrl: String        // image url
     var star: Int               // 별 개수
     var recurrenceYN: String?
-    var recurrenceInfo: RecurrenceInfo?
+    var recurrenceInfo: APIParameters.RecurrenceInfo?
     
     enum CodingKeys: String, CodingKey {
         case id = "economicActivityNo"
@@ -40,11 +40,11 @@ struct SelectDetailResDto: Codable, Equatable {
         case recurrenceYN
     }
     
-    struct RecurrenceInfo: Codable, Equatable {
-        var endYMD: String //"endYMD": "20240510",
-        var recurrenceCnt: Int //"recurrenceCnt": 3,
-        var recurrenceEndDvcd: String   // "recurrenceEndDvcd": "01",
-        var recurrencePattern: String   // "recurrencePattern": "none",
-        var startYMD: String            //  "startYMD": "20240510"
-    }
+//    struct RecurrenceInfo: Codable, Equatable {
+//        var endYMD: String //"endYMD": "20240510",
+//        var recurrenceCnt: Int //"recurrenceCnt": 3,
+//        var recurrenceEndDvcd: String   // "recurrenceEndDvcd": "01",
+//        var recurrencePattern: String   // "recurrencePattern": "none",
+//        var startYMD: String            //  "startYMD": "20240510"
+//    }
 }

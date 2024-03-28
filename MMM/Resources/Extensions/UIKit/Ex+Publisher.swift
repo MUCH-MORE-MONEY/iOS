@@ -27,6 +27,31 @@ public extension Publisher {
 		return receive(on: DispatchQueue.main)
 			.assign(to: to, on: on)
 	}
+    
+    // Optional 값을 언랩하고, nil이 아닌 값들만 메인 스레드에서 받기 위한 메소드
+    func compactMapOnMainThread<T>(_ transform: @escaping (Output) -> T?) -> Publishers.ReceiveOn<Publishers.CompactMap<Self, T>, DispatchQueue> {
+        return self
+            .compactMap(transform)
+            .receive(on: DispatchQueue.main)
+    }
+
+    // Optional을 제거하고, nil이 아닌 값들만 메인 스레드에서 받는 sink 메소드
+    func sinkCompactMapOnMainThread<T>(receiveCompletion: @escaping ((Subscribers.Completion<Self.Failure>) -> Void), receiveValue: @escaping ((T) -> Void)) -> AnyCancellable where Output == T? {
+        
+        return self
+            .compactMap { $0 } // Optional 언랩
+            .receive(on: DispatchQueue.main) // 메인 스레드로 이동
+            .sink(receiveCompletion: receiveCompletion, receiveValue: receiveValue)
+    }
+    
+    // Optional을 제거하고, nil이 아닌 값들만 메인 스레드에서 받는 sink 메소드, Failure가 Never인 경우
+    func sinkCompactMapOnMainThread<T>(receiveValue: @escaping ((T) -> Void)) -> AnyCancellable where Output == T?, Self.Failure == Never {
+        
+        return self
+            .compactMap { $0 } // Optional 언랩
+            .receive(on: DispatchQueue.main) // 메인 스레드로 이동
+            .sink(receiveValue: receiveValue)
+    }
 }
 
 extension UIButton {

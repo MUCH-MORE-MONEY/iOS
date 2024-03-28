@@ -42,7 +42,7 @@ extension AddScheduleTapView {
         arrowImageView.isHidden = true
     }
     
-    func setTitle(by recurrenceInfo: SelectDetailResDto.RecurrenceInfo) {
+    func setTitle(by recurrenceInfo: APIParameters.RecurrenceInfo) {
         // 패턴 먼저 입력
         let pattern = recurrenceInfo.recurrencePattern.recurrenceTitleByPattern()
         let deadline = recurrenceInfo.recurrenceEndDvcd == "01" ? "\(recurrenceInfo.recurrenceCnt)회 반복" : "\(recurrenceInfo.endYMD.insertDatePeriod())까지"

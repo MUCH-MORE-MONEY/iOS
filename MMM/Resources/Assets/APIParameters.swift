@@ -100,7 +100,7 @@ struct APIParameters{
         let fileNm: String
     }
     
-    struct RecurrenceInfo: Encodable {
+    struct RecurrenceInfo: Codable , Equatable{
         var endYMD: String //"endYMD": "20240510",
         var recurrenceCnt: Int //"recurrenceCnt": 3,
         var recurrenceEndDvcd: String   // "recurrenceEndDvcd": "01",

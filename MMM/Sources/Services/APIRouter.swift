@@ -78,8 +78,8 @@ final class APIRouter {
     /// 기존 경제활동 수정을 위한 Router
     struct UpdateReqDto: Request {
         typealias ReturnType = UpdateResDto
-        var path: String = "/economic_activity/update"
-        var method: HTTPMethod = .post
+        var path: String = "/v2/economic_activity"
+        var method: HTTPMethod = .put
         var headers: [String : String]?
         var body: [String: Any]?
         

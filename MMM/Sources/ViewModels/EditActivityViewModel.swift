@@ -44,6 +44,8 @@ final class EditActivityViewModel: ObservableObject {
         guard let info = recurrenceInfo else { return "N" }
         return info.recurrencePattern == "none" ? "N" : "Y"
     }
+    @Published var contentRecurrenceUpdateYN: String = ""   // 반복된 경제활동 일 경우 : 이후 경제활동도 내용 변경 여부 Y/N
+    @Published var recurrenceUpdateYN: String = ""          // 경제활동 패턴 변경 여부 Y/N
     
     @Published var editResponse: UpdateResDto?
     @Published var deleteResponse: DeleteResDto?
@@ -148,7 +150,11 @@ final class EditActivityViewModel: ObservableObject {
                     id: id,
                     createAt: createAt,
                     fileNo: fileNo,
-                    star: star)))
+                    star: star,
+                    contentRecurrenceUpdateYN: "N",
+                    recurrenceUpdateYN: "N",
+                    recurrenceInfo: recurrenceInfo,
+                    recurrenceYN: "N")))
         .sink { data in
             switch data {
             case .failure(let error):
@@ -184,7 +190,11 @@ final class EditActivityViewModel: ObservableObject {
                     id: id,
                     createAt: createAt,
                     fileNo: fileNo,
-                    star: star)))
+                    star: star,
+                    contentRecurrenceUpdateYN: "N",
+                    recurrenceUpdateYN: "N",
+                    recurrenceInfo: recurrenceInfo,
+                    recurrenceYN: "N")))
         .sink { data in
             switch data {
             case .failure(let error):

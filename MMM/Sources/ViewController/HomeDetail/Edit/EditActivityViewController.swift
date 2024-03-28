@@ -337,14 +337,14 @@ extension EditActivityViewController: CustomAlertDelegate {
                 let delRecurrenceNAction = UIAlertAction(title: "이 경제활동에만 적용", style: .default) { [weak self] _ in
                     guard let self = self else { return }
                     // 삭제시, 통계 Refresh
-                    editViewModel.deleteDetailActivity(delRecurrenceYn: "Y")
+                    editViewModel.deleteDetailActivity(delRecurrenceYn: "N")
                     self.refreshStatistics()
                 }
                 
                 let delRecurrenceYAction = UIAlertAction(title: "이후 경제활동에도 적용", style: .default) { [weak self] _ in
                     guard let self = self else { return }
                     // 삭제시, 통계 Refresh
-                    editViewModel.deleteDetailActivity(delRecurrenceYn: "N")
+                    editViewModel.deleteDetailActivity(delRecurrenceYn: "Y")
                     self.refreshStatistics()
                 }
                 

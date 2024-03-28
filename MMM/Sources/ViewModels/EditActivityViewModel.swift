@@ -44,7 +44,15 @@ final class EditActivityViewModel: ObservableObject {
         guard let info = recurrenceInfo else { return "N" }
         return info.recurrencePattern == "none" ? "N" : "Y"
     }
-    @Published var contentRecurrenceUpdateYN: String = ""   // 반복된 경제활동 일 경우 : 이후 경제활동도 내용 변경 여부 Y/N
+    var contentRecurrenceUpdateYN: String {      // 이후 경제활동도 내용 변경 여부 Y/N
+        if recurrenceYN == "Y" {    // 반복된 경제활동일 경우
+            //
+            // 경제활동의 내용이 바뀌었는지를 체크해야함
+            return "Y"
+        } else {
+            return "N"
+        }
+    }
     @Published var recurrenceUpdateYN: String = ""          // 경제활동 패턴 변경 여부 Y/N
     
     @Published var editResponse: UpdateResDto?

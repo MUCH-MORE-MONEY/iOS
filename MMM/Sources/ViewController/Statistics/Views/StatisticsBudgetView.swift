@@ -109,7 +109,7 @@ extension StatisticsBudgetView {
 extension StatisticsBudgetView {
 	// 외부에서 설정
 	func setBudget(estimatedEarning: Int) {
-		self.settingBudgetLabel.text = "예산 \(estimatedEarning)원"
+		self.settingBudgetLabel.text = "예산 \(estimatedEarning.withCommas()) 원"
 	}
 	
 	func isLoading(_ isLoading: Bool) {

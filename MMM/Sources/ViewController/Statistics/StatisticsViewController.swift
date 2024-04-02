@@ -180,6 +180,12 @@ extension StatisticsViewController {
 			.disposed(by: disposeBag)
 		
 		reactor.state
+			.map { $0.paySum }
+			.distinctUntilChanged() // 중복값 무시
+			.bind(onNext: setCurrentPay) // 현재 지출
+			.disposed(by: disposeBag)
+		
+		reactor.state
 			.map { $0.average }
 			.distinctUntilChanged() // 중복값 무시
 			.withUnretained(self)
@@ -381,6 +387,12 @@ extension StatisticsViewController {
 			}
 		}
 		self.tableView.reloadData()
+	}
+	
+	// 해당 연월 기준 월간 경제활동 총합 조회
+	private func setCurrentPay(_ sum: StatisticsSum) {
+		guard let economicActivitySumAmt = sum.economicActivitySumAmt else { return }
+		self.budgetView.setCurrentPay(currentPayLabel: 2000)
 	}
 	
 	/// '월'  및 범위 변경

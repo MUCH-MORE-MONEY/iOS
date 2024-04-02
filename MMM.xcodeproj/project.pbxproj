@@ -207,6 +207,7 @@
 		C46409D62AB8DB9000A899AD /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46409D52AB8DB8F00A899AD /* BaseTableViewCell.swift */; };
 		C46409DA2AB9625E00A899AD /* BottomSheetViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46409D92AB9625E00A899AD /* BottomSheetViewController2.swift */; };
 		C465FF352BB4364100D2E43D /* Budget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C465FF342BB4364100D2E43D /* Budget.swift */; };
+		C465FF372BBC106700D2E43D /* StatisticsSum.swift in Sources */ = {isa = PBXBuildFile; fileRef = C465FF362BBC106700D2E43D /* StatisticsSum.swift */; };
 		C466F4202B1758DF00254FED /* Ex+SkeletonLoadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C466F41F2B1758DF00254FED /* Ex+SkeletonLoadable.swift */; };
 		C466F4272B1873E600254FED /* CategoryDetailSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C466F4262B1873E600254FED /* CategoryDetailSectionModel.swift */; };
 		C466F42D2B18795000254FED /* CategorySkeletonDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C466F42C2B18794F00254FED /* CategorySkeletonDetailCell.swift */; };
@@ -530,6 +531,7 @@
 		C46409D52AB8DB8F00A899AD /* BaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
 		C46409D92AB9625E00A899AD /* BottomSheetViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController2.swift; sourceTree = "<group>"; };
 		C465FF342BB4364100D2E43D /* Budget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Budget.swift; sourceTree = "<group>"; };
+		C465FF362BBC106700D2E43D /* StatisticsSum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsSum.swift; sourceTree = "<group>"; };
 		C466F41F2B1758DF00254FED /* Ex+SkeletonLoadable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+SkeletonLoadable.swift"; sourceTree = "<group>"; };
 		C466F4262B1873E600254FED /* CategoryDetailSectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDetailSectionModel.swift; sourceTree = "<group>"; };
 		C466F42C2B18794F00254FED /* CategorySkeletonDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySkeletonDetailCell.swift; sourceTree = "<group>"; };
@@ -1161,6 +1163,7 @@
 				C4BBD2922AC04C550055FA65 /* CategoryEditSectionModel.swift */,
 				C46409AF2AB590EE00A899AD /* CategoryMainSectionModel.swift */,
 				C43FF1552B1C5A1E009394D6 /* StatisticsSectionModel.swift */,
+				C465FF362BBC106700D2E43D /* StatisticsSum.swift */,
 				C433A07029EE5516008B26DF /* EconomicActivity.swift */,
 				6A14E70A2A9DCA7F0071805D /* ModelType.swift */,
 				C4D7FC862A08942E00565291 /* Monthly.swift */,
@@ -1905,6 +1908,7 @@
 				C41193E629D287E6003DBC15 /* Ex+Color.swift in Sources */,
 				45D878A22B5A56380098F30B /* StarPickerSheetViewController.swift in Sources */,
 				C46409BA2AB5996D00A899AD /* BaseView.swift in Sources */,
+				C465FF372BBC106700D2E43D /* StatisticsSum.swift in Sources */,
 				6A1322ED2A088F7F00CEEC81 /* DetailViewController.swift in Sources */,
 				C4DBAA2C29DBCB8B00D1BB97 /* Ex+Button.swift in Sources */,
 				C4199DE12A00F164006E5DA8 /* Ex+UIImageView.swift in Sources */,

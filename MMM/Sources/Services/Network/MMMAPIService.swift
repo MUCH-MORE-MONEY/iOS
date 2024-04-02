@@ -59,6 +59,7 @@ protocol MMMAPIServiceble: BaseAPIService {
 	func getStatisticsList(dateYM: String, valueScoreDvcd: String, limit: Int, offset: Int) -> Observable<(StatisticsListResDto, Error?)>
 	func getStatisticsCategory(dateYM: String, economicActivityDvcd: String) -> Observable<(StatisticsCategoryResDto, Error?)>
 	func getBudget(dateYM: String) -> Observable<(StatisticsBudgetResDto, Error?)>
+	func getStatisticsSum(dateYM: String, economicActivityDvcd: String) -> Observable<(StatisticsSumResDto, Error?)>
 	
     // MARK: - Statistics Detail
     func getSelectedActivity(_ activityId: String) -> Observable<(SelectDetailResDto, Error?)>
@@ -126,6 +127,10 @@ struct MMMAPIService: MMMAPIServiceble {
 	// 해당 연월 기준 경제계획 조회 API
 	func getBudget(dateYM: String) -> RxSwift.Observable<(StatisticsBudgetResDto, (any Error)?)> {
 		return provider().request(MMMAPI.getBudget(dateYM: dateYM), type: StatisticsBudgetResDto.self).asObservable()
+	}
+	
+	func getStatisticsSum(dateYM: String, economicActivityDvcd: String) -> RxSwift.Observable<(StatisticsSumResDto, (any Error)?)> {
+		return provider().request(MMMAPI.getStatisticsSum(dateYM: dateYM, economicActivityDvcd: economicActivityDvcd), type: StatisticsSumResDto.self).asObservable()
 	}
 	
 	// MARK: - Category Main 요청 API

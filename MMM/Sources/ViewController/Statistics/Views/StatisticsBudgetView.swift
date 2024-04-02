@@ -112,6 +112,11 @@ extension StatisticsBudgetView {
 		self.settingBudgetLabel.text = "예산 \(estimatedEarning.withCommas()) 원"
 	}
 	
+	// 외부에서 설정
+	func setCurrentPay(currentPayLabel: Int) {
+		self.currentPayLabel.text = "현재 \(currentPayLabel.withCommas()) 원"
+	}
+	
 	func isLoading(_ isLoading: Bool) {
 		titleLabel.isHidden = isLoading
 		imageView.isHidden = isLoading

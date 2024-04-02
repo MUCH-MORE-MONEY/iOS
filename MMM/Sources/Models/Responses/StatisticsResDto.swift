@@ -35,3 +35,10 @@ struct StatisticsBudgetResDto: Decodable {
 	var message: String?
 	var status: String
 }
+
+// v1/economic-plan/{dateYM}
+struct StatisticsSumResDto: Decodable {
+	var data: StatisticsSum
+	var message: String?
+	var status: String
+}

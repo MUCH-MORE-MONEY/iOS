@@ -31,6 +31,7 @@ final class StatisticsReactor: Reactor {
 		case setSummary
 		case resetSummary
 		case setBudget(Budget)
+		case setPaySum(StatisticsSum)
 		case presentSatisfaction(Bool)
 		case pushMoreCategory(Bool)
 		case pushDetail(IndexPath, EconomicActivity, Bool)
@@ -43,6 +44,7 @@ final class StatisticsReactor: Reactor {
 	struct State {
 		var date = Date() // 월
 		var budget: Budget = .init(dateYM: Date().getFormattedYM(), budget: nil, estimatedEarning: nil)
+		var paySum: StatisticsSum = .init(dateYM: Date().getFormattedYM(), economicActivitySumAmt: nil)
 		var average: Double = 0.0 // 평균값
 		var satisfaction: Satisfaction = .low // 만족도
 		var activityList: [StatisticsSectionModel] = []
@@ -82,7 +84,8 @@ extension StatisticsReactor {
 		case .loadData:
 			return .concat([
 				.just(.setLoading(true)),
-				self.getBudget(currentState.date),
+				self.getBudget(currentState.date),			// 예산
+				self.getSum(currentState.date, type: "01"),	// 현재 지출
 				self.getStatisticsAverage(currentState.date), // 평균값
 				self.getCategory(currentState.date, "01"),	// 지출 카테고리
 				self.getCategory(currentState.date, "02"),	// 수입 카테고리
@@ -134,6 +137,7 @@ extension StatisticsReactor {
 					.just(.setDate(date)),
 					.just(.resetSummary),
 					self.getBudget(date),
+					self.getSum(date, type: "01"),
 					self.getStatisticsAverage(date),
 					self.getCategory(date, "02"),
 					self.getCategory(date, "01"),
@@ -193,7 +197,13 @@ extension StatisticsReactor {
 			// 카테고리 추가할때 사용하기 위해 저장
 			Constants.setKeychain(date.getFormattedYMD(), forKey: Constants.KeychainKey.statisticsDate)
 		case let .setBudget(budget):
-			newState.budget = budget
+			if newState.date.getFormattedYM() == "202404" {
+				newState.budget = .init(dateYM: "", budget: 1000000, estimatedEarning: 200000)
+			} else {
+				newState.budget = budget
+			}
+		case let .setPaySum(sum):
+			newState.paySum = sum
 		case let .setAverage(average):
 			newState.average = average
 		case let .setSatisfaction(satisfaction):
@@ -230,11 +240,20 @@ extension StatisticsReactor {
 }
 //MARK: - Action
 extension StatisticsReactor {
-	// 경제활동 예산 불러오기
+	// 예산 불러오기
 	func getBudget(_ date: Date) -> Observable<Mutation> {
 		return MMMAPIService().getBudget(dateYM: date.getFormattedYM())
 			.map { (response, error) -> Mutation in
 				return .setBudget(response.data)
+			}
+			.catchAndReturn(.setError)
+	}
+	
+	// 경제활동 총합 불러오기
+	func getSum(_ date: Date, type: String) -> Observable<Mutation> {
+		return MMMAPIService().getStatisticsSum(dateYM: date.getFormattedYM(), economicActivityDvcd: type)
+			.map { (response, error) -> Mutation in
+				return .setPaySum(response.data)
 			}
 			.catchAndReturn(.setError)
 	}

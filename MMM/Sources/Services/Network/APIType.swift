@@ -21,7 +21,8 @@ enum MMMAPI {
 	case getStatisticsCategory(dateYM: String, economicActivityDvcd: String)
     case getSelectedActivity(activityId: String)
 	case getBudget(dateYM: String) // 월간 예산
-	
+	case getStatisticsSum(dateYM: String, economicActivityDvcd: String) // 해당 연월 기준 월간 경제활동 총합 조회
+
 	// MARK: - Category Main
 //    case getAddCategoryList(CategoryListReqDto) //경제활동구분 코드 기준 카테고리별 월간 경제활동 목록 전체 조회
 	case getCategoryList(CategoryListReqDto) // 경제활동구분 코드 기준 카테고리별 월간 경제활동 목록 전체 조회
@@ -67,6 +68,8 @@ extension MMMAPI: BaseNetworkService {
             return "/economic_activity/detail/select"
 		case let .getBudget(dateYM):
 			return "/v1/economic-plan/\(dateYM)"
+		case let .getStatisticsSum(dateYM, economicActivityDvcd):
+			return "/economic_activity/\(dateYM)/\(economicActivityDvcd)/sum"
 		case let .getCategoryList(request):
 			return "/economic_activity/\(request.dateYM)/\(request.economicActivityDvcd)/category/list"
 		case let .getCategoryDetailList(request):
@@ -93,7 +96,7 @@ extension MMMAPI: BaseNetworkService {
 		switch self {
         case .push, .pushAgreeListSelect, .pushAgreeUpdate, .getSelectedActivity:
 			return .post
-		case .getStaticsticsAverage, .getStatisticsList, .getStatisticsCategory, .getBudget:
+		case .getStaticsticsAverage, .getStatisticsList, .getStatisticsCategory, .getBudget, .getStatisticsSum:
 			return .get
 		case .getCategoryList, .getCategoryDetailList, .getCategoryEdit, .getCategoryEditHeader:
 			return .get
@@ -118,7 +121,7 @@ extension MMMAPI: BaseNetworkService {
 			return .requestPlain
 		case let .pushAgreeUpdate(request):
 			return .requestParameters(parameters: request.asDictionary, encoding: JSONEncoding.default)
-		case .getStaticsticsAverage, .getStatisticsCategory, .getBudget:
+		case .getStaticsticsAverage, .getStatisticsCategory, .getBudget, .getStatisticsSum:
 			return .requestPlain
 		case let .getStatisticsList(_, _, limit, offset):
 			return .requestParameters(parameters: ["limit":limit, "offset":offset], encoding: URLEncoding.default)

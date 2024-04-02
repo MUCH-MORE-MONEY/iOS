@@ -147,8 +147,19 @@ extension EditActivityViewController {
         
         let saveType = editViewModel.checkSaveType(by: detailActvity)
         
+        let actionSheet = UIAlertController(title: "이 경제활동은 반복 설정되어있어요.", message: "편집 사항을 다른 일정에도 적용하시겠습니까?", preferredStyle: .actionSheet)
+        
+
+        
+        // 반복된 경제활동일 경우에만 해당
         switch saveType {
         case .content:          // case 1 : 제목, 금액 ,별점, 카테고리, 사진, 내용 수정
+            //앨범 선택 - 스타일(default)
+            actionSheet.addAction(UIAlertAction(title: "이 경젷", style: .default, handler: { [weak self] (ACTION:UIAlertAction) in
+                guard let self = self else { return }
+                self.didTapAlbumButton()
+                print("앨범선택")
+            }))
             break
         case .date:             // case 2 : 날짜 수정
             break
@@ -156,26 +167,32 @@ extension EditActivityViewController {
             break
         case .deleteRecurrence: // case 4 : 반복 없애기
             break
+        case .noRecurrence:     // 원본 경제활동이 반복이 아닐경우
+            break
         }
 
         
+        editActivity()
+	}
+	
+    func editActivity() {
         editViewModel.updateDetailActivity {
             self.detailViewModel.changedId = self.editViewModel.changedId
         }
-		
-		// 저장후, 통계 Refresh
-		if let str = Constants.getKeychainValue(forKey: Constants.KeychainKey.statisticsDate), let date = str.toDate() {
-			ServiceProvider.shared.statisticsProvider.updateDate(to: date)
-		} else {
-			ServiceProvider.shared.statisticsProvider.updateDate(to: Date())
-		}
-		
-		self.loadView.play()
-		self.loadView.isPresent = true
-		self.loadView.modalPresentationStyle = .overFullScreen
-		self.present(self.loadView, animated: false)
-	}
-	
+        
+        // 저장후, 통계 Refresh
+        if let str = Constants.getKeychainValue(forKey: Constants.KeychainKey.statisticsDate), let date = str.toDate() {
+            ServiceProvider.shared.statisticsProvider.updateDate(to: date)
+        } else {
+            ServiceProvider.shared.statisticsProvider.updateDate(to: Date())
+        }
+        
+        self.loadView.play()
+        self.loadView.isPresent = true
+        self.loadView.modalPresentationStyle = .overFullScreen
+        self.present(self.loadView, animated: false)
+    }
+    
 	func didTapDeleteButton() {
         // 키보드 내리기
         self.titleTextFeild.resignFirstResponder()
@@ -418,6 +435,10 @@ extension EditActivityViewController: UIImagePickerControllerDelegate {
 			guard let self = self else { return }
 			self.editViewModel.binaryFileList.removeAll()
 			let img = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
+                
+            // 이미지가 바뀌면
+            self.editViewModel.isImageChanged = true
+
 			self.mainImageView.image = img
 			self.editViewModel.fileNo = ""
 			guard let data = img?.jpegData(compressionQuality: 0)?.base64EncodedString() else { return }

@@ -88,8 +88,10 @@ final class EditActivityViewModel: ObservableObject {
         case date
         case contentAndDate
         case deleteRecurrence
+        case noRecurrence
     }
     
+    var isImageChanged = false
     
 	init(isAddModel: Bool) {
 		self.isAddModel = isAddModel
@@ -257,11 +259,42 @@ final class EditActivityViewModel: ObservableObject {
 
     }
     
-    func checkSaveType(by activity: SelectDetailResDto) -> EditActivityType {
+    func checkSaveType(by originalActivity: SelectDetailResDto) -> EditActivityType {
         
+        let originalRecurrnce = originalActivity.recurrenceYN
         
+        let originalTitle = originalActivity.title
+        let originalAmount = originalActivity.amount
+        let originalStar = originalActivity.star
+        let originalCategory = originalActivity.categoryID
+        let originalMemo = originalActivity.memo
         
+        let recurrenceIsChanged = originalRecurrnce == "Y" && self.recurrenceYN == "N"
+        let titleIsChanged = originalTitle != title
+        let amountIsChanged = originalAmount != amount
+        let starIsChanged = originalStar != star
+        let categoryIsChanged = originalCategory != categoryId
+        let memoIsChanged = originalMemo != memo
         
-        return .deleteRecurrence
+        let contentIsChanged = titleIsChanged || amountIsChanged || starIsChanged || categoryIsChanged || memoIsChanged
+        
+        let activityDateIsChanged = originalActivity.createAt != createAt
+        
+
+        // 반복 없애기
+        if recurrenceIsChanged {
+            return .deleteRecurrence
+        // 날짜 및 반복 수정
+        } else if activityDateIsChanged && contentIsChanged {
+            return .contentAndDate
+        // 날짜만 수정
+        } else if activityDateIsChanged {
+            return .date
+        // 내용만 수정
+        } else if contentIsChanged {
+            return .content
+        }
+        
+        return .noRecurrence
     }
 }

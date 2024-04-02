@@ -190,8 +190,6 @@ extension StatisticsViewController {
 			.distinctUntilChanged() // 중복값 무시
 			.withUnretained(self)
 			.subscribe(onNext: { this, average in // 평균 변경
-				this.activityView.isHidden = true
-
 				if this.headerView.subviews.contains(this.satisfactionView) {
 					this.satisfactionView.snp.updateConstraints {
 						$0.top.equalTo(this.averageView.snp.bottom).offset(26)
@@ -537,7 +535,7 @@ extension StatisticsViewController: SkeletonLoadable {
 		}
 
 		satisfactionView.snp.makeConstraints {
-			$0.top.equalTo(averageView.snp.bottom).offset(activityView.isHidden ? 26 : 116)
+			$0.top.equalTo(averageView.snp.bottom).offset(26)
 			$0.leading.trailing.equalToSuperview()
 			$0.bottom.equalToSuperview()
 		}
@@ -546,5 +544,7 @@ extension StatisticsViewController: SkeletonLoadable {
 		tableView.snp.makeConstraints {
 			$0.edges.equalToSuperview()
 		}
+		
+		activityView.isHidden = true // Timer가 돌아가지 않는 Bug 해결
 	}
 }

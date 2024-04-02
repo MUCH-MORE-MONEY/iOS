@@ -29,6 +29,8 @@ final class StatisticsReactor: Reactor {
 		case setSatisfaction(Satisfaction)
 		case setAverage(Double)
 		case setSummary
+		case resetSummary
+		case setBudget(Budget)
 		case presentSatisfaction(Bool)
 		case pushMoreCategory(Bool)
 		case pushDetail(IndexPath, EconomicActivity, Bool)
@@ -40,6 +42,7 @@ final class StatisticsReactor: Reactor {
 	// 현재 상태를 기록
 	struct State {
 		var date = Date() // 월
+		var budget: Budget = .init(dateYM: Date().getFormattedYM(), budget: nil, estimatedEarning: nil)
 		var average: Double = 0.0 // 평균값
 		var satisfaction: Satisfaction = .low // 만족도
 		var activityList: [StatisticsSectionModel] = []
@@ -51,7 +54,7 @@ final class StatisticsReactor: Reactor {
 		var isPushMoreCategory = false
 		var isPresentSatisfaction = false
 		var isPushDetail = false
-		var isSummary = false // true: 요약보기, false: 닫기
+		var isSummary = true // true: 요약보기, false: 닫기
 		var detailData: (IndexPath: IndexPath, info: EconomicActivity)?
 		var curSatisfaction: Satisfaction = .low
 		var totalItem: Int = 0  // item의 총 갯수
@@ -79,6 +82,7 @@ extension StatisticsReactor {
 		case .loadData:
 			return .concat([
 				.just(.setLoading(true)),
+				self.getBudget(currentState.date),
 				self.getStatisticsAverage(currentState.date), // 평균값
 				self.getCategory(currentState.date, "01"),	// 지출 카테고리
 				self.getCategory(currentState.date, "02"),	// 수입 카테고리
@@ -128,6 +132,8 @@ extension StatisticsReactor {
 			case let .updateDate(date):
 				return .concat([
 					.just(.setDate(date)),
+					.just(.resetSummary),
+					self.getBudget(date),
 					self.getStatisticsAverage(date),
 					self.getCategory(date, "02"),
 					self.getCategory(date, "01"),
@@ -186,6 +192,8 @@ extension StatisticsReactor {
 
 			// 카테고리 추가할때 사용하기 위해 저장
 			Constants.setKeychain(date.getFormattedYMD(), forKey: Constants.KeychainKey.statisticsDate)
+		case let .setBudget(budget):
+			newState.budget = budget
 		case let .setAverage(average):
 			newState.average = average
 		case let .setSatisfaction(satisfaction):
@@ -202,6 +210,8 @@ extension StatisticsReactor {
 			newState.isLoading = isLoading
 		case .setSummary:
 			newState.isSummary = !newState.isSummary
+		case .resetSummary:
+			newState.isSummary = true
 		case let .presentSatisfaction(isPresent):
 			newState.isPresentSatisfaction = isPresent
 		case let .pushMoreCategory(isPush):
@@ -220,6 +230,15 @@ extension StatisticsReactor {
 }
 //MARK: - Action
 extension StatisticsReactor {
+	// 경제활동 예산 불러오기
+	func getBudget(_ date: Date) -> Observable<Mutation> {
+		return MMMAPIService().getBudget(dateYM: date.getFormattedYM())
+			.map { (response, error) -> Mutation in
+				return .setBudget(response.data)
+			}
+			.catchAndReturn(.setError)
+	}
+	
 	// 경제활동 만족도 평균값 불러오기
 	func getStatisticsAverage(_ date: Date) -> Observable<Mutation> {
 		return MMMAPIService().getStatisticsAverage(date.getFormattedYM())

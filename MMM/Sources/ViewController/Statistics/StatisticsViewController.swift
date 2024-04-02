@@ -174,57 +174,24 @@ extension StatisticsViewController {
 			.disposed(by: disposeBag)
 		
 		reactor.state
+			.map { $0.budget }
+			.distinctUntilChanged() // 중복값 무시
+			.bind(onNext: setBudget) // 예산 변경
+			.disposed(by: disposeBag)
+		
+		reactor.state
 			.map { $0.average }
 			.distinctUntilChanged() // 중복값 무시
 			.withUnretained(self)
 			.subscribe(onNext: { this, average in // 평균 변경
-				if average == 0.0 {
-					this.activityView.isHidden = true
-					this.headerView.frame.size.height = 420
-					
-					if this.headerView.subviews.contains(this.satisfactionView) {
-						this.satisfactionView.snp.updateConstraints {
-							$0.top.equalTo(this.averageView.snp.bottom).offset(26)
-						}
-					}
-				} else {
-					this.activityView.isHidden = false
-					this.headerView.frame.size.height = 510
-					
-					if this.headerView.subviews.contains(this.satisfactionView) {
-						this.satisfactionView.snp.updateConstraints {
-							$0.top.equalTo(this.averageView.snp.bottom).offset(112)
-						}
+				this.activityView.isHidden = true
+
+				if this.headerView.subviews.contains(this.satisfactionView) {
+					this.satisfactionView.snp.updateConstraints {
+						$0.top.equalTo(this.averageView.snp.bottom).offset(26)
 					}
 				}
-//				// 예산 설정 유무
-//				if average == 0.0 { // 설정 X
-//					this.isBudget = false
-//					this.titleView.isHidden = true
-//					this.newTitleView.isHidden = false
-//					this.headerView.frame.size.height = 510
-//					
-//					if this.headerView.subviews.contains(this.categoryView) {
-//						this.categoryView.snp.remakeConstraints {
-//							$0.top.equalTo(this.newTitleView.snp.bottom).offset(12)
-//							$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
-//							$0.height.equalTo(146)
-//						}
-//					}
-//				} else {
-//					this.isBudget = true
-//					this.titleView.isHidden = false
-//					this.newTitleView.isHidden = true
-//					this.headerView.frame.size.height = 550
-//					
-//					if this.headerView.subviews.contains(this.categoryView) {
-//						this.categoryView.snp.remakeConstraints {
-//							$0.top.equalTo(this.titleView.snp.bottom).offset(12)
-//							$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
-//							$0.height.equalTo(146)
-//						}
-//					}
-//				}
+
 				this.averageView.setData(average: average)
 				this.tableView.reloadData()
 			})
@@ -262,8 +229,9 @@ extension StatisticsViewController {
 					this.activityView.isHidden = isSummary
 					
 					this.headerView.frame.size.height = isSummary ? this.headerView.frame.height - 90 : this.headerView.frame.height + 90
+
 					this.satisfactionView.snp.updateConstraints {
-						$0.top.equalTo(this.averageView.snp.bottom).offset(isSummary ? 26 : 112)
+						$0.top.equalTo(this.averageView.snp.bottom).offset(isSummary ? 26 : 116)
 					}
 					
 					this.tableView.reloadData()
@@ -378,6 +346,43 @@ extension StatisticsViewController {
 		self.present(vc, animated: true, completion: nil)
 	}
 	
+	/// 예산 설정 유무 따른 UI 변경
+	private func setBudget(_ budgetInfo: Budget) {
+		guard let budget = budgetInfo.budget, let earn = budgetInfo.estimatedEarning else {
+			// 예산 설정이 안되었을 경우
+			self.isBudget = false
+			self.budgetView.isHidden = true
+			self.yetBudgetView.isHidden = false
+			
+			self.headerView.frame.size.height = 418
+
+			if self.headerView.subviews.contains(categoryView) {
+				categoryView.snp.remakeConstraints {
+					$0.top.equalTo(yetBudgetView.snp.bottom).offset(12)
+					$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
+					$0.height.equalTo(146)
+				}
+			}
+			return
+		}
+		
+		self.isBudget = true
+		self.headerView.frame.size.height = 461
+		self.budgetView.isHidden = false
+		self.yetBudgetView.isHidden = true
+		
+		self.budgetView.setBudget(estimatedEarning: earn) // 예상 수입
+
+		if self.headerView.subviews.contains(categoryView) {
+			categoryView.snp.remakeConstraints {
+				$0.top.equalTo(budgetView.snp.bottom).offset(12)
+				$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
+				$0.height.equalTo(146)
+			}
+		}
+		self.tableView.reloadData()
+	}
+	
 	/// '월'  및 범위 변경
 	private func setMonth(_ date: Date) {
 		// 올해인지 판별
@@ -424,7 +429,7 @@ extension StatisticsViewController: SkeletonLoadable {
 		view.backgroundColor = R.Color.gray900
 		
 		headerView.backgroundColor = R.Color.gray900
-		titleView.reactor = self.reactor
+		budgetView.reactor = self.reactor
 		categoryView.reactor = self.reactor // reactor 주입
 		activityView.reactor = self.reactor // reactor 주입
 		averageView.reactor = self.reactor // reactor 주입
@@ -475,11 +480,6 @@ extension StatisticsViewController: SkeletonLoadable {
 			$0.rowHeight = UITableView.automaticDimension
 		}
 		
-		headerView = headerView.then {
-			// 420 <-> 510
-			$0.frame = .init(x: 0, y: 0, width: view.bounds.width, height: 510)
-		}
-		
 		emptyView = emptyView.then {
 			$0.frame = .init(x: 0, y: 0, width: view.bounds.width, height: 248)
 		}
@@ -495,7 +495,6 @@ extension StatisticsViewController: SkeletonLoadable {
 	override func setLayout() {
 		super.setLayout()
 		
-		titleView.isHidden = true
 		budgetView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(12)
 			$0.leading.trailing.equalToSuperview().inset(24)
@@ -505,10 +504,11 @@ extension StatisticsViewController: SkeletonLoadable {
 		yetBudgetView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(24)
 			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
+			$0.height.equalTo(80)
 		}
 
 		categoryView.snp.makeConstraints {
-			$0.top.equalTo(isBudget ? budgetView.snp.bottom : yetBudgetView.snp.bottom).offset(12)
+			$0.top.equalTo(yetBudgetView.isHidden ? budgetView.snp.bottom : yetBudgetView.snp.bottom).offset(12)
 			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 			$0.height.equalTo(146)
 		}
@@ -526,7 +526,7 @@ extension StatisticsViewController: SkeletonLoadable {
 		}
 
 		satisfactionView.snp.makeConstraints {
-			$0.top.equalTo(averageView.snp.bottom).offset(112)
+			$0.top.equalTo(averageView.snp.bottom).offset(activityView.isHidden ? 26 : 116)
 			$0.leading.trailing.equalToSuperview()
 			$0.bottom.equalToSuperview()
 		}

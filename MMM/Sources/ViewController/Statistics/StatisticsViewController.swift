@@ -371,7 +371,7 @@ extension StatisticsViewController {
 		self.budgetView.isHidden = false
 		self.yetBudgetView.isHidden = true
 		
-		self.budgetView.setBudget(estimatedEarning: earn) // 예상 수입
+		self.budgetView.setBudget(estimatedEarning: budget) // 예상 수입
 
 		if self.headerView.subviews.contains(categoryView) {
 			categoryView.snp.remakeConstraints {
@@ -400,7 +400,6 @@ extension StatisticsViewController {
 		satisfactionView.setData(title: satisfaction.title, score: satisfaction.score)
 		self.satisfaction = satisfaction
 	}
-    
     
     /// 에산설정 뷰
     private func pushBudgetSettingViewController(_ isPush: Bool) {

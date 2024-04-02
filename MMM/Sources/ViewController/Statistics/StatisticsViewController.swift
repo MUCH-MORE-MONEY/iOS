@@ -62,8 +62,8 @@ final class StatisticsViewController: BaseViewController, View {
 	private lazy var monthButtonItem = UIBarButtonItem()
 	private lazy var monthButton = SemanticContentAttributeButton()
 	private lazy var headerView = UIView()
-	private lazy var titleView = StatisticsTitleView()
-	private lazy var newTitleView = StatisticsNewTitleSettingView()
+	private lazy var budgetView = StatisticsBudgetView()
+	private lazy var yetBudgetView = StatisticsYetBudgetView()
 	private lazy var categoryView = StatisticsCategoryView()
 	private lazy var averageView = StatisticsAverageView()
 	private lazy var activityView = StatisticsActivityView(timer: timer)
@@ -157,7 +157,7 @@ extension StatisticsViewController {
 			.bind(to: reactor.action)
 			.disposed(by: disposeBag)
         
-        newTitleView.rx.tapGesture()
+        yetBudgetView.rx.tapGesture()
             .when(.recognized)
             .map { _ in .didTapNewTitleView }
             .bind(to: reactor.action)
@@ -489,26 +489,26 @@ extension StatisticsViewController: SkeletonLoadable {
 		super.setHierarchy()
 		
 		view.addSubviews(tableView)
-		headerView.addSubviews(titleView, newTitleView, categoryView, averageView, activityView, satisfactionView)
+		headerView.addSubviews(budgetView, yetBudgetView, categoryView, averageView, activityView, satisfactionView)
 	}
 	
 	override func setLayout() {
 		super.setLayout()
 		
 		titleView.isHidden = true
-		titleView.snp.makeConstraints {
+		budgetView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(12)
 			$0.leading.trailing.equalToSuperview().inset(24)
 			$0.height.equalTo(135)
 		}
 		
-		newTitleView.snp.makeConstraints {
+		yetBudgetView.snp.makeConstraints {
 			$0.top.equalToSuperview().inset(24)
 			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 		}
 
 		categoryView.snp.makeConstraints {
-			$0.top.equalTo(isBudget ? titleView.snp.bottom : newTitleView.snp.bottom).offset(12)
+			$0.top.equalTo(isBudget ? budgetView.snp.bottom : yetBudgetView.snp.bottom).offset(12)
 			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 			$0.height.equalTo(146)
 		}

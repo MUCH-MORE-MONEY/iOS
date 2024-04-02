@@ -1,5 +1,5 @@
 //
-//  StatisticsTitleView.swift
+//  StatisticsBudgetView.swift
 //  MMM
 //
 //  Created by geonhyeong on 2023/08/21.
@@ -11,7 +11,7 @@ import UIKit
 import ReactorKit
 
 // 상속하지 않으려면 final 꼭 붙이기
-final class StatisticsTitleView: BaseView, View {
+final class StatisticsBudgetView: BaseView, View {
 	// MARK: - Constants
 	private enum UI {
 		static let titleLabelTop: CGFloat = 6
@@ -91,7 +91,7 @@ final class StatisticsTitleView: BaseView, View {
 	}
 }
 //MARK: - Bind
-extension StatisticsTitleView {
+extension StatisticsBudgetView {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
 	private func bindAction(_ reactor: StatisticsReactor) {
 		
@@ -106,10 +106,10 @@ extension StatisticsTitleView {
 	}
 }
 //MARK: - Action
-extension StatisticsTitleView {
+extension StatisticsBudgetView {
 	// 외부에서 설정
-	func setData(startDate: String, endDate: String) {
-		
+	func setBudget(estimatedEarning: Int) {
+		self.settingBudgetLabel.text = "예산 \(estimatedEarning)원"
 	}
 	
 	func isLoading(_ isLoading: Bool) {
@@ -152,7 +152,7 @@ extension StatisticsTitleView {
 //	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
-extension StatisticsTitleView: SkeletonLoadable {
+extension StatisticsBudgetView: SkeletonLoadable {
 	// 초기 셋업할 코드들
 	override func setAttribute() {
 		super.setAttribute()

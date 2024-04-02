@@ -1,5 +1,5 @@
 //
-//  StatisticsNewTitleSettingView.swift
+//  StatisticsYetBudgetView.swift
 //  MMM
 //
 //  Created by geonhyeong on 2/13/24.
@@ -10,7 +10,7 @@ import SnapKit
 import UIKit
 
 // 상속하지 않으려면 final 꼭 붙이기
-final class StatisticsNewTitleSettingView: BaseView {
+final class StatisticsYetBudgetView: BaseView {
 	// MARK: - Constants
 	private enum UI {
 		static let titleLabelTop: CGFloat = 6
@@ -25,7 +25,7 @@ final class StatisticsNewTitleSettingView: BaseView {
 	}
 }
 //MARK: - Action
-extension StatisticsNewTitleSettingView {
+extension StatisticsYetBudgetView {
 	// Text 부분적으로 강조 처리
 	private func setSubTextColor() -> NSMutableAttributedString {
 		let attributedText1 = NSMutableAttributedString(string: "누구나 실천 가능한\n")
@@ -57,7 +57,7 @@ extension StatisticsNewTitleSettingView {
 	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
-extension StatisticsNewTitleSettingView: SkeletonLoadable {
+extension StatisticsYetBudgetView: SkeletonLoadable {
 	// 초기 셋업할 코드들
 	override func setAttribute() {
 		super.setAttribute()

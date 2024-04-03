@@ -9,7 +9,7 @@ import UIKit
 import Combine
 import SnapKit
 import Then
-import Photos
+import PhotosUI
 import Lottie
 import SwiftUI
 
@@ -94,12 +94,14 @@ extension AddDetailViewController {
         self.titleTextFeild.resignFirstResponder()
         
         Tracking.FinActAddPage.inputPhotoLogEvent()
-        let picker = UIImagePickerController().then {
-            $0.sourceType = .photoLibrary
-            $0.allowsEditing = true
-            $0.delegate = self
-        }
+
         
+        var config = PHPickerConfiguration()
+        config.selectionLimit = 1 // 사용자가 한 번에 선택할 수 있는 사진의 수
+        config.filter = .images // 사진만 선택
+        
+        let picker = PHPickerViewController(configuration: config)
+        picker.delegate = self
         present(picker, animated: true)
     }
     
@@ -268,32 +270,33 @@ extension AddDetailViewController: StarPickerViewProtocol {
     }
 }
 
-// MARK: - ImagePicker Delegate
-extension AddDetailViewController: UIImagePickerControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        picker.dismiss(animated: false) { [weak self] in
+// MARK: - PHPicker Delegate
+extension AddDetailViewController: PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true) { [weak self] in
             guard let self = self else { return }
             self.viewModel.binaryFileList.removeAll()
-            let img = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
-            self.mainImageView.image = img
             
-            guard let data = img?.jpegData(compressionQuality: 1)?.base64EncodedString() else { return }
-            var imageName = ""
-            if let imageUrl = info[UIImagePickerController.InfoKey.referenceURL] as? URL {
-                let assets = PHAsset.fetchAssets(withALAssetURLs: [imageUrl], options: nil)
-                
-                guard let firstObject = assets.firstObject else { return }
-                imageName = PHAssetResource.assetResources(for: firstObject).first?.originalFilename ?? "DefualtName"
+            let itemProvider = results.first?.itemProvider
+            if let itemProvider = itemProvider, itemProvider.canLoadObject(ofClass: UIImage.self) {
+                itemProvider.loadObject(ofClass: UIImage.self) { image, error in
+                    DispatchQueue.main.async {
+                        if let image = image as? UIImage {
+                            self.mainImageView.image = image
+                            guard let data = image.jpegData(compressionQuality: 0)?.base64EncodedString() else { return }
+                            
+                            let identifier = results.compactMap(\.assetIdentifier)
+                            let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: identifier, options: nil)
+                            let fileName = fetchResult.firstObject?.value(forKey: "filename") as? String ?? "defaultName"
+                            
+                            self.viewModel.binaryFileList.append(APIParameters.BinaryFileList(binaryData: data, fileNm: fileName))
+                            self.remakeConstraintsByMainImageView()
+                        }
+                    }
+                }
             }
-            
-            self.viewModel.binaryFileList.append(APIParameters.BinaryFileList(binaryData: data, fileNm: imageName))
-            self.remakeConstraintsByMainImageView()
+            self.viewModel.didTapAddButton = false
         }
-        self.viewModel.didTapAddButton = false
-    }
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        self.viewModel.didTapAddButton = false
-        dismiss(animated: true, completion: nil)
     }
 }
 

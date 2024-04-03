@@ -6,6 +6,7 @@
 
 ## 앱 버전 : 2.0.1
 
+### 앱 최소지원 버전 : iOS15
 ## 👋 앱 소개
 
 <div align="center">
@@ -121,7 +122,7 @@
 <summary>펼처서 보기</summary>
 <div markdown="1">
 
-- iOS 14.0 이상
+- iOS 15.0 이상
 - xcode 13.0
 - iPhone 14 Pro에서 최적화됨
 - 가로모드 미지원

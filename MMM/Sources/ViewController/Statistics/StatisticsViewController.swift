@@ -25,6 +25,7 @@ final class StatisticsViewController: BaseViewController, View {
 	}
 	
 	// MARK: - Properties
+	private var isFirst: Bool = false
 	private var month: Date = Date()
 	private var satisfaction: Satisfaction = .low
 	private var timer: DispatchSourceTimer? // rank(순위)를 변경하는 시간
@@ -198,6 +199,25 @@ extension StatisticsViewController {
 				this.tableView.tableFooterView = isEmpty ? this.emptyView : nil
 			})
 			.disposed(by: disposeBag)
+		
+		// 요약하기
+		reactor.state
+			.map { $0.isSummary }
+			.distinctUntilChanged() // 중복값 무시
+			.withUnretained(self)
+			.bind { (this, isSummary) in
+				if this.isFirst { // 처음 화면에 접근했을 경우
+					this.activityView.isHidden = isSummary
+					this.headerView.frame.size.height = isSummary ? 420 : 510
+					this.satisfactionView.snp.updateConstraints {
+						$0.top.equalTo(this.averageView.snp.bottom).offset(isSummary ? 26 : 112)
+					}
+					
+					this.tableView.reloadData()
+				} else {
+					this.isFirst = true
+				}
+			}.disposed(by: disposeBag)
 		
 		// 로딩 발생
 		// 다음 배포때, 스켈레톤 처리
@@ -412,7 +432,8 @@ extension StatisticsViewController: SkeletonLoadable {
 		}
 		
 		headerView = headerView.then {
-			$0.frame = .init(x: 0, y: 0, width: view.bounds.width, height: 420)
+			// 420 <-> 520
+			$0.frame = .init(x: 0, y: 0, width: view.bounds.width, height: 510)
 		}
 		
 		emptyView = emptyView.then {
@@ -447,15 +468,14 @@ extension StatisticsViewController: SkeletonLoadable {
 			$0.height.equalTo(50)
 		}
 
-		activityView.isHidden = true
 		activityView.snp.makeConstraints {
-			$0.top.equalTo(categoryView.snp.bottom).offset(12)
+			$0.top.equalTo(averageView.snp.bottom).offset(-14)
 			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 			$0.height.equalTo(100)
 		}
 
 		satisfactionView.snp.makeConstraints {
-			$0.top.equalTo(averageView.snp.bottom).offset(26)
+			$0.top.equalTo(averageView.snp.bottom).offset(112)
 			$0.leading.trailing.equalToSuperview()
 			$0.bottom.equalToSuperview()
 		}

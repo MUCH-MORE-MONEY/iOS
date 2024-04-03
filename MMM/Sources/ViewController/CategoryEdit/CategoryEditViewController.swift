@@ -298,6 +298,10 @@ extension CategoryEditViewController {
 	// Section별 Cell Layout
 	func makeLayout(sections: [CategoryEditSectionModel]) -> UICollectionViewCompositionalLayout {
 		return UICollectionViewCompositionalLayout { [weak self] sectionIndex, env in
+			guard sectionIndex < sections.count else {
+				// MARK: 대분류 생성 후 앱이 꺼지는 문제 해결 (out of index)
+				return self?.makeEmptySectionLayout()
+			}
 			switch sections[sectionIndex].model {
 			case .header:
 				return self?.makeHeaderSectionLayout()
@@ -373,6 +377,17 @@ extension CategoryEditViewController {
 		
 		return section
 	}
+	
+	func makeEmptySectionLayout() -> NSCollectionLayoutSection {
+		let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0)), subitems: .init(repeating: .init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(UI.cellHeightMargin))), count: 1))
+
+		let section: NSCollectionLayoutSection = .init(group: group)
+		section.contentInsets = .init(top: UI.sectionMargin.top, leading: UI.sectionMargin.left, bottom: UI.sectionMargin.bottom, trailing: UI.sectionMargin.right)
+		
+		return section
+	}
+	
+	
 	
 	private func willPresentEditViewController(categoryEdit: CategoryEdit) {
 		guard let reactor = self.reactor else { return }

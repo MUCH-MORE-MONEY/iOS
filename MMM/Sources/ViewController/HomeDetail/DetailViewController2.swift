@@ -180,9 +180,12 @@ private extension DetailViewController2 {
         if URL(string: activity.imageUrl) != nil {
             self.mainImageView.isHidden = false
             self.cameraImageView.isHidden = true
-            self.mainImageView.setImage(urlStr: activity.imageUrl, defaultImage: R.Icon.camera48)
-            self.remakeConstraintsByMainImageView()
-            self.hasImage = true
+            self.mainImageView.setImage(urlStr: activity.imageUrl, defaultImage: R.Icon.camera48) {
+                self.setMainImageViewLayout()
+                self.remakeConstraintsByMainImageView()
+                self.hasImage = true
+            }
+
         } else {
             self.mainImageView.isHidden = true
             self.cameraImageView.isHidden = false
@@ -218,6 +221,21 @@ private extension DetailViewController2 {
         } else {        // 기존에 있던 경제활동은 반복을 response하지 않으므로 hidden 처리
             addScheduleTapView.isHidden = true
             remakeConstraintsByAddCategoryView()
+        }
+    }
+    
+    // 이미지 뷰의 크기에 따라서 mainImageview layout 재설정
+    func setMainImageViewLayout() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self, let image = self.mainImageView.image else { return }
+            let aspectRatio = image.size.width / image.size.height
+            // 높이 제약 조건을 업데이트하여 원본 비율 유지
+            self.mainImageView.snp.remakeConstraints {
+                $0.top.equalTo(self.starStackView.snp.bottom).offset(16)
+                $0.width.equalTo(self.view.safeAreaLayoutGuide).offset(-48)
+                $0.left.right.equalToSuperview()
+                $0.height.equalTo(self.mainImageView.snp.width).dividedBy(aspectRatio)
+            }
         }
     }
 }
@@ -298,8 +316,9 @@ extension DetailViewController2 {
         mainImageView = mainImageView.then {
             $0.image = R.Icon.camera48
             $0.backgroundColor = R.Color.gray100
-            $0.contentMode = .scaleToFill
+            $0.contentMode = .scaleAspectFill
             $0.isHidden = true
+            $0.clipsToBounds = true
         }
         
         cameraImageView = cameraImageView.then {
@@ -377,7 +396,7 @@ extension DetailViewController2 {
         mainImageView.snp.makeConstraints {
             $0.top.equalTo(starStackView.snp.bottom).offset(16)
             $0.width.equalTo(view.safeAreaLayoutGuide).offset(-48)
-            $0.height.equalTo(mainImageView.snp.width)
+//            $0.height.equalTo(mainImageView.snp.width)
             $0.left.right.equalToSuperview()
         }
         

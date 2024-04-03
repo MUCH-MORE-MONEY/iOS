@@ -489,6 +489,10 @@ extension EditActivityViewController: PHPickerViewControllerDelegate {
                 itemProvider.loadObject(ofClass: UIImage.self) { image, error in
                     DispatchQueue.main.async {
                         if let image = image as? UIImage {
+                            
+                            // 이미지가 바뀌면
+                            self.editViewModel.isImageChanged = true
+                            
                             self.mainImageView.image = image
                             self.editViewModel.fileNo = ""
                             guard let data = image.jpegData(compressionQuality: 0)?.base64EncodedString() else { return }
@@ -506,38 +510,6 @@ extension EditActivityViewController: PHPickerViewControllerDelegate {
             self.editViewModel.didTapAddButton = false
         }
     }
-}
-
-// MARK: - ImagePicker Delegate
-extension EditActivityViewController: UIImagePickerControllerDelegate {
-	func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-		picker.dismiss(animated: false) { [weak self] in
-			guard let self = self else { return }
-			self.editViewModel.binaryFileList.removeAll()
-			let img = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
-                
-            // 이미지가 바뀌면
-            self.editViewModel.isImageChanged = true
-
-			self.mainImageView.image = img
-			self.editViewModel.fileNo = ""
-			guard let data = img?.jpegData(compressionQuality: 0)?.base64EncodedString() else { return }
-			var imageName = ""
-			if let imageUrl = info[UIImagePickerController.InfoKey.referenceURL] as? URL{
-				let assets = PHAsset.fetchAssets(withALAssetURLs: [imageUrl], options: nil)
-				guard let firstObject = assets.firstObject else { return }
-				imageName = PHAssetResource.assetResources(for: firstObject).first?.originalFilename ?? "defaultName"
-			}
-			
-			self.editViewModel.binaryFileList.append(APIParameters.BinaryFileList(binaryData: data,fileNm: imageName))
-			self.remakeConstraintsByMainImageView()
-		}
-        self.editViewModel.didTapAddButton = false
-	}
-	func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        self.editViewModel.didTapAddButton = false
-		dismiss(animated: true, completion: nil)
-	}
 }
 
 // MARK: - TextView Func

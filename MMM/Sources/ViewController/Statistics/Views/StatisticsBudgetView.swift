@@ -134,8 +134,17 @@ extension StatisticsBudgetView {
 			$0.width.equalTo(cal)
 		}
 		
-		if percent < 10 {
-			
+		// 11% 미만일때, Text 위치 변경
+		if percent < 11 {
+			percentLabel.snp.remakeConstraints {
+				$0.centerY.equalTo(currentBarView)
+				$0.leading.equalTo(currentBarView.snp.trailing).offset(6)
+			}
+		} else {
+			percentLabel.snp.remakeConstraints {
+				$0.centerY.equalTo(currentBarView)
+				$0.trailing.equalTo(currentBarView).offset(-6)
+			}
 		}
 	}
 	

@@ -58,7 +58,7 @@ extension AddCategoryView {
         }
         
         arrowImageView = arrowImageView.then {
-            $0.image = R.Icon.iconArrowNextGray16
+            $0.image = R.Icon.iconArrowNextGray24
             $0.contentMode = .scaleAspectFit
         }
     }

@@ -232,7 +232,6 @@
 		C46D5E672AD1826800EBE5D7 /* CategoryAddUpperBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46D5E662AD1826800EBE5D7 /* CategoryAddUpperBottomSheetViewController.swift */; };
 		C46D5E6E2AD9798800EBE5D7 /* CategoryEditDragCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46D5E6D2AD9798800EBE5D7 /* CategoryEditDragCollectionViewCell.swift */; };
 		C494A2512A9B8A0A00980A71 /* TabBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C494A2502A9B8A0A00980A71 /* TabBarViewModel.swift */; };
-		C49D0DBB2B7B686F0025FBAD /* StatisticsNewTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49D0DBA2B7B686F0025FBAD /* StatisticsNewTitleView.swift */; };
 		C4BBD2642AB9DE8C0055FA65 /* StatisticsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BBD2632AB9DE8C0055FA65 /* StatisticsProvider.swift */; };
 		C4BBD2662AB9E16D0055FA65 /* DateBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BBD2652AB9E16D0055FA65 /* DateBottomSheetViewController.swift */; };
 		C4BBD26A2AB9E1DA0055FA65 /* DateBottomSheetReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BBD2692AB9E1DA0055FA65 /* DateBottomSheetReactor.swift */; };
@@ -562,7 +561,6 @@
 		C46D5E662AD1826800EBE5D7 /* CategoryAddUpperBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryAddUpperBottomSheetViewController.swift; sourceTree = "<group>"; };
 		C46D5E6D2AD9798800EBE5D7 /* CategoryEditDragCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditDragCollectionViewCell.swift; sourceTree = "<group>"; };
 		C494A2502A9B8A0A00980A71 /* TabBarViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewModel.swift; sourceTree = "<group>"; };
-		C49D0DBA2B7B686F0025FBAD /* StatisticsNewTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsNewTitleView.swift; sourceTree = "<group>"; };
 		C4BBD2632AB9DE8C0055FA65 /* StatisticsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsProvider.swift; sourceTree = "<group>"; };
 		C4BBD2652AB9E16D0055FA65 /* DateBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateBottomSheetViewController.swift; sourceTree = "<group>"; };
 		C4BBD2692AB9E1DA0055FA65 /* DateBottomSheetReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateBottomSheetReactor.swift; sourceTree = "<group>"; };
@@ -1191,8 +1189,34 @@
 		C41193DC29D287E6003DBC15 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				454B64722B83128D0091B78A /* SwiftUI */,
-				454B64732B8312990091B78A /* UIKit */,
+				C4DBAA2B29DBCB8B00D1BB97 /* Ex+Button.swift */,
+				C41193E029D287E6003DBC15 /* Ex+Color.swift */,
+				C433A07229EEE751008B26DF /* Ex+Date.swift */,
+				6A08B47F29FF74B70080719E /* Ex+Encodable.swift */,
+				C41193DE29D287E6003DBC15 /* Ex+Font.swift */,
+				C41193E129D287E6003DBC15 /* Ex+Icon.swift */,
+				C4DBAA3129DD763D00D1BB97 /* Ex+Int.swift */,
+				C41193DD29D287E6003DBC15 /* Ex+KeychainWrapper.swift */,
+				C41193F429D3D7FB003DBC15 /* Ex+NSObject.swift */,
+				C44807DD29E4FE8000D4B090 /* Ex+Publisher.swift */,
+				C4EB8CAF2AC18E85005FBAF1 /* Ex+UICollectionView.swift */,
+				C44807E429E7E76800D4B090 /* Ex+UIControl.swift */,
+				C41193DF29D287E6003DBC15 /* Ex+UIDevice.swift */,
+				6ADC27DF2A2AEEF400C56777 /* Ex+UIImage.swift */,
+				C4199DE02A00F164006E5DA8 /* Ex+UIImageView.swift */,
+				C4C0CB082A2474F900C41FF4 /* Ex+UILabel.swift */,
+				C4C792AC2A388486007FD6AA /* Ex+UIScreen.swift */,
+				C4EA5B4329FA2810008D1564 /* Ex+UIStackView.swift */,
+				6AB1151229EE6D9E00D3B813 /* Ex+UITabBar.swift */,
+				C41193F629D3D954003DBC15 /* Ex+UITableView.swift */,
+				6A27E6942A205338001A7F04 /* Ex+UITextField.swift */,
+				6A0379742A2443B9005EE07F /* Ex+UITextView.swift */,
+				6A4F6E952A29ADA500754150 /* Ex+UIViewController.swift */,
+				C41193E229D287E6003DBC15 /* Ex+UIView.swift */,
+				C42226462A30C548000C899B /* Ex+UserDefaults.swift */,
+				6ADEAFDE2A53B81300299A0E /* Ex+Window.swift */,
+				6A14E7142A9DD4600071805D /* Ex+String.swift */,
+				C466F41F2B1758DF00254FED /* Ex+SkeletonLoadable.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1295,7 +1319,6 @@
 		C4170B4C2A89FC1500CE0A65 /* Statistics */ = {
 			isa = PBXGroup;
 			children = (
-				451B2B892B84492D0028A335 /* Budget */,
 				C4170B512A937A8400CE0A65 /* Views */,
 				C4170B4D2A89FCA800CE0A65 /* StatisticsViewController.swift */,
 			);
@@ -1312,7 +1335,6 @@
 				C4170B5C2A94BA9000CE0A65 /* StatisticsSatisfactionView.swift */,
 				C460DBA92A96056100530351 /* StatisticsSatisfactionTableViewCell.swift */,
 				C4170B522A937AAC00CE0A65 /* StatisticsTitleView.swift */,
-				C49D0DBA2B7B686F0025FBAD /* StatisticsNewTitleView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1373,17 +1395,16 @@
 		C46409C82AB8805500A899AD /* BottomSheet */ = {
 			isa = PBXGroup;
 			children = (
-				45FA74C32B7F35270002C038 /* AddSchedule */,
 				45D07CD02AC4071F001C08AB /* CustomPush */,
 				C4199DD229FE3051006E5DA8 /* BottomSheetViewController.swift */,
 				C46409D92AB9625E00A899AD /* BottomSheetViewController2.swift */,
 				C4EB8CBB2AC56341005FBAF1 /* CategoryAddBottomSheetViewController.swift */,
-				C46D5E662AD1826800EBE5D7 /* CategoryAddUpperBottomSheetViewController.swift */,
 				C4EB8CB32AC438BA005FBAF1 /* CategoryEditBottomSheetViewController.swift */,
+				C46D5E662AD1826800EBE5D7 /* CategoryAddUpperBottomSheetViewController.swift */,
 				C46D5E622AD174AD00EBE5D7 /* CategoryEditUpperBottomSheetViewController.swift */,
 				C4BBD2652AB9E16D0055FA65 /* DateBottomSheetViewController.swift */,
-				C4BBD26B2ABAD4A60055FA65 /* SatisfactionBottomSheetViewController.swift */,
 				C4C84FEE2B0744F500F7757B /* StatisticsDateBottomSheetViewController.swift */,
+				C4BBD26B2ABAD4A60055FA65 /* SatisfactionBottomSheetViewController.swift */,
 			);
 			path = BottomSheet;
 			sourceTree = "<group>";
@@ -1392,7 +1413,6 @@
 			isa = PBXGroup;
 			children = (
 				6A04FA042A1C4BB00034C114 /* AddImageView.swift */,
-				45FA74C62B7F35EB0002C038 /* AddScheduleTapView.swift */,
 				6A1322F02A089B2900CEEC81 /* BasePaddingLabel.swift */,
 				6A1479622A0DE0690045B8C1 /* CameraImageView.swift */,
 				C4DBAA3629DD7B2600D1BB97 /* CountPushLabel.swift */,
@@ -1768,7 +1788,6 @@
 				C41193F529D3D7FB003DBC15 /* Ex+NSObject.swift in Sources */,
 				45D878A42B5A5B550098F30B /* StarPickerSheetReactor.swift in Sources */,
 				6A08B47D29FF5D530080719E /* Log.swift in Sources */,
-				45FA74C22B7F33FD0002C038 /* AddScheduleRepetitionView.swift in Sources */,
 				45CA1E9D2B4CE7EF002019E6 /* EditActivityReactor.swift in Sources */,
 				C4170B572A93A58A00CE0A65 /* StatisticsCategoryView.swift in Sources */,
 				C460DBAA2A96056100530351 /* StatisticsSatisfactionTableViewCell.swift in Sources */,
@@ -1861,7 +1880,6 @@
 				C4E96B7A2AF7E27100C59983 /* CategoryEditEmptyView.swift in Sources */,
 				6A8605B62A24C83D00DF68BD /* UpdateResDto.swift in Sources */,
 				45D401212B33CF6200CE0351 /* DetailViewController2.swift in Sources */,
-				45FA74C72B7F35EB0002C038 /* AddScheduleTapView.swift in Sources */,
 				6AF653582AF92B0700035AEE /* LeftAlignedCollectionViewFlowLayout.swift in Sources */,
 				6A0531222A22183D0065DB54 /* InsertResDto.swift in Sources */,
 				6A27E6952A205338001A7F04 /* Ex+UITextField.swift in Sources */,
@@ -1879,7 +1897,6 @@
 				C4EA5B4229FA26E0008D1564 /* HomeHeaderStackView.swift in Sources */,
 				C4BBD2932AC04C550055FA65 /* CategoryEditSectionModel.swift in Sources */,
 				6A4313E22A13046E00095041 /* BottomPageControlView.swift in Sources */,
-				451B2B8D2B846F280028A335 /* BudgetSettingViewModel.swift in Sources */,
 				C4BBD27F2ABEF6360055FA65 /* CategoryDetailReactor.swift in Sources */,
 				C4C792A62A358517007FD6AA /* SummaryResDto.swift in Sources */,
 				6AF9A14D2AA9BD640069981A /* PushSettingDetailReactor.swift in Sources */,
@@ -1899,9 +1916,7 @@
 				6A381E0A29E8F40700E0974F /* AddViewController.swift in Sources */,
 				C4EB8CB62AC44448005FBAF1 /* CategoryEditBottomSheetReactor.swift in Sources */,
 				6A0F234029DBA8AA0063673B /* DataExportViewController.swift in Sources */,
-				45F393252B7E2298007AB11B /* AddScheduleView.swift in Sources */,
 				C4F1A9762AFD2E4F00843708 /* WidgetResDto.swift in Sources */,
-				C49D0DBB2B7B686F0025FBAD /* StatisticsNewTitleView.swift in Sources */,
 				C4BBD2642AB9DE8C0055FA65 /* StatisticsProvider.swift in Sources */,
 				6A14E7092A9DCA720071805D /* PushReqDto.swift in Sources */,
 				6A14E7092A9DCA720071805D /* PushReqDto.swift in Sources */,
@@ -1970,10 +1985,8 @@
 				C41193E429D287E6003DBC15 /* Ex+Font.swift in Sources */,
 				C4BBD27D2ABEBFB70055FA65 /* CategoryHeader.swift in Sources */,
 				C41193E529D287E6003DBC15 /* Ex+UIDevice.swift in Sources */,
-				45FA74C92B7F495A0002C038 /* RadioButton.swift in Sources */,
 				C4C0CB092A2474F900C41FF4 /* Ex+UILabel.swift in Sources */,
 				45B878C92B342B0600EF27FB /* DetailProvider.swift in Sources */,
-				454B64752B8312B70091B78A /* Ex+View.swift in Sources */,
 				6A1322F12A089B2900CEEC81 /* BasePaddingLabel.swift in Sources */,
 				45D2FA4A2B5E096C00DADA5B /* CategorySheetViewReactor.swift in Sources */,
 				C4D7FC872A08942E00565291 /* Monthly.swift in Sources */,

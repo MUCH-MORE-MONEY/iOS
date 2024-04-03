@@ -11,7 +11,6 @@ import SnapKit
 import Then
 import Lottie
 import PhotosUI
-import SwiftUI
 
 final class AddDetailViewController: BaseAddActivityViewController, UINavigationControllerDelegate {
     // MARK: - UI Components
@@ -411,10 +410,6 @@ extension AddDetailViewController {
             .sink { _ in
                 self.didTapCategory()
             }.store(in: &cancellable)
-        
-        addScheduleTapView.gesturePublisher()
-            .sinkOnMainThread(receiveValue: didTapAddScheduleTapView)
-            .store(in: &cancellable)
         
         // MARK: - UI Bind
         viewModel.$type

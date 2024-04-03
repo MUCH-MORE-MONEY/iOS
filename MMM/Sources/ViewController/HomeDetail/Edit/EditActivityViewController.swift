@@ -13,7 +13,6 @@ import Photos
 import Lottie
 import FirebaseAnalytics
 import PhotosUI
-import SwiftUI
 
 protocol StarPickerViewProtocol: AnyObject {
 	func willPickerDismiss(_ rate: Double)
@@ -774,10 +773,6 @@ extension EditActivityViewController {
                 self.didTapCategory()
             }.store(in: &cancellable)
 		
-        addScheduleTapView.gesturePublisher()
-            .sinkOnMainThread(receiveValue: didTapAddScheduleTapView)
-            .store(in: &cancellable)
-        
 		// MARK: - CRUD Publisher
 		saveButton.tapPublisher
 			.sinkOnMainThread(receiveValue: didTapSaveButton)

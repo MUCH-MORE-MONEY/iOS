@@ -24,6 +24,7 @@ class BaseAddActivityViewController: BaseDetailViewController {
     lazy var saveButton = UIButton()
     lazy var satisfyingLabel = BasePaddingLabel(padding: UIEdgeInsets(top: 3, left: 12, bottom: 3, right: 12))
     lazy var addCategoryView = AddCategoryView()
+    lazy var addScheduleTapView = AddScheduleTapView()
     private lazy var separatorView = SeparatorView()
     
     // MARK: - Properties

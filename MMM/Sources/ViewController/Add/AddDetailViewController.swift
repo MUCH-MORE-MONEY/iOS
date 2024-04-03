@@ -11,6 +11,7 @@ import SnapKit
 import Then
 import Lottie
 import PhotosUI
+import SwiftUI
 
 final class AddDetailViewController: BaseAddActivityViewController, UINavigationControllerDelegate {
     // MARK: - UI Components

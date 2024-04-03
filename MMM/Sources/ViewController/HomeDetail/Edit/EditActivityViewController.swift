@@ -13,6 +13,7 @@ import Photos
 import Lottie
 import FirebaseAnalytics
 import PhotosUI
+import SwiftUI
 
 protocol StarPickerViewProtocol: AnyObject {
 	func willPickerDismiss(_ rate: Double)

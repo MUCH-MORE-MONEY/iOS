@@ -9,7 +9,6 @@ import UIKit
 import Combine
 import Then
 import SnapKit
-import Photos
 import Lottie
 import FirebaseAnalytics
 import PhotosUI
@@ -746,6 +745,10 @@ extension EditActivityViewController {
                 self.didTapCategory()
             }.store(in: &cancellable)
 		
+        addScheduleTapView.gesturePublisher()
+            .sinkOnMainThread(receiveValue: didTapAddScheduleTapView)
+            .store(in: &cancellable)
+        
 		// MARK: - CRUD Publisher
 		saveButton.tapPublisher
 			.sinkOnMainThread(receiveValue: didTapSaveButton)

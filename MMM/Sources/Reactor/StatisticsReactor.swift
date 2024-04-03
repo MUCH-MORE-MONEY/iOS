@@ -12,12 +12,10 @@ final class StatisticsReactor: Reactor {
 	// 사용자의 액션
 	enum Action {
 		case loadData
-		case pagination(contentHeight: CGFloat, contentOffsetY: CGFloat, scrollViewHeight: CGFloat) 	// pagination
-		case didTapMoreButton 			// 카테고리 더보기
-		case didTapSatisfactionButton 	// 만족도 선택
+		case pagination(contentHeight: CGFloat, contentOffsetY: CGFloat, scrollViewHeight: CGFloat) // pagination
+		case didTapMoreButton // 카테고리 더보기
+		case didTapSatisfactionButton // 만족도 선택
 		case selectCell(IndexPath, StatisticsItem)
-        case didTapNewTitleView      	// 예산 설정하기 탭(임시로 averageView에 넣음)
-		case isSummary      			// 요약보기/닫기
 	}
 	
 	// 처리 단위
@@ -28,11 +26,9 @@ final class StatisticsReactor: Reactor {
 		case setDate(Date)
 		case setSatisfaction(Satisfaction)
 		case setAverage(Double)
-		case setSummary
 		case presentSatisfaction(Bool)
 		case pushMoreCategory(Bool)
 		case pushDetail(IndexPath, EconomicActivity, Bool)
-        case pushBudgetSetting(Bool)
 		case setLoading(Bool)
 		case setError
 	}
@@ -44,19 +40,17 @@ final class StatisticsReactor: Reactor {
 		var satisfaction: Satisfaction = .low // 만족도
 		var activityList: [StatisticsSectionModel] = []
 		var payBarList: [CategoryBar] = []		// 지출 카테고리
-		var earnBarList: [CategoryBar] = []		// 수입 카테고리
+		var earnBarList: [CategoryBar] = []	// 수입 카테고리
 		var activitySatisfactionList: [EconomicActivity] = []
 		var activityDisappointingList: [EconomicActivity] = []
 		var isLoading = true // 로딩
 		var isPushMoreCategory = false
 		var isPresentSatisfaction = false
 		var isPushDetail = false
-		var isSummary = false // true: 요약보기, false: 닫기
 		var detailData: (IndexPath: IndexPath, info: EconomicActivity)?
 		var curSatisfaction: Satisfaction = .low
 		var totalItem: Int = 0  // item의 총 갯수
 		var isInit = true // 최초진입
-        @Pulse var isPushBudgetSetting = false
 	}
 	
 	// MARK: Properties
@@ -111,13 +105,6 @@ extension StatisticsReactor {
 				.just(.pushDetail(indexPath, item, true)),
 				.just(.pushDetail(indexPath, item, false))
 			])
-        case .didTapNewTitleView:
-            return .concat([
-                .just(.pushBudgetSetting(true)),
-                .just(.pushBudgetSetting(false))
-            ])
-		case .isSummary:
-			return .just(.setSummary)
 		}
 	}
 	
@@ -200,8 +187,6 @@ extension StatisticsReactor {
 			newState.satisfaction = satisfaction
 		case let .setLoading(isLoading):
 			newState.isLoading = isLoading
-		case .setSummary:
-			newState.isSummary = !newState.isSummary
 		case let .presentSatisfaction(isPresent):
 			newState.isPresentSatisfaction = isPresent
 		case let .pushMoreCategory(isPush):
@@ -209,8 +194,6 @@ extension StatisticsReactor {
 		case let .pushDetail(indexPath, data, isPush):
 			newState.isPushDetail = isPush
 			newState.detailData = (indexPath, data)
-        case let .pushBudgetSetting(isPush):
-            newState.isPushBudgetSetting = isPush
 		case .setError:
 			newState.isLoading = false
 		}

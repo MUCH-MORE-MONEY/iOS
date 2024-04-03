@@ -45,6 +45,7 @@ final class StatisticsReactor: Reactor {
 		var date = Date() // 월
 		var budget: Budget = .init(dateYM: Date().getFormattedYM(), budget: nil, estimatedEarning: nil)
 		var paySum: StatisticsSum = .init(dateYM: Date().getFormattedYM(), economicActivitySumAmt: nil)
+		var percent: Int = 0
 		var average: Double = 0.0 // 평균값
 		var satisfaction: Satisfaction = .low // 만족도
 		var activityList: [StatisticsSectionModel] = []
@@ -203,7 +204,20 @@ extension StatisticsReactor {
 				newState.budget = budget
 			}
 		case let .setPaySum(sum):
+			let sum: StatisticsSum = .init(dateYM: "", economicActivitySumAmt: 3000)
+			
 			newState.paySum = sum
+
+			if let budget = newState.budget.budget, let economicActivitySumAmt = sum.economicActivitySumAmt {
+
+				// 논리적인 오류 방지
+				if economicActivitySumAmt == 0 {
+					newState.percent = 0
+				} else {
+					// Budget은 setPaySum보다 빠르게 API를 불러옴
+					newState.percent = budget / economicActivitySumAmt
+				}
+			}
 		case let .setAverage(average):
 			newState.average = average
 		case let .setSatisfaction(satisfaction):

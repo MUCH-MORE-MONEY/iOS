@@ -392,7 +392,7 @@ extension StatisticsViewController {
 		guard let economicActivitySumAmt = sum.economicActivitySumAmt else { return }
 		self.budgetView.setCurrentPay(currentPayLabel: economicActivitySumAmt)
 	}
-	
+
 	/// '월'  및 범위 변경
 	private func setMonth(_ date: Date) {
 		// 올해인지 판별

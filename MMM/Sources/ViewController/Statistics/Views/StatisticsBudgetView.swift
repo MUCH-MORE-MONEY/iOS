@@ -57,6 +57,7 @@ final class StatisticsBudgetView: BaseView, View {
 	}
 	// MARK: - Properties
 	private lazy var state: State = .less
+	private let totalWidth: CGFloat = UIScreen.width - 24 * 2
 	
 	// MARK: - UI Components
 	private lazy var titleLabel = UILabel()
@@ -103,6 +104,12 @@ extension StatisticsBudgetView {
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
 	private func bindState(_ reactor: StatisticsReactor) {
+		
+		reactor.state
+			.map { $0.percent }
+			.distinctUntilChanged() // 중복값 무시
+			.bind(onNext: setPerent) // 그래프 값 변경
+			.disposed(by: disposeBag)
 	}
 }
 //MARK: - Action
@@ -115,6 +122,21 @@ extension StatisticsBudgetView {
 	// 외부에서 설정
 	func setCurrentPay(currentPayLabel: Int) {
 		self.currentPayLabel.text = "현재 \(currentPayLabel.withCommas()) 원"
+	}
+	
+	func setPerent(percent: Int) {
+		self.percentLabel.text = "\(percent) %"
+		
+		let percent = percent > 100 ? 100 : percent
+		let cal = totalWidth * Double(percent) / 100.0
+		
+		self.currentBarView.snp.updateConstraints {
+			$0.width.equalTo(cal)
+		}
+		
+		if percent < 10 {
+			
+		}
 	}
 	
 	func isLoading(_ isLoading: Bool) {
@@ -281,7 +303,7 @@ extension StatisticsBudgetView: SkeletonLoadable {
 		
 		currentBarView.snp.makeConstraints {
 			$0.top.leading.equalTo(totalBarView)
-			$0.width.equalTo(100)
+			$0.width.equalTo(totalWidth * 0.5)
 			$0.height.equalTo(22)
 		}
 		
@@ -299,7 +321,7 @@ extension StatisticsBudgetView: SkeletonLoadable {
 			$0.centerY.equalTo(currentPayLabel)
 			$0.leading.equalTo(currentPayLabel.snp.trailing).offset(10)
 			$0.width.equalTo(1)
-			$0.height.equalTo(9 )
+			$0.height.equalTo(9)
 		}
 		
 		settingBudgetLabel.snp.makeConstraints {

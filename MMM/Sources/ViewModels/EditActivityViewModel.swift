@@ -10,7 +10,7 @@ import Photos
 import Combine
 import FirebaseAnalytics
 
-final class EditActivityViewModel {
+final class EditActivityViewModel: ObservableObject {
     // MARK: - Property Wrapper
     @Published var didTapAddButton: Bool = false
     @Published var isTitleEmpty = false
@@ -25,7 +25,7 @@ final class EditActivityViewModel {
     @Published var star = 0
     @Published var type = "01"
     @Published var fileNo = ""
-    @Published var binaryFileList:  [APIParameters.BinaryFileList] = []
+    @Published var binaryFileList: [APIParameters.BinaryFileList] = []
   	@Published var date: Date? // picker
     // UI용 카테고리
     @Published var categoryName = ""
@@ -36,6 +36,14 @@ final class EditActivityViewModel {
     // 카테고리 시트 뷰에서 관리 버튼을 눌렀을 때를 나타내는 flag
     @Published var isCategoryManageButtonTapped = false
     @Published var isViewFromCategoryViewController = false
+    
+    // 경제활동 반복
+    @Published var recurrenceInfo: APIParameters.RecurrenceInfo?
+    @Published var recurrenceTitle: String = "반복 안함"
+    private var recurrenceYN: String {
+        guard let info = recurrenceInfo else { return "N" }
+        return info.recurrencePattern == "none" ? "N" : "Y"
+    }
     
     @Published var editResponse: UpdateResDto?
     @Published var deleteResponse: DeleteResDto?
@@ -64,6 +72,16 @@ final class EditActivityViewModel {
         .map { 0 <= Int($0) ?? 0 && Int($0) ?? 0 <= 100_000_000 } // 1억(1,000만원)보다 작을 경우
         .eraseToAnyPublisher()
 	
+    // 경제활동 편집저장할 경우 저장 type을 지정
+    enum EditActivityType {
+        case content
+        case pattern
+        case contentAndPattern
+        case deleteRecurrence
+    }
+    
+    var isImageChanged = false
+    
 	init(isAddModel: Bool) {
 		self.isAddModel = isAddModel
 	}
@@ -99,7 +117,9 @@ final class EditActivityViewModel {
                     title: title,
                     memo: memo,
                     createAt: createAt,
-                    star: star)))
+                    star: star,
+                    recurrenceInfo: recurrenceInfo,
+                    recurrenceYN: recurrenceYN)))
         .sink { data in
             switch data {
             case .failure(_):
@@ -138,7 +158,11 @@ final class EditActivityViewModel {
                     id: id,
                     createAt: createAt,
                     fileNo: fileNo,
-                    star: star)))
+                    star: star,
+                    contentRecurrenceUpdateYN: "N",
+                    recurrenceUpdateYN: "N",
+                    recurrenceInfo: recurrenceInfo,
+                    recurrenceYN: recurrenceYN)))
         .sink { data in
             switch data {
             case .failure(let error):
@@ -174,7 +198,11 @@ final class EditActivityViewModel {
                     id: id,
                     createAt: createAt,
                     fileNo: fileNo,
-                    star: star)))
+                    star: star,
+                    contentRecurrenceUpdateYN: "N",
+                    recurrenceUpdateYN: "N",
+                    recurrenceInfo: recurrenceInfo,
+                    recurrenceYN: recurrenceYN)))
         .sink { data in
             switch data {
             case .failure(let error):
@@ -195,14 +223,56 @@ final class EditActivityViewModel {
         }.store(in: &cancellable)
     }
     
-    func deleteDetailActivity() {
+    func updateDetailActivity(recurrenceUpdateYN: String, contentRecurrenceUpdateYN: String, completion: @escaping () -> Void) {
+        guard let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
+        self.isLoading = true
+        self.isShowToastMessage = false
+        APIClient.dispatch(
+            APIRouter.UpdateReqDto(
+                headers: APIHeader.Default(token: token),
+                body: APIParameters.UpdateReqDto(
+                    binaryFileList: binaryFileList,
+                    amount: amount,
+                    category: categoryId,
+                    type: type,
+                    title: title,
+                    memo: memo,
+                    id: id,
+                    createAt: createAt,
+                    fileNo: fileNo,
+                    star: star,
+                    contentRecurrenceUpdateYN: contentRecurrenceUpdateYN,
+                    recurrenceUpdateYN: recurrenceUpdateYN,
+                    recurrenceInfo: recurrenceInfo,
+                    recurrenceYN: recurrenceYN)))
+        .sink { data in
+            switch data {
+            case .failure(let error):
+                print(error)
+                break
+            case .finished:
+                break
+            }
+            self.isLoading = false
+        } receiveValue: { response in
+            self.editResponse = response
+            self.isShowToastMessage = true
+            self.changedId = response.economicActivityNo
+            if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+                sceneDelegate.window?.showToast(message: "경제활동 편집 내용을 저장했습니다.")
+            }
+            completion()
+        }.store(in: &cancellable)
+    }
+    
+    func deleteDetailActivity(delRecurrenceYn: String) {
 		guard let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
         self.isLoading = true
         APIClient.dispatch(
             APIRouter.DeleteReqDto(
                 headers: APIHeader.Default(
                     token: token),
-                body: APIParameters.DeleteReqDto(id: id)))
+                queryParams: APIParameters.DeleteReqDto(id: id, delRecurrenceYn: delRecurrenceYn)))
         .sink { data in
             switch data {
             case .failure(_):
@@ -219,5 +289,42 @@ final class EditActivityViewModel {
         }.store(in: &cancellable)
 
     }
-}
+    
+    func checkSaveType(by originalActivity: SelectDetailResDto) -> EditActivityType {
+        
+        let originalRecurrnce = originalActivity.recurrenceYN
+        
+        let originalTitle = originalActivity.title
+        let originalAmount = originalActivity.amount
+        let originalStar = originalActivity.star
+        let originalCategory = originalActivity.categoryID
+        let originalMemo = originalActivity.memo
+        
+        let recurrenceIsChanged = originalRecurrnce == "Y" && self.recurrenceYN == "N"
+        let titleIsChanged = originalTitle != title
+        let amountIsChanged = originalAmount != amount
+        let starIsChanged = originalStar != star
+        let categoryIsChanged = originalCategory != categoryId
+        let memoIsChanged = originalMemo != memo
+        
+        let contentIsChanged = titleIsChanged || amountIsChanged || starIsChanged || categoryIsChanged || memoIsChanged
+        
+        let activityDateIsChanged = originalActivity.createAt != createAt
+        
 
+        let patternIsChanged = originalActivity.recurrenceInfo != recurrenceInfo
+        
+        // 반복 없애기
+        if recurrenceIsChanged {
+            return .deleteRecurrence
+            // 패턴 & 내용 변경
+        } else if patternIsChanged && (activityDateIsChanged || contentIsChanged) {
+            return .contentAndPattern
+        } else if patternIsChanged {
+            return .pattern
+        // 날짜 또는 내용 수정
+        } else {
+            return .content
+        }
+    }
+}

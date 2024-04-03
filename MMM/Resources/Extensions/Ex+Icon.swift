@@ -56,6 +56,14 @@ public extension MMMResource {
         public static let iconCheckGray16 = UIImage(named: "iconCheckGray16", in: .main, compatibleWith: nil)
         public static let iconCheckWhite16 = UIImage(named: "iconCheckWhite16", in: .main, compatibleWith: nil)
         public static let iconCharacterEmptyCategory = UIImage(named: "iconCharacterEmptyCategory", in: .main, compatibleWith: nil)
+        public static let iconRadiobuttonActive = UIImage(named: "iconRadiobuttonActive", in: .main, compatibleWith: nil)
+        public static let iconRadiobuttonEnable = UIImage(named: "iconRadiobuttonEnable", in: .main, compatibleWith: nil)
+        public static let iconRepeat24 = UIImage(named: "iconRepeat24", in: .main, compatibleWith: nil)
+        public static let iconBudgetSettingCalendar = UIImage(named: "iconBudgetSettingCalendar", in: .main, compatibleWith: nil)!
+        public static let iconSliderThumb = UIImage(named: "iconSliderThumb", in: .main, compatibleWith: nil)!
+        public static let imageBackgroundBoost366 = UIImage(named: "imageBackgroundBoost366", in: .main, compatibleWith: nil)!
+        public static let imageCalenderUsecase144 = UIImage(named: "imageCalenderUsecase144", in: .main, compatibleWith: nil)!
+        public static let iconCheckboxEnable = UIImage(named: "iconCheckboxEnable", in: .main, compatibleWith: nil)!
         
 		// MARK: - FAB
 		public static let onboarding1 = UIImage(named: "iconOnboarding1", in: .main, compatibleWith: nil)

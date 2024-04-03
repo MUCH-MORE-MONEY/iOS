@@ -218,6 +218,42 @@ extension AddDetailViewController {
         bottomSheetVC.modalPresentationStyle = .overFullScreen
         self.present(bottomSheetVC, animated: false, completion: nil)
     }
+    
+    private func didTapAddScheduleTapView(_ type: UIView.GestureType) {
+        // 키보드 내리기
+        self.titleTextFeild.resignFirstResponder()
+        
+        
+        let hostingController = UIHostingController(rootView: VStack {
+            AddScheduleView(editViewModel: viewModel)
+            Spacer()
+        })
+        
+        if #available(iOS 16.0, *) {
+            if let sheetController =  hostingController.sheetPresentationController {
+                sheetController.detents = [
+                        .custom { _ in
+                            return UIScreen.height * 0.6
+                        }
+                    ]
+                
+                sheetController.prefersGrabberVisible = true
+                self.present(hostingController, animated: true)
+            }
+        } else {
+            let bottomSheetVC = BottomSheetViewController(contentViewController: hostingController)
+            bottomSheetVC.setSetting(percentHeight: 542/812)
+
+            bottomSheetVC.modalPresentationStyle = .overFullScreen
+            self.present(bottomSheetVC, animated: false)
+        }
+        
+        
+//        let bottomSheetVC = BottomSheetViewController(contentViewController: vc)
+//        bottomSheetVC.setSetting(percentHeight: 542/812)
+        
+
+    }
 }
 
 // MARK: - Star Picker의 확인을 눌렀을 때
@@ -484,6 +520,13 @@ extension AddDetailViewController {
                 guard let self = self else { return }
                 self.viewModel.categoryId = ""
                 self.viewModel.categoryName = ""
+            }
+            .store(in: &cancellable)
+        
+        viewModel.$recurrenceTitle
+            .sinkOnMainThread { [weak self] text in
+                guard let self = self else { return }
+                self.addScheduleTapView.setTitleAndColor(by: text)
             }
             .store(in: &cancellable)
     }

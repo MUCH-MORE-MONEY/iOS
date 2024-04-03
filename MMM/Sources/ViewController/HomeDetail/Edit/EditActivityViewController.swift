@@ -143,23 +143,94 @@ extension EditActivityViewController {
 	}
 	
 	func didTapSaveButton() {
-        editViewModel.updateDetailActivity {
-            self.detailViewModel.changedId = self.editViewModel.changedId
+        // 반복된 경제활동일 경우 수정하는 case에 따라서 분기처리 해야함
+        if let info = editViewModel.recurrenceInfo {
+            guard let detailActvity = detailViewModel.detailActivity else { return }
+            
+            let saveType = editViewModel.checkSaveType(by: detailActvity)
+            
+            let actionSheet = UIAlertController(title: "이 경제활동은 반복 설정되어있어요.", message: "편집 사항을 다른 일정에도 적용하시겠습니까?", preferredStyle: .actionSheet)
+            
+            
+            // 반복된 경제활동일 경우에만 해당
+            switch saveType {
+            case .content:  // 내용이 수정되었을 경우
+                let singleAction = UIAlertAction(title: "이 경제활동에만 적용", style: .default) { [weak self] _ in
+                    guard let self = self else { return }
+                    self.editViewModel.updateDetailActivity(recurrenceUpdateYN: "N", contentRecurrenceUpdateYN: "N") {
+                        self.detailViewModel.changedId = self.editViewModel.changedId
+                    }
+                }
+                
+                let recurrenceAction = UIAlertAction(title: "이후 경제활동에도 적용", style: .default) { [weak self] _ in
+                    guard let self = self else { return }
+                    self.editViewModel.updateDetailActivity(recurrenceUpdateYN: "N", contentRecurrenceUpdateYN: "Y") {
+                        self.detailViewModel.changedId = self.editViewModel.changedId
+                    }
+                }
+                
+                actionSheet.addAction(singleAction)
+                actionSheet.addAction(recurrenceAction)
+                break
+            case .pattern:             // case 2 : 반복 패턴 수정
+                let singleAction = UIAlertAction(title: "이 경제활동에만 적용", style: .default) { [weak self] _ in
+                    guard let self = self else { return }
+                    self.editViewModel.updateDetailActivity(recurrenceUpdateYN: "N", contentRecurrenceUpdateYN: "N") {
+                        self.detailViewModel.changedId = self.editViewModel.changedId
+                    }
+                }
+                
+                let recurrenceAction = UIAlertAction(title: "이후 경제활동에도 적용", style: .default) { [weak self] _ in
+                    guard let self = self else { return }
+                    self.editViewModel.updateDetailActivity(recurrenceUpdateYN: "Y", contentRecurrenceUpdateYN: "N") {
+                        self.detailViewModel.changedId = self.editViewModel.changedId
+                    }
+                }
+                actionSheet.addAction(singleAction)
+                actionSheet.addAction(recurrenceAction)
+            case .contentAndPattern:   // case 3 반복 패턴 및 내용
+                let recurrenceAction = UIAlertAction(title: "이번 및 이후 활동에도 적용", style: .default) { [weak self] _ in
+                    guard let self = self else { return }
+                    self.editViewModel.updateDetailActivity(recurrenceUpdateYN: "Y", contentRecurrenceUpdateYN: "Y") {
+                        self.detailViewModel.changedId = self.editViewModel.changedId
+                    }
+                }
+                
+            case .deleteRecurrence: // case 4 : 반복 없애기
+                let recurrenceAction = UIAlertAction(title: "이번 및 이후 활동에도 적용", style: .default) { [weak self] _ in
+                    guard let self = self else { return }
+                    editViewModel.updateDetailActivity {
+                        self.detailViewModel.changedId = self.editViewModel.changedId
+                    }
+                }
+                actionSheet.addAction(recurrenceAction)
+            }
+
+            // 취소 액션 시트
+            let cancelAction = UIAlertAction(title: "취소", style: .cancel)
+            actionSheet.addAction(cancelAction)
+            
+            self.present(actionSheet, animated: true)
+            // 원본 경제활동이 반복이 아닐경우
+        } else {
+            editViewModel.updateDetailActivity {
+                self.detailViewModel.changedId = self.editViewModel.changedId
+            }
         }
-		
-		// 저장후, 통계 Refresh
-		if let str = Constants.getKeychainValue(forKey: Constants.KeychainKey.statisticsDate), let date = str.toDate() {
-			ServiceProvider.shared.statisticsProvider.updateDate(to: date)
-		} else {
-			ServiceProvider.shared.statisticsProvider.updateDate(to: Date())
-		}
-		
-		self.loadView.play()
-		self.loadView.isPresent = true
-		self.loadView.modalPresentationStyle = .overFullScreen
-		self.present(self.loadView, animated: false)
+        
+        // 저장후, 통계 Refresh
+        if let str = Constants.getKeychainValue(forKey: Constants.KeychainKey.statisticsDate), let date = str.toDate() {
+            ServiceProvider.shared.statisticsProvider.updateDate(to: date)
+        } else {
+            ServiceProvider.shared.statisticsProvider.updateDate(to: Date())
+        }
+        
+        self.loadView.play()
+        self.loadView.isPresent = true
+        self.loadView.modalPresentationStyle = .overFullScreen
+        self.present(self.loadView, animated: false)
 	}
-	
+    
 	func didTapDeleteButton() {
         // 키보드 내리기
         self.titleTextFeild.resignFirstResponder()
@@ -241,6 +312,37 @@ extension EditActivityViewController {
         bottomSheetVC.modalPresentationStyle = .overFullScreen
         self.present(bottomSheetVC, animated: false, completion: nil)
     }
+    
+    private func didTapAddScheduleTapView(_ type: UIView.GestureType) {
+        // 키보드 내리기
+        self.titleTextFeild.resignFirstResponder()
+        
+        let swiftUIView = VStack {
+            AddScheduleView(editViewModel: editViewModel)
+            Spacer()
+        }
+        
+        let hostingController = UIHostingController(rootView: swiftUIView)
+        
+        if #available(iOS 16.0, *) {
+            if let sheetController =  hostingController.sheetPresentationController {
+                sheetController.detents = [
+                        .custom { _ in
+                            return UIScreen.height * 0.6
+                        }
+                    ]
+                
+                sheetController.prefersGrabberVisible = true
+                self.present(hostingController, animated: true)
+            }
+        } else {
+            let bottomSheetVC = BottomSheetViewController(contentViewController: hostingController)
+            bottomSheetVC.setSetting(percentHeight: 542/812)
+
+            bottomSheetVC.modalPresentationStyle = .overFullScreen
+            self.present(bottomSheetVC, animated: false)
+        }
+    }
 }
 
 
@@ -307,25 +409,59 @@ extension EditActivityViewController {
 extension EditActivityViewController: CustomAlertDelegate {
 	func didAlertCofirmButton() {
 		if isDeleteButton {
-			editViewModel.deleteDetailActivity()
+            
+            if detailViewModel.detailActivity?.recurrenceYN == "Y" {
+                let recurrenceDeleteTitle = "이 경제활동은 반복 설정되어있어요."
+                let recurrenceDeleteMessage = "편집 사항을 다른 일정에도 적용하시겠습니까?"
+                
+                let alert = UIAlertController(title: recurrenceDeleteTitle, message: recurrenceDeleteMessage, preferredStyle: .actionSheet)
+                let delRecurrenceNAction = UIAlertAction(title: "이 경제활동에만 적용", style: .default) { [weak self] _ in
+                    guard let self = self else { return }
+                    // 삭제시, 통계 Refresh
+                    editViewModel.deleteDetailActivity(delRecurrenceYn: "N")
+                    self.refreshStatistics()
+                }
+                
+                let delRecurrenceYAction = UIAlertAction(title: "이후 경제활동에도 적용", style: .default) { [weak self] _ in
+                    guard let self = self else { return }
+                    // 삭제시, 통계 Refresh
+                    editViewModel.deleteDetailActivity(delRecurrenceYn: "Y")
+                    self.refreshStatistics()
+                }
+                
+                let cancelAction = UIAlertAction(title: "취소", style: .cancel)
+                
+                alert.addAction(delRecurrenceNAction)
+                alert.addAction(delRecurrenceYAction)
+                alert.addAction(cancelAction)
+                self.present(alert, animated: true)
+            } else {
+                editViewModel.deleteDetailActivity(delRecurrenceYn: "N")
+                self.refreshStatistics()
+            }
 			
-			// 삭제시, 통계 Refresh
-			if let str = Constants.getKeychainValue(forKey: Constants.KeychainKey.statisticsDate), let date = str.toDate() {
-				ServiceProvider.shared.statisticsProvider.updateDate(to: date)
-			} else {
-				ServiceProvider.shared.statisticsProvider.updateDate(to: Date())
-			}
-			
-			self.loadView.play()
-			self.loadView.isPresent = true
-			self.loadView.modalPresentationStyle = .overFullScreen
-			self.present(self.loadView, animated: false)
+
+
 		} else {
 			super.didTapBackButton()
 		}
 	}
 	
 	func didAlertCacelButton() { }
+    
+    private func refreshStatistics() {
+        // 삭제시, 통계 Refresh
+        if let str = Constants.getKeychainValue(forKey: Constants.KeychainKey.statisticsDate), let date = str.toDate() {
+            ServiceProvider.shared.statisticsProvider.updateDate(to: date)
+        } else {
+            ServiceProvider.shared.statisticsProvider.updateDate(to: Date())
+        }
+        
+        self.loadView.play()
+        self.loadView.isPresent = true
+        self.loadView.modalPresentationStyle = .overFullScreen
+        self.present(self.loadView, animated: false)
+    }
 }
 
 // MARK: - Star Picker의 확인을 눌렀을 때
@@ -378,6 +514,10 @@ extension EditActivityViewController: UIImagePickerControllerDelegate {
 			guard let self = self else { return }
 			self.editViewModel.binaryFileList.removeAll()
 			let img = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
+                
+            // 이미지가 바뀌면
+            self.editViewModel.isImageChanged = true
+
 			self.mainImageView.image = img
 			self.editViewModel.fileNo = ""
 			guard let data = img?.jpegData(compressionQuality: 0)?.base64EncodedString() else { return }
@@ -444,16 +584,19 @@ extension EditActivityViewController {
 extension EditActivityViewController {
 	override func setBind() {
 		// MARK: - detailVM -> editVM 데이터 주입
-		editViewModel.title = detailViewModel.detailActivity?.title ?? ""
-		editViewModel.memo = detailViewModel.detailActivity?.memo ?? ""
-		editViewModel.amount = detailViewModel.detailActivity?.amount ?? 0
-		editViewModel.createAt = detailViewModel.detailActivity?.createAt ?? ""
-		editViewModel.star = detailViewModel.detailActivity?.star ?? 0
-		editViewModel.type = detailViewModel.detailActivity?.type ?? ""
-		editViewModel.fileNo = detailViewModel.detailActivity?.fileNo ?? ""
-		editViewModel.id = detailViewModel.detailActivity?.id ?? ""
-        editViewModel.categoryId = detailViewModel.detailActivity?.categoryID ?? ""
-        editViewModel.categoryName = detailViewModel.detailActivity?.categoryName ?? ""
+        
+        guard let detailActivity = detailViewModel.detailActivity else { return }
+		editViewModel.title = detailActivity.title
+        editViewModel.memo = detailActivity.memo
+		editViewModel.amount = detailActivity.amount
+		editViewModel.createAt = detailActivity.createAt
+		editViewModel.star = detailActivity.star
+		editViewModel.type = detailActivity.type
+		editViewModel.fileNo = detailActivity.fileNo
+		editViewModel.id = detailActivity.id
+        editViewModel.categoryId = detailActivity.categoryID
+        editViewModel.categoryName = detailActivity.categoryName
+        editViewModel.recurrenceInfo = detailActivity.recurrenceInfo
 		// MARK: - Loading에 대한 처리
 		editViewModel.$isLoading
             .removeDuplicates()
@@ -688,6 +831,11 @@ extension EditActivityViewController {
                 }
             }
             .store(in: &cancellable)
+        
+        editViewModel.$recurrenceInfo
+            .sinkCompactMapOnMainThread(receiveValue: addScheduleTapView.setTitle(by:))
+            .store(in: &cancellable)
+            
 	}
 
 }

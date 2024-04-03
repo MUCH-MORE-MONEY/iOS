@@ -9,8 +9,8 @@ import UIKit
 import Combine
 import SnapKit
 import Then
+import Photos
 import Lottie
-import PhotosUI
 import SwiftUI
 
 final class AddDetailViewController: BaseAddActivityViewController, UINavigationControllerDelegate {
@@ -65,17 +65,17 @@ extension AddDetailViewController {
     
     func didTapSaveButton() {
         viewModel.insertDetailActivity()
-		
-		// 통계 Refresh
-		if let str = Constants.getKeychainValue(forKey: Constants.KeychainKey.statisticsDate), let date = str.toDate() {
-			ServiceProvider.shared.statisticsProvider.updateDate(to: date)
-		} else {
-			ServiceProvider.shared.statisticsProvider.updateDate(to: Date())
-		}
-		
-		// Home Loading을 보여줄지 판단
-		Constants.setKeychain(true, forKey: Constants.KeychainKey.isHomeLoading)
-		
+        
+        // 통계 Refresh
+        if let str = Constants.getKeychainValue(forKey: Constants.KeychainKey.statisticsDate), let date = str.toDate() {
+            ServiceProvider.shared.statisticsProvider.updateDate(to: date)
+        } else {
+            ServiceProvider.shared.statisticsProvider.updateDate(to: Date())
+        }
+        
+        // Home Loading을 보여줄지 판단
+        Constants.setKeychain(true, forKey: Constants.KeychainKey.isHomeLoading)
+        
         self.loadView.play()
         self.loadView.isPresent = true
         self.loadView.modalPresentationStyle = .overFullScreen
@@ -94,14 +94,12 @@ extension AddDetailViewController {
         self.titleTextFeild.resignFirstResponder()
         
         Tracking.FinActAddPage.inputPhotoLogEvent()
-
+        let picker = UIImagePickerController().then {
+            $0.sourceType = .photoLibrary
+            $0.allowsEditing = true
+            $0.delegate = self
+        }
         
-        var config = PHPickerConfiguration()
-        config.selectionLimit = 1 // 사용자가 한 번에 선택할 수 있는 사진의 수
-        config.filter = .images // 사진만 선택
-        
-        let picker = PHPickerViewController(configuration: config)
-        picker.delegate = self
         present(picker, animated: true)
     }
     
@@ -270,36 +268,6 @@ extension AddDetailViewController: StarPickerViewProtocol {
     }
 }
 
-// MARK: - PHPicker Delegate
-extension AddDetailViewController: PHPickerViewControllerDelegate {
-    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        picker.dismiss(animated: true) { [weak self] in
-            guard let self = self else { return }
-            self.viewModel.binaryFileList.removeAll()
-            
-            let itemProvider = results.first?.itemProvider
-            if let itemProvider = itemProvider, itemProvider.canLoadObject(ofClass: UIImage.self) {
-                itemProvider.loadObject(ofClass: UIImage.self) { image, error in
-                    DispatchQueue.main.async {
-                        if let image = image as? UIImage {
-                            self.mainImageView.image = image
-                            guard let data = image.jpegData(compressionQuality: 0)?.base64EncodedString() else { return }
-                            
-                            let identifier = results.compactMap(\.assetIdentifier)
-                            let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: identifier, options: nil)
-                            let fileName = fetchResult.firstObject?.value(forKey: "filename") as? String ?? "defaultName"
-                            
-                            self.viewModel.binaryFileList.append(APIParameters.BinaryFileList(binaryData: data, fileNm: fileName))
-                            self.remakeConstraintsByMainImageView()
-                        }
-                    }
-                }
-            }
-            self.viewModel.didTapAddButton = false
-        }
-    }
-}
-
 // MARK: - ImagePicker Delegate
 extension AddDetailViewController: UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -411,6 +379,10 @@ extension AddDetailViewController {
             .sink { _ in
                 self.didTapCategory()
             }.store(in: &cancellable)
+        
+        addScheduleTapView.gesturePublisher()
+            .sinkOnMainThread(receiveValue: didTapAddScheduleTapView)
+            .store(in: &cancellable)
         
         // MARK: - UI Bind
         viewModel.$type

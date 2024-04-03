@@ -82,8 +82,13 @@ struct AddScheduleView: View {
         .onAppear {
             // recurrenceInfo가 있을 경우 그대로 addScheduleViewModel에 넣어줌
             if let recurrenceInfo = editViewModel.recurrenceInfo {
-                addScheduleViewModel.recurrenceInfo = recurrenceInfo
-                addScheduleViewModel.selectedId = recurrenceInfo.recurrencePattern.recurrenceTitleByPattern()
+                // 20240401 이걸 date 형식으로 바꿔줘야함
+                if let date = editViewModel.createAt.toDate() {
+                    addScheduleViewModel.date = date
+                    addScheduleViewModel.recurrenceInfo = recurrenceInfo
+                    addScheduleViewModel.selectedId = recurrenceInfo.recurrencePattern.recurrenceTitleByPattern()
+                }
+
             } else {
                 // recurrenceInfo가 없을 경우(최초 진입) 데이터 직접 넣어줌, date값을 초기세팅해줌
                 guard let date = editViewModel.date else { return }

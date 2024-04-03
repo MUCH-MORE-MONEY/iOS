@@ -143,41 +143,79 @@ extension EditActivityViewController {
 	}
 	
 	func didTapSaveButton() {
-        guard let detailActvity = detailViewModel.detailActivity else { return }
-        
-        let saveType = editViewModel.checkSaveType(by: detailActvity)
-        
-        let actionSheet = UIAlertController(title: "이 경제활동은 반복 설정되어있어요.", message: "편집 사항을 다른 일정에도 적용하시겠습니까?", preferredStyle: .actionSheet)
-        
+        // 반복된 경제활동일 경우 수정하는 case에 따라서 분기처리 해야함
+        if let info = editViewModel.recurrenceInfo {
+            guard let detailActvity = detailViewModel.detailActivity else { return }
+            
+            let saveType = editViewModel.checkSaveType(by: detailActvity)
+            
+            let actionSheet = UIAlertController(title: "이 경제활동은 반복 설정되어있어요.", message: "편집 사항을 다른 일정에도 적용하시겠습니까?", preferredStyle: .actionSheet)
+            
+            
+            // 반복된 경제활동일 경우에만 해당
+            switch saveType {
+            case .content:  // 내용이 수정되었을 경우
+                let singleAction = UIAlertAction(title: "이 경제활동에만 적용", style: .default) { [weak self] _ in
+                    guard let self = self else { return }
+                    self.editViewModel.updateDetailActivity(recurrenceUpdateYN: "N", contentRecurrenceUpdateYN: "N") {
+                        self.detailViewModel.changedId = self.editViewModel.changedId
+                    }
+                }
+                
+                let recurrenceAction = UIAlertAction(title: "이후 경제활동에도 적용", style: .default) { [weak self] _ in
+                    guard let self = self else { return }
+                    self.editViewModel.updateDetailActivity(recurrenceUpdateYN: "N", contentRecurrenceUpdateYN: "Y") {
+                        self.detailViewModel.changedId = self.editViewModel.changedId
+                    }
+                }
+                
+                actionSheet.addAction(singleAction)
+                actionSheet.addAction(recurrenceAction)
+                break
+            case .pattern:             // case 2 : 반복 패턴 수정
+                let singleAction = UIAlertAction(title: "이 경제활동에만 적용", style: .default) { [weak self] _ in
+                    guard let self = self else { return }
+                    self.editViewModel.updateDetailActivity(recurrenceUpdateYN: "N", contentRecurrenceUpdateYN: "N") {
+                        self.detailViewModel.changedId = self.editViewModel.changedId
+                    }
+                }
+                
+                let recurrenceAction = UIAlertAction(title: "이후 경제활동에도 적용", style: .default) { [weak self] _ in
+                    guard let self = self else { return }
+                    self.editViewModel.updateDetailActivity(recurrenceUpdateYN: "Y", contentRecurrenceUpdateYN: "N") {
+                        self.detailViewModel.changedId = self.editViewModel.changedId
+                    }
+                }
+                actionSheet.addAction(singleAction)
+                actionSheet.addAction(recurrenceAction)
+            case .contentAndPattern:   // case 3 반복 패턴 및 내용
+                let recurrenceAction = UIAlertAction(title: "이번 및 이후 활동에도 적용", style: .default) { [weak self] _ in
+                    guard let self = self else { return }
+                    self.editViewModel.updateDetailActivity(recurrenceUpdateYN: "Y", contentRecurrenceUpdateYN: "Y") {
+                        self.detailViewModel.changedId = self.editViewModel.changedId
+                    }
+                }
+                
+            case .deleteRecurrence: // case 4 : 반복 없애기
+                let recurrenceAction = UIAlertAction(title: "이번 및 이후 활동에도 적용", style: .default) { [weak self] _ in
+                    guard let self = self else { return }
+                    editViewModel.updateDetailActivity {
+                        self.detailViewModel.changedId = self.editViewModel.changedId
+                    }
+                }
+                actionSheet.addAction(recurrenceAction)
+            }
 
-        
-        // 반복된 경제활동일 경우에만 해당
-        switch saveType {
-        case .content:          // case 1 : 제목, 금액 ,별점, 카테고리, 사진, 내용 수정
-            //앨범 선택 - 스타일(default)
-            actionSheet.addAction(UIAlertAction(title: "이 경젷", style: .default, handler: { [weak self] (ACTION:UIAlertAction) in
-                guard let self = self else { return }
-                self.didTapAlbumButton()
-                print("앨범선택")
-            }))
-            break
-        case .date:             // case 2 : 날짜 수정
-            break
-        case .contentAndDate:   // case 3 : case 1 && case 2 수정
-            break
-        case .deleteRecurrence: // case 4 : 반복 없애기
-            break
-        case .noRecurrence:     // 원본 경제활동이 반복이 아닐경우
-            break
-        }
-
-        
-        editActivity()
-	}
-	
-    func editActivity() {
-        editViewModel.updateDetailActivity {
-            self.detailViewModel.changedId = self.editViewModel.changedId
+            // 취소 액션 시트
+            let cancelAction = UIAlertAction(title: "취소", style: .cancel)
+            actionSheet.addAction(cancelAction)
+            
+            self.present(actionSheet, animated: true)
+            // 원본 경제활동이 반복이 아닐경우
+        } else {
+            editViewModel.updateDetailActivity {
+                self.detailViewModel.changedId = self.editViewModel.changedId
+            }
         }
         
         // 저장후, 통계 Refresh
@@ -191,7 +229,7 @@ extension EditActivityViewController {
         self.loadView.isPresent = true
         self.loadView.modalPresentationStyle = .overFullScreen
         self.present(self.loadView, animated: false)
-    }
+	}
     
 	func didTapDeleteButton() {
         // 키보드 내리기

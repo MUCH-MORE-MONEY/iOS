@@ -44,16 +44,6 @@ final class EditActivityViewModel: ObservableObject {
         guard let info = recurrenceInfo else { return "N" }
         return info.recurrencePattern == "none" ? "N" : "Y"
     }
-    var contentRecurrenceUpdateYN: String {      // 이후 경제활동도 내용 변경 여부 Y/N
-        if recurrenceYN == "Y" {    // 반복된 경제활동일 경우
-            //
-            // 경제활동의 내용이 바뀌었는지를 체크해야함
-            return "Y"
-        } else {
-            return "N"
-        }
-    }
-    @Published var recurrenceUpdateYN: String = ""          // 경제활동 패턴 변경 여부 Y/N
     
     @Published var editResponse: UpdateResDto?
     @Published var deleteResponse: DeleteResDto?
@@ -85,10 +75,9 @@ final class EditActivityViewModel: ObservableObject {
     // 경제활동 편집저장할 경우 저장 type을 지정
     enum EditActivityType {
         case content
-        case date
-        case contentAndDate
+        case pattern
+        case contentAndPattern
         case deleteRecurrence
-        case noRecurrence
     }
     
     var isImageChanged = false
@@ -173,7 +162,7 @@ final class EditActivityViewModel: ObservableObject {
                     contentRecurrenceUpdateYN: "N",
                     recurrenceUpdateYN: "N",
                     recurrenceInfo: recurrenceInfo,
-                    recurrenceYN: "N")))
+                    recurrenceYN: recurrenceYN)))
         .sink { data in
             switch data {
             case .failure(let error):
@@ -213,7 +202,49 @@ final class EditActivityViewModel: ObservableObject {
                     contentRecurrenceUpdateYN: "N",
                     recurrenceUpdateYN: "N",
                     recurrenceInfo: recurrenceInfo,
-                    recurrenceYN: "N")))
+                    recurrenceYN: recurrenceYN)))
+        .sink { data in
+            switch data {
+            case .failure(let error):
+                print(error)
+                break
+            case .finished:
+                break
+            }
+            self.isLoading = false
+        } receiveValue: { response in
+            self.editResponse = response
+            self.isShowToastMessage = true
+            self.changedId = response.economicActivityNo
+            if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+                sceneDelegate.window?.showToast(message: "경제활동 편집 내용을 저장했습니다.")
+            }
+            completion()
+        }.store(in: &cancellable)
+    }
+    
+    func updateDetailActivity(recurrenceUpdateYN: String, contentRecurrenceUpdateYN: String, completion: @escaping () -> Void) {
+        guard let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
+        self.isLoading = true
+        self.isShowToastMessage = false
+        APIClient.dispatch(
+            APIRouter.UpdateReqDto(
+                headers: APIHeader.Default(token: token),
+                body: APIParameters.UpdateReqDto(
+                    binaryFileList: binaryFileList,
+                    amount: amount,
+                    category: categoryId,
+                    type: type,
+                    title: title,
+                    memo: memo,
+                    id: id,
+                    createAt: createAt,
+                    fileNo: fileNo,
+                    star: star,
+                    contentRecurrenceUpdateYN: contentRecurrenceUpdateYN,
+                    recurrenceUpdateYN: recurrenceUpdateYN,
+                    recurrenceInfo: recurrenceInfo,
+                    recurrenceYN: recurrenceYN)))
         .sink { data in
             switch data {
             case .failure(let error):
@@ -281,20 +312,19 @@ final class EditActivityViewModel: ObservableObject {
         let activityDateIsChanged = originalActivity.createAt != createAt
         
 
+        let patternIsChanged = originalActivity.recurrenceInfo != recurrenceInfo
+        
         // 반복 없애기
         if recurrenceIsChanged {
             return .deleteRecurrence
-        // 날짜 및 반복 수정
-        } else if activityDateIsChanged && contentIsChanged {
-            return .contentAndDate
-        // 날짜만 수정
-        } else if activityDateIsChanged {
-            return .date
-        // 내용만 수정
-        } else if contentIsChanged {
+            // 패턴 & 내용 변경
+        } else if patternIsChanged && (activityDateIsChanged || contentIsChanged) {
+            return .contentAndPattern
+        } else if patternIsChanged {
+            return .pattern
+        // 날짜 또는 내용 수정
+        } else {
             return .content
         }
-        
-        return .noRecurrence
     }
 }

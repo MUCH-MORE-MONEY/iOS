@@ -132,9 +132,10 @@ extension BaseAddActivityViewController {
         
         mainImageView = mainImageView.then {
             $0.image = R.Icon.camera48
-            $0.contentMode = .scaleToFill
+            $0.contentMode = .scaleAspectFill
             $0.isHidden = true
             $0.isUserInteractionEnabled = true
+            $0.clipsToBounds = true
         }
         
         memoTextView = memoTextView.then {

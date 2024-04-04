@@ -173,20 +173,13 @@ extension EditActivityViewController {
                 actionSheet.addAction(recurrenceAction)
                 break
             case .pattern:             // case 2 : 반복 패턴 수정
-                let singleAction = UIAlertAction(title: "이 경제활동에만 적용", style: .default) { [weak self] _ in
+                let recurrenceAction = UIAlertAction(title: "이번 및 이후 활동에도 적용", style: .default) { [weak self] _ in
                     guard let self = self else { return }
-                    self.editViewModel.updateDetailActivity(recurrenceUpdateYN: "N", contentRecurrenceUpdateYN: "N") {
+                    self.editViewModel.updateDetailActivity(recurrenceUpdateYN: "Y", contentRecurrenceUpdateYN: "Y") {
                         self.detailViewModel.changedId = self.editViewModel.changedId
                     }
                 }
                 
-                let recurrenceAction = UIAlertAction(title: "이후 경제활동에도 적용", style: .default) { [weak self] _ in
-                    guard let self = self else { return }
-                    self.editViewModel.updateDetailActivity(recurrenceUpdateYN: "Y", contentRecurrenceUpdateYN: "N") {
-                        self.detailViewModel.changedId = self.editViewModel.changedId
-                    }
-                }
-                actionSheet.addAction(singleAction)
                 actionSheet.addAction(recurrenceAction)
             case .contentAndPattern:   // case 3 반복 패턴 및 내용
                 let recurrenceAction = UIAlertAction(title: "이번 및 이후 활동에도 적용", style: .default) { [weak self] _ in
@@ -195,7 +188,7 @@ extension EditActivityViewController {
                         self.detailViewModel.changedId = self.editViewModel.changedId
                     }
                 }
-                
+                actionSheet.addAction(recurrenceAction)
             case .deleteRecurrence: // case 4 : 반복 없애기
                 let recurrenceAction = UIAlertAction(title: "이번 및 이후 활동에도 적용", style: .default) { [weak self] _ in
                     guard let self = self else { return }

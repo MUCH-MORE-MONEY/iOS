@@ -255,6 +255,7 @@ final class EditActivityViewModel: ObservableObject {
             }
             self.isLoading = false
         } receiveValue: { response in
+            print(response)
             self.editResponse = response
             self.isShowToastMessage = true
             self.changedId = response.economicActivityNo

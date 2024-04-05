@@ -105,7 +105,7 @@ final class EditActivityViewController: BaseAddActivityViewController, UINavigat
 
 // MARK: - Action
 extension EditActivityViewController {
-	func didTapDateTitle() {
+    func didTapDateTitle(_ type: UIView.GestureType) {
         // 키보드 내리기
         self.titleTextFeild.resignFirstResponder()
         
@@ -117,7 +117,7 @@ extension EditActivityViewController {
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
 	}
 	
-	func didTapMoneyLabel() {
+	func didTapMoneyLabel(_ type: UIView.GestureType) {
         // 키보드 내리기
         self.titleTextFeild.resignFirstResponder()
         
@@ -129,7 +129,7 @@ extension EditActivityViewController {
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
 	}
 	
-	func didTapStarLabel() {
+	func didTapStarLabel(_ type: UIView.GestureType) {
         // 키보드 내리기
         self.titleTextFeild.resignFirstResponder()
         
@@ -255,7 +255,7 @@ extension EditActivityViewController {
         
 	}
 	
-	func didTapImageView() {
+	func didTapImageView(_ type: UIView.GestureType) {
         // 키보드 내리기
         self.titleTextFeild.resignFirstResponder()
         
@@ -291,7 +291,7 @@ extension EditActivityViewController {
 		return text
 	}
     
-    private func didTapCategory() {
+    private func didTapCategory(_ type: UIView.GestureType) {
         // 키보드 내리기
         self.titleTextFeild.resignFirstResponder()
         
@@ -510,18 +510,6 @@ extension EditActivityViewController {
 	}
 	
 	func textViewDidBeginEditing() {
-//		let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
-//		scrollView.contentInset = contentInsets
-//		scrollView.scrollIndicatorInsets = contentInsets
-//		
-//		var rect = scrollView.frame
-//		rect.size.height -= keyboardHeight
-//		if !rect.contains(memoTextView.frame.origin) {
-//			scrollView.scrollRectToVisible(memoTextView.frame, animated: true)
-//		}
-		
-        
-        
 		if memoTextView.text == textViewPlaceholder {
 			memoTextView.text = nil
 			memoTextView.textColor = R.Color.black
@@ -698,41 +686,29 @@ extension EditActivityViewController {
 		
 		// MARK: - Gesture Publisher
 		titleStackView.gesturePublisher()
-			.receive(on: DispatchQueue.main)
-			.sink { _ in
-				self.didTapDateTitle()
-			}.store(in: &cancellable)
+            .sinkOnMainThread(receiveValue: didTapDateTitle)
+            .store(in: &cancellable)
 		
 		containerStackView.gesturePublisher()
-			.receive(on: DispatchQueue.main)
-			.sink { _ in
-				self.didTapMoneyLabel()
-			}.store(in: &cancellable)
+            .sinkOnMainThread(receiveValue: didTapMoneyLabel)
+			.store(in: &cancellable)
 		
 		starStackView.gesturePublisher()
-			.receive(on: DispatchQueue.main)
-			.sink { _ in
-				self.didTapStarLabel()
-			}.store(in: &cancellable)
+            .sinkOnMainThread(receiveValue: didTapStarLabel)
+			.store(in: &cancellable)
 		
 		satisfyingLabel.gesturePublisher()
-			.receive(on: DispatchQueue.main)
-			.sink { _ in
-				self.didTapStarLabel()
-			}.store(in: &cancellable)
+            .sinkOnMainThread(receiveValue: didTapStarLabel)
+			.store(in: &cancellable)
 		
 		mainImageView.gesturePublisher()
-			.receive(on: DispatchQueue.main)
-			.sink { _ in
-				self.didTapImageView()
-			}.store(in: &cancellable)
+            .sinkOnMainThread(receiveValue: didTapImageView)
+			.store(in: &cancellable)
 		
         
         addCategoryView.gesturePublisher()
-            .receive(on: DispatchQueue.main)
-            .sink { _ in
-                self.didTapCategory()
-            }.store(in: &cancellable)
+            .sinkOnMainThread(receiveValue: didTapCategory)
+            .store(in: &cancellable)
 		
         addScheduleTapView.gesturePublisher()
             .sinkOnMainThread(receiveValue: didTapAddScheduleTapView)
@@ -792,7 +768,7 @@ extension EditActivityViewController {
                 guard let self = self else { return }
                 if isFromView {
                     view.endEditing(true)
-                    self.didTapCategory()
+                    self.didTapCategory(.tap(.init()))
                 }
             }
             .store(in: &cancellable)
@@ -811,10 +787,6 @@ extension EditActivityViewController {
         self.hideKeyboardWhenTappedAround()
         titleTextFeild.becomeFirstResponder() // 키보드 보이기 및 포커스 주기
 
-//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        
-        
         navigationItem.rightBarButtonItem = deleteActivityButtonItem
         
         setCustomTitle()

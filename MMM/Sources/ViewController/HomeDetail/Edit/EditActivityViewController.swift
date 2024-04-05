@@ -795,7 +795,7 @@ extension EditActivityViewController {
         }
         
         deleteButton = deleteButton.then {
-            $0.setTitle("삭제", for: .normal)
+            $0.setTitle(CommonText.delete, for: .normal)
         }
                 
         editIconImage = editIconImage.then {

@@ -65,6 +65,7 @@
 		45E9091E2BBF9AF100E3DF20 /* ActionSheetText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E9091D2BBF9AF100E3DF20 /* ActionSheetText.swift */; };
 		45E909202BBFB27D00E3DF20 /* CommonText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E9091F2BBFB27D00E3DF20 /* CommonText.swift */; };
 		45E909222BBFB2AC00E3DF20 /* AlertText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E909212BBFB2AC00E3DF20 /* AlertText.swift */; };
+		45E909242BBFC62400E3DF20 /* CustomCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E909232BBFC62400E3DF20 /* CustomCalendarView.swift */; };
 		45FD3C852B887E1500C14A49 /* BudgetSettingSubTitleModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FD3C842B887E1500C14A49 /* BudgetSettingSubTitleModifier.swift */; };
 		6A0379752A2443B9005EE07F /* Ex+UITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0379742A2443B9005EE07F /* Ex+UITextView.swift */; };
 		6A03BB4C2ADD555D00F86756 /* AddCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A03BB4B2ADD555D00F86756 /* AddCategoryViewController.swift */; };
@@ -393,6 +394,7 @@
 		45E9091D2BBF9AF100E3DF20 /* ActionSheetText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionSheetText.swift; sourceTree = "<group>"; };
 		45E9091F2BBFB27D00E3DF20 /* CommonText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonText.swift; sourceTree = "<group>"; };
 		45E909212BBFB2AC00E3DF20 /* AlertText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertText.swift; sourceTree = "<group>"; };
+		45E909232BBFC62400E3DF20 /* CustomCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCalendarView.swift; sourceTree = "<group>"; };
 		45FD3C842B887E1500C14A49 /* BudgetSettingSubTitleModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetSettingSubTitleModifier.swift; sourceTree = "<group>"; };
 		6A0379742A2443B9005EE07F /* Ex+UITextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UITextView.swift"; sourceTree = "<group>"; };
 		6A03BB4B2ADD555D00F86756 /* AddCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryViewController.swift; sourceTree = "<group>"; };
@@ -821,6 +823,7 @@
 				45D831D92BBD403100FE3D72 /* AddScheduleRepetitionView.swift */,
 				45D831DA2BBD403100FE3D72 /* AddScheduleView.swift */,
 				45D831DB2BBD403100FE3D72 /* RadioButton.swift */,
+				45E909232BBFC62400E3DF20 /* CustomCalendarView.swift */,
 			);
 			path = AddSchedule;
 			sourceTree = "<group>";
@@ -1816,6 +1819,7 @@
 				C433BA072AEA3C63000793CB /* CategoryEditEmptyCollectionViewCell.swift in Sources */,
 				C46409CF2AB8832D00A899AD /* BaseViewController.swift in Sources */,
 				6A4F6E962A29ADA500754150 /* Ex+UIViewController.swift in Sources */,
+				45E909242BBFC62400E3DF20 /* CustomCalendarView.swift in Sources */,
 				C4BBD28F2AC049130055FA65 /* CategoryEditViewController.swift in Sources */,
 				C4DBAA2E29DC16A400D1BB97 /* WithdrawViewController.swift in Sources */,
 				6ADEAFDF2A53B81300299A0E /* Ex+Window.swift in Sources */,

@@ -58,6 +58,10 @@ final class StatisticsBudgetView: BaseView, View {
 	// MARK: - Properties
 	private lazy var state: State = .less
 	private let totalWidth: CGFloat = UIScreen.width - 24 * 2
+	private let monthList: [CGFloat] = [0, 30, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+	private var standardLeading: CGFloat {
+		return setDate()
+	}
 	
 	// MARK: - UI Components
 	private lazy var titleLabel = UILabel()
@@ -113,6 +117,7 @@ extension StatisticsBudgetView {
 			.distinctUntilChanged() // 중복값 무시
 			.bind(onNext: setPerent) // 그래프 값 변경
 			.disposed(by: disposeBag)
+		
 	}
 }
 //MARK: - Action
@@ -128,7 +133,7 @@ extension StatisticsBudgetView {
 	}
 	
 	func setPerent(percent: Int) {
-		let percent = 100
+		let percent = 40
 		self.percentLabel.text = "\(percent)%"
 		
 //		let percent = percent > 100 ? 100 : percent
@@ -200,6 +205,15 @@ extension StatisticsBudgetView: SkeletonLoadable {
 		setDotLine()
 	}
 	
+	func setDate(date: Date = Date(), isLast: Bool = false) -> CGFloat {
+		let month = Int(date.getFormattedDate(format: "MM")) ?? 1
+		let day = isLast ? monthList[month] : CGFloat((Int(date.getFormattedDate(format: "dd")) ?? 1)) - 1
+		let totalDay = monthList[month] - 1
+		let padding: CGFloat = 5 * 2
+		let leading = (totalWidth - padding) / totalDay * day
+		return leading
+	}
+	
 	func setDotLine() {
 		let layer = CAShapeLayer()
 		layer.strokeColor = R.Color.black.cgColor
@@ -214,6 +228,16 @@ extension StatisticsBudgetView: SkeletonLoadable {
 		
 		layer.path = path.cgPath
 		dotLine.layer.addSublayer(layer)
+	}
+	
+	func setStandard() {
+		let month = Int(Date().getFormattedDate(format: "MM")) ?? 1
+		let day = Int(Date().getFormattedDate(format: "dd")) ?? 1
+		let totalDay = monthList[month]
+		let padding: CGFloat = 5 * 2
+		let leading = (totalWidth - padding) / totalDay * CGFloat(day)
+		
+		print("여기", totalWidth, totalDay, CGFloat(day), leading)
 	}
 	
 	// 초기 셋업할 코드들
@@ -364,6 +388,7 @@ extension StatisticsBudgetView: SkeletonLoadable {
 		}
 		
 		standardView.snp.makeConstraints {
+			$0.leading.equalTo(totalBarView).offset(standardLeading)
 			$0.bottom.equalTo(totalBarView)
 			$0.width.equalTo(63)
 			$0.height.equalTo(49)

@@ -118,6 +118,11 @@ extension StatisticsBudgetView {
 			.bind(onNext: setPerent) // 그래프 값 변경
 			.disposed(by: disposeBag)
 		
+		reactor.state
+			.map { $0.date }
+			.distinctUntilChanged() // 중복값 무시
+			.bind(onNext: chageDate)
+			.disposed(by: disposeBag)
 	}
 }
 //MARK: - Action
@@ -130,6 +135,22 @@ extension StatisticsBudgetView {
 	// 외부에서 설정
 	func setCurrentPay(currentPayLabel: Int) {
 		self.currentPayLabel.text = "현재 \(currentPayLabel.withCommas()) 원"
+	}
+	
+	func chageDate(date: Date) {
+		let leading = setDate(date: date, isLast: date.getFormattedYM() != Date().getFormattedYM())
+		standardView.snp.updateConstraints {
+			$0.leading.equalTo(totalBarView).offset(leading)
+		}
+	}
+	
+	func setDate(date: Date = Date(), isLast: Bool = false) -> CGFloat {
+		let month = Int(date.getFormattedDate(format: "MM")) ?? 1
+		let totalDay = monthList[month] - 1
+		let day = isLast ? totalDay : CGFloat((Int(date.getFormattedDate(format: "dd")) ?? 1)) - 1
+		let padding: CGFloat = 5 * 2
+		let leading = (totalWidth - padding) / totalDay * day
+		return leading
 	}
 	
 	func setPerent(percent: Int) {
@@ -203,15 +224,6 @@ extension StatisticsBudgetView: SkeletonLoadable {
 		super.setup()
 		
 		setDotLine()
-	}
-	
-	func setDate(date: Date = Date(), isLast: Bool = false) -> CGFloat {
-		let month = Int(date.getFormattedDate(format: "MM")) ?? 1
-		let day = isLast ? monthList[month] : CGFloat((Int(date.getFormattedDate(format: "dd")) ?? 1)) - 1
-		let totalDay = monthList[month] - 1
-		let padding: CGFloat = 5 * 2
-		let leading = (totalWidth - padding) / totalDay * day
-		return leading
 	}
 	
 	func setDotLine() {

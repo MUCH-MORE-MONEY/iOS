@@ -138,7 +138,8 @@ extension StatisticsBudgetView {
 	}
 	
 	func chageDate(date: Date) {
-		let leading = setDate(date: date, isLast: date.getFormattedYM() != Date().getFormattedYM())
+		let isToday = date.getFormattedYM() == Date().getFormattedYM()
+		let leading = setDate(date: isToday ? Date() : date, isLast: !isToday)
 		standardView.snp.updateConstraints {
 			$0.leading.equalTo(totalBarView).offset(leading)
 		}

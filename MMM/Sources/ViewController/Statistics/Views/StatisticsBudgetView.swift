@@ -70,6 +70,9 @@ final class StatisticsBudgetView: BaseView, View {
 	private lazy var separatorView = UIView()
 	private lazy var settingBudgetLabel = UILabel()	// 예산
 	private lazy var settingButton = UIButton()		// 설정
+	private lazy var standardView = UIView()
+	private lazy var standardLabel = UILabel()
+	private lazy var dotLine = UIView()	// 점선
 
 	// 스켈레톤 UI
 	private lazy var skTitleView = UIView()
@@ -125,9 +128,10 @@ extension StatisticsBudgetView {
 	}
 	
 	func setPerent(percent: Int) {
-		self.percentLabel.text = "\(percent) %"
+		let percent = 100
+		self.percentLabel.text = "\(percent)%"
 		
-		let percent = percent > 100 ? 100 : percent
+//		let percent = percent > 100 ? 100 : percent
 		let cal = totalWidth * Double(percent) / 100.0
 		
 		self.currentBarView.snp.updateConstraints {
@@ -190,6 +194,29 @@ extension StatisticsBudgetView {
 //MARK: - Attribute & Hierarchy & Layouts
 extension StatisticsBudgetView: SkeletonLoadable {
 	// 초기 셋업할 코드들
+	override func setup() {
+		super.setup()
+		
+		setDotLine()
+	}
+	
+	func setDotLine() {
+		let layer = CAShapeLayer()
+		layer.strokeColor = R.Color.black.cgColor
+		layer.lineDashPattern = [2, 2]
+
+		let path = UIBezierPath()
+		let point1 = CGPoint(x: dotLine.frame.midX, y: dotLine.frame.minY)
+		let point2 = CGPoint(x: dotLine.frame.midX, y: dotLine.frame.maxY)
+		
+		path.move(to: point1)
+		path.addLine(to: point2)
+		
+		layer.path = path.cgPath
+		dotLine.layer.addSublayer(layer)
+	}
+	
+	// 초기 셋업할 코드들
 	override func setAttribute() {
 		super.setAttribute()
 		
@@ -243,6 +270,20 @@ extension StatisticsBudgetView: SkeletonLoadable {
 			$0.backgroundColor = state.barColor
 		}
 		
+		standardLabel = standardLabel.then {
+			$0.text = "적정지출"
+			$0.textColor = R.Color.white
+			$0.font = R.Font.body5
+			$0.clipsToBounds = true // cornerRadius 적용
+			$0.layer.cornerRadius = 10
+			$0.textAlignment = .center
+			$0.backgroundColor = R.Color.black
+		}
+		
+		dotLine = dotLine.then {
+			$0.frame = .init(x: 0, y: 0, width: 1, height: 39)
+		}
+
 		percentLabel = percentLabel.then {
 			$0.text = "0%"
 			$0.textColor = state.textColor
@@ -276,7 +317,8 @@ extension StatisticsBudgetView: SkeletonLoadable {
 	override func setHierarchy() {
 		super.setHierarchy()
 		
-		addSubviews(titleLabel, subTitleLabel, imageView, skTitleView, totalBarView, currentBarView, percentLabel, currentPayLabel, separatorView, settingBudgetLabel, settingButton)
+		addSubviews(titleLabel, subTitleLabel, imageView, skTitleView, totalBarView, currentBarView, percentLabel, standardView, currentPayLabel, separatorView, settingBudgetLabel, settingButton)
+		standardView.addSubviews(standardLabel, dotLine)
 	}
 	
 	override func setLayout() {
@@ -319,6 +361,24 @@ extension StatisticsBudgetView: SkeletonLoadable {
 		percentLabel.snp.makeConstraints {
 			$0.centerY.equalTo(currentBarView)
 			$0.trailing.equalTo(currentBarView).offset(-6)
+		}
+		
+		standardView.snp.makeConstraints {
+			$0.bottom.equalTo(totalBarView)
+			$0.width.equalTo(63)
+			$0.height.equalTo(49)
+		}
+		
+		standardLabel.snp.makeConstraints {
+			$0.top.leading.trailing.equalToSuperview()
+			$0.width.equalToSuperview()
+			$0.height.equalTo(22)
+		}
+		
+		dotLine.snp.makeConstraints {
+			$0.leading.equalToSuperview().inset(5)
+			$0.top.equalToSuperview().inset(10)
+			$0.bottom.equalToSuperview()
 		}
 		
 		currentPayLabel.snp.makeConstraints {

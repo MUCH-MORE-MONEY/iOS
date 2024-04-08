@@ -140,18 +140,38 @@ extension StatisticsBudgetView {
 	func chageDate(date: Date) {
 		let isToday = date.getFormattedYM() == Date().getFormattedYM()
 		let leading = setDate(date: isToday ? Date() : date, isLast: !isToday)
+		let month = Int(date.getFormattedDate(format: "MM")) ?? 1
+		let totalDay: CGFloat = monthList[month] - 1
+		let today: Int = Int(Date().getFormattedDate(format: "dd")) ?? 1
+		let day: CGFloat = !isToday ? totalDay : CGFloat(today)
+
 		standardView.snp.updateConstraints {
 			$0.leading.equalTo(totalBarView).offset(leading)
+		}
+		
+		dotLine.snp.remakeConstraints {
+			if day < 4 {
+				$0.leading.equalToSuperview().offset(5)
+			} else if day > totalDay - 2  {
+				$0.trailing.equalToSuperview().offset(-5)
+			} else {
+				$0.centerX.equalTo(standardLabel)
+			}
+			$0.top.equalToSuperview().inset(10)
+			$0.bottom.equalToSuperview()
 		}
 	}
 	
 	func setDate(date: Date = Date(), isLast: Bool = false) -> CGFloat {
 		let month = Int(date.getFormattedDate(format: "MM")) ?? 1
-		let totalDay = monthList[month] - 1
-		let day = isLast ? totalDay : CGFloat((Int(date.getFormattedDate(format: "dd")) ?? 1)) - 1
+		let totalDay: CGFloat = monthList[month] - 1
+		let today: Int = Int(date.getFormattedDate(format: "dd")) ?? 1
+		let day: CGFloat = isLast ? totalDay : CGFloat(today) - 1
 		let padding: CGFloat = 5 * 2
 		let leading = (totalWidth - padding) / totalDay * day
-		return leading
+		let diff: CGFloat = day + 1 < 4 ? 0 : totalDay - 2 < day + 1 ? 52 : 26
+		
+		return leading - diff
 	}
 	
 	func setPerent(percent: Int) {
@@ -224,6 +244,7 @@ extension StatisticsBudgetView: SkeletonLoadable {
 	override func setup() {
 		super.setup()
 		
+		setStandard()
 		setDotLine()
 	}
 	
@@ -244,13 +265,35 @@ extension StatisticsBudgetView: SkeletonLoadable {
 	}
 	
 	func setStandard() {
-		let month = Int(Date().getFormattedDate(format: "MM")) ?? 1
-		let day = Int(Date().getFormattedDate(format: "dd")) ?? 1
-		let totalDay = monthList[month]
-		let padding: CGFloat = 5 * 2
-		let leading = (totalWidth - padding) / totalDay * CGFloat(day)
+		let date = Date()
+		let month = Int(date.getFormattedDate(format: "MM")) ?? 1
+		let today: Int = Int(date.getFormattedDate(format: "dd")) ?? 1
+		let totalDay: Int = Int(monthList[month])
+
+		standardView.snp.makeConstraints {
+			$0.leading.equalTo(totalBarView).offset(standardLeading)
+			$0.bottom.equalTo(totalBarView)
+			$0.width.equalTo(63)
+			$0.height.equalTo(49)
+		}
 		
-		print("여기", totalWidth, totalDay, CGFloat(day), leading)
+		standardLabel.snp.makeConstraints {
+			$0.top.leading.trailing.equalToSuperview()
+			$0.width.equalToSuperview()
+			$0.height.equalTo(22)
+		}
+		
+		dotLine.snp.makeConstraints {
+			if today < 4 {
+				$0.leading.equalToSuperview().offset(5)
+			} else if today > totalDay - 2  {
+				$0.trailing.equalToSuperview().offset(-5)
+			} else {
+				$0.centerX.equalTo(standardLabel)
+			}
+			$0.top.equalToSuperview().inset(10)
+			$0.bottom.equalToSuperview()
+		}
 	}
 	
 	// 초기 셋업할 코드들
@@ -398,25 +441,6 @@ extension StatisticsBudgetView: SkeletonLoadable {
 		percentLabel.snp.makeConstraints {
 			$0.centerY.equalTo(currentBarView)
 			$0.trailing.equalTo(currentBarView).offset(-6)
-		}
-		
-		standardView.snp.makeConstraints {
-			$0.leading.equalTo(totalBarView).offset(standardLeading)
-			$0.bottom.equalTo(totalBarView)
-			$0.width.equalTo(63)
-			$0.height.equalTo(49)
-		}
-		
-		standardLabel.snp.makeConstraints {
-			$0.top.leading.trailing.equalToSuperview()
-			$0.width.equalToSuperview()
-			$0.height.equalTo(22)
-		}
-		
-		dotLine.snp.makeConstraints {
-			$0.leading.equalToSuperview().inset(5)
-			$0.top.equalToSuperview().inset(10)
-			$0.bottom.equalToSuperview()
 		}
 		
 		currentPayLabel.snp.makeConstraints {

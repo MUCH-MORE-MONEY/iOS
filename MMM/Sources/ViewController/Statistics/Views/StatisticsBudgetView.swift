@@ -175,16 +175,16 @@ extension StatisticsBudgetView {
 	}
 	
 	func setPerent(percent: Int) {
-		let percent = 40
+//		let percent = 100
 		self.percentLabel.text = "\(percent)%"
 		
-//		let percent = percent > 100 ? 100 : percent
-		let cal = totalWidth * Double(percent) / 100.0
+		let percent = percent > 100 ? 100 : percent
+		let width = totalWidth * Double(percent) / 100.0
 		
 		self.currentBarView.snp.updateConstraints {
-			$0.width.equalTo(cal)
+			$0.width.equalTo(width)
 		}
-		
+		 
 		// 11% 미만일때, Text 위치 변경
 		if percent < 11 {
 			percentLabel.snp.remakeConstraints {
@@ -197,6 +197,19 @@ extension StatisticsBudgetView {
 				$0.trailing.equalTo(currentBarView).offset(-6)
 			}
 		}
+		
+		if percent > 100 {
+			state = .over
+		} else if width < standardView.frame.minX + dotLine.frame.maxX {
+			state = .less
+		} else {
+			state = .more
+		}
+		
+		titleLabel.text = state.title
+		subTitleLabel.text = state.subTitle
+		currentBarView.backgroundColor = state.barColor
+		percentLabel.textColor = state.textColor
 	}
 	
 	func isLoading(_ isLoading: Bool) {

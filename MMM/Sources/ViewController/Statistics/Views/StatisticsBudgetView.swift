@@ -54,6 +54,14 @@ final class StatisticsBudgetView: BaseView, View {
 			case .over: return R.Color.black
 			}
 		}
+		
+		var backColor: UIColor {
+			switch self {
+			case .less: return R.Color.yellow100
+			case .more: return R.Color.black
+			case .over: return R.Color.black
+			}
+		}
 	}
 	// MARK: - Properties
 	private lazy var state: State = .less
@@ -208,6 +216,7 @@ extension StatisticsBudgetView {
 		
 		titleLabel.text = state.title
 		subTitleLabel.text = state.subTitle
+		totalBarView.backgroundColor = state.backColor
 		currentBarView.backgroundColor = state.barColor
 		percentLabel.textColor = state.textColor
 	}

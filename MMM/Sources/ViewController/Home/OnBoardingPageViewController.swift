@@ -1,5 +1,5 @@
 //
-//  PopupViewController.swift
+//  OnBoardingPageViewController.swift
 //  MMM
 //
 //  Created by geonhyeong on 4/9/24.
@@ -10,10 +10,11 @@ import Then
 import SnapKit
 import ReactorKit
 
-final class PopupViewController: BaseViewController, View {
+final class OnBoardingPageViewController: BaseViewController, View {
 	typealias Reactor = HomeReactor
 	// MARK: - Properties
 	// MARK: - UI Components
+	private lazy var cardView: UIView = UIView()
 	private lazy var contentView: UIView = UIView()
 
 	func bind(reactor: HomeReactor) {
@@ -22,7 +23,7 @@ final class PopupViewController: BaseViewController, View {
 	}
 }
 //MARK: - Action
-extension PopupViewController {
+extension OnBoardingPageViewController {
 	// MARK: 데이터 변경 요청 및 버튼 클릭시 요청 로직(View -> Reactor)
 	private func bindAction(_ reactor: HomeReactor) {
 	}
@@ -33,31 +34,40 @@ extension PopupViewController {
 	}
 }
 //MARK: - Attribute & Hierarchy & Layouts
-extension PopupViewController {
+extension OnBoardingPageViewController {
 	override func setAttribute() {
 		super.setAttribute()
 		
 		view.backgroundColor = .clear
 		
-		contentView = contentView.then {
+		cardView = cardView.then {
 			$0.backgroundColor = R.Color.white
 			$0.layer.cornerRadius = 16
 		}
+		
+		contentView.backgroundColor = R.Color.yellow050
+		
+		
 	}
 	
 	override func setHierarchy() {
 		super.setHierarchy()
 
-		view.addSubviews(contentView)
+		view.addSubviews(cardView)
+		cardView.addSubviews(contentView)
 	}
 	
 	override func setLayout() {
 		super.setLayout()
 		
-		contentView.snp.makeConstraints {
+		cardView.snp.makeConstraints {
 			$0.width.equalTo(312)
 			$0.height.equalTo(392)
 			$0.center.equalToSuperview()
+		}
+		
+		contentView.snp.makeConstraints {
+			$0.edges.equalToSuperview().inset(24)
 		}
 	}
 }

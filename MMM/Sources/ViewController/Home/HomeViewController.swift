@@ -36,7 +36,7 @@ final class HomeViewController: UIViewController {
 	private lazy var dayLabel = UILabel()
 	private lazy var scopeGesture = UIPanGestureRecognizer()
 	private lazy var loadView = LoadingViewController()
-	private lazy var popupView = PopupViewController() // 2.0.3 popup
+	private lazy var popupView = OnBoardingPageViewController() // 2.0.3 popup
 	
 	// Empty & Error UI
 	private lazy var emptyView = HomeEmptyView()
@@ -88,7 +88,7 @@ final class HomeViewController: UIViewController {
 		
 		// 첫 한번만 Onboarding popup 작동
 		if Constants.getKeychainValueByBool(forKey: Constants.KeychainKey.isFirstPopup) == nil {
-			setPopup()
+//			setPopup()
 		}
 	}
 	

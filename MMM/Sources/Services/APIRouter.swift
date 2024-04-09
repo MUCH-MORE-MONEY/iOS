@@ -36,14 +36,14 @@ final class APIRouter {
     /// 일별 세부 경제활동을 위한 Router
     struct SelectDetailReqDto: Request {
         typealias ReturnType = SelectDetailResDto
-        var path: String = "/economic_activity/detail/select"
-        var method: HTTPMethod = .post
+        var path: String = "/v2/economic_activity/detail"
+        var method: HTTPMethod = .get
+        var queryParams: [String : Any]?
         var headers: [String : String]?
-        var body: [String: Any]?
         
-        init(headers: APIHeader.Default, body: APIParameters.SelectDetailReqDto) {
+        init(headers: APIHeader.Default, queryParams: APIParameters.SelectDetailReqDto) {
             self.headers = headers.asDictionary as? [String: String]
-            self.body = body.asDictionary
+            self.queryParams = queryParams.asDictionary
         }
     }
 	
@@ -64,7 +64,7 @@ final class APIRouter {
     /// 신규 경제활동 등록을 위한 Router
     struct InsertReqDto: Request {
         typealias ReturnType = InsertResDto
-        var path: String = "/economic_activity/insert"
+        var path: String = "/v2/economic_activity"
         var method: HTTPMethod = .post
         var headers: [String : String]?
         var body: [String : Any]?
@@ -78,8 +78,8 @@ final class APIRouter {
     /// 기존 경제활동 수정을 위한 Router
     struct UpdateReqDto: Request {
         typealias ReturnType = UpdateResDto
-        var path: String = "/economic_activity/update"
-        var method: HTTPMethod = .post
+        var path: String = "/v2/economic_activity"
+        var method: HTTPMethod = .put
         var headers: [String : String]?
         var body: [String: Any]?
         
@@ -92,14 +92,14 @@ final class APIRouter {
     /// 경제활동 삭제를 위한 Router
     struct DeleteReqDto: Request {
         typealias ReturnType = DeleteResDto
-        var path: String = "/economic_activity/delete"
-        var method: HTTPMethod = .post
+        var path: String = "/v2/economic_activity"
+        var method: HTTPMethod = .delete
         var headers: [String : String]?
-        var body: [String : Any]?
+        var queryParams: [String : Any]?
         
-        init(headers: APIHeader.Default, body: APIParameters.DeleteReqDto) {
+        init(headers: APIHeader.Default, queryParams: APIParameters.DeleteReqDto) {
             self.headers = headers.asDictionary as? [String: String]
-            self.body = body.asDictionary
+            self.queryParams = queryParams.asDictionary
         }
     }
 	

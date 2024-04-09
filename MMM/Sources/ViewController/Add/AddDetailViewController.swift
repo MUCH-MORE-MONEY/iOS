@@ -9,8 +9,9 @@ import UIKit
 import Combine
 import SnapKit
 import Then
-import Lottie
 import PhotosUI
+import Lottie
+import SwiftUI
 
 final class AddDetailViewController: BaseAddActivityViewController, UINavigationControllerDelegate {
     // MARK: - UI Components
@@ -64,17 +65,17 @@ extension AddDetailViewController {
     
     func didTapSaveButton() {
         viewModel.insertDetailActivity()
-		
-		// 통계 Refresh
-		if let str = Constants.getKeychainValue(forKey: Constants.KeychainKey.statisticsDate), let date = str.toDate() {
-			ServiceProvider.shared.statisticsProvider.updateDate(to: date)
-		} else {
-			ServiceProvider.shared.statisticsProvider.updateDate(to: Date())
-		}
-		
-		// Home Loading을 보여줄지 판단
-		Constants.setKeychain(true, forKey: Constants.KeychainKey.isHomeLoading)
-		
+        
+        // 통계 Refresh
+        if let str = Constants.getKeychainValue(forKey: Constants.KeychainKey.statisticsDate), let date = str.toDate() {
+            ServiceProvider.shared.statisticsProvider.updateDate(to: date)
+        } else {
+            ServiceProvider.shared.statisticsProvider.updateDate(to: Date())
+        }
+        
+        // Home Loading을 보여줄지 판단
+        Constants.setKeychain(true, forKey: Constants.KeychainKey.isHomeLoading)
+        
         self.loadView.play()
         self.loadView.isPresent = true
         self.loadView.modalPresentationStyle = .overFullScreen
@@ -218,6 +219,42 @@ extension AddDetailViewController {
         bottomSheetVC.modalPresentationStyle = .overFullScreen
         self.present(bottomSheetVC, animated: false, completion: nil)
     }
+    
+    private func didTapAddScheduleTapView(_ type: UIView.GestureType) {
+        // 키보드 내리기
+        self.titleTextFeild.resignFirstResponder()
+        
+        
+        let hostingController = UIHostingController(rootView: VStack {
+            AddScheduleView(editViewModel: viewModel)
+            Spacer()
+        })
+        
+        if #available(iOS 16.0, *) {
+            if let sheetController =  hostingController.sheetPresentationController {
+                sheetController.detents = [
+                        .custom { _ in
+                            return UIScreen.height * 0.6
+                        }
+                    ]
+                
+                sheetController.prefersGrabberVisible = true
+                self.present(hostingController, animated: true)
+            }
+        } else {
+            let bottomSheetVC = BottomSheetViewController(contentViewController: hostingController)
+            bottomSheetVC.setSetting(percentHeight: 542/812)
+
+            bottomSheetVC.modalPresentationStyle = .overFullScreen
+            self.present(bottomSheetVC, animated: false)
+        }
+        
+        
+//        let bottomSheetVC = BottomSheetViewController(contentViewController: vc)
+//        bottomSheetVC.setSetting(percentHeight: 542/812)
+        
+
+    }
 }
 
 // MARK: - Star Picker의 확인을 눌렀을 때
@@ -260,35 +297,6 @@ extension AddDetailViewController: PHPickerViewControllerDelegate {
             }
             self.viewModel.didTapAddButton = false
         }
-    }
-}
-
-// MARK: - ImagePicker Delegate
-extension AddDetailViewController: UIImagePickerControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        picker.dismiss(animated: false) { [weak self] in
-            guard let self = self else { return }
-            self.viewModel.binaryFileList.removeAll()
-            let img = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
-            self.mainImageView.image = img
-            
-            guard let data = img?.jpegData(compressionQuality: 1)?.base64EncodedString() else { return }
-            var imageName = ""
-            if let imageUrl = info[UIImagePickerController.InfoKey.referenceURL] as? URL {
-                let assets = PHAsset.fetchAssets(withALAssetURLs: [imageUrl], options: nil)
-                
-                guard let firstObject = assets.firstObject else { return }
-                imageName = PHAssetResource.assetResources(for: firstObject).first?.originalFilename ?? "DefualtName"
-            }
-            
-            self.viewModel.binaryFileList.append(APIParameters.BinaryFileList(binaryData: data, fileNm: imageName))
-            self.remakeConstraintsByMainImageView()
-        }
-        self.viewModel.didTapAddButton = false
-    }
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        self.viewModel.didTapAddButton = false
-        dismiss(animated: true, completion: nil)
     }
 }
 
@@ -374,6 +382,10 @@ extension AddDetailViewController {
             .sink { _ in
                 self.didTapCategory()
             }.store(in: &cancellable)
+        
+        addScheduleTapView.gesturePublisher()
+            .sinkOnMainThread(receiveValue: didTapAddScheduleTapView)
+            .store(in: &cancellable)
         
         // MARK: - UI Bind
         viewModel.$type
@@ -484,6 +496,13 @@ extension AddDetailViewController {
                 guard let self = self else { return }
                 self.viewModel.categoryId = ""
                 self.viewModel.categoryName = ""
+            }
+            .store(in: &cancellable)
+        
+        viewModel.$recurrenceTitle
+            .sinkOnMainThread { [weak self] text in
+                guard let self = self else { return }
+                self.addScheduleTapView.setTitleAndColor(by: text)
             }
             .store(in: &cancellable)
     }

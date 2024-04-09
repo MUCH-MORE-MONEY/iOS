@@ -43,6 +43,8 @@ struct APIParameters{
         var memo: String
         var createAt: String
         var star: Int
+        var recurrenceInfo: RecurrenceInfo?
+        var recurrenceYN: String
         
         enum CodingKeys: String, CodingKey {
             case binaryFileList
@@ -53,6 +55,8 @@ struct APIParameters{
             case memo = "economicActivityMm"
             case createAt = "economicActivityYMD"
             case star = "valueScore"
+            case recurrenceInfo
+            case recurrenceYN
         }
     }
     
@@ -68,6 +72,10 @@ struct APIParameters{
         var createAt: String
         var fileNo: String
         var star: Int
+        var contentRecurrenceUpdateYN: String       // 반복된 경제활동일 경우 날짜까지 Y/N에 따라서 반복된 경제활동 정보도 바꾸는 변수
+        var recurrenceUpdateYN: String              // 경제활동 패턴 변경 여부 Y/N -> 이후의 경제활동 패턴이 전부 변경
+        var recurrenceInfo: RecurrenceInfo?         // 경제활동 패턴 변경 여부 Y/N -> 이후의 경제활동 패턴이 전부 변경
+        var recurrenceYN: String                    // 경제활동 반복 여부 -> Y/N
         
         enum CodingKeys: String, CodingKey {
             case binaryFileList
@@ -80,6 +88,10 @@ struct APIParameters{
             case id = "economicActivityNo"
             case createAt = "economicActivityYMD"
             case star = "valueScore"
+            case contentRecurrenceUpdateYN
+            case recurrenceUpdateYN
+            case recurrenceInfo
+            case recurrenceYN
         }
     }
     /// update와 insert에 사용하는 이미지 binaryfile struct
@@ -88,12 +100,21 @@ struct APIParameters{
         let fileNm: String
     }
     
+    struct RecurrenceInfo: Codable , Equatable{
+        var endYMD: String //"endYMD": "20240510",
+        var recurrenceCnt: Int //"recurrenceCnt": 3,
+        var recurrenceEndDvcd: String   // "recurrenceEndDvcd": "01",
+        var recurrencePattern: String   // "recurrencePattern": "none",
+        var startYMD: String            //  "startYMD": "20240510"
+    }
+    
     /// 경제활동 삭제를 위한 Request
     struct DeleteReqDto: Encodable {
-        var id: String
-        
+        let id: String
+        let delRecurrenceYn: String
         enum CodingKeys: String, CodingKey {
             case id = "economicActivityNo"
+            case delRecurrenceYn
         }
     }
 	

@@ -16,6 +16,14 @@ extension Date {
 		return dateformat.string(from: self)
 	}
 	
+    func getFormattedDateENG(format: String) -> String {
+        let dateformat = DateFormatter()
+        dateformat.locale = Locale(identifier: "en_US")
+        dateformat.timeZone = TimeZone(abbreviation: "KST")
+        dateformat.dateFormat = format
+        return dateformat.string(from: self)
+    }
+    
 	/// format: yyyy-MM-dd
 	func getFormattedDefault() -> String {
 		let dateformat = DateFormatter()
@@ -33,6 +41,15 @@ extension Date {
 		dateformat.dateFormat = "yyyyMMdd"
 		return dateformat.string(from: self)
 	}
+    
+    /// format: yyMMdd
+    func getFormattedYMDByCalendar() -> String {
+        let dateformat = DateFormatter()
+        dateformat.locale = Locale(identifier: "ko_KR")
+        dateformat.timeZone = TimeZone(abbreviation: "KST")
+        dateformat.dateFormat = "yyyy.MM.dd"
+        return dateformat.string(from: self)
+    }
 	
 	/// format: yyMM
 	func getFormattedYM() -> String {

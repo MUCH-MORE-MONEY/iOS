@@ -20,6 +20,7 @@ final class HomeViewController: UIViewController {
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 	private let viewModel = HomeViewModel()
     var disposeBag = DisposeBag()
+	private var onBoardingViewFlag = false
     
 	// MARK: - UI Components
 	private lazy var monthButtonItem = UIBarButtonItem()
@@ -87,8 +88,8 @@ final class HomeViewController: UIViewController {
 		fetchData()
 		
 		// 첫 한번만 Onboarding popup 작동
-		if Constants.getKeychainValueByBool(forKey: Constants.KeychainKey.isFirstPopup) == nil {
-//			setPopup()
+		if !onBoardingViewFlag {
+			setPopup()
 		}
 	}
 	
@@ -218,6 +219,7 @@ private extension HomeViewController {
 	func setPopup() {
 		self.popupView.modalPresentationStyle = .overFullScreen
 		self.present(popupView, animated: true)
+		self.onBoardingViewFlag = true
 	}
 	
 	private func bind() {

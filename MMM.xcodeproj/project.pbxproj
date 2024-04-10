@@ -219,6 +219,7 @@
 		C46409DA2AB9625E00A899AD /* BottomSheetViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46409D92AB9625E00A899AD /* BottomSheetViewController2.swift */; };
 		C465FF392BC4407400D2E43D /* OnBoardingPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C465FF382BC4407400D2E43D /* OnBoardingPageViewController.swift */; };
 		C465FF3B2BC524B700D2E43D /* HomeReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C465FF3A2BC524B700D2E43D /* HomeReactor.swift */; };
+		C465FF3D2BC57AA200D2E43D /* HomeOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C465FF3C2BC57AA200D2E43D /* HomeOnboardingViewController.swift */; };
 		C466F4202B1758DF00254FED /* Ex+SkeletonLoadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C466F41F2B1758DF00254FED /* Ex+SkeletonLoadable.swift */; };
 		C466F4272B1873E600254FED /* CategoryDetailSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C466F4262B1873E600254FED /* CategoryDetailSectionModel.swift */; };
 		C466F42D2B18795000254FED /* CategorySkeletonDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C466F42C2B18794F00254FED /* CategorySkeletonDetailCell.swift */; };
@@ -551,6 +552,7 @@
 		C46409D92AB9625E00A899AD /* BottomSheetViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController2.swift; sourceTree = "<group>"; };
 		C465FF382BC4407400D2E43D /* OnBoardingPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoardingPageViewController.swift; sourceTree = "<group>"; };
 		C465FF3A2BC524B700D2E43D /* HomeReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeReactor.swift; sourceTree = "<group>"; };
+		C465FF3C2BC57AA200D2E43D /* HomeOnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeOnboardingViewController.swift; sourceTree = "<group>"; };
 		C466F41F2B1758DF00254FED /* Ex+SkeletonLoadable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+SkeletonLoadable.swift"; sourceTree = "<group>"; };
 		C466F4262B1873E600254FED /* CategoryDetailSectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDetailSectionModel.swift; sourceTree = "<group>"; };
 		C466F42C2B18794F00254FED /* CategorySkeletonDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySkeletonDetailCell.swift; sourceTree = "<group>"; };
@@ -1362,6 +1364,7 @@
 				C4199DD829FE6BE1006E5DA8 /* DatePickerViewController.swift */,
 				C4C8B68C2A3ACDC700FAF931 /* LoadingViewController.swift */,
 				C465FF382BC4407400D2E43D /* OnBoardingPageViewController.swift */,
+				C465FF3C2BC57AA200D2E43D /* HomeOnboardingViewController.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -1988,6 +1991,7 @@
 				45B878C92B342B0600EF27FB /* DetailProvider.swift in Sources */,
 				6A1322F12A089B2900CEEC81 /* BasePaddingLabel.swift in Sources */,
 				45D2FA4A2B5E096C00DADA5B /* CategorySheetViewReactor.swift in Sources */,
+				C465FF3D2BC57AA200D2E43D /* HomeOnboardingViewController.swift in Sources */,
 				C4D7FC872A08942E00565291 /* Monthly.swift in Sources */,
 				C46D5E552AD078DA00EBE5D7 /* CategoryEditTableViewCell.swift in Sources */,
 				C4BBD2872AC03C300055FA65 /* CategoryEditCollectionViewCell.swift in Sources */,

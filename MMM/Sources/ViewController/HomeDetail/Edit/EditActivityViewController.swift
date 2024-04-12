@@ -377,13 +377,6 @@ extension EditActivityViewController {
         
         // recurrnceinfo 바꿔주고 라벨 변경
         addScheduleTapView.setTitle(by: recurrenceInfo)
-    
-        
-        // recurrenceinfo를 직접 변경해줘서 패턴 및 라벨을 직접 변경해줘야함
-
-//        
-        //weekly:Thu 패턴만 변경해주면됨
-        
     }
 }
 

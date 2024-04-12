@@ -36,7 +36,20 @@ final class DateComponentViewModel: ObservableObject {
     
     func dayRange(forYear year: Int, month: Int) -> [Int] {
         // 계산은 단순화를 위해 생략. 실제 구현에는 선택된 년, 월에 따라 일자 범위 계산 필요.
-        return Array(1...31)
+        
+        var components = DateComponents()
+        components.year = year
+        components.month = month
+        
+        // 지정된 월의 첫 날을 구성합니다.
+        if let date = calendar.date(from: components) {
+            // 지정된 월의 마지막 날짜를 얻기 위해 다음 달의 첫 날에서 하루를 빼줍니다.
+            let range = calendar.range(of: .day, in: .month, for: date)!
+            return Array(range)
+        } else {
+            // 오류 상황에 대한 기본 처리, 실제 구현에서는 오류 처리 방식을 고려해야 합니다.
+            return []
+        }
     }
 }
 
@@ -45,8 +58,12 @@ struct DatePickerView: UIViewRepresentable {
     
     @ObservedObject var viewModel: DateComponentViewModel
 //    @ObservedObject var viewModel: PickerViewModel
-
+    @ObservedObject var addScheduleViewModel: AddScheduleViewModel
+    @Binding var selectedDate: Date
+    
     func makeUIView(context: Context) -> UIPickerView {
+//        viewModel.baseDate = addScheduleViewModel.date
+        
         let picker = UIPickerView()
         picker.delegate = context.coordinator
         picker.dataSource = context.coordinator
@@ -63,7 +80,7 @@ struct DatePickerView: UIViewRepresentable {
         let month = components.month!
         let day = components.day!
         
-        uiView.selectRow(year - 2020, inComponent: 0, animated: true)
+        uiView.selectRow(year, inComponent: 0, animated: true)
         uiView.selectRow(month - 1, inComponent: 1, animated: true)
         uiView.selectRow(day - 1, inComponent: 2, animated: true)
     }
@@ -95,8 +112,18 @@ struct DatePickerView: UIViewRepresentable {
                 let selectedYear = years[selectedYearIndex]
                 return viewModel.monthRange(forYear: selectedYear).count
             case 2:
-                // 일자 계산 로직은 선택된 년, 월에 따라 다릅니다.
-                return 31
+                let selectedYearIndex = pickerView.selectedRow(inComponent: 0)
+                let selectedMonthIndex = pickerView.selectedRow(inComponent: 1)
+                let years = viewModel.yearRange()
+                let months = viewModel.monthRange(forYear: years[selectedYearIndex])
+                
+                // 선택된 연도와 월을 기준으로 일자 수 계산
+                if !years.isEmpty && !months.isEmpty {
+                    let selectedYear = years[selectedYearIndex]
+                    let selectedMonth = months[selectedMonthIndex]
+                    return viewModel.dayRange(forYear: selectedYear, month: selectedMonth).count
+                }
+                return 0
             default:
                 return 0
             }
@@ -121,24 +148,25 @@ struct DatePickerView: UIViewRepresentable {
         }
 
         func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-            let date = viewModel.baseDate
-            let calendar = Calendar.current
-            let components = calendar.dateComponents([.year, .month, .day], from: date)
 
-            var year = components.year!
-            var month = components.month!
-            var day = components.day!
-            
+            let calendar = Calendar.current
+            var dateComponents = calendar.dateComponents([.year, .month, .day], from: parent.selectedDate)
+
             switch component {
             case 0:
-                year = 2020 + row
+                dateComponents.year = 2020 + row
             case 1:
-                month = row + 1
+                dateComponents.month = row + 1
             case 2:
-                day = row + 1
+                dateComponents.day = row + 1
             default:
                 break
             }
+            
+            if let newDate = Calendar.current.date(from: dateComponents) {
+                parent.selectedDate = newDate
+            }
+            
             pickerView.reloadAllComponents() // 선택에 따라 다른 컴포넌트의 범위가 변경될 수 있으므로 전체 갱신
         }
     }
@@ -147,14 +175,16 @@ struct DatePickerView: UIViewRepresentable {
 
 
 struct CustomCalendarView: View {
+    @Binding var selectedDate: Date
     @StateObject private var viewModel = DateComponentViewModel(baseDate: Date())
-
+    @ObservedObject var addScheduleViewModel: AddScheduleViewModel
+    
     var body: some View {
-        DatePickerView(viewModel: viewModel)
+        DatePickerView(viewModel: viewModel, addScheduleViewModel: addScheduleViewModel, selectedDate: $selectedDate)
     }
 }
 
-#Preview {
-    CustomCalendarView()
-}
+//#Preview {
+//    CustomCalendarView(selectedDate: <#Date#>, addScheduleViewModel: AddScheduleViewModel())
+//}
 

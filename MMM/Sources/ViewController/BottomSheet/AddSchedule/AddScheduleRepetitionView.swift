@@ -107,6 +107,9 @@ struct AddScheduleRepetitionView: View {
                 
                 if selectedID == radioButtonItems[1] {
                     VStack {
+//                        CustomCalendarView(selectedDate: $addScheduleViewModel.endDate, addScheduleViewModel: addScheduleViewModel)
+//                            .frame(width: UIScreen.width, height: 168)
+//                            .background(Color(R.Color.gray100))
                         DatePicker(selection: $addScheduleViewModel.endDate,
                                    in: addScheduleViewModel.date...nextYear,
                                    displayedComponents: .date) {

@@ -335,8 +335,57 @@ extension EditActivityViewController {
             self.present(bottomSheetVC, animated: false)
         }
     }
-}
+    
+    // 날짜가 변경되었을 경우 경제활동 패턴을 다시 보여줌
+    private func updateRecurrencePattern(by date: Date) {
+        guard let recurrenceInfo = editViewModel.recurrenceInfo else { return }
+        
+        // info의 패턴만 변경해주면됨
+        let pattern = recurrenceInfo.recurrencePattern
+        print(pattern.recurrenceTitleByPattern())
+        
+        let dateComponent = Calendar.current.dateComponents([.year, .month, .day, .weekday, .weekOfMonth], from: date)
+        let recurrenceWeekday = date.getFormattedDateENG(format: "E")   // 날짜 변환 성공
+        let recurrenceMonth = date.getFormattedDate(format: "MMMM")
+        let recurrenceDayofMonth = "\(dateComponent.day ?? 1)"
+        let recurrenceWeekOfMonth = "\(dateComponent.weekOfMonth ?? 1)"
+        
+        var convertedPattern = ""
+        
+        switch pattern {
+        case "daily":
+            convertedPattern = "daily"
+            
+        case let str where str.starts(with: "weekly"):
+            // weekly의 뒤에만 바꿔서 다시 패턴에 넣어줘야함
+            convertedPattern = "weekly:\(recurrenceWeekday)"
+            
+        case let str where str.starts(with: "monthly:date"):
+            convertedPattern = "monthly:date:\(recurrenceDayofMonth)"
+            
+        case let str where str.starts(with: "monthly:nth_week"):
+            convertedPattern = "monthly:nth_week:\(recurrenceWeekOfMonth):\(recurrenceWeekday)"
+            
+        case "weekday":
+            convertedPattern = "weekday"
+        default:
+            debugPrint("Fail to convert RecurrencePattern")
+            convertedPattern = "none"
+        }
+        
+        editViewModel.recurrenceInfo?.recurrencePattern = convertedPattern
+        
+        // recurrnceinfo 바꿔주고 라벨 변경
+        addScheduleTapView.setTitle(by: recurrenceInfo)
+    
+        
+        // recurrenceinfo를 직접 변경해줘서 패턴 및 라벨을 직접 변경해줘야함
 
+//        
+        //weekly:Thu 패턴만 변경해주면됨
+        
+    }
+}
 
 // MARK: - UI Funcitons
 extension EditActivityViewController {
@@ -625,6 +674,11 @@ extension EditActivityViewController {
 				}
 			}.store(in: &cancellable)
 		
+        // 날짜가 바뀔경우 경제활동 반복패턴을 다시 그려줘야함
+        editViewModel.$date
+            .sinkCompactMapOnMainThread(receiveValue: updateRecurrencePattern)
+            .store(in: &cancellable)
+        
 		titleTextFeild.textPublisher
 			.receive(on: RunLoop.main)
 			.assign(to: \.title, on: editViewModel)

@@ -106,20 +106,22 @@ struct AddScheduleRepetitionView: View {
                 .padding([.leading, .trailing], 24)
                 
                 if selectedID == radioButtonItems[1] {
-                    VStack {
-//                        CustomCalendarView(selectedDate: $addScheduleViewModel.endDate, addScheduleViewModel: addScheduleViewModel)
-//                            .frame(width: UIScreen.width, height: 168)
-//                            .background(Color(R.Color.gray100))
-                        DatePicker(selection: $addScheduleViewModel.endDate,
-                                   in: addScheduleViewModel.date...nextYear,
-                                   displayedComponents: .date) {
-                            
-                        }
-                        .labelsHidden()
-                        .frame(width: UIScreen.width, height: 168)
-                        .background(Color(R.Color.gray100))
-                        .clipped()
-                        .datePickerStyle(.wheel)
+                    VStack { // 여기서 endDate는 종료기간임
+                        DatePickerRepresentable(selectedDate: $addScheduleViewModel.endDate, range: addScheduleViewModel.date...nextYear)
+                            .frame(width: UIScreen.width, height: 168)
+                            .background(Color(R.Color.gray100))
+                        
+                        // 기본 피커
+//                        DatePicker(selection: $addScheduleViewModel.endDate,
+//                                   in: addScheduleViewModel.date...nextYear,
+//                                   displayedComponents: .date) {
+//                            
+//                        }
+//                        .labelsHidden()
+//                        .frame(width: UIScreen.width, height: 168)
+//                        .background(Color(R.Color.gray100))
+//                        .clipped()
+//                        .datePickerStyle(.wheel)
                     }
                 }
             }

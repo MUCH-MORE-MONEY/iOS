@@ -31,7 +31,7 @@ extension AddScheduleTapView {
     func setTitleAndColor(by text: String) {
         let split = text.components(separatedBy: ",")
         guard let type = split.first else { return }
-        titleLabel.text = type == "반복 안함" ? "일정반복" : text
+        titleLabel.text = type == "반복 안함" ? "일정반복" : "\(text)"
         titleLabel.textColor = type == "반복 안함" ? R.Color.gray400 : R.Color.gray800
     }
     

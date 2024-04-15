@@ -70,7 +70,7 @@ final class AddScheduleViewModel: ObservableObject {
         if recurrenceInfo.recurrenceEndDvcd == "01" {
             return "\(recurrenceInfo.recurrenceCnt)회 반복"
         } else {
-            return recurrenceInfo.endYMD.insertDatePeriod()
+            return "\(recurrenceInfo.endYMD.insertDatePeriod())까지"
         }
     }
     

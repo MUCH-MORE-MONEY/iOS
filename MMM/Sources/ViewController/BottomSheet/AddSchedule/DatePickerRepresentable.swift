@@ -23,8 +23,28 @@ struct DatePickerRepresentable: UIViewRepresentable {
     }
 
     func updateUIView(_ picker: UIPickerView, context: Context) {
-        print("selectedDate : \(selectedDate)")
-        context.coordinator.updatePickerView(picker, with: selectedDate)
+        // 선택된 날짜로 UIPickerView를 업데이트
+        let selectedComponents = Calendar.current.dateComponents([.year, .month, .day], from: selectedDate)
+        let selectedYear = selectedComponents.year ?? Calendar.current.component(.year, from: Date())
+        let selectedMonth = selectedComponents.month ?? Calendar.current.component(.month, from: Date())
+        let selectedDay = selectedComponents.day ?? Calendar.current.component(.day, from: Date())
+
+        // Coordinator를 통해 년, 월, 일 데이터를 업데이트
+        context.coordinator.updateMonths(for: selectedYear)
+        context.coordinator.updateDays(for: selectedYear, month: selectedMonth)
+
+        // UIPickerView에 현재 선택된 년, 월, 일을 반영
+        if let yearIndex = context.coordinator.years.firstIndex(of: selectedYear) {
+            picker.selectRow(yearIndex, inComponent: 0, animated: true)
+        }
+        if let monthIndex = context.coordinator.months.firstIndex(of: selectedMonth) {
+            picker.reloadComponent(1)
+            picker.selectRow(monthIndex, inComponent: 1, animated: true)
+        }
+        if let dayIndex = context.coordinator.days.firstIndex(of: selectedDay) {
+            picker.reloadComponent(2)
+            picker.selectRow(dayIndex, inComponent: 2, animated: true)
+        }
     }
 
     func makeCoordinator() -> Coordinator {
@@ -73,33 +93,75 @@ struct DatePickerRepresentable: UIViewRepresentable {
         }
 
         func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-            var components = Calendar.current.dateComponents([.year, .month, .day], from: parent.selectedDate)
-            switch component {
-            case 0:
-                components.year = years[row]
-            case 1:
-                components.month = months[row]
-            case 2:
-                components.day = days[row]
-            default:
-                break
+            let selectedYear = years[pickerView.selectedRow(inComponent: 0)]
+            let selectedMonth = months[pickerView.selectedRow(inComponent: 1)]
+            let selectedDay = days[pickerView.selectedRow(inComponent: 2)]
+
+            var shouldReloadDays = false
+
+            if component == 0 {  // Year changed
+                updateMonths(for: selectedYear)
+                pickerView.reloadComponent(1)
+                pickerView.selectRow(0, inComponent: 1, animated: false)
+                shouldReloadDays = true
+            } else if component == 1 {  // Month changed
+                shouldReloadDays = true
             }
-            if let newDate = Calendar.current.date(from: components) {
+
+            if shouldReloadDays {
+                let previousDayCount = days.count
+                updateDays(for: selectedYear, month: selectedMonth)
+                if previousDayCount != days.count {
+                    pickerView.reloadComponent(2)
+                    if selectedDay > days.count {
+                        pickerView.selectRow(days.count - 1, inComponent: 2, animated: false)
+                    } else {
+                        pickerView.selectRow(selectedDay - 1, inComponent: 2, animated: false)
+                    }
+                }
+            }
+
+            updateSelectedDate(pickerView: pickerView)
+        }
+        
+        private func updateSelectedDate(pickerView: UIPickerView) {
+            let selectedYear = years[pickerView.selectedRow(inComponent: 0)]
+            let selectedMonth = months[pickerView.selectedRow(inComponent: 1)]
+            let selectedDay = days[min(pickerView.selectedRow(inComponent: 2), days.count - 1)]
+
+            let dateComponents = DateComponents(year: selectedYear, month: selectedMonth, day: selectedDay)
+            if let newDate = Calendar.current.date(from: dateComponents) {
                 parent.selectedDate = newDate
             }
         }
+        
+        func updateMonths(for year: Int) {
+            let calendar = Calendar.current
+            let startYear = calendar.component(.year, from: parent.range.lowerBound)
+            let endYear = calendar.component(.year, from: parent.range.upperBound)
+            let startMonth = (year == startYear) ? calendar.component(.month, from: parent.range.lowerBound) : 1
+            let endMonth = (year == endYear) ? calendar.component(.month, from: parent.range.upperBound) : 12
+            months = Array(startMonth...endMonth)
+        }
 
-        func updatePickerView(_ picker: UIPickerView, with date: Date) {
-            let components = Calendar.current.dateComponents([.year, .month, .day], from: date)
-            if let yearIndex = years.firstIndex(of: components.year ?? years.first!) {
-                picker.selectRow(yearIndex, inComponent: 0, animated: true)
+        func updateDays(for year: Int, month: Int) {
+            let calendar = Calendar.current
+            
+            // 존재하는 날짜인지 확인하기 위해 유효한 날짜를 생성
+            guard let validDate = calendar.date(from: DateComponents(year: year, month: month)) else {
+                days = []
+                return
             }
-            if let monthIndex = months.firstIndex(of: components.month ?? months.first!) {
-                picker.selectRow(monthIndex, inComponent: 1, animated: true)
-            }
-            if let dayIndex = days.firstIndex(of: components.day ?? days.first!) {
-                picker.selectRow(dayIndex, inComponent: 2, animated: true)
-            }
+            
+            let range = calendar.range(of: .day, in: .month, for: validDate) ?? Range(1...28)
+
+            let startComponents = calendar.dateComponents([.year, .month, .day], from: parent.range.lowerBound)
+            let endComponents = calendar.dateComponents([.year, .month, .day], from: parent.range.upperBound)
+
+            let startDay = (year == startComponents.year && month == startComponents.month) ? max(startComponents.day!, 1) : 1
+            let endDay = (year == endComponents.year && month == endComponents.month) ? min(endComponents.day!, range.upperBound) : range.upperBound
+
+            days = Array(startDay..<endDay)
         }
     }
 }

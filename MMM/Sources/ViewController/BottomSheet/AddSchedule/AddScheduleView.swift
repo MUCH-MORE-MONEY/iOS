@@ -52,7 +52,7 @@ struct AddScheduleView: View {
                     .padding(.top, 7)
                 
                 HStack {
-                    Text("반복 종류")
+                    Text("반복 종료")
                         .font(Font(R.Font.title1))
                         .foregroundStyle(isTypeButtonOn ? Color(R.Color.gray900) : Color(R.Color.gray400))
                     Spacer()

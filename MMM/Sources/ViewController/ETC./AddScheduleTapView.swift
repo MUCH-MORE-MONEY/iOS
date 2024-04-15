@@ -27,6 +27,7 @@ final class AddScheduleTapView: BaseView {
 
 // MARK: - Action
 extension AddScheduleTapView {
+    //TODO: AddDetailVC에서 사용중 나중에 바꿔야함
     func setTitleAndColor(by text: String) {
         let split = text.components(separatedBy: ",")
         guard let type = split.first else { return }
@@ -46,8 +47,10 @@ extension AddScheduleTapView {
         // 패턴 먼저 입력
         let pattern = recurrenceInfo.recurrencePattern.recurrenceTitleByPattern()
         let deadline = recurrenceInfo.recurrenceEndDvcd == "01" ? "\(recurrenceInfo.recurrenceCnt)회 반복" : "\(recurrenceInfo.endYMD.insertDatePeriod())까지"
-        self.titleLabel.text = "\(pattern), \(deadline)"
-        self.titleLabel.textColor = R.Color.gray800
+        
+        // 반복 안함일 경우 dealine을 없애줌
+        self.titleLabel.text = pattern == "반복 안함" ? "일정반복" : "\(pattern), \(deadline)"
+        self.titleLabel.textColor = pattern == "반복 안함" ? R.Color.gray400 : R.Color.gray800
     }
 }
 

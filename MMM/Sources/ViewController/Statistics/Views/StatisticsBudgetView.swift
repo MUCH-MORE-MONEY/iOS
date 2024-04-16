@@ -183,7 +183,7 @@ extension StatisticsBudgetView {
 	}
 	
 	func setPerent(percent: Int) {
-//		let percent = 100
+//		let percent = 101 // 임시
 		self.percentLabel.text = "\(percent)%"
 		
 		let percent = percent > 100 ? 100 : percent

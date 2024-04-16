@@ -187,13 +187,14 @@ extension StatisticsReactor {
 			// 카테고리 추가할때 사용하기 위해 저장
 			Constants.setKeychain(date.getFormattedYMD(), forKey: Constants.KeychainKey.statisticsDate)
 		case let .setBudget(budget):
+			// 임시
 //			if newState.date.getFormattedYM() == "202402" || newState.date.getFormattedYM() == "202404" {
 //				newState.budget = .init(dateYM: "", budget: 1000000, estimatedEarning: 200000000)
 //			} else {
-				newState.budget = budget
+			newState.budget = budget
 //			}
 		case let .setPaySum(sum):
-//			let sum: StatisticsSum = .init(dateYM: "", economicActivitySumAmt: 3000)
+//			let sum: StatisticsSum = .init(dateYM: "", economicActivitySumAmt: 3000) // 임시
 			
 			newState.paySum = sum
 

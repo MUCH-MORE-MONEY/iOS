@@ -127,7 +127,8 @@ extension HomeViewModel {
 					UserDefaults.shared.set(response.pay, forKey: "pay")
 					WidgetCenter.shared.reloadAllTimelines()
 				}
-			}).store(in: &cancellable)
+			})
+			.store(in: &cancellable)
 	}
 	
 	func getWeeklyList(_ date1YM: String, _ date2YM: String) {

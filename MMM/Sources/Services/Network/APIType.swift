@@ -109,7 +109,7 @@ extension MMMAPI: BaseNetworkService {
         // MARK: - V1 API
         case .push, .pushAgreeListSelect, .pushAgreeUpdate:
 			return .post
-		case .getStaticsticsAverage, .getStatisticsList, .getStatisticsCategory, .getBudget, .getStatisticsSum:
+		case .getStaticsticsAverage, .getStatisticsList, .getStatisticsCategory, .getBudget, .getStatisticsSum, .getSelectedActivity:
 			return .get
 		case .getCategoryList, .getCategoryDetailList, .getCategoryEdit, .getCategoryEditHeader:
 			return .get
@@ -139,7 +139,7 @@ extension MMMAPI: BaseNetworkService {
 			return .requestPlain
 		case let .pushAgreeUpdate(request):
 			return .requestParameters(parameters: request.asDictionary, encoding: JSONEncoding.default)
-		case .getStaticsticsAverage, .getStatisticsCategory, .getBudget, .getStatisticsSum:
+		case .getStaticsticsAverage, .getStatisticsCategory, .getBudget, .getStatisticsSum, .getSelectedActivity:
 			return .requestPlain
 		case let .getStatisticsList(_, _, limit, offset):
 			return .requestParameters(parameters: ["limit":limit, "offset":offset], encoding: URLEncoding.default)

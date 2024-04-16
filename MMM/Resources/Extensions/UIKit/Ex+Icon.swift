@@ -21,6 +21,7 @@ public extension MMMResource {
 		public static let arrowNextBlack24 = UIImage(named: "iconArrowNextBlack24", in: .main, compatibleWith: nil)
 		public static let arrowBackBlack24 = UIImage(named: "iconArrowBackBlack24", in: .main, compatibleWith: nil)
 		public static let arrowUp32 = UIImage(named: "iconArrowUp32", in: .main, compatibleWith: nil)
+		public static let iconBudgetSettingCalendar = UIImage(named: "iconBudgetSettingCalendar", in: .main, compatibleWith: nil)!
 		public static let camera48 = UIImage(named: "iconCamera48", in: .main, compatibleWith: nil)
 		public static let cancel = UIImage(named: "iconCancel", in: .main, compatibleWith: nil)
 		public static let characterBudget = UIImage(named: "iconCharacterBudget", in: .main, compatibleWith: nil)
@@ -77,8 +78,8 @@ public extension MMMResource {
 		public static let iconStarOrange36 = UIImage(named: "iconStarOrange36", in: .main, compatibleWith: nil)
 		public static let iconStarOrange48 = UIImage(named: "iconStarOrange48", in: .main, compatibleWith: nil)
 		public static let iconStarYellow24 = UIImage(named: "iconStarYellow24", in: .main, compatibleWith: nil)
-		
-
+		public static let imageBackgroundBoost366 = UIImage(named: "imageBackgroundBoost366", in: .main, compatibleWith: nil)!
+		public static let imageCalenderUsecase144 = UIImage(named: "imageCalenderUsecase144", in: .main, compatibleWith: nil)!
 
 		// MARK: - TabBar Items
 		public static let iconGroupActive = UIImage(named: "iconGroupActive", in: .main, compatibleWith: nil)

@@ -36,8 +36,6 @@ struct BudgetDetail05View: View {
             .padding(.bottom, 14)
             
             Image(uiImage: R.Icon.imageCalenderUsecase144)
-
-                .frame(width: .infinity)
             
             VStack(alignment: .leading) {
                 HStack {

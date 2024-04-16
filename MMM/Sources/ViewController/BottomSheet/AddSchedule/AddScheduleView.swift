@@ -96,13 +96,20 @@ struct AddScheduleView: View {
                 }
 
             } else {
-                // recurrenceInfo가 없을 경우(최초 진입) 데이터 직접 넣어줌, date값을 초기세팅해줌
-                guard let date = editViewModel.date else { return }
-                addScheduleViewModel.startDate = date
-                addScheduleViewModel.recurrenceInfo.startYMD = date.getFormattedYMD()
+                // AddDetailVC에서 들어온 경우 피커에서 데이터를 직접넣어줘서 초기화를 해줌
+                if let date = editViewModel.date {
+                    addScheduleViewModel.startDate = date
+                    addScheduleViewModel.recurrenceInfo.startYMD = date.getFormattedYMD()
+                    // recurrenceInfo 가 있으면 selectedDate를 createdAt으로 초기화
+                    addScheduleViewModel.selectedDate = date
+                } else {    // 기존 경제활동일 경우 picker 데이터가 없기 때문에 activity의 createAt을 넣어줘야함
+                    if let createAt = editViewModel.createAt.toDate() {
+                        addScheduleViewModel.startDate = createAt
+                        addScheduleViewModel.recurrenceInfo.startYMD = createAt.getFormattedYMD()
+                        addScheduleViewModel.selectedDate = createAt
+                    }
+                }
                 addScheduleViewModel.selectedId = "반복 안함"
-                // recurrenceInfo 가 있으면 selectedDate를 createdAt으로 초기화
-                addScheduleViewModel.selectedDate = date
             }
         }
     }

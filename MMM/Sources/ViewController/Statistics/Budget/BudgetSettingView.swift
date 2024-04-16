@@ -29,27 +29,44 @@ struct BudgetSettingView: View {
                     switch currentStep {
                     case .main:
                         BudgetDetail01View(budgetSettingViewModel: budgetSettingViewModel)
+                            .navigationTransition()
                     case .income:
                         BudgetDetail02View(budgetSettingViewModel: budgetSettingViewModel)
+                            .navigationTransition()
                     case .expense:
                         BudgetDetail03View(budgetSettingViewModel: budgetSettingViewModel)
+                            .navigationTransition()
                     case .budget:
                         BudgetDetail04View(budgetSettingViewModel: budgetSettingViewModel)
+                            .navigationTransition()
                     case .calendar:
                         BudgetDetail05View(budgetSettingViewModel: budgetSettingViewModel)
+                            .navigationTransition()
                     }
                 }
                 .padding(.top, 48)
                 .padding([.leading, .trailing], 24)
+                .animation(.easeInOut, value: currentStep)
                 
                 Spacer()
                 
                 Button {
-                    debugPrint("다음버튼 tapped")
+                    switch currentStep {
+                    case .main:
+                        currentStep = .income
+                    case .income:
+                        currentStep = .expense
+                    case .expense:
+                        currentStep = .budget
+                    case .budget:
+                        currentStep = .calendar
+                    case .calendar:
+                        currentStep = .main
+                    }
                 } label: {
                     Text("다음")
                         .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, minHeight: 56)
-
+                    
                         .font(Font(R.Font.title1))
                         .foregroundStyle(Color(R.Color.gray100))
                         .background(Color(R.Color.gray800))
@@ -66,11 +83,11 @@ struct BudgetSettingView: View {
 }
 
 struct SegmentedView: View {
-
+    
     let segments: [BudgetSettingView.CurrentStep] = [.main, .income, .expense, .budget, .calendar]
     @Binding var selected: BudgetSettingView.CurrentStep
     @Namespace var name
-
+    
     var body: some View {
         HStack(spacing: 0) {
             ForEach(segments, id: \.self) { segment in

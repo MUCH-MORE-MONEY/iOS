@@ -19,6 +19,10 @@ extension View {
                 HalfSheetHelper(sheetView: sheetView(), showSheet: showSheet, onEnd: onEnd)
             }
     }
+    
+    func navigationTransition() -> some View {
+            self.transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
+        }
 }
 
 // UIKit Integration

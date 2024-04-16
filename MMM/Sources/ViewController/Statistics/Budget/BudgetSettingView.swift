@@ -8,8 +8,16 @@
 import SwiftUI
 
 struct BudgetSettingView: View {
-    @State var currentStep: String = "3"
+    @State var currentStep: CurrentStep = .main
     @StateObject var budgetSettingViewModel = BudgetSettingViewModel()
+    
+    enum CurrentStep {
+        case main       // 예산 세팅
+        case income     // 예상 수입 설정
+        case expense    // 지출 예산 설정
+        case budget     // 사용가능 예산
+        case calendar   // 날짜
+    }
     
     var body: some View {
         NavigationView {
@@ -19,21 +27,17 @@ struct BudgetSettingView: View {
                     .padding([.leading, .trailing], 24)
                 VStack {
                     switch currentStep {
-                    case "1":
+                    case .main:
                         BudgetDetail01View(budgetSettingViewModel: budgetSettingViewModel)
-                    case "2":
+                    case .income:
                         BudgetDetail02View(budgetSettingViewModel: budgetSettingViewModel)
-                    case "3":
+                    case .expense:
                         BudgetDetail03View(budgetSettingViewModel: budgetSettingViewModel)
-                    case "4":
+                    case .budget:
                         BudgetDetail04View(budgetSettingViewModel: budgetSettingViewModel)
-                    case "5":
+                    case .calendar:
                         BudgetDetail05View(budgetSettingViewModel: budgetSettingViewModel)
-                    default:
-                        EmptyView()
                     }
-                    
-
                 }
                 .padding(.top, 48)
                 .padding([.leading, .trailing], 24)
@@ -63,8 +67,8 @@ struct BudgetSettingView: View {
 
 struct SegmentedView: View {
 
-    let segments: [String] = ["1", "2", "3", "4", "5"]
-    @Binding var selected: String
+    let segments: [BudgetSettingView.CurrentStep] = [.main, .income, .expense, .budget, .calendar]
+    @Binding var selected: BudgetSettingView.CurrentStep
     @Namespace var name
 
     var body: some View {

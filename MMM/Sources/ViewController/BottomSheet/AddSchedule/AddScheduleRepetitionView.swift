@@ -36,7 +36,7 @@ struct AddScheduleRepetitionView: View {
     }
     
     private var nextYear: Date {
-        Calendar.current.date(byAdding: .year, value: 1, to: addScheduleViewModel.date)!
+        Calendar.current.date(byAdding: .year, value: 1, to: addScheduleViewModel.startDate)!
     }
     
     var body: some View {
@@ -52,8 +52,8 @@ struct AddScheduleRepetitionView: View {
                             
                         } else {
                             addScheduleViewModel.recurrenceInfo.recurrenceEndDvcd = "02"
-                            addScheduleViewModel.recurrenceInfo.startYMD = addScheduleViewModel.date.getFormattedYMD()
-                            addScheduleViewModel.recurrenceInfo.endYMD = addScheduleViewModel.endDate.getFormattedYMD()
+                            addScheduleViewModel.recurrenceInfo.startYMD = addScheduleViewModel.startDate.getFormattedYMD()
+                            addScheduleViewModel.recurrenceInfo.endYMD = addScheduleViewModel.selectedDate?.getFormattedYMD() ?? ""
                             addScheduleViewModel.recurrenceInfo.recurrenceCnt = 0
                         }
 
@@ -98,7 +98,7 @@ struct AddScheduleRepetitionView: View {
                 }
                 RadioButton(radioButtonItems[1],
                             selectedID: selectedID,
-                            subLabel: isTimeRadioButtonOn ? nil : "\(addScheduleViewModel.endDate.getFormattedYMDByCalendar())까지",
+                            subLabel: isTimeRadioButtonOn ? nil : "\(addScheduleViewModel.selectedDate?.getFormattedYMDByCalendar() ?? "")까지",
                             callback: { id in
                     selectedID = id
                     isFirst = false
@@ -107,7 +107,7 @@ struct AddScheduleRepetitionView: View {
                 
                 if selectedID == radioButtonItems[1] {
                     VStack { // 여기서 endDate는 종료기간임
-                        DatePickerRepresentable(selectedDate: $addScheduleViewModel.endDate, range: addScheduleViewModel.date...nextYear)
+                        DatePickerRepresentable(selectedDate: $addScheduleViewModel.selectedDate, range: addScheduleViewModel.startDate...nextYear)
                             .frame(width: UIScreen.width, height: 168)
                             .background(Color(R.Color.gray100))
                         
@@ -125,9 +125,6 @@ struct AddScheduleRepetitionView: View {
                     }
                 }
             }
-        }
-        .onAppear {
-            addScheduleViewModel.endDate = addScheduleViewModel.date
         }
         .ignoresSafeArea()
         Spacer()

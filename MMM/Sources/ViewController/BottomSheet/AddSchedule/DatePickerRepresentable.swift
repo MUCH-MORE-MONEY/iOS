@@ -12,7 +12,7 @@ import SwiftUI
 import UIKit
 
 struct DatePickerRepresentable: UIViewRepresentable {
-    @Binding var selectedDate: Date
+    @Binding var selectedDate: Date?
     let range: ClosedRange<Date>
 
     func makeUIView(context: Context) -> UIPickerView {
@@ -24,7 +24,7 @@ struct DatePickerRepresentable: UIViewRepresentable {
 
     func updateUIView(_ picker: UIPickerView, context: Context) {
         // 선택된 날짜로 UIPickerView를 업데이트
-        let selectedComponents = Calendar.current.dateComponents([.year, .month, .day], from: selectedDate)
+        let selectedComponents = Calendar.current.dateComponents([.year, .month, .day], from: selectedDate ?? Date())
         let selectedYear = selectedComponents.year ?? Calendar.current.component(.year, from: Date())
         let selectedMonth = selectedComponents.month ?? Calendar.current.component(.month, from: Date())
         let selectedDay = selectedComponents.day ?? Calendar.current.component(.day, from: Date())

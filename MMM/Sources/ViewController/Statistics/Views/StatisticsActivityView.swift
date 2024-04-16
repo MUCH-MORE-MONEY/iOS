@@ -252,7 +252,7 @@ extension StatisticsActivityView: SkeletonLoadable {
 		setTimer()
 	}
 	
-	private func setTimer() {
+	func setTimer() {
 		timer?.setEventHandler(handler: moveToIndex)
 	}
 	

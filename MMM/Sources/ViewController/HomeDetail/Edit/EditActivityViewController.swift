@@ -9,7 +9,6 @@ import UIKit
 import Combine
 import Then
 import SnapKit
-import Photos
 import Lottie
 import FirebaseAnalytics
 import PhotosUI
@@ -35,11 +34,7 @@ final class EditActivityViewController: BaseAddActivityViewController, UINavigat
 	private var navigationTitle: String {
 		return date.getFormattedDate(format: "yyyy.MM.dd")
 	}
-	private let editAlertTitle = "편집을 그만두시겠어요?"
-	private let editAlertContentText = "편집한 내용이 사라지니 유의해주세요!"
 	
-	private let deleteAlertTitle = "경제활동을 삭제하시겠어요?"
-	private let deleteAlertContentText = "활동이 영구적으로 사라지니 유의해주세요!"
 	private var keyboardHeight: CGFloat = 0
 	private var isDeleteButton = false
 	
@@ -79,7 +74,11 @@ final class EditActivityViewController: BaseAddActivityViewController, UINavigat
         
 		//FIXME: - showAlert에서 super.didTapBackButton()호출하면 문제생김
 		isDeleteButton = false
-		showAlert(alertType: .canCancel, titleText: editAlertTitle, contentText: editAlertContentText, cancelButtonText: "닫기", confirmButtonText: "편집 취소하기")
+        showAlert(alertType: .canCancel,
+                  titleText: AlertText.Edit.title,
+                  contentText: AlertText.Edit.message,
+                  cancelButtonText: AlertText.close,
+                  confirmButtonText: AlertText.Edit.cancel)
 	}
 	
 	
@@ -106,7 +105,7 @@ final class EditActivityViewController: BaseAddActivityViewController, UINavigat
 
 // MARK: - Action
 extension EditActivityViewController {
-	func didTapDateTitle() {
+    func didTapDateTitle(_ type: UIView.GestureType) {
         // 키보드 내리기
         self.titleTextFeild.resignFirstResponder()
         
@@ -118,7 +117,7 @@ extension EditActivityViewController {
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
 	}
 	
-	func didTapMoneyLabel() {
+	func didTapMoneyLabel(_ type: UIView.GestureType) {
         // 키보드 내리기
         self.titleTextFeild.resignFirstResponder()
         
@@ -130,7 +129,7 @@ extension EditActivityViewController {
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
 	}
 	
-	func didTapStarLabel() {
+	func didTapStarLabel(_ type: UIView.GestureType) {
         // 키보드 내리기
         self.titleTextFeild.resignFirstResponder()
         
@@ -144,29 +143,92 @@ extension EditActivityViewController {
 	}
 	
 	func didTapSaveButton() {
-        editViewModel.updateDetailActivity {
-            self.detailViewModel.changedId = self.editViewModel.changedId
+        // 반복된 경제활동일 경우 수정하는 case에 따라서 분기처리 해야함
+        if let info = editViewModel.recurrenceInfo {
+            guard let detailActvity = detailViewModel.detailActivity else { return }
+            
+            let saveType = editViewModel.checkSaveType(by: detailActvity)
+            
+            let actionSheet = UIAlertController(title: ActionSheetText.Recurrence.title,
+                                                message: ActionSheetText.Recurrence.message,
+                                                preferredStyle: .actionSheet)
+            
+            
+            // 반복된 경제활동일 경우에만 해당
+            switch saveType {
+            case .content:  // 내용이 수정되었을 경우
+                let singleAction = UIAlertAction(title: ActionSheetText.Recurrence.singleAction, style: .default) { [weak self] _ in
+                    guard let self = self else { return }
+                    self.editViewModel.updateDetailActivity(recurrenceUpdateYN: "N", contentRecurrenceUpdateYN: "N") {
+                        self.detailViewModel.changedId = self.editViewModel.changedId
+                    }
+                }
+                
+                let multiAction = UIAlertAction(title: ActionSheetText.Recurrence.multiAction, style: .default) { [weak self] _ in
+                    guard let self = self else { return }
+                    self.editViewModel.updateDetailActivity(recurrenceUpdateYN: "N", contentRecurrenceUpdateYN: "Y") {
+                        self.detailViewModel.changedId = self.editViewModel.changedId
+                    }
+                }
+                
+                actionSheet.addAction(singleAction)
+                actionSheet.addAction(multiAction)
+                break
+            case .pattern:   // case 2 반복 패턴 및 내용, 반복 패턴 변경의 경우 이후 반복 경제활동 다 삭제 되고 다시 만들어 지는 거라  contentRecurrenceUpdateYN = Y
+                let patternAction = UIAlertAction(title: ActionSheetText.Recurrence.patternAction, style: .default) { [weak self] _ in
+                    guard let self = self else { return }
+                    self.editViewModel.updateDetailActivity(recurrenceUpdateYN: "Y", contentRecurrenceUpdateYN: "Y") {
+                        self.detailViewModel.changedId = self.editViewModel.changedId
+                    }
+                }
+                
+                actionSheet.addAction(patternAction)
+            
+            case .deleteRecurrence: // case 3 : 반복 없애기
+                let recurrenceAction = UIAlertAction(title: ActionSheetText.Recurrence.patternAction, style: .default) { [weak self] _ in
+                    guard let self = self else { return }
+                    editViewModel.updateDetailActivity {
+                        self.detailViewModel.changedId = self.editViewModel.changedId
+                    }
+                }
+                actionSheet.addAction(recurrenceAction)
+            }
+
+            // 취소 액션 시트
+            let cancelAction = UIAlertAction(title: CommonText.cancel, style: .cancel)
+            actionSheet.addAction(cancelAction)
+            
+            self.present(actionSheet, animated: true)
+            // 원본 경제활동이 반복이 아닐경우
+        } else {
+            editViewModel.updateDetailActivity {
+                self.detailViewModel.changedId = self.editViewModel.changedId
+            }
         }
-		
-		// 저장후, 통계 Refresh
-		if let str = Constants.getKeychainValue(forKey: Constants.KeychainKey.statisticsDate), let date = str.toDate() {
-			ServiceProvider.shared.statisticsProvider.updateDate(to: date)
-		} else {
-			ServiceProvider.shared.statisticsProvider.updateDate(to: Date())
-		}
-		
-		self.loadView.play()
-		self.loadView.isPresent = true
-		self.loadView.modalPresentationStyle = .overFullScreen
-		self.present(self.loadView, animated: false)
+        
+        // 저장후, 통계 Refresh
+        if let str = Constants.getKeychainValue(forKey: Constants.KeychainKey.statisticsDate), let date = str.toDate() {
+            ServiceProvider.shared.statisticsProvider.updateDate(to: date)
+        } else {
+            ServiceProvider.shared.statisticsProvider.updateDate(to: Date())
+        }
+        
+        self.loadView.play()
+        self.loadView.isPresent = true
+        self.loadView.modalPresentationStyle = .overFullScreen
+        self.present(self.loadView, animated: false)
 	}
-	
+    
 	func didTapDeleteButton() {
         // 키보드 내리기
         self.titleTextFeild.resignFirstResponder()
         
 		isDeleteButton = true
-		showAlert(alertType: .canCancel, titleText: deleteAlertTitle, contentText: deleteAlertContentText, cancelButtonText: "닫기", confirmButtonText: "삭제하기")
+		showAlert(alertType: .canCancel,
+                  titleText: AlertText.Delete.title,
+                  contentText:  AlertText.Delete.message,
+                  cancelButtonText: AlertText.close,
+                  confirmButtonText: AlertText.Delete.confirm)
 	}
 	
 	func didTapAlbumButton() {
@@ -193,20 +255,20 @@ extension EditActivityViewController {
         
 	}
 	
-	func didTapImageView() {
+	func didTapImageView(_ type: UIView.GestureType) {
         // 키보드 내리기
         self.titleTextFeild.resignFirstResponder()
         
 		let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 		
 		//앨범 선택 - 스타일(default)
-		actionSheet.addAction(UIAlertAction(title: "앨범선택", style: .default, handler: { [weak self] (ACTION:UIAlertAction) in
+        actionSheet.addAction(UIAlertAction(title: ActionSheetText.Album.selectTitle, style: .default, handler: { [weak self] (ACTION:UIAlertAction) in
 			guard let self = self else { return }
 			self.didTapAlbumButton()
 		}))
 		
 		//사진삭제 - 스타일(destructive)
-		actionSheet.addAction(UIAlertAction(title: "사진삭제", style: .destructive, handler: { [weak self] (ACTION:UIAlertAction) in
+		actionSheet.addAction(UIAlertAction(title: ActionSheetText.Album.deleteTitle, style: .destructive, handler: { [weak self] (ACTION:UIAlertAction) in
 			guard let self = self else { return }
 			self.mainImageView.image = nil
 			self.editViewModel.binaryFileList.removeAll()
@@ -215,7 +277,7 @@ extension EditActivityViewController {
 		}))
 		
 		//취소 버튼 - 스타일(cancel)
-		actionSheet.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+		actionSheet.addAction(UIAlertAction(title: CommonText.cancel, style: .cancel, handler: nil))
 		
 		self.present(actionSheet, animated: true, completion: nil)
 	}
@@ -229,7 +291,7 @@ extension EditActivityViewController {
 		return text
 	}
     
-    private func didTapCategory() {
+    private func didTapCategory(_ type: UIView.GestureType) {
         // 키보드 내리기
         self.titleTextFeild.resignFirstResponder()
         
@@ -248,7 +310,7 @@ extension EditActivityViewController {
         self.titleTextFeild.resignFirstResponder()
         
         let swiftUIView = VStack {
-            AddScheduleView()
+            AddScheduleView(editViewModel: editViewModel)
             Spacer()
         }
         
@@ -339,25 +401,56 @@ extension EditActivityViewController {
 extension EditActivityViewController: CustomAlertDelegate {
 	func didAlertCofirmButton() {
 		if isDeleteButton {
-			editViewModel.deleteDetailActivity()
+            
+            if detailViewModel.detailActivity?.recurrenceYN == "Y" {
+                let alert = UIAlertController(title: ActionSheetText.Recurrence.title, message: ActionSheetText.Recurrence.message, preferredStyle: .actionSheet)
+                let delRecurrenceNAction = UIAlertAction(title: ActionSheetText.Recurrence.singleAction, style: .default) { [weak self] _ in
+                    guard let self = self else { return }
+                    // 삭제시, 통계 Refresh
+                    editViewModel.deleteDetailActivity(delRecurrenceYn: "N")
+                    self.refreshStatistics()
+                }
+                
+                let delRecurrenceYAction = UIAlertAction(title: ActionSheetText.Recurrence.multiAction, style: .default) { [weak self] _ in
+                    guard let self = self else { return }
+                    // 삭제시, 통계 Refresh
+                    editViewModel.deleteDetailActivity(delRecurrenceYn: "Y")
+                    self.refreshStatistics()
+                }
+                
+                let cancelAction = UIAlertAction(title: CommonText.cancel, style: .cancel)
+                
+                alert.addAction(delRecurrenceNAction)
+                alert.addAction(delRecurrenceYAction)
+                alert.addAction(cancelAction)
+                self.present(alert, animated: true)
+            } else {
+                editViewModel.deleteDetailActivity(delRecurrenceYn: "N")
+                self.refreshStatistics()
+            }
 			
-			// 삭제시, 통계 Refresh
-			if let str = Constants.getKeychainValue(forKey: Constants.KeychainKey.statisticsDate), let date = str.toDate() {
-				ServiceProvider.shared.statisticsProvider.updateDate(to: date)
-			} else {
-				ServiceProvider.shared.statisticsProvider.updateDate(to: Date())
-			}
-			
-			self.loadView.play()
-			self.loadView.isPresent = true
-			self.loadView.modalPresentationStyle = .overFullScreen
-			self.present(self.loadView, animated: false)
+
+
 		} else {
 			super.didTapBackButton()
 		}
 	}
 	
 	func didAlertCacelButton() { }
+    
+    private func refreshStatistics() {
+        // 삭제시, 통계 Refresh
+        if let str = Constants.getKeychainValue(forKey: Constants.KeychainKey.statisticsDate), let date = str.toDate() {
+            ServiceProvider.shared.statisticsProvider.updateDate(to: date)
+        } else {
+            ServiceProvider.shared.statisticsProvider.updateDate(to: Date())
+        }
+        
+        self.loadView.play()
+        self.loadView.isPresent = true
+        self.loadView.modalPresentationStyle = .overFullScreen
+        self.present(self.loadView, animated: false)
+    }
 }
 
 // MARK: - Star Picker의 확인을 눌렀을 때
@@ -384,6 +477,10 @@ extension EditActivityViewController: PHPickerViewControllerDelegate {
                 itemProvider.loadObject(ofClass: UIImage.self) { image, error in
                     DispatchQueue.main.async {
                         if let image = image as? UIImage {
+                            
+                            // 이미지가 바뀌면
+                            self.editViewModel.isImageChanged = true
+                            
                             self.mainImageView.image = image
                             self.editViewModel.fileNo = ""
                             guard let data = image.jpegData(compressionQuality: 0)?.base64EncodedString() else { return }
@@ -403,34 +500,6 @@ extension EditActivityViewController: PHPickerViewControllerDelegate {
     }
 }
 
-// MARK: - ImagePicker Delegate
-extension EditActivityViewController: UIImagePickerControllerDelegate {
-	func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-		picker.dismiss(animated: false) { [weak self] in
-			guard let self = self else { return }
-			self.editViewModel.binaryFileList.removeAll()
-			let img = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
-			self.mainImageView.image = img
-			self.editViewModel.fileNo = ""
-			guard let data = img?.jpegData(compressionQuality: 0)?.base64EncodedString() else { return }
-			var imageName = ""
-			if let imageUrl = info[UIImagePickerController.InfoKey.referenceURL] as? URL{
-				let assets = PHAsset.fetchAssets(withALAssetURLs: [imageUrl], options: nil)
-				guard let firstObject = assets.firstObject else { return }
-				imageName = PHAssetResource.assetResources(for: firstObject).first?.originalFilename ?? "defaultName"
-			}
-			
-			self.editViewModel.binaryFileList.append(APIParameters.BinaryFileList(binaryData: data,fileNm: imageName))
-			self.remakeConstraintsByMainImageView()
-		}
-        self.editViewModel.didTapAddButton = false
-	}
-	func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        self.editViewModel.didTapAddButton = false
-		dismiss(animated: true, completion: nil)
-	}
-}
-
 // MARK: - TextView Func
 extension EditActivityViewController {
 	func textViewDidChange(text: String) {
@@ -441,18 +510,6 @@ extension EditActivityViewController {
 	}
 	
 	func textViewDidBeginEditing() {
-//		let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
-//		scrollView.contentInset = contentInsets
-//		scrollView.scrollIndicatorInsets = contentInsets
-//		
-//		var rect = scrollView.frame
-//		rect.size.height -= keyboardHeight
-//		if !rect.contains(memoTextView.frame.origin) {
-//			scrollView.scrollRectToVisible(memoTextView.frame, animated: true)
-//		}
-		
-        
-        
 		if memoTextView.text == textViewPlaceholder {
 			memoTextView.text = nil
 			memoTextView.textColor = R.Color.black
@@ -476,16 +533,19 @@ extension EditActivityViewController {
 extension EditActivityViewController {
 	override func setBind() {
 		// MARK: - detailVM -> editVM 데이터 주입
-		editViewModel.title = detailViewModel.detailActivity?.title ?? ""
-		editViewModel.memo = detailViewModel.detailActivity?.memo ?? ""
-		editViewModel.amount = detailViewModel.detailActivity?.amount ?? 0
-		editViewModel.createAt = detailViewModel.detailActivity?.createAt ?? ""
-		editViewModel.star = detailViewModel.detailActivity?.star ?? 0
-		editViewModel.type = detailViewModel.detailActivity?.type ?? ""
-		editViewModel.fileNo = detailViewModel.detailActivity?.fileNo ?? ""
-		editViewModel.id = detailViewModel.detailActivity?.id ?? ""
-        editViewModel.categoryId = detailViewModel.detailActivity?.categoryID ?? ""
-        editViewModel.categoryName = detailViewModel.detailActivity?.categoryName ?? ""
+        
+        guard let detailActivity = detailViewModel.detailActivity else { return }
+		editViewModel.title = detailActivity.title
+        editViewModel.memo = detailActivity.memo
+		editViewModel.amount = detailActivity.amount
+		editViewModel.createAt = detailActivity.createAt
+		editViewModel.star = detailActivity.star
+		editViewModel.type = detailActivity.type
+		editViewModel.fileNo = detailActivity.fileNo
+		editViewModel.id = detailActivity.id
+        editViewModel.categoryId = detailActivity.categoryID
+        editViewModel.categoryName = detailActivity.categoryName
+        editViewModel.recurrenceInfo = detailActivity.recurrenceInfo
 		// MARK: - Loading에 대한 처리
 		editViewModel.$isLoading
             .removeDuplicates()
@@ -626,41 +686,29 @@ extension EditActivityViewController {
 		
 		// MARK: - Gesture Publisher
 		titleStackView.gesturePublisher()
-			.receive(on: DispatchQueue.main)
-			.sink { _ in
-				self.didTapDateTitle()
-			}.store(in: &cancellable)
+            .sinkOnMainThread(receiveValue: didTapDateTitle)
+            .store(in: &cancellable)
 		
 		containerStackView.gesturePublisher()
-			.receive(on: DispatchQueue.main)
-			.sink { _ in
-				self.didTapMoneyLabel()
-			}.store(in: &cancellable)
+            .sinkOnMainThread(receiveValue: didTapMoneyLabel)
+			.store(in: &cancellable)
 		
 		starStackView.gesturePublisher()
-			.receive(on: DispatchQueue.main)
-			.sink { _ in
-				self.didTapStarLabel()
-			}.store(in: &cancellable)
+            .sinkOnMainThread(receiveValue: didTapStarLabel)
+			.store(in: &cancellable)
 		
 		satisfyingLabel.gesturePublisher()
-			.receive(on: DispatchQueue.main)
-			.sink { _ in
-				self.didTapStarLabel()
-			}.store(in: &cancellable)
+            .sinkOnMainThread(receiveValue: didTapStarLabel)
+			.store(in: &cancellable)
 		
 		mainImageView.gesturePublisher()
-			.receive(on: DispatchQueue.main)
-			.sink { _ in
-				self.didTapImageView()
-			}.store(in: &cancellable)
+            .sinkOnMainThread(receiveValue: didTapImageView)
+			.store(in: &cancellable)
 		
         
         addCategoryView.gesturePublisher()
-            .receive(on: DispatchQueue.main)
-            .sink { _ in
-                self.didTapCategory()
-            }.store(in: &cancellable)
+            .sinkOnMainThread(receiveValue: didTapCategory)
+            .store(in: &cancellable)
 		
         addScheduleTapView.gesturePublisher()
             .sinkOnMainThread(receiveValue: didTapAddScheduleTapView)
@@ -720,10 +768,15 @@ extension EditActivityViewController {
                 guard let self = self else { return }
                 if isFromView {
                     view.endEditing(true)
-                    self.didTapCategory()
+                    self.didTapCategory(.tap(.init()))
                 }
             }
             .store(in: &cancellable)
+        
+        editViewModel.$recurrenceInfo
+            .sinkCompactMapOnMainThread(receiveValue: addScheduleTapView.setTitle(by:))
+            .store(in: &cancellable)
+            
 	}
 
 }
@@ -734,10 +787,6 @@ extension EditActivityViewController {
         self.hideKeyboardWhenTappedAround()
         titleTextFeild.becomeFirstResponder() // 키보드 보이기 및 포커스 주기
 
-//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        
-        
         navigationItem.rightBarButtonItem = deleteActivityButtonItem
         
         setCustomTitle()
@@ -746,7 +795,7 @@ extension EditActivityViewController {
         }
         
         deleteButton = deleteButton.then {
-            $0.setTitle("삭제", for: .normal)
+            $0.setTitle(CommonText.delete, for: .normal)
         }
                 
         editIconImage = editIconImage.then {

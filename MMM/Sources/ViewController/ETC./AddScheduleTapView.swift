@@ -6,8 +6,6 @@
 //
 
 import UIKit
-
-import UIKit
 import SnapKit
 import Then
 
@@ -30,12 +28,26 @@ final class AddScheduleTapView: BaseView {
 // MARK: - Action
 extension AddScheduleTapView {
     func setTitleAndColor(by text: String) {
-        titleLabel.text = text == "" ? "카테고리" : text
-        titleLabel.textColor = text == "" ? R.Color.gray400 : R.Color.gray800
+        let split = text.components(separatedBy: ",")
+        guard let type = split.first else { return }
+        titleLabel.text = type == "반복 안함" ? "일정반복" : text
+        titleLabel.textColor = type == "반복 안함" ? R.Color.gray400 : R.Color.gray800
     }
     
     func setViewisHomeDetail() {
         arrowImageView.isHidden = true
+    }
+    
+    func arrowImageHidden() {
+        arrowImageView.isHidden = true
+    }
+    
+    func setTitle(by recurrenceInfo: APIParameters.RecurrenceInfo) {
+        // 패턴 먼저 입력
+        let pattern = recurrenceInfo.recurrencePattern.recurrenceTitleByPattern()
+        let deadline = recurrenceInfo.recurrenceEndDvcd == "01" ? "\(recurrenceInfo.recurrenceCnt)회 반복" : "\(recurrenceInfo.endYMD.insertDatePeriod())까지"
+        self.titleLabel.text = "\(pattern), \(deadline)"
+        self.titleLabel.textColor = R.Color.gray800
     }
 }
 

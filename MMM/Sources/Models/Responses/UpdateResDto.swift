@@ -9,5 +9,4 @@ import Foundation
 
 struct UpdateResDto: Codable {
     var economicActivityNo: String
-    var message: String
 }

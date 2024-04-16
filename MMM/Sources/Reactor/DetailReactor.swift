@@ -18,11 +18,12 @@ final class DetailReactor: Reactor {
     
     enum Mutation {
         case pushEditVC(Bool)
-        case fetchSelectedActivity(SelectDetailResDto)
+        case fetchDetailActivity(SelectDetailResDto)
         case fetchActivity([EconomicActivity])
         case setLoading(Bool)
         case setError
         case updateIndex(Int)
+        case updateID(String)
     }
     
     struct State {
@@ -44,7 +45,6 @@ final class DetailReactor: Reactor {
     
     init(dateYM: String, rowNum: Int, totalItem: Int, valueScoreDvcd: String, id: String) {
         self.initialState = State(dateYM: dateYM, rowNum: rowNum, totalItem: totalItem, valueScoreDvcd: valueScoreDvcd, id: id)
-//        action.onNext(.loadData(dateYM: dateYM, rowNum: rowNum, valueScoreDvcd: valueScoreDvcd, id: id))
     }
 }
 
@@ -66,7 +66,7 @@ extension DetailReactor {
             return .concat([
                 .just(.setLoading(true)),
                 self.getStatisticsList(dateYM, rowNum, valueScoreDvcd, true),
-                self.getSelectedActivity(by: id),
+                self.getDetailActivity(by: id),
                 .just(.setLoading(false))
             ])
             
@@ -74,7 +74,7 @@ extension DetailReactor {
             return .concat([
                 .just(.updateIndex(1)),
                 .just(.setLoading(true)),
-                self.getStatisticsList(dateYM, rowNum + 1, valueScoreDvcd),
+                fetchStatisticsAndSelectedActivity(dateYM, rowNum + 1, valueScoreDvcd),
                 .just(.setLoading(false))
             ])
             
@@ -82,7 +82,7 @@ extension DetailReactor {
             return .concat([
                 .just(.updateIndex(-1)),
                 .just(.setLoading(true)),
-                self.getStatisticsList(dateYM, rowNum - 1, valueScoreDvcd),
+                fetchStatisticsAndSelectedActivity(dateYM, rowNum - 1, valueScoreDvcd),
                 .just(.setLoading(false))
             ])
         }
@@ -107,8 +107,11 @@ extension DetailReactor {
         case let .updateIndex(index):
             newState.rowNum += index
             
-        case let .fetchSelectedActivity(activity):
+        case let .fetchDetailActivity(activity):
             newState.editActivity = activity
+            
+        case let .updateID(id):
+            newState.id = id
         }
         
         return newState
@@ -125,12 +128,30 @@ extension DetailReactor {
             }
             .catchAndReturn(.setError)
     }
+
     // 경제활동 편집 기능도 수행하기 위해 selectedActivity 타입이 필요
-    func getSelectedActivity(by id: String) -> Observable<Mutation> {
-        return MMMAPIService().getSelectedActivity(id)
+    func getDetailActivity(by id: String) -> Observable<Mutation> {
+        return MMMAPIService().getDetailActivity(id)
             .map { (response, error) -> Mutation in
-                return .fetchSelectedActivity(response)
+                return .fetchDetailActivity(response)
             }
-            .catchAndReturn(.setError)
     }
+    
+    func fetchStatisticsAndSelectedActivity(_ dateYM: String, _ rowNum: Int, _ type: String, _ reset: Bool = false) -> Observable<Mutation> {
+        return getStatisticsList(dateYM, rowNum, type, reset)
+            .flatMap { mutation -> Observable<Mutation> in
+                switch mutation {
+                case .fetchActivity(let activities):
+                    guard let activity = activities.first else {
+                        // 활동 목록이 비어있는 경우, 적절한 처리를 하거나 에러를 방출할 수 있습니다.
+                        return .just(.setError)
+                    }
+                    return self.getDetailActivity(by: activity.id)
+                default:
+                    // .setError 또는 다른 Mutation 처리
+                    return .just(.setError)
+                }
+            }
+    }
+
 }

@@ -8,6 +8,5 @@
 import Foundation
 
 struct DeleteResDto: Codable {
-    var economicActivityNo: String
-    var message: String
+    var status: String
 }

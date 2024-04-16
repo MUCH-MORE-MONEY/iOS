@@ -261,7 +261,6 @@ extension StatisticsActivityView: SkeletonLoadable {
 		
 		backgroundColor = R.Color.black
 		layer.cornerRadius = 10
-		layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
 
 		let firstGroup = makeAnimationGroup(startColor: R.Color.gray900, endColor: R.Color.gray700)
 		firstGroup.beginTime = 0.0

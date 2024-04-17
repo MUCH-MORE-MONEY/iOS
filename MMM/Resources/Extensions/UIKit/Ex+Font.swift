@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 public extension MMMResource {
 	enum Font {
@@ -90,6 +91,9 @@ public extension MMMResource {
         // MARK: - medium14
         /// Weight : medium, Size : 14
         public static let medium14 = prtendard(family: .medium, size: 14)
+        // MARK: - medium16
+        /// Weight : medium, Size : 16
+        public static let medium16 = prtendard(family: .medium, size: 16)
 	}
 }
 
@@ -113,3 +117,8 @@ public extension MMMResource {
 	}
 }
 
+public extension UIFont {
+    var suFont: Font {
+        return Font(self)
+    }
+}

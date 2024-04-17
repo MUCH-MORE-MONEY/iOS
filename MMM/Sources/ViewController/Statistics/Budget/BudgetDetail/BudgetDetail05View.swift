@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 
 struct BudgetDetail05View: View {
-    @ObservedObject var budgetSettingViewModel: BudgetSettingViewModel
+    @ObservedObject var viewModel: BudgetSettingViewModel
     
     let title = "일별 환산된 적정 지출 금액을\n달력에서 확인하시겠어요?"
     var body: some View {
@@ -36,18 +36,28 @@ struct BudgetDetail05View: View {
             .padding(.bottom, 14)
             
             Image(uiImage: R.Icon.imageCalenderUsecase144)
+                .resizable()
+                .scaledToFit()
+                .padding(.bottom, 23)
             
             VStack(alignment: .leading) {
                 HStack {
                     CalendarLabel(price: 3, color: R.Color.orange400)
                     CalendarLabel(price: 3, color: R.Color.orange200)
+                    Spacer()
                 }
                 .padding(.bottom, 51)
                 
                 Button {
-                    debugPrint("checkbox tapped")
+                    viewModel.isCalenderCheckboxEnable.toggle()
                 } label: {
-                    /*@START_MENU_TOKEN@*/Text("Button")/*@END_MENU_TOKEN@*/
+                    HStack(spacing: 8) {
+                        Image(uiImage: viewModel.isCalenderCheckboxEnable ? R.Icon.iconCheckboxEnableOrange : R.Icon.iconCheckboxDisable)
+                        Text("달력에 표시하기")
+                            .foregroundStyle(R.Color.gray100.suColor)
+                            .font(R.Font.medium16.suFont)
+                    }
+
                 }
             }
         }
@@ -56,7 +66,7 @@ struct BudgetDetail05View: View {
 }
 
 #Preview {
-    BudgetDetail05View(budgetSettingViewModel: BudgetSettingViewModel())
+    BudgetDetail05View(viewModel: BudgetSettingViewModel())
 }
 
 
@@ -67,6 +77,8 @@ struct CalendarLabel: View {
         VStack {
             HStack(spacing: 4) {
                 Text("{\(price)}만원 이상 지출")
+                    .font(R.Font.medium14.suFont)
+                    .foregroundStyle(R.Color.gray300.suColor)
                 
                 Circle()
                     .fill(Color(color))

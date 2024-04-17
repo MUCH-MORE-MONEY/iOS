@@ -47,7 +47,7 @@ struct BudgetSettingView: View {
                         BudgetDetail04View(budgetSettingViewModel: budgetSettingViewModel)
                             .navigationTransition()
                     case .calendar:
-                        BudgetDetail05View(budgetSettingViewModel: budgetSettingViewModel)
+                        BudgetDetail05View(viewModel: budgetSettingViewModel)
                             .navigationTransition()
                     }
                 }

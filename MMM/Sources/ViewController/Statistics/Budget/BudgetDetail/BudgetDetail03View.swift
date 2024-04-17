@@ -56,16 +56,12 @@ struct BudgetDetail03View: View {
 
             Spacer()
             
-            // 툴팁으로 사용될 텍스트 뷰
-            Text("\(priceText)%")
-                .padding(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
-                .background(Color(R.Color.orange500))
-                .font(Font(R.Font.body1))
-                .foregroundStyle(Color(R.Color.white))
-                .cornerRadius(8)
+
 //                .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.blue, lineWidth: 2))
-                .offset(x: 0, y: -30) // 툴팁 위치 조정
+
             // 슬라이더 값에 따라 툴팁 위치 동적 조정
+            TooltipView(text: "\(priceText)%", color: R.Color.orange500.suColor)
+                .offset(x: 0, y: -30) // 툴팁 위치 조정
                 .offset(x: CGFloat((price - 100)), y: 0) // 가정: 슬라이더 너비가 300pt
 
             BudgetSlider(value: $price, range: 0...200)

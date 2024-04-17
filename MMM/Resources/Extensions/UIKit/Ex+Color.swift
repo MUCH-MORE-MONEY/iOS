@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 public extension MMMResource {
 	enum Color {
@@ -62,4 +63,10 @@ public extension MMMResource {
 		// MARK: - Warning
 		public static let red500 = UIColor(named: "red500", in: .main, compatibleWith: nil)!
 	}
+}
+
+public extension UIColor {
+    var suColor: Color {
+        return Color(self)
+    }
 }

@@ -66,6 +66,7 @@
 		45E909202BBFB27D00E3DF20 /* CommonText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E9091F2BBFB27D00E3DF20 /* CommonText.swift */; };
 		45E909222BBFB2AC00E3DF20 /* AlertText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E909212BBFB2AC00E3DF20 /* AlertText.swift */; };
 		45E909242BBFC62400E3DF20 /* CustomCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E909232BBFC62400E3DF20 /* CustomCalendarView.swift */; };
+		45EA263F2BCF483D001BAC57 /* TooltipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45EA263E2BCF483D001BAC57 /* TooltipView.swift */; };
 		45FD3C852B887E1500C14A49 /* BudgetSettingSubTitleModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FD3C842B887E1500C14A49 /* BudgetSettingSubTitleModifier.swift */; };
 		6A0379752A2443B9005EE07F /* Ex+UITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0379742A2443B9005EE07F /* Ex+UITextView.swift */; };
 		6A03BB4C2ADD555D00F86756 /* AddCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A03BB4B2ADD555D00F86756 /* AddCategoryViewController.swift */; };
@@ -398,6 +399,7 @@
 		45E9091F2BBFB27D00E3DF20 /* CommonText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonText.swift; sourceTree = "<group>"; };
 		45E909212BBFB2AC00E3DF20 /* AlertText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertText.swift; sourceTree = "<group>"; };
 		45E909232BBFC62400E3DF20 /* CustomCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCalendarView.swift; sourceTree = "<group>"; };
+		45EA263E2BCF483D001BAC57 /* TooltipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooltipView.swift; sourceTree = "<group>"; };
 		45FD3C842B887E1500C14A49 /* BudgetSettingSubTitleModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetSettingSubTitleModifier.swift; sourceTree = "<group>"; };
 		6A0379742A2443B9005EE07F /* Ex+UITextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UITextView.swift"; sourceTree = "<group>"; };
 		6A03BB4B2ADD555D00F86756 /* AddCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryViewController.swift; sourceTree = "<group>"; };
@@ -819,6 +821,7 @@
 			children = (
 				45D831CA2BBD3DF700FE3D72 /* BudgetSlider.swift */,
 				45D831CB2BBD3DF700FE3D72 /* PriceTextFieldView.swift */,
+				45EA263E2BCF483D001BAC57 /* TooltipView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1831,6 +1834,7 @@
 				45E909242BBFC62400E3DF20 /* CustomCalendarView.swift in Sources */,
 				C4BBD28F2AC049130055FA65 /* CategoryEditViewController.swift in Sources */,
 				C4DBAA2E29DC16A400D1BB97 /* WithdrawViewController.swift in Sources */,
+				45EA263F2BCF483D001BAC57 /* TooltipView.swift in Sources */,
 				6ADEAFDF2A53B81300299A0E /* Ex+Window.swift in Sources */,
 				45D831D22BBD3DF700FE3D72 /* BudgetDetail02View.swift in Sources */,
 				6A223FFC2A1B3D590058C877 /* EditActivityViewController.swift in Sources */,

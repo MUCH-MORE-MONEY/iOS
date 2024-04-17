@@ -26,6 +26,25 @@ struct BudgetDetail01View: View {
             
             Image(uiImage: R.Icon.iconBudgetSettingCalendar)
                 .padding(.top, 89)
+            
+            Spacer()
+            
+            TooltipView(text: "최근 설정한 지출 예산은 {0}만원이에요", color: R.Color.black.suColor)
+                .padding(.top, 21)
+            
+            Button {
+                
+            } label: {
+                Text("이전 예산 그대로 설정")
+                    .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, minHeight: 56)
+                
+                    .font(Font(R.Font.title1))
+                    .foregroundStyle(R.Color.gray100.suColor)
+                    .background(R.Color.orange500.suColor)
+            }
+            .padding(.top, 12)
+//            .padding([.leading, .trailing, .bottom], 24)
+    
         }
     }
 }

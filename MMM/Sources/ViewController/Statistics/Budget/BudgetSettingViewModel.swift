@@ -11,6 +11,7 @@ import Combine
 final class BudgetSettingViewModel: ObservableObject {
     @Published var budget: Int = 0
     @Published var priceInput: String = ""
+    @Published var isFocusTextField: Bool = false
     
     // MARK: - Public properties
     // 들어온 퍼블리셔의 값 일치 여부를 반환하는 퍼블리셔
@@ -21,6 +22,10 @@ final class BudgetSettingViewModel: ObservableObject {
     lazy var isValidByWon: AnyPublisher<Bool, Never> = $priceInput
         .map { 0 <= Int($0) ?? 0 && Int($0) ?? 0 <= 100_000_000 } // 1억(1,000만원)보다 작을 경우
         .eraseToAnyPublisher()
+    
+    func dismissKeyboard() {
+        isFocusTextField.toggle()
+    }
 }
 
 

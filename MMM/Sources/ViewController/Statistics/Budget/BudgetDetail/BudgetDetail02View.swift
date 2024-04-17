@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import Combine
 
 struct BudgetDetail02View: View {
     @ObservedObject var budgetSettingViewModel: BudgetSettingViewModel
-    @State var price = ""
+    @FocusState private var isFocus: Bool
+    @State private var cancellables = Set<AnyCancellable>()
     
     private let subTitle = "이번 달 예상 수입은 얼마인가요?"
     
@@ -21,7 +23,15 @@ struct BudgetDetail02View: View {
                 .padding(.bottom, 16)
 
             PriceTextFieldViewRepresentable(viewModel: budgetSettingViewModel)
+                .focused($isFocus)
                 .frame(height: 40)
+                .onAppear {
+                    budgetSettingViewModel.$isFocusTextField
+                        .sinkOnMainThread { isFocus in
+                            self.isFocus = false
+                        }
+                        .store(in: &cancellables)
+                }
             
             HStack(spacing: 4) {
                 Spacer()

@@ -10,6 +10,7 @@ import SwiftUI
 struct BudgetSettingView: View {
     @State var currentStep: CurrentStep = .main
     @StateObject var budgetSettingViewModel = BudgetSettingViewModel()
+    @FocusState private var isFocus: Bool
     
     enum CurrentStep {
         case main       // 예산 세팅
@@ -32,6 +33,9 @@ struct BudgetSettingView: View {
                             .navigationTransition()
                     case .income:
                         BudgetDetail02View(budgetSettingViewModel: budgetSettingViewModel)
+                            .onTapGesture {
+                                // 강제로 탭 제스처를 만들어서 전체 뷰에 대한 터치 이벤트를 막음
+                            }
                             .navigationTransition()
                     case .expense:
                         BudgetDetail03View(budgetSettingViewModel: budgetSettingViewModel)
@@ -74,6 +78,9 @@ struct BudgetSettingView: View {
                 .padding([.leading, .trailing, .bottom], 24)
             }
             .background(Color(R.Color.gray900))
+            .onTapGesture {
+                budgetSettingViewModel.dismissKeyboard()
+            }
         }
     }
 }

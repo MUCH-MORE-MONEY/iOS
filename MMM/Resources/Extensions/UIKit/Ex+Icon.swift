@@ -63,7 +63,7 @@ public extension MMMResource {
 		public static let iconRepeat24 = UIImage(named: "iconRepeat24", in: .main, compatibleWith: nil)
         public static let iconCheckboxEnableOrange = UIImage(named: "iconCheckboxEnableOrange", in: .main, compatibleWith: nil)!
         public static let iconCheckboxDisable = UIImage(named: "iconCheckboxDisable", in: .main, compatibleWith: nil)!
-        
+
 		// MARK: - FAB
 		public static let onboarding1 = UIImage(named: "iconOnboarding1", in: .main, compatibleWith: nil)
 		public static let onboarding2 = UIImage(named: "iconOnboarding2", in: .main, compatibleWith: nil)

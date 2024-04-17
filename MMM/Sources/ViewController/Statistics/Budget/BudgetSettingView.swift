@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct BudgetSettingView: View {
+    @Environment(\.presentationMode) var presentationMode
     @State var currentStep: CurrentStep = .main
-    @StateObject var budgetSettingViewModel = BudgetSettingViewModel()
+    @StateObject var viewModel = BudgetSettingViewModel()
     @FocusState private var isFocus: Bool
     
     enum CurrentStep {
@@ -20,6 +21,8 @@ struct BudgetSettingView: View {
         case calendar   // 날짜
     }
     
+    @State private var nextButtonTitle = "다음"
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -29,25 +32,25 @@ struct BudgetSettingView: View {
                 VStack {
                     switch currentStep {
                     case .main:
-                        BudgetDetail01View(budgetSettingViewModel: budgetSettingViewModel)
+                        BudgetDetail01View(budgetSettingViewModel: viewModel)
                             .navigationTransition()
                     case .income:
-                        BudgetDetail02View(budgetSettingViewModel: budgetSettingViewModel)
+                        BudgetDetail02View(budgetSettingViewModel: viewModel)
                             .onTapGesture {
                                 // 강제로 탭 제스처를 만들어서 전체 뷰에 대한 터치 이벤트를 막음
                             }
                             .navigationTransition()
                     case .expense:
-                        BudgetDetail03View(budgetSettingViewModel: budgetSettingViewModel)
+                        BudgetDetail03View(budgetSettingViewModel: viewModel)
                             .onTapGesture {
                                 // 강제로 탭 제스처를 만들어서 전체 뷰에 대한 터치 이벤트를 막음
                             }
                             .navigationTransition()
                     case .budget:
-                        BudgetDetail04View(budgetSettingViewModel: budgetSettingViewModel)
+                        BudgetDetail04View(budgetSettingViewModel: viewModel)
                             .navigationTransition()
                     case .calendar:
-                        BudgetDetail05View(viewModel: budgetSettingViewModel)
+                        BudgetDetail05View(viewModel: viewModel)
                             .navigationTransition()
                     }
                 }
@@ -68,10 +71,28 @@ struct BudgetSettingView: View {
                     case .budget:
                         currentStep = .calendar
                     case .calendar:
-                        currentStep = .main
+                        
+                        // 이미 완료 버튼으로 바뀌었고 버튼을 누르게 되면 pop
+                        if nextButtonTitle == "완료" {
+                            // UIWindowScene을 통해 현재 활성화된 씬을 찾고, 그 씬의 windows 배열에서 visible인 윈도우를 찾습니다.
+                            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                               let rootViewController = windowScene.windows.first(where: { $0.isKeyWindow })?.rootViewController {
+                                // UINavigationController를 찾아 pop합니다.
+                                let navigationController = findNavigationController(viewController: rootViewController)
+                                navigationController?.popViewController(animated: true)
+                            }
+                        }
+                        
+                        // 모든 Step 완료
+                        viewModel.compeleteSteps = true
+                        nextButtonTitle = "완료"
+                        
+                        
+                        
+//                        currentStep = .main
                     }
                 } label: {
-                    Text("다음")
+                    Text(nextButtonTitle)
                         .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, minHeight: 56)
                     
                         .font(Font(R.Font.title1))
@@ -82,8 +103,19 @@ struct BudgetSettingView: View {
             }
             .background(Color(R.Color.gray900))
             .onTapGesture {
-                budgetSettingViewModel.dismissKeyboard()
+                viewModel.dismissKeyboard()
             }
+        }
+    }
+    
+    // UIViewController에서 UINavigationController을 찾는 재귀 함수
+    func findNavigationController(viewController: UIViewController) -> UINavigationController? {
+        if let navigationController = viewController as? UINavigationController {
+            return navigationController
+        } else if let presentedViewController = viewController.presentedViewController {
+            return findNavigationController(viewController: presentedViewController)
+        } else {
+            return nil
         }
     }
 }

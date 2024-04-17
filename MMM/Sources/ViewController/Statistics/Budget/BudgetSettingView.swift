@@ -151,6 +151,7 @@ struct SegmentedView: View {
                         .padding([.leading, .trailing], 1)
                     }
                 }
+                .disabled(true)
             }
         }
     }

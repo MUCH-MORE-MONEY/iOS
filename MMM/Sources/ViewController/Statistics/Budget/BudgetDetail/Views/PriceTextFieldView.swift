@@ -9,12 +9,14 @@ import UIKit
 import Then
 import SnapKit
 import SwiftUI
+import Combine
 
 final class PriceTextFieldView: BaseView {
     // MARK: - UI Components
     private lazy var priceTextField = UITextField()
     private lazy var warningLabel = UILabel()
     private let viewModel: BudgetSettingViewModel
+    private lazy var cancellable: Set<AnyCancellable> = .init()
     
     init(viewModel: BudgetSettingViewModel) {
         self.viewModel = viewModel
@@ -65,6 +67,14 @@ extension PriceTextFieldView {
             $0.top.equalTo(priceTextField.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
         }
+    }
+    
+    override func setBind() {
+        priceTextField.textPublisher
+            .map{String(Array($0).filter{$0.isNumber})} // 숫자만 추출
+            .assignOnMainThread(to: \.priceInput, on: viewModel)
+            .store(in: &cancellable)
+            
     }
 }
 

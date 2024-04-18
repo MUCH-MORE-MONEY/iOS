@@ -20,8 +20,8 @@ extension View {
             }
     }
     
-    func navigationTransition() -> some View {
-        self.transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
+    func navigationTransition(start insertion: Edge, to removal: Edge) -> some View {
+        self.transition(.asymmetric(insertion: .move(edge: insertion), removal: .move(edge: removal)))
     }
 }
 

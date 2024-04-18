@@ -13,10 +13,13 @@ final class BudgetSettingViewModel: ObservableObject {
     @Published var priceInput: String = ""
     @Published var isFocusTextField: Bool = false
     @Published var isSliderView: Bool = true
+    @Published var isFirstStep: Bool = true
     
     @Published var isCalenderCheckboxEnable: Bool = false
     
     @Published var compeleteSteps: Bool = false
+    @Published var transition: Bool = true  // true이면 next
+    
     
     // MARK: - Public properties
     // 들어온 퍼블리셔의 값 일치 여부를 반환하는 퍼블리셔

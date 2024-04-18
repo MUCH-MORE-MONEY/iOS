@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 
 struct BudgetDetail03View: View {
-    @ObservedObject var budgetSettingViewModel: BudgetSettingViewModel
+    @ObservedObject var viewModel: BudgetSettingViewModel
     @State private var price = 100.0
     @FocusState var isFocus: Bool
     @State private var cancellables = Set<AnyCancellable>()
@@ -44,47 +44,63 @@ struct BudgetDetail03View: View {
                 Spacer()
             }
             
-            if budgetSettingViewModel.isSliderView {
-                VStack {
-                    Text("\(budgetSettingViewModel.priceInput)만원")
-                        .font(Font(R.Font.h2))
-                        .foregroundStyle(Color(R.Color.white))
-                        .padding(.bottom, 22)
+            VStack {
+                Text("\(viewModel.priceInput)만원")
+                    .font(Font(R.Font.h2))
+                    .foregroundStyle(Color(R.Color.white))
+                    .padding(.bottom, 22)
+                
+                Text(contentText)
+                    .multilineTextAlignment(.center)
+                    .font(Font(R.Font.medium14))
+                    .foregroundStyle(Color(R.Color.orange100))
+                    .padding(.bottom, 32)
+                
+                Button {
+                    print("ssss")
+                    viewModel.isShowingTextFieldSheet = true
+                } label: {
+                    Text("직접 입력하기")
+                        .underline()
+                        .font(Font(R.Font.body3))
+                        .foregroundStyle(Color(R.Color.gray500))
+                }
+                Spacer()
+            
+                // 슬라이더 값에 따라 툴팁 위치 동적 조정
+                TooltipView(text: "\(priceText)%", color: R.Color.orange500.suColor)
+                    .offset(x: 0, y: -30) // 툴팁 위치 조정
+                    .offset(x: CGFloat((price - 100)), y: 0) // 가정: 슬라이더 너비가 300pt
+
+                BudgetSlider(value: $price, range: 0...200)
+            }
+            .padding(.top, 136)
+        }
+        .sheet(isPresented: $viewModel.isShowingTextFieldSheet, content: {
+            VStack(spacing: 24) {
+                HStack {
+                    Text("이번 달 저축 금액")
+                        .font(R.Font.h5.suFont)
+                        .foregroundStyle(R.Color.black.suColor)
                     
-                    Text(contentText)
-                        .multilineTextAlignment(.center)
-                        .font(Font(R.Font.medium14))
-                        .foregroundStyle(Color(R.Color.orange100))
-                        .padding(.bottom, 32)
+                    Spacer()
                     
                     Button {
-                        budgetSettingViewModel.isSliderView = false
+                        
                     } label: {
-                        Text("직접 입력하기")
-                            .underline()
-                            .font(Font(R.Font.body3))
-                            .foregroundStyle(Color(R.Color.gray500))
+                        Text("확인")
+                            .font(R.Font.title3.suFont)
+                            .foregroundStyle(R.Color.gray500.suColor)
                     }
-
-                    Spacer()
-                
-                    // 슬라이더 값에 따라 툴팁 위치 동적 조정
-                    TooltipView(text: "\(priceText)%", color: R.Color.orange500.suColor)
-                        .offset(x: 0, y: -30) // 툴팁 위치 조정
-                        .offset(x: CGFloat((price - 100)), y: 0) // 가정: 슬라이더 너비가 300pt
-
-                    BudgetSlider(value: $price, range: 0...200)
                 }
-                .padding(.top, 136)
+                .padding(.top, 32)
                 
-
-            } else {
-                PriceTextFieldViewRepresentable(viewModel: budgetSettingViewModel)
+                PriceTextFieldViewRepresentable(viewModel: viewModel)
                     .padding(.top, 16)
                     .focused($isFocus)
                     .frame(height: 40)
                     .onAppear {
-                        budgetSettingViewModel.$isFocusTextField
+                        viewModel.$isFocusTextField
                             .sinkOnMainThread { isFocus in
                                 self.isFocus = false
                             }
@@ -92,13 +108,12 @@ struct BudgetDetail03View: View {
                     }
                 Spacer()
             }
-        }
-        
-        
-        
+            .padding([.leading, .trailing], 24)
+            .presentationDetents([.height(174)])
+        })
     }
 }
 
 #Preview {
-    BudgetDetail03View(budgetSettingViewModel: BudgetSettingViewModel())
+    BudgetDetail03View(viewModel: BudgetSettingViewModel())
 }

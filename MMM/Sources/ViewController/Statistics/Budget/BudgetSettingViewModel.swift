@@ -12,7 +12,7 @@ final class BudgetSettingViewModel: ObservableObject {
     @Published var budget: Int = 0
     @Published var priceInput: String = ""
     @Published var isFocusTextField: Bool = false
-    @Published var isSliderView: Bool = true
+    @Published var isShowingTextFieldSheet: Bool = false     //03 Setting뷰의 직접 입력하기 시트
     @Published var isFirstStep: Bool = true
     
     @Published var isCalenderCheckboxEnable: Bool = false

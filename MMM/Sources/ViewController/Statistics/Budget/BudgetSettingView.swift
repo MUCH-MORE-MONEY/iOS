@@ -49,7 +49,7 @@ struct BudgetSettingView: View {
                             }
                             .navigationTransition(start: startTransition, to: toTransition)
                     case .expense:
-                        BudgetDetail03View(budgetSettingViewModel: viewModel)
+                        BudgetDetail03View(viewModel: viewModel)
                             .onTapGesture {
                                 // 강제로 탭 제스처를 만들어서 전체 뷰에 대한 터치 이벤트를 막음
                             }

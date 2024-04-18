@@ -32,5 +32,3 @@ final class BudgetSettingViewModel: ObservableObject {
         isFocusTextField.toggle()
     }
 }
-
-

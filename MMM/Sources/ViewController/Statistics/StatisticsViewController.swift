@@ -413,6 +413,9 @@ extension StatisticsViewController {
     
     /// 에산설정 뷰
     private func pushBudgetSettingViewController(_ isPush: Bool) {
+		guard let reactor = reactor else { return }
+//		reactor.currentState.preBudget // 임시: 사용하렴 정우야
+		
         let interface = BudgetSettingViewInterface()
         let vc = interface.budgetSettingViewUI()
         

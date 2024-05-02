@@ -30,7 +30,7 @@ final class StatisticsReactor: Reactor {
 		case setAverage(Double)
 		case setSummary
 		case resetSummary
-		case setBudget(Budget)
+		case setBudget(Budget, Bool)
 		case setPaySum(StatisticsSum)
 		case presentSatisfaction(Bool)
 		case pushMoreCategory(Bool)
@@ -44,6 +44,7 @@ final class StatisticsReactor: Reactor {
 	struct State {
 		var date = Date() // 월
 		var budget: Budget = .init(dateYM: Date().getFormattedYM(), budget: nil, estimatedEarning: nil)
+		var preBudget: Budget = .init(dateYM: Date().previousMonth().getFormattedYM(), budget: nil, estimatedEarning: nil) // 이전 달
 		var paySum: StatisticsSum = .init(dateYM: Date().getFormattedYM(), economicActivitySumAmt: nil)
 		var percent: Int = 0
 		var average: Double = 0.0 // 평균값
@@ -85,13 +86,14 @@ extension StatisticsReactor {
 		case .loadData:
 			return .concat([
 				.just(.setLoading(true)),
-				self.getBudget(currentState.date),			// 예산
-				self.getSum(currentState.date, type: "01"),	// 현재 지출
-				self.getStatisticsAverage(currentState.date), // 평균값
-				self.getCategory(currentState.date, "01"),	// 지출 카테고리
-				self.getCategory(currentState.date, "02"),	// 수입 카테고리
-				self.getStatisticsList(currentState.date, "01", true), // 아쉬운 List
-				self.getStatisticsList(currentState.date, "03", true), // 만족스러운 List
+				self.getBudget(currentState.date),						// 예산
+				self.getBudget(currentState.date.previousMonth(), true),// 이전 예산
+				self.getSum(currentState.date, type: "01"),				// 현재 지출
+				self.getStatisticsAverage(currentState.date), 			// 평균값
+				self.getCategory(currentState.date, "01"),				// 지출 카테고리
+				self.getCategory(currentState.date, "02"),				// 수입 카테고리
+				self.getStatisticsList(currentState.date, "01", true), 	// 아쉬운 List
+				self.getStatisticsList(currentState.date, "03", true), 	// 만족스러운 List
 				self.getStatisticsList(currentState.date, self.currentState.satisfaction.id, true), // viewWillAppear일때, 현재 만족도를 불러와야한다.
 				.just(.setLoading(false))
 			])
@@ -138,6 +140,7 @@ extension StatisticsReactor {
 					.just(.setDate(date)),
 					.just(.resetSummary),
 					self.getBudget(date),
+					self.getBudget(date.previousMonth(), true),
 					self.getSum(date, type: "01"),
 					self.getStatisticsAverage(date),
 					self.getCategory(date, "02"),
@@ -197,12 +200,16 @@ extension StatisticsReactor {
 
 			// 카테고리 추가할때 사용하기 위해 저장
 			Constants.setKeychain(date.getFormattedYMD(), forKey: Constants.KeychainKey.statisticsDate)
-		case let .setBudget(budget):
+		case let .setBudget(budget, isPreMonth):
 			// 임시
 //			if newState.date.getFormattedYM() == "202402" || newState.date.getFormattedYM() == "202404" {
 //				newState.budget = .init(dateYM: "", budget: 1000000, estimatedEarning: 200000000)
 //			} else {
-			newState.budget = budget
+			if isPreMonth {
+				newState.preBudget = budget
+			} else {
+				newState.budget = budget
+			}
 //			}
 		case let .setPaySum(sum):
 //			let sum: StatisticsSum = .init(dateYM: "", economicActivitySumAmt: 3000) // 임시
@@ -256,10 +263,10 @@ extension StatisticsReactor {
 //MARK: - Action
 extension StatisticsReactor {
 	// 예산 불러오기
-	func getBudget(_ date: Date) -> Observable<Mutation> {
+	func getBudget(_ date: Date, _ isPreMonth: Bool = false) -> Observable<Mutation> {
 		return MMMAPIService().getBudget(dateYM: date.getFormattedYM())
 			.map { (response, error) -> Mutation in
-				return .setBudget(response.data)
+				return .setBudget(response.data, isPreMonth)
 			}
 			.catchAndReturn(.setError)
 	}

@@ -59,6 +59,14 @@ extension Date {
 		dateformat.dateFormat = "yyyyMM"
 		return dateformat.string(from: self)
 	}
+	
+	/// 이전달
+	func previousMonth() -> Date {
+		guard let previousMonth = Calendar.current.date(byAdding: .month, value: -1, to: self) else {
+			return self
+		}
+		return previousMonth
+	}
     
     func getFormattedTime() -> String {
         let dateformat = DateFormatter()

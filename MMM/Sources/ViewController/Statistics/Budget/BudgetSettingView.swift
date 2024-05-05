@@ -12,6 +12,7 @@ struct BudgetSettingView: View {
     @State var currentStep: CurrentStep = .main
     @StateObject var viewModel = BudgetSettingViewModel()
     @FocusState private var isFocus: Bool
+    @Environment(\.dismiss) private var dismiss
     
     enum CurrentStep {
         case main       // 예산 세팅
@@ -136,10 +137,19 @@ struct BudgetSettingView: View {
                 }
                 .padding([.leading, .trailing, .bottom], 24)
             }
-
+            .navigationBarBackButtonHidden()
             .background(Color(R.Color.gray900))
             .onTapGesture {
                 viewModel.dismissKeyboard()
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Text("닫기")
+                    }
+                }
             }
         }
     }

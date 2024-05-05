@@ -32,6 +32,8 @@ struct BudgetSettingView: View {
         return !viewModel.transition ? .leading : .trailing
     }
     
+    
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -142,12 +144,17 @@ struct BudgetSettingView: View {
             .onTapGesture {
                 viewModel.dismissKeyboard()
             }
+            .navigationTitle("예산설정")
+            .navigationBarTitleDisplayMode(.inline)
+            .foregroundStyle(R.Color.white.suColor)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         dismiss()
                     } label: {
                         Text("닫기")
+                            .foregroundStyle(R.Color.white.suColor)
+                            .font(R.Font.body1.suFont)
                     }
                 }
             }

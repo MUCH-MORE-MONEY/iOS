@@ -68,7 +68,6 @@
 		45E909242BBFC62400E3DF20 /* CustomCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E909232BBFC62400E3DF20 /* CustomCalendarView.swift */; };
 		45EA263F2BCF483D001BAC57 /* TooltipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45EA263E2BCF483D001BAC57 /* TooltipView.swift */; };
 		45FD3C852B887E1500C14A49 /* BudgetSettingSubTitleModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FD3C842B887E1500C14A49 /* BudgetSettingSubTitleModifier.swift */; };
-		6A01321D2BE7523600906F94 /* BudgetSettingButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A01321C2BE7523600906F94 /* BudgetSettingButtonStyle.swift */; };
 		6A0379752A2443B9005EE07F /* Ex+UITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0379742A2443B9005EE07F /* Ex+UITextView.swift */; };
 		6A03BB4C2ADD555D00F86756 /* AddCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A03BB4B2ADD555D00F86756 /* AddCategoryViewController.swift */; };
 		6A03FEE32ADBDB7300DA3D15 /* AddCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A03FEE22ADBDB7300DA3D15 /* AddCategoryView.swift */; };
@@ -402,7 +401,6 @@
 		45E909232BBFC62400E3DF20 /* CustomCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCalendarView.swift; sourceTree = "<group>"; };
 		45EA263E2BCF483D001BAC57 /* TooltipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooltipView.swift; sourceTree = "<group>"; };
 		45FD3C842B887E1500C14A49 /* BudgetSettingSubTitleModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetSettingSubTitleModifier.swift; sourceTree = "<group>"; };
-		6A01321C2BE7523600906F94 /* BudgetSettingButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetSettingButtonStyle.swift; sourceTree = "<group>"; };
 		6A0379742A2443B9005EE07F /* Ex+UITextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UITextView.swift"; sourceTree = "<group>"; };
 		6A03BB4B2ADD555D00F86756 /* AddCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryViewController.swift; sourceTree = "<group>"; };
 		6A03FEE22ADBDB7300DA3D15 /* AddCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryView.swift; sourceTree = "<group>"; };
@@ -900,14 +898,6 @@
 			path = Modifiers;
 			sourceTree = "<group>";
 		};
-		6A01321B2BE7522300906F94 /* ButtonStyle */ = {
-			isa = PBXGroup;
-			children = (
-				6A01321C2BE7523600906F94 /* BudgetSettingButtonStyle.swift */,
-			);
-			path = ButtonStyle;
-			sourceTree = "<group>";
-		};
 		6A08B47B29FF5D3D0080719E /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
@@ -1054,7 +1044,6 @@
 		6A7DE6B829F771F8009354EF /* Configuration */ = {
 			isa = PBXGroup;
 			children = (
-				6A01321B2BE7522300906F94 /* ButtonStyle */,
 				45FD3C832B887DEB00C14A49 /* Modifiers */,
 				6A8B776229FF92CC0095ECFC /* Constants.swift */,
 			);
@@ -1909,7 +1898,6 @@
 				45D831E42BBD429C00FE3D72 /* Ex+View.swift in Sources */,
 				C4199DD929FE6BE1006E5DA8 /* DatePickerViewController.swift in Sources */,
 				C4EA5B4429FA2810008D1564 /* Ex+UIStackView.swift in Sources */,
-				6A01321D2BE7523600906F94 /* BudgetSettingButtonStyle.swift in Sources */,
 				6A0F234729DC0DB20063673B /* TabBarController.swift in Sources */,
 				C4BBD2812ABF01B40055FA65 /* CategoryDetailViewController.swift in Sources */,
 				6A2B5D592A97217F00CCBFBE /* PushSettingReactor.swift in Sources */,

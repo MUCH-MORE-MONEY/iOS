@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 
 struct BudgetDetail02View: View {
-    @ObservedObject var budgetSettingViewModel: BudgetSettingViewModel
+    @ObservedObject var viewModel: BudgetSettingViewModel
     @FocusState private var isFocus: Bool
     @State private var cancellables = Set<AnyCancellable>()
     
@@ -22,11 +22,11 @@ struct BudgetDetail02View: View {
                 .foregroundStyle(Color(R.Color.gray200))
                 .padding(.bottom, 16)
 
-            PriceTextFieldViewRepresentable(viewModel: budgetSettingViewModel)
+            PriceTextFieldViewRepresentable(viewModel: viewModel)
                 .focused($isFocus)
                 .frame(height: 40)
                 .onAppear {
-                    budgetSettingViewModel.$isFocusTextField
+                    viewModel.$isFocusTextField
                         .sinkOnMainThread { isFocus in
                             self.isFocus = false
                         }
@@ -36,7 +36,7 @@ struct BudgetDetail02View: View {
             HStack(spacing: 4) {
                 Spacer()
                 Text("지난 달 작성한 수입")
-                Text("000,000원")
+                Text("\(viewModel.previousIncome.withCommas())원")
             }
             .font(Font(R.Font.body3))
             .foregroundStyle(Color(R.Color.gray300))
@@ -47,6 +47,6 @@ struct BudgetDetail02View: View {
 }
 
 #Preview {
-    BudgetDetail02View(budgetSettingViewModel: BudgetSettingViewModel())
+    BudgetDetail02View(viewModel: BudgetSettingViewModel())
 }
 

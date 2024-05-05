@@ -11,6 +11,8 @@ import Combine
 final class BudgetSettingViewModel: ObservableObject {
     @Published var budget: Int = 0
     @Published var expectedIncome: String = ""
+    @Published var previousIncome: Int = 10000000
+    @Published var savingPrice: Int = 0
     @Published var isFocusTextField: Bool = false
     @Published var isShowingTextFieldSheet: Bool = false     //03 Setting뷰의 직접 입력하기 시트
     @Published var isFirstStep: Bool = true

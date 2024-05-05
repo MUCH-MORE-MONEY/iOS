@@ -72,7 +72,7 @@ extension PriceTextFieldView {
     override func setBind() {
         priceTextField.textPublisher
             .map{String(Array($0).filter{$0.isNumber})} // 숫자만 추출
-            .assignOnMainThread(to: \.priceInput, on: viewModel)
+            .assignOnMainThread(to: \.expectedIncome, on: viewModel)
             .store(in: &cancellable)
             
     }

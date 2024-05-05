@@ -45,7 +45,7 @@ struct BudgetDetail03View: View {
             }
             
             VStack {
-                Text("\(viewModel.priceInput)만원")
+                Text("\(viewModel.expectedIncome)만원")
                     .font(Font(R.Font.h2))
                     .foregroundStyle(Color(R.Color.white))
                     .padding(.bottom, 22)

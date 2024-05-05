@@ -9,18 +9,12 @@ import SwiftUI
 
 struct BudgetSettingView: View {
     @Environment(\.presentationMode) var presentationMode
-    @State var currentStep: CurrentStep = .main
     @StateObject var viewModel = BudgetSettingViewModel()
     @FocusState private var isFocus: Bool
     @Environment(\.dismiss) private var dismiss
     
-    enum CurrentStep {
-        case main       // 예산 세팅
-        case income     // 예상 수입 설정
-        case expense    // 지출 예산 설정
-        case budget     // 사용가능 예산
-        case calendar   // 날짜
-    }
+    
+    
     
     @State private var nextButtonTitle = "다음"
     
@@ -37,11 +31,11 @@ struct BudgetSettingView: View {
     var body: some View {
         NavigationView {
             VStack {
-                SegmentedView(selected: $currentStep)
+                SegmentedView(selected:$viewModel.currentStep)
                     .padding(.top, 16)
                     .padding([.leading, .trailing], 24)
                 VStack {
-                    switch currentStep {
+                    switch viewModel.currentStep {
                     case .main:
                         BudgetDetail01View(budgetSettingViewModel: viewModel)
                             .navigationTransition(start: startTransition, to: toTransition)
@@ -67,7 +61,7 @@ struct BudgetSettingView: View {
                 }
                 .padding(.top, 48)
                 .padding([.leading, .trailing], 24)
-                .animation(.easeInOut, value: currentStep)
+                .animation(.easeInOut, value: viewModel.currentStep)
                 
                 Spacer()
                 HStack(spacing: 8) {
@@ -75,18 +69,18 @@ struct BudgetSettingView: View {
                         Button {
                             viewModel.transition = true
                             
-                            switch currentStep {
+                            switch viewModel.currentStep {
                             case .main:
                                 break
                             case .income:
                                 viewModel.isFirstStep = true
-                                currentStep = .main
+                                viewModel.currentStep = .main
                             case .expense:
-                                currentStep = .income
+                                viewModel.currentStep = .income
                             case .budget:
-                                currentStep = .expense
+                                viewModel.currentStep = .expense
                             case .calendar:
-                                currentStep = .budget
+                                viewModel.currentStep = .budget
                             }
                         } label: {
                             Text("이전")
@@ -100,16 +94,16 @@ struct BudgetSettingView: View {
                     Button {
                         viewModel.transition = false
                         
-                        switch currentStep {
+                        switch viewModel.currentStep {
                         case .main:
                             viewModel.isFirstStep = false
-                            currentStep = .income
+                            viewModel.currentStep = .income
                         case .income:
-                            currentStep = .expense
+                            viewModel.currentStep = .expense
                         case .expense:
-                            currentStep = .budget
+                            viewModel.currentStep = .budget
                         case .budget:
-                            currentStep = .calendar
+                            viewModel.currentStep = .calendar
                         case .calendar:
                             
                             // 이미 완료 버튼으로 바뀌었고 버튼을 누르게 되면 pop
@@ -131,11 +125,12 @@ struct BudgetSettingView: View {
                         Text(nextButtonTitle)
                             .frame(maxWidth: .infinity, minHeight: 56)
                             .font(R.Font.title1.suFont)
-                            .foregroundStyle(R.Color.gray100.suColor)
-                            .background(viewModel.isFirstStep ? R.Color.gray800.suColor : R.Color.orange500.suColor)
+                            .foregroundStyle(viewModel.isNextButtonDisable ? R.Color.gray400.suColor : R.Color.gray100.suColor)
+                            .background(viewModel.isNextButtonDisable ? R.Color.gray600.suColor: (viewModel.isFirstStep ? R.Color.gray800.suColor : R.Color.orange500.suColor))
 
                     }
-
+                    // step2에서 값을 입력하지 않았을 경우 disable
+                    .disabled(viewModel.isNextButtonDisable)
                 }
                 .padding([.leading, .trailing, .bottom], 24)
             }
@@ -144,7 +139,7 @@ struct BudgetSettingView: View {
             .onTapGesture {
                 viewModel.dismissKeyboard()
             }
-            .navigationTitle("예산설정")
+            .navigationTitle("지출 예산 설정하기")
             .navigationBarTitleDisplayMode(.inline)
             .foregroundStyle(R.Color.white.suColor)
             .toolbar {
@@ -179,8 +174,8 @@ struct BudgetSettingView: View {
 
 struct SegmentedView: View {
     
-    let segments: [BudgetSettingView.CurrentStep] = [.main, .income, .expense, .budget, .calendar]
-    @Binding var selected: BudgetSettingView.CurrentStep
+    let segments: [BudgetSettingViewModel.CurrentStep] = [.main, .income, .expense, .budget, .calendar]
+    @Binding var selected: BudgetSettingViewModel.CurrentStep
     @Namespace var name
     
     var body: some View {

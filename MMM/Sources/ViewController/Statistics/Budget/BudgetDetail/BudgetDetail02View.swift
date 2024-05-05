@@ -35,7 +35,7 @@ struct BudgetDetail02View: View {
             
             HStack(spacing: 4) {
                 Spacer()
-                Text("지난 달 수입")
+                Text("지난 달 작성한 수입")
                 Text("000,000원")
             }
             .font(Font(R.Font.body3))

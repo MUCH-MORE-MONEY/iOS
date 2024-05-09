@@ -54,11 +54,11 @@ final class BudgetSettingViewModel: ObservableObject {
     }
     
     private func bind() {
-        // 두 변수를 합친 값을 계산하고 새로운 속성으로 사용
-        Publishers.CombineLatest($expectedIncome, $currentStep)
-            .map { expectedIncome, currentStep in
-                // 예상 수입이 비어있지 않고, 현재 단계가 income이 아니면 버튼을 활성화
-                return expectedIncome.isEmpty && currentStep == .income
+        // 세 변수를 합친 값을 계산하고 새로운 속성으로 사용
+        Publishers.CombineLatest3($expectedIncome, $currentStep, $isPriceValid)
+            .map { expectedIncome, currentStep , isPriceValid in
+                // 예상 수입이 비어있지 않고, 현재 단계가 income이 아니면 버튼을 활성화 OR 예산을 정확히 입력하지 않았을 경우
+                return expectedIncome.isEmpty && currentStep == .income || !isPriceValid
             }
             .sink(receiveValue: { [weak self] isActive in
                 guard let self = self else { return }
@@ -68,7 +68,10 @@ final class BudgetSettingViewModel: ObservableObject {
         
         $expectedIncome
             .map { income in
-                guard let incomeValue = Int(income) else { return false }
+                guard let incomeValue = Int(income) else {
+                    return income == "" ? true : false
+                }
+                
                 return 0 <= incomeValue && incomeValue <= 10_000
             }
             .assign(to: &$isPriceValid)

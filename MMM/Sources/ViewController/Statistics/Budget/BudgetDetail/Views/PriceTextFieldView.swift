@@ -36,8 +36,8 @@ extension PriceTextFieldView {
             if let price = Int(viewModel.expectedIncome) {
                 $0.text = price.withCommas() + " 원"
             }
-            $0.placeholder = "만원 단위로 입력"
-            
+            let placeholder = "만원 단위로 입력"
+            $0.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedString.Key.foregroundColor: R.Color.gray500])
             $0.font = R.Font.h2
             $0.textColor = R.Color.white
             $0.keyboardType = .numberPad     // 숫자 키보드

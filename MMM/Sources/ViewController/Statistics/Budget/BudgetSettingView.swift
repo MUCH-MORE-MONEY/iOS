@@ -18,11 +18,11 @@ struct BudgetSettingView: View {
     }
     
     private var startTransition: Edge {
-        return !viewModel.transition ? .trailing : .leading
+        return viewModel.transition ? .leading : .trailing
     }
     
     private var toTransition: Edge {
-        return !viewModel.transition ? .leading : .trailing
+        return viewModel.transition ? .trailing : .leading
     }
     
     

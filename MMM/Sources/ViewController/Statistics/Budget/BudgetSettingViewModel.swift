@@ -20,16 +20,16 @@ final class BudgetSettingViewModel: ObservableObject {
     @Published var savingPrice: String = ""
     
     @Published var isFocusTextField: Bool = false
-    @Published var isShowingTextFieldSheet: Bool = false     //03 Setting뷰의 직접 입력하기 시트
+    //03 Setting뷰의 직접 입력하기 시트
+    @Published var isShowingTextFieldSheet: Bool = false
+    // step1일 경우 버튼의 사이즈가 다르기 때문에 사용
     @Published var isFirstStep: Bool = true
     
     @Published var isCalenderCheckboxEnable: Bool = false
-    
-//    @Published var compeleteSteps: Bool = false
+
     @Published var transition: Bool = true  // true이면 next
-    
+    // 현재 segment의 step
     @Published var currentStep: CurrentStep = .main
-    
     // 들어온 퍼블리셔의 값 일치 여부를 반환하는 퍼블리셔 -> budget02에서 textfield가 1억 넘었을 경우를 나타냄
     @Published var isIncomeValid: Bool = true
     // 수입보다 저축 금액이 큰지 판단하여 warning label을 띄워주는 변수 -> budget03

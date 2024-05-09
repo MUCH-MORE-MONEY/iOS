@@ -9,8 +9,10 @@ import SwiftUI
 import Combine
 
 final class BudgetSettingViewModel: ObservableObject {
+    @Published var budget: Budget
+    
     // 이전 달 예산 금액
-    @Published var budget: Int = 0
+//    @Published var budget: Int = 0
     @Published var previousIncome: Int = 10_000_000
     // budget02에서 사용하는 price property
     @Published var expectedIncome: String = ""
@@ -53,7 +55,8 @@ final class BudgetSettingViewModel: ObservableObject {
     @Published var isNextButtonDisable: Bool = false
     
     
-    init() {
+    init(budget: Budget) {
+        self.budget = budget
         bind()
     }
     

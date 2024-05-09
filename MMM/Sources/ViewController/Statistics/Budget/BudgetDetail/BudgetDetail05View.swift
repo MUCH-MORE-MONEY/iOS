@@ -83,7 +83,7 @@ struct BudgetDetail05View: View {
 }
 
 #Preview {
-    BudgetDetail05View(viewModel: BudgetSettingViewModel())
+    BudgetDetail05View(viewModel: BudgetSettingViewModel(budget: Budget.getDummy()))
 }
 
 

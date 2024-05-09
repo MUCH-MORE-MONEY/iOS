@@ -9,7 +9,7 @@ import SwiftUI
 
 struct BudgetSettingView: View {
     @Environment(\.presentationMode) var presentationMode
-    @StateObject var viewModel = BudgetSettingViewModel()
+    @StateObject var viewModel: BudgetSettingViewModel
     @FocusState private var isFocus: Bool
     @Environment(\.dismiss) private var dismiss
     
@@ -169,7 +169,7 @@ struct BudgetSettingView: View {
 }
 
 #Preview {
-    BudgetSettingView()
+    BudgetSettingView(viewModel: BudgetSettingViewModel(budget: Budget.getDummy()))
 }
 
 struct SegmentedView: View {
@@ -212,8 +212,9 @@ final class BudgetSettingHostingController: UIHostingController<BudgetSettingVie
 }
 
 final class BudgetSettingViewInterface {
-    func budgetSettingViewUI() -> UIViewController {
-        let vc = BudgetSettingHostingController(rootView: BudgetSettingView())
+    func budgetSettingViewUI(_ budget: Budget) -> UIViewController {
+        let viewModel = BudgetSettingViewModel(budget: budget)
+        let vc = BudgetSettingHostingController(rootView: BudgetSettingView(viewModel: viewModel))
         return vc
     }
 }

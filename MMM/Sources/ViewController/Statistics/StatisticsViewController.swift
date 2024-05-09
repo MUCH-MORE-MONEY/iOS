@@ -414,9 +414,9 @@ extension StatisticsViewController {
     private func pushBudgetSettingViewController(_ isPush: Bool) {
 		guard let reactor = reactor else { return }
 //		reactor.currentState.preBudget // 임시: 사용하렴 정우야
-		
+        let budget = reactor.currentState.preBudget
         let interface = BudgetSettingViewInterface()
-        let vc = interface.budgetSettingViewUI()
+        let vc = interface.budgetSettingViewUI(budget)
         
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         

@@ -82,11 +82,10 @@ final class StatisticsViewController: BaseViewController, View {
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
-        Tracking.StatiBudget.pageViewLogEvent()
-        
-		guard let reactor = reactor else { return }
-
 		super.viewWillAppear(animated)
+        Tracking.StatiBudget.pageViewLogEvent()
+        self.navigationController?.setNavigationBarHidden(false, animated: animated)
+        guard let reactor = reactor else { return }
 		// Root View인 NavigationView에 item 수정하기
 		if let navigationController = self.navigationController {
 			if let rootVC = navigationController.viewControllers.first {
@@ -418,6 +417,8 @@ extension StatisticsViewController {
 		
         let interface = BudgetSettingViewInterface()
         let vc = interface.budgetSettingViewUI()
+        
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
         
         navigationController?.pushViewController(vc, animated: true)
     }

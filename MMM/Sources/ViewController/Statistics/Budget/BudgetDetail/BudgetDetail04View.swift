@@ -26,7 +26,7 @@ struct BudgetDetail04View: View {
                     .foregroundStyle(Color(R.Color.white))
                 Rectangle()
                     .fill(Color(R.Color.orange500))
-                    .frame(width: .infinity, height: 2)
+                    .frame(height: 2)
             }
             .padding(EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16))
             .background(Color(R.Color.gray800))

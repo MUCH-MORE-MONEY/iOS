@@ -57,7 +57,6 @@ struct BudgetDetail03View: View {
                     .padding(.bottom, 32)
                 
                 Button {
-                    print("ssss")
                     viewModel.isShowingTextFieldSheet = true
                 } label: {
                     Text("직접 입력하기")
@@ -95,17 +94,25 @@ struct BudgetDetail03View: View {
                 }
                 .padding(.top, 32)
                 
-                PriceTextFieldViewRepresentable(viewModel: viewModel)
-                    .padding(.top, 16)
-                    .focused($isFocus)
-                    .frame(height: 40)
-                    .onAppear {
-                        viewModel.$isFocusTextField
-                            .sinkOnMainThread { isFocus in
-                                self.isFocus = false
-                            }
-                            .store(in: &cancellables)
+                VStack(alignment: .leading, spacing: 12) {
+                    PriceTextFieldViewRepresentable(viewModel: viewModel)
+                        .padding(.top, 16)
+                        .focused($isFocus)
+                        .frame(height: 40)
+                        .onAppear {
+                            viewModel.$isFocusTextField
+                                .sinkOnMainThread { isFocus in
+                                    self.isFocus = false
+                                }
+                                .store(in: &cancellables)
+                        }
+                    if !viewModel.isSavingValid {
+                        Text("예상 수입을 넘어선 금액이에요 (최대 {예상수입}만원)")
+                            .font(R.Font.body3.suFont)
+                            .foregroundStyle(R.Color.red500.suColor)
+                            .autoShake(shakeCount: $viewModel.shakes, triggerFlag: viewModel.isSavingValid)
                     }
+                }
                 Spacer()
             }
             .padding([.leading, .trailing], 24)

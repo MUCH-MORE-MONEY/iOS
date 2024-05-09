@@ -34,15 +34,17 @@ extension PriceTextFieldView {
     override func setAttribute() {
         priceTextField = priceTextField.then {
             if let price = Int(viewModel.expectedIncome) {
-                $0.text = price.withCommas() + " 원"
+                $0.text = price.withCommas() + "만원"
             }
             let placeholder = "만원 단위로 입력"
+            let isStep2 = viewModel.currentStep == .income
+            
             $0.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedString.Key.foregroundColor: R.Color.gray500])
             $0.font = R.Font.h2
-            $0.textColor = R.Color.white
+            $0.textColor = isStep2 ? R.Color.white : R.Color.gray900
             $0.keyboardType = .numberPad     // 숫자 키보드
             $0.tintColor = R.Color.gray400     // cursor color
-            $0.setNumberMode(unit: "만원")     // 단위 설정
+            $0.setNumberMode(unit: isStep2 ? "만원" : " 만원")     // 단위 설정
             $0.setClearButton(with: R.Icon.cancel, mode: .always) // clear 버튼
         }
         

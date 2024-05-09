@@ -25,23 +25,28 @@ final class BudgetSettingViewModel: ObservableObject {
     
     @Published var isCalenderCheckboxEnable: Bool = false
     
-    @Published var compeleteSteps: Bool = false
+//    @Published var compeleteSteps: Bool = false
     @Published var transition: Bool = true  // true이면 next
     
     @Published var currentStep: CurrentStep = .main
     
     // 들어온 퍼블리셔의 값 일치 여부를 반환하는 퍼블리셔 -> budget02에서 textfield가 1억 넘었을 경우를 나타냄
-    @Published var isPriceValid: Bool = true
+    @Published var isIncomeValid: Bool = true
+    // 수입보다 저축 금액이 큰지 판단하여 warning label을 띄워주는 변수 -> budget03
+    @Published var isSavingValid: Bool = true
+    // shake 에니메이션 상수
+    @Published var shakes: CGFloat = 0
     
     private var cancellables = Set<AnyCancellable>()
 
     
     enum CurrentStep {
-        case main       // 예산 세팅
-        case income     // 예상 수입 설정
-        case expense    // 지출 예산 설정
-        case budget     // 사용가능 예산
-        case calendar   // 날짜
+        case main       // 01 : 예산 세팅
+        case income     // 02 : 예상 수입 설정
+        case expense    // 03 : 지출 예산 설정
+        case budget     // 04 : 사용가능 예산
+        case calendar   // 05 : 날짜
+        case complete   // 05 : 완료
     }
     
     // MARK: - Public properties
@@ -62,7 +67,7 @@ final class BudgetSettingViewModel: ObservableObject {
     
     private func bind() {
         // 세 변수를 합친 값을 계산하고 새로운 속성으로 사용
-        Publishers.CombineLatest3($expectedIncome, $currentStep, $isPriceValid)
+        Publishers.CombineLatest3($expectedIncome, $currentStep, $isIncomeValid)
             .map { expectedIncome, currentStep , isPriceValid in
                 // 예상 수입이 비어있지 않고, 현재 단계가 income이 아니면 버튼을 활성화 OR 예산을 정확히 입력하지 않았을 경우
                 return expectedIncome.isEmpty && currentStep == .income || !isPriceValid
@@ -81,7 +86,16 @@ final class BudgetSettingViewModel: ObservableObject {
                 
                 return 0 <= incomeValue && incomeValue <= 10_000
             }
-            .assign(to: &$isPriceValid)
+            .assign(to: &$isIncomeValid)
+        
+        $savingPrice
+            .map { saving in
+                guard let savingValue = Int(saving) else {
+                    return saving == "" ? true : false
+                }
+                return 0 <= savingValue && savingValue <= 10_000
+            }
+            .assign(to: &$isSavingValid)
     }
     
     

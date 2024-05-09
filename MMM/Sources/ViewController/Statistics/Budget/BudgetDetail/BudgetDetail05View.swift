@@ -12,7 +12,7 @@ struct BudgetDetail05View: View {
     @ObservedObject var viewModel: BudgetSettingViewModel
     
     private var title: String {
-        if viewModel.compeleteSteps {
+        if viewModel.currentStep == .complete {
             return "지출 예산이 세워졌어요!\n시작이 반이랍니다.\n이번 달도 해낼 수 있어요!"
         } else {
             return "일별 환산된 적정 지출 금액을\n달력에서 확인하시겠어요?"
@@ -30,7 +30,7 @@ struct BudgetDetail05View: View {
                 Spacer()
             }
             
-            if viewModel.compeleteSteps {
+            if viewModel.currentStep == .complete {
                 Spacer()
                 Image(uiImage: R.Icon.imageBackgroundBoost366)
             } else {

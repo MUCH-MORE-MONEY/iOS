@@ -42,7 +42,7 @@ extension PriceTextFieldView {
             $0.textColor = R.Color.white
             $0.keyboardType = .numberPad     // 숫자 키보드
             $0.tintColor = R.Color.gray400     // cursor color
-            $0.setNumberMode(unit: "원")     // 단위 설정
+            $0.setNumberMode(unit: "만원")     // 단위 설정
             $0.setClearButton(with: R.Icon.cancel, mode: .always) // clear 버튼
         }
         

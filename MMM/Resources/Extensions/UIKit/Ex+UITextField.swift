@@ -50,6 +50,16 @@ extension UITextField {
                 let newSelectedRange = self.textRange(from: newPosition, to: newPosition)
                 self.selectedTextRange = newSelectedRange
             }
+            
+        case 2:
+            self.text = "원"
+            self.textColor = R.Color.white
+            
+            // cursor 위치 변경
+            if let newPosition = self.position(from: self.beginningOfDocument, offset: 0) {
+                let newSelectedRange = self.textRange(from: newPosition, to: newPosition)
+                self.selectedTextRange = newSelectedRange
+            }
         default:
             self.text = ""
         }
@@ -128,8 +138,8 @@ extension UITextField: UITextFieldDelegate {
 		numberFormatter.numberStyle = .decimal // 콤마 생성
 		
 		guard let price = Int(newStringOnlyNumber), let result = numberFormatter.string(from: NSNumber(value: price)) else {
-			self.text = tag == 3 ? "원" : ""
-			self.textColor = tag == 3 ? R.Color.white : R.Color.gray900 // 빈배열로 만든후
+			self.text = tag == 3 || tag == 2 ? "원" : ""
+			self.textColor = tag == 3 || tag == 2 ? R.Color.white : R.Color.gray900 // 빈배열로 만든후
 			sendActions(for: .editingChanged)
 			return false
 		}
@@ -152,7 +162,7 @@ extension UITextField: UITextFieldDelegate {
 		}
 
 		// 단위에 따른 color 변경
-		self.textColor = price > limit ? R.Color.red500 : self.tag == 3 ? R.Color.white : R.Color.gray900
+        self.textColor = price > limit ? R.Color.red500 : self.tag == 3 || self.tag == 2 ? R.Color.white : R.Color.gray900
 		
 		// 범위가 넘어갈 경우
 		if price > limit {

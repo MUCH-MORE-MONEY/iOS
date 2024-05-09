@@ -9,10 +9,14 @@ import SwiftUI
 import Combine
 
 final class BudgetSettingViewModel: ObservableObject {
+    // 이전 달 예산 금액
     @Published var budget: Int = 0
+    @Published var previousIncome: Int = 10_000_000
+    // budget02에서 사용하는 price property
     @Published var expectedIncome: String = ""
-    @Published var previousIncome: Int = 10000000
-    @Published var savingPrice: Int = 0
+    // budget03에서 사용하는 price property
+    @Published var savingPrice: String = ""
+    
     @Published var isFocusTextField: Bool = false
     @Published var isShowingTextFieldSheet: Bool = false     //03 Setting뷰의 직접 입력하기 시트
     @Published var isFirstStep: Bool = true

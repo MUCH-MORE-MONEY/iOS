@@ -72,11 +72,18 @@ extension PriceTextFieldView {
     }
     
     override func setBind() {
-        priceTextField.textPublisher
-            .map{String(Array($0).filter{$0.isNumber})} // 숫자만 추출
-            .assignOnMainThread(to: \.expectedIncome, on: viewModel)
-            .store(in: &cancellable)
-            
+        // 현재 스탭에 따라서 binding을 다르게 해줌
+        if viewModel.currentStep == .income {
+            priceTextField.textPublisher
+                .map{String(Array($0).filter{$0.isNumber})} // 숫자만 추출
+                .assignOnMainThread(to: \.expectedIncome, on: viewModel)
+                .store(in: &cancellable)
+        } else if viewModel.currentStep == .expense {
+            priceTextField.textPublisher
+                .map{String(Array($0).filter{$0.isNumber})} // 숫자만 추출
+                .assignOnMainThread(to: \.savingPrice, on: viewModel)
+                .store(in: &cancellable)
+        }
     }
 }
 

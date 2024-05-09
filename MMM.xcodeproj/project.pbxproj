@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		450E3B292BEC583C00F6AA75 /* Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450E3B282BEC583C00F6AA75 /* Modifiers.swift */; };
 		45AFC2A92AC296E1004DF76E /* CustomPushTextSettingReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AFC2A82AC296E1004DF76E /* CustomPushTextSettingReactor.swift */; };
 		45AFC2AB2AC2A564004DF76E /* CustomPushTextSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AFC2AA2AC2A564004DF76E /* CustomPushTextSettingViewController.swift */; };
 		45B878C52B341A3400EF27FB /* BottomPageControlView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B878C42B341A3400EF27FB /* BottomPageControlView2.swift */; };
@@ -67,7 +68,6 @@
 		45E909222BBFB2AC00E3DF20 /* AlertText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E909212BBFB2AC00E3DF20 /* AlertText.swift */; };
 		45E909242BBFC62400E3DF20 /* CustomCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E909232BBFC62400E3DF20 /* CustomCalendarView.swift */; };
 		45EA263F2BCF483D001BAC57 /* TooltipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45EA263E2BCF483D001BAC57 /* TooltipView.swift */; };
-		45FD3C852B887E1500C14A49 /* BudgetSettingSubTitleModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FD3C842B887E1500C14A49 /* BudgetSettingSubTitleModifier.swift */; };
 		6A0379752A2443B9005EE07F /* Ex+UITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0379742A2443B9005EE07F /* Ex+UITextView.swift */; };
 		6A03BB4C2ADD555D00F86756 /* AddCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A03BB4B2ADD555D00F86756 /* AddCategoryViewController.swift */; };
 		6A03FEE32ADBDB7300DA3D15 /* AddCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A03FEE22ADBDB7300DA3D15 /* AddCategoryView.swift */; };
@@ -359,6 +359,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		450E3B282BEC583C00F6AA75 /* Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modifiers.swift; sourceTree = "<group>"; };
 		45AFC2A82AC296E1004DF76E /* CustomPushTextSettingReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPushTextSettingReactor.swift; sourceTree = "<group>"; };
 		45AFC2AA2AC2A564004DF76E /* CustomPushTextSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPushTextSettingViewController.swift; sourceTree = "<group>"; };
 		45B878C42B341A3400EF27FB /* BottomPageControlView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomPageControlView2.swift; sourceTree = "<group>"; };
@@ -400,7 +401,6 @@
 		45E909212BBFB2AC00E3DF20 /* AlertText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertText.swift; sourceTree = "<group>"; };
 		45E909232BBFC62400E3DF20 /* CustomCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCalendarView.swift; sourceTree = "<group>"; };
 		45EA263E2BCF483D001BAC57 /* TooltipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooltipView.swift; sourceTree = "<group>"; };
-		45FD3C842B887E1500C14A49 /* BudgetSettingSubTitleModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetSettingSubTitleModifier.swift; sourceTree = "<group>"; };
 		6A0379742A2443B9005EE07F /* Ex+UITextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ex+UITextView.swift"; sourceTree = "<group>"; };
 		6A03BB4B2ADD555D00F86756 /* AddCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryViewController.swift; sourceTree = "<group>"; };
 		6A03FEE22ADBDB7300DA3D15 /* AddCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryView.swift; sourceTree = "<group>"; };
@@ -841,6 +841,7 @@
 			isa = PBXGroup;
 			children = (
 				45D831E32BBD429C00FE3D72 /* Ex+View.swift */,
+				450E3B282BEC583C00F6AA75 /* Modifiers.swift */,
 			);
 			path = SwiftUI;
 			sourceTree = "<group>";
@@ -888,14 +889,6 @@
 				45E9091F2BBFB27D00E3DF20 /* CommonText.swift */,
 			);
 			path = Text;
-			sourceTree = "<group>";
-		};
-		45FD3C832B887DEB00C14A49 /* Modifiers */ = {
-			isa = PBXGroup;
-			children = (
-				45FD3C842B887E1500C14A49 /* BudgetSettingSubTitleModifier.swift */,
-			);
-			path = Modifiers;
 			sourceTree = "<group>";
 		};
 		6A08B47B29FF5D3D0080719E /* Utilities */ = {
@@ -1044,7 +1037,6 @@
 		6A7DE6B829F771F8009354EF /* Configuration */ = {
 			isa = PBXGroup;
 			children = (
-				45FD3C832B887DEB00C14A49 /* Modifiers */,
 				6A8B776229FF92CC0095ECFC /* Constants.swift */,
 			);
 			path = Configuration;
@@ -1870,7 +1862,6 @@
 				45D831D62BBD3DF700FE3D72 /* BudgetSettingView.swift in Sources */,
 				6A08B47829FF5C7E0080719E /* APIParameters.swift in Sources */,
 				45D07CCF2AC4071A001C08AB /* CustomPushTimeSettingViewController.swift in Sources */,
-				45FD3C852B887E1500C14A49 /* BudgetSettingSubTitleModifier.swift in Sources */,
 				C46409DA2AB9625E00A899AD /* BottomSheetViewController2.swift in Sources */,
 				C433BA052AE95E2D000793CB /* CategoryEmptyCollectionViewCell.swift in Sources */,
 				C4BBD2912AC0498E0055FA65 /* CategoryEditReactor.swift in Sources */,
@@ -2041,6 +2032,7 @@
 				C46409B82AB598D100A899AD /* BaseCollectionViewCell.swift in Sources */,
 				C41193F729D3D954003DBC15 /* Ex+UITableView.swift in Sources */,
 				C46D5E572AD0799900EBE5D7 /* CategoryEditTableViewCellReactor.swift in Sources */,
+				450E3B292BEC583C00F6AA75 /* Modifiers.swift in Sources */,
 				C4D7FC892A08A61C00565291 /* CalendarCell.swift in Sources */,
 				C433A06D29EE53BB008B26DF /* HomeTableViewCell.swift in Sources */,
 				C46409C02AB5BE7900A899AD /* CategoryEditReqDto.swift in Sources */,

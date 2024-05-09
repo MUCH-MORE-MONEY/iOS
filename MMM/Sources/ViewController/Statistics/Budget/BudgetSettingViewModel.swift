@@ -24,6 +24,9 @@ final class BudgetSettingViewModel: ObservableObject {
     
     @Published var currentStep: CurrentStep = .main
     
+    // 들어온 퍼블리셔의 값 일치 여부를 반환하는 퍼블리셔 -> budget02에서 textfield가 1억 넘었을 경우를 나타냄
+    @Published var isPriceValid: Bool = true
+    
     private var cancellables = Set<AnyCancellable>()
 
     
@@ -37,9 +40,6 @@ final class BudgetSettingViewModel: ObservableObject {
     
     // MARK: - Public properties
     // 들어온 퍼블리셔의 값 일치 여부를 반환하는 퍼블리셔
-    lazy var isPriceVaild: AnyPublisher<Bool, Never> = $expectedIncome
-        .map {0 <= Int($0) ?? 0 && Int($0) ?? 0 <= 10_000 } // 1억(1,000만원)보다 작을 경우
-        .eraseToAnyPublisher()
     
     lazy var isValidByWon: AnyPublisher<Bool, Never> = $expectedIncome
         .map { 0 <= Int($0) ?? 0 && Int($0) ?? 0 <= 100_000_000 } // 1억(1,000만원)보다 작을 경우
@@ -65,6 +65,13 @@ final class BudgetSettingViewModel: ObservableObject {
                 self.isNextButtonDisable = isActive
             })
             .store(in: &cancellables)
+        
+        $expectedIncome
+            .map { income in
+                guard let incomeValue = Int(income) else { return false }
+                return 0 <= incomeValue && incomeValue <= 10_000
+            }
+            .assign(to: &$isPriceValid)
     }
     
     

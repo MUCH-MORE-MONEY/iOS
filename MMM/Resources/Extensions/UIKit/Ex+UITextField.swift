@@ -40,18 +40,20 @@ extension UITextField {
 	}
 	
 	@objc func clear(sender: AnyObject) {
-		if tag == 3 {
-			self.text = "원"
-			self.textColor = R.Color.white
-			
-			// cursor 위치 변경
-			if let newPosition = self.position(from: self.beginningOfDocument, offset: 0) {
-				let newSelectedRange = self.textRange(from: newPosition, to: newPosition)
-				self.selectedTextRange = newSelectedRange
-			}
-		} else {
-			self.text = ""
-		}
+        switch tag {
+        case 3:
+            self.text = "원"
+            self.textColor = R.Color.white
+            
+            // cursor 위치 변경
+            if let newPosition = self.position(from: self.beginningOfDocument, offset: 0) {
+                let newSelectedRange = self.textRange(from: newPosition, to: newPosition)
+                self.selectedTextRange = newSelectedRange
+            }
+        default:
+            self.text = ""
+        }
+		
 		sendActions(for: .editingChanged)
 	}
 }

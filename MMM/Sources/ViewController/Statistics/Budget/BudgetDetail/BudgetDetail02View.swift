@@ -12,6 +12,7 @@ struct BudgetDetail02View: View {
     @ObservedObject var viewModel: BudgetSettingViewModel
     @FocusState private var isFocus: Bool
     @State private var cancellables = Set<AnyCancellable>()
+    @State private var shakes: CGFloat = 0
     
     private let subTitle = "이번 달 예상 수입은 얼마인가요?"
     
@@ -35,12 +36,21 @@ struct BudgetDetail02View: View {
             
             HStack(spacing: 4) {
                 Spacer()
-                Text("지난 달 작성한 수입")
-                Text("\(viewModel.previousIncome.withCommas())원")
+                
+                if viewModel.isPriceValid {
+                    Group {
+                        Text("지난 달 작성한 수입")
+                        Text("\(viewModel.previousIncome.withCommas())원")
+                    }
+                    .foregroundStyle(R.Color.gray300.suColor)
+                    
+                } else {
+                    Text("최대 작성 단위을 넘어선 금액이에요. (최대 1억)")
+                        .foregroundStyle(R.Color.red500.suColor)
+                }
             }
             .font(Font(R.Font.body3))
-            .foregroundStyle(Color(R.Color.gray300))
-
+            .autoShake(shakeCount: $shakes, triggerFlag: !viewModel.isPriceValid)
             Spacer()
         }
     }

@@ -37,8 +37,11 @@ final class BudgetSettingViewModel: ObservableObject {
     // shake 에니메이션 상수
     @Published var shakes: CGFloat = 0
     
+    @Published var isLoading = true
+    
     private var cancellables = Set<AnyCancellable>()
 
+    @Published var response: UpsertEconomicPlanResDto?
     
     enum CurrentStep {
         case main       // 01 : 예산 세팅
@@ -101,5 +104,31 @@ final class BudgetSettingViewModel: ObservableObject {
     
     func dismissKeyboard() {
         isFocusTextField.toggle()
+    }
+    
+    func upsertEconomicPlan() {
+        guard let token = Constants.getKeychainValue(forKey: Constants.KeychainKey.token) else { return }
+        self.isLoading = true
+        
+        APIClient.dispatch(
+            APIRouter.upsertEconomicPlanReqDto(
+                headers: APIHeader.Default(token: token),
+                body:APIParameters.UpsertEconomicPlanReqDto(
+                    budgetAmt: 4000,
+                    economicPlanYM: 202404,
+                    estimatedEarningAmt: 2000)))
+        .sink { data in
+            switch data {
+            case .failure(_):
+                break
+            case .finished:
+                break
+            }
+            self.isLoading = false
+        } receiveValue: { response in
+            print(response)
+            self.response = response
+        }
+        .store(in: &cancellables)
     }
 }

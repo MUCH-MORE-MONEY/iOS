@@ -15,6 +15,7 @@ final class BudgetSettingViewModel: ObservableObject {
     @Published var budgetAmt: Int = 0
     // budget03에서 사용하는 price property
     @Published var estimatedEarningAmt: Int = 0
+    @Published var estimatedpercentage: Double = 0.0
     
     @Published var isFocusTextField: Bool = false
     //03 Setting뷰의 직접 입력하기 시트
@@ -48,13 +49,6 @@ final class BudgetSettingViewModel: ObservableObject {
         case calendar   // 05 : 날짜
         case complete   // 05 : 완료
     }
-    
-    // MARK: - Public properties
-    // 들어온 퍼블리셔의 값 일치 여부를 반환하는 퍼블리셔
-    
-    lazy var isValidByWon: AnyPublisher<Bool, Never> = $budgetAmt
-        .map { 0 <= Int($0) ?? 0 && Int($0) ?? 0 <= 100_000_000 } // 1억(1,000만원)보다 작을 경우
-        .eraseToAnyPublisher()
     
     // step2에서 예상수익을 입력하지 않았을 떄를 판단하는 변수
     @Published var isNextButtonDisable: Bool = false

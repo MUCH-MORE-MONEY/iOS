@@ -33,9 +33,13 @@ final class PriceTextFieldView: BaseView {
 extension PriceTextFieldView {
     override func setAttribute() {
         priceTextField = priceTextField.then {
-            if let price = Int(viewModel.expectedIncome) {
-                $0.text = price.withCommas() + "만원"
+//            if let price = Int(viewModel.budgetAmt) {
+//                $0.text = price.withCommas() + "만원"
+//            }
+            if viewModel.budgetAmt != 0 {
+                $0.text = viewModel.budgetAmt.withCommas() + "만원"
             }
+            
             let placeholder = "만원 단위로 입력"
             let isStep2 = viewModel.currentStep == .income
             
@@ -78,12 +82,14 @@ extension PriceTextFieldView {
         if viewModel.currentStep == .income {
             priceTextField.textPublisher
                 .map{String(Array($0).filter{$0.isNumber})} // 숫자만 추출
-                .assignOnMainThread(to: \.expectedIncome, on: viewModel)
+                .map { Int($0) ?? 0 }
+                .assignOnMainThread(to: \.budgetAmt, on: viewModel)
                 .store(in: &cancellable)
         } else if viewModel.currentStep == .expense {
             priceTextField.textPublisher
                 .map{String(Array($0).filter{$0.isNumber})} // 숫자만 추출
-                .assignOnMainThread(to: \.savingPrice, on: viewModel)
+                .map { Int($0) ?? 0 }
+                .assignOnMainThread(to: \.estimatedEarningAmt, on: viewModel)
                 .store(in: &cancellable)
         }
     }

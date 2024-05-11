@@ -9,15 +9,12 @@ import SwiftUI
 import Combine
 
 final class BudgetSettingViewModel: ObservableObject {
-    @Published var budget: Budget
-    
     // 이전 달 예산 금액
-//    @Published var budget: Int = 0
-    @Published var previousIncome: Int = 10_000_000
+    @Published var budget: Budget
     // budget02에서 사용하는 price property
-    @Published var expectedIncome: String = ""
+    @Published var budgetAmt: Int = 0
     // budget03에서 사용하는 price property
-    @Published var savingPrice: String = ""
+    @Published var estimatedEarningAmt: Int = 0
     
     @Published var isFocusTextField: Bool = false
     //03 Setting뷰의 직접 입력하기 시트
@@ -31,9 +28,9 @@ final class BudgetSettingViewModel: ObservableObject {
     // 현재 segment의 step
     @Published var currentStep: CurrentStep = .main
     // 들어온 퍼블리셔의 값 일치 여부를 반환하는 퍼블리셔 -> budget02에서 textfield가 1억 넘었을 경우를 나타냄
-    @Published var isIncomeValid: Bool = true
+    @Published var isBudgetAmtValid: Bool = true
     // 수입보다 저축 금액이 큰지 판단하여 warning label을 띄워주는 변수 -> budget03
-    @Published var isSavingValid: Bool = true
+    @Published var isEstimatedEarningAmtValid: Bool = true
     // shake 에니메이션 상수
     @Published var shakes: CGFloat = 0
     
@@ -55,7 +52,7 @@ final class BudgetSettingViewModel: ObservableObject {
     // MARK: - Public properties
     // 들어온 퍼블리셔의 값 일치 여부를 반환하는 퍼블리셔
     
-    lazy var isValidByWon: AnyPublisher<Bool, Never> = $expectedIncome
+    lazy var isValidByWon: AnyPublisher<Bool, Never> = $budgetAmt
         .map { 0 <= Int($0) ?? 0 && Int($0) ?? 0 <= 100_000_000 } // 1억(1,000만원)보다 작을 경우
         .eraseToAnyPublisher()
     
@@ -70,10 +67,10 @@ final class BudgetSettingViewModel: ObservableObject {
     
     private func bind() {
         // 세 변수를 합친 값을 계산하고 새로운 속성으로 사용
-        Publishers.CombineLatest3($expectedIncome, $currentStep, $isIncomeValid)
-            .map { expectedIncome, currentStep , isPriceValid in
+        Publishers.CombineLatest($currentStep, $isBudgetAmtValid)
+            .map { currentStep , isBudgetAmtValid in
                 // 예상 수입이 비어있지 않고, 현재 단계가 income이 아니면 버튼을 활성화 OR 예산을 정확히 입력하지 않았을 경우
-                return expectedIncome.isEmpty && currentStep == .income || !isPriceValid
+                return currentStep == .income && !isBudgetAmtValid
             }
             .sink(receiveValue: { [weak self] isActive in
                 guard let self = self else { return }
@@ -81,24 +78,17 @@ final class BudgetSettingViewModel: ObservableObject {
             })
             .store(in: &cancellables)
         
-        $expectedIncome
-            .map { income in
-                guard let incomeValue = Int(income) else {
-                    return income == "" ? true : false
-                }
-                
-                return 0 <= incomeValue && incomeValue <= 10_000
+        $budgetAmt
+            .map { amt in
+                return 0 < amt && amt <= 10_000
             }
-            .assign(to: &$isIncomeValid)
+            .assign(to: &$isBudgetAmtValid)
         
-        $savingPrice
-            .map { saving in
-                guard let savingValue = Int(saving) else {
-                    return saving == "" ? true : false
-                }
-                return 0 <= savingValue && savingValue <= 10_000
+        $estimatedEarningAmt
+            .map { amt in
+                return 0 < amt && amt <= 10_000
             }
-            .assign(to: &$isSavingValid)
+            .assign(to: &$isEstimatedEarningAmtValid)
     }
     
     
@@ -114,9 +104,9 @@ final class BudgetSettingViewModel: ObservableObject {
             APIRouter.upsertEconomicPlanReqDto(
                 headers: APIHeader.Default(token: token),
                 body:APIParameters.UpsertEconomicPlanReqDto(
-                    budgetAmt: 4000,
+                    budgetAmt: budgetAmt * 10000,
                     economicPlanYM: "202404",
-                    estimatedEarningAmt: 2000)))
+                    estimatedEarningAmt: estimatedEarningAmt * 10000)))
         .sink { data in
             switch data {
             case .failure(_):

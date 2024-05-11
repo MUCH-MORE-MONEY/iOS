@@ -45,7 +45,7 @@ struct BudgetDetail03View: View {
             }
             
             VStack {
-                Text("\(viewModel.expectedIncome)만원")
+                Text("\(viewModel.budgetAmt)만원")
                     .font(Font(R.Font.h2))
                     .foregroundStyle(Color(R.Color.white))
                     .padding(.bottom, 22)
@@ -106,11 +106,11 @@ struct BudgetDetail03View: View {
                                 }
                                 .store(in: &cancellables)
                         }
-                    if !viewModel.isSavingValid {
+                    if !viewModel.isEstimatedEarningAmtValid {
                         Text("예상 수입을 넘어선 금액이에요 (최대 {예상수입}만원)")
                             .font(R.Font.body3.suFont)
                             .foregroundStyle(R.Color.red500.suColor)
-                            .autoShake(shakeCount: $viewModel.shakes, triggerFlag: viewModel.isSavingValid)
+                            .autoShake(shakeCount: $viewModel.shakes, triggerFlag: viewModel.isEstimatedEarningAmtValid)
                     }
                 }
                 Spacer()

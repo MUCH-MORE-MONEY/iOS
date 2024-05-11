@@ -36,10 +36,12 @@ struct BudgetDetail02View: View {
             HStack(spacing: 4) {
                 Spacer()
                 
-                if viewModel.isIncomeValid {
+                if viewModel.isBudgetAmtValid {
                     Group {
-                        Text("지난 달 작성한 수입")
-                        Text("\(viewModel.previousIncome.withCommas())원")
+                        if let budget = viewModel.budget.budget {
+                            Text("지난 달 작성한 수입")
+                            Text("\(budget.withCommas())원")
+                        }
                     }
                     .foregroundStyle(R.Color.gray300.suColor)
                     
@@ -49,7 +51,7 @@ struct BudgetDetail02View: View {
                 }
             }
             .font(Font(R.Font.body3))
-            .autoShake(shakeCount: $viewModel.shakes, triggerFlag: !viewModel.isIncomeValid)
+            .autoShake(shakeCount: $viewModel.shakes, triggerFlag: !viewModel.isBudgetAmtValid)
             Spacer()
         }
     }

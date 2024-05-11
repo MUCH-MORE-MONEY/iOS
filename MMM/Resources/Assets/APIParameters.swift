@@ -136,7 +136,7 @@ struct APIParameters{
     
     struct UpsertEconomicPlanReqDto: Encodable {
         var budgetAmt: Int
-        var economicPlanYM: Int
+        var economicPlanYM: String
         var estimatedEarningAmt: Int
     }
 }

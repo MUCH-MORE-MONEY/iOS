@@ -110,13 +110,7 @@ struct BudgetSettingView: View {
                         case .calendar:
                             viewModel.currentStep = .complete
                         case .complete:
-                            // UIWindowScene을 통해 현재 활성화된 씬을 찾고, 그 씬의 windows 배열에서 visible인 윈도우를 찾습니다.
-                            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                               let rootViewController = windowScene.windows.first(where: { $0.isKeyWindow })?.rootViewController {
-                                // UINavigationController를 찾아 pop합니다.
-                                let navigationController = findNavigationController(viewController: rootViewController)
-                                navigationController?.popViewController(animated: true)
-                            }
+                            viewModel.upsertEconomicPlan()
                         }
                     } label: {
                         Text(nextButtonTitle)
@@ -150,17 +144,6 @@ struct BudgetSettingView: View {
                     }
                 }
             }
-        }
-    }
-    
-    // UIViewController에서 UINavigationController을 찾는 재귀 함수
-    func findNavigationController(viewController: UIViewController) -> UINavigationController? {
-        if let navigationController = viewController as? UINavigationController {
-            return navigationController
-        } else if let presentedViewController = viewController.presentedViewController {
-            return findNavigationController(viewController: presentedViewController)
-        } else {
-            return nil
         }
     }
 }

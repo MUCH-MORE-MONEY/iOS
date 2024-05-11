@@ -9,7 +9,7 @@ import Foundation
 
 struct UpsertEconomicPlanResDto: Codable {
     var data: Data
-    var message: String
+    var message: String?
     var status: String
     
     struct Data: Codable {

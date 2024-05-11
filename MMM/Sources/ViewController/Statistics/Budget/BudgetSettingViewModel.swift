@@ -115,11 +115,13 @@ final class BudgetSettingViewModel: ObservableObject {
                 headers: APIHeader.Default(token: token),
                 body:APIParameters.UpsertEconomicPlanReqDto(
                     budgetAmt: 4000,
-                    economicPlanYM: 202404,
+                    economicPlanYM: "202404",
                     estimatedEarningAmt: 2000)))
         .sink { data in
             switch data {
             case .failure(_):
+                // 실패했을 경우 alert 같은 걸 띄워줘야함
+                debugPrint("upsert fail")
                 break
             case .finished:
                 break
@@ -128,7 +130,26 @@ final class BudgetSettingViewModel: ObservableObject {
         } receiveValue: { response in
             print(response)
             self.response = response
+            
+            // UIWindowScene을 통해 현재 활성화된 씬을 찾고, 그 씬의 windows 배열에서 visible인 윈도우를 찾습니다.
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let rootViewController = windowScene.windows.first(where: { $0.isKeyWindow })?.rootViewController {
+                // UINavigationController를 찾아 pop합니다.
+                let navigationController = self.findNavigationController(viewController: rootViewController)
+                navigationController?.popViewController(animated: true)
+            }
         }
         .store(in: &cancellables)
+    }
+    
+    // UIViewController에서 UINavigationController을 찾는 재귀 함수
+    func findNavigationController(viewController: UIViewController) -> UINavigationController? {
+        if let navigationController = viewController as? UINavigationController {
+            return navigationController
+        } else if let presentedViewController = viewController.presentedViewController {
+            return findNavigationController(viewController: presentedViewController)
+        } else {
+            return nil
+        }
     }
 }

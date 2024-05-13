@@ -196,6 +196,7 @@
 		C4351B4C2A1601D3005F95BE /* HomeFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4351B4B2A1601D3005F95BE /* HomeFilterView.swift */; };
 		C4351B4E2A166DB0005F95BE /* SemanticContentAttributeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4351B4D2A166DB0005F95BE /* SemanticContentAttributeButton.swift */; };
 		C4351B502A1691FB005F95BE /* HighlightViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4351B4F2A1691FB005F95BE /* HighlightViewController.swift */; };
+		C43779552BF2367800FD9AE2 /* StatisticsBudgetBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C43779542BF2367800FD9AE2 /* StatisticsBudgetBottomSheetViewController.swift */; };
 		C43FF1562B1C5A1E009394D6 /* StatisticsSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C43FF1552B1C5A1E009394D6 /* StatisticsSectionModel.swift */; };
 		C446BF1B2A430B1400DFA788 /* SnackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C446BF1A2A430B1400DFA788 /* SnackView.swift */; };
 		C44807DE29E4FE8000D4B090 /* Ex+Publisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44807DD29E4FE8000D4B090 /* Ex+Publisher.swift */; };
@@ -534,6 +535,7 @@
 		C4351B4B2A1601D3005F95BE /* HomeFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFilterView.swift; sourceTree = "<group>"; };
 		C4351B4D2A166DB0005F95BE /* SemanticContentAttributeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemanticContentAttributeButton.swift; sourceTree = "<group>"; };
 		C4351B4F2A1691FB005F95BE /* HighlightViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightViewController.swift; sourceTree = "<group>"; };
+		C43779542BF2367800FD9AE2 /* StatisticsBudgetBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsBudgetBottomSheetViewController.swift; sourceTree = "<group>"; };
 		C43FF1552B1C5A1E009394D6 /* StatisticsSectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsSectionModel.swift; sourceTree = "<group>"; };
 		C446BF1A2A430B1400DFA788 /* SnackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnackView.swift; sourceTree = "<group>"; };
 		C44807DD29E4FE8000D4B090 /* Ex+Publisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Publisher.swift"; sourceTree = "<group>"; };
@@ -1411,6 +1413,7 @@
 				C46D5E662AD1826800EBE5D7 /* CategoryAddUpperBottomSheetViewController.swift */,
 				C46D5E622AD174AD00EBE5D7 /* CategoryEditUpperBottomSheetViewController.swift */,
 				C4BBD2652AB9E16D0055FA65 /* DateBottomSheetViewController.swift */,
+				C43779542BF2367800FD9AE2 /* StatisticsBudgetBottomSheetViewController.swift */,
 				C4C84FEE2B0744F500F7757B /* StatisticsDateBottomSheetViewController.swift */,
 				C4BBD26B2ABAD4A60055FA65 /* SatisfactionBottomSheetViewController.swift */,
 			);
@@ -1842,6 +1845,7 @@
 				45D401242B33D11500CE0351 /* DetailReactor.swift in Sources */,
 				C44B61BF2AA9A85B00950226 /* CategorySegmentedControl.swift in Sources */,
 				C4F1A9742AFD2C5800843708 /* WidgetReqDto.swift in Sources */,
+				C43779552BF2367800FD9AE2 /* StatisticsBudgetBottomSheetViewController.swift in Sources */,
 				6A0D5B992A4C0E3300958E72 /* ToastView.swift in Sources */,
 				C46409B02AB590EE00A899AD /* CategoryMainSectionModel.swift in Sources */,
 				C4351B4A2A15C935005F95BE /* HomeFilterViewController.swift in Sources */,

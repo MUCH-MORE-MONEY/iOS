@@ -17,6 +17,7 @@ final class BudgetSettingViewModel: ObservableObject {
     @Published var estimatedEarningAmt: Int = 0
     @Published var estimatedpercentage: Double = 0.0
     
+    
     @Published var isFocusTextField: Bool = false
     //03 Setting뷰의 직접 입력하기 시트
     @Published var isShowingTextFieldSheet: Bool = false

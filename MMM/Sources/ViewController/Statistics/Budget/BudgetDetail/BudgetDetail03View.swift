@@ -17,8 +17,9 @@ struct BudgetDetail03View: View {
         UIScreen.width - 88 // 전체 길이 - Padding * 20
     }
     
-    private var priceText: String {
+    private var toolTipText: String {
         get {
+//            return viewModel.estimatedEarningAmt / viewModel.budgetAmt
             return "\(Int(viewModel.estimatedpercentage))"
         }
     }
@@ -48,7 +49,7 @@ struct BudgetDetail03View: View {
             }
             
             VStack {
-                Text("\(viewModel.budgetAmt)만원")
+                Text("\(viewModel.budgetAmt / Int(viewModel.estimatedpercentage))만원")
                     .font(Font(R.Font.h2))
                     .foregroundStyle(Color(R.Color.white))
                     .padding(.bottom, 22)
@@ -70,7 +71,7 @@ struct BudgetDetail03View: View {
                 Spacer()
             
                 // 슬라이더 값에 따라 툴팁 위치 동적 조정
-                TooltipView(text: "\(priceText)%", color: R.Color.orange500.suColor)
+                TooltipView(text: "\(toolTipText)%", color: R.Color.orange500.suColor)
                     .offset(x: -(silderWidth / 2) + (silderWidth / 100) * viewModel.estimatedpercentage, y: -30) // 가정: 슬라이더 너비가 300pt
                 
                 BudgetSlider(value: $viewModel.estimatedpercentage, range: 0...100)

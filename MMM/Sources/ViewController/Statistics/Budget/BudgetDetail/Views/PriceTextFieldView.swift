@@ -33,16 +33,25 @@ final class PriceTextFieldView: BaseView {
 extension PriceTextFieldView {
     override func setAttribute() {
         priceTextField = priceTextField.then {
-            if let price = Int(viewModel.expectedIncome) {
-                $0.text = price.withCommas() + " 원"
-            }
-            $0.placeholder = "만원 단위로 입력"
+//            if let price = Int(viewModel.budgetAmt) {
+//                $0.text = price.withCommas() + "만원"
+//            }
             
+            let isStep2 = viewModel.currentStep == .income
+            
+            if viewModel.budgetAmt != 0 {
+                $0.text = isStep2 ? viewModel.budgetAmt.withCommas() : ""
+            }
+            
+            let placeholder = "만원 단위로 입력"
+
+            
+            $0.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedString.Key.foregroundColor: R.Color.gray500])
             $0.font = R.Font.h2
-            $0.textColor = R.Color.white
+            $0.textColor = isStep2 ? R.Color.white : R.Color.gray900
             $0.keyboardType = .numberPad     // 숫자 키보드
             $0.tintColor = R.Color.gray400     // cursor color
-            $0.setNumberMode(unit: "만원")     // 단위 설정
+            $0.setNumberMode(unit: isStep2 ? "만원" : " 만원")     // 단위 설정
             $0.setClearButton(with: R.Icon.cancel, mode: .always) // clear 버튼
         }
         
@@ -76,12 +85,14 @@ extension PriceTextFieldView {
         if viewModel.currentStep == .income {
             priceTextField.textPublisher
                 .map{String(Array($0).filter{$0.isNumber})} // 숫자만 추출
-                .assignOnMainThread(to: \.expectedIncome, on: viewModel)
+                .map { Int($0) ?? 0 }
+                .assignOnMainThread(to: \.budgetAmt, on: viewModel)
                 .store(in: &cancellable)
         } else if viewModel.currentStep == .expense {
             priceTextField.textPublisher
                 .map{String(Array($0).filter{$0.isNumber})} // 숫자만 추출
-                .assignOnMainThread(to: \.savingPrice, on: viewModel)
+                .map { Int($0) ?? 0 }
+                .assignOnMainThread(to: \.estimatedEarningAmtForTextField, on: viewModel)
                 .store(in: &cancellable)
         }
     }

@@ -12,7 +12,6 @@ struct BudgetDetail02View: View {
     @ObservedObject var viewModel: BudgetSettingViewModel
     @FocusState private var isFocus: Bool
     @State private var cancellables = Set<AnyCancellable>()
-    @State private var shakes: CGFloat = 0
     
     private let subTitle = "이번 달 예상 수입은 얼마인가요?"
     
@@ -37,10 +36,12 @@ struct BudgetDetail02View: View {
             HStack(spacing: 4) {
                 Spacer()
                 
-                if viewModel.isPriceValid {
+                if viewModel.isBudgetAmtValid {
                     Group {
-                        Text("지난 달 작성한 수입")
-                        Text("\(viewModel.previousIncome.withCommas())원")
+                        if let budget = viewModel.budget.budget {
+                            Text("지난 달 작성한 수입")
+                            Text("\(budget.withCommas())원")
+                        }
                     }
                     .foregroundStyle(R.Color.gray300.suColor)
                     
@@ -50,13 +51,13 @@ struct BudgetDetail02View: View {
                 }
             }
             .font(Font(R.Font.body3))
-            .autoShake(shakeCount: $shakes, triggerFlag: !viewModel.isPriceValid)
+            .autoShake(shakeCount: $viewModel.shakes, triggerFlag: !viewModel.isBudgetAmtValid)
             Spacer()
         }
     }
 }
 
 #Preview {
-    BudgetDetail02View(viewModel: BudgetSettingViewModel())
+    BudgetDetail02View(viewModel: BudgetSettingViewModel(budget: Budget.getDummy(), dateYM: "202404"))
 }
 

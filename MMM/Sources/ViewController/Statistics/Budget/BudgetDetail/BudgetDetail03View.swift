@@ -10,13 +10,17 @@ import Combine
 
 struct BudgetDetail03View: View {
     @ObservedObject var viewModel: BudgetSettingViewModel
-    @State private var price = 100.0
     @FocusState var isFocus: Bool
     @State private var cancellables = Set<AnyCancellable>()
     
-    private var priceText: String {
+    private var silderWidth: CGFloat {
+        UIScreen.width - 88 // 전체 길이 - Padding * 20
+    }
+    
+    private var toolTipText: String {
         get {
-            return "\(Int(price))"
+//            return viewModel.estimatedEarningAmt / viewModel.budgetAmt
+            return "\(Int(viewModel.estimatedpercentage))"
         }
     }
     
@@ -27,12 +31,29 @@ struct BudgetDetail03View: View {
                    "경제적 자립에 한 발짝 다가갈 수 있어요.\n절약을 응원할게요!"]
     
     private var contentText: String {
-        switch price {
-        case 0...100:
+        switch viewModel.estimatedpercentage {
+        case 0..<25:
             return contentArr[0]
+        case 25..<50:
+            return contentArr[1]
+        case 50..<75:
+            return contentArr[2]
         default:
-            return "니 맘대로 해라"
+            return contentArr[3]
         }
+    }
+    
+    @State private var showingSheet: Bool = false
+    
+    private var isTextFieldSheetConfrimButtonOn: Bool {
+        viewModel.estimatedEarningAmtForTextField != 0
+    }
+    
+    private var estimatedEarningLabel: String {
+//        let amount = Double(viewModel.budgetAmt) * Double(viewModel.estimatedpercentage) / 100
+//        viewModel.estimatedEarningAmt = amount
+        let amount = viewModel.estimatedEarning
+        return "\(Int(amount))"
     }
     
     var body: some View {
@@ -45,7 +66,7 @@ struct BudgetDetail03View: View {
             }
             
             VStack {
-                Text("\(viewModel.expectedIncome)만원")
+                Text("\(estimatedEarningLabel)만원")
                     .font(Font(R.Font.h2))
                     .foregroundStyle(Color(R.Color.white))
                     .padding(.bottom, 22)
@@ -57,8 +78,7 @@ struct BudgetDetail03View: View {
                     .padding(.bottom, 32)
                 
                 Button {
-                    print("ssss")
-                    viewModel.isShowingTextFieldSheet = true
+                    showingSheet = true
                 } label: {
                     Text("직접 입력하기")
                         .underline()
@@ -68,15 +88,15 @@ struct BudgetDetail03View: View {
                 Spacer()
             
                 // 슬라이더 값에 따라 툴팁 위치 동적 조정
-                TooltipView(text: "\(priceText)%", color: R.Color.orange500.suColor)
-                    .offset(x: 0, y: -30) // 툴팁 위치 조정
-                    .offset(x: CGFloat((price - 100)), y: 0) // 가정: 슬라이더 너비가 300pt
-
-                BudgetSlider(value: $price, range: 0...200)
+                TooltipView(text: "\(toolTipText)%", color: R.Color.orange500.suColor)
+                    .offset(x: -(silderWidth / 2) + (silderWidth / 100) * viewModel.estimatedpercentage, y: -30) // 가정: 슬라이더 너비가 300pt
+                
+                BudgetSlider(value: $viewModel.estimatedpercentage, range: 0...100)
+                    .padding([.leading, .trailing], 20)
             }
             .padding(.top, 136)
         }
-        .sheet(isPresented: $viewModel.isShowingTextFieldSheet, content: {
+        .sheet(isPresented: $showingSheet, content: {
             VStack(spacing: 24) {
                 HStack {
                     Text("이번 달 저축 금액")
@@ -86,26 +106,39 @@ struct BudgetDetail03View: View {
                     Spacer()
                     
                     Button {
+//                        viewModel.estimatedpercentage = 100.0 / Double(viewModel.budgetAmt / viewModel.estimatedEarningAmtForTextField)
+        
+                        viewModel.estimatedpercentage = Double(viewModel.estimatedEarningAmtForTextField) / Double(viewModel.budgetAmt) * 100.0
                         
+                        showingSheet.toggle()
                     } label: {
                         Text("확인")
                             .font(R.Font.title3.suFont)
-                            .foregroundStyle(R.Color.gray500.suColor)
+                            .foregroundStyle(isTextFieldSheetConfrimButtonOn ? R.Color.black.suColor : R.Color.gray500.suColor)
                     }
+                    .disabled(!isTextFieldSheetConfrimButtonOn)
                 }
                 .padding(.top, 32)
                 
-                PriceTextFieldViewRepresentable(viewModel: viewModel)
-                    .padding(.top, 16)
-                    .focused($isFocus)
-                    .frame(height: 40)
-                    .onAppear {
-                        viewModel.$isFocusTextField
-                            .sinkOnMainThread { isFocus in
-                                self.isFocus = false
-                            }
-                            .store(in: &cancellables)
+                VStack(alignment: .leading, spacing: 12) {
+                    PriceTextFieldViewRepresentable(viewModel: viewModel)
+                        .padding(.top, 16)
+                        .focused($isFocus)
+                        .frame(height: 40)
+                        .onAppear {
+                            viewModel.$isFocusTextField
+                                .sinkOnMainThread { isFocus in
+                                    self.isFocus = false
+                                }
+                                .store(in: &cancellables)
+                        }
+                    if !viewModel.isEstimatedEarningAmtValid {
+                        Text("예상 수입을 넘어선 금액이에요 (최대 {예상수입}만원)")
+                            .font(R.Font.body3.suFont)
+                            .foregroundStyle(R.Color.red500.suColor)
+                            .autoShake(shakeCount: $viewModel.shakes, triggerFlag: viewModel.isEstimatedEarningAmtValid)
                     }
+                }
                 Spacer()
             }
             .padding([.leading, .trailing], 24)
@@ -115,5 +148,5 @@ struct BudgetDetail03View: View {
 }
 
 #Preview {
-    BudgetDetail03View(viewModel: BudgetSettingViewModel())
+    BudgetDetail03View(viewModel: BudgetSettingViewModel(budget: Budget.getDummy(), dateYM: "202404"))
 }

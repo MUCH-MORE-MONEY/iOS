@@ -133,6 +133,12 @@ struct APIParameters{
     /// 카테고리 조회
     struct CategoryListReqDto: Encodable {
     }
+    
+    struct UpsertEconomicPlanReqDto: Encodable {
+        var budgetAmt: Int
+        var economicPlanYM: String
+        var estimatedEarningAmt: Int
+    }
 }
 
 struct APIHeader {

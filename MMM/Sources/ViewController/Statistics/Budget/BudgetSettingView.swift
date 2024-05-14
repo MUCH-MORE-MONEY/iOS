@@ -9,21 +9,20 @@ import SwiftUI
 
 struct BudgetSettingView: View {
     @Environment(\.presentationMode) var presentationMode
-    @StateObject var viewModel = BudgetSettingViewModel()
+    @StateObject var viewModel: BudgetSettingViewModel
     @FocusState private var isFocus: Bool
     @Environment(\.dismiss) private var dismiss
     
-    
-    
-    
-    @State private var nextButtonTitle = "다음"
+    private var nextButtonTitle: String {
+        viewModel.currentStep == .complete ? "완료" : "다음"
+    }
     
     private var startTransition: Edge {
-        return !viewModel.transition ? .trailing : .leading
+        return viewModel.transition ? .leading : .trailing
     }
     
     private var toTransition: Edge {
-        return !viewModel.transition ? .leading : .trailing
+        return viewModel.transition ? .trailing : .leading
     }
     
     
@@ -52,9 +51,9 @@ struct BudgetSettingView: View {
                             }
                             .navigationTransition(start: startTransition, to: toTransition)
                     case .budget:
-                        BudgetDetail04View(budgetSettingViewModel: viewModel)
+                        BudgetDetail04View(viewModel: viewModel)
                             .navigationTransition(start: startTransition, to: toTransition)
-                    case .calendar:
+                    case .calendar, .complete:
                         BudgetDetail05View(viewModel: viewModel)
                             .navigationTransition(start: startTransition, to: toTransition)
                     }
@@ -66,6 +65,7 @@ struct BudgetSettingView: View {
                 Spacer()
                 HStack(spacing: 8) {
                     if !viewModel.isFirstStep {
+                        // 이전 버튼
                         Button {
                             viewModel.transition = true
                             
@@ -81,6 +81,8 @@ struct BudgetSettingView: View {
                                 viewModel.currentStep = .expense
                             case .calendar:
                                 viewModel.currentStep = .budget
+                            case .complete:
+                                viewModel.currentStep = .calendar
                             }
                         } label: {
                             Text("이전")
@@ -91,6 +93,7 @@ struct BudgetSettingView: View {
                         }
                     }
                     
+                    // 다음 버튼
                     Button {
                         viewModel.transition = false
                         
@@ -105,21 +108,9 @@ struct BudgetSettingView: View {
                         case .budget:
                             viewModel.currentStep = .calendar
                         case .calendar:
-                            
-                            // 이미 완료 버튼으로 바뀌었고 버튼을 누르게 되면 pop
-                            if nextButtonTitle == "완료" {
-                                // UIWindowScene을 통해 현재 활성화된 씬을 찾고, 그 씬의 windows 배열에서 visible인 윈도우를 찾습니다.
-                                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                                   let rootViewController = windowScene.windows.first(where: { $0.isKeyWindow })?.rootViewController {
-                                    // UINavigationController를 찾아 pop합니다.
-                                    let navigationController = findNavigationController(viewController: rootViewController)
-                                    navigationController?.popViewController(animated: true)
-                                }
-                            }
-                            
-                            // 모든 Step 완료
-                            viewModel.compeleteSteps = true
-                            nextButtonTitle = "완료"
+                            viewModel.currentStep = .complete
+                        case .complete:
+                            viewModel.upsertEconomicPlan()
                         }
                     } label: {
                         Text(nextButtonTitle)
@@ -155,21 +146,10 @@ struct BudgetSettingView: View {
             }
         }
     }
-    
-    // UIViewController에서 UINavigationController을 찾는 재귀 함수
-    func findNavigationController(viewController: UIViewController) -> UINavigationController? {
-        if let navigationController = viewController as? UINavigationController {
-            return navigationController
-        } else if let presentedViewController = viewController.presentedViewController {
-            return findNavigationController(viewController: presentedViewController)
-        } else {
-            return nil
-        }
-    }
 }
 
 #Preview {
-    BudgetSettingView()
+    BudgetSettingView(viewModel: BudgetSettingViewModel(budget: Budget.getDummy(), dateYM: "202404"))
 }
 
 struct SegmentedView: View {
@@ -189,9 +169,10 @@ struct SegmentedView: View {
                             Capsule()
                                 .fill(Color(R.Color.gray600))
                                 .frame(height: 2)
-                            if selected == segment {
+                            // 5번 페이지에서는 두개의 화면을 쓰기 때문에 .complete == .calendar를 동일 취급해줘야함
+                            if selected == segment || (selected == .complete && segment == .calendar) {
                                 Capsule()
-                                    .fill(selected == segment ? Color(R.Color.white) : Color(R.Color.gray600))
+                                    .fill(Color(R.Color.white))
                                     .frame(height: 2)
                                     .matchedGeometryEffect(id: "Tab", in: name)
                             }
@@ -212,8 +193,9 @@ final class BudgetSettingHostingController: UIHostingController<BudgetSettingVie
 }
 
 final class BudgetSettingViewInterface {
-    func budgetSettingViewUI() -> UIViewController {
-        let vc = BudgetSettingHostingController(rootView: BudgetSettingView())
+    func budgetSettingViewUI(_ budget: Budget, _ dateYM: String) -> UIViewController {
+        let viewModel = BudgetSettingViewModel(budget: budget, dateYM: dateYM)
+        let vc = BudgetSettingHostingController(rootView: BudgetSettingView(viewModel: viewModel))
         return vc
     }
 }

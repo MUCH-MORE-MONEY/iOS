@@ -12,7 +12,7 @@ struct BudgetDetail05View: View {
     @ObservedObject var viewModel: BudgetSettingViewModel
     
     private var title: String {
-        if viewModel.compeleteSteps {
+        if viewModel.currentStep == .complete {
             return "지출 예산이 세워졌어요!\n시작이 반이랍니다.\n이번 달도 해낼 수 있어요!"
         } else {
             return "일별 환산된 적정 지출 금액을\n달력에서 확인하시겠어요?"
@@ -30,7 +30,7 @@ struct BudgetDetail05View: View {
                 Spacer()
             }
             
-            if viewModel.compeleteSteps {
+            if viewModel.currentStep == .complete {
                 Spacer()
                 Image(uiImage: R.Icon.imageBackgroundBoost366)
             } else {
@@ -41,7 +41,7 @@ struct BudgetDetail05View: View {
                         Text("일일 적정 지출 금액 ")
                             .foregroundColor(Color(R.Color.white))
                         +
-                        Text("{3}만원 ")
+                        Text("\(viewModel.dailyRemainBudget)만원 ")
                             .foregroundColor(Color(R.Color.orange500))
                         
                         Spacer()
@@ -56,8 +56,8 @@ struct BudgetDetail05View: View {
                     
                     VStack(alignment: .leading) {
                         HStack {
-                            CalendarLabel(price: 3, color: R.Color.orange400)
-                            CalendarLabel(price: 3, color: R.Color.orange200)
+                            CalendarLabel(price: viewModel.dailyRemainBudget, color: R.Color.orange400)
+                            CalendarLabel(price: viewModel.dailyRemainBudget, color: R.Color.orange200)
                             Spacer()
                         }
                         .padding(.bottom, 51)
@@ -83,7 +83,7 @@ struct BudgetDetail05View: View {
 }
 
 #Preview {
-    BudgetDetail05View(viewModel: BudgetSettingViewModel())
+    BudgetDetail05View(viewModel: BudgetSettingViewModel(budget: Budget.getDummy(), dateYM: "202404"))
 }
 
 

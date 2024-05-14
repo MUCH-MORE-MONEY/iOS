@@ -13,13 +13,15 @@ struct BudgetDetail01View: View {
     var body: some View {
         VStack {
             HStack {
-                
-                Text("""
-                                이번 달 수입과 저축 금액을 고려해
-                                매일 얼마 지출할 지 예산을 세워봐요
-                                """)
-                .font(Font(R.Font.body0))
-                .foregroundStyle(Color(R.Color.white))
+                Text("내가 고정적으로 쓰는 돈을 고려하여\n**이번 달의 수입**과 **저축할 금액**을 적고\n매일 ")
+                    .font(Font(R.Font.h6)) // 일관된 폰트 적용
+                    .foregroundColor(R.Color.white.suColor) +
+                Text("**얼마 지출할 수 있는지**")
+                    .font(Font(R.Font.h6)) // 같은 폰트로 유지
+                    .foregroundColor(R.Color.yellow300.suColor) + // 변경하고자 하는 색상 적용
+                Text(" 알아보세요!")
+                    .font(Font(R.Font.h6))
+                    .foregroundColor(R.Color.white.suColor)
                 Spacer()
             }
             
@@ -50,5 +52,5 @@ struct BudgetDetail01View: View {
 }
 
 #Preview {
-    BudgetDetail01View(budgetSettingViewModel: BudgetSettingViewModel())
+    BudgetDetail01View(budgetSettingViewModel: BudgetSettingViewModel(budget: Budget.getDummy(), dateYM: "202404"))
 }

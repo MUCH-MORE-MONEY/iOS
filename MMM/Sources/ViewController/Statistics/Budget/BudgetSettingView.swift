@@ -51,7 +51,7 @@ struct BudgetSettingView: View {
                             }
                             .navigationTransition(start: startTransition, to: toTransition)
                     case .budget:
-                        BudgetDetail04View(budgetSettingViewModel: viewModel)
+                        BudgetDetail04View(viewModel: viewModel)
                             .navigationTransition(start: startTransition, to: toTransition)
                     case .calendar, .complete:
                         BudgetDetail05View(viewModel: viewModel)
@@ -149,7 +149,7 @@ struct BudgetSettingView: View {
 }
 
 #Preview {
-    BudgetSettingView(viewModel: BudgetSettingViewModel(budget: Budget.getDummy()))
+    BudgetSettingView(viewModel: BudgetSettingViewModel(budget: Budget.getDummy(), dateYM: "202404"))
 }
 
 struct SegmentedView: View {
@@ -193,8 +193,8 @@ final class BudgetSettingHostingController: UIHostingController<BudgetSettingVie
 }
 
 final class BudgetSettingViewInterface {
-    func budgetSettingViewUI(_ budget: Budget) -> UIViewController {
-        let viewModel = BudgetSettingViewModel(budget: budget)
+    func budgetSettingViewUI(_ budget: Budget, _ dateYM: String) -> UIViewController {
+        let viewModel = BudgetSettingViewModel(budget: budget, dateYM: dateYM)
         let vc = BudgetSettingHostingController(rootView: BudgetSettingView(viewModel: viewModel))
         return vc
     }

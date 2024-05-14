@@ -41,7 +41,7 @@ struct BudgetDetail05View: View {
                         Text("일일 적정 지출 금액 ")
                             .foregroundColor(Color(R.Color.white))
                         +
-                        Text("{3}만원 ")
+                        Text("\(viewModel.dailyRemainBudget)만원 ")
                             .foregroundColor(Color(R.Color.orange500))
                         
                         Spacer()
@@ -56,8 +56,8 @@ struct BudgetDetail05View: View {
                     
                     VStack(alignment: .leading) {
                         HStack {
-                            CalendarLabel(price: 3, color: R.Color.orange400)
-                            CalendarLabel(price: 3, color: R.Color.orange200)
+                            CalendarLabel(price: viewModel.dailyRemainBudget, color: R.Color.orange400)
+                            CalendarLabel(price: viewModel.dailyRemainBudget, color: R.Color.orange200)
                             Spacer()
                         }
                         .padding(.bottom, 51)
@@ -83,7 +83,7 @@ struct BudgetDetail05View: View {
 }
 
 #Preview {
-    BudgetDetail05View(viewModel: BudgetSettingViewModel(budget: Budget.getDummy()))
+    BudgetDetail05View(viewModel: BudgetSettingViewModel(budget: Budget.getDummy(), dateYM: "202404"))
 }
 
 

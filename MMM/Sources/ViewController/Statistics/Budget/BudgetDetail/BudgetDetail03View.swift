@@ -32,11 +32,28 @@ struct BudgetDetail03View: View {
     
     private var contentText: String {
         switch viewModel.estimatedpercentage {
-        case 0...100:
+        case 0..<25:
             return contentArr[0]
+        case 25..<50:
+            return contentArr[1]
+        case 50..<75:
+            return contentArr[2]
         default:
-            return "니 맘대로 해라"
+            return contentArr[3]
         }
+    }
+    
+    @State private var showingSheet: Bool = false
+    
+    private var isTextFieldSheetConfrimButtonOn: Bool {
+        viewModel.estimatedEarningAmtForTextField != 0
+    }
+    
+    private var estimatedEarningLabel: String {
+//        let amount = Double(viewModel.budgetAmt) * Double(viewModel.estimatedpercentage) / 100
+//        viewModel.estimatedEarningAmt = amount
+        let amount = viewModel.estimatedEarning
+        return "\(Int(amount))"
     }
     
     var body: some View {
@@ -49,7 +66,7 @@ struct BudgetDetail03View: View {
             }
             
             VStack {
-                Text("\(viewModel.budgetAmt / Int(viewModel.estimatedpercentage))만원")
+                Text("\(estimatedEarningLabel)만원")
                     .font(Font(R.Font.h2))
                     .foregroundStyle(Color(R.Color.white))
                     .padding(.bottom, 22)
@@ -61,7 +78,7 @@ struct BudgetDetail03View: View {
                     .padding(.bottom, 32)
                 
                 Button {
-                    viewModel.isShowingTextFieldSheet = true
+                    showingSheet = true
                 } label: {
                     Text("직접 입력하기")
                         .underline()
@@ -79,7 +96,7 @@ struct BudgetDetail03View: View {
             }
             .padding(.top, 136)
         }
-        .sheet(isPresented: $viewModel.isShowingTextFieldSheet, content: {
+        .sheet(isPresented: $showingSheet, content: {
             VStack(spacing: 24) {
                 HStack {
                     Text("이번 달 저축 금액")
@@ -89,12 +106,17 @@ struct BudgetDetail03View: View {
                     Spacer()
                     
                     Button {
+//                        viewModel.estimatedpercentage = 100.0 / Double(viewModel.budgetAmt / viewModel.estimatedEarningAmtForTextField)
+        
+                        viewModel.estimatedpercentage = Double(viewModel.estimatedEarningAmtForTextField) / Double(viewModel.budgetAmt) * 100.0
                         
+                        showingSheet.toggle()
                     } label: {
                         Text("확인")
                             .font(R.Font.title3.suFont)
-                            .foregroundStyle(R.Color.gray500.suColor)
+                            .foregroundStyle(isTextFieldSheetConfrimButtonOn ? R.Color.black.suColor : R.Color.gray500.suColor)
                     }
+                    .disabled(!isTextFieldSheetConfrimButtonOn)
                 }
                 .padding(.top, 32)
                 
@@ -126,5 +148,5 @@ struct BudgetDetail03View: View {
 }
 
 #Preview {
-    BudgetDetail03View(viewModel: BudgetSettingViewModel(budget: Budget.getDummy()))
+    BudgetDetail03View(viewModel: BudgetSettingViewModel(budget: Budget.getDummy(), dateYM: "202404"))
 }

@@ -52,5 +52,5 @@ struct BudgetDetail01View: View {
 }
 
 #Preview {
-    BudgetDetail01View(budgetSettingViewModel: BudgetSettingViewModel(budget: Budget.getDummy()))
+    BudgetDetail01View(budgetSettingViewModel: BudgetSettingViewModel(budget: Budget.getDummy(), dateYM: "202404"))
 }

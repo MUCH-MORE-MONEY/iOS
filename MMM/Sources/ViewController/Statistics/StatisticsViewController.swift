@@ -414,9 +414,18 @@ extension StatisticsViewController {
     private func pushBudgetSettingViewController(_ isPush: Bool) {
 		guard let reactor = reactor else { return }
 //		reactor.currentState.preBudget // 임시: 사용하렴 정우야
+        
+        
+        var dateComponents = DateComponents()
+        dateComponents.month = 0
+        let newDate = Calendar.current.date(byAdding: dateComponents, to: reactor.currentState.date)
+        
+        let dateYM = newDate?.getFormattedYM() ?? ""
+        print(dateYM)
+        
         let budget = reactor.currentState.preBudget
         let interface = BudgetSettingViewInterface()
-        let vc = interface.budgetSettingViewUI(budget)
+        let vc = interface.budgetSettingViewUI(budget, dateYM)
         
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         

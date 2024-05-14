@@ -11,16 +11,15 @@ import Combine
 final class BudgetSettingViewModel: ObservableObject {
     // 이전 달 예산 금액
     @Published var budget: Budget
+    var dateYM: String
+    
     // budget02에서 사용하는 price property
     @Published var budgetAmt: Int = 0
     // budget03에서 사용하는 price property
-    @Published var estimatedEarningAmt: Int = 0
+    @Published var estimatedEarningAmtForTextField: Int = 0
     @Published var estimatedpercentage: Double = 0.0
     
-    
     @Published var isFocusTextField: Bool = false
-    //03 Setting뷰의 직접 입력하기 시트
-    @Published var isShowingTextFieldSheet: Bool = false
     // step1일 경우 버튼의 사이즈가 다르기 때문에 사용
     @Published var isFirstStep: Bool = true
     
@@ -31,6 +30,38 @@ final class BudgetSettingViewModel: ObservableObject {
     @Published var currentStep: CurrentStep = .main
     // 들어온 퍼블리셔의 값 일치 여부를 반환하는 퍼블리셔 -> budget02에서 textfield가 1억 넘었을 경우를 나타냄
     @Published var isBudgetAmtValid: Bool = true
+    // budget03에서 slider 퍼센트에 따라서 estimatedEarningAmt를 계산하는 연산 프로퍼티
+    
+    // 한달에 저축할 총 예산
+    var estimatedEarning: Double {
+        Double(budgetAmt) * Double(estimatedpercentage) / 100
+    }
+    // 하루에 지출할 수 있는 남은 예산
+    var remainBudget: Int {
+        budgetAmt - Int(estimatedEarning)
+    }
+    
+    var dailyRemainBudget: Int {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyyMM"
+
+        let dateString = budget.dateYM ?? ""
+        
+        // 문자열로부터 Date 객체 생성
+        guard let date = dateFormatter.date(from: dateString) else {
+            print("날짜 형식이 잘못되었습니다.")
+            return 0
+        }
+
+        // Calendar 객체를 사용하여 월의 마지막 일자 구하기
+        let calendar = Calendar.current
+        let range = calendar.range(of: .day, in: .month, for: date)
+
+        let dailyAmt = remainBudget / (range?.count ?? 30)
+        
+        return dailyAmt
+    }
+    
     // 수입보다 저축 금액이 큰지 판단하여 warning label을 띄워주는 변수 -> budget03
     @Published var isEstimatedEarningAmtValid: Bool = true
     // shake 에니메이션 상수
@@ -55,8 +86,9 @@ final class BudgetSettingViewModel: ObservableObject {
     @Published var isNextButtonDisable: Bool = false
     
     
-    init(budget: Budget) {
+    init(budget: Budget, dateYM: String) {
         self.budget = budget
+        self.dateYM = dateYM
         bind()
     }
     
@@ -79,7 +111,7 @@ final class BudgetSettingViewModel: ObservableObject {
             }
             .assign(to: &$isBudgetAmtValid)
         
-        $estimatedEarningAmt
+        $estimatedEarningAmtForTextField
             .map { amt in
                 return 0 < amt && amt <= 10_000
             }
@@ -100,8 +132,8 @@ final class BudgetSettingViewModel: ObservableObject {
                 headers: APIHeader.Default(token: token),
                 body:APIParameters.UpsertEconomicPlanReqDto(
                     budgetAmt: budgetAmt * 10000,
-                    economicPlanYM: "202404",
-                    estimatedEarningAmt: estimatedEarningAmt * 10000)))
+                    economicPlanYM: dateYM,
+                    estimatedEarningAmt: Int(estimatedEarning * 10000))))
         .sink { data in
             switch data {
             case .failure(_):

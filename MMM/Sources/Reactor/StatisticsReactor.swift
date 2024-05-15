@@ -223,7 +223,8 @@ extension StatisticsReactor {
 					newState.percent = 0
 				} else {
 					// Budget은 setPaySum보다 빠르게 API를 불러옴
-					newState.percent = budget / economicActivitySumAmt
+					// 지출 / 예산
+					newState.percent = economicActivitySumAmt / budget
 				}
 			}
 		case let .setAverage(average):

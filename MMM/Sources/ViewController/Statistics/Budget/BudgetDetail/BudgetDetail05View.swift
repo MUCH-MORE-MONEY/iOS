@@ -93,7 +93,7 @@ struct CalendarLabel: View {
     var body: some View {
         VStack {
             HStack(spacing: 4) {
-                Text("{\(price)}만원 이상 지출")
+                Text("\(price)만원 이상 지출")
                     .font(R.Font.medium14.suFont)
                     .foregroundStyle(R.Color.gray300.suColor)
                 

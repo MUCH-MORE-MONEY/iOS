@@ -23,7 +23,7 @@ final class BudgetSettingViewModel: ObservableObject {
     // step1일 경우 버튼의 사이즈가 다르기 때문에 사용
     @Published var isFirstStep: Bool = true
     
-    @Published var isCalenderCheckboxEnable: Bool = false
+    @Published var isCalenderCheckboxEnable: Bool = true
 
     @Published var transition: Bool = true  // true이면 next
     // 현재 segment의 step
@@ -147,6 +147,12 @@ final class BudgetSettingViewModel: ObservableObject {
         } receiveValue: { response in
             print(response)
             self.response = response
+            
+            // 캘린더 지출 기준 변경 -> 색상
+
+            if self.isCalenderCheckboxEnable {
+                Constants.setKeychain(self.dailyRemainBudget * 10_000, forKey: Constants.KeychainKey.payStandard)
+            }
             
             // UIWindowScene을 통해 현재 활성화된 씬을 찾고, 그 씬의 windows 배열에서 visible인 윈도우를 찾습니다.
             if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,

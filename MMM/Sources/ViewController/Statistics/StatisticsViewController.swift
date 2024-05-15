@@ -299,8 +299,8 @@ extension StatisticsViewController {
 	private func presentBottomSheet() {
 		guard let reactor = self.reactor else { return }
 		// 달력 Picker
-		let vc = StatisticsDateBottomSheetViewController(title: "월 이동", date: month, height: 360, mode: .onlyMonthly, sheetMode: .drag, isDark: false)
-		vc.reactor = StatisticsDateBottomSheetReactor(provider: reactor.provider)
+		let vc = StatisticsBudgetBottomSheetViewController(curBudget: 100, totalSaving: 1000, height: 292)
+		vc.reactor = StatisticsBudgetBottomSheetReactor(provider: reactor.provider)
 		self.present(vc, animated: true, completion: nil)
 	}
 	

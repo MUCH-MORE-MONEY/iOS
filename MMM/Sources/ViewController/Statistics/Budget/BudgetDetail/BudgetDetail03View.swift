@@ -114,9 +114,9 @@ struct BudgetDetail03View: View {
                     } label: {
                         Text("확인")
                             .font(R.Font.title3.suFont)
-                            .foregroundStyle(isTextFieldSheetConfrimButtonOn ? R.Color.black.suColor : R.Color.gray500.suColor)
+                            .foregroundStyle(viewModel.isEstimatedEarningAmtValid ? R.Color.black.suColor : R.Color.gray500.suColor)
                     }
-                    .disabled(!isTextFieldSheetConfrimButtonOn)
+                    .disabled(!viewModel.isEstimatedEarningAmtValid)
                 }
                 .padding(.top, 32)
                 

@@ -421,7 +421,6 @@ extension StatisticsViewController {
         let newDate = Calendar.current.date(byAdding: dateComponents, to: reactor.currentState.date)
         
         let dateYM = newDate?.getFormattedYM() ?? ""
-        print(dateYM)
         
         let budget = reactor.currentState.preBudget
         let interface = BudgetSettingViewInterface()

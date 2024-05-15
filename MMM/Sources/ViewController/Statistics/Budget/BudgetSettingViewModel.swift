@@ -113,7 +113,7 @@ final class BudgetSettingViewModel: ObservableObject {
         
         $estimatedEarningAmtForTextField
             .map { amt in
-                return 0 < amt && amt <= 10_000
+                return 0 < amt && amt <= self.budgetAmt
             }
             .assign(to: &$isEstimatedEarningAmtValid)
     }

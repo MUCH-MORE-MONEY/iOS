@@ -57,9 +57,9 @@ final class BudgetSettingViewModel: ObservableObject {
         let calendar = Calendar.current
         let range = calendar.range(of: .day, in: .month, for: date)
 
-        let dailyAmt = remainBudget / (range?.count ?? 30)
-        
-        return dailyAmt
+        let dailyAmt = Double(remainBudget) / Double(range?.count ?? 30)
+        // 반올림 처리
+        return Int(round(dailyAmt))
     }
     
     // 수입보다 저축 금액이 큰지 판단하여 warning label을 띄워주는 변수 -> budget03

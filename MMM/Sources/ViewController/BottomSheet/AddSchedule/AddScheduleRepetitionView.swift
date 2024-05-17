@@ -73,7 +73,7 @@ struct AddScheduleRepetitionView: View {
                 
                 RadioButton(radioButtonItems[0],
                             selectedID: selectedRadioButton,
-                            subLabel: isTimeRadioButtonOn ? nil : "\(addScheduleViewModel.selectedDate?.getFormattedYMDByCalendar() ?? "")까지",
+                            subLabel: isTimeRadioButtonOn ? "\(addScheduleViewModel.recurrenceInfo.recurrenceCnt)회 반복" : nil,
                             callback: { id in
                     selectedRadioButton = id
                     isFirst = false

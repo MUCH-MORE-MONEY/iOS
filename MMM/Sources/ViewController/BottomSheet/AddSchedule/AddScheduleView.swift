@@ -11,8 +11,7 @@ struct AddScheduleView: View {
     @State private var isShowingSheet: Bool = false
     @ObservedObject var editViewModel: EditActivityViewModel
     @StateObject var addScheduleViewModel = AddScheduleViewModel()
-    @Environment(\.presentationMode) var presentationMode
-    
+    @Environment(\.dismiss) var dismiss
     // 반복 안함일 경우에는 detail Sheet로 넘어가면 안되기 때문에 처리해줌
     private var isTypeButtonOn: Bool {
         addScheduleViewModel.selectedId != "반복 안함"
@@ -30,8 +29,8 @@ struct AddScheduleView: View {
                         addScheduleViewModel.getCurrentRadioButtonItem()
                         editViewModel.recurrenceTitle = addScheduleViewModel.addScheduleTapViewLabel
                         editViewModel.recurrenceInfo = addScheduleViewModel.recurrenceInfo
-                        presentationMode.wrappedValue.dismiss()
-                        print("확인 \(addScheduleViewModel.recurrenceInfo)")
+                        dismiss()
+//                        print("확인 \(addScheduleViewModel.recurrenceInfo)")
                     } label: {
                         Text("확인")
                             .font(Font(R.Font.title3))
@@ -73,12 +72,19 @@ struct AddScheduleView: View {
             .padding([.leading, .trailing], 24)
             Spacer()
         }
-        .halfSheet(showSheet: $isShowingSheet) {
+        .sheet(isPresented: $isShowingSheet) {
             VStack {
                 AddScheduleRepetitionView(addScheduleViewModel: addScheduleViewModel, isShowingSheet: $isShowingSheet)
                 Spacer()
             }
+            .presentationDetents([.fraction(0.5)])
         }
+//        .halfSheet(showSheet: $isShowingSheet) {
+//            VStack {
+//                AddScheduleRepetitionView(addScheduleViewModel: addScheduleViewModel, isShowingSheet: $isShowingSheet)
+//                Spacer()
+//            }
+//        }
         .onAppear {
             // recurrenceInfo가 있을 경우 그대로 addScheduleViewModel에 넣어줌
             if let recurrenceInfo = editViewModel.recurrenceInfo {

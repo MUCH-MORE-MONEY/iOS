@@ -21,7 +21,7 @@ extension String {
     func toDate() -> Date? {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyyMMdd"
-        dateFormatter.timeZone = TimeZone(identifier: "UTC")
+        dateFormatter.timeZone = TimeZone(identifier: "KST")
         if let date = dateFormatter.date(from: self) {
             return date
         } else {

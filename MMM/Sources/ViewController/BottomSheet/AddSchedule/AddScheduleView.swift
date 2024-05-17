@@ -25,12 +25,12 @@ struct AddScheduleView: View {
                         .font(Font(R.Font.h5))
                     Spacer()
                     Button {
-//                        // 확인 버튼을 눌렀을 경우에만 editVM에 데이터를 넣어줘야함
+                        //                        // 확인 버튼을 눌렀을 경우에만 editVM에 데이터를 넣어줘야함
                         addScheduleViewModel.getCurrentRadioButtonItem()
                         editViewModel.recurrenceTitle = addScheduleViewModel.addScheduleTapViewLabel
                         editViewModel.recurrenceInfo = addScheduleViewModel.recurrenceInfo
                         dismiss()
-//                        print("확인 \(addScheduleViewModel.recurrenceInfo)")
+                        //                        print("확인 \(addScheduleViewModel.recurrenceInfo)")
                     } label: {
                         Text("확인")
                             .font(Font(R.Font.title3))
@@ -46,12 +46,12 @@ struct AddScheduleView: View {
                         // 확인 버튼을 눌렀을 경우에만 editVM에 데이터를 넣어줘야하기 떄문에 radio를 선택했을 경우 이벤트 처리 ㄴㄴ
                     }
                 }.padding(.top, 12)
-
+                
                 Divider()
                     .padding(.top, 7)
                 
                 HStack {
-                    Text("반복 종류")
+                    Text("반복 종료")
                         .font(Font(R.Font.title1))
                         .foregroundStyle(isTypeButtonOn ? Color(R.Color.gray900) : Color(R.Color.gray400))
                     Spacer()
@@ -79,27 +79,36 @@ struct AddScheduleView: View {
             }
             .presentationDetents([.fraction(0.5)])
         }
-//        .halfSheet(showSheet: $isShowingSheet) {
-//            VStack {
-//                AddScheduleRepetitionView(addScheduleViewModel: addScheduleViewModel, isShowingSheet: $isShowingSheet)
-//                Spacer()
-//            }
-//        }
         .onAppear {
             // recurrenceInfo가 있을 경우 그대로 addScheduleViewModel에 넣어줌
             if let recurrenceInfo = editViewModel.recurrenceInfo {
                 // 20240401 이걸 date 형식으로 바꿔줘야함
-                if let date = editViewModel.createAt.toDate() {
-                    addScheduleViewModel.date = date
-                    addScheduleViewModel.recurrenceInfo = recurrenceInfo
-                    addScheduleViewModel.selectedId = recurrenceInfo.recurrencePattern.recurrenceTitleByPattern()
+                if let createdDate = editViewModel.createAt.toDate() {
+                    addScheduleViewModel.startDate = createdDate
                 }
-
+                
+                addScheduleViewModel.recurrenceInfo = recurrenceInfo
+                addScheduleViewModel.selectedId = recurrenceInfo.recurrencePattern.recurrenceTitleByPattern()
+                
+                // recurrenceInfo 가 있으면 selectedDate를 설정해줌
+                if let endDate = recurrenceInfo.endYMD.toDate() {
+                    addScheduleViewModel.selectedDate = endDate
+                }
+                
             } else {
-                // recurrenceInfo가 없을 경우(최초 진입) 데이터 직접 넣어줌, date값을 초기세팅해줌
-                guard let date = editViewModel.date else { return }
-                addScheduleViewModel.date = date
-                addScheduleViewModel.recurrenceInfo.startYMD = date.getFormattedYMD()
+                // AddDetailVC에서 들어온 경우 피커에서 데이터를 직접넣어줘서 초기화를 해줌
+                if let date = editViewModel.date {
+                    addScheduleViewModel.startDate = date
+                    addScheduleViewModel.recurrenceInfo.startYMD = date.getFormattedYMD()
+                    // recurrenceInfo 가 있으면 selectedDate를 createdAt으로 초기화
+                    addScheduleViewModel.selectedDate = date
+                } else {    // 기존 경제활동일 경우 picker 데이터가 없기 때문에 activity의 createAt을 넣어줘야함
+                    if let createAt = editViewModel.createAt.toDate() {
+                        addScheduleViewModel.startDate = createAt
+                        addScheduleViewModel.recurrenceInfo.startYMD = createAt.getFormattedYMD()
+                        addScheduleViewModel.selectedDate = createAt
+                    }
+                }
                 addScheduleViewModel.selectedId = "반복 안함"
             }
         }

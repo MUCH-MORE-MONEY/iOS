@@ -15,7 +15,7 @@ struct AddScheduleRepetitionView: View {
         
     private let radioButtonItems = ["횟수", "날짜"]
     private let times = [1,2,3,4,5]
-    @State private var selectedID = "횟수"
+    @State private var selectedRadioButton = "횟수"
     
     @State private var selectedYear: Int = Calendar.current.component(.year, from: Date())
     @State private var selectedMonth: Int = Calendar.current.component(.month, from: Date())
@@ -32,11 +32,11 @@ struct AddScheduleRepetitionView: View {
     }
     
     private var isTimeRadioButtonOn: Bool {
-        selectedID == radioButtonItems[0]
+        selectedRadioButton == radioButtonItems[0]
     }
     
     private var nextYear: Date {
-        Calendar.current.date(byAdding: .year, value: 1, to: addScheduleViewModel.date)!
+        Calendar.current.date(byAdding: .year, value: 1, to: addScheduleViewModel.startDate)!
     }
     
     var body: some View {
@@ -52,8 +52,8 @@ struct AddScheduleRepetitionView: View {
                             
                         } else {
                             addScheduleViewModel.recurrenceInfo.recurrenceEndDvcd = "02"
-                            addScheduleViewModel.recurrenceInfo.startYMD = addScheduleViewModel.date.getFormattedYMD()
-                            addScheduleViewModel.recurrenceInfo.endYMD = addScheduleViewModel.endDate.getFormattedYMD()
+                            addScheduleViewModel.recurrenceInfo.startYMD = addScheduleViewModel.startDate.getFormattedYMD()
+                            addScheduleViewModel.recurrenceInfo.endYMD = addScheduleViewModel.selectedDate?.getFormattedYMD() ?? ""
                             addScheduleViewModel.recurrenceInfo.recurrenceCnt = 0
                         }
 
@@ -72,16 +72,16 @@ struct AddScheduleRepetitionView: View {
                 
                 
                 RadioButton(radioButtonItems[0],
-                            selectedID: selectedID,
-                            subLabel: isTimeRadioButtonOn ? "\(addScheduleViewModel.recurrenceInfo.recurrenceCnt)회 반복" : nil,
+                            selectedID: selectedRadioButton,
+                            subLabel: isTimeRadioButtonOn ? nil : "\(addScheduleViewModel.selectedDate?.getFormattedYMDByCalendar() ?? "")까지",
                             callback: { id in
-                    selectedID = id
+                    selectedRadioButton = id
                     isFirst = false
                 })
                 
                 .padding([.leading, .trailing], 24)
 
-                if !isFirst && selectedID == radioButtonItems[0] {
+                if !isFirst && selectedRadioButton == radioButtonItems[0] {
                     HStack {
                         Picker(selection: $addScheduleViewModel.recurrenceInfo.recurrenceCnt, label: Text("회").fixedSize()) {
                             ForEach(times, id: \.self) {
@@ -97,32 +97,39 @@ struct AddScheduleRepetitionView: View {
                     
                 }
                 RadioButton(radioButtonItems[1],
-                            selectedID: selectedID,
-                            subLabel: isTimeRadioButtonOn ? nil : "\(addScheduleViewModel.endDate.getFormattedYMDByCalendar())까지",
+                            selectedID: selectedRadioButton,
+                            subLabel: isTimeRadioButtonOn ? nil : "\(addScheduleViewModel.selectedDate?.getFormattedYMDByCalendar() ?? "")까지",
                             callback: { id in
-                    selectedID = id
+                    selectedRadioButton = id
                     isFirst = false
                 })
                 .padding([.leading, .trailing], 24)
                 
-                if selectedID == radioButtonItems[1] {
+                if selectedRadioButton == radioButtonItems[1] {
                     VStack {
-                        DatePicker(selection: $addScheduleViewModel.endDate,
-                                   in: addScheduleViewModel.date...nextYear,
-                                   displayedComponents: .date) {
-                            
-                        }
-                        .labelsHidden()
-                        .frame(width: UIScreen.width, height: 168)
-                        .background(Color(R.Color.gray100))
-                        .clipped()
-                        .datePickerStyle(.wheel)
+                        DatePickerRepresentable(selectedDate: $addScheduleViewModel.selectedDate, range: addScheduleViewModel.startDate...nextYear)
+                            .frame(width: UIScreen.width, height: 168)
+                            .background(Color(R.Color.gray100))
                     }
+                    
+//                    VStack {
+//                        DatePicker(selection: $addScheduleViewModel.endDate,
+//                                   in: addScheduleViewModel.date...nextYear,
+//                                   displayedComponents: .date) {
+//                            
+//                        }
+//                        .labelsHidden()
+//                        .frame(width: UIScreen.width, height: 168)
+//                        .background(Color(R.Color.gray100))
+//                        .clipped()
+//                        .datePickerStyle(.wheel)
+//                    }
                 }
             }
         }
         .onAppear {
-            addScheduleViewModel.endDate = addScheduleViewModel.date
+            // recurrenceInfo의 타입에 따라서 횟수/날짜를 설정해줌
+            selectedRadioButton = addScheduleViewModel.recurrenceInfo.recurrenceEndDvcd == "01" ? radioButtonItems[0] : radioButtonItems[1]
         }
         .ignoresSafeArea()
         Spacer()

@@ -91,8 +91,13 @@ struct AddScheduleView: View {
                 addScheduleViewModel.selectedId = recurrenceInfo.recurrencePattern.recurrenceTitleByPattern()
                 
                 // recurrenceInfo 가 있으면 selectedDate를 설정해줌
+                
                 if let endDate = recurrenceInfo.endYMD.toDate() {
-                    addScheduleViewModel.selectedDate = endDate
+                    if recurrenceInfo.endYMD == "" {
+                        addScheduleViewModel.selectedDate = editViewModel.createAt.toDate()
+                    } else {
+                        addScheduleViewModel.selectedDate = endDate
+                    }
                 }
                 
             } else {

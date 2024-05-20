@@ -22,15 +22,6 @@ struct AddScheduleRepetitionView: View {
     @State private var selectedDay: Int = Calendar.current.component(.day, from: Date())
     @Environment(\.presentationMode) var presentationMode
     
-    // 년도, 월, 일 범위 설정
-    let years: [Int] = Array(2020...2024)
-    let months: [Int] = Array(1...12)
-    var days: [Int] {
-        let selectedMonthIndex = selectedMonth - 1
-        let daysInMonth = Calendar.current.range(of: .day, in: .month, for: Calendar.current.date(from: DateComponents(year: selectedYear, month: selectedMonthIndex))!)!
-        return Array(daysInMonth)
-    }
-    
     private var isTimeRadioButtonOn: Bool {
         selectedRadioButton == radioButtonItems[0]
     }

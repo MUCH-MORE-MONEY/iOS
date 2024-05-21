@@ -40,7 +40,7 @@ extension PriceTextFieldView {
             let isStep2 = viewModel.currentStep == .income
             
             if viewModel.budgetAmt != 0 {
-                $0.text = isStep2 ? viewModel.budgetAmt.withCommas() : ""
+                $0.text = isStep2 ? viewModel.budgetAmt.withCommas() + "만원" : ""
             }
             
             let placeholder = "만원 단위로 입력"

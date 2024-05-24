@@ -132,11 +132,10 @@ struct BudgetDetail03View: View {
                                 }
                                 .store(in: &cancellables)
                         }
-                    if !viewModel.isEstimatedEarningAmtValid {
-                        Text("예상 수입을 넘어선 금액이에요 (최대 {예상수입}만원)")
+                    if !viewModel.isEstimatedEarningAmtValid && viewModel.estimatedEarningAmtForTextField != 0 {
+                        Text("예상 수입을 넘어선 금액이에요 (최대 \(viewModel.budgetAmt)만원)")
                             .font(R.Font.body3.suFont)
                             .foregroundStyle(R.Color.red500.suColor)
-                            .autoShake(shakeCount: $viewModel.shakes, triggerFlag: viewModel.isEstimatedEarningAmtValid)
                     }
                 }
                 Spacer()

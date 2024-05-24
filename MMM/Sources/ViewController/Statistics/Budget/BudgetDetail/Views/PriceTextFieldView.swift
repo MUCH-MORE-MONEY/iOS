@@ -33,10 +33,6 @@ final class PriceTextFieldView: BaseView {
 extension PriceTextFieldView {
     override func setAttribute() {
         priceTextField = priceTextField.then {
-//            if let price = Int(viewModel.budgetAmt) {
-//                $0.text = price.withCommas() + "만원"
-//            }
-            
             let isStep2 = viewModel.currentStep == .income
             
             if viewModel.budgetAmt != 0 {
@@ -48,10 +44,12 @@ extension PriceTextFieldView {
             
             $0.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedString.Key.foregroundColor: R.Color.gray500])
             $0.font = R.Font.h2
-            $0.textColor = isStep2 ? R.Color.white : R.Color.gray900
             $0.keyboardType = .numberPad     // 숫자 키보드
             $0.tintColor = R.Color.gray400     // cursor color
-            $0.setNumberMode(unit: isStep2 ? "만원" : " 만원")     // 단위 설정
+            
+            $0.setNumberMode(by: viewModel.currentStep)
+            
+            
             $0.setClearButton(with: R.Icon.cancel, mode: .always) // clear 버튼
         }
         
@@ -82,17 +80,40 @@ extension PriceTextFieldView {
     
     override func setBind() {
         // 현재 스탭에 따라서 binding을 다르게 해줌
+        // budget02 에서의 bind
         if viewModel.currentStep == .income {
             priceTextField.textPublisher
                 .map{String(Array($0).filter{$0.isNumber})} // 숫자만 추출
                 .map { Int($0) ?? 0 }
                 .assignOnMainThread(to: \.budgetAmt, on: viewModel)
                 .store(in: &cancellable)
+            
+            // 값이 범위 내 초과하였을 경우 textfield shake
+            viewModel.$budgetAmt.combineLatest(viewModel.$isBudgetAmtValid)
+                .sinkOnMainThread { [weak self] budget, isValid in
+                    guard let self = self else { return }
+                    if budget != 0 && !isValid {
+                        self.priceTextField.shake()
+                    }
+                }
+                .store(in: &cancellable)
+                
+            // budget02 에서의 bind
         } else if viewModel.currentStep == .expense {
             priceTextField.textPublisher
                 .map{String(Array($0).filter{$0.isNumber})} // 숫자만 추출
                 .map { Int($0) ?? 0 }
                 .assignOnMainThread(to: \.estimatedEarningAmtForTextField, on: viewModel)
+                .store(in: &cancellable)
+            
+            // 값이 범위 내 초과하였을 경우 textfield shake
+            viewModel.$estimatedEarningAmtForTextField.combineLatest(viewModel.$isEstimatedEarningAmtValid)
+                .sinkOnMainThread { [weak self] estimatedAmt, isValid in
+                    guard let self = self else { return }
+                    if estimatedAmt != 0 && !isValid {
+                        self.priceTextField.shake()
+                    }
+                }
                 .store(in: &cancellable)
         }
     }

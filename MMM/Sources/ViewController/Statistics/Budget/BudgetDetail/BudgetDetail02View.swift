@@ -51,7 +51,7 @@ struct BudgetDetail02View: View {
                 }
             }
             .font(Font(R.Font.body3))
-            .autoShake(shakeCount: $viewModel.shakes, triggerFlag: !viewModel.isBudgetAmtValid && viewModel.budgetAmt != 0)
+//            .autoShake(shakeCount: $viewModel.shakes, triggerFlag: !viewModel.isBudgetAmtValid && viewModel.budgetAmt != 0)
             Spacer()
         }
     }

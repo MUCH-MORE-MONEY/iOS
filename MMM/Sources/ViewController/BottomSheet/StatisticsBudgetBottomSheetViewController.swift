@@ -65,7 +65,7 @@ extension StatisticsBudgetBottomSheetViewController {
 		// 똑같이 적용하기
 		sameButton.rx.tap
 			.withUnretained(self)
-			.map { .dismiss }
+			.map { .setApply }
 			.bind(to: reactor.action)
 			.disposed(by: disposeBag)
 	}
@@ -86,7 +86,7 @@ extension StatisticsBudgetBottomSheetViewController {
 extension StatisticsBudgetBottomSheetViewController {
 	private func setMutiText() -> NSMutableAttributedString {
 		let attributedText1 = NSMutableAttributedString(string: "가장 최근에 설정한 지출 예산인\n")
-		let attributedText2 = NSMutableAttributedString(string: "{\(curBudget)}원")
+		let attributedText2 = NSMutableAttributedString(string: "{\(curBudget.withCommas())}원")
 		let attributedText3 = NSMutableAttributedString(string: "을 적용할까요?")
 		let paragraphStyle = NSMutableParagraphStyle()
 		paragraphStyle.lineSpacing = 5
@@ -129,7 +129,7 @@ extension StatisticsBudgetBottomSheetViewController {
 		}
 		
 		contentLabel = contentLabel.then {
-			let attrString = NSMutableAttributedString(string: "한 달에 이만큼 지출하면\n총 {\(totalSaving)}원을 저축할 수 있어요")
+			let attrString = NSMutableAttributedString(string: "한 달에 이만큼 지출하면\n총 {\(totalSaving.withCommas())}원을 저축할 수 있어요")
 			let paragraphStyle = NSMutableParagraphStyle()
 			paragraphStyle.lineSpacing = 5
 			attrString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, attrString.length))

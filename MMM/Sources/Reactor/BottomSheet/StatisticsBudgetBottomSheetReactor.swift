@@ -20,10 +20,12 @@ final class StatisticsBudgetBottomSheetReactor: Reactor {
 	// 처리 단위
 	enum Mutation {
 		case dismiss
+		case setError
 	}
 	
 	// 현재 상태를 기록
 	struct State {
+		var applyInfo: APIParameters.UpsertEconomicPlanReqDto
 		var dismiss: Bool = false
 	}
 	
@@ -32,8 +34,8 @@ final class StatisticsBudgetBottomSheetReactor: Reactor {
 	let provider: ServiceProviderProtocol
 
 	// 초기 State 설정
-	init(provider: ServiceProviderProtocol) {
-		self.initialState = State()
+	init(provider: ServiceProviderProtocol, applyInfo: APIParameters.UpsertEconomicPlanReqDto) {
+		self.initialState = State(applyInfo: applyInfo)
 		self.provider = provider
 	}
 }
@@ -45,7 +47,9 @@ extension StatisticsBudgetBottomSheetReactor {
 		case .change:
 			return provider.statisticsProvider.changeBudge().map { _ in .dismiss }
 		case .setApply:
-			return .just(.dismiss)
+			return .concat([
+				postEconomicPlan()
+			])
 		case .dismiss:
 			return .just(.dismiss)
 		}
@@ -58,9 +62,22 @@ extension StatisticsBudgetBottomSheetReactor {
 		switch mutation {
 		case .dismiss:
 			newState.dismiss = true
+		case .setError:
+			newState.dismiss = true
 		}
 		
 		return newState
 	}
 }
-
+//MARK: - Action
+extension StatisticsBudgetBottomSheetReactor {
+	func postEconomicPlan() -> Observable<Mutation> {
+		
+		return MMMAPIService().upsertEconomicPlan(request: currentState.applyInfo)
+			.map { (response, error) -> Mutation in
+				self.provider.statisticsProvider.loadData()
+				return .dismiss
+			}
+			.catchAndReturn(.setError)
+	}
+}

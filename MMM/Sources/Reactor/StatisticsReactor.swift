@@ -137,8 +137,13 @@ extension StatisticsReactor {
 	
 	/// 각각의 stream을 변형
 	func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-		let event = provider.statisticsProvider.event.flatMap { event -> Observable<Mutation> in
+		let event = provider.statisticsProvider.event.flatMap { [self] event -> Observable<Mutation> in
 			switch event {
+			case .loadData:
+				return .concat([
+					self.getBudget(currentState.date),						// 예산
+					self.getBudget(currentState.date.previousMonth(), true),// 이전 예산
+				])
 			case let .updateDate(date):
 				return .concat([
 					.just(.setDialog(false)),

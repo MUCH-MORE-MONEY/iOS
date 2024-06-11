@@ -88,7 +88,7 @@ final class HomeViewController: UIViewController {
 		fetchData()
 		
 		// 첫 한번만 Onboarding popup 작동
-		if !onBoardingViewFlag {
+		if let value = Constants.getKeychainValueByBool(forKey: Constants.KeychainKey.onBoardingFlag), value {
 			setPopup()
 		}
 	}
@@ -219,7 +219,7 @@ private extension HomeViewController {
 	func setPopup() {
 		self.popupView.modalPresentationStyle = .overFullScreen
 		self.present(popupView, animated: true)
-		self.onBoardingViewFlag = true
+		Constants.setKeychain(false, forKey: Constants.KeychainKey.onBoardingFlag)
 	}
 	
 	private func bind() {

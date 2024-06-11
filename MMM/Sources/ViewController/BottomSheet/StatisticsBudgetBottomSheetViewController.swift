@@ -65,7 +65,7 @@ extension StatisticsBudgetBottomSheetViewController {
 		// 똑같이 적용하기
 		sameButton.rx.tap
 			.withUnretained(self)
-			.map { .dismiss }
+			.map { .setApply }
 			.bind(to: reactor.action)
 			.disposed(by: disposeBag)
 	}

@@ -25,6 +25,7 @@ enum MMMAPI {
 	case getBudget(dateYM: String) // 월간 예산
 	case getStatisticsSum(dateYM: String, economicActivityDvcd: String) // 해당 연월 기준 월간 경제활동 총합 조회
 	case getStatisticsLast // 가장 최근 수정한 경제계획 조회 API
+	case upsertEconomicPlan(info: APIParameters.UpsertEconomicPlanReqDto)
 	
 	// MARK: - Category Main
 	//    case getAddCategoryList(CategoryListReqDto) //경제활동구분 코드 기준 카테고리별 월간 경제활동 목록 전체 조회
@@ -81,6 +82,8 @@ extension MMMAPI: BaseNetworkService {
 			return "/economic_activity/\(dateYM)/\(economicActivityDvcd)/sum"
 		case .getStatisticsLast:
 			return "/v1/economic-plan/latest-updated"
+		case .upsertEconomicPlan:
+			return "/v1/economic-plan"
 		case let .getCategoryList(request):
 			return "/economic_activity/\(request.dateYM)/\(request.economicActivityDvcd)/category/list"
 		case let .getCategoryDetailList(request):
@@ -110,7 +113,7 @@ extension MMMAPI: BaseNetworkService {
 	var method: Moya.Method {
 		switch self {
 			// MARK: - V1 API
-		case .push, .pushAgreeListSelect, .pushAgreeUpdate:
+		case .push, .pushAgreeListSelect, .pushAgreeUpdate, .upsertEconomicPlan:
 			return .post
 		case .getStaticsticsAverage, .getStatisticsList, .getStatisticsCategory, .getBudget, .getStatisticsSum, .getSelectedActivity, .getStatisticsLast:
 			return .get
@@ -141,6 +144,8 @@ extension MMMAPI: BaseNetworkService {
 		case .pushAgreeListSelect:
 			return .requestPlain
 		case let .pushAgreeUpdate(request):
+			return .requestParameters(parameters: request.asDictionary, encoding: JSONEncoding.default)
+		case let .upsertEconomicPlan(request):
 			return .requestParameters(parameters: request.asDictionary, encoding: JSONEncoding.default)
 		case .getStaticsticsAverage, .getStatisticsCategory, .getBudget, .getStatisticsSum, .getSelectedActivity, .getStatisticsLast:
 			return .requestPlain

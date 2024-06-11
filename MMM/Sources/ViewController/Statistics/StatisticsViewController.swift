@@ -317,9 +317,9 @@ extension StatisticsViewController {
 			return
 		}
 		let lastPlan = reactor.currentState.lastPlan
-		print("여기", lastPlan, reactor.currentState.budget)
+
 		let vc = StatisticsBudgetBottomSheetViewController(curBudget: lastPlan.budget ?? 0, totalSaving: lastPlan.estimatedEarning ?? 0, height: 292)
-		vc.reactor = StatisticsBudgetBottomSheetReactor(provider: reactor.provider)
+		vc.reactor = StatisticsBudgetBottomSheetReactor(provider: reactor.provider, applyInfo: .init(budgetAmt: lastPlan.budget ?? 0, economicPlanYM: reactor.currentState.date.getFormattedYM(), estimatedEarningAmt: lastPlan.estimatedEarning ?? 0))
 		self.present(vc, animated: true, completion: nil)
 	}
 	

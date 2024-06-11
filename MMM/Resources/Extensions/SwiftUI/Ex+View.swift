@@ -19,6 +19,10 @@ extension View {
                 HalfSheetHelper(sheetView: sheetView(), showSheet: showSheet, onEnd: onEnd)
             }
     }
+    
+    func navigationTransition(start insertion: Edge, to removal: Edge) -> some View {
+        self.transition(.asymmetric(insertion: .move(edge: insertion), removal: .move(edge: removal)))
+    }
 }
 
 // UIKit Integration
@@ -83,3 +87,25 @@ final class CustomHostingController<Content: View>: UIHostingController<Content>
         }
     }
 }
+
+struct ShakeEffect: GeometryEffect {
+    var amount: CGFloat = 10
+    var shakesPerUnit: CGFloat = 3
+    var animatableData: CGFloat
+
+    func effectValue(size: CGSize) -> ProjectionTransform {
+        ProjectionTransform(CGAffineTransform(translationX: amount * sin(animatableData * .pi * shakesPerUnit), y: 0))
+    }
+}
+
+extension View {
+    func shake(animatableData: CGFloat) -> some View {
+        modifier(ShakeEffect(animatableData: animatableData))
+    }
+    
+    /// Automatically triggers a shake animation based on a boolean flag.
+    func autoShake(shakeCount: Binding<CGFloat>, triggerFlag: Bool) -> some View {
+        self.modifier(AutoShakeModifier(shakeCount: shakeCount, triggerFlag: triggerFlag))
+    }
+}
+

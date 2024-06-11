@@ -100,6 +100,6 @@ extension String {
         let month = self.dropFirst(4).prefix(2)
         let day = self.suffix(2)
         
-        return "\(year).\(month).\(day)까지"
+        return "\(year).\(month).\(day)"
     }
 }

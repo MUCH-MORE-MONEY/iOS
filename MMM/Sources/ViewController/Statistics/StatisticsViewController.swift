@@ -12,6 +12,7 @@ import RxCocoa
 import ReactorKit
 import RxDataSources
 import UIKit
+import RxGesture
 
 // 상속하지 않으려면 final 꼭 붙이기
 final class StatisticsViewController: BaseViewController, View {
@@ -24,9 +25,11 @@ final class StatisticsViewController: BaseViewController, View {
 	}
 	
 	// MARK: - Properties
+	private var isFirst: Bool = false
 	private var month: Date = Date()
 	private var satisfaction: Satisfaction = .low
 	private var timer: DispatchSourceTimer? // rank(순위)를 변경하는 시간
+	private var isBudget: Bool = false
 	private lazy var dataSource: DataSource = RxTableViewSectionedReloadDataSource<StatisticsSectionModel>(configureCell: { dataSource, tv, indexPath, item -> UITableViewCell in
 		
 		guard let reactor = self.reactor else { return .init() }
@@ -59,9 +62,10 @@ final class StatisticsViewController: BaseViewController, View {
 	private lazy var monthButtonItem = UIBarButtonItem()
 	private lazy var monthButton = SemanticContentAttributeButton()
 	private lazy var headerView = UIView()
-	private lazy var titleView = StatisticsTitleView()
-	private lazy var averageView = StatisticsAverageView()
+	private lazy var budgetView = StatisticsBudgetView()
+	private lazy var yetBudgetView = StatisticsYetBudgetView()
 	private lazy var categoryView = StatisticsCategoryView()
+	private lazy var averageView = StatisticsAverageView()
 	private lazy var activityView = StatisticsActivityView(timer: timer)
 	private lazy var satisfactionView = StatisticsSatisfactionView() // 만족도 선택
 	private lazy var tableView = UITableView()
@@ -78,11 +82,10 @@ final class StatisticsViewController: BaseViewController, View {
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
-        Tracking.StatiBudget.pageViewLogEvent()
-        
-		guard let reactor = reactor else { return }
-
 		super.viewWillAppear(animated)
+        Tracking.StatiBudget.pageViewLogEvent()
+        self.navigationController?.setNavigationBarHidden(false, animated: animated)
+        guard let reactor = reactor else { return }
 		// Root View인 NavigationView에 item 수정하기
 		if let navigationController = self.navigationController {
 			if let rootVC = navigationController.viewControllers.first {
@@ -152,6 +155,12 @@ extension StatisticsViewController {
 			}
 			.bind(to: reactor.action)
 			.disposed(by: disposeBag)
+        
+        yetBudgetView.rx.tapGesture()
+            .when(.recognized)
+            .map { _ in .didTapNewTitleView }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
 	}
 	
 	// MARK: 데이터 바인딩 처리 (Reactor -> View)
@@ -164,9 +173,38 @@ extension StatisticsViewController {
 			.disposed(by: disposeBag)
 		
 		reactor.state
+			.map { $0.isDialog }
+			.distinctUntilChanged() // 중복값 무시
+			.filter { $0 }
+			.bind(onNext: presentDiaglog) // 다이어로그 노출
+			.disposed(by: disposeBag)
+		
+		reactor.state
+			.map { $0.budget }
+			.distinctUntilChanged() // 중복값 무시
+			.bind(onNext: setBudget) // 예산 변경
+			.disposed(by: disposeBag)
+		
+		reactor.state
+			.map { $0.paySum }
+			.distinctUntilChanged() // 중복값 무시
+			.bind(onNext: setCurrentPay) // 현재 지출
+			.disposed(by: disposeBag)
+		
+		reactor.state
 			.map { $0.average }
 			.distinctUntilChanged() // 중복값 무시
-			.bind(onNext: averageView.setData) // 평균 변경
+			.withUnretained(self)
+			.subscribe(onNext: { this, average in // 평균 변경
+				if this.headerView.subviews.contains(this.satisfactionView) {
+					this.satisfactionView.snp.updateConstraints {
+						$0.top.equalTo(this.averageView.snp.bottom).offset(26)
+					}
+				}
+
+				this.averageView.setData(average: average)
+				this.tableView.reloadData()
+			})
 			.disposed(by: disposeBag)
 		
 		reactor.state
@@ -190,6 +228,27 @@ extension StatisticsViewController {
 				this.tableView.tableFooterView = isEmpty ? this.emptyView : nil
 			})
 			.disposed(by: disposeBag)
+		
+		// 요약하기
+		reactor.state
+			.map { $0.isSummary }
+			.distinctUntilChanged() // 중복값 무시
+			.withUnretained(self)
+			.bind { (this, isSummary) in
+				if this.isFirst { // 처음 화면에 접근했을 경우
+					this.activityView.isHidden = isSummary
+					
+					this.headerView.frame.size.height = isSummary ? this.headerView.frame.height - 90 : this.headerView.frame.height + 90
+
+					this.satisfactionView.snp.updateConstraints {
+						$0.top.equalTo(this.averageView.snp.bottom).offset(isSummary ? 26 : 116)
+					}
+					
+					this.tableView.reloadData()
+				} else {
+					this.isFirst = true
+				}
+			}.disposed(by: disposeBag)
 		
 		// 로딩 발생
 		// 다음 배포때, 스켈레톤 처리
@@ -232,6 +291,13 @@ extension StatisticsViewController {
 			.filter { $0 } // true일때만 화면 전환
 			.bind(onNext: pushDetail)
 			.disposed(by: disposeBag)
+        
+        reactor.state
+            .map { $0.isPushBudgetSetting }
+            .distinctUntilChanged()
+            .filter { $0 }
+            .bind(onNext: pushBudgetSettingViewController)
+            .disposed(by: disposeBag)
 	}
 }
 //MARK: - Action
@@ -242,6 +308,18 @@ extension StatisticsViewController {
 		// 달력 Picker
 		let vc = StatisticsDateBottomSheetViewController(title: "월 이동", date: month, height: 360, mode: .onlyMonthly, sheetMode: .drag, isDark: false)
 		vc.reactor = StatisticsDateBottomSheetReactor(provider: reactor.provider)
+		self.present(vc, animated: true, completion: nil)
+	}
+	
+	// Dialog 설정
+	private func presentDiaglog(_ isDialog: Bool) {
+		guard let reactor = self.reactor, reactor.currentState.budget.budget == nil else {
+			return
+		}
+		let lastPlan = reactor.currentState.lastPlan
+
+		let vc = StatisticsBudgetBottomSheetViewController(curBudget: lastPlan.budget ?? 0, totalSaving: lastPlan.estimatedEarning ?? 0, height: 292)
+		vc.reactor = StatisticsBudgetBottomSheetReactor(provider: reactor.provider, applyInfo: .init(budgetAmt: lastPlan.budget ?? 0, economicPlanYM: reactor.currentState.date.getFormattedYM(), estimatedEarningAmt: lastPlan.estimatedEarning ?? 0))
 		self.present(vc, animated: true, completion: nil)
 	}
 	
@@ -290,6 +368,49 @@ extension StatisticsViewController {
 		self.present(vc, animated: true, completion: nil)
 	}
 	
+	/// 예산 설정 유무 따른 UI 변경
+	private func setBudget(_ budgetInfo: Budget) {
+		guard let budget = budgetInfo.budget, let earn = budgetInfo.estimatedEarning else {
+			// 예산 설정이 안되었을 경우
+			self.isBudget = false
+			self.budgetView.isHidden = true
+			self.yetBudgetView.isHidden = false
+			
+			self.headerView.frame.size.height = 418
+
+			if self.headerView.subviews.contains(categoryView) {
+				categoryView.snp.remakeConstraints {
+					$0.top.equalTo(yetBudgetView.snp.bottom).offset(12)
+					$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
+					$0.height.equalTo(146)
+				}
+			}
+			return
+		}
+		
+		self.isBudget = true
+		self.headerView.frame.size.height = 461
+		self.budgetView.isHidden = false
+		self.yetBudgetView.isHidden = true
+		
+		self.budgetView.setBudget(estimatedEarning: budget) // 예상 수입
+
+		if self.headerView.subviews.contains(categoryView) {
+			categoryView.snp.remakeConstraints {
+				$0.top.equalTo(budgetView.snp.bottom).offset(12)
+				$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
+				$0.height.equalTo(146)
+			}
+		}
+		self.tableView.reloadData()
+	}
+	
+	// 해당 연월 기준 월간 경제활동 총합 조회
+	private func setCurrentPay(_ sum: StatisticsSum) {
+		guard let economicActivitySumAmt = sum.economicActivitySumAmt else { return }
+		self.budgetView.setCurrentPay(currentPayLabel: economicActivitySumAmt)
+	}
+
 	/// '월'  및 범위 변경
 	private func setMonth(_ date: Date) {
 		// 올해인지 판별
@@ -299,16 +420,6 @@ extension StatisticsViewController {
 			monthButton.setTitle(date.getFormattedDate(format: "M월"), for: .normal)
 		}
 		
-		// 범위 변경
-		let month = date.getFormattedDate(format: "MM")
-		var end = date.lastDay() ?? "01"
-		
-		// 이번달 인지 판별
-		if date.getFormattedYM() == Date().getFormattedYM() {
-			end = Date().getFormattedDate(format: "dd")
-		}
-		
-		self.titleView.setData(startDate: "\(month).01", endDate: "\(month).\(end)")
 		self.month = date
 	}
 	
@@ -317,6 +428,28 @@ extension StatisticsViewController {
 		satisfactionView.setData(title: satisfaction.title, score: satisfaction.score)
 		self.satisfaction = satisfaction
 	}
+    
+    /// 에산설정 뷰
+    private func pushBudgetSettingViewController(_ isPush: Bool) {
+		guard let reactor = reactor else { return }
+//		reactor.currentState.preBudget // 임시: 사용하렴 정우야
+        
+        
+        var dateComponents = DateComponents()
+        dateComponents.month = 0
+        let newDate = Calendar.current.date(byAdding: dateComponents, to: reactor.currentState.date)
+        
+        let dateYM = newDate?.getFormattedYM() ?? ""
+        print(dateYM)
+        
+        let budget = reactor.currentState.preBudget
+        let interface = BudgetSettingViewInterface()
+        let vc = interface.budgetSettingViewUI(budget, dateYM)
+        
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        
+        navigationController?.pushViewController(vc, animated: true)
+    }
 }
 //MARK: - Attribute & Hierarchy & Layouts
 extension StatisticsViewController: SkeletonLoadable {
@@ -337,8 +470,10 @@ extension StatisticsViewController: SkeletonLoadable {
 		view.backgroundColor = R.Color.gray900
 		
 		headerView.backgroundColor = R.Color.gray900
+		budgetView.reactor = self.reactor
 		categoryView.reactor = self.reactor // reactor 주입
 		activityView.reactor = self.reactor // reactor 주입
+		averageView.reactor = self.reactor // reactor 주입
 		satisfactionView.reactor = self.reactor // reactor 주입
 		
 		let firstGroup = makeAnimationGroup(startColor: R.Color.gray800, endColor: R.Color.gray600)
@@ -386,10 +521,6 @@ extension StatisticsViewController: SkeletonLoadable {
 			$0.rowHeight = UITableView.automaticDimension
 		}
 		
-		headerView = headerView.then {
-			$0.frame = .init(x: 0, y: 0, width: view.bounds.width, height: 551)
-		}
-		
 		emptyView = emptyView.then {
 			$0.frame = .init(x: 0, y: 0, width: view.bounds.width, height: 248)
 		}
@@ -399,38 +530,44 @@ extension StatisticsViewController: SkeletonLoadable {
 		super.setHierarchy()
 		
 		view.addSubviews(tableView)
-		headerView.addSubviews(titleView, averageView, categoryView, activityView, satisfactionView)
+		headerView.addSubviews(budgetView, yetBudgetView, categoryView, averageView, activityView, satisfactionView)
 	}
 	
 	override func setLayout() {
 		super.setLayout()
 		
-		titleView.snp.makeConstraints {
-			$0.top.equalToSuperview().inset(32)
-			$0.leading.equalToSuperview().inset(24)
-			$0.trailing.equalToSuperview().inset(UI.sideMargin)
+		budgetView.snp.makeConstraints {
+			$0.top.equalToSuperview().inset(12)
+			$0.leading.trailing.equalToSuperview().inset(24)
+			$0.height.equalTo(135)
 		}
 		
-		averageView.snp.makeConstraints {
-			$0.top.equalTo(titleView.snp.bottom)
+		yetBudgetView.snp.makeConstraints {
+			$0.top.equalToSuperview().inset(24)
 			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
-			$0.height.equalTo(64)
+			$0.height.equalTo(80)
 		}
 
 		categoryView.snp.makeConstraints {
-			$0.top.equalTo(averageView.snp.bottom).offset(16)
+			$0.top.equalTo(yetBudgetView.isHidden ? budgetView.snp.bottom : yetBudgetView.snp.bottom).offset(12)
 			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 			$0.height.equalTo(146)
 		}
+		
+		averageView.snp.makeConstraints {
+			$0.top.equalTo(categoryView.snp.bottom).offset(12)
+			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
+			$0.height.equalTo(50)
+		}
 
 		activityView.snp.makeConstraints {
-			$0.top.equalTo(categoryView.snp.bottom).offset(16)
+			$0.top.equalTo(averageView.snp.bottom).offset(-14)
 			$0.leading.trailing.equalToSuperview().inset(UI.sideMargin)
 			$0.height.equalTo(100)
 		}
 
 		satisfactionView.snp.makeConstraints {
-			$0.top.equalTo(activityView.snp.bottom).offset(24)
+			$0.top.equalTo(averageView.snp.bottom).offset(26)
 			$0.leading.trailing.equalToSuperview()
 			$0.bottom.equalToSuperview()
 		}
@@ -439,5 +576,7 @@ extension StatisticsViewController: SkeletonLoadable {
 		tableView.snp.makeConstraints {
 			$0.edges.equalToSuperview()
 		}
+		
+		activityView.isHidden = true // Timer가 돌아가지 않는 Bug 해결
 	}
 }

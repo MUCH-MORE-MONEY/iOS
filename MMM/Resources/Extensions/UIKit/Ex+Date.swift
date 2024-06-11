@@ -51,13 +51,21 @@ extension Date {
         return dateformat.string(from: self)
     }
 	
-	/// format: yyMM
+	/// format: yyyyMM
 	func getFormattedYM() -> String {
 		let dateformat = DateFormatter()
 		dateformat.locale = Locale(identifier: "ko_KR")
 		dateformat.timeZone = TimeZone(abbreviation: "KST")
 		dateformat.dateFormat = "yyyyMM"
 		return dateformat.string(from: self)
+	}
+	
+	/// 이전달
+	func previousMonth() -> Date {
+		guard let previousMonth = Calendar.current.date(byAdding: .month, value: -1, to: self) else {
+			return self
+		}
+		return previousMonth
 	}
     
     func getFormattedTime() -> String {

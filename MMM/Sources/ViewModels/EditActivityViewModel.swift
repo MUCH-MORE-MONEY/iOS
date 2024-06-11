@@ -76,7 +76,6 @@ final class EditActivityViewModel: ObservableObject {
     enum EditActivityType {
         case content
         case pattern
-        case contentAndPattern
         case deleteRecurrence
     }
     
@@ -255,6 +254,7 @@ final class EditActivityViewModel: ObservableObject {
             }
             self.isLoading = false
         } receiveValue: { response in
+            print(response)
             self.editResponse = response
             self.isShowToastMessage = true
             self.changedId = response.economicActivityNo
@@ -318,9 +318,7 @@ final class EditActivityViewModel: ObservableObject {
         if recurrenceIsChanged {
             return .deleteRecurrence
             // 패턴 & 내용 변경
-        } else if patternIsChanged && (activityDateIsChanged || contentIsChanged) {
-            return .contentAndPattern
-        } else if patternIsChanged {
+        }  else if patternIsChanged {
             return .pattern
         // 날짜 또는 내용 수정
         } else {

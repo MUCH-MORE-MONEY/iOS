@@ -34,11 +34,7 @@ final class EditActivityViewController: BaseAddActivityViewController, UINavigat
 	private var navigationTitle: String {
 		return date.getFormattedDate(format: "yyyy.MM.dd")
 	}
-	private let editAlertTitle = "편집을 그만두시겠어요?"
-	private let editAlertContentText = "편집한 내용이 사라지니 유의해주세요!"
 	
-	private let deleteAlertTitle = "경제활동을 삭제하시겠어요?"
-	private let deleteAlertContentText = "활동이 영구적으로 사라지니 유의해주세요!"
 	private var keyboardHeight: CGFloat = 0
 	private var isDeleteButton = false
 	
@@ -78,7 +74,11 @@ final class EditActivityViewController: BaseAddActivityViewController, UINavigat
         
 		//FIXME: - showAlert에서 super.didTapBackButton()호출하면 문제생김
 		isDeleteButton = false
-		showAlert(alertType: .canCancel, titleText: editAlertTitle, contentText: editAlertContentText, cancelButtonText: "닫기", confirmButtonText: "편집 취소하기")
+        showAlert(alertType: .canCancel,
+                  titleText: AlertText.Edit.title,
+                  contentText: AlertText.Edit.message,
+                  cancelButtonText: AlertText.close,
+                  confirmButtonText: AlertText.Edit.cancel)
 	}
 	
 	
@@ -105,7 +105,7 @@ final class EditActivityViewController: BaseAddActivityViewController, UINavigat
 
 // MARK: - Action
 extension EditActivityViewController {
-	func didTapDateTitle() {
+    func didTapDateTitle(_ type: UIView.GestureType) {
         // 키보드 내리기
         self.titleTextFeild.resignFirstResponder()
         
@@ -117,7 +117,7 @@ extension EditActivityViewController {
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
 	}
 	
-	func didTapMoneyLabel() {
+	func didTapMoneyLabel(_ type: UIView.GestureType) {
         // 키보드 내리기
         self.titleTextFeild.resignFirstResponder()
         
@@ -129,7 +129,7 @@ extension EditActivityViewController {
 		self.present(bottomSheetVC, animated: false, completion: nil) // fasle(애니메이션 효과로 인해 부자연스럽움 제거)
 	}
 	
-	func didTapStarLabel() {
+	func didTapStarLabel(_ type: UIView.GestureType) {
         // 키보드 내리기
         self.titleTextFeild.resignFirstResponder()
         
@@ -149,20 +149,22 @@ extension EditActivityViewController {
             
             let saveType = editViewModel.checkSaveType(by: detailActvity)
             
-            let actionSheet = UIAlertController(title: "이 경제활동은 반복 설정되어있어요.", message: "편집 사항을 다른 일정에도 적용하시겠습니까?", preferredStyle: .actionSheet)
+            let actionSheet = UIAlertController(title: ActionSheetText.Recurrence.title,
+                                                message: ActionSheetText.Recurrence.message,
+                                                preferredStyle: .actionSheet)
             
             
             // 반복된 경제활동일 경우에만 해당
             switch saveType {
             case .content:  // 내용이 수정되었을 경우
-                let singleAction = UIAlertAction(title: "이 경제활동에만 적용", style: .default) { [weak self] _ in
+                let singleAction = UIAlertAction(title: ActionSheetText.Recurrence.singleAction, style: .default) { [weak self] _ in
                     guard let self = self else { return }
                     self.editViewModel.updateDetailActivity(recurrenceUpdateYN: "N", contentRecurrenceUpdateYN: "N") {
                         self.detailViewModel.changedId = self.editViewModel.changedId
                     }
                 }
                 
-                let recurrenceAction = UIAlertAction(title: "이후 경제활동에도 적용", style: .default) { [weak self] _ in
+                let multiAction = UIAlertAction(title: ActionSheetText.Recurrence.multiAction, style: .default) { [weak self] _ in
                     guard let self = self else { return }
                     self.editViewModel.updateDetailActivity(recurrenceUpdateYN: "N", contentRecurrenceUpdateYN: "Y") {
                         self.detailViewModel.changedId = self.editViewModel.changedId
@@ -170,34 +172,20 @@ extension EditActivityViewController {
                 }
                 
                 actionSheet.addAction(singleAction)
-                actionSheet.addAction(recurrenceAction)
+                actionSheet.addAction(multiAction)
                 break
-            case .pattern:             // case 2 : 반복 패턴 수정
-                let singleAction = UIAlertAction(title: "이 경제활동에만 적용", style: .default) { [weak self] _ in
-                    guard let self = self else { return }
-                    self.editViewModel.updateDetailActivity(recurrenceUpdateYN: "N", contentRecurrenceUpdateYN: "N") {
-                        self.detailViewModel.changedId = self.editViewModel.changedId
-                    }
-                }
-                
-                let recurrenceAction = UIAlertAction(title: "이후 경제활동에도 적용", style: .default) { [weak self] _ in
-                    guard let self = self else { return }
-                    self.editViewModel.updateDetailActivity(recurrenceUpdateYN: "Y", contentRecurrenceUpdateYN: "N") {
-                        self.detailViewModel.changedId = self.editViewModel.changedId
-                    }
-                }
-                actionSheet.addAction(singleAction)
-                actionSheet.addAction(recurrenceAction)
-            case .contentAndPattern:   // case 3 반복 패턴 및 내용
-                let recurrenceAction = UIAlertAction(title: "이번 및 이후 활동에도 적용", style: .default) { [weak self] _ in
+            case .pattern:   // case 2 반복 패턴 및 내용, 반복 패턴 변경의 경우 이후 반복 경제활동 다 삭제 되고 다시 만들어 지는 거라  contentRecurrenceUpdateYN = Y
+                let patternAction = UIAlertAction(title: ActionSheetText.Recurrence.patternAction, style: .default) { [weak self] _ in
                     guard let self = self else { return }
                     self.editViewModel.updateDetailActivity(recurrenceUpdateYN: "Y", contentRecurrenceUpdateYN: "Y") {
                         self.detailViewModel.changedId = self.editViewModel.changedId
                     }
                 }
                 
-            case .deleteRecurrence: // case 4 : 반복 없애기
-                let recurrenceAction = UIAlertAction(title: "이번 및 이후 활동에도 적용", style: .default) { [weak self] _ in
+                actionSheet.addAction(patternAction)
+            
+            case .deleteRecurrence: // case 3 : 반복 없애기
+                let recurrenceAction = UIAlertAction(title: ActionSheetText.Recurrence.patternAction, style: .default) { [weak self] _ in
                     guard let self = self else { return }
                     editViewModel.updateDetailActivity {
                         self.detailViewModel.changedId = self.editViewModel.changedId
@@ -207,7 +195,7 @@ extension EditActivityViewController {
             }
 
             // 취소 액션 시트
-            let cancelAction = UIAlertAction(title: "취소", style: .cancel)
+            let cancelAction = UIAlertAction(title: CommonText.cancel, style: .cancel)
             actionSheet.addAction(cancelAction)
             
             self.present(actionSheet, animated: true)
@@ -236,7 +224,11 @@ extension EditActivityViewController {
         self.titleTextFeild.resignFirstResponder()
         
 		isDeleteButton = true
-		showAlert(alertType: .canCancel, titleText: deleteAlertTitle, contentText: deleteAlertContentText, cancelButtonText: "닫기", confirmButtonText: "삭제하기")
+		showAlert(alertType: .canCancel,
+                  titleText: AlertText.Delete.title,
+                  contentText:  AlertText.Delete.message,
+                  cancelButtonText: AlertText.close,
+                  confirmButtonText: AlertText.Delete.confirm)
 	}
 	
 	func didTapAlbumButton() {
@@ -263,20 +255,20 @@ extension EditActivityViewController {
         
 	}
 	
-	func didTapImageView() {
+	func didTapImageView(_ type: UIView.GestureType) {
         // 키보드 내리기
         self.titleTextFeild.resignFirstResponder()
         
 		let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 		
 		//앨범 선택 - 스타일(default)
-		actionSheet.addAction(UIAlertAction(title: "앨범선택", style: .default, handler: { [weak self] (ACTION:UIAlertAction) in
+        actionSheet.addAction(UIAlertAction(title: ActionSheetText.Album.selectTitle, style: .default, handler: { [weak self] (ACTION:UIAlertAction) in
 			guard let self = self else { return }
 			self.didTapAlbumButton()
 		}))
 		
 		//사진삭제 - 스타일(destructive)
-		actionSheet.addAction(UIAlertAction(title: "사진삭제", style: .destructive, handler: { [weak self] (ACTION:UIAlertAction) in
+		actionSheet.addAction(UIAlertAction(title: ActionSheetText.Album.deleteTitle, style: .destructive, handler: { [weak self] (ACTION:UIAlertAction) in
 			guard let self = self else { return }
 			self.mainImageView.image = nil
 			self.editViewModel.binaryFileList.removeAll()
@@ -285,7 +277,7 @@ extension EditActivityViewController {
 		}))
 		
 		//취소 버튼 - 스타일(cancel)
-		actionSheet.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+		actionSheet.addAction(UIAlertAction(title: CommonText.cancel, style: .cancel, handler: nil))
 		
 		self.present(actionSheet, animated: true, completion: nil)
 	}
@@ -299,7 +291,7 @@ extension EditActivityViewController {
 		return text
 	}
     
-    private func didTapCategory() {
+    private func didTapCategory(_ type: UIView.GestureType) {
         // 키보드 내리기
         self.titleTextFeild.resignFirstResponder()
         
@@ -411,25 +403,22 @@ extension EditActivityViewController: CustomAlertDelegate {
 		if isDeleteButton {
             
             if detailViewModel.detailActivity?.recurrenceYN == "Y" {
-                let recurrenceDeleteTitle = "이 경제활동은 반복 설정되어있어요."
-                let recurrenceDeleteMessage = "편집 사항을 다른 일정에도 적용하시겠습니까?"
-                
-                let alert = UIAlertController(title: recurrenceDeleteTitle, message: recurrenceDeleteMessage, preferredStyle: .actionSheet)
-                let delRecurrenceNAction = UIAlertAction(title: "이 경제활동에만 적용", style: .default) { [weak self] _ in
+                let alert = UIAlertController(title: ActionSheetText.Recurrence.title, message: ActionSheetText.Recurrence.message, preferredStyle: .actionSheet)
+                let delRecurrenceNAction = UIAlertAction(title: ActionSheetText.Recurrence.singleAction, style: .default) { [weak self] _ in
                     guard let self = self else { return }
                     // 삭제시, 통계 Refresh
                     editViewModel.deleteDetailActivity(delRecurrenceYn: "N")
                     self.refreshStatistics()
                 }
                 
-                let delRecurrenceYAction = UIAlertAction(title: "이후 경제활동에도 적용", style: .default) { [weak self] _ in
+                let delRecurrenceYAction = UIAlertAction(title: ActionSheetText.Recurrence.multiAction, style: .default) { [weak self] _ in
                     guard let self = self else { return }
                     // 삭제시, 통계 Refresh
                     editViewModel.deleteDetailActivity(delRecurrenceYn: "Y")
                     self.refreshStatistics()
                 }
                 
-                let cancelAction = UIAlertAction(title: "취소", style: .cancel)
+                let cancelAction = UIAlertAction(title: CommonText.cancel, style: .cancel)
                 
                 alert.addAction(delRecurrenceNAction)
                 alert.addAction(delRecurrenceYAction)
@@ -521,18 +510,6 @@ extension EditActivityViewController {
 	}
 	
 	func textViewDidBeginEditing() {
-//		let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
-//		scrollView.contentInset = contentInsets
-//		scrollView.scrollIndicatorInsets = contentInsets
-//		
-//		var rect = scrollView.frame
-//		rect.size.height -= keyboardHeight
-//		if !rect.contains(memoTextView.frame.origin) {
-//			scrollView.scrollRectToVisible(memoTextView.frame, animated: true)
-//		}
-		
-        
-        
 		if memoTextView.text == textViewPlaceholder {
 			memoTextView.text = nil
 			memoTextView.textColor = R.Color.black
@@ -709,41 +686,29 @@ extension EditActivityViewController {
 		
 		// MARK: - Gesture Publisher
 		titleStackView.gesturePublisher()
-			.receive(on: DispatchQueue.main)
-			.sink { _ in
-				self.didTapDateTitle()
-			}.store(in: &cancellable)
+            .sinkOnMainThread(receiveValue: didTapDateTitle)
+            .store(in: &cancellable)
 		
 		containerStackView.gesturePublisher()
-			.receive(on: DispatchQueue.main)
-			.sink { _ in
-				self.didTapMoneyLabel()
-			}.store(in: &cancellable)
+            .sinkOnMainThread(receiveValue: didTapMoneyLabel)
+			.store(in: &cancellable)
 		
 		starStackView.gesturePublisher()
-			.receive(on: DispatchQueue.main)
-			.sink { _ in
-				self.didTapStarLabel()
-			}.store(in: &cancellable)
+            .sinkOnMainThread(receiveValue: didTapStarLabel)
+			.store(in: &cancellable)
 		
 		satisfyingLabel.gesturePublisher()
-			.receive(on: DispatchQueue.main)
-			.sink { _ in
-				self.didTapStarLabel()
-			}.store(in: &cancellable)
+            .sinkOnMainThread(receiveValue: didTapStarLabel)
+			.store(in: &cancellable)
 		
 		mainImageView.gesturePublisher()
-			.receive(on: DispatchQueue.main)
-			.sink { _ in
-				self.didTapImageView()
-			}.store(in: &cancellable)
+            .sinkOnMainThread(receiveValue: didTapImageView)
+			.store(in: &cancellable)
 		
         
         addCategoryView.gesturePublisher()
-            .receive(on: DispatchQueue.main)
-            .sink { _ in
-                self.didTapCategory()
-            }.store(in: &cancellable)
+            .sinkOnMainThread(receiveValue: didTapCategory)
+            .store(in: &cancellable)
 		
         addScheduleTapView.gesturePublisher()
             .sinkOnMainThread(receiveValue: didTapAddScheduleTapView)
@@ -803,7 +768,7 @@ extension EditActivityViewController {
                 guard let self = self else { return }
                 if isFromView {
                     view.endEditing(true)
-                    self.didTapCategory()
+                    self.didTapCategory(.tap(.init()))
                 }
             }
             .store(in: &cancellable)
@@ -822,10 +787,6 @@ extension EditActivityViewController {
         self.hideKeyboardWhenTappedAround()
         titleTextFeild.becomeFirstResponder() // 키보드 보이기 및 포커스 주기
 
-//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        
-        
         navigationItem.rightBarButtonItem = deleteActivityButtonItem
         
         setCustomTitle()
@@ -834,7 +795,7 @@ extension EditActivityViewController {
         }
         
         deleteButton = deleteButton.then {
-            $0.setTitle("삭제", for: .normal)
+            $0.setTitle(CommonText.delete, for: .normal)
         }
                 
         editIconImage = editIconImage.then {

@@ -6,12 +6,15 @@
 //
 
 import SwiftUI
+import CoreHaptics
 
 struct BudgetSlider: View {
     @Binding var value: Double // 슬라이더의 현재 값
     var range: ClosedRange<Double> // 슬라이더의 범위
     var step: Double = 5.0 // 슬라이더의 단위 변경
     let divisions: Int = 4 // 5개의 구간을 만들기 위한 나눔 수 (0을 포함하여 총 5개)
+    private let hapticFeedback = UIImpactFeedbackGenerator(style: .medium)
+    
     
     var body: some View {
         GeometryReader { geometry in
@@ -62,7 +65,13 @@ struct BudgetSlider: View {
         let dragValue = max(0, min(Double(gesture.location.x / width), 1))
         let newValue = dragValue * (range.upperBound - range.lowerBound) + range.lowerBound
         let roundedValue = round(newValue / step) * step
-        self.value = roundedValue
+        
+        if roundedValue != value {
+            value = roundedValue
+            // 햅틱 기능 추가
+            self.hapticFeedback.impactOccurred()
+        }
+
     }
 
     // 현재 값에 따른 핸들의 위치를 계산하는 메소드

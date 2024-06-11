@@ -172,4 +172,17 @@ final class APIRouter {
 			self.path += "/\(dateYMD)/weekly"
 		}
 	}
+    
+    struct upsertEconomicPlanReqDto: Request {
+        typealias ReturnType = UpsertEconomicPlanResDto
+        var path: String = "/v1/economic-plan"
+        var method: HTTPMethod = .post
+        var headers: [String : String]?
+        var body: [String : Any]?
+        
+        init(headers: APIHeader.Default, body: APIParameters.UpsertEconomicPlanReqDto) {
+            self.headers = headers.asDictionary as? [String: String]
+            self.body = body.asDictionary
+        }
+    }
 }

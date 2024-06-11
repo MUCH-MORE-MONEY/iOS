@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct BudgetDetail04View: View {
-    @ObservedObject var budgetSettingViewModel: BudgetSettingViewModel
+    @ObservedObject var viewModel: BudgetSettingViewModel
     
-    let title = "일별 환산된 적정 지출 금액을\n달력에서 확인하시겠어요?"
+    let title = "모으는 돈을 제외하고\n이번 달 지출할 수 있는 예산 금액"
     let subTitle = "월 지출 예산을 일별로 환산하면 다음과 같아요."
     
     var body: some View {
@@ -21,12 +21,12 @@ struct BudgetDetail04View: View {
                 .foregroundStyle(Color(R.Color.gray200))
 
             VStack(alignment: .leading, spacing: 3) {
-                Text("{100}만원")
+                Text("\(viewModel.remainBudget)만원")
                     .font(Font(R.Font.h2))
                     .foregroundStyle(Color(R.Color.white))
                 Rectangle()
                     .fill(Color(R.Color.orange500))
-                    .frame(width: .infinity, height: 2)
+                    .frame(height: 2)
             }
             .padding(EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16))
             .background(Color(R.Color.gray800))
@@ -42,7 +42,7 @@ struct BudgetDetail04View: View {
                 Text("일일 적정 지출 금액 ")
                     .foregroundColor(Color(R.Color.white))
                 +
-                Text("{3}만원 ")
+                Text("\(viewModel.dailyRemainBudget)만원 ")
                     .foregroundColor(Color(R.Color.orange500))
                 +
                 Text("이하")
@@ -55,5 +55,5 @@ struct BudgetDetail04View: View {
 }
 
 #Preview {
-    BudgetDetail04View(budgetSettingViewModel: BudgetSettingViewModel())
+    BudgetDetail04View(viewModel: BudgetSettingViewModel(budget: Budget.getDummy(), dateYM: "202404"))
 }

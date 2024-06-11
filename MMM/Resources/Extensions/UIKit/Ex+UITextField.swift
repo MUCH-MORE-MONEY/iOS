@@ -31,6 +31,7 @@ extension UITextField {
 		case " 원": self.tag = 1
 		case "만원": self.tag = 2
 		case "원": self.tag = 3
+        case " 만원": self.tag = 4
 		default: self.tag = 0
 		}
 	}
@@ -40,18 +41,30 @@ extension UITextField {
 	}
 	
 	@objc func clear(sender: AnyObject) {
-		if tag == 3 {
-			self.text = "원"
-			self.textColor = R.Color.white
-			
-			// cursor 위치 변경
-			if let newPosition = self.position(from: self.beginningOfDocument, offset: 0) {
-				let newSelectedRange = self.textRange(from: newPosition, to: newPosition)
-				self.selectedTextRange = newSelectedRange
-			}
-		} else {
-			self.text = ""
-		}
+        switch tag {
+        case 3:
+            self.text = "원"
+            self.textColor = R.Color.white
+            
+            // cursor 위치 변경
+            if let newPosition = self.position(from: self.beginningOfDocument, offset: 0) {
+                let newSelectedRange = self.textRange(from: newPosition, to: newPosition)
+                self.selectedTextRange = newSelectedRange
+            }
+            
+        case 2:
+            self.text = "원"
+            self.textColor = R.Color.white
+            
+            // cursor 위치 변경
+            if let newPosition = self.position(from: self.beginningOfDocument, offset: 0) {
+                let newSelectedRange = self.textRange(from: newPosition, to: newPosition)
+                self.selectedTextRange = newSelectedRange
+            }
+        default:
+            self.text = ""
+        }
+		
 		sendActions(for: .editingChanged)
 	}
 }
@@ -126,8 +139,8 @@ extension UITextField: UITextFieldDelegate {
 		numberFormatter.numberStyle = .decimal // 콤마 생성
 		
 		guard let price = Int(newStringOnlyNumber), let result = numberFormatter.string(from: NSNumber(value: price)) else {
-			self.text = tag == 3 ? "원" : ""
-			self.textColor = tag == 3 ? R.Color.white : R.Color.gray900 // 빈배열로 만든후
+			self.text = tag == 3 || tag == 2 ? "원" : ""
+			self.textColor = tag == 3 || tag == 2 ? R.Color.white : R.Color.gray900 // 빈배열로 만든후
 			sendActions(for: .editingChanged)
 			return false
 		}
@@ -139,18 +152,25 @@ extension UITextField: UITextFieldDelegate {
 		case 1: // Detail 수정
 			unit = " 원"
 			limit = 100_000_000
+            self.textColor = price > limit ? R.Color.red500 : R.Color.gray900
 		case 2: // Home 설정
 			unit = " 만원"
 			limit = 10_000
+            self.textColor = price > limit ? R.Color.red500 : R.Color.white
 		case 3: // Add 추가
 			unit = " 원"
 			limit = 100_000_000
+            self.textColor = price > limit ? R.Color.red500 : R.Color.white
+        case 4:
+            unit = " 만원"
+            limit = 10_000
+            self.textColor = price > limit ? R.Color.red500 : R.Color.gray900
 		default:
 			break
 		}
 
 		// 단위에 따른 color 변경
-		self.textColor = price > limit ? R.Color.red500 : self.tag == 3 ? R.Color.white : R.Color.gray900
+//        self.textColor = price > limit ? R.Color.red500 : self.tag == 3 || self.tag == 2 ? R.Color.white : R.Color.gray900
 		
 		// 범위가 넘어갈 경우
 		if price > limit {

@@ -33,6 +33,8 @@ final class StatisticsCategoryView: BaseView, View {
 	
 	// MARK: - Properties
 	private lazy var alphaList: [CGFloat] = [1, 0.8, 0.5, 0.3, 0.2]
+	private lazy var alphaPayEmptyList: [CGFloat] = [1, 0.8, 0.5, 0.3, 0.2]
+	private lazy var alphaEarnEmptyList: [CGFloat] = [1, 0.8, 0.5, 0.3, 0.2]
 	private lazy var barWidth: CGFloat = UIScreen.width - UI.rankViewSide - UI.sideMargin - 20 * 2 // 전체 Bar 길이
 
 	// MARK: - UI Components
@@ -109,23 +111,32 @@ extension StatisticsCategoryView {
 }
 //MARK: - Action
 extension StatisticsCategoryView {
+	// 외부에서 설정
+	func setData(isEmpty: Bool) {
+		payLabel.textColor = isEmpty ? R.Color.gray500 : R.Color.white
+		earnLabel.textColor = isEmpty ? R.Color.gray500 : R.Color.white
+	}
+	
 	func convertData(_ data: [CategoryBar], _ type: String) {
 		let isEmpty = data.isEmpty
 		let str = data.enumerated().map { "\($0.offset + 1)위 \($0.element.title)"}.joined(separator: "  " )
 		
+		payLabel.textColor = isEmpty ? R.Color.gray500 : R.Color.white
+		earnLabel.textColor = isEmpty ? R.Color.gray500 : R.Color.white
+		
 		if type == "01" {
 			payEmptyLabel.isHidden = !isEmpty
 			payRankLabel.isHidden = isEmpty
-			payBarStackView.isHidden = isEmpty
+//			payBarStackView.isHidden = isEmpty
 			payRankLabel.text = str
 		} else {
 			earnEmptyLabel.isHidden = !isEmpty
 			earnRankLabel.isHidden = isEmpty
-			earnBarStackView.isHidden = isEmpty
+//			earnBarStackView.isHidden = isEmpty
 			earnRankLabel.text = str
 		}
 		
-		convertBar(data, type)
+		convertBar(data, type, isEmpty)
 	}
 	
 	func isLoading(_ isLoading: Bool) {
@@ -138,14 +149,13 @@ extension StatisticsCategoryView {
 		earnBarView.isHidden = !isLoading
 	}
 	
-	func convertBar(_ data: [CategoryBar], _ type: String) {
-		guard !data.isEmpty else { return }
-
+	func convertBar(_ data: [CategoryBar], _ type: String, _ isEmpty: Bool) {
+		let data = isEmpty ? type == "01" ? CategoryBar.getPayList() : CategoryBar.getEarnList() : data
 		let unit = barWidth / 100.0
 		let cnt = data.count
 		let barView: UIStackView = type == "01" ? payBarStackView : earnBarStackView
 		barView.subviews.forEach { $0.removeFromSuperview() } // 기존에 있던 subView 제거
-		let color: UIColor = type == "01" ? R.Color.orange500 : R.Color.blue500
+		let color: UIColor = isEmpty ? R.Color.gray700 : type == "01" ? R.Color.orange500 : R.Color.blue500
 		let minimumWidth = 3.0
 		var sumSmail = 0
 		var flag = true
@@ -268,11 +278,10 @@ extension StatisticsCategoryView: SkeletonLoadable {
 		payBarStackView = payBarStackView.then {
 			$0.axis = .horizontal
 			$0.spacing = 2
-			$0.isHidden = true
 		}
 		
 		payEmptyLabel = payEmptyLabel.then {
-			$0.text = "아직 카테고리에 작성된 경제활동이 없어요"
+			$0.text = "경제활동에 카테고리를 설정해주세요"
 			$0.font = R.Font.body3
 			$0.textColor = R.Color.gray700
 			$0.textAlignment = .center
@@ -298,12 +307,11 @@ extension StatisticsCategoryView: SkeletonLoadable {
 		earnBarStackView = earnBarStackView.then {
 			$0.axis = .horizontal
 			$0.spacing = 2
-			$0.isHidden = true
 			$0.distribution = .equalSpacing
 		}
 		
 		earnEmptyLabel = earnEmptyLabel.then {
-			$0.text = "아직 카테고리에 작성된 경제활동이 없어요"
+			$0.text = "경제활동에 카테고리를 설정해주세요"
 			$0.font = R.Font.body3
 			$0.textColor = R.Color.gray700
 			$0.textAlignment = .center
@@ -349,9 +357,8 @@ extension StatisticsCategoryView: SkeletonLoadable {
 		}
 		
 		payEmptyLabel.snp.makeConstraints {
-			$0.leading.equalTo(payLabel.snp.trailing).offset(12)
-			$0.trailing.equalToSuperview().inset(20)
-			$0.centerY.equalTo(payLabel)
+			$0.top.equalToSuperview().offset(UI.payRankLabelTop)
+			$0.leading.equalTo(earnLabel.snp.trailing).offset(12)
 		}
 		
 		earnLabel.snp.makeConstraints {
@@ -373,9 +380,8 @@ extension StatisticsCategoryView: SkeletonLoadable {
 		}
 		
 		earnEmptyLabel.snp.makeConstraints {
+			$0.top.equalToSuperview().offset(UI.earnRankLabelTop)
 			$0.leading.equalTo(earnLabel.snp.trailing).offset(12)
-			$0.trailing.equalToSuperview().inset(20)
-			$0.centerY.equalTo(earnLabel)
 		}
 		
 		// 스켈레톤 Layer

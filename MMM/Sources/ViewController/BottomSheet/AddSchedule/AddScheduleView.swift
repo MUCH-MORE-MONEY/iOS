@@ -96,7 +96,6 @@ struct AddScheduleView: View {
                 addScheduleViewModel.recurrenceInfo.startYMD = date.getFormattedYMD()
                 addScheduleViewModel.selectedId = "반복 안함"
             }
-
         }
     }
 }

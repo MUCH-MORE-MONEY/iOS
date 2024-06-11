@@ -12,10 +12,12 @@ final class StatisticsReactor: Reactor {
 	// 사용자의 액션
 	enum Action {
 		case loadData
-		case pagination(contentHeight: CGFloat, contentOffsetY: CGFloat, scrollViewHeight: CGFloat) // pagination
-		case didTapMoreButton // 카테고리 더보기
-		case didTapSatisfactionButton // 만족도 선택
+		case pagination(contentHeight: CGFloat, contentOffsetY: CGFloat, scrollViewHeight: CGFloat) 	// pagination
+		case didTapMoreButton 			// 카테고리 더보기
+		case didTapSatisfactionButton 	// 만족도 선택
 		case selectCell(IndexPath, StatisticsItem)
+		case didTapNewTitleView      	// 예산 설정하기 탭(임시로 averageView에 넣음)
+		case isSummary      			// 요약보기/닫기
 	}
 	
 	// 처리 단위
@@ -26,9 +28,16 @@ final class StatisticsReactor: Reactor {
 		case setDate(Date)
 		case setSatisfaction(Satisfaction)
 		case setAverage(Double)
+		case setSummary
+		case setLastPlan(StatisticsLast)
+		case resetSummary
+		case setBudget(Budget, Bool)
+		case setPaySum(StatisticsSum)
 		case presentSatisfaction(Bool)
 		case pushMoreCategory(Bool)
 		case pushDetail(IndexPath, EconomicActivity, Bool)
+		case pushBudgetSetting(Bool)
+		case setDialog(Bool)
 		case setLoading(Bool)
 		case setError
 	}
@@ -36,21 +45,29 @@ final class StatisticsReactor: Reactor {
 	// 현재 상태를 기록
 	struct State {
 		var date = Date() // 월
+		var lastPlan: StatisticsLast = .init(budget: nil, dateYM: nil, estimatedEarning: nil)
+		var budget: Budget = .init(dateYM: Date().getFormattedYM(), budget: nil, estimatedEarning: nil)
+		var preBudget: Budget = .init(dateYM: Date().previousMonth().getFormattedYM(), budget: nil, estimatedEarning: nil) // 이전 달
+		var paySum: StatisticsSum = .init(dateYM: Date().getFormattedYM(), economicActivitySumAmt: nil)
+		var percent: Int = 0
 		var average: Double = 0.0 // 평균값
 		var satisfaction: Satisfaction = .low // 만족도
 		var activityList: [StatisticsSectionModel] = []
 		var payBarList: [CategoryBar] = []		// 지출 카테고리
-		var earnBarList: [CategoryBar] = []	// 수입 카테고리
+		var earnBarList: [CategoryBar] = []		// 수입 카테고리
 		var activitySatisfactionList: [EconomicActivity] = []
 		var activityDisappointingList: [EconomicActivity] = []
 		var isLoading = true // 로딩
 		var isPushMoreCategory = false
 		var isPresentSatisfaction = false
 		var isPushDetail = false
+		var isSummary = true // true: 요약보기, false: 닫기
+		var isDialog = false // 다이어로그를 노출시켜야하는지 여부
 		var detailData: (IndexPath: IndexPath, info: EconomicActivity)?
 		var curSatisfaction: Satisfaction = .low
 		var totalItem: Int = 0  // item의 총 갯수
 		var isInit = true // 최초진입
+		@Pulse var isPushBudgetSetting = false
 	}
 	
 	// MARK: Properties
@@ -58,8 +75,8 @@ final class StatisticsReactor: Reactor {
 	let provider: ServiceProviderProtocol
 	var currentPage: Int = 0
 	var totalPage: Int = 0
-    var totalItem: Int = 0
-    
+	var totalItem: Int = 0
+	
 	init(provider: ServiceProviderProtocol) {
 		self.initialState = State()
 		self.provider = provider
@@ -73,11 +90,14 @@ extension StatisticsReactor {
 		case .loadData:
 			return .concat([
 				.just(.setLoading(true)),
-				self.getStatisticsAverage(currentState.date), // 평균값
-				self.getCategory(currentState.date, "01"),	// 지출 카테고리
-				self.getCategory(currentState.date, "02"),	// 수입 카테고리
-				self.getStatisticsList(currentState.date, "01", true), // 아쉬운 List
-				self.getStatisticsList(currentState.date, "03", true), // 만족스러운 List
+				self.getBudget(currentState.date),						// 예산
+				self.getBudget(currentState.date.previousMonth(), true),// 이전 예산
+				self.getSum(currentState.date, type: "01"),				// 현재 지출
+				self.getStatisticsAverage(currentState.date), 			// 평균값
+				self.getCategory(currentState.date, "01"),				// 지출 카테고리
+				self.getCategory(currentState.date, "02"),				// 수입 카테고리
+				self.getStatisticsList(currentState.date, "01", true), 	// 아쉬운 List
+				self.getStatisticsList(currentState.date, "03", true), 	// 만족스러운 List
 				self.getStatisticsList(currentState.date, self.currentState.satisfaction.id, true), // viewWillAppear일때, 현재 만족도를 불러와야한다.
 				.just(.setLoading(false))
 			])
@@ -105,27 +125,51 @@ extension StatisticsReactor {
 				.just(.pushDetail(indexPath, item, true)),
 				.just(.pushDetail(indexPath, item, false))
 			])
+		case .didTapNewTitleView:
+			return .concat([
+				.just(.pushBudgetSetting(true)),
+				.just(.pushBudgetSetting(false))
+			])
+		case .isSummary:
+			return .just(.setSummary)
 		}
 	}
 	
 	/// 각각의 stream을 변형
 	func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-		let event = provider.statisticsProvider.event.flatMap { event -> Observable<Mutation> in
+		let event = provider.statisticsProvider.event.flatMap { [self] event -> Observable<Mutation> in
 			switch event {
+			case .loadData:
+				return .concat([
+					self.getBudget(currentState.date),						// 예산
+					self.getBudget(currentState.date.previousMonth(), true),// 이전 예산
+				])
 			case let .updateDate(date):
 				return .concat([
+					.just(.setDialog(false)),
 					.just(.setDate(date)),
+					.just(.resetSummary),
+					self.getBudget(date),
+					self.getBudget(date.previousMonth(), true),
+					self.getLastPlan(),
+					self.getSum(date, type: "01"),
 					self.getStatisticsAverage(date),
 					self.getCategory(date, "02"),
 					self.getCategory(date, "01"),
 					self.getStatisticsList(date, "01", true),
 					self.getStatisticsList(date, "03", true),
-					self.getStatisticsList(date, self.currentState.satisfaction.id) // viewWillAppear일때, 현재 만족도를 불러와야한다.
+					self.getStatisticsList(date, self.currentState.satisfaction.id), // viewWillAppear일때, 현재 만족도를 불러와야한다.
+					.just(.setDialog(Date() < date))
 				])
 			case let .updateSatisfaction(satisfaction):
 				return .concat([
 					.just(.setSatisfaction(satisfaction)),
 					self.getStatisticsList(self.currentState.date, satisfaction.id),
+				])
+			case .changeBudge:
+				return .concat([
+					.just(.pushBudgetSetting(true)),
+					.just(.pushBudgetSetting(false))
 				])
 			}
 		}
@@ -173,20 +217,55 @@ extension StatisticsReactor {
 
 			// 카테고리 추가할때 사용하기 위해 저장
 			Constants.setKeychain(date.getFormattedYMD(), forKey: Constants.KeychainKey.statisticsDate)
+		case let .setBudget(budget, isPreMonth):
+			// 임시
+//			if newState.date.getFormattedYM() == "202402" || newState.date.getFormattedYM() == "202404" {
+//				newState.budget = .init(dateYM: "", budget: 1000000, estimatedEarning: 200000000)
+//			} else {
+			if isPreMonth {
+				newState.preBudget = budget
+			} else {
+				newState.budget = budget
+			}
+//			}
+		case let .setLastPlan(lastPlan):
+			newState.lastPlan = lastPlan
+		case let .setPaySum(sum):
+//			let sum: StatisticsSum = .init(dateYM: "", economicActivitySumAmt: 3000) // 임시
+			
+			newState.paySum = sum
+
+			if let budget = newState.budget.budget, let economicActivitySumAmt = sum.economicActivitySumAmt {
+
+				// 논리적인 오류 방지
+				if economicActivitySumAmt == 0 {
+					newState.percent = 0
+				} else {
+					// Budget은 setPaySum보다 빠르게 API를 불러옴
+					// 지출 / 예산
+					newState.percent = economicActivitySumAmt / budget
+				}
+			}
 		case let .setAverage(average):
 			newState.average = average
 		case let .setSatisfaction(satisfaction):
-            switch satisfaction {
-            case .hight:
-                Tracking.StatiBudget.rating45LogEvent()
-            case .middle:
-                Tracking.StatiBudget.rating3LogEvent()
-            case .low:
-                Tracking.StatiBudget.rating12LogEvent()
-            }
+			switch satisfaction {
+			case .hight:
+				Tracking.StatiBudget.rating45LogEvent()
+			case .middle:
+				Tracking.StatiBudget.rating3LogEvent()
+			case .low:
+				Tracking.StatiBudget.rating12LogEvent()
+			}
 			newState.satisfaction = satisfaction
+		case let .setDialog(isDialog):
+			newState.isDialog = isDialog
 		case let .setLoading(isLoading):
 			newState.isLoading = isLoading
+		case .setSummary:
+			newState.isSummary = !newState.isSummary
+		case .resetSummary:
+			newState.isSummary = true
 		case let .presentSatisfaction(isPresent):
 			newState.isPresentSatisfaction = isPresent
 		case let .pushMoreCategory(isPush):
@@ -194,6 +273,8 @@ extension StatisticsReactor {
 		case let .pushDetail(indexPath, data, isPush):
 			newState.isPushDetail = isPush
 			newState.detailData = (indexPath, data)
+		case let .pushBudgetSetting(isPush):
+			newState.isPushBudgetSetting = isPush
 		case .setError:
 			newState.isLoading = false
 		}
@@ -203,6 +284,24 @@ extension StatisticsReactor {
 }
 //MARK: - Action
 extension StatisticsReactor {
+	// 예산 불러오기
+	func getBudget(_ date: Date, _ isPreMonth: Bool = false) -> Observable<Mutation> {
+		return MMMAPIService().getBudget(dateYM: date.getFormattedYM())
+			.map { (response, error) -> Mutation in
+				return .setBudget(response.data, isPreMonth)
+			}
+			.catchAndReturn(.setError)
+	}
+	
+	// 경제활동 총합 불러오기
+	func getSum(_ date: Date, type: String) -> Observable<Mutation> {
+		return MMMAPIService().getStatisticsSum(dateYM: date.getFormattedYM(), economicActivityDvcd: type)
+			.map { (response, error) -> Mutation in
+				return .setPaySum(response.data)
+			}
+			.catchAndReturn(.setError)
+	}
+	
 	// 경제활동 만족도 평균값 불러오기
 	func getStatisticsAverage(_ date: Date) -> Observable<Mutation> {
 		return MMMAPIService().getStatisticsAverage(date.getFormattedYM())
@@ -217,7 +316,7 @@ extension StatisticsReactor {
 		return MMMAPIService().getStatisticsList(dateYM: date.getFormattedYM(), valueScoreDvcd: type, limit: 15, offset: 0)
 			.map { (response, error) -> Mutation in
 				self.totalPage = response.totalPageCnt
-                self.totalItem = response.totalItemCnt
+				self.totalItem = response.totalItemCnt
 				return .setList(response.selectListMonthlyByValueScoreOutputDto, type, reset)
 			}
 			.catchAndReturn(.setError)
@@ -243,6 +342,15 @@ extension StatisticsReactor {
 		return MMMAPIService().getStatisticsCategory(dateYM: date.getFormattedYM(), economicActivityDvcd: type)
 			.map { (response, error) -> Mutation in
 				return .fetchCategoryBar(response.data.setSelectListMonthlyByUpperCategoryOutputDto, type)
+			}
+			.catchAndReturn(.setError)
+	}
+	
+	// 가장 최근 수정한 경제계획 조회
+	private func getLastPlan() -> Observable<Mutation> {
+		return MMMAPIService().getStatisticsLast()
+			.map { (response, error) -> Mutation in
+				return .setLastPlan(response.data)
 			}
 			.catchAndReturn(.setError)
 	}

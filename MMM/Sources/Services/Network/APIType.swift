@@ -10,8 +10,8 @@ import Moya
 import RxSwift
 
 enum MMMAPI {
-    // MARK: - V1 API
-    
+	// MARK: - V1 API
+	
 	// MARK: - Push
 	case push(PushReqDto)
 	case pushAgreeListSelect
@@ -21,20 +21,21 @@ enum MMMAPI {
 	case getStaticsticsAverage(dateYM: String) // 월간 만족도 평균값
 	case getStatisticsList(dateYM: String, valueScoreDvcd: String, limit: Int = 15, offset: Int = 0) // 만족도별 목록
 	case getStatisticsCategory(dateYM: String, economicActivityDvcd: String)
-  case getSelectedActivity(activityId: String)
+	case getSelectedActivity(activityId: String)
 	case getBudget(dateYM: String) // 월간 예산
 	case getStatisticsSum(dateYM: String, economicActivityDvcd: String) // 해당 연월 기준 월간 경제활동 총합 조회
-
+	case getStatisticsLast // 가장 최근 수정한 경제계획 조회 API
+	
 	// MARK: - Category Main
-//    case getAddCategoryList(CategoryListReqDto) //경제활동구분 코드 기준 카테고리별 월간 경제활동 목록 전체 조회
+	//    case getAddCategoryList(CategoryListReqDto) //경제활동구분 코드 기준 카테고리별 월간 경제활동 목록 전체 조회
 	case getCategoryList(CategoryListReqDto) // 경제활동구분 코드 기준 카테고리별 월간 경제활동 목록 전체 조회
 	case getCategoryDetailList(CategoryDetailListReqDto) // 카테고리 코드별 월간 경제활동 목록 조회
-
+	
 	// MARK: - Category Edit
 	case getCategoryEdit(CategoryEditReqDto)
 	case getCategoryEditHeader(CategoryEditReqDto)
 	case putCategoryEdit(PutCategoryEditReqDto)
-
+	
 	// MARK: - Profile
 	case exportToExcel
 	case getSummary
@@ -42,11 +43,11 @@ enum MMMAPI {
 	
 	// MARK: - Widget
 	case getWeely(WidgetReqDto)
-    
-    // MARK: - V2 API
-    
-    // MARK: - Staticstics
-    case getDetailActivity(activityId: String)
+	
+	// MARK: - V2 API
+	
+	// MARK: - Staticstics
+	case getDetailActivity(activityId: String)
 }
 
 extension MMMAPI: BaseNetworkService {
@@ -59,7 +60,7 @@ extension MMMAPI: BaseNetworkService {
 	/// router에 사용될 세부 경로
 	var path: String {
 		switch self {
-        // MARK: - V1 API
+			// MARK: - V1 API
 		case .push:
 			return "/push"
 		case .pushAgreeListSelect:
@@ -72,12 +73,14 @@ extension MMMAPI: BaseNetworkService {
 			return "/economic_activity/\(dateYM)/\(valueScoreDvcd)/list"
 		case let .getStatisticsCategory(dateYM, economicActivityDvcd):
 			return "/economic_activity/\(dateYM)/\(economicActivityDvcd)/upper-category/list"
-    case .getSelectedActivity:
-        return "/economic_activity/detail/select"
+		case .getSelectedActivity:
+			return "/economic_activity/detail/select"
 		case let .getBudget(dateYM):
 			return "/v1/economic-plan/\(dateYM)"
 		case let .getStatisticsSum(dateYM, economicActivityDvcd):
 			return "/economic_activity/\(dateYM)/\(economicActivityDvcd)/sum"
+		case .getStatisticsLast:
+			return "/v1/economic-plan/latest-updated"
 		case let .getCategoryList(request):
 			return "/economic_activity/\(request.dateYM)/\(request.economicActivityDvcd)/category/list"
 		case let .getCategoryDetailList(request):
@@ -96,20 +99,20 @@ extension MMMAPI: BaseNetworkService {
 			return "/login/delete"
 		case let .getWeely(request):
 			return "economic_activity​/\(request.dateYMD)/weekly"
-            
-        // MARK: - V2 API
-        case .getDetailActivity:
-            return "/v2/economic_activity/detail"
+			
+			// MARK: - V2 API
+		case .getDetailActivity:
+			return "/v2/economic_activity/detail"
 		}
 	}
 	
 	/// 메서드 방식 선택
 	var method: Moya.Method {
 		switch self {
-        // MARK: - V1 API
-        case .push, .pushAgreeListSelect, .pushAgreeUpdate:
+			// MARK: - V1 API
+		case .push, .pushAgreeListSelect, .pushAgreeUpdate:
 			return .post
-		case .getStaticsticsAverage, .getStatisticsList, .getStatisticsCategory, .getBudget, .getStatisticsSum, .getSelectedActivity:
+		case .getStaticsticsAverage, .getStatisticsList, .getStatisticsCategory, .getBudget, .getStatisticsSum, .getSelectedActivity, .getStatisticsLast:
 			return .get
 		case .getCategoryList, .getCategoryDetailList, .getCategoryEdit, .getCategoryEditHeader:
 			return .get
@@ -119,10 +122,10 @@ extension MMMAPI: BaseNetworkService {
 			return .post
 		case .getWeely:
 			return .get
-            
-        // MARK: - V2 API
-        case .getDetailActivity:
-            return .get
+			
+			// MARK: - V2 API
+		case .getDetailActivity:
+			return .get
 		}
 	}
 	
@@ -132,14 +135,14 @@ extension MMMAPI: BaseNetworkService {
 	/// parameter || body가 없을 경우 .requestPlain 설정
 	var task: Moya.Task {
 		switch self {
-        // MARK: - V1 API
+			// MARK: - V1 API
 		case let .push(request):
 			return .requestParameters(parameters: request.asDictionary, encoding: JSONEncoding.default)
 		case .pushAgreeListSelect:
 			return .requestPlain
 		case let .pushAgreeUpdate(request):
 			return .requestParameters(parameters: request.asDictionary, encoding: JSONEncoding.default)
-		case .getStaticsticsAverage, .getStatisticsCategory, .getBudget, .getStatisticsSum, .getSelectedActivity:
+		case .getStaticsticsAverage, .getStatisticsCategory, .getBudget, .getStatisticsSum, .getSelectedActivity, .getStatisticsLast:
 			return .requestPlain
 		case let .getStatisticsList(_, _, limit, offset):
 			return .requestParameters(parameters: ["limit":limit, "offset":offset], encoding: URLEncoding.default)
@@ -153,11 +156,11 @@ extension MMMAPI: BaseNetworkService {
 			return .requestPlain
 		case .getWeely:
 			return .requestPlain // get이지만 따로 필요한 값이 없다.
-            
-        // MARK: - V2 API
-        case let .getDetailActivity(activityId):
-            return .requestParameters(parameters: ["economicActivityNo" : activityId], encoding: URLEncoding.default)
-        }
+			
+			// MARK: - V2 API
+		case let .getDetailActivity(activityId):
+			return .requestParameters(parameters: ["economicActivityNo" : activityId], encoding: URLEncoding.default)
+		}
 	}
 	
 	/// Header 전달

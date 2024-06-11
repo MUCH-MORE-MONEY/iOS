@@ -12,6 +12,7 @@ import Foundation
 final class StatisticsBudgetBottomSheetReactor: Reactor {
 	// 사용자의 액션
 	enum Action {
+		case change
 		case setApply
 		case dismiss
 	}
@@ -41,6 +42,8 @@ extension StatisticsBudgetBottomSheetReactor {
 	/// Action이 들어온 경우, 어떤 처리를 할건지 분기
 	func mutate(action: Action) -> Observable<Mutation> {
 		switch action {
+		case .change:
+			return provider.statisticsProvider.changeBudge().map { _ in .dismiss }
 		case .setApply:
 			return .just(.dismiss)
 		case .dismiss:

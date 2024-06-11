@@ -242,6 +242,7 @@
 		C46D5E6E2AD9798800EBE5D7 /* CategoryEditDragCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46D5E6D2AD9798800EBE5D7 /* CategoryEditDragCollectionViewCell.swift */; };
 		C494A2512A9B8A0A00980A71 /* TabBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C494A2502A9B8A0A00980A71 /* TabBarViewModel.swift */; };
 		C49D0DBB2B7B686F0025FBAD /* StatisticsYetBudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49D0DBA2B7B686F0025FBAD /* StatisticsYetBudgetView.swift */; };
+		C4B334D32BFF0B6300C77FA0 /* StatisticsLast.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B334D22BFF0B6300C77FA0 /* StatisticsLast.swift */; };
 		C4BBD2642AB9DE8C0055FA65 /* StatisticsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BBD2632AB9DE8C0055FA65 /* StatisticsProvider.swift */; };
 		C4BBD2662AB9E16D0055FA65 /* DateBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BBD2652AB9E16D0055FA65 /* DateBottomSheetViewController.swift */; };
 		C4BBD26A2AB9E1DA0055FA65 /* DateBottomSheetReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BBD2692AB9E1DA0055FA65 /* DateBottomSheetReactor.swift */; };
@@ -581,6 +582,7 @@
 		C46D5E6D2AD9798800EBE5D7 /* CategoryEditDragCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditDragCollectionViewCell.swift; sourceTree = "<group>"; };
 		C494A2502A9B8A0A00980A71 /* TabBarViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewModel.swift; sourceTree = "<group>"; };
 		C49D0DBA2B7B686F0025FBAD /* StatisticsYetBudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsYetBudgetView.swift; sourceTree = "<group>"; };
+		C4B334D22BFF0B6300C77FA0 /* StatisticsLast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsLast.swift; sourceTree = "<group>"; };
 		C4BBD2632AB9DE8C0055FA65 /* StatisticsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsProvider.swift; sourceTree = "<group>"; };
 		C4BBD2652AB9E16D0055FA65 /* DateBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateBottomSheetViewController.swift; sourceTree = "<group>"; };
 		C4BBD2692AB9E1DA0055FA65 /* DateBottomSheetReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateBottomSheetReactor.swift; sourceTree = "<group>"; };
@@ -1240,6 +1242,7 @@
 				C4BBD2922AC04C550055FA65 /* CategoryEditSectionModel.swift */,
 				C46409AF2AB590EE00A899AD /* CategoryMainSectionModel.swift */,
 				C43FF1552B1C5A1E009394D6 /* StatisticsSectionModel.swift */,
+				C4B334D22BFF0B6300C77FA0 /* StatisticsLast.swift */,
 				C465FF362BBC106700D2E43D /* StatisticsSum.swift */,
 				C433A07029EE5516008B26DF /* EconomicActivity.swift */,
 				6A14E70A2A9DCA7F0071805D /* ModelType.swift */,
@@ -1798,6 +1801,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4B334D32BFF0B6300C77FA0 /* StatisticsLast.swift in Sources */,
 				C411940429D53DDF003DBC15 /* ManagementViewController.swift in Sources */,
 				C41193F529D3D7FB003DBC15 /* Ex+NSObject.swift in Sources */,
 				45D878A42B5A5B550098F30B /* StarPickerSheetReactor.swift in Sources */,

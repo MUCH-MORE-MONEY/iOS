@@ -58,7 +58,7 @@ extension StatisticsBudgetBottomSheetViewController {
 		// 예산 변경하기
 		chageButton.rx.tap
 			.withUnretained(self)
-			.map { .dismiss }
+			.map { .change }
 			.bind(to: reactor.action)
 			.disposed(by: disposeBag)
 

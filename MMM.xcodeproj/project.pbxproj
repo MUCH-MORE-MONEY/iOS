@@ -225,6 +225,9 @@
 		C46409D42AB8CAE600A899AD /* WithdrawReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46409D32AB8CAE600A899AD /* WithdrawReactor.swift */; };
 		C46409D62AB8DB9000A899AD /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46409D52AB8DB8F00A899AD /* BaseTableViewCell.swift */; };
 		C46409DA2AB9625E00A899AD /* BottomSheetViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46409D92AB9625E00A899AD /* BottomSheetViewController2.swift */; };
+		C465FF392BC4407400D2E43D /* OnBoardingPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C465FF382BC4407400D2E43D /* OnBoardingPageViewController.swift */; };
+		C465FF3B2BC524B700D2E43D /* HomeReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C465FF3A2BC524B700D2E43D /* HomeReactor.swift */; };
+		C465FF3D2BC57AA200D2E43D /* HomeOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C465FF3C2BC57AA200D2E43D /* HomeOnboardingViewController.swift */; };
 		C465FF352BB4364100D2E43D /* Budget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C465FF342BB4364100D2E43D /* Budget.swift */; };
 		C465FF372BBC106700D2E43D /* StatisticsSum.swift in Sources */ = {isa = PBXBuildFile; fileRef = C465FF362BBC106700D2E43D /* StatisticsSum.swift */; };
 		C466F4202B1758DF00254FED /* Ex+SkeletonLoadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C466F41F2B1758DF00254FED /* Ex+SkeletonLoadable.swift */; };
@@ -567,6 +570,9 @@
 		C46409D32AB8CAE600A899AD /* WithdrawReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawReactor.swift; sourceTree = "<group>"; };
 		C46409D52AB8DB8F00A899AD /* BaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
 		C46409D92AB9625E00A899AD /* BottomSheetViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController2.swift; sourceTree = "<group>"; };
+		C465FF382BC4407400D2E43D /* OnBoardingPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoardingPageViewController.swift; sourceTree = "<group>"; };
+		C465FF3A2BC524B700D2E43D /* HomeReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeReactor.swift; sourceTree = "<group>"; };
+		C465FF3C2BC57AA200D2E43D /* HomeOnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeOnboardingViewController.swift; sourceTree = "<group>"; };
 		C465FF342BB4364100D2E43D /* Budget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Budget.swift; sourceTree = "<group>"; };
 		C465FF362BBC106700D2E43D /* StatisticsSum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsSum.swift; sourceTree = "<group>"; };
 		C466F41F2B1758DF00254FED /* Ex+SkeletonLoadable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+SkeletonLoadable.swift"; sourceTree = "<group>"; };
@@ -1036,6 +1042,7 @@
 				C4E96B7D2AF919C300C59983 /* ChallengeReactor.swift */,
 				45D401232B33D11500CE0351 /* DetailReactor.swift */,
 				45CA1E9C2B4CE7EF002019E6 /* EditActivityReactor.swift */,
+				C465FF3A2BC524B700D2E43D /* HomeReactor.swift */,
 				C4170B4F2A89FD1100CE0A65 /* StatisticsReactor.swift */,
 				C46409D12AB8A6A400A899AD /* ProfileReactor.swift */,
 				C46409D32AB8CAE600A899AD /* WithdrawReactor.swift */,
@@ -1390,6 +1397,8 @@
 				C4351B4F2A1691FB005F95BE /* HighlightViewController.swift */,
 				C4199DD829FE6BE1006E5DA8 /* DatePickerViewController.swift */,
 				C4C8B68C2A3ACDC700FAF931 /* LoadingViewController.swift */,
+				C465FF382BC4407400D2E43D /* OnBoardingPageViewController.swift */,
+				C465FF3C2BC57AA200D2E43D /* HomeOnboardingViewController.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -1825,6 +1834,7 @@
 				C41193FD29D42BD9003DBC15 /* ProfileFooterView.swift in Sources */,
 				C44807E129E648D300D4B090 /* HomeViewController.swift in Sources */,
 				C4BBD2662AB9E16D0055FA65 /* DateBottomSheetViewController.swift in Sources */,
+				C465FF392BC4407400D2E43D /* OnBoardingPageViewController.swift in Sources */,
 				C46409BE2AB5B0A000A899AD /* BaseCollectionReusableView.swift in Sources */,
 				45D3C2332B4CD74E004ECC0A /* EditActivityViewController2.swift in Sources */,
 				6A2B5D5D2A97415000CCBFBE /* CustomPushTextSettingView.swift in Sources */,
@@ -1983,6 +1993,7 @@
 				C4170B672A95EBFA00CE0A65 /* CategoryMainReactor.swift in Sources */,
 				45D2FA482B5E094F00DADA5B /* CategorySheetViewController.swift in Sources */,
 				C433A07329EEE751008B26DF /* Ex+Date.swift in Sources */,
+				C465FF3B2BC524B700D2E43D /* HomeReactor.swift in Sources */,
 				C4EA5B4029FA1A40008D1564 /* HomeHeaderView.swift in Sources */,
 				C4E96B7E2AF919C300C59983 /* ChallengeReactor.swift in Sources */,
 				45E909202BBFB27D00E3DF20 /* CommonText.swift in Sources */,
@@ -2027,6 +2038,7 @@
 				45B878C92B342B0600EF27FB /* DetailProvider.swift in Sources */,
 				6A1322F12A089B2900CEEC81 /* BasePaddingLabel.swift in Sources */,
 				45D2FA4A2B5E096C00DADA5B /* CategorySheetViewReactor.swift in Sources */,
+				C465FF3D2BC57AA200D2E43D /* HomeOnboardingViewController.swift in Sources */,
 				C4D7FC872A08942E00565291 /* Monthly.swift in Sources */,
 				C46D5E552AD078DA00EBE5D7 /* CategoryEditTableViewCell.swift in Sources */,
 				C4BBD2872AC03C300055FA65 /* CategoryEditCollectionViewCell.swift in Sources */,

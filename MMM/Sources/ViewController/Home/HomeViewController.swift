@@ -20,6 +20,7 @@ final class HomeViewController: UIViewController {
 	private lazy var cancellable: Set<AnyCancellable> = .init()
 	private let viewModel = HomeViewModel()
     var disposeBag = DisposeBag()
+	private var onBoardingViewFlag = false
     
 	// MARK: - UI Components
 	private lazy var monthButtonItem = UIBarButtonItem()
@@ -36,7 +37,8 @@ final class HomeViewController: UIViewController {
 	private lazy var dayLabel = UILabel()
 	private lazy var scopeGesture = UIPanGestureRecognizer()
 	private lazy var loadView = LoadingViewController()
-
+	private lazy var popupView = OnBoardingPageViewController() // 2.0.3 popup
+	
 	// Empty & Error UI
 	private lazy var emptyView = HomeEmptyView()
 	private lazy var errorBgView = UIView()
@@ -67,8 +69,6 @@ final class HomeViewController: UIViewController {
 //        print("getCustomPuhsNudge : \(Common.getCustomPuhsNudge())")
 //        print("getNudgeIfPushRestricted : \(Common.getNudgeIfPushRestricted())")
 //        
-
-        
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -86,6 +86,11 @@ final class HomeViewController: UIViewController {
 		}
 		
 		fetchData()
+		
+		// 첫 한번만 Onboarding popup 작동
+		if let value = Constants.getKeychainValueByBool(forKey: Constants.KeychainKey.onBoardingFlag), value {
+			setPopup()
+		}
 	}
 	
     override func viewDidAppear(_ animated: Bool) {
@@ -209,6 +214,12 @@ private extension HomeViewController {
 		bind()
 		setAttribute()
 		setLayout()
+	}
+	
+	func setPopup() {
+		self.popupView.modalPresentationStyle = .overFullScreen
+		self.present(popupView, animated: true)
+		Constants.setKeychain(false, forKey: Constants.KeychainKey.onBoardingFlag)
 	}
 	
 	private func bind() {
@@ -343,6 +354,7 @@ private extension HomeViewController {
 		// [view]
 		view.backgroundColor = R.Color.gray900
 		view.addGestureRecognizer(self.scopeGesture)
+		popupView.reactor = HomeReactor()
         
 		let view = UIView(frame: .init(origin: .zero, size: .init(width: 150, height: 30)))
 		monthButton = monthButton.then {

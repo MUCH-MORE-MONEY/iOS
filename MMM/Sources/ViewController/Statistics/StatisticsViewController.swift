@@ -173,6 +173,13 @@ extension StatisticsViewController {
 			.disposed(by: disposeBag)
 		
 		reactor.state
+			.map { $0.isDialog }
+			.distinctUntilChanged() // 중복값 무시
+			.filter { $0 }
+			.bind(onNext: presentDiaglog) // 다이어로그 노출
+			.disposed(by: disposeBag)
+		
+		reactor.state
 			.map { $0.budget }
 			.distinctUntilChanged() // 중복값 무시
 			.bind(onNext: setBudget) // 예산 변경
@@ -301,6 +308,18 @@ extension StatisticsViewController {
 		// 달력 Picker
 		let vc = StatisticsDateBottomSheetViewController(title: "월 이동", date: month, height: 360, mode: .onlyMonthly, sheetMode: .drag, isDark: false)
 		vc.reactor = StatisticsDateBottomSheetReactor(provider: reactor.provider)
+		self.present(vc, animated: true, completion: nil)
+	}
+	
+	// Dialog 설정
+	private func presentDiaglog(_ isDialog: Bool) {
+		guard let reactor = self.reactor, reactor.currentState.budget.budget == nil else {
+			return
+		}
+		let lastPlan = reactor.currentState.lastPlan
+		
+		let vc = StatisticsBudgetBottomSheetViewController(curBudget: lastPlan.budget ?? 0, totalSaving: lastPlan.estimatedEarning ?? 0, height: 292)
+		vc.reactor = StatisticsBudgetBottomSheetReactor(provider: reactor.provider)
 		self.present(vc, animated: true, completion: nil)
 	}
 	

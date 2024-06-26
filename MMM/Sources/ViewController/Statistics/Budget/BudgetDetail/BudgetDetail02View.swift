@@ -36,7 +36,7 @@ struct BudgetDetail02View: View {
             HStack(spacing: 4) {
                 Spacer()
                 
-                if viewModel.isBudgetAmtValid {
+                if viewModel.isBudgetAmtValid || viewModel.budgetAmt == 0 {
                     Group {
                         if let budget = viewModel.budget.budget {
                             Text("지난 달 작성한 수입")
@@ -51,7 +51,7 @@ struct BudgetDetail02View: View {
                 }
             }
             .font(Font(R.Font.body3))
-            .autoShake(shakeCount: $viewModel.shakes, triggerFlag: !viewModel.isBudgetAmtValid)
+//            .autoShake(shakeCount: $viewModel.shakes, triggerFlag: !viewModel.isBudgetAmtValid && viewModel.budgetAmt != 0)
             Spacer()
         }
     }

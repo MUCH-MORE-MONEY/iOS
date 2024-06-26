@@ -107,5 +107,32 @@ extension View {
     func autoShake(shakeCount: Binding<CGFloat>, triggerFlag: Bool) -> some View {
         self.modifier(AutoShakeModifier(shakeCount: shakeCount, triggerFlag: triggerFlag))
     }
+    
+    func foregroundColorModifier(forSubstring substring: String, color: Color) -> some View {
+        self.modifier(ForegroundColorModifier(substring: substring, color: color))
+    }
 }
+struct ForegroundColorModifier: ViewModifier {
+    let substring: String
+    let color: Color
 
+    func body(content: Content) -> some View {
+        content.overlay(
+            TextOverlay(substring: substring, color: color)
+        )
+    }
+
+    struct TextOverlay: View {
+        let substring: String
+        let color: Color
+
+        var body: some View {
+            GeometryReader { geometry in
+                Text(substring)
+                    .font(Font(R.Font.h6))
+                    .background(color)
+                    .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
+            }
+        }
+    }
+}

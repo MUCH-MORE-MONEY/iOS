@@ -18,8 +18,8 @@ final class AddScheduleViewModel: ObservableObject {
         case weekday
     }
     
-    @Published var date = Date()    // date picker의 시작 날짜를 정의 (현재 날짜 기준으로 start)
-    @Published var endDate = Date() // date picker가 보여줄 마지막 날짜(최대 1년까지만 보여줌)
+    @Published var startDate = Date()    // date picker의 시작 날짜를 정의 (현재 날짜 기준으로 start)
+    @Published var selectedDate: Date? // 경제활동 반복을 종료할 날짜 -> selectedDate
     @Published var selectedId = ""
     // 경제활동 반복
     @Published var recurrenceInfo: APIParameters.RecurrenceInfo = .init(
@@ -32,15 +32,15 @@ final class AddScheduleViewModel: ObservableObject {
     var dateComponent: DateComponents {
         let calendar = Calendar.current
         
-        return calendar.dateComponents([.year, .month, .day, .weekday, .weekOfMonth], from: self.date)
+        return calendar.dateComponents([.year, .month, .day, .weekday, .weekOfMonth], from: self.startDate)
     }
     
     var recurrenceWeekday: String {
-        return date.getFormattedDate(format: "E")
+        return startDate.getFormattedDate(format: "E")
     }
     
     var recurrenceMonth: String {
-        return date.getFormattedDate(format: "MMMM")
+        return startDate.getFormattedDate(format: "MMMM")
     }
     
     var recurrenceDayofMonth: String {
@@ -70,7 +70,7 @@ final class AddScheduleViewModel: ObservableObject {
         if recurrenceInfo.recurrenceEndDvcd == "01" {
             return "\(recurrenceInfo.recurrenceCnt)회 반복"
         } else {
-            return recurrenceInfo.endYMD.insertDatePeriod()
+            return "\(recurrenceInfo.endYMD.insertDatePeriod())까지" 
         }
     }
     
@@ -89,12 +89,12 @@ final class AddScheduleViewModel: ObservableObject {
         case .daily:
             recurrenceInfo.recurrencePattern = "daily"
         case .weekly:
-            let day = date.getFormattedDateENG(format: "EEE")
+            let day = startDate.getFormattedDateENG(format: "EEE")
             recurrenceInfo.recurrencePattern = "weekly:\(day)"
         case .monthlyDate:
             recurrenceInfo.recurrencePattern = "monthly:date:\(recurrenceDayofMonth)"
         case .monthlyNthWeek:
-            let day = date.getFormattedDateENG(format: "EEE")
+            let day = startDate.getFormattedDateENG(format: "EEE")
             recurrenceInfo.recurrencePattern = "monthly:nth_week:\(recurrenceWeekOfMonth):\(day)"
         case .weekday:
             recurrenceInfo.recurrencePattern = "weekday"

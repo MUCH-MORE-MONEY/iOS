@@ -131,20 +131,20 @@ extension SceneDelegate {
                      
                      // 강제 업데이트 유무
                      if forceUpdate {
-                         self.showUpdateAlert(version: remoteVersion)
+                         self.showMajorUpdateAlert(version: remoteVersion)
                      }
                      // Major 버전 비교
                      else if splitCurrentProjectVersion[0] < splitMarketingVersion[0] {
                          let splitDeferredVersion = deferredVersion.split(separator: ".").map { $0 }
                          if splitDeferredVersion[0] < splitMarketingVersion[0] {
-                             self.showUpdateAlert(version: remoteVersion)
+                             self.showMajorUpdateAlert(version: remoteVersion)
                          }
                          
                      // Minor 비전 비교
                      } else if splitCurrentProjectVersion[1] < splitMarketingVersion[1] {
                          let splitDeferredVersion = deferredVersion.split(separator: ".").map { $0 }
                          if splitDeferredVersion[1] < splitMarketingVersion[1] {
-                             self.showUpdateAlert(version: remoteVersion)
+                             self.showMinorUpdateAlert(version: remoteVersion)
                          }
                          
                      // 나머지 상황에서는 업데이트 알럿을 띄우지 않음(patch)
@@ -160,8 +160,35 @@ extension SceneDelegate {
          }
      }
      
-    // 알럿을 띄우는 함수
-    func showUpdateAlert(version: String) {
+    // Major update
+    func showMajorUpdateAlert(version: String) {
+        let alert = UIAlertController(
+            title: "신규 업데이트 알림 📢",
+            message: """
+            mmm이 여러분의 원활한 가계부 작성을 위해 앱에서 발생하던 문제들을 개선했어요.
+            업데이트하여 더 쾌적한 mmm을 경험하세요.
+            """,
+            preferredStyle: .alert
+        )
+        
+        // 업데이트 버튼을 누르면 앱스토어로 이동
+        let updateAction = UIAlertAction(title: "업데이트", style: .default) { _ in
+            AppstoreCheck().openAppStore()
+        }
+        // "나중에" 버튼을 누를 경우 현재 remoteConfig version을 저장
+//        let laterAction = UIAlertAction(title: "나중에", style: .cancel) { _ in
+//            Common.setDeferredVersion(version)
+//        }
+        
+        alert.addAction(updateAction)
+//        alert.addAction(laterAction)
+        
+        alert.preferredAction = updateAction
+        self.window?.rootViewController?.present(alert, animated: true, completion: nil)
+    }
+    
+    // Minor Update
+    func showMinorUpdateAlert(version: String) {
         let alert = UIAlertController(
             title: "신규 업데이트 알림 📢",
             message: """

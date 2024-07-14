@@ -37,6 +37,7 @@ extension PriceTextFieldView {
             
             if viewModel.budgetAmt != 0 {
                 $0.text = isStep2 ? viewModel.budgetAmt.withCommas() + "만원" : ""
+                $0.textColor = R.Color.white
             }
             
             let placeholder = "만원 단위로 입력"

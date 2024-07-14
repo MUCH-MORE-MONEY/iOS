@@ -7,11 +7,32 @@
 
 import SwiftUI
 
+struct NavigationTransitionModifier: ViewModifier {
+
+    @Binding var insertion: Edge
+    @Binding var removal: Edge
+
+    func body(content: Content) -> some View {
+        
+        content.transition(.asymmetric(insertion: .move(edge: insertion), removal: .move(edge: removal)))
+        
+//        if isNext {
+//            // insertion : 뷰나 나올 때, removal : 뷰가 사라질 때
+//
+//        } else {
+//            content.transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
+//        }
+    }
+}
+
 struct BudgetSettingView: View {
     @Environment(\.presentationMode) var presentationMode
     @StateObject var viewModel: BudgetSettingViewModel
     @FocusState private var isFocus: Bool
     @Environment(\.dismiss) private var dismiss
+    
+    @State private var insertion: Edge = .leading
+    @State private var removal: Edge = .trailing
     
     private var nextButtonTitle: String {
         viewModel.currentStep == .complete ? "완료" : "다음"
@@ -25,8 +46,6 @@ struct BudgetSettingView: View {
         return viewModel.transition ? .trailing : .leading
     }
     
-    
-    
     var body: some View {
         NavigationView {
             VStack {
@@ -37,30 +56,36 @@ struct BudgetSettingView: View {
                     switch viewModel.currentStep {
                     case .main:
                         BudgetDetail01View(budgetSettingViewModel: viewModel)
-                            .navigationTransition(start: startTransition, to: toTransition)
+//                            .modifier(NavigationTransitionModifier(insertion: $insertion, removal: $removal))
+//                            .navigationTransition(start: startTransition, to: toTransition)
                     case .income:
                         BudgetDetail02View(viewModel: viewModel)
                             .onTapGesture {
                                 // 강제로 탭 제스처를 만들어서 전체 뷰에 대한 터치 이벤트를 막음
                             }
-                            .navigationTransition(start: startTransition, to: toTransition)
+//                            .modifier(NavigationTransitionModifier(insertion: $insertion, removal: $removal))
+//                            .navigationTransition(start: startTransition, to: toTransition)
                     case .expense:
                         BudgetDetail03View(viewModel: viewModel)
                             .onTapGesture {
                                 // 강제로 탭 제스처를 만들어서 전체 뷰에 대한 터치 이벤트를 막음
                             }
-                            .navigationTransition(start: startTransition, to: toTransition)
+//                            .modifier(NavigationTransitionModifier(insertion: $insertion, removal: $removal))
+//                            .navigationTransition(start: startTransition, to: toTransition)
                     case .budget:
                         BudgetDetail04View(viewModel: viewModel)
-                            .navigationTransition(start: startTransition, to: toTransition)
+//                            .modifier(NavigationTransitionModifier(insertion: $insertion, removal: $removal))
+//                            .navigationTransition(start: startTransition, to: toTransition)
                     case .calendar, .complete:
                         BudgetDetail05View(viewModel: viewModel)
-                            .navigationTransition(start: startTransition, to: toTransition)
+//                            .modifier(NavigationTransitionModifier(insertion: $insertion, removal: $removal))
+//                            .navigationTransition(start: startTransition, to: toTransition)
                     }
                 }
                 .padding(.top, 48)
                 .padding([.leading, .trailing], 24)
                 .animation(.easeInOut, value: viewModel.currentStep)
+                
                 
                 Spacer()
                 HStack(spacing: 8) {
@@ -68,7 +93,8 @@ struct BudgetSettingView: View {
                         // 이전 버튼
                         Button {
                             viewModel.transition = true
-                            
+                            insertion = .leading
+                            removal = .trailing
                             switch viewModel.currentStep {
                             case .main:
                                 break
@@ -96,7 +122,8 @@ struct BudgetSettingView: View {
                     // 다음 버튼
                     Button {
                         viewModel.transition = false
-                        
+                        insertion = .trailing
+                        removal = .leading
                         switch viewModel.currentStep {
                         case .main:
                             viewModel.isFirstStep = false
